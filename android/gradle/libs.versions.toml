@@ -9,16 +9,28 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+junit-jupiter = "5.10.2"
+assertj-core = "3.25.3"
+kotest-runner-junit5 = "5.8.0"
+mockk = "1.13.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+junit-jupiter = { group = "junit", name = "jupiter", version.ref = "junit-jupiter" }
+assertj = { group = "assertj", name = "assertj-core", version.ref = "assertj-core" }
+kotest = { group = "kotest", name = "kotest-runner-junit5", version.ref = "kotest-runner-junit5" }
+mockk = { group = "mockk", name = "mockk", version.ref = "mockk" }
+
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+[bundles]
+test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
