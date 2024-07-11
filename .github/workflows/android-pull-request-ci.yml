@@ -15,6 +15,8 @@ defaults:
 jobs:
   unit_test:
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion != 'skipped'
+
     permissions:
       checks: write
 
@@ -31,6 +33,12 @@ jobs:
       actions: read
 
     steps:
+      - name: Download and Extract Artifacts
+        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          path: artifacts
+          
       - name: Checkout the code
         uses: actions/checkout@v3
 
