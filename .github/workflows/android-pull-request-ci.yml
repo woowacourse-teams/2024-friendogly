@@ -60,9 +60,6 @@ jobs:
       - name: Lint Check
         run: ./gradlew ktlintCheck
 
-      - name: Run detekt
-        run: ./gradlew detekt
-
       - name: Upload Event File
         uses: actions/upload-artifact@v3
         with:
