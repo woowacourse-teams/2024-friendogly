@@ -41,11 +41,13 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
+    implementation(libs.bundles.kotlin)
+    implementation(libs.bundles.android)
+    implementation(libs.bundles.navigation)
+    implementation(libs.bundles.google)
+    implementation(libs.bundles.kakao)
+    implementation(libs.bundles.network)
+    implementation(libs.bundles.datastore)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
