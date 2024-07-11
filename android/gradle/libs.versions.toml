@@ -2,6 +2,8 @@
 agp = "8.3.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
+lifecycle-runtime-ktx = "2.8.3"
+lifecycle-extensions = "2.2.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -14,25 +16,90 @@ assertj-core = "3.25.3"
 kotest-runner-junit5 = "5.8.0"
 mockk = "1.13.10"
 
+# android-library
+datastore = "1.1.1"
+image-cropper = "4.5.0"
+navigation = "2.7.7"
+glide = "4.16.0"
+
+# coroutines
+coroutines = "1.7.3"
+
+# kakao
+kakao-user = "2.20.3"
+kakao-map = "2.9.5"
+
+## google + firebase
+google-services = "4.4.2"
+firebase-auth = "23.0.0"
+firebase-messaging = "24.0.0"
+firebase-bom = "33.1.1"
+google-play-services-auth = "21.2.0"
+
+# network
+okhttp = "4.12.0"
+retrofit = "2.11.0"
+
+# paging
+paging = "3.3.0"
+
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+# test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter = { group = "junit", name = "jupiter", version.ref = "junit-jupiter" }
 assertj = { group = "assertj", name = "assertj-core", version.ref = "assertj-core" }
 kotest = { group = "kotest", name = "kotest-runner-junit5", version.ref = "kotest-runner-junit5" }
 mockk = { group = "mockk", name = "mockk", version.ref = "mockk" }
-
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
+# kotlin
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+# android-library
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
+image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "image-cropper" }
+androidx-navigation-fragemnt = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+
+# kakao
+kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
+kakao-map = { group = "com.kakao.maps.open", name = "android", version.ref = "kakao-map" }
+
+# google
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services-auth" }
+
+# Network
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 [bundles]
+kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core"]
+android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "paging-runtime-ktx"]
+navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]
+google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth"]
+kakao = ["kakao-user", "kakao-map"]
+network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor"]
+datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+android-library = { id = "com.android.library", version.ref = "agp" }
