@@ -46,10 +46,10 @@ paging = "3.3.0"
 [libraries]
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-junit-jupiter = { group = "junit", name = "jupiter", version.ref = "junit-jupiter" }
-assertj = { group = "assertj", name = "assertj-core", version.ref = "assertj-core" }
-kotest = { group = "kotest", name = "kotest-runner-junit5", version.ref = "kotest-runner-junit5" }
-mockk = { group = "mockk", name = "mockk", version.ref = "mockk" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
+assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj-core" }
+kotest = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest-runner-junit5" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
