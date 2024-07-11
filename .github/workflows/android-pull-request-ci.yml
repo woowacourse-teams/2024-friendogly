@@ -2,7 +2,7 @@ name: Android Pull Request CI
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ woowacourse-teams:develop ]
     paths:
       - 'android/**'
 
