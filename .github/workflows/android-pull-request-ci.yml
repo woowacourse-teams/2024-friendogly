@@ -3,8 +3,6 @@ name: Android Pull Request CI
 on:
   push:
     branches: [ develop ]
-    paths:
-      - 'android/**'
   pull_request:
     branches: [ develop ]
     paths:
@@ -15,8 +13,23 @@ defaults:
     working-directory: ./android
 
 jobs:
-  unit_test:
+  verify:
     runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+
+      # needed unless run with comment_mode: off
+      pull-requests: write
+
+      # only needed for private repository
+      contents: read
+
+      # only needed for private repository
+      issues: read
+
+      # required by download step to access artifacts API
+      actions: read
 
     steps:
       - name: Checkout the code
