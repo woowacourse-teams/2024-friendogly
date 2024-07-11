@@ -3,12 +3,12 @@ name: Android Pull Request CI
 on:
   pull_request:
     branches: [ develop ]
-#    paths:
-#      - 'android/**'
+    paths:
+      - 'android/**'
 
-#defaults:
-#  run:
-#    working-directory: ./android
+defaults:
+  run:
+    working-directory: ./android
 
 jobs:
   unit_test:
