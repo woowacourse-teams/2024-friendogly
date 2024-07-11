@@ -44,7 +44,10 @@ jobs:
         run: ./gradlew ktlintCheck
 
       - name: Run unit tests
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
         run: |
+          echo "$LOCAL_PROPERTIES" > local.properties
           ./gradlew testDebugUnitTest --stacktrace
 
       - name: Publish Test Results
