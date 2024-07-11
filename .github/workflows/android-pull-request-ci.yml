@@ -43,10 +43,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run unit tests
-#        env:
-#          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
         run: |
-#          echo "$LOCAL_PROPERTIES" > local.properties
+          echo "$LOCAL_PROPERTIES" > local.properties
           ./gradlew testDebugUnitTest --stacktrace
 
       - name: Publish Test Results
