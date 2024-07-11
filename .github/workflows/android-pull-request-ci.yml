@@ -3,6 +3,8 @@ name: Android Pull Request CI
 on:
   push:
     branches: [ develop ]
+    paths:
+      - 'android/**'
   pull_request:
     branches: [ develop ]
     paths:
@@ -41,6 +43,9 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Lint Check
+        run: ./gradlew ktlintCheck
 
       - name: Run unit tests
         env:
