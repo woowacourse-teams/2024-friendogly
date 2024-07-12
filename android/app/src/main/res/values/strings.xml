@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">friendogly</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--내비게이션 메뉴-->
+    <string name="bottom_home">홈</string>
+    <string name="bottom_woof">멍멍짖기</string>
+    <string name="bottom_chat">채팅</string>
+    <string name="bottom_my_page">나의 댕댕이</string>
+
 </resources>

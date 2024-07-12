@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="@string/bottom_home" />
+
+    <item
+        android:id="@+id/woofFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_dog"
+        android:title="@string/bottom_woof" />
+
+    <item
+        android:id="@+id/chatFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/bottom_chat" />
+
+    <item
+        android:id="@+id/myPageFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_my"
+        android:title="@string/bottom_my_page" />
+
+</menu>
