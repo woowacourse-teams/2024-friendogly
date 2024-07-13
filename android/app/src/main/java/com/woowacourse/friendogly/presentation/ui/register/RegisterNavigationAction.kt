@@ -4,4 +4,6 @@ sealed interface RegisterNavigationAction {
     data object NavigateToKakaoLogin : RegisterNavigationAction
 
     data object NavigateToGoogleLogin : RegisterNavigationAction
+
+    data class NavigateToProfileSetting(val idToken: String) : RegisterNavigationAction
 }

@@ -37,6 +37,9 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
 
                 is RegisterNavigationAction.NavigateToGoogleLogin ->
                     googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
+
+                is RegisterNavigationAction.NavigateToProfileSetting ->
+                    startActivity(MainActivity.getIntent(this))
             }
         }
     }
