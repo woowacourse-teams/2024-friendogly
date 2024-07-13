@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.presentation.ui
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -62,6 +64,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
         } catch (e: Exception) {
             showToastMessage(e.message.toString())
+        }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
         }
     }
 }
