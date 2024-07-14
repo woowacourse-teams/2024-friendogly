@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">friendogly</string>
 
+    <!--회원가입 화면-->
+    <string name="register_now">간편하게 로그인 할래요</string>
+
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
 
