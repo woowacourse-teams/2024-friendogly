@@ -6,7 +6,7 @@
     <data>
         <variable
             name="groupFilter"
-            type="com.woowacourse.friendogly.presentation.ui.grouplist.grouplistUiModel.groupfilter.GroupFilter" />
+            type="com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

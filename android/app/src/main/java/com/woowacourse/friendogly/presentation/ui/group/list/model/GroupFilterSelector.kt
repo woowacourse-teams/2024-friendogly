@@ -1,7 +1,7 @@
-package com.woowacourse.friendogly.presentation.ui.grouplist.grouplistUiModel
+package com.woowacourse.friendogly.presentation.ui.group.list.model
 
-import com.woowacourse.friendogly.presentation.ui.grouplist.grouplistUiModel.groupfilter.GroupFilter
-import com.woowacourse.friendogly.presentation.ui.grouplist.grouplistUiModel.groupfilter.ParticipationFilter
+import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.ParticipationFilter
 
 class GroupFilterSelector {
     var participationFilter = ParticipationFilter.POSSIBLE
