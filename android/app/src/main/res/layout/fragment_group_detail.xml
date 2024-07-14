@@ -5,7 +5,9 @@
     tools:context=".presentation.ui.grouplist.detail.GroupDetailFragment">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.woowacourse.friendogly.presentation.ui.grouplist.detail.GroupDetailViewModel" />
     </data>
 
     <ScrollView
