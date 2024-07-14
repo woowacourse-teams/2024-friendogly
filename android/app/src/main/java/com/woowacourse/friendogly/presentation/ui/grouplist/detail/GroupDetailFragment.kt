@@ -8,6 +8,7 @@ import com.woowacourse.friendogly.presentation.base.BaseFragment
 class GroupDetailFragment :
     BaseFragment<FragmentGroupDetailBinding>(R.layout.fragment_group_detail) {
     private val viewModel: GroupDetailViewModel by viewModels()
+
     override fun initViewCreated() {
         binding.vm = viewModel
     }
