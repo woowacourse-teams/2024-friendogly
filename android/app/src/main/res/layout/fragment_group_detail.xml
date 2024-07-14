@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.ui.grouplist.detail.GroupDetailFragment">
+    tools:context=".presentation.ui.group.detail.GroupDetailFragment">
 
     <data>
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.grouplist.detail.GroupDetailViewModel" />
+            type="com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailViewModel" />
     </data>
 
     <ScrollView

@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.grouplist.detail
+package com.woowacourse.friendogly.presentation.ui.group.detail
 
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 
