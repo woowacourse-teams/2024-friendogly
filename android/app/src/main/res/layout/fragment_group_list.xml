@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <View
             android:id="@+id/group_top_bar"
             android:layout_width="match_parent"
@@ -22,15 +23,13 @@
             android:layout_marginStart="16dp"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/group_top_bar"
             app:layout_constraintBottom_toBottomOf="@id/group_top_bar"
+            app:layout_constraintStart_toStartOf="@id/group_top_bar"
             app:layout_constraintTop_toTopOf="@id/group_top_bar">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="18sp"
                 tools:text="잠실6동" />
 
             <Space
@@ -44,25 +43,26 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toTopOf="@id/group_top_bar"
-            app:layout_constraintEnd_toEndOf="@id/group_top_bar"
-            app:layout_constraintBottom_toBottomOf="@id/group_top_bar"
-            android:src="@drawable/ic_alarm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_alarm"
+            app:layout_constraintBottom_toBottomOf="@id/group_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/group_top_bar"
+            app:layout_constraintTop_toTopOf="@id/group_top_bar" />
 
         <include
-            layout="@layout/include_group_filter_selector"
-            app:layout_constraintTop_toBottomOf="@id/group_top_bar"
             android:id="@+id/group_filter"
+            layout="@layout/include_group_filter_selector"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/group_top_bar" />
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
-            tools:listitem="@layout/item_group"
-            app:layout_constraintTop_toBottomOf="@id/group_filter"
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/group_filter"
+            tools:listitem="@layout/item_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
