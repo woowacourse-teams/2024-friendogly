@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group." />
+            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
