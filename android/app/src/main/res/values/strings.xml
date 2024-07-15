@@ -13,4 +13,8 @@
     <string name="bottom_chat">채팅</string>
     <string name="bottom_my_page">나의 댕댕이</string>
 
+    <!--멍개-->
+    <string name="group_user_list_subject">참여 견주</string>
+    <string name="group_dog_list_subject">댕댕이들</string>
+
 </resources>
