@@ -1,9 +1,7 @@
 name: Android Pull Request CI
 
 on:
-  push:
-    branches: [ develop ]
-  pull_request:
+  pull_request_target:
     branches: [ develop ]
     paths:
       - 'android/**'
