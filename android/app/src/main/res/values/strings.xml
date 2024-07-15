@@ -18,6 +18,13 @@
     <string name="edit_profile_title">프로필 편집</string>
     <string name="register_dog_title">등록하기</string>
 
+    <!--강아지 등록-->
+    <string name="dog_name_title">댕댕이 이름</string>
+    <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
+    <string name="register_dog_name_hint">댕댕이 이름을 입력해주세요</string>
+    <string name="one_liner_title">한 줄 소개</string>
+    <string name="one_liner_hint">한 줄 소개를 입력해주세요</string>
+
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
     <string name="bottom_woof">멍멍짖기</string>
@@ -31,5 +38,6 @@
 
     <!--이미지 크롭-->
     <string name="image_cropper_done">확인</string>
+    <string name="camera_select_photo">카메라 실행하기</string>
 
 </resources>

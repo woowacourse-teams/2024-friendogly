@@ -21,6 +21,17 @@
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page">
 
+        <action
+            android:id="@+id/action_myPageFragment_to_registerDogFragment"
+            app:destination="@id/registerDogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerDogFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.registerdog.RegisterDogFragment"
+        android:label="RegisterDogFragment"
+        tools:layout="@layout/fragment_register_dog">
+
     </fragment>
 
 </navigation>

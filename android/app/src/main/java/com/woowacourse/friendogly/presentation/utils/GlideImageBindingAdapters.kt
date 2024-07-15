@@ -46,6 +46,19 @@ fun ImageView.bindProfile1000(profilePath: String?) {
         .into(this)
 }
 
+@BindingAdapter("dogProfile")
+fun ImageView.bindDogProfile(bitmap: Bitmap?) {
+    if (bitmap == null) return
+
+    val softwareBitmap = bitmap.toSoftwareBitmap()
+
+    Glide.with(context)
+        .asBitmap()
+        .load(softwareBitmap)
+        .centerCrop()
+        .into(this)
+}
+
 @BindingAdapter("glide12")
 fun ImageView.bindGlide12(imageUrl: String?) {
     imageUrl?.let { url ->
