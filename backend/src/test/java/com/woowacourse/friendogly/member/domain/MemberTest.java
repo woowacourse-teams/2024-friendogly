@@ -35,4 +35,28 @@ class MemberTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("이름 형식이 잘못되면 예외가 발생한다.")
+    @NullAndEmptySource
+    @ParameterizedTest
+    void create_Fail_IllegalNameFormat(String nameInput) {
+        assertThatThrownBy(() -> Member.builder()
+                .name(nameInput)
+                .email("crew@wooteco.com")
+                .build()
+        )
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("이름이 1글자 미만 15글자 초과면 예외가 발생한다.")
+    @ValueSource(strings = {"", "0000_0000_0000_1"})
+    @ParameterizedTest
+    void create_Fail_IllegalNameLength(String nameInput) {
+        assertThatThrownBy(() -> Member.builder()
+                .name(nameInput)
+                .email("crew@wooteco.com")
+                .build()
+        )
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 }
