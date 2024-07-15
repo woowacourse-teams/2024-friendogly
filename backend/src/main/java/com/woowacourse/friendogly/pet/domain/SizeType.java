@@ -1,9 +1,9 @@
 package com.woowacourse.friendogly.pet.domain;
 
 public enum SizeType {
-    SMALL("small"),
-    MEDIUM("medium"),
-    LARGE("large"),
+    SMALL("소형견"),
+    MEDIUM("중형견"),
+    LARGE("대형견"),
     ;
 
     private final String value;
