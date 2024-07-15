@@ -5,6 +5,7 @@
     <style name="Theme.AppCompat.TextView.Bold.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray10</item>
         <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_bold</item>
     </style>
 
@@ -13,11 +14,13 @@
     <style name="Theme.AppCompat.TextView.SemiBold.Black.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/gray08</item>
     </style>
@@ -25,23 +28,27 @@
     <style name="Theme.AppCompat.TextView.SemiBold.Gray09.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray09</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Gray09.Size24" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray09</item>
         <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray10</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Black.Size24" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -49,17 +56,20 @@
     <style name="Theme.AppCompat.TextView.SemiBold.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray05</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Black.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/gray07</item>
     </style>
@@ -68,47 +78,55 @@
     <style name="Theme.AppCompat.TextView.Medium.Black.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Gray08.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray08</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray07</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Black.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Black.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray10</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Medium.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray05</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
@@ -117,6 +135,7 @@
     <style name="Theme.AppCompat.TextView.Regular.Black.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
@@ -124,16 +143,19 @@
     <style name="Theme.AppCompat.TextView.Regular.Gray07.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray07</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Gray05.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray05</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textSize">14dp</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
@@ -141,23 +163,27 @@
     <style name="Theme.AppCompat.TextView.Regular.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray05</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray07</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Gray08.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textColor">@color/gray08</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Black.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -165,24 +191,28 @@
     <style name="Theme.AppCompat.TextView.Regular.Gray07.Size12" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray07</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Black.Size12" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Gray10.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray10</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Regular.Black.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 
