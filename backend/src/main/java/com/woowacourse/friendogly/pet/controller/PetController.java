@@ -23,7 +23,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> SavePet(@RequestBody SavePetRequest savePetRequest) {
+    public ResponseEntity<Void> savePet(@RequestBody SavePetRequest savePetRequest) {
         Long petId = petCommandService.savePet(savePetRequest);
         return ResponseEntity.created(URI.create("/pet/" + petId)).build();
     }
