@@ -50,7 +50,7 @@ fun TextView.bindEditBtnBackground(contents: String?) {
     val length = contents?.length ?: 0
 
     if (length > 0) {
-        this.background = context.getDrawable(R.drawable.recy_blue_fill_16)
+        this.background = context.getDrawable(R.drawable.rect_blue_fill_16)
         this.setTextColor(context.getColor(R.color.black))
     } else {
         this.background = context.getDrawable(R.drawable.rect_gray03_fill_16)
