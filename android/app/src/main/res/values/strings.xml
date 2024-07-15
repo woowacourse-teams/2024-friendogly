@@ -28,4 +28,8 @@
     <!--이미지 크롭-->
     <string name="image_cropper_done">확인</string>
 
+    <!--멍개-->
+    <string name="group_user_list_subject">참여 견주</string>
+    <string name="group_dog_list_subject">댕댕이들</string>
+
 </resources>
