@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.navigation.safeargs)
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization")
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -67,4 +69,13 @@ dependencies {
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+
+    // serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
 }
