@@ -38,4 +38,8 @@ public class Footprint {
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
     }
+
+    public boolean isNear(Location location) {
+        return this.location.isNear(location);
+    }
 }

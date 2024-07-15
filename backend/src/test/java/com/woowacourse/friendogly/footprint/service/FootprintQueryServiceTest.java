@@ -1,0 +1,106 @@
+package com.woowacourse.friendogly.footprint.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
+import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.member.repository.MemberRepository;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+@SpringBootTest
+class FootprintQueryServiceTest {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private FootprintQueryService footprintQueryService;
+
+    @Autowired
+    private FootprintCommandService footprintCommandService;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private FootprintRepository footprintRepository;
+
+    @AfterEach
+    void cleanUp() {
+        footprintRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
+
+    @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
+    @Test
+    void findNear() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        double nearLongitude = 0.008993216;
+        double farLongitude = 0.009001209;
+
+        // 999m 떨어진 발자국 저장
+        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, nearLongitude));
+
+        // 1001m 떨어진 발자국 저장
+        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, farLongitude));
+
+        List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
+            new FindNearFootprintRequest(0.0, 0.0));
+
+        Assertions.assertAll(
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
+                .containsExactly(member.getId()),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
+                .containsExactly(0.0),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
+                .containsExactly(nearLongitude)
+        );
+    }
+
+    @DisplayName("현재 시간 기준 24시간 보다 이전에 생성된 발자국은 조회되지 않는다.")
+    @Test
+    void findNear24Hours() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        jdbcTemplate.update("""
+            INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+            VALUES
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
+            """, member.getId(), member.getId(), member.getId());
+
+        List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
+            new FindNearFootprintRequest(0.0, 0.0));
+
+        Assertions.assertAll(
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
+                .containsExactly(member.getId(), member.getId()),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
+                .containsExactly(0.00000, 0.00000),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
+                .containsExactly(0.00000, 0.00000)
+        );
+    }
+}
