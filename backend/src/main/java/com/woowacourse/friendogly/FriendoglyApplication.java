@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class FriendoglyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FriendoglyApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FriendoglyApplication.class, args);
+    }
 
 }
