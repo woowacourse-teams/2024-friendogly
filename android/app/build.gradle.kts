@@ -16,6 +16,7 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.woowacourse.friendogly"
@@ -31,6 +32,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "BASE_URL", baseUrl)
     }
 
     buildTypes {
