@@ -1,0 +1,17 @@
+package com.woowacourse.friendogly.remote.dto.response
+
+import com.woowacourse.friendogly.remote.dto.request.LocalDateSerializer
+import kotlinx.serialization.Serializable
+import java.time.LocalDate
+
+@Serializable
+data class ResponsePetGetDto(
+    val name: String,
+    val description: String,
+    @Serializable(with = LocalDateSerializer::class)
+    val birthDate: LocalDate,
+    val sizeType: String,
+    val gender: String,
+    val isNeutered: Boolean,
+    val image: String
+)
