@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.navigation.safeargs) apply false
+    kotlin("plugin.serialization") version "1.9.0" apply false
 }
 
 allprojects {

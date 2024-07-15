@@ -4,6 +4,13 @@
     <!--회원가입 화면-->
     <string name="register_now">간편하게 로그인 할래요</string>
 
+    <!--프로필 설정-->
+    <string name="profile_setting_nickname">닉네임</string>
+    <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="profile_setting_profile_pic">프로필 사진</string>
+    <string name="make_profile_title">프로필 만들기</string>
+    <string name="make_profile_edit_btn_title">선택 완료!</string>
+
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
 
@@ -12,5 +19,13 @@
     <string name="bottom_woof">멍멍짖기</string>
     <string name="bottom_chat">채팅</string>
     <string name="bottom_my_page">나의 댕댕이</string>
+
+    <!--이미지 선택 바텀 시트-->
+    <string name="gallery_select_photo">앨범에서 사진 선택</string>
+    <string name="default_image_set">기본 이미지로 변경</string>
+    <string name="edit_profile_image_close">닫기</string>
+
+    <!--이미지 크롭-->
+    <string name="image_cropper_done">확인</string>
 
 </resources>
