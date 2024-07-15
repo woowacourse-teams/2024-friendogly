@@ -5,6 +5,7 @@
     tools:context=".presentation.ui.group.detail.GroupDetailFragment">
 
     <data>
+
         <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailViewModel" />
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/group_detail_image"
+                android:id="@+id/iv_group_detail_poster"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/black"
@@ -34,8 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_arrow_left"
-                app:layout_constraintStart_toStartOf="@id/group_detail_image"
-                app:layout_constraintTop_toTopOf="@id/group_detail_image"
+                app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
+                app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
                 app:tint="@color/white" />
 
             <ImageView
@@ -43,49 +44,49 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_more_vertical"
-                app:layout_constraintEnd_toEndOf="@id/group_detail_image"
-                app:layout_constraintTop_toTopOf="@id/group_detail_image"
+                app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"
+                app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
                 app:tint="@color/white" />
 
             <View
-                android:id="@+id/detail_top_bar"
+                android:id="@+id/view_group_detail_top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                app:layout_constraintTop_toBottomOf="@id/group_detail_image" />
+                app:layout_constraintTop_toBottomOf="@id/iv_group_detail_poster" />
 
             <ImageView
-                android:id="@+id/user_image"
+                android:id="@+id/iv_group_detail_user_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/ic_dog"
-                app:layout_constraintBottom_toBottomOf="@id/detail_top_bar"
-                app:layout_constraintStart_toStartOf="@id/detail_top_bar"
-                app:layout_constraintTop_toTopOf="@id/detail_top_bar" />
+                app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
+                app:layout_constraintStart_toStartOf="@id/view_group_detail_top_bar"
+                app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar" />
 
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/tv_group_detail_user_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                app:layout_constraintBottom_toTopOf="@id/group_info"
-                app:layout_constraintStart_toEndOf="@id/user_image"
-                app:layout_constraintTop_toTopOf="@id/detail_top_bar"
+                app:layout_constraintBottom_toTopOf="@id/ll_group_detail_group_info"
+                app:layout_constraintStart_toEndOf="@id/iv_group_detail_user_image"
+                app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
                 tools:text="이름" />
 
             <LinearLayout
-                android:id="@+id/group_info"
+                android:id="@+id/ll_group_detail_group_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/detail_top_bar"
+                app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/user_image"
-                app:layout_constraintTop_toBottomOf="@id/user_name">
+                app:layout_constraintStart_toEndOf="@id/iv_group_detail_user_image"
+                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_user_name">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,81 +105,81 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/group_line"
+                android:id="@+id/view_group_detail_line"
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/gray04"
-                app:layout_constraintTop_toBottomOf="@id/detail_top_bar" />
+                app:layout_constraintTop_toBottomOf="@id/view_group_detail_top_bar" />
 
             <!--TODO:listitem 추가-->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/filter_list"
+                android:id="@+id/rcv_group_detail_filter_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/group_line" />
+                app:layout_constraintTop_toBottomOf="@id/view_group_detail_line" />
 
             <TextView
-                android:id="@+id/group_subject"
+                android:id="@+id/tv_group_detail_subject"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filter_list"
+                app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_filter_list"
                 tools:text="모임 이름이에요~" />
 
             <TextView
-                android:id="@+id/group_content"
+                android:id="@+id/tv_group_detail_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/group_subject"
+                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_subject"
                 tools:text="모임 내용입니다." />
 
             <TextView
-                android:id="@+id/user_list_subject"
+                android:id="@+id/tv_group_detail_user_list_subject"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/group_user_list_subject"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/group_content" />
+                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_content" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/user_list"
+                android:id="@+id/rcv_group_detail_user_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/user_list_subject"
+                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_user_list_subject"
                 tools:listitem="@layout/item_detail_profile" />
 
             <TextView
-                android:id="@+id/dog_list_subject"
+                android:id="@+id/tv_group_list_dog_list_subject"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/group_dog_list_subject"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_list" />
+                app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_user_list" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dog_list"
+                android:id="@+id/rcv_group_detail_dog_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/dog_list_subject"
+                app:layout_constraintTop_toBottomOf="@id/tv_group_list_dog_list_subject"
                 tools:listitem="@layout/item_detail_profile" />
 
             <Button
@@ -187,9 +188,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/custom_background_white_radius10"
+                android:background="@drawable/rect_white_fill_radius10"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dog_list"
+                app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
                 tools:text="참여하기" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
