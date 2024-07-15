@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pet")
+@RequestMapping("/pets")
 public class PetController {
 
     private final PetQueryService petQueryService;
@@ -30,7 +30,7 @@ public class PetController {
     @PostMapping
     public ResponseEntity<Void> savePet(@RequestBody SavePetRequest savePetRequest) {
         Long petId = petCommandService.savePet(savePetRequest);
-        return ResponseEntity.created(URI.create("/pet/" + petId)).build();
+        return ResponseEntity.created(URI.create("/pets/" + petId)).build();
     }
 
     @GetMapping("/{id}")
