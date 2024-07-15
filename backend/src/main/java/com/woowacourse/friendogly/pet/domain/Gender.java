@@ -1,8 +1,8 @@
 package com.woowacourse.friendogly.pet.domain;
 
 public enum Gender {
-    MALE("male"),
-    FEMALE("female"),
+    MALE("수컷"),
+    FEMALE("암컷"),
     ;
 
     private final String value;
