@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.Friendogly" parent="Base.Theme.Friendogly" />
+
+
+    <style name="Theme.ImageCropper" parent="Theme.AppCompat">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/black</item>
+    </style>
+
 </resources>
