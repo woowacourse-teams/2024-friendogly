@@ -20,4 +20,12 @@
     <string name="bottom_chat">채팅</string>
     <string name="bottom_my_page">나의 댕댕이</string>
 
+    <!--이미지 선택 바텀 시트-->
+    <string name="gallery_select_photo">앨범에서 사진 선택</string>
+    <string name="default_image_set">기본 이미지로 변경</string>
+    <string name="edit_profile_image_close">닫기</string>
+
+    <!--이미지 크롭-->
+    <string name="image_cropper_done">확인</string>
+
 </resources>
