@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+        <variable
+            name="dog"
+            type="com.woowacourse.friendogly.presentation.ui.mypage.Dog" />
+
+
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.mypage.MyPageActionHandler" />
+
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp">
+
+        <ImageView
+            android:id="@+id/iv_product_thumbnail"
+            glide12="@{dog.image}"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/img_dog" />
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="9dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{dog.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_product_thumbnail"
+            tools:text="땡이" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
