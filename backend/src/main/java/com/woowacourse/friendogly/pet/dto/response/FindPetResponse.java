@@ -12,7 +12,7 @@ public record FindPetResponse(
         boolean isNeutered,
         String image
 ) {
-    public static FindPetResponse from(Pet pet) {
+    public static FindPetResponse from(Pet pet){
         return new FindPetResponse(
                 pet.getName(),
                 pet.getDescription(),
@@ -21,6 +21,6 @@ public record FindPetResponse(
                 pet.getGender().getValue(),
                 pet.isNeutered(),
                 pet.getImage()
-        );
+                );
     }
 }
