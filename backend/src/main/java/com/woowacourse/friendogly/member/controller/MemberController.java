@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberCommandService memberCommandService;
@@ -23,6 +23,6 @@ public class MemberController {
     @PostMapping
     public ResponseEntity<Void> saveMember(@RequestBody SaveMemberRequest request){
         saveMemberResponse saveMemberResponse = memberCommandService.saveMember(request);
-        return ResponseEntity.created(URI.create("/member/" + saveMemberResponse.id())).build();
+        return ResponseEntity.created(URI.create("/members/" + saveMemberResponse.id())).build();
     }
 }
