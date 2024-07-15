@@ -30,7 +30,7 @@ class MemberControllerTest {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("/member")
+                .when().post("/members")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
     }
@@ -42,7 +42,7 @@ class MemberControllerTest {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("/member")
+                .when().post("/members")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
