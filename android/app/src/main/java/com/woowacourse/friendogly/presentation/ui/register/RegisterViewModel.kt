@@ -18,4 +18,8 @@ class RegisterViewModel : BaseViewModel() {
     fun executeGoogleLogin() {
         _navigateAction.emit(RegisterNavigationAction.NavigateToGoogleLogin)
     }
+
+    fun handleGoogleLogin(idToken: String) {
+        _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = idToken))
+    }
 }

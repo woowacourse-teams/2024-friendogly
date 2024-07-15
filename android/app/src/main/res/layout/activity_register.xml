@@ -40,6 +40,7 @@
 
         <ImageButton
             android:id="@+id/ib_kakao_register"
+            onSingleClick="@{() -> vm.executeKakaoLogin()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -47,7 +48,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:adjustViewBounds="true"
-            android:onClick="@{() -> vm.executeKakaoLogin()}"
             android:padding="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/img_kakao_register"
@@ -57,6 +57,7 @@
 
         <ImageButton
             android:id="@+id/ib_google_register"
+            onSingleClick="@{() -> vm.executeGoogleLogin()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -64,7 +65,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:adjustViewBounds="true"
-            android:onClick="@{() -> vm.executeGoogleLogin()}"
             android:padding="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/img_google_register"
