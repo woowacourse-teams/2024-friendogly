@@ -19,4 +19,8 @@ public enum Gender {
         }
         throw new IllegalArgumentException("존재하지 않는 gender가 입력되었습니다.");
     }
+
+    public String getValue() {
+        return value;
+    }
 }
