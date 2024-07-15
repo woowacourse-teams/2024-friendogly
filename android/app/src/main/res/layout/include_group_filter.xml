@@ -9,7 +9,7 @@
     </data>
 
     <LinearLayout
-        android:background="@drawable/custom_background_white_radius100_line_black"
+        android:background="@drawable/rect_white_line_black_100"
         android:paddingHorizontal="12dp"
         android:paddingVertical="8dp"
         android:layout_marginHorizontal="4dp"

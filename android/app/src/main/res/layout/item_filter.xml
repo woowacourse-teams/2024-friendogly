@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/custom_background_white_radius4_line_black"
+        android:background="@drawable/rect_white_line_black_4"
         android:paddingHorizontal="6dp"
         android:paddingVertical="3dp"
         android:layout_marginHorizontal="5dp"

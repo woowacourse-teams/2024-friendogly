@@ -19,7 +19,7 @@
         android:paddingHorizontal="12dp">
 
         <include
-            android:id="@+id/participation_filter"
+            android:id="@+id/include_group_list_participation_filter"
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,21 +28,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
-            android:id="@+id/size_filter"
+            android:id="@+id/include_group_list_size_filter"
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:filterName="@{groupFilterSelector.SIZE_FILTER_SUBJECT}"
-            app:layout_constraintStart_toEndOf="@id/participation_filter"
+            app:layout_constraintStart_toEndOf="@id/include_group_list_participation_filter"
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
-            android:id="@+id/gender_filter"
+            android:id="@+id/include_group_list_gender_filter"
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:filterName="@{groupFilterSelector.GENDER_FILTER_SUBJECT}"
-            app:layout_constraintStart_toEndOf="@id/size_filter"
+            app:layout_constraintStart_toEndOf="@id/include_group_list_size_filter"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -52,7 +52,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/participation_filter"
+            app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
             tools:listitem="@layout/item_filter" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
