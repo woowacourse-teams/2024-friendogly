@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+  application:
+    name: friendogly
+  sql:
+    init:
+      encoding: utf-8
