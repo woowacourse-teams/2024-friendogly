@@ -32,15 +32,14 @@ public class Footprint {
     private boolean isDeleted;
 
     @Builder
-    public Footprint(
-            Member member,
-            Location location,
-            LocalDateTime createdAt,
-            boolean isDeleted
-    ) {
+    public Footprint(Member member, Location location) {
         this.member = member;
         this.location = location;
-        this.createdAt = createdAt;
-        this.isDeleted = isDeleted;
+        this.createdAt = LocalDateTime.now();
+        this.isDeleted = false;
+    }
+
+    public boolean isNear(Location location) {
+        return this.location.isNear(location);
     }
 }
