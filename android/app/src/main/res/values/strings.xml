@@ -4,6 +4,13 @@
     <!--회원가입 화면-->
     <string name="register_now">간편하게 로그인 할래요</string>
 
+    <!--프로필 설정-->
+    <string name="profile_setting_nickname">닉네임</string>
+    <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="profile_setting_profile_pic">프로필 사진</string>
+    <string name="make_profile_title">프로필 만들기</string>
+    <string name="make_profile_edit_btn_title">선택 완료!</string>
+
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
 

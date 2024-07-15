@@ -13,10 +13,13 @@
         android:theme="@style/Theme.Friendogly"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.register.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.register.RegisterActivity"
+            android:name=".presentation.ui.profilesetting.ProfileSettingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
