@@ -34,4 +34,16 @@ class MemberControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
     }
+
+    @DisplayName("잘못된 값으로 회원을 생성하려고 하면 400을 반환한다.")
+    @Test
+    void saveMember_Fail_IllegalArguments() {
+        SaveMemberRequest request = new SaveMemberRequest("길이가 15글자 초과 입니다.");
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/member")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
 }
