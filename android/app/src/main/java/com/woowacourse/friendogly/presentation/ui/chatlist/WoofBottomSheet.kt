@@ -54,7 +54,7 @@ class WoofBottomSheet : BottomSheetDialogFragment() {
 
         dlg.findViewById<TextView>(R.id.tv_woof_dog_name)?.text = info.name
         dlg.findViewById<TextView>(R.id.tv_woof_dog_age)?.text = "${info.age} 살"
-        dlg.findViewById<TextView>(R.id.tv_woof_dog_gender)?.text = info.name
+        dlg.findViewById<TextView>(R.id.tv_woof_dog_gender)?.text = info.gender
         dlg.findViewById<TextView>(R.id.tv_woof_dog_size)?.text = info.size
         dlg.findViewById<TextView>(R.id.tv_woof_dog_desc)?.text = info.description
 
