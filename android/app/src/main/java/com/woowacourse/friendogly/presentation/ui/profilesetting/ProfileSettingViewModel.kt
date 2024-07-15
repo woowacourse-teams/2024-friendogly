@@ -23,6 +23,10 @@ class ProfileSettingViewModel : BaseViewModel() {
         _navigateAction.emit(ProfileSettingNavigationAction.NavigateToSetProfileImage)
     }
 
+    fun submitProfileSelection() {
+        _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
+    }
+
     fun updateProfileImage(bitmap: Bitmap) {
         val state = _uiState.value ?: return
         _uiState.value = state.copy(profileImage = bitmap)

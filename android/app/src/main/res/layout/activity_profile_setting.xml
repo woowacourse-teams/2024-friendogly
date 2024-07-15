@@ -114,7 +114,7 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:onClick="@{() -> vm.selectProfileImage()}"
+                android:onClick="@{() -> vm.submitProfileSelection()}"
                 android:padding="18dp"
                 android:text="@string/make_profile_edit_btn_title"
                 app:editBtnBackgroundTextColor="@{vm.nickname}"

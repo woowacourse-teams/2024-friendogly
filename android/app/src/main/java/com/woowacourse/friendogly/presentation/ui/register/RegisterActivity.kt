@@ -7,13 +7,15 @@ import com.woowacourse.friendogly.databinding.ActivityRegisterBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.MainActivity
+import com.woowacourse.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
     private val viewModel: RegisterViewModel by viewModels()
 
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
-            val account = task?.getResult(ApiException::class.java) ?: return@registerForActivityResult
+            val account =
+                task?.getResult(ApiException::class.java) ?: return@registerForActivityResult
             val idToken = account.idToken ?: return@registerForActivityResult
             viewModel.handleGoogleLogin(idToken = idToken)
         }
@@ -39,7 +41,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
                     googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
-                    startActivity(MainActivity.getIntent(this))
+                    startActivity(ProfileSettingActivity.getIntent(this))
             }
         }
     }

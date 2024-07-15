@@ -1,6 +1,8 @@
 package com.woowacourse.friendogly.presentation.ui.profilesetting
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
@@ -110,5 +112,11 @@ class ProfileSettingActivity :
             )
 
         dialog.show(supportFragmentManager, "TAG")
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, ProfileSettingActivity::class.java)
+        }
     }
 }
