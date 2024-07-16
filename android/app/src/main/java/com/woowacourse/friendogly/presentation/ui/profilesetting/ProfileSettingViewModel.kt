@@ -1,12 +1,19 @@
 package com.woowacourse.friendogly.presentation.ui.profilesetting
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.woowacourse.friendogly.data.repository.HackathonRepository
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.remote.dto.request.RequestMemberPostDto
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+
+var memberId: Long = 1
 
 class ProfileSettingViewModel : BaseViewModel() {
     private val _uiState: MutableLiveData<ProfileSettingUiState> =
@@ -24,7 +31,20 @@ class ProfileSettingViewModel : BaseViewModel() {
     }
 
     fun submitProfileSelection() {
-        _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
+        viewModelScope.launch {
+            val request =
+                RequestMemberPostDto(
+                    name = nickname.value.toString(),
+                )
+            HackathonRepository.postMember(request).onSuccess { id ->
+                memberId = id.toLong()
+                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
+                Log.d("ttt memberId", memberId.toString())
+                Log.d("ttt id", id.toString())
+            }.onFailure {
+                Log.d("ttt", it.toString())
+            }
+        }
     }
 
     fun updateProfileImage(bitmap: Bitmap) {

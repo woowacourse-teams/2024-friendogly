@@ -8,7 +8,7 @@
         android:title="@string/bottom_home" />
 
     <item
-        android:id="@+id/woofFragment"
+        android:id="@+id/footPrintFragment"
         android:enabled="true"
         android:icon="@drawable/ic_dog"
         android:title="@string/bottom_woof" />

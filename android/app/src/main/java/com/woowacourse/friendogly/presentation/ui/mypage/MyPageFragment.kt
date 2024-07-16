@@ -33,7 +33,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 is MyPageNavigationAction.NavigateToDogDetail -> TODO()
                 is MyPageNavigationAction.NavigateToDogRegister ->
                     navigate(MyPageFragmentDirections.actionMyPageFragmentToRegisterDogFragment())
-                    
+
                 is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
             }
         }
@@ -41,5 +41,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             adapter.submitList(uiState.dogs)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPet()
     }
 }

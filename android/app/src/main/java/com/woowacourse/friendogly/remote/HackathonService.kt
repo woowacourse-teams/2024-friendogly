@@ -15,32 +15,30 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface HackathonService {
-
     @POST("/pets")
     suspend fun postPets(
-        @Body request:RequestPetPostDto
-    ):Response<Unit>
+        @Body request: RequestPetPostDto,
+    ): Response<Unit>
 
     @GET("/pets/mine/{id}")
     suspend fun getPets(
-        @Path("id") id:Long,
-    ):Response<List<ResponsePetGetDto>>
-
+        @Path("id") id: Long,
+    ): Response<List<ResponsePetGetDto>>
 
     @GET("/pets")
     suspend fun getPetByPetId(
-        @Body request:RequestPetsGetDto,
-    ):Response<ResponsePetGetDto>
+        @Body request: RequestPetsGetDto,
+    ): Response<ResponsePetGetDto>
 
-    @POST("/member")
+    @POST("/members")
     suspend fun postMember(
-        @Body request:RequestMemberPostDto,
-    ):Response<Unit>
+        @Body request: RequestMemberPostDto,
+    ): Response<Unit>
 
     @POST("/footprints")
     suspend fun postFoot(
-        @Body request:RequestFootPostDto
-    ):Response<Unit>
+        @Body request: RequestFootPostDto,
+    ): Response<Unit>
 
     @GET("/footprints/near")
     suspend fun getFoots(

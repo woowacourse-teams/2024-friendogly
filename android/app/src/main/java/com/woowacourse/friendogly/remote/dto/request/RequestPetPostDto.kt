@@ -8,7 +8,9 @@ data class RequestPetPostDto(
     val memberId: Long,
     val name: String,
     val description: String,
-    @Serializable(with = LocalDateSerializer::class)
-    val birthDate: LocalDate,
-    val sizeType: String
+    @Serializable(with = LocalDateSerializer::class) val birthDate: LocalDate,
+    val sizeType: String,
+    val gender: String,
+    val isNeutered: Boolean,
+    val image: String,
 )
