@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.navigation.safeargs)
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization")
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -14,6 +16,8 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val kakaoAppKey = localProperties.getProperty("kakao_app_key") ?: ""
+val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.woowacourse.friendogly"
@@ -28,7 +32,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "GOOGLE_CLIENT_ID", kakaoAppKey)
+        buildConfigField("String", "kakao_app_key", kakaoAppKey)
+        buildConfigField("String", "BASE_URL", baseUrl)
     }
 
     buildTypes {
@@ -67,4 +73,16 @@ dependencies {
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+
+    // serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
+    // map
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 }

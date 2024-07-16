@@ -33,7 +33,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 is MyPageNavigationAction.NavigateToDogDetail -> TODO()
                 is MyPageNavigationAction.NavigateToDogRegister ->
                     navigate(MyPageFragmentDirections.actionMyPageFragmentToRegisterDogFragment())
-
+                    
                 is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
             }
         }

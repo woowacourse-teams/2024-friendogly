@@ -15,6 +15,16 @@
         app:popUpTo="@id/navigation_graph"
         app:popUpToInclusive="true" />
 
+    <action
+        android:id="@+id/action_chat_fragment"
+        app:destination="@id/chatFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/navigation_graph"
+        app:popUpToInclusive="true" />
+
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.woowacourse.friendogly.presentation.ui.mypage.MyPageFragment"
@@ -33,5 +43,11 @@
         tools:layout="@layout/fragment_register_dog">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.chatlist.ChatListFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat_list"/>
 
 </navigation>
