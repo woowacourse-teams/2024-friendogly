@@ -23,33 +23,37 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp">
+        android:layout_margin="6dp"
+        android:background="@drawable/rect_white_fill_10"
+        android:clipToOutline="true">
 
         <ImageView
             android:id="@+id/iv_product_thumbnail"
-            glide12="@{dog.image}"
+            urlToImage="@{dog.image}"
             android:layout_width="200dp"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_dog" />
+            tools:src="@drawable/ic_launcher_background" />
 
         <TextView
             android:id="@+id/tv_product_name"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="9dp"
+            android:background="@drawable/black_gradient"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
+            android:paddingTop="30dp"
+            android:paddingBottom="10dp"
             android:text="@{dog.name}"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_product_thumbnail"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_product_thumbnail"
             tools:text="땡이" />
 
 

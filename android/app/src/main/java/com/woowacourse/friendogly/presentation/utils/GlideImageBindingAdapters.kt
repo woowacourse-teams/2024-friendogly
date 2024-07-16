@@ -46,12 +46,12 @@ fun ImageView.bindProfile1000(profilePath: String?) {
         .into(this)
 }
 
-@BindingAdapter("glide12")
-fun ImageView.bindGlide12(imageUrl: String?) {
+@BindingAdapter("urlToImage")
+fun ImageView.bindUrlToImage(imageUrl: String?) {
     imageUrl?.let { url ->
         Glide.with(context)
             .load(url)
-            .transform(CenterCrop(), RoundedCorners(12))
+            .centerCrop()
             .into(this)
     }
 }
