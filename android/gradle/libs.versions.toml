@@ -44,6 +44,10 @@ retrofit = "2.11.0"
 # paging
 paging = "3.3.0"
 
+# map
+playServicesLocation = "21.3.0"
+playServicesMaps = "19.0.0"
+
 [libraries]
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -89,6 +93,10 @@ google-auth = { group = "com.google.android.gms", name = "play-services-auth", v
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+# map
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 #ktlint
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }

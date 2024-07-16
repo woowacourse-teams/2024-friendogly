@@ -16,6 +16,7 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val kakaoAppKey = localProperties.getProperty("kakao_app_key") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
@@ -31,7 +32,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "GOOGLE_CLIENT_ID", kakaoAppKey)
+        buildConfigField("String", "kakao_app_key", kakaoAppKey)
         buildConfigField("String", "BASE_URL", baseUrl)
     }
 
@@ -80,4 +82,7 @@ dependencies {
     // serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
+    // map
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 }
