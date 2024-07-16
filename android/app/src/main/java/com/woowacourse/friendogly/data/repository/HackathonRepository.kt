@@ -5,6 +5,8 @@ import com.woowacourse.friendogly.remote.dto.request.RequestMemberPostDto
 import com.woowacourse.friendogly.remote.dto.request.RequestNearFootGetDto
 import com.woowacourse.friendogly.remote.dto.request.RequestPetPostDto
 import com.woowacourse.friendogly.remote.dto.request.RequestPetsGetDto
+import com.kakao.vectormap.LatLng
+import com.woowacourse.friendogly.remote.dto.request.RequestPetPostDto
 import com.woowacourse.friendogly.remote.dto.response.ResponseFootNearGetDto
 import com.woowacourse.friendogly.remote.dto.response.ResponsePetGetDto
 import com.woowacourse.friendogly.remote.retrofit.DogRetrofit
@@ -37,8 +39,7 @@ object HackathonRepository {
             DogRetrofit.hackathonService.postFoot(request).body() ?: error("서버 실패")
         }
 
-    suspend fun getFoot(request: RequestNearFootGetDto): Result<List<ResponseFootNearGetDto>> =
-        runCatching {
-            DogRetrofit.hackathonService.getFoot(request).body() ?: error("서버 실패")
-        }
+    suspend fun getFoots(latLng: LatLng): List<ResponseFootNearGetDto> =
+        DogRetrofit.hackathonService.getFoots(latLng.latitude, latLng.longitude).body()
+            ?: error("서버 실패")
 }

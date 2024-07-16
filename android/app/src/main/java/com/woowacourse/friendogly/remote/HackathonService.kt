@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface HackathonService {
     @POST("/pets")
@@ -40,7 +41,9 @@ interface HackathonService {
     ): Response<Unit>
 
     @GET("/footprints/near")
-    suspend fun getFoot(
-        @Body request: RequestNearFootGetDto,
-    ): Response<List<ResponseFootNearGetDto>>
+    suspend fun getFoots(
+        @Query("lat") latitude:Double,
+        @Query("lng") longitude:Double,
+    ):Response<List<ResponseFootNearGetDto>>
+
 }
