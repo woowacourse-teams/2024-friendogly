@@ -60,6 +60,22 @@ class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
                     name = "도토리",
                     image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
                 ),
+                dog.copy(
+                    name = "도토리",
+                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
+                ),
+                dog.copy(
+                    name = "도토리",
+                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
+                ),
+                dog.copy(
+                    name = "도토리",
+                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
+                ),
+                dog.copy(
+                    name = "도토리",
+                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
+                ),
             )
     }
 }
