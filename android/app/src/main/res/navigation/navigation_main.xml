@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_registerDogFragment"
             app:destination="@id/registerDogFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_footPrintFragment"
+            app:destination="@id/footPrintFragment" />
     </fragment>
 
     <fragment
@@ -45,9 +48,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.woowacourse.friendogly.presentation.ui.chatlist.ChatListFragment"
-        android:label="ChatFragment"
-        tools:layout="@layout/fragment_chat_list"/>
+        android:id="@+id/footPrintFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.footprint.FootPrintFragment"
+        android:label="FootPrintFragment"
+        tools:layout="@layout/fragment_foot_print"/>
 
 </navigation>

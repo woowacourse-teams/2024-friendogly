@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.mypage
 
+import com.woowacourse.friendogly.remote.dto.response.ResponsePetGetDto
 import java.time.LocalDate
 
 data class MyPageUiState(
@@ -18,3 +19,21 @@ data class Dog(
     val isNeutered: Boolean,
     val image: String,
 )
+
+fun List<ResponsePetGetDto>.toDog(): List<Dog> {
+    return this.map {
+        it.toDog()
+    }
+}
+
+fun ResponsePetGetDto.toDog(): Dog {
+    return Dog(
+        name = this.name,
+        description = this.description,
+        birthDate = this.birthDate,
+        sizeType = this.sizeType,
+        gender = this.gender,
+        isNeutered = this.isNeutered,
+        image = this.image,
+    )
+}

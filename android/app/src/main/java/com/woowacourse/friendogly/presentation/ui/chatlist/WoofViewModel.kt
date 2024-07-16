@@ -8,13 +8,12 @@ import com.woowacourse.friendogly.data.repository.HackathonRepository
 import kotlinx.coroutines.launch
 
 class WoofViewModel : ViewModel() {
-
     private val _dogInfo: MutableLiveData<WoofDogUiModel> = MutableLiveData()
     val dogInfo: LiveData<WoofDogUiModel> get() = _dogInfo
 
     fun getDogInfo(memberId: Long) {
         viewModelScope.launch {
-            _dogInfo.value = HackathonRepository.getPet(memberId).first().toUiModel()
+            _dogInfo.value = HackathonRepository.getPet(memberId).getOrThrow().first().toUiModel()
         }
     }
 }

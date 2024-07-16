@@ -1,10 +1,16 @@
 package com.woowacourse.friendogly.presentation.ui.mypage
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.woowacourse.friendogly.data.repository.HackathonRepository
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.ui.profilesetting.memberId
+import com.woowacourse.friendogly.remote.dto.response.ResponsePetGetDto
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
@@ -16,18 +22,26 @@ class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
     init {
-        fetchDummy()
+        fetchPet()
     }
 
-    private fun fetchDummy() {
-        val state = _uiState.value ?: return
+    fun fetchPet() {
+        viewModelScope.launch {
+            HackathonRepository.getPet(memberId = memberId)
+                .onSuccess { value: List<ResponsePetGetDto> ->
+                    val state = _uiState.value ?: return@launch
 
-        _uiState.value =
-            state.copy(
-                nickname = "손흥민",
-                email = "tottenham@gmail.com",
-                dogs = dogs,
-            )
+                    _uiState.value =
+                        state.copy(
+                            nickname = "손흥민",
+                            email = "tottenham@gmail.com",
+                            dogs = value.toDog().reversed() + dogs,
+                        )
+                    Log.d("Ttt getPet", value.toString())
+                }.onFailure {
+                    Log.d("Ttt getPet", it.toString())
+                }
+        }
     }
 
     fun navigateToDogRegister() {
