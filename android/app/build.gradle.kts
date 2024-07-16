@@ -17,6 +17,7 @@ localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
 val kakaoAppKey = localProperties.getProperty("kakao_app_key") ?: ""
+val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.woowacourse.friendogly"
@@ -33,6 +34,7 @@ android {
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", kakaoAppKey)
         buildConfigField("String", "kakao_app_key", kakaoAppKey)
+        buildConfigField("String", "BASE_URL", baseUrl)
     }
 
     buildTypes {
