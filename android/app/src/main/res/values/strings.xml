@@ -31,5 +31,7 @@
     <!--멍개-->
     <string name="group_user_list_subject">참여 견주</string>
     <string name="group_dog_list_subject">댕댕이들</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
