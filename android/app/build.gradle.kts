@@ -32,7 +32,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GOOGLE_CLIENT_ID", kakaoAppKey)
+        buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
         buildConfigField("String", "kakao_app_key", kakaoAppKey)
         buildConfigField("String", "BASE_URL", baseUrl)
     }

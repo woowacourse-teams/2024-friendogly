@@ -3,7 +3,6 @@ package com.woowacourse.friendogly.presentation.ui.footprint
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -23,12 +22,16 @@ import com.kakao.vectormap.label.LabelStyles
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.FragmentFootPrintBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.presentation.ui.chatlist.WoofBottomSheet
+import com.woowacourse.friendogly.presentation.ui.chatlist.WoofViewModel
 
 
 class FootPrintFragment : BaseFragment<FragmentFootPrintBinding>(R.layout.fragment_foot_print) {
     private lateinit var footPrintMap: KakaoMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+
+    private val woofViewModel = WoofViewModel()
 
     override fun initViewCreated() {
         binding.mvFootprintMap.start(object : MapLifeCycleCallback() {
@@ -59,11 +62,29 @@ class FootPrintFragment : BaseFragment<FragmentFootPrintBinding>(R.layout.fragme
                 requestLocationUpdates(locationRequest)
 
                 binding.btnFootprintMark.setOnClickListener {
-                    moveCameraCenterPosition()
+                    moveCameraCenterPosition { position ->
+                        woofViewModel.getFoots(position)
+                        markMyFootPrint(position)
+                    }
                 }
 
                 footPrintMap.setOnLabelClickListener { map, labelLayer, label ->
                     // 라벨 클릭 시 이벤트 처리
+                    woofViewModel.getDogInfo(woofViewModel.findFoot(label.position))
+                }
+
+                woofViewModel.dogInfo.observe(viewLifecycleOwner) {
+                    val bottomSheet = WoofBottomSheet()
+                    val bundle = WoofBottomSheet.getBundle(it)
+                    bottomSheet.arguments = bundle
+                    bottomSheet.show(parentFragmentManager, "")
+                }
+
+                woofViewModel.dogs.observe(viewLifecycleOwner) {
+                    it.forEach { foot ->
+                        val latLng = LatLng.from(foot.latitude, foot.longitude)
+                        markOtherFootPrint(latLng)
+                    }
                 }
             }
 
@@ -105,7 +126,9 @@ class FootPrintFragment : BaseFragment<FragmentFootPrintBinding>(R.layout.fragme
         }
     }
 
-    private fun moveCameraCenterPosition() {
+    private fun moveCameraCenterPosition(
+        data: (latLng: LatLng) -> Unit,
+    ) {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -117,9 +140,10 @@ class FootPrintFragment : BaseFragment<FragmentFootPrintBinding>(R.layout.fragme
             fusedLocationClient.lastLocation.addOnSuccessListener { lastLocation ->
                 if (lastLocation != null) {
                     val latLng = LatLng.from(lastLocation.latitude, lastLocation.longitude)
+                    data(latLng)
                     val cameraUpdate = CameraUpdateFactory.newCenterPosition(latLng, 15)
                     footPrintMap.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
-                    markFootPrint(latLng)
+//                    markOtherFootPrint(latLng)
                 }
             }.addOnFailureListener { exception ->
                 // 위치 정보를 가져오지 못했을 때 처리
@@ -127,10 +151,21 @@ class FootPrintFragment : BaseFragment<FragmentFootPrintBinding>(R.layout.fragme
         }
     }
 
-    private fun markFootPrint(latLng: LatLng) {
+    private fun markMyFootPrint(latLng: LatLng) {
+        val styles =
+            footPrintMap.labelManager?.addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.ic_my_footprint)))
+        val options =
+            LabelOptions.from(latLng).setStyles(styles).setTag("userId") // userId 를 tag로 설정
+        val layer = footPrintMap.labelManager?.layer
+        val label = layer?.addLabel(options)
+        label?.show()
+    }
+
+    private fun markOtherFootPrint(latLng: LatLng) {
         val styles =
             footPrintMap.labelManager?.addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.ic_footprint)))
-        val options = LabelOptions.from(latLng).setStyles(styles).setTag("userId") // userId 를 tag로 설정
+        val options =
+            LabelOptions.from(latLng).setStyles(styles).setTag("userId") // userId 를 tag로 설정
         val layer = footPrintMap.labelManager?.layer
         val label = layer?.addLabel(options)
         label?.show()

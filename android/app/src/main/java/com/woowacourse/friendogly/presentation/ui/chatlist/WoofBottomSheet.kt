@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +58,6 @@ class WoofBottomSheet : BottomSheetDialogFragment() {
         dlg.findViewById<TextView>(R.id.tv_woof_dog_gender)?.text = info.gender
         dlg.findViewById<TextView>(R.id.tv_woof_dog_size)?.text = info.size
         dlg.findViewById<TextView>(R.id.tv_woof_dog_desc)?.text = info.description
-
         Glide.with(requireContext())
             .load(info.imageUrl)
             .into(dlg.findViewById<ImageView>(R.id.iv_woof_dog)!!)
