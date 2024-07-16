@@ -42,7 +42,7 @@
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/black_gradient"
+            android:background="@drawable/rect_black_gradient_fill"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
