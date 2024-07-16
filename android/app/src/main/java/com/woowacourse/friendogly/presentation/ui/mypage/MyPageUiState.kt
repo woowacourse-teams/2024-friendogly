@@ -9,6 +9,7 @@ data class MyPageUiState(
     val dogs: List<Dog> = emptyList(),
 )
 
+// TODO 더미 데이터 모델
 data class Dog(
     val name: String,
     val description: String,
