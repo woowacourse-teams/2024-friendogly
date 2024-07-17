@@ -22,37 +22,39 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
         loadMyDogs()
     }
 
-    //TODO: romove sample
-    private fun loadMyDogs() = viewModelScope.launch {
-        delay(1000)
-        _dogs.value = listOf(
-            DogSelectUiModel(
-                id = 0L,
-                profileImage = "",
-                name = "강아지 1",
-            ),
-            DogSelectUiModel(
-                id = 0L,
-                profileImage = "",
-                name = "강아지 2",
-            ),
-            DogSelectUiModel(
-                id = 0L,
-                profileImage = "",
-                name = "강아지 3",
-            ),
-            DogSelectUiModel(
-                id = 0L,
-                profileImage = "",
-                name = "강아지 4",
-            ),
-            DogSelectUiModel(
-                id = 0L,
-                profileImage = "",
-                name = "강아지 5",
-            )
-        )
-    }
+    // TODO: romove sample
+    private fun loadMyDogs() =
+        viewModelScope.launch {
+            delay(1000)
+            _dogs.value =
+                listOf(
+                    DogSelectUiModel(
+                        id = 0L,
+                        profileImage = "",
+                        name = "강아지 1",
+                    ),
+                    DogSelectUiModel(
+                        id = 0L,
+                        profileImage = "",
+                        name = "강아지 2",
+                    ),
+                    DogSelectUiModel(
+                        id = 0L,
+                        profileImage = "",
+                        name = "강아지 3",
+                    ),
+                    DogSelectUiModel(
+                        id = 0L,
+                        profileImage = "",
+                        name = "강아지 4",
+                    ),
+                    DogSelectUiModel(
+                        id = 0L,
+                        profileImage = "",
+                        name = "강아지 5",
+                    ),
+                )
+        }
 
     override fun choiceDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
@@ -64,5 +66,4 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
         }
         _dogSelectEvent.emit()
     }
-
 }

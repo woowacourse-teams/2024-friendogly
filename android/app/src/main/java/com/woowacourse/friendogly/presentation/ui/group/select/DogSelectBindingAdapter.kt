@@ -14,6 +14,6 @@ fun dogSelect(
             Color.GREEN
         } else {
             Color.GRAY
-        }
+        },
     )
 }

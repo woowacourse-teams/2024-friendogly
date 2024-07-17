@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.group.select
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -48,7 +47,7 @@ class DogSelectFragment : BaseFragment<FragmentDogSelectBinding>(R.layout.fragme
         initNearViewSize()
     }
 
-    private fun initNearViewSize(){
+    private fun initNearViewSize()  {
         val transform = CompositePageTransformer()
         transform.addTransformer(MarginPageTransformer(8))
         transform.addTransformer { view: View, fl: Float ->
@@ -57,5 +56,4 @@ class DogSelectFragment : BaseFragment<FragmentDogSelectBinding>(R.layout.fragme
         }
         binding.vpGroupSelectDogList.setPageTransformer(transform)
     }
-
 }

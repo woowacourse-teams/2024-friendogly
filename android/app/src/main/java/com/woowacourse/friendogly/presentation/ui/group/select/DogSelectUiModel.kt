@@ -6,15 +6,15 @@ data class DogSelectUiModel(
     val id: Long,
     val name: String,
     val profileImage: String,
-): Serializable {
+) : Serializable {
     var isSelected = false
         private set
 
-    fun selectDog(){
+    fun selectDog()  {
         isSelected = true
     }
 
-    fun unSelectDog(){
+    fun unSelectDog()  {
         isSelected = false
     }
 }
