@@ -1,6 +1,11 @@
 package com.woowacourse.friendogly.footprint.domain;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.acos;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.toDegrees;
+import static java.lang.Math.toRadians;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -18,10 +23,10 @@ public class Location {
     private double longitude;
 
     public boolean isWithin(Location other, int radius) {
-        return distanceAsMeter(other) <= radius;
+        return calculateDistanceInMeters(other) <= radius;
     }
 
-    private double distanceAsMeter(Location other) {
+    private double calculateDistanceInMeters(Location other) {
         double theta = this.longitude - other.longitude;
         double dist = sin(toRadians(this.latitude)) * sin(toRadians(other.latitude)) +
                       cos(toRadians(this.latitude)) * cos(toRadians(other.latitude)) * cos(toRadians(theta));
