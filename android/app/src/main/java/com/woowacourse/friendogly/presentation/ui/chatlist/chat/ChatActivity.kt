@@ -7,5 +7,4 @@ import com.woowacourse.friendogly.presentation.base.BaseActivity
 class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     override fun initCreateView() {
     }
-
 }
