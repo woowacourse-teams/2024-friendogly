@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
@@ -20,7 +21,7 @@ public class FootprintCommandService {
 
     public Long save(SaveFootprintRequest request) {
         Member member = memberRepository.findById(request.memberId())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 ID입니다."));
+            .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
 
         Footprint footprint = footprintRepository.save(
             Footprint.builder()
