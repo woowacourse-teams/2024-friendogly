@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 
+    private static final int MAX_NAME_LENGTH = 15;
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-z0-9]+@[A-z0-9.-]+\\.[A-z]{2,6}$");
-    private static final int MAX_NAME_LENGTH = 15;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
