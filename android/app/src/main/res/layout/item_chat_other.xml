@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toEndOf="@id/iv_chat_user"
-        app:layout_constraintTop_toTopOf=""
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="에디" />
 
     <TextView
