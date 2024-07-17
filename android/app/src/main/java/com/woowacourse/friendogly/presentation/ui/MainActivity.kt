@@ -27,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.woofFragment, R.id.chatFragment, R.id.myPageFragment -> showBottomNav()
+                R.id.groupListFragment, R.id.woofFragment, R.id.chatListFragment, R.id.myPageFragment -> showBottomNav()
                 else -> hideBottomNav()
             }
         }
@@ -49,7 +49,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 super.onBackPressed()
             } else {
                 when (navController.currentDestination?.id) {
-                    R.id.homeFragment -> {
+                    R.id.groupListFragment -> {
                         if (System.currentTimeMillis() - waitTime >= 1500) {
                             waitTime = System.currentTimeMillis()
                             showToastMessage(getString(R.string.on_back_pressed_Message))
