@@ -24,6 +24,6 @@ public class MemberCommandService {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        return SaveMemberResponse.from(savedMember);
+        return new SaveMemberResponse(savedMember);
     }
 }
