@@ -13,6 +13,10 @@ class RegisterDogViewModel : BaseViewModel() {
         MutableLiveData(RegisterDogUiState())
     val uiState: LiveData<RegisterDogUiState> get() = _uiState
 
+    private val _profileImage: MutableLiveData<Bitmap?> =
+        MutableLiveData(null)
+    val profileImage: LiveData<Bitmap?> get() = _profileImage
+
     val dogName = MutableLiveData<String>("")
     val dogDescription = MutableLiveData<String>("")
     private var dogSize: DogSize = DogSize.SMALL
@@ -42,8 +46,7 @@ class RegisterDogViewModel : BaseViewModel() {
     }
 
     fun updateDogProfileImage(bitmap: Bitmap) {
-        val state = _uiState.value ?: return
-        _uiState.value = state.copy(profileImage = bitmap)
+        _profileImage.value = bitmap
     }
 
     fun updateDogProfileFile(file: MultipartBody.Part) {
@@ -74,7 +77,7 @@ class RegisterDogViewModel : BaseViewModel() {
 
     fun registerDog() {
         val state = _uiState.value ?: return
-        if (dogName.value == "" || dogDescription.value == "" || state.profileImage == null) return
+        if (dogName.value == "" || dogDescription.value == "" || _profileImage.value == null) return
         _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
     }
 }

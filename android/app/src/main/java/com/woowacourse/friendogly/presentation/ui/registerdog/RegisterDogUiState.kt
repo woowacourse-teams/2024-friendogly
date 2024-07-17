@@ -1,11 +1,9 @@
 package com.woowacourse.friendogly.presentation.ui.registerdog
 
-import android.graphics.Bitmap
 import okhttp3.MultipartBody
 import java.time.LocalDate
 
 data class RegisterDogUiState(
-    val profileImage: Bitmap? = null,
     val profilePath: MultipartBody.Part? = null,
     val dogBirthdayYear: Int = LocalDate.now().year,
     val dogBirthdayMonth: Int = LocalDate.now().month.value,
