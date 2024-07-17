@@ -2,13 +2,12 @@ package com.woowacourse.friendogly.presentation.ui.group.select
 
 import java.io.Serializable
 
-class DogSelectUiModel(
+data class DogSelectUiModel(
     val id: Long,
     val name: String,
     val profileImage: String,
-    isSelected: Boolean,
 ): Serializable {
-    var isSelected = isSelected
+    var isSelected = false
         private set
 
     fun selectDog(){

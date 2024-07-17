@@ -5,11 +5,15 @@
 
     <data>
         <variable
+            name="dogSelectActionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectActionHandler" />
+        <variable
             name="dogUiModel"
             type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:onClick="@{() ->dogSelectActionHandler.choiceDog(dogSelectActionHandler)}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

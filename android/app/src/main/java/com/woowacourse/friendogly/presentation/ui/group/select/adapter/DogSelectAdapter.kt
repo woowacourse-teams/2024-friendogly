@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.woowacourse.friendogly.databinding.ItemDogSelectProfileBinding
+import com.woowacourse.friendogly.presentation.ui.group.select.DogSelectActionHandler
 import com.woowacourse.friendogly.presentation.ui.group.select.DogSelectUiModel
 
 class DogSelectAdapter(
-
+    private val actionHandler: DogSelectActionHandler,
 ): ListAdapter<DogSelectUiModel,DogSelectViewHolder>(DogSelectDiffCallback()) {
     class DogSelectDiffCallback: DiffUtil.ItemCallback<DogSelectUiModel>() {
         override fun areItemsTheSame(
@@ -31,7 +32,7 @@ class DogSelectAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogSelectViewHolder {
         val view = ItemDogSelectProfileBinding.inflate(LayoutInflater.from(parent.context))
-        return DogSelectViewHolder(view)
+        return DogSelectViewHolder(view,actionHandler)
     }
 
     override fun onBindViewHolder(holder: DogSelectViewHolder, position: Int) {
