@@ -1,8 +1,12 @@
 package com.woowacourse.friendogly.presentation.ui
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -10,6 +14,7 @@ import com.woowacourse.friendogly.NavigationGraphDirections
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityMainBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
+import com.woowacourse.friendogly.presentation.ui.map.MapFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private lateinit var navHostFragment: NavHostFragment
@@ -17,7 +22,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private var waitTime = 0L
 
     override fun initCreateView() {
+        supportFragmentManager.commit {
+            replace(R.id.main, MapFragment())
+        }
         initNavController()
+        requestLocationPermissions()
     }
 
     private fun initNavController() {
@@ -67,7 +76,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
+    private fun requestLocationPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            val permissions =
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
+        }
+    }
+
     companion object {
+        const val LOCATION_PERMISSION_REQUEST_CODE = 100
+
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }

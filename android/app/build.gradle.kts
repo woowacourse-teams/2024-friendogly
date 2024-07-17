@@ -14,6 +14,8 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
+val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
     namespace = "com.woowacourse.friendogly"
@@ -29,6 +31,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "NAVER_CLIEND_ID", naverClientId)
+        buildConfigField("String", "base_url", baseUrl)
     }
 
     buildTypes {
@@ -62,6 +66,8 @@ dependencies {
     implementation(libs.bundles.navigation)
     implementation(libs.bundles.google)
     implementation(libs.bundles.kakao)
+    implementation(libs.bundles.naver)
+    implementation(libs.bundles.location)
     implementation(libs.bundles.network)
     implementation(libs.bundles.datastore)
     testImplementation(libs.bundles.test)
