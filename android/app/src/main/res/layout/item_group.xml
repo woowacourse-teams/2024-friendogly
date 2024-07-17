@@ -7,7 +7,7 @@
 
         <variable
             name="group"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel" />
+            type="com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel" />
         <variable
             name="actionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />

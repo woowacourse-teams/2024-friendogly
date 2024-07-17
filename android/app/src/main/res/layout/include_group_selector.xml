@@ -8,13 +8,10 @@
         <variable
             name="participationFilter"
             type="com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter" />
+
         <variable
             name="groupFilterSelector"
             type="com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector" />
-
-        <variable
-            name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
 
         <variable
             name="actionHandler"
