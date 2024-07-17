@@ -18,10 +18,9 @@ sealed class GroupFilter(val filterName: String) {
         companion object {
             private fun from(): List<GroupFilter> {
                 return listOf(
-                    SizeFilter("수컷"),
-                    SizeFilter("암컷"),
-                    SizeFilter("중성화 수컷"),
-                    SizeFilter("중성화 암컷"),
+                    SizeFilter("대형견"),
+                    SizeFilter("중형견"),
+                    SizeFilter("소형견"),
                 )
             }
         }
