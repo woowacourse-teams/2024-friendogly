@@ -1,8 +1,15 @@
+buildscript {
+    ext {
+        restdocsApiSpecVersion = '0.17.1'
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+    id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 group = 'com.woowacourse'
@@ -20,12 +27,25 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
+swaggerSources {
+    sample {
+        setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
+    }
 }
 
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
+openapi3 {
+    servers = [
+            { url = "http://3.35.5.179/" },
+            { url = "http://localhost:8080" }
+    ]
+    title = "반갑개 API 명세서"
+    description = "반갑개 명세서"
+    version = "0.0.1"
+    format = "yaml"
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -40,16 +60,43 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    swaggerUI 'org.webjars:swagger-ui:4.11.1'
 }
 
-tasks.named('test') {
-    outputs.dir snippetsDir
+tasks.withType(Test) {
     useJUnitPlatform()
+    systemProperty 'file.encoding', 'UTF-8'
 }
 
-tasks.named('asciidoctor') {
-    inputs.dir snippetsDir
-    dependsOn test
+tasks.withType(GenerateSwaggerUI) {
+    dependsOn 'openapi3'
+}
+
+// 생성된 SwaggerUI 를 jar 에 포함시키기 위해 build/resources 경로로 로 복사
+tasks.register('copySwaggerUI', Copy) {
+    dependsOn 'generateSwaggerUISample'
+
+    def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
+
+    from("${generateSwaggerUISampleTask.outputDir}")
+    into("${project.buildDir}/resources/main/static/docs")
+}
+
+// 3.4.3
+// bootJar 실행 전, copySwaggerUI 를 실행하도록 설정
+bootJar {
+    dependsOn 'copySwaggerUI'
+}
+
+
+jar {
+    from tasks.copySwaggerUI
+}
+
+resolveMainClassName {
+    dependsOn 'copySwaggerUI'
 }
