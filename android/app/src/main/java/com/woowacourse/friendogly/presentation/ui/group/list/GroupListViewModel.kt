@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
-class GroupListViewModel : BaseViewModel() {
+class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private val _groups: MutableLiveData<List<GroupUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupUiModel>> get() = _groups
 
@@ -24,7 +24,7 @@ class GroupListViewModel : BaseViewModel() {
 
     //TODO: remove dummy
     private fun loadGroups() = viewModelScope.launch {
-            delay(1000)
+        delay(1000)
         _groups.value = listOf(
             GroupUiModel(
                 groupId = 0L,
