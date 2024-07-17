@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FootprintQueryService {
 
-    private static final int FOOTPRINT_REMAIN_HOURS = 24;
+    private static final int FOOTPRINT_DURATION_HOURS = 24;
 
     private final FootprintRepository footprintRepository;
 
     public List<FindNearFootprintResponse> findNear(FindNearFootprintRequest request) {
-        LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_REMAIN_HOURS);
+        LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
         List<Footprint> recentFootprints = footprintRepository.findByCreatedAtAfter(startTime);
 
         Location currentLocation = new Location(request.lat(), request.lng());
