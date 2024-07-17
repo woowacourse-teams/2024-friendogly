@@ -15,7 +15,7 @@
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/rect_gray03_fill_16"
         android:backgroundTint="@color/gray02"
-        android:hint="메세지 보내기"
+        android:hint="@string/chat_send_hint_message"
         android:maxLines="1"
         android:paddingHorizontal="22dp"
         android:paddingVertical="7dp"

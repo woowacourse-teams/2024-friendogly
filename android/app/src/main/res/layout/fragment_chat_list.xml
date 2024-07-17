@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                app:title="채팅"
+                app:title="@string/chat_list_title"
                 app:titleMarginStart="16dp"
                 app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size24">
 
