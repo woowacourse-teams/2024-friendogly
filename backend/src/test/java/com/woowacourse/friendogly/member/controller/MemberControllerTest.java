@@ -38,7 +38,7 @@ class MemberControllerTest {
     @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_NameLengthOver() {
-        SaveMemberRequest request = new SaveMemberRequest("15글자를 초과하는 닉네임이다.으아아", "member@email.com");
+        SaveMemberRequest request = new SaveMemberRequest("1234567890123456", "member@email.com");
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)

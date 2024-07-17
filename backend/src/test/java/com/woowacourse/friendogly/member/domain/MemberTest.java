@@ -22,7 +22,7 @@ class MemberTest {
         ).doesNotThrowAnyException();
     }
 
-    @DisplayName("이메일 형식이 잘못되면 예외가 발생한다.")
+    @DisplayName("이메일 형식이 올바르지 않은 경우 예외가 발생한다.")
     @NullAndEmptySource
     @ValueSource(strings = {"www@.gmail", "@gmail.com"})
     @ParameterizedTest
@@ -34,8 +34,9 @@ class MemberTest {
         ).isInstanceOf(FriendoglyException.class);
     }
 
-    @DisplayName("이름 형식이 잘못되면 예외가 발생한다.")
+    @DisplayName("이름 형식이 올바르지 않은 경우 예외가 발생한다.")
     @NullAndEmptySource
+    @ValueSource(strings = {"1234567890123456"})
     @ParameterizedTest
     void create_Fail_IllegalNameFormat(String nameInput) {
         assertThatThrownBy(() -> Member.builder()
@@ -44,16 +45,4 @@ class MemberTest {
                 .build()
         ).isInstanceOf(FriendoglyException.class);
     }
-
-    @DisplayName("이름이 1글자 미만 15글자 초과면 예외가 발생한다.")
-    @ValueSource(strings = {"", "0000_0000_0000_1"})
-    @ParameterizedTest
-    void create_Fail_IllegalNameLength(String nameInput) {
-        assertThatThrownBy(() -> Member.builder()
-                .name(nameInput)
-                .email("crew@wooteco.com")
-                .build()
-        ).isInstanceOf(FriendoglyException.class);
-    }
-
 }
