@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.presentation.ui.map
 
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
@@ -29,7 +30,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onMapReady(naverMap: NaverMap) {
         setUpNaverMap(naverMap)
-        setUpMarkBtn(naverMap)
+        setUpMarkBtnClickAction(naverMap)
     }
 
     override fun onStart() {
@@ -80,7 +81,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         }
     }
 
-    private fun setUpMarkBtn(naverMap: NaverMap) {
+    private fun setUpMarkBtnClickAction(naverMap: NaverMap) {
         binding.btnMapMark.setOnClickListener {
             createMarker(naverMap)
         }
@@ -94,5 +95,22 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         marker.width = 125
         marker.height = 160
         marker.map = naverMap
+
+        marker.setOnClickListener {
+            val bottomSheet =
+                FootPrintBottomSheet.newInstance(
+                    DogUiModel(
+                        "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
+                        "땡이",
+                        "소형견",
+                        "암컷",
+                        11,
+                        "안녕하세요! 땡이에요~",
+                    ),
+                )
+            bottomSheet.show(parentFragmentManager, tag)
+            bottomSheet.setStyle(STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+            true
+        }
     }
 }
