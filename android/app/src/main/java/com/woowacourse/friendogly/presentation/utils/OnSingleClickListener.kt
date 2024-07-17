@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.presentation.utils
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.BindingAdapter
 
