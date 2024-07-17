@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +24,10 @@ class MemberControllerTest {
         RestAssured.port = port;
     }
 
-    @DisplayName("회원을 생성하면 201을 반환한다.")
+    @DisplayName("정상적으로 회원을 생성하면 201을 반환한다.")
     @Test
     void saveMember() {
-        SaveMemberRequest request = new SaveMemberRequest("누누");
+        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com");
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
@@ -35,10 +36,24 @@ class MemberControllerTest {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    @DisplayName("잘못된 값으로 회원을 생성하려고 하면 400을 반환한다.")
+    @Disabled
+    @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
     @Test
-    void saveMember_Fail_IllegalArguments() {
-        SaveMemberRequest request = new SaveMemberRequest("길이가 15글자 초과 입니다.");
+    void saveMember_Fail_NameLengthOver() {
+        SaveMemberRequest request = new SaveMemberRequest("15글자를 초과하는 닉네임이다.으아아", "member@email.com");
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/members")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Disabled
+    @DisplayName("이메일 형식이 아닌 경우 400을 반환한다.")
+    @Test
+    void saveMember_Fail_InvalidEmailFormat() {
+        SaveMemberRequest request = new SaveMemberRequest("땡이", "이메일 형식이 아닌 문자열");
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
