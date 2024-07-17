@@ -20,7 +20,7 @@ public class FootprintCommandService {
 
     public Long save(SaveFootprintRequest request) {
         Member member = memberRepository.findById(request.memberId())
-            .orElseThrow(() -> new IllegalArgumentException("멤버 없음"));
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 ID입니다."));
 
         Footprint footprint = footprintRepository.save(
             Footprint.builder()
