@@ -24,7 +24,7 @@ public class FootprintQueryService {
         LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
         List<Footprint> recentFootprints = footprintRepository.findByCreatedAtAfter(startTime);
 
-        Location currentLocation = new Location(request.lat(), request.lng());
+        Location currentLocation = new Location(request.latitude(), request.longitude());
 
         return recentFootprints.stream()
             .filter(footprint -> footprint.isNear(currentLocation))

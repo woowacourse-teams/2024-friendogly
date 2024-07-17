@@ -98,15 +98,15 @@ class FootprintControllerTest {
 
         mockMvc
             .perform(get("/footprints/near")
-                .param("lat", "37.5173316")
-                .param("lng", "127.1011661"))
+                .param("latitude", "37.5173316")
+                .param("longitude", "127.1011661"))
             .andDo(print())
             .andDo(document("footprints/near",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(
-                    parameterWithName("lat").description("현재 위치의 위도"),
-                    parameterWithName("lng").description("현재 위치의 경도")
+                    parameterWithName("latitude").description("현재 위치의 위도"),
+                    parameterWithName("longitude").description("현재 위치의 경도")
                 ),
                 responseFields(
                     fieldWithPath("[].memberId").description("발자국을 찍은 사용자 ID"),
