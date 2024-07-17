@@ -13,13 +13,11 @@ class GroupFilterSelector {
     val currentSelectedFilters: LiveData<List<GroupFilter>> get() = _currentSelectedFilters
 
     fun selectParticipationFilter(selectedFilter: ParticipationFilter) {
-        _participationFilter.value = selectedFilter
+        participationFilter = selectedFilter
     }
 
     fun addGroupFilter(filter: GroupFilter) {
-        if (confirmInValidFilter(filter)) {
-            _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
-        }
+        _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
     }
 
     fun removeGroupFilter(filter: GroupFilter) {
