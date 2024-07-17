@@ -9,7 +9,7 @@ class DogSelectViewHolder(
     private val binding: ItemDogSelectProfileBinding,
     private val actionHandler: DogSelectActionHandler,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(dogSelectUiModel: DogSelectUiModel)  {
+    fun bind(dogSelectUiModel: DogSelectUiModel) {
         binding.dogUiModel = dogSelectUiModel
         binding.dogSelectActionHandler = actionHandler
     }

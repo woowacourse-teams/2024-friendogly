@@ -10,11 +10,11 @@ data class DogSelectUiModel(
     var isSelected = false
         private set
 
-    fun selectDog()  {
+    fun selectDog() {
         isSelected = true
     }
 
-    fun unSelectDog()  {
+    fun unSelectDog() {
         isSelected = false
     }
 }
