@@ -6,22 +6,30 @@ import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.G
 import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.ParticipationFilter
 
 class GroupFilterSelector {
-    var participationFilter = ParticipationFilter.POSSIBLE
-        private set
+    private val _participationFilter : MutableLiveData<ParticipationFilter> = MutableLiveData(ParticipationFilter.POSSIBLE)
+    val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
     private val _currentSelectedFilters: MutableLiveData<List<GroupFilter>> = MutableLiveData()
     val currentSelectedFilters: LiveData<List<GroupFilter>> get() = _currentSelectedFilters
 
     fun selectParticipationFilter(selectedFilter: ParticipationFilter) {
-        participationFilter = selectedFilter
+        _participationFilter.value = selectedFilter
     }
 
     fun addGroupFilter(filter: GroupFilter) {
-        _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
+        if (confirmInValidFilter(filter)) {
+            _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
+        }
     }
 
     fun removeGroupFilter(filter: GroupFilter) {
         _currentSelectedFilters.value = _currentSelectedFilters.value?.minus(filter)
+    }
+
+    private fun confirmInValidFilter(filter: GroupFilter): Boolean{
+        return currentSelectedFilters.value?.all {
+            it.filterName != filter.filterName
+        } ?: true
     }
 
     companion object {

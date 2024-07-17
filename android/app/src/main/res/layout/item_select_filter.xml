@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="actionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
+
         <variable
             name="groupFilter"
             type="com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
         android:background="@drawable/rect_white_line_black_4"
         android:paddingHorizontal="6dp"
-        android:paddingVertical="3dp"
-        android:layout_marginHorizontal="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:paddingVertical="3dp">
 
         <TextView
             android:id="@+id/tv_group_list_filter_name"
-            tools:text = "중형견"
-            android:paddingEnd="5dp"
-            app:layout_constraintEnd_toStartOf=""
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{groupFilter.filterName}"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageView
-            app:layout_constraintStart_toEndOf="@id/tv_group_list_filter_name"
+            android:layout_height="wrap_content"
+            android:paddingEnd="5dp"
+            android:text="@{groupFilter.filterName}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="중형견" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_close"
-            android:backgroundTint="@color/white"
-            android:layout_width="12dp"
-            android:layout_height="12dp"/>
+            app:layout_constraintStart_toEndOf="@id/tv_group_list_filter_name"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
