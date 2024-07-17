@@ -3,10 +3,12 @@ name: backend-ci
 on:
   push:
     branches: [ "develop" ]
+    paths:
+     - 'backend/**'
   pull_request:
     branches: [ "develop" ]
-    # paths:
-    #  - 'backend/**'
+    paths:
+     - 'backend/**'
 
 defaults:
   run:
