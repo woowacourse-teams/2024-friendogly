@@ -31,3 +31,27 @@ fun ImageView.bindProfile1000(bitmap: Bitmap?) {
         .transform(CenterCrop(), RoundedCorners(1000))
         .into(this)
 }
+
+@BindingAdapter("glideProfile1000")
+fun ImageView.bindProfile1000(profilePath: String?) {
+    if (profilePath == null) {
+        this.setImageResource(R.drawable.img_dog)
+        return
+    }
+
+    Glide.with(context)
+        .asBitmap()
+        .load(profilePath)
+        .transform(CenterCrop(), RoundedCorners(1000))
+        .into(this)
+}
+
+@BindingAdapter("urlToImage")
+fun ImageView.bindUrlToImage(imageUrl: String?) {
+    imageUrl?.let { url ->
+        Glide.with(context)
+            .load(url)
+            .centerCrop()
+            .into(this)
+    }
+}
