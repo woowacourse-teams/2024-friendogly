@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.woowacourse.friendogly.presentation.ui.registerdog.DogSize" />
+
+        <import type="com.woowacourse.friendogly.presentation.ui.registerdog.DogGender" />
+
+        <variable
+            name="vm"
+            type="com.woowacourse.friendogly.presentation.ui.registerdog.RegisterDogViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_register_dog_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tv_register_dog_title"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="24dp"
+                android:text="@string/register_dog_toolbar_title"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:onSingleClick="@{() -> vm.executeBackAction()}"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+
+            <ImageView
+                android:id="@+id/iv_add_dog_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:src="@drawable/ic_add_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_image_title"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/dog_add_image_title"
+                app:layout_constraintEnd_toEndOf="@+id/iv_add_dog_image"
+                app:layout_constraintStart_toStartOf="@+id/iv_add_dog_image"
+                app:layout_constraintTop_toBottomOf="@+id/iv_add_dog_image" />
+
+
+            <ImageView
+                android:id="@+id/iv_dog_image"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:adjustViewBounds="true"
+                app:dogProfile="@{vm.uiState.profileImage}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                app:onSingleClick="@{() -> vm.selectDogProfileImage()}" />
+
+            <TextView
+                android:id="@+id/tv_dog_name_title"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/dog_name_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_dog_image" />
+
+
+            <EditText
+                android:id="@+id/et_user_name"
+                style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:hint="@string/register_dog_name_hint"
+                android:maxLength="15"
+                android:maxLines="1"
+                android:text="@={vm.dogName}"
+                app:layout_constraintStart_toStartOf="@+id/tv_dog_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dog_name_title" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_name_count"
+                style="Theme.AppCompat.TextView.Regular.Gray05.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                app:editTextLength="@{vm.dogName}"
+                app:layout_constraintBottom_toBottomOf="@+id/et_user_name"
+                app:layout_constraintEnd_toEndOf="@+id/et_user_name"
+                app:layout_constraintTop_toTopOf="@+id/et_user_name"
+                tools:text="0/15" />
+
+
+            <TextView
+                android:id="@+id/tv_description"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/description_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_user_name" />
+
+            <EditText
+                android:id="@+id/et_description"
+                style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:hint="@string/description_hint"
+                android:maxLength="20"
+                android:maxLines="2"
+                android:text="@={vm.dogDescription}"
+                app:layout_constraintStart_toStartOf="@+id/tv_description"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+            <TextView
+                android:id="@+id/tv_description_count"
+                style="Theme.AppCompat.TextView.Regular.Gray05.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                app:editTextDescriptionLength="@{vm.dogDescription}"
+                app:layout_constraintBottom_toBottomOf="@+id/et_description"
+                app:layout_constraintEnd_toEndOf="@+id/et_description"
+                app:layout_constraintTop_toTopOf="@+id/et_description"
+                tools:text="0/20" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_size"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/dog_size_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_description" />
+
+            <RadioGroup
+                android:id="@+id/radio_group_dog_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_dog_size">
+
+                <RadioButton
+                    android:id="@+id/rb_small"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="76dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/sel_regsiterdog_color_dog_option"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@{DogSize.SMALL.title}" />
+
+                <RadioButton
+                    android:id="@+id/rb_medium"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="76dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/sel_regsiterdog_color_dog_option"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@{DogSize.MEDIUM.title}" />
+
+                <RadioButton
+                    android:id="@+id/rb_large"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="76dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/sel_regsiterdog_color_dog_option"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@{DogSize.LARGE.title}" />
+
+
+            </RadioGroup>
+
+
+            <TextView
+                android:id="@+id/tv_dog_gender"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/dog_gender_title"
+                app:layout_constraintStart_toStartOf="@+id/radio_group_dog_size"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group_dog_size" />
+
+            <RadioGroup
+                android:id="@+id/radio_group_dog_gender"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dog_gender">
+
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/sel_regsiterdog_color_dog_option"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@{DogGender.MAIL.title}" />
+
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/sel_regsiterdog_color_dog_option"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@{DogGender.FEMALE.title}" />
+
+
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/checkbox_neutering"
+                style="@style/Widget.App.CheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.uiState.neutering}"
+                android:onClick="@{() -> vm.updateNeutering()}"
+                app:layout_constraintStart_toStartOf="@+id/radio_group_dog_gender"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group_dog_gender" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.updateNeutering()}"
+                android:text="@string/neutralized_title"
+                app:layout_constraintBottom_toBottomOf="@+id/checkbox_neutering"
+                app:layout_constraintStart_toEndOf="@+id/checkbox_neutering"
+                app:layout_constraintTop_toTopOf="@+id/checkbox_neutering" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_birthday"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/birthday_title"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_neutering"
+                app:layout_constraintTop_toBottomOf="@+id/checkbox_neutering" />
+
+
+            <TextView
+                android:id="@+id/tv_birthday"
+                style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
+                onSingleClick="@{() -> vm.selectDogBirthday()}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:clickable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dog_birthday"
+                app:month="@{vm.uiState.dogBirthdayMonth}"
+                app:year="@{vm.uiState.dogBirthdayYear}"
+                tools:text="2024년 07월" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_edit_submit"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="200dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:padding="18dp"
+                android:text="@string/dog_submit_title"
+                app:dogDescription="@{vm.dogDescription}"
+                app:dogName="@{vm.dogName}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_birthday"
+                app:onSingleClick="@{() -> vm.registerDog()}"
+                app:profileImage="@{vm.uiState.profileImage}"
+                tools:background="@color/blue" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>
