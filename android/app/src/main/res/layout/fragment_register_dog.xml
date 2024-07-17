@@ -289,19 +289,9 @@
                 android:layout_height="wrap_content"
                 android:checked="@{vm.uiState.neutering}"
                 android:onClick="@{() -> vm.updateNeutering()}"
+                android:text="@string/neutralized_title"
                 app:layout_constraintStart_toStartOf="@+id/radio_group_dog_gender"
                 app:layout_constraintTop_toBottomOf="@+id/radio_group_dog_gender" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> vm.updateNeutering()}"
-                android:text="@string/neutralized_title"
-                app:layout_constraintBottom_toBottomOf="@+id/checkbox_neutering"
-                app:layout_constraintStart_toEndOf="@+id/checkbox_neutering"
-                app:layout_constraintTop_toTopOf="@+id/checkbox_neutering" />
-
 
             <TextView
                 android:id="@+id/tv_dog_birthday"
