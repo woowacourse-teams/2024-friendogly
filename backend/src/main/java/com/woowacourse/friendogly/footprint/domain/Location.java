@@ -14,13 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Location {
 
-    private static final int BOUNDARY_RADIUS_METER = 1000;
-
     private double latitude;
     private double longitude;
 
-    public boolean isNear(Location other) {
-        return distanceAsMeter(other) <= BOUNDARY_RADIUS_METER;
+    public boolean isWithin(Location other, int radius) {
+        return distanceAsMeter(other) <= radius;
     }
 
     private double distanceAsMeter(Location other) {
