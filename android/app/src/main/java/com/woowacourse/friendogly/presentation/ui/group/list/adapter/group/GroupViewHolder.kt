@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.presentation.ui.group.list.adapter.group
 import androidx.recyclerview.widget.RecyclerView
 import com.woowacourse.friendogly.databinding.ItemGroupBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
+import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel
 
 class GroupViewHolder(
@@ -14,5 +15,9 @@ class GroupViewHolder(
     ){
         binding.group = groupUiModel
         binding.actionHandler = actionHandler
+
+        val filterAdapter = FilterAdapter()
+        binding.rcvGroupListFilterList.adapter = filterAdapter
+        filterAdapter.submitList(groupUiModel.filters)
     }
 }
