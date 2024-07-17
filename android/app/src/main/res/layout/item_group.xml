@@ -7,9 +7,13 @@
         <variable
             name="group"
             type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel" />
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:onClick="@{()->actionHandler.}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp">
