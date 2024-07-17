@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="dogSelectActionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectActionHandler" />
+
         <variable
             name="dogUiModel"
             type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:onClick="@{() ->dogSelectActionHandler.choiceDog(dogSelectActionHandler)}"
+        app:bindingSelectBorder="@{dogUiModel}"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:onClick="@{()->dogSelectActionHandler.choiceDog(dogUiModel)}">
 
         <ImageView
+            android:background="@color/white"
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <TextView
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            tools:text = "땡이 준비 갈 완료"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            tools:text="땡이 준비 갈 완료" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

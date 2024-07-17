@@ -20,7 +20,6 @@ class DogSelectAdapter(
             return oldItem.id == newItem.id
         }
 
-        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
             oldItem: DogSelectUiModel,
             newItem: DogSelectUiModel,
@@ -31,7 +30,7 @@ class DogSelectAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogSelectViewHolder {
-        val view = ItemDogSelectProfileBinding.inflate(LayoutInflater.from(parent.context))
+        val view = ItemDogSelectProfileBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return DogSelectViewHolder(view,actionHandler)
     }
 

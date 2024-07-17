@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"/>
 
         <androidx.viewpager2.widget.ViewPager2
-            android:layout_marginHorizontal="10dp"
+            android:paddingHorizontal="30dp"
             android:id="@+id/vp_group_select_dog_list"
             app:layout_constraintTop_toBottomOf="@id/view_group_select_top_bar"
             app:layout_constraintBottom_toTopOf="@id/btn_group_select_commit"
