@@ -119,13 +119,5 @@
     <!--멍멍 짓기-->
     <string name="woof_dog_age">%d살</string>
     <string name="woof_dog_name">%s가 여기서 산책하고 있어요!</string>
-    <string name="group_number_of_people">%d/%d</string>
-    <string name="group_group_info">%s · %s</string>
-    <string name="group_participate_name">모집중</string>
-    <string name="group_complete_participate_name">모집완료</string>
-
-    <!--멍멍 짓기-->
-    <string name="woof_dog_age">%d살</string>
-    <string name="woof_dog_name">%s가 여기서 산책하고 있어요!</string>
 
 </resources>
