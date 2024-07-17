@@ -16,5 +16,10 @@
     <color name="gray02">#F5F5F5</color>
     <color name="gray01">#FAFAFA</color>
     
+    <color name="orange07">#FF821E</color>
+    <color name="orange05">#FFB377</color>
+    <color name="orange03">#FFCBA1</color>
+    <color name="orange01">#FFE8D6</color>
+    
     <color name="blue">#8AABFF</color>
 </resources>

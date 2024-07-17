@@ -36,4 +36,9 @@
     <string name="group_user_list_subject">참여 견주</string>
     <string name="group_dog_list_subject">댕댕이들</string>
 
+    <!--채팅-->
+    <string name="chat_list_title">채팅</string>
+    <string name="chat_send_hint_message">메세지 보내기</string>
+
+
 </resources>
