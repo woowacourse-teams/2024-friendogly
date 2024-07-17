@@ -11,5 +11,6 @@ class GroupDetailFragment :
 
     override fun initViewCreated() {
         binding.vm = viewModel
+
     }
 }
