@@ -4,7 +4,6 @@ import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +35,6 @@ class MemberControllerTest {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    @Disabled
     @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_NameLengthOver() {
@@ -49,7 +47,6 @@ class MemberControllerTest {
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
-    @Disabled
     @DisplayName("이메일 형식이 아닌 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_InvalidEmailFormat() {
