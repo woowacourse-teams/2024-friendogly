@@ -26,7 +26,14 @@
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
     <string name="birthday_title">댕댕이가 태어난 달</string>
-
+    <string name="birthday_year">년</string>
+    <string name="birthday_month">월</string>
+    <string name="neutralized_title">중성화했어요.</string>
+    <string name="dog_size_title">댕댕이 사이즈</string>
+    <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
+    <string name="dog_gender_title">댕댕이 성별</string>
+    <string name="dog_submit_title">등록완료!</string>
+    
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
     <string name="bottom_woof">멍멍짖기</string>
@@ -43,12 +50,12 @@
 
     <!--이미지 크롭-->
     <string name="image_cropper_done">확인</string>
-    <string name="birthday_year">년</string>
-    <string name="birthday_month">월</string>
-    <string name="neutralized_title">중성화했어요.</string>
-    <string name="dog_size_title">댕댕이 사이즈</string>
-    <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
-    <string name="dog_gender_title">댕댕이 성별</string>
-    <string name="dog_submit_title">등록완료!</string>
 
+    <!--멍개-->
+    <string name="group_user_list_subject">참여 견주</string>
+    <string name="group_dog_list_subject">댕댕이들</string>
+
+    <!--채팅-->
+    <string name="chat_list_title">채팅</string>
+    <string name="chat_send_hint_message">메세지 보내기</string>
 </resources>

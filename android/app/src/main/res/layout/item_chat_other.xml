@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_chat_user"
+        android:layout_width="32dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/Circle" />
+
+    <TextView
+        android:id="@+id/tv_chat_user_nickname"
+        style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toEndOf="@id/iv_chat_user"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="에디" />
+
+    <TextView
+        android:id="@+id/tv_chat_other_message"
+        style="@style/Theme.AppCompat.TextView.Regular.Size16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rect_gray03_fill_16"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="7dp"
+        android:backgroundTint="@color/gray03"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tv_chat_user_nickname"
+        app:layout_constraintTop_toBottomOf="@id/tv_chat_user_nickname"
+        tools:text="채드야 도토리 사진 좀 많이 올려봐봐 레퍼런스 부족하다" />
+
+    <TextView
+        android:id="@+id/tv_chat_other_time"
+        style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_chat_other_message"
+        app:layout_constraintStart_toEndOf="@id/tv_chat_other_message"
+        tools:text="오후 2:23" />
+</androidx.constraintlayout.widget.ConstraintLayout>
