@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.woowacourse.friendogly.databinding.ItemFilterBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
 
-class FilterAdapter: ListAdapter<GroupFilter,FilterViewHolder>(FilterDiffCallback()) {
-    class FilterDiffCallback: DiffUtil.ItemCallback<GroupFilter>() {
+class FilterAdapter : ListAdapter<GroupFilter, FilterViewHolder>(FilterDiffCallback()) {
+    class FilterDiffCallback : DiffUtil.ItemCallback<GroupFilter>() {
         override fun areItemsTheSame(oldItem: GroupFilter, newItem: GroupFilter): Boolean {
-            return oldItem == newItem
+            return oldItem.filterName == newItem.filterName
         }
 
         override fun areContentsTheSame(oldItem: GroupFilter, newItem: GroupFilter): Boolean {
@@ -20,7 +20,7 @@ class FilterAdapter: ListAdapter<GroupFilter,FilterViewHolder>(FilterDiffCallbac
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
-        val binding = ItemFilterBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemFilterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FilterViewHolder(binding)
     }
 
