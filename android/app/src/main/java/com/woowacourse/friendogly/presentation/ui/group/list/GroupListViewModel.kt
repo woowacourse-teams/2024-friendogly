@@ -21,43 +21,47 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         loadGroups()
     }
 
-    //TODO: remove dummy
-    private fun loadGroups() = viewModelScope.launch {
-        delay(1000)
-        _groups.value = listOf(
-            GroupUiModel(
-                groupId = 0L,
-                filters = listOf(
-                    GroupFilter.SizeFilter.SmallDog(),
-                    GroupFilter.GenderFilter.Female(),
-                    GroupFilter.GenderFilter.NeutralizingMale(),
-                ),
-                groupPoster = "",
-                isParticipable = true,
-                title = "중형견 모임해요",
-                content = "공지 꼭 읽어주세요",
-                maximumNumberOfPeople = 5,
-                currentNumberOfPeople = 2,
-                groupLocation = "잠실6동",
-                groupLeader = "벼리",
-                groupDate = LocalDateTime.now(),
-            ),
-            GroupUiModel(
-                groupId = 0L,
-                filters = listOf(
-                    GroupFilter.SizeFilter.SmallDog(),
-                    GroupFilter.GenderFilter.Female(),
-                ),
-                groupPoster = "",
-                isParticipable = true,
-                title = "중형견 모임해요",
-                content = "공지 꼭 읽어주세요",
-                maximumNumberOfPeople = 5,
-                currentNumberOfPeople = 3,
-                groupLocation = "잠실5동",
-                groupLeader = "채드",
-                groupDate = LocalDateTime.now(),
-            ),
-        )
-    }
+    // TODO: remove dummy
+    private fun loadGroups() =
+        viewModelScope.launch {
+            delay(1000)
+            _groups.value =
+                listOf(
+                    GroupUiModel(
+                        groupId = 0L,
+                        filters =
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog(),
+                                GroupFilter.GenderFilter.Female(),
+                                GroupFilter.GenderFilter.NeutralizingMale(),
+                            ),
+                        groupPoster = "",
+                        isParticipable = true,
+                        title = "중형견 모임해요",
+                        content = "공지 꼭 읽어주세요",
+                        maximumNumberOfPeople = 5,
+                        currentNumberOfPeople = 2,
+                        groupLocation = "잠실6동",
+                        groupLeader = "벼리",
+                        groupDate = LocalDateTime.now(),
+                    ),
+                    GroupUiModel(
+                        groupId = 0L,
+                        filters =
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog(),
+                                GroupFilter.GenderFilter.Female(),
+                            ),
+                        groupPoster = "",
+                        isParticipable = true,
+                        title = "중형견 모임해요",
+                        content = "공지 꼭 읽어주세요",
+                        maximumNumberOfPeople = 5,
+                        currentNumberOfPeople = 3,
+                        groupLocation = "잠실5동",
+                        groupLeader = "채드",
+                        groupDate = LocalDateTime.now(),
+                    ),
+                )
+        }
 }

@@ -40,7 +40,6 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
         }
 
         viewModel.groupFilterSelector.currentSelectedFilters.observe(viewLifecycleOwner) { filters ->
-
         }
     }
 }

@@ -12,21 +12,33 @@ class GroupListAdapter(
     private val actionHandler: GroupListActionHandler,
 ) : ListAdapter<GroupUiModel, GroupViewHolder>(GroupDiffCallback()) {
     class GroupDiffCallback : DiffUtil.ItemCallback<GroupUiModel>() {
-        override fun areItemsTheSame(oldItem: GroupUiModel, newItem: GroupUiModel): Boolean {
+        override fun areItemsTheSame(
+            oldItem: GroupUiModel,
+            newItem: GroupUiModel,
+        ): Boolean {
             return oldItem.groupId == newItem.groupId
         }
 
-        override fun areContentsTheSame(oldItem: GroupUiModel, newItem: GroupUiModel): Boolean {
+        override fun areContentsTheSame(
+            oldItem: GroupUiModel,
+            newItem: GroupUiModel,
+        ): Boolean {
             return oldItem == newItem
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): GroupViewHolder {
         val binding = ItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GroupViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: GroupViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position), actionHandler)
     }
 }

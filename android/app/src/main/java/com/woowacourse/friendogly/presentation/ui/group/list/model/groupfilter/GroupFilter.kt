@@ -1,19 +1,22 @@
 package com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter
 
-
-
 sealed class GroupFilter(val filterName: String) {
     sealed class GenderFilter(filterName: String) : GroupFilter(filterName) {
         class Female : GenderFilter(FEMALE_NAME)
-        class Male: GenderFilter(MALE_NAME)
-        class NeutralizingFemale: GenderFilter(NEUTRALIZING_FEMALE_NAME)
-        class NeutralizingMale: GenderFilter(NEUTRALIZING_MALE_NAME)
+
+        class Male : GenderFilter(MALE_NAME)
+
+        class NeutralizingFemale : GenderFilter(NEUTRALIZING_FEMALE_NAME)
+
+        class NeutralizingMale : GenderFilter(NEUTRALIZING_MALE_NAME)
     }
 
     sealed class SizeFilter(filterName: String) : GroupFilter(filterName) {
-        class SmallDog: SizeFilter(SMALL_DOG_NAME)
-        class MediumDog: SizeFilter(MEDIUM_DOG_NAME)
-        class BigDog: SizeFilter(BIG_DOG_NAME)
+        class SmallDog : SizeFilter(SMALL_DOG_NAME)
+
+        class MediumDog : SizeFilter(MEDIUM_DOG_NAME)
+
+        class BigDog : SizeFilter(BIG_DOG_NAME)
     }
 
     companion object {

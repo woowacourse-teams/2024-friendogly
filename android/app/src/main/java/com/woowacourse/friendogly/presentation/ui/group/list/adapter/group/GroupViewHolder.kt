@@ -7,12 +7,12 @@ import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.Filt
 import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel
 
 class GroupViewHolder(
-    private val binding: ItemGroupBinding
-): RecyclerView.ViewHolder(binding.root) {
+    private val binding: ItemGroupBinding,
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
         groupUiModel: GroupUiModel,
         actionHandler: GroupListActionHandler,
-    ){
+    ) {
         binding.group = groupUiModel
         binding.actionHandler = actionHandler
 
