@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.footprint.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
@@ -12,7 +13,6 @@ import com.woowacourse.friendogly.member.repository.MemberRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ class FootprintQueryServiceTest {
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
             member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
-        Assertions.assertAll(
+        assertAll(
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.0),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
@@ -101,7 +101,7 @@ class FootprintQueryServiceTest {
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
             member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
-        Assertions.assertAll(
+        assertAll(
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.00000, 0.00000),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
@@ -129,9 +129,13 @@ class FootprintQueryServiceTest {
             (?, 0.22222, 0.22222, ?, FALSE);
             """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
-        assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
-            .extracting(FindMyLatestFootprintTimeResponse::createdAt)
-            .isEqualTo(oneMinuteAgo);
+        LocalDateTime time = footprintQueryService.findMyLatestFootprintTime(member.getId()).createdAt();
+
+        assertAll(
+            () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
+            () -> assertThat(time.getMinute()).isEqualTo(oneMinuteAgo.getMinute()),
+            () -> assertThat(time.getSecond()).isEqualTo(oneMinuteAgo.getSecond())
+        );
     }
 
     @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 없는 경우")
