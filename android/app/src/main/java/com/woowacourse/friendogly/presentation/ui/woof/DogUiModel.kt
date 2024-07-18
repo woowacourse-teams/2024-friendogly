@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.map
+package com.woowacourse.friendogly.presentation.ui.woof
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

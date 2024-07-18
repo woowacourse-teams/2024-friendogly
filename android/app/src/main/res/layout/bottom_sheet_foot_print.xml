@@ -3,12 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="dog"
+            type="com.woowacourse.friendogly.presentation.ui.woof.DogUiModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_woof_walk"
+            android:id="@+id/layout_woof_foot_print"
             style="@style/Widget.Material3.BottomSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,21 +23,22 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-                android:id="@+id/drag_handle_woof_walk"
+                android:id="@+id/drag_handle_woof_foot_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_map_dog"
+                android:id="@+id/iv_woof_dog"
+                glide="@{dog.imageUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="90dp"
                 android:layout_marginTop="7dp"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toBottomOf="@id/drag_handle_woof_walk"
+                app:layout_constraintTop_toBottomOf="@id/drag_handle_woof_foot_print"
                 app:shapeAppearanceOverlay="@style/RoundBig"
-                tools:src="@drawable/img_dog" />
+                tools:src="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/tv_woof_dog_name"
@@ -39,9 +47,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:gravity="center"
+                dogName="@{dog.name}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_map_dog"
+                app:layout_constraintTop_toBottomOf="@id/iv_woof_dog"
                 tools:text="땡이가 여기서 산책하고 있어요!" />
 
             <TextView
@@ -53,6 +62,7 @@
                 android:background="@drawable/rect_orange700_fill_12"
                 android:paddingHorizontal="25dp"
                 android:paddingVertical="7dp"
+                android:text="@{@string/woof_dog_age(dog.age)}"
                 app:layout_constraintEnd_toStartOf="@id/tv_woof_dog_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_name"
@@ -67,6 +77,7 @@
                 android:background="@drawable/rect_orange700_fill_12"
                 android:paddingHorizontal="25dp"
                 android:paddingVertical="7dp"
+                android:text="@{dog.size}"
                 app:layout_constraintEnd_toStartOf="@id/tv_woof_dog_gender"
                 app:layout_constraintStart_toEndOf="@id/tv_woof_dog_age"
                 app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_name"
@@ -81,6 +92,7 @@
                 android:background="@drawable/rect_orange700_fill_12"
                 android:paddingHorizontal="25dp"
                 android:paddingVertical="7dp"
+                android:text="@{dog.gender}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_woof_dog_size"
                 app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_name"
@@ -107,13 +119,10 @@
                 android:background="@drawable/rect_orange100_fill_12"
                 android:minHeight="80dp"
                 android:padding="15dp"
+                android:text="@{dog.description}"
                 app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_introduce"
                 tools:text="땡이는 사람을 좋아해요! 땡이를 보게 되면 말 걸어주세요!!" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

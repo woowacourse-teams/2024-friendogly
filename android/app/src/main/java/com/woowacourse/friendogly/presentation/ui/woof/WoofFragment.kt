@@ -1,8 +1,9 @@
-package com.woowacourse.friendogly.presentation.ui.map
+package com.woowacourse.friendogly.presentation.ui.woof
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
@@ -11,16 +12,18 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.woowacourse.friendogly.R
-import com.woowacourse.friendogly.databinding.FragmentMapBinding
+import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.woowacourse.friendogly.presentation.ui.woof.bottom.FootPrintBottomSheet
 
-class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
+class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var mapView: MapView
     private lateinit var naverMap: NaverMap
 
     override fun initViewCreated() {
+        setUpDataBinding()
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
         mapView = binding.mapView
@@ -30,7 +33,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
 
     override fun onMapReady(naverMap: NaverMap) {
         setUpNaverMap(naverMap)
-        setUpMarkBtnClickAction(naverMap)
+        setUpMarkBtnClickAction()
     }
 
     override fun onStart() {
@@ -68,6 +71,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         mapView.onLowMemory()
     }
 
+    private fun setUpDataBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
     private fun setUpNaverMap(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
@@ -81,13 +88,27 @@ class MapFragment : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnM
         }
     }
 
-    private fun setUpMarkBtnClickAction(naverMap: NaverMap) {
+    private fun setUpMarkBtnClickAction() {
         binding.btnMapMark.setOnClickListener {
-            createMarker(naverMap)
+            moveCameraCenterPosition()
+            createMarker()
         }
     }
 
-    private fun createMarker(naverMap: NaverMap) {
+    private fun moveCameraCenterPosition() {
+        if (locationSource.lastLocation != null) {
+            val lastLocation = locationSource.lastLocation ?: return
+            val latLng =
+                LatLng(
+                    lastLocation.latitude,
+                    lastLocation.longitude,
+                )
+            val cameraUpdate = CameraUpdate.scrollTo(latLng)
+            naverMap.moveCamera(cameraUpdate)
+        }
+    }
+
+    private fun createMarker() {
         val marker = Marker()
         val position = locationSource.lastLocation ?: return
         marker.position = LatLng(position.latitude, position.longitude)

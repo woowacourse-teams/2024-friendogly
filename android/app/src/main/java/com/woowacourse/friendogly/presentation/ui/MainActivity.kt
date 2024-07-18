@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -14,7 +13,6 @@ import com.woowacourse.friendogly.NavigationGraphDirections
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityMainBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
-import com.woowacourse.friendogly.presentation.ui.map.MapFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private lateinit var navHostFragment: NavHostFragment
@@ -22,9 +20,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private var waitTime = 0L
 
     override fun initCreateView() {
-        supportFragmentManager.commit {
-            replace(R.id.main, MapFragment())
-        }
         initNavController()
         requestLocationPermissions()
     }

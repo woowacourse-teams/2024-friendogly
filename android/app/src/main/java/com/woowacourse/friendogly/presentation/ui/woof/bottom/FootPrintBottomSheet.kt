@@ -1,16 +1,17 @@
-package com.woowacourse.friendogly.presentation.ui.map
+package com.woowacourse.friendogly.presentation.ui.woof.bottom
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.woowacourse.friendogly.databinding.BottomSheetMapBinding
+import com.woowacourse.friendogly.databinding.BottomSheetFootPrintBinding
+import com.woowacourse.friendogly.presentation.ui.woof.DogUiModel
 import com.woowacourse.friendogly.presentation.utils.bundleParcelable
 
 class FootPrintBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetMapBinding? = null
-    val binding: BottomSheetMapBinding
+    private var _binding: BottomSheetFootPrintBinding? = null
+    val binding: BottomSheetFootPrintBinding
         get() = _binding!!
 
     private val dog: DogUiModel by lazy {
@@ -25,7 +26,7 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = BottomSheetMapBinding.inflate(inflater, container, false)
+        _binding = BottomSheetFootPrintBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,11 +35,17 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setUpDataBinding()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setUpDataBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.dog = dog
     }
 
     companion object {
