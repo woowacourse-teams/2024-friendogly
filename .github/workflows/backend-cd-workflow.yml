@@ -79,6 +79,8 @@ jobs:
 
       - name: Start server
         run: |
-          sudo nohup java -jar ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar &
+          pwd
+          cd build/libs
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
 
