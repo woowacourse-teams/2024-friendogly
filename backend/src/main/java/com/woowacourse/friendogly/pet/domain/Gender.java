@@ -1,26 +1,17 @@
 package com.woowacourse.friendogly.pet.domain;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
+
 public enum Gender {
-    MALE("수컷"),
-    FEMALE("암컷"),
-    ;
 
-    private final String value;
-
-    Gender(String value) {
-        this.value = value;
-    }
+    MALE,
+    FEMALE;
 
     public static Gender toGender(String gender) {
-        for (Gender value : values()) {
-            if (value.value.equals(gender)) {
-                return value;
-            }
+        try {
+            return Gender.valueOf(gender);
+        } catch (IllegalArgumentException e) {
+            throw new FriendoglyException("존재하지 않는 Gender 입니다.");
         }
-        throw new IllegalArgumentException("존재하지 않는 gender가 입력되었습니다.");
-    }
-
-    public String getValue() {
-        return value;
     }
 }
