@@ -56,7 +56,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: friendogly-be-develop-jar
-          path: ./backend/build/libs
 
       - name: Check if room-esc server is running on port 8080
         id: check-server-on-port
@@ -78,18 +77,7 @@ jobs:
           echo "Preivous running Server stopped."
 
       - name: Start server
-        run: |
-          pwd
-          cd backend/build/libs
-          pwd
-          ls
-          cd backend
-          pwd
-          cd build
-          pwd
-          cd libs
-          pwd
-          ls
+        run:
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
 
