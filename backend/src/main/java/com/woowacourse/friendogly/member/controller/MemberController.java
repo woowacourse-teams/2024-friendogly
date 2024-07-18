@@ -1,8 +1,9 @@
 package com.woowacourse.friendogly.member.controller;
 
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
-import com.woowacourse.friendogly.member.dto.response.saveMemberResponse;
+import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.service.MemberCommandService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,9 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveMember(@RequestBody SaveMemberRequest request){
-        saveMemberResponse saveMemberResponse = memberCommandService.saveMember(request);
-        return ResponseEntity.created(URI.create("/members/" + saveMemberResponse.id())).build();
+    public ResponseEntity<SaveMemberResponse> saveMember(@RequestBody @Valid SaveMemberRequest request) {
+        SaveMemberResponse response = memberCommandService.saveMember(request);
+        return ResponseEntity.created(URI.create("/members/" + response.id()))
+                .body(response);
     }
 }
