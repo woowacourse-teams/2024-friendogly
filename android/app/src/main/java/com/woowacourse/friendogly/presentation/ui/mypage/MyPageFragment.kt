@@ -30,7 +30,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
                 is MyPageNavigationAction.NavigateToSetting -> TODO()
-                is MyPageNavigationAction.NavigateToDogDetail -> TODO()
+                is MyPageNavigationAction.NavigateToDogDetail ->
+                    navigate(MyPageFragmentDirections.actionMyPageFragmentToDogDetailFragment(action.id))
+
                 is MyPageNavigationAction.NavigateToDogRegister -> TODO()
                 is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
             }
