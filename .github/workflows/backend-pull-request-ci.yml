@@ -2,11 +2,11 @@ name: backend-ci
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop1" ]
     paths:
      - 'backend/**'
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop1" ]
     paths:
      - 'backend/**'
 
