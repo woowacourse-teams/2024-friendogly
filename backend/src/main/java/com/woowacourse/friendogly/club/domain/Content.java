@@ -27,7 +27,7 @@ public class Content {
 
     private void validate(String content) {
         if (StringUtils.isBlank(content) || content.length() > MAX_CONTENT_LENGTH) {
-            throw new FriendoglyException("내용은 1글자 이상 1000글자 이하로 작성해주세요.");
+            throw new FriendoglyException(String.format("내용은 1글자 이상 %d글자 이하로 작성해주세요.", MAX_CONTENT_LENGTH));
         }
     }
 }

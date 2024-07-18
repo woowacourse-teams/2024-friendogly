@@ -23,7 +23,11 @@ public class MemberCapacity {
 
     private void validate(int value) {
         if (value < MIN_CAPACITY_SIZE || value > MAX_CAPACITY_SIZE) {
-            throw new FriendoglyException("모집 인원은 1명 이상 5명 이하 입니다.");
+            throw new FriendoglyException(String.format(
+                    "모집 인원은 %d명 이상 %d명 이하 입니다.",
+                    MIN_CAPACITY_SIZE,
+                    MAX_CAPACITY_SIZE)
+            );
         }
     }
 }
