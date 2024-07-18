@@ -7,11 +7,16 @@ import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
+    private val _participationFilter: MutableLiveData<ParticipationFilter> =
+        MutableLiveData(ParticipationFilter.POSSIBLE)
+    val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
+
     private val _groups: MutableLiveData<List<GroupUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupUiModel>> get() = _groups
 
