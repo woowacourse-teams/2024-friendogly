@@ -17,7 +17,7 @@ VALUES (1, 37.5173316, 127.1011661, TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
        (6, 37.5171728, 127.1047797, TIMESTAMPADD(MINUTE, -60, NOW()), FALSE),
        (7, 37.516183, 127.1068874, TIMESTAMPADD(MINUTE, -70, NOW()), FALSE);
 
-INSERT INTO pet(member_id, name, description, birth_date, size_type, gender, is_neutered, image)
+INSERT INTO pet(member_id, name, description, birth_date, size_type, gender, is_neutered, image_url)
 VALUES (1, '귀요미', '제 이름은 귀요미입니다', '2010-04-01', 'small', 'male', TRUE, 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201901/20/28017477-0365-4a43-b546-008b603da621.jpg'),
        (2, '멍뭉이', '우리 멍뭉이 귀엽죠?', '2011-05-01', 'medium', 'female', FALSE, 'https://img.freepik.com/premium-photo/cute-puppy_976589-177.jpg?w=1060'),
        (3, '보리', '보리보리 쌀', '2021-11-01', 'large', 'male', TRUE, 'https://img.extmovie.com/files/attach/images/148/921/189/074/4e27f0d91051df9ba456302557c78977.jpg'),
