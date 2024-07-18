@@ -25,7 +25,7 @@ public class PetQueryService {
     public List<FindPetResponse> findPets(FindPetRequest findPetRequest) {
         List<Pet> pets = petRepository.findByMemberId(findPetRequest.memberId());
         return pets.stream()
-                .map(FindPetResponse::from)
+                .map(FindPetResponse::new)
                 .toList();
     }
 }

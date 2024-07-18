@@ -10,17 +10,18 @@ public record FindPetResponse(
         String sizeType,
         String gender,
         boolean isNeutered,
-        String image
+        String imageUrl
 ) {
-    public static FindPetResponse from(Pet pet) {
-        return new FindPetResponse(
+
+    public FindPetResponse(Pet pet) {
+        this(
                 pet.getName(),
                 pet.getDescription(),
                 pet.getBirthDate(),
-                pet.getSizeType().getValue(),
-                pet.getGender().getValue(),
+                pet.getSizeType().toString(),
+                pet.getGender().toString(),
                 pet.isNeutered(),
-                pet.getImage()
+                pet.getImageUrl()
         );
     }
 }
