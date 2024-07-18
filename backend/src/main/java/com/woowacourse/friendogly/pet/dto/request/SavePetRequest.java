@@ -13,7 +13,6 @@ public record SavePetRequest(
         LocalDate birthDate,
         String sizeType,
         String gender,
-        boolean isNeutered,
         String imageUrl
 ) {
     public Pet toEntity(Member member) {
@@ -24,7 +23,6 @@ public record SavePetRequest(
                 .birthDate(birthDate)
                 .sizeType(SizeType.toSizeType(sizeType))
                 .gender(Gender.toGender(gender))
-                .isNeutered(isNeutered)
                 .imageUrl(imageUrl)
                 .build();
     }

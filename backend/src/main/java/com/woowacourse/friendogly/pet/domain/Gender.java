@@ -5,7 +5,9 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 public enum Gender {
 
     MALE,
-    FEMALE;
+    FEMALE,
+    MALE_NEUTERED,
+    FEMALE_NEUTERED;
 
     public static Gender toGender(String gender) {
         try {

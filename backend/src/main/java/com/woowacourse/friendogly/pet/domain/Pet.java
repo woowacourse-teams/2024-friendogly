@@ -37,8 +37,6 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private boolean isNeutered;
-
     private String imageUrl;
 
     @Builder
@@ -49,7 +47,6 @@ public class Pet {
             LocalDate birthDate,
             SizeType sizeType,
             Gender gender,
-            boolean isNeutered,
             String imageUrl
     ) {
         this.member = member;
@@ -58,7 +55,6 @@ public class Pet {
         this.birthDate = birthDate;
         this.sizeType = sizeType;
         this.gender = gender;
-        this.isNeutered = isNeutered;
         this.imageUrl = imageUrl;
     }
 }

@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 class GenderTest {
 
     @DisplayName("String 타입으로 Gender를 입력하면 Enum으로 변환한다.")
-    @ValueSource(strings = {"MALE", "FEMALE"})
+    @ValueSource(strings = {"MALE", "FEMALE", "MALE_NEUTERED", "FEMALE_NEUTERED"})
     @ParameterizedTest
     void toGender(String input) {
         assertThatCode(() -> Gender.toGender(input))
