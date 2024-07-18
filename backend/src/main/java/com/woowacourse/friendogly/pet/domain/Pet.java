@@ -26,7 +26,7 @@ public class Pet {
     private static final int MAX_NAME_LENGTH = 15;
     private static final int MAX_DESCRIPTION_LENGTH = 15;
     private static final Pattern VALID_URL_REGEX =
-            Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+            Pattern.compile("^(https?:\\/\\/)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}(:[0-9]{1,5})?(\\/.*)?$");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +65,7 @@ public class Pet {
             Gender gender,
             String imageUrl
     ) {
+        validateMember(member);
         validateName(name);
         validateDescription(description);
         validateBirthDate(birthDate);
@@ -77,6 +78,12 @@ public class Pet {
         this.sizeType = sizeType;
         this.gender = gender;
         this.imageUrl = imageUrl;
+    }
+
+    private void validateMember(Member member) {
+        if (member == null) {
+            throw new FriendoglyException("member는 null일 수 없습니다.");
+        }
     }
 
     private void validateName(String name) {
@@ -97,7 +104,7 @@ public class Pet {
             throw new FriendoglyException("생년월일은 필수 입력 값입니다.");
         }
 
-        if (birthDate.isBefore(LocalDate.now())) {
+        if (birthDate.isAfter(LocalDate.now())) {
             throw new FriendoglyException("생년월일은 현재 날짜와 같거나, 이전이어야 합니다.");
         }
     }
