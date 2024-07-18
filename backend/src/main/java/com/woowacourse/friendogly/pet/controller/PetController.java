@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
 import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
 import com.woowacourse.friendogly.pet.service.PetCommandService;
 import com.woowacourse.friendogly.pet.service.PetQueryService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<SavePetResponse> savePet(@RequestBody SavePetRequest savePetRequest) {
+    public ResponseEntity<SavePetResponse> savePet(@RequestBody @Valid SavePetRequest savePetRequest) {
         SavePetResponse response = petCommandService.savePet(savePetRequest);
         return ResponseEntity.created(URI.create("/pets/" + response.id()))
                 .body(response);
