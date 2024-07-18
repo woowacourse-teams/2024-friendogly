@@ -6,7 +6,7 @@ import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.G
 import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.ParticipationFilter
 
 class GroupFilterSelector {
-    private val _participationFilter : MutableLiveData<ParticipationFilter> = MutableLiveData(ParticipationFilter.POSSIBLE)
+    private val _participationFilter: MutableLiveData<ParticipationFilter> = MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
     private val _currentSelectedFilters: MutableLiveData<List<GroupFilter>> = MutableLiveData()
@@ -26,7 +26,7 @@ class GroupFilterSelector {
         _currentSelectedFilters.value = _currentSelectedFilters.value?.minus(filter)
     }
 
-    private fun confirmInValidFilter(filter: GroupFilter): Boolean{
+    private fun confirmInValidFilter(filter: GroupFilter): Boolean {
         return currentSelectedFilters.value?.all {
             it.filterName != filter.filterName
         } ?: true

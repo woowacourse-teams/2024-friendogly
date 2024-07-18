@@ -6,8 +6,8 @@ import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.G
 
 class FilterViewHolder(
     private val binding: ItemFilterBinding,
-): RecyclerView.ViewHolder(binding.root){
-    fun bind(filter: GroupFilter){
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(filter: GroupFilter) {
         binding.groupFilter = filter
         binding.executePendingBindings()
     }

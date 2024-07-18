@@ -9,22 +9,33 @@ import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.G
 
 class FilterAdapter : ListAdapter<GroupFilter, FilterViewHolder>(FilterDiffCallback()) {
     class FilterDiffCallback : DiffUtil.ItemCallback<GroupFilter>() {
-        override fun areItemsTheSame(oldItem: GroupFilter, newItem: GroupFilter): Boolean {
+        override fun areItemsTheSame(
+            oldItem: GroupFilter,
+            newItem: GroupFilter,
+        ): Boolean {
             return oldItem.filterName == newItem.filterName
         }
 
-        override fun areContentsTheSame(oldItem: GroupFilter, newItem: GroupFilter): Boolean {
+        override fun areContentsTheSame(
+            oldItem: GroupFilter,
+            newItem: GroupFilter,
+        ): Boolean {
             return oldItem == newItem
         }
-
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): FilterViewHolder {
         val binding = ItemFilterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FilterViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: FilterViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: FilterViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 }
