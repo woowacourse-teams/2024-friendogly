@@ -2,11 +2,11 @@ name: deploy
 
 on:
   push:
-    branches: ['develop']
+    branches: ['develop12']
     # paths:
     #  - 'backend/**'
   pull_request:
-    branches: ['develop']
+    branches: ['develop12']
     # paths:
     #  - 'backend/**'
 
