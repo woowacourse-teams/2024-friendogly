@@ -10,10 +10,6 @@ on:
     # paths:
     #  - 'backend/**'
 
-defaults:
-  run:
-   
-
 jobs:
   build:
     runs-on: ubuntu-latest
