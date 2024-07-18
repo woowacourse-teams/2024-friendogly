@@ -51,7 +51,6 @@ jobs:
       - name: change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
-          chmod +x ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
 
       - name: Download build artifact
         uses: actions/download-artifact@v3
