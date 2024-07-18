@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.woowacourse.friendogly.presentation.ui.group.list.GroupListFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.mypage.MyPageFragment"
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page">
 
