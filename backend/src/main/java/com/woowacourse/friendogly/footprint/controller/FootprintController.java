@@ -2,8 +2,10 @@ package com.woowacourse.friendogly.footprint.controller;
 
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import jakarta.validation.Valid;
@@ -12,6 +14,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,5 +48,13 @@ public class FootprintController {
         // memberId == 1L 로 dummy data 사용
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         return footprintQueryService.findMyLatestFootprintTime(1L);
+    }
+
+    @PostMapping("/image/{footprintId}")
+    public UpdateFootprintImageResponse updateFootprintImage(
+        @PathVariable Long footprintId,
+        @ModelAttribute UpdateFootprintImageRequest request
+    ) {
+        return footprintCommandService.updateFootprintImage(footprintId, request);
     }
 }

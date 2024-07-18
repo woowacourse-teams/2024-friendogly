@@ -32,6 +32,8 @@ public class Footprint {
     @Embedded
     private Location location;
 
+    private String imageUrl;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -42,11 +44,16 @@ public class Footprint {
     public Footprint(Member member, Location location) {
         this.member = member;
         this.location = location;
+        this.imageUrl = "";
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
     }
 
     public boolean isNear(Location location) {
         return this.location.isWithin(location, RADIUS_AS_METER);
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
