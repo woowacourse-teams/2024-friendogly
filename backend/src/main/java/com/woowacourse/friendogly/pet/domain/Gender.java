@@ -9,7 +9,7 @@ public enum Gender {
 
     public static Gender toGender(String gender) {
         try {
-            return Gender.valueOf(gender);
+            return valueOf(gender);
         } catch (IllegalArgumentException e) {
             throw new FriendoglyException("존재하지 않는 Gender 입니다.");
         }
