@@ -83,6 +83,13 @@ jobs:
           cd backend/build/libs
           pwd
           ls
+          cd backend
+          pwd
+          cd build
+          pwd
+          cd libs
+          pwd
+          ls
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
 
