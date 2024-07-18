@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="group"
             type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel" />
+
         <variable
             name="actionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
@@ -19,11 +21,11 @@
 
         <View
             android:id="@+id/view_group_list_line"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
             android:layout_marginVertical="5dp"
             android:background="@color/gray03"
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_group_list_filter_list"
@@ -52,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            app:applyParticipable="@{group.participable}"
             app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
             app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
             tools:text="모집중" />
@@ -64,6 +67,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{group.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_group_list_group_state"
             app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
@@ -78,6 +82,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:text="@{group.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
             app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_state"
@@ -95,6 +100,8 @@
             app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_content" />
 
         <TextView
+            applyCurrentNumberOfPeople="@{group.currentNumberOfPeople}"
+            applyMaximumNumberOfPeople="@{group.maximumNumberOfPeople}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -105,6 +112,8 @@
 
         <TextView
             android:id="@+id/tv_group_list_user_info"
+            applyGroupLeader="@{group.groupLeader}"
+            applyGroupLocation="@{group.groupLocation}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
