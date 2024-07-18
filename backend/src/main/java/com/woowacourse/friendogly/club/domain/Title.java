@@ -25,7 +25,7 @@ public class Title {
 
     private void validate(String title) {
         if (StringUtils.isBlank(title) || title.length() > MAX_TITLE_LENGTH) {
-            throw new FriendoglyException("제목은 1글자 이상 100글자 이하로 작성해주세요.");
+            throw new FriendoglyException(String.format("제목은 1글자 이상 %d글자 이하로 작성해주세요.", MAX_TITLE_LENGTH));
         }
     }
 }
