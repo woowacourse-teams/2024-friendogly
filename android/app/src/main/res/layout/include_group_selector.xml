@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="participationFilter"
+            type="com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter" />
         <variable
             name="groupFilterSelector"
             type="com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector" />
@@ -28,7 +30,7 @@
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:filterName="@{groupFilterSelector.participationFilter.filterName}"
+            app:filterName="@{participationFilter.filterName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
