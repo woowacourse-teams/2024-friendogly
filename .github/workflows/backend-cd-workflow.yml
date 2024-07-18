@@ -51,12 +51,13 @@ jobs:
       - name: change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
+          chmod +x ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
 
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
           name: friendogly-be-develop-jar
-          path: ./build/libs
+          path: ./backend/build/libs
 
       - name: Check if room-esc server is running on port 8080
         id: check-server-on-port
@@ -79,6 +80,6 @@ jobs:
 
       - name: Start server
         run: |
-          sudo nohup java -jar build/libs/friendogly-0.0.1-SNAPSHOT.jar &
+          sudo nohup java -jar ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
 
