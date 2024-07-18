@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.footprint.domain;
 
 import com.woowacourse.friendogly.member.domain.Member;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,14 +24,17 @@ public class Footprint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
+    @Column(nullable = false)
     @Embedded
     private Location location;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
     @Builder
