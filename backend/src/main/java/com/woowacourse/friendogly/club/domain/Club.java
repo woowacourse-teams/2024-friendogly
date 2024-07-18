@@ -10,7 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,10 +41,10 @@ public class Club {
     @OneToOne(optional = false)
     private Member owner;
 
-    @OneToMany
+    @ManyToMany
     private List<Member> participantMembers = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany
     private List<Pet> participantPets = new ArrayList<>();
 
     //TODO: 필터링 조건
