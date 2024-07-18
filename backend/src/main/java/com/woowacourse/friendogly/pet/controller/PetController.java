@@ -33,14 +33,14 @@ public class PetController {
         return ResponseEntity.created(URI.create("/pets/" + petId)).build();
     }
 
-    @GetMapping("/{petId}")
-    public ResponseEntity<FindPetResponse> findPet(@PathVariable Long petId) {
-        FindPetResponse findPetResponse = petQueryService.findPet(petId);
-        return ResponseEntity.ok(findPetResponse);
+    @GetMapping("/{id}")
+    public ResponseEntity<FindPetResponse> findPetById(@PathVariable Long id) {
+        FindPetResponse response = petQueryService.findPet(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mine/{memberId}")
-    public ResponseEntity<List<FindPetResponse>> findPets(@PathVariable Long memberId) {
+    public ResponseEntity<List<FindPetResponse>> findPetsByMemberId(@PathVariable Long memberId) {
         List<FindPetResponse> pets = petQueryService.findPets(new FindPetRequest(memberId));
         return ResponseEntity.ok(pets);
     }

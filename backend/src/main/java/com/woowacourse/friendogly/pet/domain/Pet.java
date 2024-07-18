@@ -41,7 +41,7 @@ public class Pet {
 
     private boolean isNeutered;
 
-    private String image;
+    private String imageUrl;
 
     @Builder
     public Pet(
@@ -52,7 +52,7 @@ public class Pet {
             SizeType sizeType,
             Gender gender,
             boolean isNeutered,
-            String image
+            String imageUrl
     ) {
         this.member = member;
         this.name = name;
@@ -61,6 +61,6 @@ public class Pet {
         this.sizeType = sizeType;
         this.gender = gender;
         this.isNeutered = isNeutered;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 }
