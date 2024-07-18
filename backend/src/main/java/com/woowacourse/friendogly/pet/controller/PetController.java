@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.pet.controller;
 
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
+import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
 import com.woowacourse.friendogly.pet.service.PetCommandService;
 import com.woowacourse.friendogly.pet.service.PetQueryService;
 import java.net.URI;
@@ -27,9 +28,10 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePet(@RequestBody SavePetRequest savePetRequest) {
-        Long petId = petCommandService.savePet(savePetRequest);
-        return ResponseEntity.created(URI.create("/pets/" + petId)).build();
+    public ResponseEntity<SavePetResponse> savePet(@RequestBody SavePetRequest savePetRequest) {
+        SavePetResponse response = petCommandService.savePet(savePetRequest);
+        return ResponseEntity.created(URI.create("/pets/" + response.id()))
+                .body(response);
     }
 
     @GetMapping("/{id}")
