@@ -3,12 +3,8 @@ name: deploy
 on:
   push:
     branches: ['develop']
-    # paths:
-    #  - 'backend/**'
-  pull_request:
-    branches: ['develop']
-    # paths:
-    #  - 'backend/**'
+    paths:
+     - 'backend/**'
 
 jobs:
   build:
@@ -51,11 +47,11 @@ jobs:
       - name: change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
-
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
           name: friendogly-be-develop-jar
+          path: ./backend/build/libs
 
       - name: Check if room-esc server is running on port 8080
         id: check-server-on-port
@@ -68,16 +64,15 @@ jobs:
           else
             echo "server_running=false" >> $GITHUB_ENV
           fi
-
       - name: Stop server if running
         if: env.server_running == 'true'
         run: |
           echo "Stopping server running on port 8080..."
           kill -9 $PID
           echo "Preivous running Server stopped."
-
       - name: Start server
-        run:
+        run: |
+          cd backend/build/libs
+          cd backend/build/libs
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
-
