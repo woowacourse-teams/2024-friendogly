@@ -37,9 +37,12 @@ jobs:
         run: chmod +x gradlew
         
       - name: Build project using Gradle
-        run: ./gradlew clean bootJar
+        run: ./gradlew build
 
-      - name: Build project using Gradle
+      - name: 이동1
+        run: cd build/libs
+        
+      - name: 보기1
         run: ls
 
       - name: Upload build artifact
