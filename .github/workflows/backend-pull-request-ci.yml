@@ -71,3 +71,43 @@ jobs:
         with:
           report_paths: './backend/build/test-results/test/TEST-*.xml'
           token: ${{ github.token }}
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+      # # 처음 _work 폴더에 github actions 프로그램이 파일을 수정할 권한이 없어서, 권한을 부여해 주기 위한 작업입니다
+      # # 이 명령을 통해서 이미 있는 폴더에 git pull 을 사용할 수 있습니다
+      # - name: change permission
+      #   # 마지막 jwp-shopping-order 는 repository 이름입니다.
+      #   run: |
+      #     sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/jwp-shopping-order 
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: friendogly-be-develop-jar
+          path: ./build/libs
+
+      - name: Check if room-esc server is running on port 8080
+        id: check-server-on-port
+        run: |
+          echo "Checking if port 8080 is in use..."
+          PID=$(lsof -t -i:8080 || true)
+          if [ -n "$PID" ]; then
+            echo "server_running=true" >> $GITHUB_ENV
+            echo "PID=$PID" >> $GITHUB_ENV
+          else
+            echo "server_running=false" >> $GITHUB_ENV
+          fi
+
+      - name: Stop server if running
+        if: env.server_running == 'true'
+        run: |
+          echo "Stopping server running on port 8080..."
+          kill -9 $PID
+          echo "Preivous running Server stopped."
+
+      - name: Start server
+        run: |
+          sudo nohup java -jar build/libs/friendogly-0.0.1-SNAPSHOT.jar &
+          echo "Lastest Backend API Server started."
