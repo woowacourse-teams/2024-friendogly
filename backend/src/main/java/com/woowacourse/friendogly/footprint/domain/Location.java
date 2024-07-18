@@ -1,5 +1,12 @@
 package com.woowacourse.friendogly.footprint.domain;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.acos;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.toDegrees;
+import static java.lang.Math.toRadians;
+
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,32 +19,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Location {
 
-    private static final int BOUNDARY_RADIUS_METER = 1000;
-
     private double latitude;
     private double longitude;
 
-    public boolean isNear(Location other) {
-        return distance(this.latitude, this.longitude, other.latitude, other.longitude) <= BOUNDARY_RADIUS_METER;
+    public boolean isWithin(Location other, int radius) {
+        return calculateDistanceInMeters(other) <= radius;
     }
 
-    private double distance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(degToRad(lat1)) * Math.sin(degToRad(lat2)) +
-                      Math.cos(degToRad(lat1)) * Math.cos(degToRad(lat2)) * Math.cos(degToRad(theta));
+    private double calculateDistanceInMeters(Location other) {
+        double theta = this.longitude - other.longitude;
+        double dist = sin(toRadians(this.latitude)) * sin(toRadians(other.latitude)) +
+                      cos(toRadians(this.latitude)) * cos(toRadians(other.latitude)) * cos(toRadians(theta));
 
-        dist = Math.acos(dist);
-        dist = radToDeg(dist);
-        dist = dist * 60 * 1.1515 * 1609.344;
-
-        return Math.abs(dist);
-    }
-
-    private double degToRad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double radToDeg(double rad) {
-        return (rad * 180 / Math.PI);
+        dist = toDegrees(acos(dist));
+        return abs(dist * 60 * 1.1515 * 1609.344);
     }
 }
