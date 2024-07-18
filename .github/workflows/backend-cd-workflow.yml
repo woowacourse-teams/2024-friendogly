@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: friendogly-be-develop-jar
-          path: build/libs/friendogly-0.0.1-SNAPSHOT.jar
+          path: ./build/libs/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
     needs: build
