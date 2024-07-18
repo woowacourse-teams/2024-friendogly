@@ -44,7 +44,7 @@ class PetControllerTest {
                 LocalDate.now().minusDays(1L),
                 "SMALL",
                 "FEMALE_NEUTERED",
-                "http://www.sampleImage.friendogly"
+                "http://www.google.com"
         );
 
         RestAssured.given().log().all()
@@ -65,7 +65,7 @@ class PetControllerTest {
                 LocalDate.now().minusDays(1L),
                 "SMALL",
                 "FEMALE_NEUTERED",
-                "http://www.sampleImage.friendogly"
+                "http://www.google.com"
         );
 
         RestAssured.given().log().all()
@@ -86,7 +86,7 @@ class PetControllerTest {
                 LocalDate.now().minusDays(1L),
                 "SMALL",
                 "FEMALE_NEUTERED",
-                "http://www.sampleImage.friendogly"
+                "http://www.google.com"
         );
 
         RestAssured.given().log().all()
@@ -107,7 +107,7 @@ class PetControllerTest {
                 LocalDate.now().plusDays(1L),
                 "SMALL",
                 "FEMALE_NEUTERED",
-                "http://www.sampleImage.friendogly"
+                "http://www.google.com"
         );
 
         RestAssured.given().log().all()
