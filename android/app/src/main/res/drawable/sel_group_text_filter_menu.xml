@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
     <item android:state_checked="true" android:color="@color/white" />
     <item android:color="@color/black" />
+=======
+    <item android:state_checked="true" android:color="@color/black" />
+    <item android:color="@color/white" />
+>>>>>>> 9f1730e (feat: add group 뷰 구현)
 </selector>
