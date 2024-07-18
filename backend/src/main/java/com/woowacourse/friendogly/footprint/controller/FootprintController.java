@@ -37,24 +37,27 @@ public class FootprintController {
     }
 
     @GetMapping("/near")
-    public List<FindNearFootprintResponse> findNear(@Valid FindNearFootprintRequest request) {
+    public ResponseEntity<List<FindNearFootprintResponse>> findNear(@Valid FindNearFootprintRequest request) {
         // memberId == 1L 로 dummy data 사용
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        return footprintQueryService.findNear(1L, request);
+        List<FindNearFootprintResponse> response = footprintQueryService.findNear(1L, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mine/latest")
-    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTime() {
+    public ResponseEntity<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime() {
         // memberId == 1L 로 dummy data 사용
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        return footprintQueryService.findMyLatestFootprintTime(1L);
+        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(1L);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/image/{footprintId}")
-    public UpdateFootprintImageResponse updateFootprintImage(
+    public ResponseEntity<UpdateFootprintImageResponse> updateFootprintImage(
         @PathVariable Long footprintId,
         @ModelAttribute UpdateFootprintImageRequest request
     ) {
-        return footprintCommandService.updateFootprintImage(footprintId, request);
+        UpdateFootprintImageResponse response = footprintCommandService.updateFootprintImage(footprintId, request);
+        return ResponseEntity.ok(response);
     }
 }
