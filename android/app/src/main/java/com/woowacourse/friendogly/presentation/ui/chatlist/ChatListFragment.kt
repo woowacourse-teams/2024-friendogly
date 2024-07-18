@@ -11,6 +11,10 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
     private lateinit var adapter: ChatListAdapter
 
     override fun initViewCreated() {
+        initAdapter()
+    }
+
+    private fun initAdapter() {
         adapter = ChatListAdapter()
         binding.rcvChatList.adapter = adapter
         viewModel.getChats()
