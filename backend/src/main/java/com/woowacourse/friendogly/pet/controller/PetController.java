@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.pet.controller;
 
-import com.woowacourse.friendogly.pet.dto.request.FindPetRequest;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
 import com.woowacourse.friendogly.pet.service.PetCommandService;
@@ -40,9 +39,7 @@ public class PetController {
     }
 
     @GetMapping("/mine/{memberId}")
-    public ResponseEntity<List<FindPetResponse>> findPetsByMemberId(@PathVariable Long memberId) {
-        List<FindPetResponse> pets = petQueryService.findPets(new FindPetRequest(memberId));
-        return ResponseEntity.ok(pets);
+    public List<FindPetResponse> findPetsByMemberId(@PathVariable Long memberId) {
+        return petQueryService.findPets(memberId);
     }
 }
-
