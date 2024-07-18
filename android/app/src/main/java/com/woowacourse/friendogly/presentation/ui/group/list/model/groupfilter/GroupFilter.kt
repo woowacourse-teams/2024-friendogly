@@ -20,12 +20,12 @@ sealed class GroupFilter(val filterName: String) {
     }
 
     companion object {
-        private const val FEMALE_NAME = "암컷"
-        private const val MALE_NAME = "수컷"
-        private const val NEUTRALIZING_FEMALE_NAME = "중성화 암컷"
-        private const val NEUTRALIZING_MALE_NAME = "중성화 수컷"
-        private const val SMALL_DOG_NAME = "소형견"
-        private const val MEDIUM_DOG_NAME = "중형견"
-        private const val BIG_DOG_NAME = "대형견"
+        const val FEMALE_NAME = "암컷"
+        const val MALE_NAME = "수컷"
+        const val NEUTRALIZING_FEMALE_NAME = "중성화 암컷"
+        const val NEUTRALIZING_MALE_NAME = "중성화 수컷"
+        const val SMALL_DOG_NAME = "소형견"
+        const val MEDIUM_DOG_NAME = "중형견"
+        const val BIG_DOG_NAME = "대형견"
     }
 }

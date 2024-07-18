@@ -62,6 +62,17 @@
     <string name="group_list_date_hours">%d시간 전</string>
     <string name="group_list_date_minutes">%d분 전</string>
     <string name="group_list_date_now">방금 전</string>
+    <string name="group_list_add_title">모임 생성하기</string>
+
+    <!--멍개 생성-->
+    <string name="group_add_dog_size_title">참여 가능한 댕댕이 사이즈</string>
+    <string name="group_add_dog_gender_title">참여 가능한 성별 선택</string>
+    <string name="group_add_group_title">모임 제목</string>
+    <string name="group_add_group_number">참여 가능 인원</string>
+    <string name="group_add_group_content">모임 소개</string>
+    <string name="group_add_group_my_dog">내 댕댕이</string>
+    <string name="group_add_group_add_my_dog_text">댕댕이 추가</string>
+    <string name="group_add_group">등록하기</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>

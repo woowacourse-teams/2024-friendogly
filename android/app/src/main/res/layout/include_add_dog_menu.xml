@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="menu"
+            type="java.lang.String" />
+    </data>
+
+    <CheckBox
+        android:id="@+id/customCheckBox"
+        style="@style/CustomCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:minHeight="0dp"
+        android:gravity="center"
+        android:text="@{menu}"
+        tools:text="대형견" />
+</layout>

@@ -1,11 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter" />
+
         <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
     </data>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/view_group_add_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:layout_constraintBottom_toTopOf="@id/sv_group_add_main"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_add_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_add_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_group_add_top_bar" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_list_add_title"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_add_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/view_group_add_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_add_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_group_add_top_bar" />
+
+        <ScrollView
+            android:id="@+id/sv_group_add_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_group_add_commit"
+            app:layout_constraintTop_toBottomOf="@+id/view_group_add_top_bar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="15dp">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <ImageView
+                    android:layout_width="158dp"
+                    android:layout_height="158dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add_image" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Gray08.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="모임 사진을 추가하세요." />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="잠실 6동" />
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 기준으로 모임이 생성돼요." />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/group_add_dog_size_title" />
+
+                    <Space
+                        android:layout_width="5dp"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_alart" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.SMALL_DOG_NAME}" />
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.MEDIUM_DOG_NAME}" />
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.BIG_DOG_NAME}" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_dog_gender_title" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.MALE_NAME}" />
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.FEMALE_NAME}" />
+
+                    <include
+                        layout="@layout/include_add_dog_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        app:menu="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_group_number" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    tools:text="5명" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_group_title" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+
+                <EditText
+                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_gray03_fill_16"
+                    android:maxLength="50"
+                    android:maxLines="1"
+
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_name_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_name_title" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_group_content" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+
+                <EditText
+                    android:id="@+id/et_user_name"
+                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rect_gray03_fill_16"
+                    android:gravity="top"
+                    android:lines="3"
+                    android:maxLength="1000"
+                    android:maxLines="1"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_group_my_dog" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rcv_group_add_my_dog_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/item_detail_dog_profile" />
+
+                    <View
+                        android:id="@+id/view_group_add_add_dog_button"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/sel_group_background_add_dog"
+                        android:clickable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/rcv_group_add_my_dog_list"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_add"
+                        app:layout_constraintBottom_toBottomOf="@id/view_group_add_add_dog_button"
+                        app:layout_constraintEnd_toEndOf="@id/view_group_add_add_dog_button"
+                        app:layout_constraintStart_toStartOf="@id/view_group_add_add_dog_button"
+                        app:layout_constraintTop_toTopOf="@id/view_group_add_add_dog_button"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.White.Size10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/group_add_group_add_my_dog_text"
+                        app:layout_constraintBottom_toBottomOf="@id/view_group_add_add_dog_button"
+                        app:layout_constraintEnd_toEndOf="@id/view_group_add_add_dog_button"
+                        app:layout_constraintStart_toStartOf="@id/view_group_add_add_dog_button" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+        <Button
+            android:id="@+id/btn_group_add_commit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/rect_white_fill_radius10"
+            android:text="@string/group_add_group"
+            app:layout_constraintTop_toBottomOf="@+id/sv_group_add_main"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
