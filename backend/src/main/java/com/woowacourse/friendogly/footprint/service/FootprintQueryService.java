@@ -20,7 +20,7 @@ public class FootprintQueryService {
 
     private final FootprintRepository footprintRepository;
 
-    public List<FindNearFootprintResponse> findNear(FindNearFootprintRequest request) {
+    public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
         LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
         List<Footprint> recentFootprints = footprintRepository.findByCreatedAtAfter(startTime);
 
@@ -28,7 +28,7 @@ public class FootprintQueryService {
 
         return recentFootprints.stream()
             .filter(footprint -> footprint.isNear(currentLocation))
-            .map(FindNearFootprintResponse::from)
+            .map(footprint -> FindNearFootprintResponse.from(footprint, memberId))
             .toList();
     }
 }

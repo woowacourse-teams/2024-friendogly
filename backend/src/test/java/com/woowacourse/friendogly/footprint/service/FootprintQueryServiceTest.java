@@ -44,9 +44,16 @@ class FootprintQueryServiceTest {
     @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {
-        Member member = memberRepository.save(
+        Member member1 = memberRepository.save(
             Member.builder()
-                .name("name")
+                .name("name1")
+                .email("test@test.com")
+                .build()
+        );
+
+        Member member2 = memberRepository.save(
+            Member.builder()
+                .name("name2")
                 .email("test@test.com")
                 .build()
         );
@@ -55,17 +62,15 @@ class FootprintQueryServiceTest {
         double farLongitude = 0.009001209;
 
         // 999m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, nearLongitude));
+        footprintCommandService.save(new SaveFootprintRequest(member1.getId(), 0.0, nearLongitude));
 
         // 1001m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, farLongitude));
+        footprintCommandService.save(new SaveFootprintRequest(member2.getId(), 0.0, farLongitude));
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-            new FindNearFootprintRequest(0.0, 0.0));
+            member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         Assertions.assertAll(
-            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
-                .containsExactly(member.getId()),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.0),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
@@ -92,11 +97,9 @@ class FootprintQueryServiceTest {
             """, member.getId(), member.getId(), member.getId());
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-            new FindNearFootprintRequest(0.0, 0.0));
+            member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         Assertions.assertAll(
-            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
-                .containsExactly(member.getId(), member.getId()),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.00000, 0.00000),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)

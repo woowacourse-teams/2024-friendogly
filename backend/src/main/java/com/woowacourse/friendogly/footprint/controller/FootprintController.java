@@ -33,6 +33,8 @@ public class FootprintController {
 
     @GetMapping("/near")
     public List<FindNearFootprintResponse> findNear(@Valid FindNearFootprintRequest request) {
-        return footprintQueryService.findNear(request);
+        // memberId == 1L 로 dummy data 사용
+        // 추후 토큰에서 memberId를 가져오도록 변경
+        return footprintQueryService.findNear(1L, request);
     }
 }
