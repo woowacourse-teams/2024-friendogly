@@ -14,10 +14,9 @@
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/navigation_graph"
         app:popUpToInclusive="true" />
-    <!--TODO : reset-->
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.woowacourse.friendogly.presentation.ui.group.list.GroupListFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.mypage.MyPageFragment"
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page">
 
