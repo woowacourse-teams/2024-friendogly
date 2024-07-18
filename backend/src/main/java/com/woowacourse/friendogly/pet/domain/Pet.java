@@ -7,7 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import lombok.Builder;
@@ -24,7 +23,6 @@ public class Pet {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
     private Member member;
 
     private String name;
