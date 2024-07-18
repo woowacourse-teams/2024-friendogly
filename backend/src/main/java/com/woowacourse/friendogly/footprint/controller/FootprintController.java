@@ -25,7 +25,7 @@ public class FootprintController {
     private final FootprintQueryService footprintQueryService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody SaveFootprintRequest request) {
+    public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {
         Long id = footprintCommandService.save(request);
         return ResponseEntity.created(URI.create("/footprints/" + id))
             .build();
