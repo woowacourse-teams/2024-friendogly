@@ -30,6 +30,7 @@ jobs:
           gradle-version: 8.1.1
 
       - name: Grant execute permission for gradlew
+        working-directory: ./backend
         run: chmod +x gradlew
         
       - name: Build project using Gradle
