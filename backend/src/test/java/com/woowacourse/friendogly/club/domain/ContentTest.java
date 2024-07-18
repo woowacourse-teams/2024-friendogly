@@ -27,5 +27,4 @@ class ContentTest {
         assertThatThrownBy(() -> new Content(contentInput))
                 .isInstanceOf(FriendoglyException.class);
     }
-
 }
