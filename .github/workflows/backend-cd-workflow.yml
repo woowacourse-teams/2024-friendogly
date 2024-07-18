@@ -80,7 +80,9 @@ jobs:
       - name: Start server
         run: |
           pwd
-          cd build/libs
+          cd backend/build/libs
+          pwd
+          ls
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
           echo "Lastest Backend API Server started."
 
