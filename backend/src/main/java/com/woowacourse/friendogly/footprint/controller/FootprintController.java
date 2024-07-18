@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class FootprintController {
     }
 
     @GetMapping("/near")
-    public List<FindNearFootprintResponse> findNear(FindNearFootprintRequest request) {
+    public List<FindNearFootprintResponse> findNear(@Valid FindNearFootprintRequest request) {
         return footprintQueryService.findNear(request);
     }
 }
