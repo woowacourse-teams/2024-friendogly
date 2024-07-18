@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.club.domain;
 
 public enum Status {
 
-    RECRUITMENT,
-    TERMINATE;
+    OPEN,
+    CLOSED;
 
 }
