@@ -8,7 +8,7 @@
 
         <variable
             name="groupFilterSelector"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupFilterSelector" />
+            type="com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector" />
 
         <variable
             name="actionHandler"

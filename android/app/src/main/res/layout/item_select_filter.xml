@@ -11,7 +11,7 @@
 
         <variable
             name="groupFilter"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter" />
+            type="com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter
+package com.woowacourse.friendogly.presentation.ui.group.model.groupfilter
 
 sealed class GroupFilter(val filterName: String) {
     sealed class GenderFilter(filterName: String) : GroupFilter(filterName) {

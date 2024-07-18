@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
-import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupFilterSelector
-import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel
-import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
+import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime

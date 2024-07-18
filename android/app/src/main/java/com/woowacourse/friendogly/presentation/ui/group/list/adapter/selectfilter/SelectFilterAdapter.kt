@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.woowacourse.friendogly.databinding.ItemSelectFilterBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
-import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 class SelectFilterAdapter(
     private val actionHandler: GroupListActionHandler,
