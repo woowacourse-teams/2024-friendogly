@@ -24,7 +24,7 @@ public class PetCommandService {
 
     public SavePetResponse savePet(SavePetRequest request) {
         Member member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new FriendoglyException("존재하지 않는 Member Id 입니다."));
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 Member 입니다."));
         Pet pet = request.toEntity(member);
         Pet savedPet = petRepository.save(pet);
 
