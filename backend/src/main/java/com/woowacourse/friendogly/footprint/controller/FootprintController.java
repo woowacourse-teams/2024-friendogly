@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.footprint.controller;
 
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
@@ -34,7 +35,14 @@ public class FootprintController {
     @GetMapping("/near")
     public List<FindNearFootprintResponse> findNear(@Valid FindNearFootprintRequest request) {
         // memberId == 1L 로 dummy data 사용
-        // 추후 토큰에서 memberId를 가져오도록 변경
+        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         return footprintQueryService.findNear(1L, request);
+    }
+
+    @GetMapping("/mine/latest")
+    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTime() {
+        // memberId == 1L 로 dummy data 사용
+        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
+        return footprintQueryService.findMyLatestFootprintTime(1L);
     }
 }

@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.footprint.service;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import java.time.LocalDateTime;
@@ -30,5 +31,11 @@ public class FootprintQueryService {
             .filter(footprint -> footprint.isNear(currentLocation))
             .map(footprint -> FindNearFootprintResponse.from(footprint, memberId))
             .toList();
+    }
+
+    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTime(Long memberId) {
+        return footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
+            .map(footprint -> new FindMyLatestFootprintTimeResponse(footprint.getCreatedAt()))
+            .orElse(new FindMyLatestFootprintTimeResponse(null));
     }
 }

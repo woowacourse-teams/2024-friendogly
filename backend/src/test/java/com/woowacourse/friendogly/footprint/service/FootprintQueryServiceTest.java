@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -105,5 +107,45 @@ class FootprintQueryServiceTest {
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
                 .containsExactly(0.00000, 0.00000)
         );
+    }
+
+    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 있는 경우")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintExists() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
+
+        jdbcTemplate.update("""
+            INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+            VALUES
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+            (?, 0.11111, 0.11111, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+            (?, 0.22222, 0.22222, ?, FALSE);
+            """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
+
+        assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
+            .extracting(FindMyLatestFootprintTimeResponse::createdAt)
+            .isEqualTo(oneMinuteAgo);
+    }
+
+    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 없는 경우")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
+            .extracting(FindMyLatestFootprintTimeResponse::createdAt)
+            .isNull();
     }
 }
