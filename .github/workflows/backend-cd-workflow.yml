@@ -39,6 +39,9 @@ jobs:
       - name: Build project using Gradle
         run: ./gradlew clean bootJar
 
+      - name: Build project using Gradle
+        run: ls
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
