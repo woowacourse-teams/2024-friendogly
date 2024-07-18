@@ -2,11 +2,11 @@ name: deploy
 
 on:
   push:
-    branches: ['develop12']
+    branches: ['develop']
     # paths:
     #  - 'backend/**'
   pull_request:
-    branches: ['develop12']
+    branches: ['develop']
     # paths:
     #  - 'backend/**'
 
@@ -46,6 +46,7 @@ jobs:
           path: build/libs/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
+    needs: build
     runs-on: self-hosted
     steps:
       # # 처음 _work 폴더에 github actions 프로그램이 파일을 수정할 권한이 없어서, 권한을 부여해 주기 위한 작업입니다
