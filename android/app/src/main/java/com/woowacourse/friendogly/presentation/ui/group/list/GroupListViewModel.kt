@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-
 class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private val _groups: MutableLiveData<List<GroupUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupUiModel>> get() = _groups
@@ -39,8 +38,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                 content = "공지 꼭 읽어주세요",
                 maximumNumberOfPeople = 5,
                 currentNumberOfPeople = 2,
-                groupLocation = "",
-                groupLeader = "",
+                groupLocation = "잠실6동",
+                groupLeader = "벼리",
                 groupDate = LocalDateTime.now(),
             ),
             GroupUiModel(
@@ -55,8 +54,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                 content = "공지 꼭 읽어주세요",
                 maximumNumberOfPeople = 5,
                 currentNumberOfPeople = 3,
-                groupLocation = "",
-                groupLeader = "",
+                groupLocation = "잠실5동",
+                groupLeader = "채드",
                 groupDate = LocalDateTime.now(),
             ),
         )
