@@ -39,6 +39,10 @@
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
     <string name="chat_send_hint_message">메세지 보내기</string>
+    <string name="chat_time">a h:mm</string>
+    <string name="chat_yesterday">어제</string>
+    <string name="chat_date"> MM월 dd일</string>
+    <string name="chat_unread_max_count">999+</string>
 
 
 </resources>
