@@ -19,7 +19,7 @@ public record FindNearFootprintResponse(
             footprint.getLocation().getLatitude(),
             footprint.getLocation().getLongitude(),
             footprint.getCreatedAt(),
-            memberId.equals(footprint.getMember().getId())
+            footprint.isCreatedBy(memberId)
         );
     }
 }
