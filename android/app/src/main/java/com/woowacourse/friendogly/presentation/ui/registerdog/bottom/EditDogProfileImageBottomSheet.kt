@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.profilesetting.bottom
+package com.woowacourse.friendogly.presentation.ui.registerdog.bottom
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,15 +12,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.woowacourse.friendogly.R
 
-class EditProfileImageBottomSheet(
+class EditDogProfileImageBottomSheet(
     private val clickGallery: () -> Unit,
-    private val clickDefaultImage: () -> Unit,
+    private val clickCamera: () -> Unit,
 ) : BottomSheetDialogFragment() {
     private lateinit var dlg: BottomSheetDialog
-
-    private lateinit var gallery: TextView
-    private lateinit var defaultImage: TextView
-    private lateinit var close: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dlg = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -41,7 +37,7 @@ class EditProfileImageBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.bottom_sheet_edit_profile_image, container, false)
+        return inflater.inflate(R.layout.bottom_sheet_dog_edit_profile_image, container, false)
     }
 
     override fun onViewCreated(
@@ -49,28 +45,22 @@ class EditProfileImageBottomSheet(
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        initFindVIewById(view)
-        initClickListener()
-    }
 
-    private fun initFindVIewById(view: View) {
-        gallery = view.findViewById(R.id.btn_gallery_select)
-        defaultImage = view.findViewById(R.id.btn_default_image_set)
-        close = view.findViewById(R.id.close_btn)
-    }
+        val gallery = view.findViewById<TextView>(R.id.btn_gallery_select)
+        val camera = view.findViewById<TextView>(R.id.btn_camera_select)
+        val submit = view.findViewById<TextView>(R.id.tv_submit)
 
-    private fun initClickListener() {
         gallery.setOnClickListener {
             clickGallery.invoke()
             dismiss()
         }
 
-        defaultImage.setOnClickListener {
-            clickDefaultImage.invoke()
+        camera.setOnClickListener {
+            clickCamera.invoke()
             dismiss()
         }
 
-        close.setOnClickListener {
+        submit.setOnClickListener {
             dismiss()
         }
     }
