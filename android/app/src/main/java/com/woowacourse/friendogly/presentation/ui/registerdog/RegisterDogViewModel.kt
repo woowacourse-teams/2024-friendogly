@@ -2,10 +2,12 @@ package com.woowacourse.friendogly.presentation.ui.registerdog
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.utils.addSourceList
 import okhttp3.MultipartBody
 
 class RegisterDogViewModel : BaseViewModel() {
@@ -21,6 +23,15 @@ class RegisterDogViewModel : BaseViewModel() {
     val dogDescription = MutableLiveData<String>("")
     private var dogSize: DogSize = DogSize.SMALL
     private var dogGender: DogGender = DogGender.MAIL
+
+    val isProfileComplete =
+        MediatorLiveData<Boolean>().apply {
+            addSourceList(
+                dogName,
+                dogDescription,
+                profileImage,
+            ) { dogName.value != "" && dogDescription.value != "" && profileImage.value != null }
+        }
 
     private val _navigateAction: MutableLiveData<Event<RegisterDogNavigationAction>> =
         MutableLiveData(null)
@@ -76,9 +87,8 @@ class RegisterDogViewModel : BaseViewModel() {
     }
 
     fun registerDog() {
-        val isProfileComplete =
-            dogName.value == "" || dogDescription.value == "" || _profileImage.value == null
-        if (!isProfileComplete) return
-        _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
+        if (isProfileComplete.value == true) {
+            _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
+        }
     }
 }

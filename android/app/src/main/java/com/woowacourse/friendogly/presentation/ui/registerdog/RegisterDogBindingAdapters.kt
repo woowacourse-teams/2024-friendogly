@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.registerdog
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -26,14 +25,10 @@ fun TextView.bindEditTextDescriptionLength(contents: String?) {
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
-@BindingAdapter("dogName", "dogDescription", "profileImage")
-fun TextView.bindDogEditBtnBackground(
-    dogName: String?,
-    dogDescription: String?,
-    profileImage: Bitmap?,
-) {
-    val isProfileComplete = dogName != "" && dogDescription != "" && profileImage != null
-    if (isProfileComplete) {
+@BindingAdapter("dogEditBtnBackground")
+fun TextView.bindDogEditBtnBackground(isProfileComplete: Boolean?) {
+    val completed = isProfileComplete ?: return
+    if (completed) {
         this.background = context.getDrawable(R.drawable.rect_blue_fill_16)
         this.setTextColor(context.getColor(R.color.black))
     } else {

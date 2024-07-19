@@ -333,14 +333,12 @@
                 android:includeFontPadding="false"
                 android:padding="18dp"
                 android:text="@string/dog_submit_title"
-                app:dogDescription="@{vm.dogDescription}"
-                app:dogName="@{vm.dogName}"
+                app:dogEditBtnBackground="@{vm.isProfileComplete()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_birthday"
                 app:onSingleClick="@{() -> vm.registerDog()}"
-                app:profileImage="@{vm.profileImage}"
                 tools:background="@color/blue" />
 
 
