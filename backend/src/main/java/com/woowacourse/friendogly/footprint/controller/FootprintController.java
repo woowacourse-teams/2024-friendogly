@@ -11,7 +11,6 @@ import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,12 +22,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/footprints")
 public class FootprintController {
 
     private final FootprintCommandService footprintCommandService;
     private final FootprintQueryService footprintQueryService;
+
+    public FootprintController(
+        FootprintCommandService footprintCommandService,
+        FootprintQueryService footprintQueryService
+    ) {
+        this.footprintCommandService = footprintCommandService;
+        this.footprintQueryService = footprintQueryService;
+    }
 
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {

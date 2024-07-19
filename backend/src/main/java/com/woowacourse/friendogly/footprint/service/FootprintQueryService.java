@@ -8,18 +8,20 @@ import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintRespon
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class FootprintQueryService {
 
     private static final int FOOTPRINT_DURATION_HOURS = 24;
 
     private final FootprintRepository footprintRepository;
+
+    public FootprintQueryService(FootprintRepository footprintRepository) {
+        this.footprintRepository = footprintRepository;
+    }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
         LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);

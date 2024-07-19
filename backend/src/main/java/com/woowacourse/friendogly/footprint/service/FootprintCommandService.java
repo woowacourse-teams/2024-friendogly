@@ -10,20 +10,23 @@ import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import java.time.LocalDateTime;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class FootprintCommandService {
 
     private static final int FOOTPRINT_COOLDOWN = 30;
 
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
+
+    public FootprintCommandService(FootprintRepository footprintRepository, MemberRepository memberRepository) {
+        this.footprintRepository = footprintRepository;
+        this.memberRepository = memberRepository;
+    }
 
     public Long save(SaveFootprintRequest request) {
         Member member = memberRepository.findById(request.memberId())
