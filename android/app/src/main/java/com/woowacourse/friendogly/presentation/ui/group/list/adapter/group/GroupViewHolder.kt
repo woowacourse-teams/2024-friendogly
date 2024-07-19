@@ -9,15 +9,18 @@ import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel
 class GroupViewHolder(
     private val binding: ItemGroupBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
+    private val filterAdapter = FilterAdapter()
+
+    init {
+        binding.rcvGroupListFilterList.adapter = filterAdapter
+    }
+
     fun bind(
         groupUiModel: GroupUiModel,
         actionHandler: GroupListActionHandler,
     ) {
         binding.group = groupUiModel
         binding.actionHandler = actionHandler
-
-        val filterAdapter = FilterAdapter()
-        binding.rcvGroupListFilterList.adapter = filterAdapter
         filterAdapter.submitList(groupUiModel.filters)
     }
 }
