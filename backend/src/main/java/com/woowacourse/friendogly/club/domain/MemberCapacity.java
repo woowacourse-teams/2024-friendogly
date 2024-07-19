@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.club.domain;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class MemberCapacity {
     private static final int MIN_CAPACITY_SIZE = 1;
     private static final int MAX_CAPACITY_SIZE = 5;
 
+    @Column(name = "member_capacity")
     private int value = 0;
 
     public MemberCapacity(int value) {
