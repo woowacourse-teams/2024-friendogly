@@ -47,7 +47,7 @@ public class FootprintCommandService {
     private void validateRecentFootprintExists(Long memberId) {
         boolean exists = footprintRepository.existsByMemberIdAndCreatedAtAfter(
             memberId,
-            LocalDateTime.now().minusSeconds(FootprintCommandService.FOOTPRINT_COOLDOWN)
+            LocalDateTime.now().minusSeconds(FOOTPRINT_COOLDOWN)
         );
 
         if (exists) {
