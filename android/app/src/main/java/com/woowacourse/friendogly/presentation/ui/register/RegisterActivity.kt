@@ -2,17 +2,16 @@ package com.woowacourse.friendogly.presentation.ui.register
 
 import androidx.activity.viewModels
 import com.google.android.gms.common.api.ApiException
+import com.woowacourse.friendogly.App.Companion.kakaoModule
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityRegisterBinding
-import com.woowacourse.friendogly.domain.repository.KakaoLoginRepository
-import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
     private val viewModel: RegisterViewModel by viewModels {
-        RegisterViewModel.factory(kakaoLoginUseCase = KakaoLoginUseCase(KakaoLoginRepository.getInstance()))
+        RegisterViewModel.factory(kakaoLoginUseCase = kakaoModule.kakaoLoginUseCase)
     }
 
     private val googleSignInLauncher =
