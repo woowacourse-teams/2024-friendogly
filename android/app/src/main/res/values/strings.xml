@@ -33,6 +33,7 @@
     <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
     <string name="dog_gender_title">댕댕이 성별</string>
     <string name="dog_submit_title">등록완료!</string>
+    <string name="bottom_sheet_dog_edit_birthday_title">언제 태어났나요?</string>
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
