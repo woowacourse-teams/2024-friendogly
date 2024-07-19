@@ -20,8 +20,8 @@ import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATIO
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
-    private lateinit var mapView: MapView
     private lateinit var naverMap: NaverMap
+    private val mapView: MapView by lazy { binding.mapView }
     private val permissionRequester: WoofPermissionRequester by lazy {
         WoofPermissionRequester(
             requireActivity(),
@@ -35,7 +35,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     override fun initViewCreated() {
-        mapView = binding.mapView
         mapView.getMapAsync(this)
     }
 
@@ -83,27 +82,41 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
-
         naverMap.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = false
             isZoomControlEnabled = false
             isScaleBarEnabled = false
         }
+        setUpLocationBtnClickAction()
+    }
+
+    private fun setUpLocationBtnClickAction() {
+        binding.btnWoofLocation.setOnClickListener {
+            if (hasNotLocationPermissions()) return@setOnClickListener
+
+            naverMap.locationTrackingMode =
+                if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
+        }
     }
 
     private fun setUpMarkBtnClickAction() {
         binding.btnMapMark.setOnClickListener {
-            if (permissionRequester.hasNotLocationPermissions()) {
-                permissionRequester.checkLocationPermissions {
-                    makeSettingSnackbar()
-                }
-                return@setOnClickListener
-            }
+            if (hasNotLocationPermissions()) return@setOnClickListener
 
             moveCameraCenterPosition()
             createMarker()
         }
+    }
+
+    private fun hasNotLocationPermissions(): Boolean {
+        if (permissionRequester.hasNotLocationPermissions()) {
+            permissionRequester.checkLocationPermissions {
+                makeSettingSnackbar()
+            }
+            return true
+        }
+        return false
     }
 
     private fun makeSettingSnackbar() {
