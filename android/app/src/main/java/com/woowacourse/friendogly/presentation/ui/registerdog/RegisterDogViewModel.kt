@@ -30,7 +30,12 @@ class RegisterDogViewModel : BaseViewModel() {
                 dogName,
                 dogDescription,
                 profileImage,
-            ) { dogName.value != "" && dogDescription.value != "" && profileImage.value != null }
+            ) {
+                val name = dogName.value ?: return@addSourceList false
+                val description = dogDescription.value ?: return@addSourceList false
+
+                name.isNotBlank() && description.isNotBlank() && profileImage.value != null
+            }
         }
 
     private val _navigateAction: MutableLiveData<Event<RegisterDogNavigationAction>> =
