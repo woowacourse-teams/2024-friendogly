@@ -14,6 +14,7 @@
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/navigation_graph"
         app:popUpToInclusive="true" />
+
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.woowacourse.friendogly.presentation.ui.mypage.MyPageFragment"
@@ -21,9 +22,27 @@
         tools:layout="@layout/fragment_my_page">
 
         <action
+
+            android:id="@+id/action_myPageFragment_to_dogDetailFragment"
+            app:destination="@id/dogDetailFragment"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
             android:id="@+id/action_myPageFragment_to_registerDogFragment"
             app:destination="@id/registerDogFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/dogDetailFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.dogdetail.DogDetailFragment"
+        android:label="DogDetailFragment"
+        tools:layout="@layout/fragment_dog_detail">
+
+        <argument
+            android:name="id"
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -33,6 +52,4 @@
         tools:layout="@layout/fragment_register_dog">
 
     </fragment>
-
-
 </navigation>
