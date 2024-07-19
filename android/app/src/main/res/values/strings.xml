@@ -82,6 +82,10 @@
     <string name="chat_date"> MM월 dd일</string>
     <string name="chat_unread_max_count">999+</string>
 
+    <string name="group_number_of_people">%d/%d</string>
+    <string name="group_group_info">%s · %s</string>
+    <string name="group_participate_name">모집중</string>
+    <string name="group_complete_participate_name">모집완료</string>
 
     <!--멍멍 짓기-->
     <string name="woof_dog_age">%d살</string>
