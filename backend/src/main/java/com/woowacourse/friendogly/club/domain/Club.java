@@ -18,8 +18,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Club {
 
     @Id
@@ -45,8 +45,8 @@ public class Club {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @Builder

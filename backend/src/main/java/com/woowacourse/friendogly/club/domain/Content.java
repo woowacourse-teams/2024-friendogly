@@ -10,19 +10,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Content {
 
     private static final int MAX_CONTENT_LENGTH = 1000;
 
-    @Column(nullable = false)
     @Lob
+    @Column(nullable = false)
     private String content;
 
     public Content(String content) {
         validate(content);
-        this.content = content;
+        this.content =
+                content;
     }
 
     private void validate(String content) {

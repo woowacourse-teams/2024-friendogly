@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class MemberCapacity {
 
     private static final int MIN_CAPACITY_SIZE = 1;
