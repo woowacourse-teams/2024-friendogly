@@ -26,6 +26,7 @@
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
     <string name="birthday_title">댕댕이가 태어난 달</string>
+    <string name="birthday">%d년 %02d월</string>
     <string name="birthday_year">년</string>
     <string name="birthday_month">%02d월</string>
     <string name="neutralized_title">중성화했어요.</string>

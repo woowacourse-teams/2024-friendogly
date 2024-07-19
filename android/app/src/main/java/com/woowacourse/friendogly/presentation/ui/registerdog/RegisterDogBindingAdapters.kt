@@ -8,17 +8,6 @@ import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.R
 
 @SuppressLint("SetTextI18n")
-@BindingAdapter("year", "month")
-fun TextView.bindDogBirthday(
-    year: Int?,
-    month: Int?,
-) {
-    val yearStr = year.toString() + context.getString(R.string.birthday_year)
-    val monthStr = context.getString(R.string.birthday_month).format(month)
-    this.text = "$yearStr $monthStr"
-}
-
-@SuppressLint("SetTextI18n")
 @BindingAdapter("editTextDescriptionLength")
 fun TextView.bindEditTextDescriptionLength(contents: String?) {
     val length = contents?.length ?: 0

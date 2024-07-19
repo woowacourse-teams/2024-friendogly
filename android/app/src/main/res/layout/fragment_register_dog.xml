@@ -314,11 +314,10 @@
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray03_fill_16"
                 android:clickable="true"
+                android:text="@{@string/birthday(vm.uiState.dogBirthdayYear, vm.uiState.dogBirthdayMonth)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dog_birthday"
-                app:month="@{vm.uiState.dogBirthdayMonth}"
-                app:year="@{vm.uiState.dogBirthdayYear}"
                 tools:text="2024년 07월" />
 
 
