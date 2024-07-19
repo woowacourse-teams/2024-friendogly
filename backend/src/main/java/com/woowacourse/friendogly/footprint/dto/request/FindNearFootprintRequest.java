@@ -13,6 +13,7 @@ public record FindNearFootprintRequest(
     @NotNull
     @DecimalMin(value = "-180.0", message = "경도는 -180도 이상 180도 이하로 입력해 주세요.")
     @DecimalMax(value = "180.0", message = "경도는 -180도 이상 180도 이하로 입력해 주세요.")
-    double longitude) {
+    double longitude
+) {
 
 }
