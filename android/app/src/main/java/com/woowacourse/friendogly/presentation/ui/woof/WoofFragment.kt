@@ -1,6 +1,9 @@
 package com.woowacourse.friendogly.presentation.ui.woof
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -17,16 +20,22 @@ import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATIO
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
-    private lateinit var locationSource: FusedLocationSource
     private lateinit var mapView: MapView
     private lateinit var naverMap: NaverMap
+    private val permissionRequester: WoofPermissionRequester by lazy {
+        WoofPermissionRequester(
+            requireActivity(),
+        )
+    }
+    private val locationSource: FusedLocationSource by lazy {
+        FusedLocationSource(
+            this,
+            LOCATION_PERMISSION_REQUEST_CODE,
+        )
+    }
 
     override fun initViewCreated() {
-        setUpDataBinding()
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
         mapView = binding.mapView
-//        mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
     }
 
@@ -70,10 +79,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         mapView.onLowMemory()
     }
 
-    private fun setUpDataBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
-    }
-
     private fun setUpNaverMap(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource
@@ -89,8 +94,33 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun setUpMarkBtnClickAction() {
         binding.btnMapMark.setOnClickListener {
+            if (permissionRequester.hasNotLocationPermissions()) {
+                permissionRequester.checkLocationPermissions {
+                    makeSettingSnackbar()
+                }
+                return@setOnClickListener
+            }
+
             moveCameraCenterPosition()
             createMarker()
+        }
+    }
+
+    private fun makeSettingSnackbar() {
+        showSnackbar(resources.getString(R.string.woof_permission)) {
+            setAction(resources.getString(R.string.woof_setting)) {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data =
+                    Uri.parse(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_package,
+                                requireContext().packageName,
+                            ),
+                        ),
+                    )
+                startActivity(intent)
+            }
         }
     }
 
@@ -112,8 +142,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         val position = locationSource.lastLocation ?: return
         marker.position = LatLng(position.latitude, position.longitude)
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker)
-        marker.width = 125
-        marker.height = 160
+        marker.width = MARKER_WIDTH
+        marker.height = MARKER_HEIGHT
         marker.map = naverMap
 
         marker.setOnClickListener {
@@ -124,5 +154,10 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             bottomSheet.show(parentFragmentManager, tag)
             true
         }
+    }
+
+    companion object {
+        private const val MARKER_WIDTH = 125
+        private const val MARKER_HEIGHT = 160
     }
 }

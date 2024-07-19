@@ -140,4 +140,7 @@
     <!--멍멍 짓기-->
     <string name="woof_dog_age">%d살</string>
     <string name="woof_dog_walking">%s가 여기서 산책하고 있어요!</string>
+    <string name="woof_permission">발자국을 남기려면 위치 권한이 필요합니다.</string>
+    <string name="woof_setting">세팅</string>
+    <string name="woof_package">package:%s</string>
 </resources>
