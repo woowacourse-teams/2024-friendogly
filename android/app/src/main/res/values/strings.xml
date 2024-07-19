@@ -35,5 +35,9 @@
     <!--멍개-->
     <string name="group_user_list_subject">참여 견주</string>
     <string name="group_dog_list_subject">댕댕이들</string>
+    <string name="group_number_of_people">%d/%d</string>
+    <string name="group_group_info">%s · %s</string>
+    <string name="group_participate_name">모집중</string>
+    <string name="group_complete_participate_name">모집완료</string>
 
 </resources>
