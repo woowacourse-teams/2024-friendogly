@@ -31,9 +31,9 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupId = 0L,
                         filters =
                             listOf(
-                                GroupFilter.SizeFilter.SmallDog(),
-                                GroupFilter.GenderFilter.Female(),
-                                GroupFilter.GenderFilter.NeutralizingMale(),
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
                             ),
                         groupPoster = "",
                         isParticipable = true,
@@ -49,8 +49,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupId = 0L,
                         filters =
                             listOf(
-                                GroupFilter.SizeFilter.SmallDog(),
-                                GroupFilter.GenderFilter.Female(),
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
                             ),
                         groupPoster = "",
                         isParticipable = true,
