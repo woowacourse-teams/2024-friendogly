@@ -15,8 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Footprint {
 
     private static final int RADIUS_AS_METER = 1000;
@@ -28,8 +28,8 @@ public class Footprint {
     @ManyToOne(optional = false)
     private Member member;
 
-    @Column(nullable = false)
     @Embedded
+    @Column(nullable = false)
     private Location location;
 
     private String imageUrl;
