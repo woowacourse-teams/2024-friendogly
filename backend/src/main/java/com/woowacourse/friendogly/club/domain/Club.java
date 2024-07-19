@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.club.domain;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import jakarta.persistence.Column;
@@ -49,7 +50,6 @@ public class Club {
 
     //TODO: 필터링 조건
 
-    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
@@ -69,6 +69,7 @@ public class Club {
             List<Pet> participantPets,
             Status status
     ) {
+        validateOwner(owner);
         this.title = new Title(title);
         this.content = new Content(content);
         this.memberCapacity = new MemberCapacity(memberCapacity);
@@ -78,6 +79,12 @@ public class Club {
         this.status = status;
         createdAt = LocalDateTime.now();
         participantMembers.add(owner);
+    }
+
+    private void validateOwner(Member owner) {
+        if (owner == null) {
+            throw new FriendoglyException("모임 방장 정보는 필수 입니다.");
+        }
     }
 
     public int getNumberOfParticipant() {
