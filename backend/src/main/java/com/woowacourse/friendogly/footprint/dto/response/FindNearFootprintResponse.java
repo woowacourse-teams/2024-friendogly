@@ -8,6 +8,7 @@ public record FindNearFootprintResponse(
     Long footprintId,
     double latitude,
     double longitude,
+    // TODO: 패턴을 통일시키고 나서 어노테이션 지우기
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime createdAt,
     boolean isMine
 ) {
