@@ -9,7 +9,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.member.controller.MemberController;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
-import com.woowacourse.friendogly.member.dto.response.saveMemberResponse;
+import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.service.MemberCommandService;
 import com.woowacourse.friendogly.member.service.MemberQueryService;
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +26,15 @@ public class MemberApiDocsTest extends RestDocsTest {
 
     @MockBean
     MemberCommandService memberCommandService;
+
     @MockBean
     MemberQueryService memberQueryService;
 
     @DisplayName("회원 생성 문서화 테스트 예시")
     @Test
     void saveMember_Success() throws Exception {
-        SaveMemberRequest request = new SaveMemberRequest("반갑개");
-        saveMemberResponse response = new saveMemberResponse(1L);
+        SaveMemberRequest request = new SaveMemberRequest("반갑개", "member@email.com");
+        SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "member@email.com");
 
         Mockito.when(memberCommandService.saveMember(request))
                 .thenReturn(response);
@@ -51,7 +52,12 @@ public class MemberApiDocsTest extends RestDocsTest {
                                 .tag("Member API")
                                 .summary("회원 생성 API")
                                 .requestFields(
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("회원 이름"))
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"))
+                                .responseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원 id"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"))
                                 .requestSchema(Schema.schema("saveMemberRequest"))
                                 .responseSchema(Schema.schema("응답DTO 이름"))
                                 .build()))
