@@ -17,6 +17,14 @@ fun ImageView.bindGlide1000(uri: String?) {
         .into(this)
 }
 
+@BindingAdapter("glide")
+fun ImageView.bindGlide(uri: String?) {
+    if (uri == null) return
+    Glide.with(context)
+        .load(uri)
+        .into(this)
+}
+
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     if (bitmap == null) {
