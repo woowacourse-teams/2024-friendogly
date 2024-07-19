@@ -31,6 +31,13 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/woofFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.woof.WoofFragment"
+        android:label="WoofFragment"
+        tools:layout="@layout/fragment_woof">
+    </fragment>
+
 
     <fragment
         android:id="@+id/chatListFragment"
