@@ -18,16 +18,15 @@ public class Content {
 
     @Lob
     @Column(nullable = false)
-    private String content;
+    private String value;
 
-    public Content(String content) {
-        validate(content);
-        this.content =
-                content;
+    public Content(String value) {
+        validate(value);
+        this.value = value;
     }
 
-    private void validate(String content) {
-        if (StringUtils.isBlank(content) || content.length() > MAX_CONTENT_LENGTH) {
+    private void validate(String value) {
+        if (StringUtils.isBlank(value) || value.length() > MAX_CONTENT_LENGTH) {
             throw new FriendoglyException(String.format("내용은 1글자 이상 %d글자 이하로 작성해주세요.", MAX_CONTENT_LENGTH));
         }
     }
