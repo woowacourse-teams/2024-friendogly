@@ -1,11 +1,10 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
-import android.util.Log
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-class GroupAddViewModel: BaseViewModel(), GroupAddActionHandler {
+class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     val groupFilterSelector = GroupFilterSelector(
         groupList = GroupFilter.makeGroupFilterEntry()
     )
@@ -15,11 +14,10 @@ class GroupAddViewModel: BaseViewModel(), GroupAddActionHandler {
         isSelected: Boolean,
     ) {
         val groupFilter = GroupFilter.findGroupFilter(filterName) ?: return
-        if (isSelected){
+        if (isSelected) {
             groupFilterSelector.addGroupFilter(groupFilter)
-        } else{
+        } else {
             groupFilterSelector.removeGroupFilter(groupFilter)
         }
-        Log.d("sdflsdfjlfs",groupFilterSelector.currentSelectedFilters.value?.joinToString {  it.filterName} ?: "")
     }
 }
