@@ -31,7 +31,7 @@ public class FootprintQueryService {
 
         return recentFootprints.stream()
             .filter(footprint -> footprint.isNear(currentLocation))
-            .map(footprint -> FindNearFootprintResponse.from(footprint, memberId))
+            .map(footprint -> new FindNearFootprintResponse(footprint, memberId))
             .toList();
     }
 

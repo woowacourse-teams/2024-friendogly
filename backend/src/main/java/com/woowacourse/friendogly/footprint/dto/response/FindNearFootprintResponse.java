@@ -13,8 +13,8 @@ public record FindNearFootprintResponse(
     boolean isMine
 ) {
 
-    public static FindNearFootprintResponse from(Footprint footprint, Long memberId) {
-        return new FindNearFootprintResponse(
+    public FindNearFootprintResponse(Footprint footprint, Long memberId) {
+        this(
             footprint.getId(),
             footprint.getLocation().getLatitude(),
             footprint.getLocation().getLongitude(),
