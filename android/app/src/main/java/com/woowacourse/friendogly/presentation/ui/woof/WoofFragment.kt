@@ -19,7 +19,10 @@ import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
-class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
+class WoofFragment :
+    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
+    OnMapReadyCallback,
+    WoofActionHandler {
     private lateinit var map: NaverMap
     private val mapView: MapView by lazy { binding.mapView }
     private val permissionRequester: WoofPermissionRequester by lazy {
@@ -35,13 +38,16 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     override fun initViewCreated() {
+        initDataBinding()
         mapView.getMapAsync(this)
     }
 
     override fun onMapReady(naverMap: NaverMap) {
         setUpMap(naverMap)
-        setUpMarkBtnClickAction()
-        setUpLocationBtnClickAction()
+    }
+
+    private fun initDataBinding() {
+        binding.actionHandler = this
     }
 
     private fun setUpMap(naverMap: NaverMap) {
@@ -55,24 +61,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             isScaleBarEnabled = false
         }
         map.locationOverlay.circleRadius = MAP_CIRCLE_RADIUS
-    }
-
-    private fun setUpLocationBtnClickAction() {
-        binding.btnWoofLocation.setOnClickListener {
-            if (hasNotLocationPermissions()) return@setOnClickListener
-
-            map.locationTrackingMode =
-                if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
-        }
-    }
-
-    private fun setUpMarkBtnClickAction() {
-        binding.btnMapMark.setOnClickListener {
-            if (hasNotLocationPermissions()) return@setOnClickListener
-
-            moveCameraCenterPosition()
-            createMarker()
-        }
     }
 
     private fun hasNotLocationPermissions(): Boolean {
@@ -133,6 +121,20 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             bottomSheet.show(parentFragmentManager, tag)
             true
         }
+    }
+
+    override fun markFootPrint() {
+        if (hasNotLocationPermissions()) return
+
+        moveCameraCenterPosition()
+        createMarker()
+    }
+
+    override fun changeLocationTrackingMode() {
+        if (hasNotLocationPermissions()) return
+
+        map.locationTrackingMode =
+            if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
     }
 
     override fun onStart() {

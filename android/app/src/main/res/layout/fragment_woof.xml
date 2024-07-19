@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.woof.WoofActionHandler" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +27,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="42dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> actionHandler.changeLocationTrackingMode()}"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
@@ -33,6 +41,7 @@
             android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_btn"
+            android:onClick="@{() -> actionHandler.markFootPrint()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
