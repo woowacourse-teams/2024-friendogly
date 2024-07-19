@@ -14,6 +14,8 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
 
 android {
     namespace = "com.woowacourse.friendogly"
@@ -29,6 +31,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
+        resValue("string", "KAKAO_OAUTH_HOST", kakaoOauthHost)
     }
 
     buildTypes {
