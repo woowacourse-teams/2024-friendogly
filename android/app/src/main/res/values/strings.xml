@@ -29,7 +29,6 @@
     <string name="empty_pet_description">등록하기를 통해 강아지를 추가해주세요</string>
     <string name="user_name_tag">#%s</string>
 
-
     <!--강아지 등록-->
     <string name="dog_name_title">댕댕이 이름</string>
     <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
@@ -131,6 +130,7 @@
     <string name="chat_group_dog_gender">성별</string>
     <string name="chat_group_join_people">참여 중인 견주</string>
     <string name="chat_setting_alarm">채팅방 알림</string>
+    <string name="chat_mine">나</string>
 
     <string name="group_number_of_people">%d/%d</string>
     <string name="group_group_info">%s · %s</string>
@@ -139,7 +139,5 @@
 
     <!--멍멍 짓기-->
     <string name="woof_dog_age">%d살</string>
-    <string name="woof_dog_name">%s가 여기서 산책하고 있어요!</string>
-    <string name="chat_mine">나</string>
-
+    <string name="woof_dog_walking">%s가 여기서 산책하고 있어요!</string>
 </resources>

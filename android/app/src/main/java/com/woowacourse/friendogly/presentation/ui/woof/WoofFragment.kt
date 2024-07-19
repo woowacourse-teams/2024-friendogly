@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.woof
 
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -15,7 +14,7 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.woowacourse.friendogly.presentation.ui.woof.bottom.FootPrintBottomSheet
+import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
@@ -120,17 +119,9 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker.setOnClickListener {
             val bottomSheet =
                 FootPrintBottomSheet.newInstance(
-                    DogUiModel(
-                        "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
-                        "땡이",
-                        "소형견",
-                        "암컷",
-                        11,
-                        "안녕하세요! 땡이에요~",
-                    ),
+                    memberId = 1L,
                 )
             bottomSheet.show(parentFragmentManager, tag)
-            bottomSheet.setStyle(STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
             true
         }
     }
