@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.remote.source
 
-import com.woowacourse.friendogly.data.model.FootPrintDto
+import com.woowacourse.friendogly.data.model.FootPrintInfoDto
 
 interface FootPrintDataSource {
-    suspend fun getFootPrint(memberId: Long): Result<FootPrintDto>
+    suspend fun getFootPrintInfo(memberId: Long): Result<FootPrintInfoDto>
 }

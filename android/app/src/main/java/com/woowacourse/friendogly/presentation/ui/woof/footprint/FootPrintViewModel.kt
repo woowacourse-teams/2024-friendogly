@@ -16,8 +16,8 @@ class FootPrintViewModel(
         MutableLiveData(FootPrintUiState.Loading)
     val uiState: LiveData<FootPrintUiState> get() = _uiState
 
-    private val _footPrint: MutableLiveData<FootPrintUiModel> = MutableLiveData()
-    val footPrint: LiveData<FootPrintUiModel> get() = _footPrint
+    private val _footPrint: MutableLiveData<FootPrintInfoUiModel> = MutableLiveData()
+    val footPrint: LiveData<FootPrintInfoUiModel> get() = _footPrint
 
     init {
         viewModelScope.launch {
@@ -26,7 +26,7 @@ class FootPrintViewModel(
     }
 
     private suspend fun loadFootPrint() {
-        footPrintRepository.getFootPrint(memberId).onSuccess { footPrint ->
+        footPrintRepository.getFootPrintInfo(memberId).onSuccess { footPrint ->
             _footPrint.value = footPrint.toUiModel()
         }.onFailure {
         }

@@ -1,9 +1,9 @@
 package com.woowacourse.friendogly.remote.service
 
-import com.woowacourse.friendogly.data.model.FootPrintDto
+import com.woowacourse.friendogly.data.model.FootPrintInfoDto
 import retrofit2.http.GET
 
 interface FootPrintService {
     @GET()
-    suspend fun getFootPrint(memberId: Long): Result<FootPrintDto>
+    suspend fun getFootPrintInfo(memberId: Long): Result<FootPrintInfoDto>
 }
