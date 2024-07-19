@@ -3,31 +3,30 @@ package com.woowacourse.friendogly.presentation.ui.group.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
-import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 
-class GroupFilterSelector {
-    private val _participationFilter: MutableLiveData<ParticipationFilter> = MutableLiveData(
-        ParticipationFilter.POSSIBLE)
-    val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
-
-    private val _currentSelectedFilters: MutableLiveData<List<GroupFilter>> = MutableLiveData()
+class GroupFilterSelector(
+    groupList: List<GroupFilter> = listOf(),
+) {
+    private val _currentSelectedFilters: MutableLiveData<List<GroupFilter>> =
+        MutableLiveData(groupList)
     val currentSelectedFilters: LiveData<List<GroupFilter>> get() = _currentSelectedFilters
 
-    fun selectParticipationFilter(selectedFilter: ParticipationFilter) {
-        participationFilter = selectedFilter
-    }
-
     fun addGroupFilter(filter: GroupFilter) {
-        _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
+        if (confirmValidFilter(filter)) {
+            _currentSelectedFilters.value = _currentSelectedFilters.value?.plus(filter)
+        }
     }
 
     fun removeGroupFilter(filter: GroupFilter) {
-        _currentSelectedFilters.value = _currentSelectedFilters.value?.minus(filter)
+        if (!confirmValidFilter(filter)) {
+            _currentSelectedFilters.value =
+                _currentSelectedFilters.value?.filterNot { it.filterName == filter.filterName }
+        }
     }
 
-    private fun confirmInValidFilter(filter: GroupFilter): Boolean {
-        return currentSelectedFilters.value?.all {
-            it.filterName != filter.filterName
+    private fun confirmValidFilter(filter: GroupFilter): Boolean {
+        return currentSelectedFilters.value?.none {
+            it.filterName == filter.filterName
         } ?: true
     }
 

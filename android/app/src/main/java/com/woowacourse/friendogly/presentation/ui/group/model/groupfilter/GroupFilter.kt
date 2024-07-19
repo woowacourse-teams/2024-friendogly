@@ -20,6 +20,31 @@ sealed class GroupFilter(val filterName: String) {
     }
 
     companion object {
+        fun findGroupFilter(filterName: String): GroupFilter? {
+            return when (filterName) {
+                FEMALE_NAME -> GenderFilter.Female()
+                MALE_NAME -> GenderFilter.Male()
+                NEUTRALIZING_FEMALE_NAME -> GenderFilter.NeutralizingFemale()
+                NEUTRALIZING_MALE_NAME -> GenderFilter.NeutralizingMale()
+                SMALL_DOG_NAME -> SizeFilter.SmallDog()
+                MEDIUM_DOG_NAME -> SizeFilter.MediumDog()
+                BIG_DOG_NAME -> SizeFilter.BigDog()
+                else -> null
+            }
+        }
+
+        fun makeGroupFilterEntry(): List<GroupFilter>{
+            return listOf(
+                SizeFilter.SmallDog(),
+                SizeFilter.MediumDog(),
+                SizeFilter.BigDog(),
+                GenderFilter.Male(),
+                GenderFilter.Female(),
+                GenderFilter.NeutralizingMale(),
+                GenderFilter.NeutralizingFemale(),
+            )
+        }
+
         const val FEMALE_NAME = "암컷"
         const val MALE_NAME = "수컷"
         const val NEUTRALIZING_FEMALE_NAME = "중성화 암컷"
