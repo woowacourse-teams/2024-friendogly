@@ -3,9 +3,11 @@ package com.woowacourse.friendogly.footprint.dto.request;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record SaveFootprintRequest(
     @NotNull
+    @Positive(message = "memberId는 1 이상이어야 합니다.")
     Long memberId,
 
     @NotNull
