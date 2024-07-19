@@ -18,12 +18,12 @@ public record FindPetResponse(
         this(
                 pet.getId(),
                 pet.getMember().getId(),
-                pet.getName(),
-                pet.getDescription(),
-                pet.getBirthDate(),
+                pet.getName().getValue(),
+                pet.getDescription().getValue(),
+                pet.getBirthDate().getValue(),
                 pet.getSizeType().toString(),
                 pet.getGender().toString(),
-                pet.getImageUrl()
+                pet.getImageUrl().getValue()
         );
     }
 }

@@ -51,14 +51,30 @@ class PetTest {
                 .hasMessage("member는 null일 수 없습니다.");
     }
 
-    @DisplayName("이름의 길이가 1글자 미만 또는 16글자 이상인 경우 예외가 발생한다.")
-    @ValueSource(strings = {"", "1234567890123456"})
-    @ParameterizedTest
-    void create_Fail_IllegalNameLength(String invalidName) {
+    @DisplayName("이름이 null인 경우 예외가 발생한다.")
+    @Test
+    void create_Fail_NullName() {
         assertThatThrownBy(() ->
                 Pet.builder()
                         .member(member)
-                        .name(invalidName)
+                        .name(null)
+                        .description("땡이입니다.")
+                        .birthDate(LocalDate.now().minusDays(1L))
+                        .sizeType(SizeType.SMALL)
+                        .gender(Gender.FEMALE_NEUTERED)
+                        .imageUrl("http://www.google.com")
+                        .build())
+                .isExactlyInstanceOf(FriendoglyException.class)
+                .hasMessage("이름은 빈 값이나 null일 수 없습니다.");
+    }
+
+    @DisplayName("이름의 길이가 16글자 이상인 경우 예외가 발생한다.")
+    @Test
+    void create_Fail_IllegalNameLength() {
+        assertThatThrownBy(() ->
+                Pet.builder()
+                        .member(member)
+                        .name("1234567890123456")
                         .description("땡이입니다.")
                         .birthDate(LocalDate.now().minusDays(1L))
                         .sizeType(SizeType.SMALL)
@@ -69,15 +85,31 @@ class PetTest {
                 .hasMessage("이름은 1자 이상, 15자 이하여야 합니다.");
     }
 
-    @DisplayName("한 줄 설명의 길이가 1글자 미만 또는 16글자 이상인 경우 예외가 발생한다.")
-    @ValueSource(strings = {"", "1234567890123456"})
-    @ParameterizedTest
-    void create_Fail_IllegalDescriptionLength(String invalidDescription) {
+    @DisplayName("한 줄 설명이 null인 경우 예외가 발생한다.")
+    @Test
+    void create_Fail_NullDescription() {
         assertThatThrownBy(() ->
                 Pet.builder()
                         .member(member)
                         .name("땡이")
-                        .description(invalidDescription)
+                        .description(null)
+                        .birthDate(LocalDate.now().minusDays(1L))
+                        .sizeType(SizeType.SMALL)
+                        .gender(Gender.FEMALE_NEUTERED)
+                        .imageUrl("http://www.google.com")
+                        .build())
+                .isExactlyInstanceOf(FriendoglyException.class)
+                .hasMessage("한 줄 설명은 빈 값이나 null일 수 없습니다.");
+    }
+
+    @DisplayName("한 줄 설명의 길이가 16글자 이상인 경우 예외가 발생한다.")
+    @Test
+    void create_Fail_IllegalDescriptionLength() {
+        assertThatThrownBy(() ->
+                Pet.builder()
+                        .member(member)
+                        .name("땡이")
+                        .description("1234567890123456")
                         .birthDate(LocalDate.now().minusDays(1L))
                         .sizeType(SizeType.SMALL)
                         .gender(Gender.FEMALE_NEUTERED)
