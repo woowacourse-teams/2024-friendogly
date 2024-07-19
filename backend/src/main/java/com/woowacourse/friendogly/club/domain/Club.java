@@ -35,14 +35,14 @@ public class Club {
     @Embedded
     private Content content;
 
-    @Column(nullable = false)
+    @Embedded
     private MemberCapacity memberCapacity;
 
     @OneToOne(optional = false)
     private Member owner;
 
     @ManyToMany
-    private List<Member> participantMembers = new ArrayList<>();
+    private final List<Member> participantMembers = new ArrayList<>();
 
     @ManyToMany
     private List<Pet> participantPets = new ArrayList<>();
