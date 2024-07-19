@@ -1,112 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="20dp">
-    <View
-        android:id="@+id/view_group_list_line"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginVertical="5dp"
-        android:background="@color/gray03"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="group"
+            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel" />
+
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="8dp"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_group_list_filter_list"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/iv_group_list_poster"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_group_list_line"
-        tools:listitem="@layout/item_filter" />
+        android:paddingBottom="20dp">
 
-    <ImageView
-        android:id="@+id/iv_group_list_poster"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="15dp"
-        android:background="@drawable/rect_white_fill_radius4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list" />
+        <View
+            android:id="@+id/view_group_list_line"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/gray03"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_group_list_group_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
-        app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
-        tools:text="모집중" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_group_list_filter_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/iv_group_list_poster"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_group_list_line"
+            tools:listitem="@layout/item_filter" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_group_list_group_state"
-        app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
-        tools:text="모임해요~" />
+        <ImageView
+            android:id="@+id/iv_group_list_poster"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/rect_white_fill_radius4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list" />
 
-    <TextView
-        android:id="@+id/tv_group_list_group_content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
-        app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_state"
-        tools:text="공지 꼭 읽어주세요!" />
+        <TextView
+            android:id="@+id/tv_group_list_group_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            app:applyParticipable="@{group.participable}"
+            app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
+            tools:text="모집중" />
 
-    <ImageView
-        android:id="@+id/iv_group_list_user_list_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/ic_user_list"
-        app:layout_constraintBottom_toTopOf="@id/tv_group_list_user_info"
-        app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
-        app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{group.title}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_group_list_group_state"
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter_list"
+            tools:text="모임해요~" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_group_list_user_info"
-        app:layout_constraintStart_toEndOf="@id/iv_group_list_user_list_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_content"
-        tools:text="2/4명 참여" />
+        <TextView
+            android:id="@+id/tv_group_list_group_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{group.content}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
+            app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_state"
+            tools:text="공지 꼭 읽어주세요!" />
 
-    <TextView
-        android:id="@+id/tv_group_list_user_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
-        app:layout_constraintTop_toBottomOf="@id/iv_group_list_user_list_icon"
-        tools:text="벼리 · 잠실6동 " />
+        <ImageView
+            android:id="@+id/iv_group_list_user_list_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_user_list"
+            app:layout_constraintBottom_toTopOf="@id/tv_group_list_user_info"
+            app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
+            app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_content" />
 
-    <TextView
-        android:id="@+id/tv_group_list_group_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_group_list_user_list_icon"
-        tools:text="3분 전" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:text="@{@string/group_number_of_people(group.currentNumberOfPeople,group.maximumNumberOfPeople)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_group_list_user_info"
+            app:layout_constraintStart_toEndOf="@id/iv_group_list_user_list_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_group_list_group_content"
+            tools:text="2/4명 참여" />
+
+        <TextView
+            android:id="@+id/tv_group_list_user_info"
+            android:text="@{@string/group_group_info(group.groupLeader,group.groupLocation)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_group_list_poster"
+            app:layout_constraintTop_toBottomOf="@id/iv_group_list_user_list_icon"
+            tools:text="벼리 · 잠실6동 " />
+
+        <TextView
+            android:id="@+id/tv_group_list_group_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_group_list_user_list_icon"
+            tools:text="3분 전" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
