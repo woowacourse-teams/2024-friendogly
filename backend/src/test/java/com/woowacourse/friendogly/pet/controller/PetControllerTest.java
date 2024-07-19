@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,28 @@ class PetControllerTest {
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @DisplayName("memberId가 양수가 아닌 경우 400을 반환한다.")
+    @ValueSource(longs = {-1L, 0L})
+    @ParameterizedTest
+    void savePet_Fail_NonPositiveMemberId(Long idInput) {
+        SavePetRequest request = new SavePetRequest(
+                idInput,
+                "1234567890123456",
+                "땡이입니다.",
+                LocalDate.now().minusDays(1L),
+                "SMALL",
+                "FEMALE_NEUTERED",
+                "http://www.google.com"
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/pets")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
