@@ -12,12 +12,6 @@
         <item name="buttonTint">@color/blue</item>
     </style>
 
-
-    <style name="ThemeOverlay.App.CheckBox" parent="">
-        <item name="colorOnSurface">@color/blue</item>
-        <item name="colorSecondary">@color/blue</item>
-    </style>
-
     <style name="Theme.Friendogly" parent="Base.Theme.Friendogly" />
 
     <style name="Theme.ImageCropper" parent="Theme.AppCompat">
