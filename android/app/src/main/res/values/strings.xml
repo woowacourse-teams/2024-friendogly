@@ -42,5 +42,9 @@
     <string name="chat_list_title">채팅</string>
     <string name="chat_send_hint_message">메세지 보내기</string>
 
+    <string name="group_number_of_people">%d/%d</string>
+    <string name="group_group_info">%s · %s</string>
+    <string name="group_participate_name">모집중</string>
+    <string name="group_complete_participate_name">모집완료</string>
 
 </resources>
