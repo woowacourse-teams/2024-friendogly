@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class LocationTest {
 
-    @DisplayName("생성 성공 - 올바른 위도, 경도 범위")
+    @DisplayName("올바른 위도, 경도 범위로 생성하면 예외가 발생하지 않는다.")
     @ParameterizedTest
     @CsvSource(value = {"90.000, 180.000", "-90.000, -180.000", "0.000, 0.000"})
     void constructor_Success(double latitude, double longitude) {
@@ -21,7 +21,7 @@ class LocationTest {
             .doesNotThrowAnyException();
     }
 
-    @DisplayName("생성 실패 - 올바르지 않은 위도 범위")
+    @DisplayName("올바르지 않은 위도 범위로 생성하면 예외가 발생한다.")
     @ParameterizedTest
     @ValueSource(doubles = {-90.001, 90.001})
     void constructor_Fail_IllegalLatitude(double latitude) {
@@ -30,7 +30,7 @@ class LocationTest {
             .hasMessage("위도 범위가 올바르지 않습니다.");
     }
 
-    @DisplayName("생성 실패 - 올바르지 않은 위도 범위")
+    @DisplayName("올바르지 않은 경도 범위로 생성하면 예외가 발생한다.")
     @ParameterizedTest
     @ValueSource(doubles = {-180.001, 180.001})
     void constructor_Fail_IllegalLongitude(double longitude) {
