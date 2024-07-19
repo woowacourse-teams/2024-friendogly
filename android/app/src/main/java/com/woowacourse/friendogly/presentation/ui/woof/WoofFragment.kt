@@ -20,7 +20,7 @@ import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATIO
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
-    private lateinit var naverMap: NaverMap
+    private lateinit var map: NaverMap
     private val mapView: MapView by lazy { binding.mapView }
     private val permissionRequester: WoofPermissionRequester by lazy {
         WoofPermissionRequester(
@@ -39,64 +39,30 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        setUpNaverMap(naverMap)
+        setUpMap(naverMap)
         setUpMarkBtnClickAction()
+        setUpLocationBtnClickAction()
     }
 
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
-
-    private fun setUpNaverMap(naverMap: NaverMap) {
-        this.naverMap = naverMap
-        naverMap.locationSource = locationSource
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
-        naverMap.uiSettings.apply {
+    private fun setUpMap(naverMap: NaverMap) {
+        map = naverMap
+        map.locationSource = locationSource
+        map.locationTrackingMode = LocationTrackingMode.Follow
+        map.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = false
             isZoomControlEnabled = false
             isScaleBarEnabled = false
         }
-        setUpLocationBtnClickAction()
+        map.locationOverlay.circleRadius = MAP_CIRCLE_RADIUS
     }
 
     private fun setUpLocationBtnClickAction() {
         binding.btnWoofLocation.setOnClickListener {
             if (hasNotLocationPermissions()) return@setOnClickListener
 
-            naverMap.locationTrackingMode =
-                if (naverMap.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
+            map.locationTrackingMode =
+                if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
         }
     }
 
@@ -146,7 +112,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                     lastLocation.longitude,
                 )
             val cameraUpdate = CameraUpdate.scrollTo(latLng)
-            naverMap.moveCamera(cameraUpdate)
+            map.moveCamera(cameraUpdate)
         }
     }
 
@@ -157,7 +123,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker)
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
-        marker.map = naverMap
+        marker.map = map
 
         marker.setOnClickListener {
             val bottomSheet =
@@ -169,8 +135,44 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
     companion object {
         private const val MARKER_WIDTH = 125
         private const val MARKER_HEIGHT = 160
+        private const val MAP_CIRCLE_RADIUS = 1000
     }
 }
