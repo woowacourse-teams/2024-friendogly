@@ -33,6 +33,7 @@
             android:id="@+id/bottom_navi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:clipChildren="false"
             app:elevation="0dp"
             app:itemActiveIndicatorStyle="@android:color/transparent"

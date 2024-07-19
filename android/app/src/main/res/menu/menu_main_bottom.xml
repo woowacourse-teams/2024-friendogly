@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/groupListFragment"
         android:enabled="true"
         android:icon="@drawable/ic_home"
         android:title="@string/bottom_home" />
@@ -14,7 +14,7 @@
         android:title="@string/bottom_woof" />
 
     <item
-        android:id="@+id/chatFragment"
+        android:id="@+id/chatListFragment"
         android:enabled="true"
         android:icon="@drawable/ic_chat"
         android:title="@string/bottom_chat" />

@@ -3,17 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/myPageFragment">
+    app:startDestination="@id/groupListFragment">
 
     <action
         android:id="@+id/action_home_fragment"
-        app:destination="@id/myPageFragment"
+        app:destination="@id/groupListFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/navigation_graph"
         app:popUpToInclusive="true" />
+
+
+    <fragment
+        android:id="@+id/groupListFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.group.list.GroupListFragment"
+        android:label="GroupListFragment"
+        tools:layout="@layout/fragment_group_list">
+
+        <action
+            android:id="@+id/action_groupListFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_groupListFragment_to_chatListFragment"
+            app:destination="@id/chatListFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/woofFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.woof.WoofFragment"
+        android:label="WoofFragment"
+        tools:layout="@layout/fragment_woof">
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.woowacourse.friendogly.presentation.ui.chatlist.ChatListFragment"
+        android:label="ChatListFragment"
+        tools:layout="@layout/fragment_chat_list">
+
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/myPageFragment"
