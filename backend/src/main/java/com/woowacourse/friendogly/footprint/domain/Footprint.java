@@ -53,7 +53,7 @@ public class Footprint {
         return this.location.isWithin(location, RADIUS_AS_METER);
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

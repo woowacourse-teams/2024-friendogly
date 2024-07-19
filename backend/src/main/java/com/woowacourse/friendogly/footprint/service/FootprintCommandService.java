@@ -60,7 +60,7 @@ public class FootprintCommandService {
         // TODO: 더미 데이터 URL입니다. 나중에 이미지 저장소(AWS S3)와 연동 필요 !!!
         // TODO: 연동 완료되면 테스트도 작성 필요합니다.
         String imageUrl = "https://img.extmovie.com/files/attach/images/148/921/189/074/6a71e831234e113e3ed215405098109c.jpg";
-        footprint.setImageUrl(imageUrl);
+        footprint.updateImageUrl(imageUrl);
         return new UpdateFootprintImageResponse(imageUrl);
     }
 }
