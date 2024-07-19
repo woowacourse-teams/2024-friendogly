@@ -3,7 +3,7 @@ package com.woowacourse.friendogly.pet.dto.response;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import java.time.LocalDate;
 
-public record FindPetResponse(
+public record SavePetResponse(
         Long id,
         Long memberId,
         String name,
@@ -14,7 +14,7 @@ public record FindPetResponse(
         String imageUrl
 ) {
 
-    public FindPetResponse(Pet pet) {
+    public SavePetResponse(Pet pet) {
         this(
                 pet.getId(),
                 pet.getMember().getId(),
