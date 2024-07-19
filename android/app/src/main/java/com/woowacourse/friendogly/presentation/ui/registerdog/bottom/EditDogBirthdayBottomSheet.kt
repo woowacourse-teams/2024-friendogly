@@ -84,10 +84,7 @@ class EditDogBirthdayBottomSheet(
             value = birthdayMonth
             displayedValues =
                 (MIN_MONTH..MAX_MONTH).map { month ->
-                    month.toString().padStart(
-                        MONTH_MAX_LENGTH,
-                        MONTH_PAD_CHAR,
-                    ) + context.getString(R.string.birthday_month)
+                    context.getString(R.string.birthday_month).format(month)
                 }.toTypedArray()
         }
     }
@@ -105,8 +102,5 @@ class EditDogBirthdayBottomSheet(
         private const val MIN_YEAR = 1970
         private const val MIN_MONTH = 1
         private const val MAX_MONTH = 12
-
-        const val MONTH_MAX_LENGTH = 2
-        const val MONTH_PAD_CHAR = '0'
     }
 }

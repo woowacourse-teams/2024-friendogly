@@ -6,8 +6,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.R
-import com.woowacourse.friendogly.presentation.ui.registerdog.bottom.EditDogBirthdayBottomSheet.Companion.MONTH_MAX_LENGTH
-import com.woowacourse.friendogly.presentation.ui.registerdog.bottom.EditDogBirthdayBottomSheet.Companion.MONTH_PAD_CHAR
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("year", "month")
@@ -16,11 +14,7 @@ fun TextView.bindDogBirthday(
     month: Int?,
 ) {
     val yearStr = year.toString() + context.getString(R.string.birthday_year)
-    val monthStr =
-        month.toString().padStart(
-            MONTH_MAX_LENGTH,
-            MONTH_PAD_CHAR,
-        ) + context.getString(R.string.birthday_month)
+    val monthStr = context.getString(R.string.birthday_month).format(month)
     this.text = "$yearStr $monthStr"
 }
 
