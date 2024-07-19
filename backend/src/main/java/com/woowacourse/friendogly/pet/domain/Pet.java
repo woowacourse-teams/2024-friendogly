@@ -24,7 +24,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pet {
 
+    private static final int MIN_NAME_LENGTH = 1;
     private static final int MAX_NAME_LENGTH = 15;
+    private static final int MIN_DESCRIPTION_LENGTH = 1;
     private static final int MAX_DESCRIPTION_LENGTH = 15;
     private static final Pattern VALID_URL_REGEX =
             Pattern.compile("^(https?:\\/\\/)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}(:[0-9]{1,5})?(\\/.*)?$");
@@ -88,15 +90,18 @@ public class Pet {
     }
 
     private void validateName(String name) {
-        if (StringUtils.isBlank(name) || name.length() > MAX_NAME_LENGTH) {
-            throw new FriendoglyException(String.format("이름은 1자 이상, %d자 이하여야 합니다.", MAX_NAME_LENGTH));
+        if (StringUtils.isBlank(name) || name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            throw new FriendoglyException(String.format(
+                    "이름은 %d자 이상, %d자 이하여야 합니다.", MIN_NAME_LENGTH, MAX_NAME_LENGTH));
         }
     }
 
     private void validateDescription(String description) {
-        if (StringUtils.isBlank(description) || description.length() > MAX_DESCRIPTION_LENGTH) {
-            throw new FriendoglyException(
-                    String.format("한 줄 설명은 1자 이상, %d자 이하여야 합니다.", MAX_DESCRIPTION_LENGTH));
+        if (StringUtils.isBlank(description)
+                || description.length() < MIN_DESCRIPTION_LENGTH
+                || description.length() > MAX_DESCRIPTION_LENGTH) {
+            throw new FriendoglyException(String.format(
+                    "한 줄 설명은 %d자 이상, %d자 이하여야 합니다.", MIN_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH));
         }
     }
 
