@@ -43,7 +43,8 @@ fun TextView.bindDogEditBtnBackground(
     dogDescription: String?,
     profileImage: Bitmap?,
 ) {
-    if (dogName != "" && dogDescription != "" && profileImage != null) {
+    val isProfileComplete = dogName != "" && dogDescription != "" && profileImage != null
+    if (isProfileComplete) {
         this.background = context.getDrawable(R.drawable.rect_blue_fill_16)
         this.setTextColor(context.getColor(R.color.black))
     } else {

@@ -76,8 +76,9 @@ class RegisterDogViewModel : BaseViewModel() {
     }
 
     fun registerDog() {
-        val state = _uiState.value ?: return
-        if (dogName.value == "" || dogDescription.value == "" || _profileImage.value == null) return
+        val isProfileComplete =
+            dogName.value == "" || dogDescription.value == "" || _profileImage.value == null
+        if (!isProfileComplete) return
         _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
     }
 }
