@@ -28,7 +28,12 @@ coroutines = "1.7.3"
 
 # kakao
 kakao-user = "2.20.3"
-kakao-map = "2.9.5"
+
+# naver
+naver-maps = "3.18.0"
+
+# location
+location = "21.0.1"
 
 ## google + firebase
 google-services = "4.4.2"
@@ -76,7 +81,12 @@ paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", v
 
 # kakao
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
-kakao-map = { group = "com.kakao.maps.open", name = "android", version.ref = "kakao-map" }
+
+# naver
+naver-maps = { group = "com.naver.maps", name = "map-sdk", version.ref = "naver-maps" }
+
+# location
+location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "location" }
 
 # google
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
@@ -98,7 +108,9 @@ kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core"]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "paging-runtime-ktx"]
 navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth"]
-kakao = ["kakao-user", "kakao-map"]
+kakao = ["kakao-user"]
+naver = ["naver-maps"]
+location = ["location"]
 network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor"]
 datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]

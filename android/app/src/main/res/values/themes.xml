@@ -1,12 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Friendogly" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
+
+    </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/blue</item>
     </style>
 
     <style name="Theme.Friendogly" parent="Base.Theme.Friendogly" />
-
 
     <style name="Theme.ImageCropper" parent="Theme.AppCompat">
         <item name="android:statusBarColor">@color/white</item>
