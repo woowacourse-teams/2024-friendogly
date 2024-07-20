@@ -13,13 +13,13 @@ public record FindNearFootprintResponse(
     boolean isMine
 ) {
 
-    public FindNearFootprintResponse(Footprint footprint, Long memberId) {
+    public FindNearFootprintResponse(Footprint footprint, boolean isMine) {
         this(
             footprint.getId(),
             footprint.getLocation().getLatitude(),
             footprint.getLocation().getLongitude(),
             footprint.getCreatedAt(),
-            footprint.isCreatedBy(memberId)
+            isMine
         );
     }
 }
