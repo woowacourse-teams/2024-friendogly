@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.presentation.ui.woof
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -14,16 +13,15 @@ import kotlinx.coroutines.launch
 
 class WoofViewModel(private val woofRepository: WoofRepository) :
     BaseViewModel() {
-    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData(WoofUiState())
+    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
 
     fun loadNearFootPrints(latLng: LatLng) {
         viewModelScope.launch {
             woofRepository.getNearFootPrints(latLng).onSuccess { nearFootPrints ->
-                val state = uiState.value ?: return@onSuccess
+                val state = uiState.value ?: WoofUiState()
                 _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
             }.onFailure {
-                Log.e("chad", it.toString())
             }
         }
     }

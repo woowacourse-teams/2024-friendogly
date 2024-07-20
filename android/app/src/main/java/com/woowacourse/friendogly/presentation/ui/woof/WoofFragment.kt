@@ -4,6 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.LayoutInflater
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -19,6 +22,7 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteWoofDataSource
 import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
+import com.woowacourse.friendogly.databinding.ToastCustomBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -29,6 +33,7 @@ class WoofFragment :
     OnMapReadyCallback,
     WoofActionHandler {
     private lateinit var map: NaverMap
+    private lateinit var lastLatLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val permissionRequester: WoofPermissionRequester by lazy {
@@ -68,6 +73,9 @@ class WoofFragment :
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             markNearFootPrints(footPrints = state.nearFootPrints)
+            createMarker(latLng = lastLatLng, isMine = true)
+            moveCameraCenterPosition(latLng = lastLatLng)
+            showCustomToastMessage()
         }
     }
 
@@ -143,10 +151,27 @@ class WoofFragment :
         marker.height = MARKER_HEIGHT
         marker.map = map
 
-        showFootPrintInfo(marker)
+        setUpMarkerAction(marker)
     }
 
-    private fun showFootPrintInfo(marker: Marker) {
+    private fun showCustomToastMessage() {
+        val toastBinding: ToastCustomBinding =
+            DataBindingUtil.inflate(
+                LayoutInflater.from(context),
+                R.layout.toast_custom,
+                null,
+                false,
+            )
+
+        val toast = Toast(context)
+        toast.apply {
+            duration = Toast.LENGTH_SHORT
+            view = toastBinding.root
+            show()
+        }
+    }
+
+    private fun setUpMarkerAction(marker: Marker) {
         marker.setOnClickListener {
             val bottomSheet =
                 FootPrintBottomSheet.newInstance(
@@ -168,14 +193,12 @@ class WoofFragment :
 
         if (locationSource.lastLocation != null) {
             val lastLocation = locationSource.lastLocation ?: return
-            val latLng =
+            lastLatLng =
                 LatLng(
                     lastLocation.latitude,
                     lastLocation.longitude,
                 )
-            moveCameraCenterPosition(latLng = latLng)
-            createMarker(latLng = latLng, isMine = true)
-            viewModel.loadNearFootPrints(latLng = latLng)
+            viewModel.loadNearFootPrints(latLng = lastLatLng)
         }
     }
 
