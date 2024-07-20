@@ -11,6 +11,7 @@ import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
@@ -29,6 +30,7 @@ class WoofFragment :
     WoofActionHandler {
     private lateinit var map: NaverMap
     private val mapView: MapView by lazy { binding.mapView }
+    private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val permissionRequester: WoofPermissionRequester by lazy {
         WoofPermissionRequester(
             requireActivity(),
@@ -75,11 +77,17 @@ class WoofFragment :
         map.locationTrackingMode = LocationTrackingMode.Follow
         map.uiSettings.apply {
             isLocationButtonEnabled = true
-            isCompassEnabled = false
+            isCompassEnabled = true
             isZoomControlEnabled = false
             isScaleBarEnabled = false
         }
-        map.locationOverlay.circleRadius = MAP_CIRCLE_RADIUS
+    }
+
+    private fun setUpCircleOverlay(latLng: LatLng) {
+        circleOverlay.center = latLng
+        circleOverlay.radius = MAP_CIRCLE_RADIUS
+        circleOverlay.color = resources.getColor(R.color.map_circle, null)
+        circleOverlay.map = map
     }
 
     private fun hasNotLocationPermissions(): Boolean {
@@ -113,6 +121,8 @@ class WoofFragment :
     private fun moveCameraCenterPosition(latLng: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(latLng)
         map.moveCamera(cameraUpdate)
+
+        setUpCircleOverlay(latLng)
     }
 
     private fun createMarker(
@@ -214,6 +224,6 @@ class WoofFragment :
     companion object {
         private const val MARKER_WIDTH = 125
         private const val MARKER_HEIGHT = 160
-        private const val MAP_CIRCLE_RADIUS = 1000
+        private const val MAP_CIRCLE_RADIUS = 1000.0
     }
 }
