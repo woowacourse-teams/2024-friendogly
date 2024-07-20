@@ -29,7 +29,7 @@ class WoofFragment :
     OnMapReadyCallback,
     WoofActionHandler {
     private lateinit var map: NaverMap
-    private lateinit var lastLatLng: LatLng
+    private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val permissionRequester: WoofPermissionRequester by lazy {
@@ -59,7 +59,8 @@ class WoofFragment :
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        setUpMap(naverMap)
+        initMap(naverMap)
+        activateMap()
     }
 
     private fun initDataBinding() {
@@ -69,30 +70,40 @@ class WoofFragment :
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             markNearFootPrints(footPrints = state.nearFootPrints)
-            createMarker(latLng = lastLatLng, isMine = true)
-            moveCameraCenterPosition(latLng = lastLatLng)
-            map.locationTrackingMode = LocationTrackingMode.Follow
+            createMarker(latLng = latLng, isMine = true)
+            moveCameraCenterPosition()
         }
     }
 
-    private fun setUpMap(naverMap: NaverMap) {
+    private fun initMap(naverMap: NaverMap) {
         map = naverMap
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
-        map.locationTrackingMode = LocationTrackingMode.Follow
+
         map.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = true
             isZoomControlEnabled = false
             isScaleBarEnabled = false
         }
+
+        map.addOnLocationChangeListener { location ->
+            latLng = LatLng(location.latitude, location.longitude)
+            circleOverlay.center = latLng
+        }
+    }
+
+    private fun activateMap() {
+        locationSource.activate { location ->
+            val lastLocation = location ?: return@activate
+            latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+            moveCameraCenterPosition()
+        }
     }
 
     private fun setUpCircleOverlay() {
-        map.addOnLocationChangeListener { location ->
-            circleOverlay.center = LatLng(location.latitude, location.longitude)
-        }
+        circleOverlay.center = latLng
         circleOverlay.radius = MAP_CIRCLE_RADIUS
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
@@ -125,9 +136,10 @@ class WoofFragment :
         }
     }
 
-    private fun moveCameraCenterPosition(latLng: LatLng) {
+    private fun moveCameraCenterPosition() {
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
         map.moveCamera(cameraUpdate)
+        map.locationTrackingMode = LocationTrackingMode.Follow
         setUpCircleOverlay()
     }
 
@@ -168,12 +180,12 @@ class WoofFragment :
 
         if (locationSource.lastLocation != null) {
             val lastLocation = locationSource.lastLocation ?: return
-            lastLatLng =
+            latLng =
                 LatLng(
                     lastLocation.latitude,
                     lastLocation.longitude,
                 )
-            viewModel.loadNearFootPrints(latLng = lastLatLng)
+            viewModel.loadNearFootPrints(latLng = latLng)
         }
     }
 
