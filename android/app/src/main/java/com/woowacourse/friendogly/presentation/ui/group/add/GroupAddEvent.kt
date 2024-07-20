@@ -6,4 +6,5 @@ sealed interface GroupAddEvent {
         data object NavigateToSelectGroupPoster: Navigation
         data object NavigateToSelectDog: Navigation
     }
+    data class ChangePage(val page:Int): GroupAddEvent
 }

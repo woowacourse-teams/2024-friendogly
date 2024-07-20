@@ -15,7 +15,6 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/ll_group_add_information"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -89,7 +88,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:max="5"
-            android:progress="@{vm.groupCounter.count}"
-            android:onProgressChanged="@{(seekBar, progress, fromUser) -> actionHandler.settingGroupCounter(progress)}" />
+            android:progress="@{vm.groupCounter.count}"/>
     </LinearLayout>
 </layout>

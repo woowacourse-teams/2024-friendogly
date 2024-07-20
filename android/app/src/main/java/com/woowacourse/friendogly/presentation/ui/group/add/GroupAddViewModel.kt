@@ -1,28 +1,30 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
-import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.DEFAULT_PAGE
+import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
+import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MIN_PAGE
 import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import okhttp3.MultipartBody
 
 class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
-    private val _navigateAction: MutableLiveData<Event<GroupAddEvent>> =
-            MutableLiveData()
-    val navigationAction: LiveData<Event<GroupAddEvent>> get() = _navigateAction
+    private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
+        MutableLiveData()
+    val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
 
-    private val _currentPage: MutableLiveData<Int> = MutableLiveData(DEFAULT_PAGE)
+    private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
 
     private val groupFilterSelector =
         GroupFilterSelector(groupList = GroupFilter.makeGroupFilterEntry())
 
-    private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData()
+    private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData(GroupCounter())
     val groupCounter: LiveData<GroupCounter> get() = _groupCounter
 
     private val _groupTitle: MutableLiveData<String> = MutableLiveData()
@@ -53,29 +55,36 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
         groupFilterSelector.addAllGenderFilter()
     }
 
-    override fun settingGroupCounter(count: Int) {
+    fun settingGroupCounter(count: Int) {
+        Log.d("sdfjlsdfjlsfdsdf",count.toString())
         _groupCounter.value = GroupCounter(count)
     }
 
     override fun cancelAddGroup() {
-        _navigateAction.emit(GroupAddEvent.Navigation.NavigateToHome)
+        _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
     //TODO : add api
     override fun submitAddGroup() {
-        _navigateAction.emit(GroupAddEvent.Navigation.NavigateToHome)
+        _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
     override fun navigatePrevPage() {
-        TODO("Not yet implemented")
+        val currentPage = _currentPage.value ?: return
+        val newPage = currentPage - 1
+        if (newPage in MIN_PAGE until MAX_PAGE_SIZE) {
+            _currentPage.value = newPage
+            _groupAddEvent.emit(GroupAddEvent.ChangePage(newPage))
+        }
     }
 
     override fun navigateNextPage() {
-        TODO("Not yet implemented")
-    }
-
-    private fun isValidInformationPage(){
-
+        val currentPage = _currentPage.value ?: return
+        val newPage = currentPage + 1
+        if (newPage in MIN_PAGE until MAX_PAGE_SIZE) {
+            _currentPage.value = newPage
+            _groupAddEvent.emit(GroupAddEvent.ChangePage(newPage))
+        }
     }
 
 }

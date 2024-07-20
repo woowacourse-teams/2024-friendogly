@@ -10,8 +10,6 @@ interface GroupAddActionHandler {
 
     fun selectAllGenderFilter(isSelected: Boolean)
 
-    fun settingGroupCounter(count:Int)
-
     fun cancelAddGroup()
 
     fun submitAddGroup()
