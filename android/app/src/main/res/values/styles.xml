@@ -343,6 +343,12 @@
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size25" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
 
     <!--Profile Edit Text-->
     <style name="Theme.AppCompat.TextView.Profile.EditText.Contents" parent="@style/Widget.AppCompat.EditText">
