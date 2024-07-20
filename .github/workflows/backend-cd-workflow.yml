@@ -77,6 +77,14 @@ jobs:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
 
+      - name: Check if port 8080 
+        run: |
+          lsof -t -i:8080
+
+      - name: Check if port 80
+        run: |
+          lsof -t -i:80
+          
       - name: Check if port 8080 is in use
         id: check-port
         run: |
