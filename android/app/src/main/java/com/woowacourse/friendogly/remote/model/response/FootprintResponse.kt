@@ -5,5 +5,5 @@ data class FootprintResponse(
     val latitude: Double,
     val longitude: Double,
     val createdAt: String,
-    val isMine: Boolean
+    val isMine: Boolean,
 )
