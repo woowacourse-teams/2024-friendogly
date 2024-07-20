@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
+import com.woowacourse.friendogly.presentation.base.emit
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import okhttp3.MultipartBody
@@ -45,5 +46,14 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
 
     override fun selectAllGenderFilter(isSelected: Boolean) {
         groupFilterSelector.addAllGenderFilter()
+    }
+
+    override fun cancelAddGroup() {
+        _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
+    }
+
+    //TODO : add api
+    override fun submitAddGroup() {
+        _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
     }
 }
