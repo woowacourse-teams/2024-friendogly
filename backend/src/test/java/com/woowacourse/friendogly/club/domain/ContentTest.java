@@ -5,16 +5,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class ContentTest {
 
     @DisplayName("생성 테스트")
-    @Test
-    void create() {
-        assertThatCode(() -> new Content("이번주 주말에 공원에서 산책하실 분~?"))
+    @ValueSource(ints = {1, 1000})
+    @ParameterizedTest
+    void create(int contentLength) {
+        String contentInput = "a".repeat(contentLength);
+        assertThatCode(() -> new Content(contentInput))
                 .doesNotThrowAnyException();
     }
 

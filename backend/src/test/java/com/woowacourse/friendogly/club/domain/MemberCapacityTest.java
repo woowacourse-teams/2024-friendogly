@@ -5,16 +5,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberCapacityTest {
 
     @DisplayName("모집 인원을 생성한다.")
-    @Test
-    void create() {
-        assertThatCode(() -> new MemberCapacity(5))
+    @ValueSource(ints = {1, 5})
+    @ParameterizedTest
+    void create(int memberCapacityInput) {
+        assertThatCode(() -> new MemberCapacity(memberCapacityInput))
                 .doesNotThrowAnyException();
     }
 
