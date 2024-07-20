@@ -4,15 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter"/>
-        <variable
-            name="groupAddAdapter"
-            type="GroupAddAdapter" />
-
         <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
-
         <variable
             name="actionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
