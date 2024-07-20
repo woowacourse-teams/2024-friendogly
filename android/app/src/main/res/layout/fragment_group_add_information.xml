@@ -17,7 +17,7 @@
         tools:context=".presentation.ui.group.add.information.GroupAddInformationFragment">
         <TextView
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintTop_toTopOf="parent"
             android:text="@string/group_add_information_main_title"
             android:layout_width="wrap_content"

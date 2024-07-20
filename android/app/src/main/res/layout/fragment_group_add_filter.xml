@@ -20,7 +20,7 @@
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             android:text="@string/group_add_information_main_title" />
 
         <Space
@@ -68,7 +68,6 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:drawableTint="@color/white"
             android:minHeight="0dp"
             android:onCheckedChanged="@{(buttonView, isChecked) -> vm.selectAllSizeFilter(isChecked)}"
             android:text="@string/group_add_filter_all_select" />
@@ -128,7 +127,6 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:drawableTint="@color/white"
             android:minHeight="0dp"
             android:onCheckedChanged="@{(buttonView, isChecked) -> vm.selectAllGenderFilter(isChecked)}"
             android:text="@string/group_add_filter_all_select" />

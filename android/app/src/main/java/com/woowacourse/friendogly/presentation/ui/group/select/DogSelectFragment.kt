@@ -24,7 +24,6 @@ class DogSelectFragment : BaseFragment<FragmentDogSelectBinding>(R.layout.fragme
     }
 
     private fun initDataBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
     }
 

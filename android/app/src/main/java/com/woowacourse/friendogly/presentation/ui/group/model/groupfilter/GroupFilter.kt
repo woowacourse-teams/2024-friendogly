@@ -45,6 +45,23 @@ sealed class GroupFilter(val filterName: String) {
             )
         }
 
+        fun makeSizeFilterEntry(): List<GroupFilter>{
+            return listOf(
+                SizeFilter.SmallDog,
+                SizeFilter.MediumDog,
+                SizeFilter.BigDog,
+            )
+        }
+
+        fun makeGenderFilterEntry(): List<GroupFilter>{
+            return listOf(
+                GenderFilter.Male,
+                GenderFilter.Female,
+                GenderFilter.NeutralizingMale,
+                GenderFilter.NeutralizingFemale,
+            )
+        }
+
         const val FEMALE_NAME = "암컷"
         const val MALE_NAME = "수컷"
         const val NEUTRALIZING_FEMALE_NAME = "중성화 암컷"

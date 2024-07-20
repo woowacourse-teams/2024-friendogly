@@ -1,14 +1,31 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
+import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import okhttp3.MultipartBody
 
 class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
-    val groupFilterSelector =
-        GroupFilterSelector(
-            groupList = GroupFilter.makeGroupFilterEntry(),
-        )
+    private val _navigateAction: MutableLiveData<Event<GroupAddNavigationAction>> =
+            MutableLiveData()
+    val navigationAction: LiveData<Event<GroupAddNavigationAction>> get() = _navigateAction
+
+    private val groupFilterSelector =
+        GroupFilterSelector(groupList = GroupFilter.makeGroupFilterEntry())
+
+    private val _numberOfPeople: MutableLiveData<Int> = MutableLiveData()
+    val numberOfPeople: LiveData<Int> get() = _numberOfPeople
+
+    private val _groupTitle: MutableLiveData<String> = MutableLiveData()
+    val groupTitle: LiveData<String> get() = _groupTitle
+
+    private val _groupContent: MutableLiveData<String> = MutableLiveData()
+    val groupContent: LiveData<String> get() = _groupContent
+
+    private val groupPoster: MultipartBody.Part? = null
 
     override fun selectGroupFilter(
         filterName: String,
@@ -23,8 +40,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     }
 
     override fun selectAllSizeFilter(isSelected: Boolean) {
+        groupFilterSelector.addAllSizeFilter()
     }
 
     override fun selectAllGenderFilter(isSelected: Boolean) {
+        groupFilterSelector.addAllGenderFilter()
     }
 }

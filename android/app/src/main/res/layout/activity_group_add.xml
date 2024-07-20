@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"
+        tools:context=".presentation.ui.group.add.GroupAddActivity">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_group_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <View
+            android:id="@+id/view_group_add_top_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+        <ImageView
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintTop_toTopOf="@id/view_group_add_top_bar"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_add_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_add_top_bar"
+            android:id="@+id/iv_group_add_back_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:text="@string/group_list_add_title"
+            app:layout_constraintTop_toTopOf="@id/view_group_add_top_bar"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_add_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_add_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/view_group_add_top_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ProgressBar
+            app:layout_constraintBottom_toTopOf="@id/tv_group_add_prev_button"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_alignParentBottom="true"
+            android:indeterminate="false"
+            android:progress="50"
+            android:max="100"
+            android:background="@android:color/darker_gray" />
+        <TextView
+            android:background="@drawable/rect_orange100_fill_12"
+            android:id="@+id/tv_group_add_prev_button"
+            android:text="이전"
+            android:gravity="center"
+            app:layout_constraintHorizontal_weight="2"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_group_add_next_button"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="다음"
+            android:background="@drawable/rect_orange100_fill_12"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/tv_group_add_prev_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/tv_group_add_next_button"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

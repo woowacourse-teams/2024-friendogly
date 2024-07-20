@@ -19,7 +19,7 @@
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             android:text="@string/group_add_detail_main_title" />
 
         <Space
