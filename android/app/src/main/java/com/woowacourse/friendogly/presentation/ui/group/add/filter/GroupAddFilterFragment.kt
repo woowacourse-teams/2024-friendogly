@@ -8,14 +8,13 @@ import com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel
 
 class GroupAddFilterFragment :
     BaseFragment<FragmentGroupAddFilterBinding>(R.layout.fragment_group_add_filter) {
-    private val viewModel : GroupAddViewModel by activityViewModels()
+    private val viewModel: GroupAddViewModel by activityViewModels()
 
     override fun initViewCreated() {
         initDataBinding()
     }
 
-    private fun initDataBinding(){
+    private fun initDataBinding() {
         binding.vm = viewModel
     }
-
 }

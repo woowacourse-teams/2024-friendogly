@@ -33,7 +33,7 @@ sealed class GroupFilter(val filterName: String) {
             }
         }
 
-        fun makeGroupFilterEntry(): List<GroupFilter>{
+        fun makeGroupFilterEntry(): List<GroupFilter> {
             return listOf(
                 SizeFilter.SmallDog,
                 SizeFilter.MediumDog,

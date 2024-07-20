@@ -5,9 +5,10 @@ import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelecto
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
-    val groupFilterSelector = GroupFilterSelector(
-        groupList = GroupFilter.makeGroupFilterEntry()
-    )
+    val groupFilterSelector =
+        GroupFilterSelector(
+            groupList = GroupFilter.makeGroupFilterEntry(),
+        )
 
     override fun selectGroupFilter(
         filterName: String,
@@ -22,10 +23,8 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     }
 
     override fun selectAllSizeFilter(isSelected: Boolean) {
-
     }
 
     override fun selectAllGenderFilter(isSelected: Boolean) {
-
     }
 }
