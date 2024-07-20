@@ -367,8 +367,10 @@
     </style>
 
     <!--ADD Group Menu Text-->
-    <style name="CustomCheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+    <style name="group_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="android:button">@null</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableEnd">@drawable/sel_group_add_check_filter_menu</item>
         <item name="android:background">@drawable/sel_group_background_filter_menu</item>
         <item name="android:textColor">@drawable/sel_group_text_filter_menu</item>
         <item name="android:textSize">16sp</item>
@@ -376,7 +378,6 @@
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
         <item name="android:paddingHorizontal">15dp</item>
         <item name="android:paddingVertical">8dp</item>
-        <item name="android:drawablePadding">0dp</item>
-        <item name="android:layout_margin">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
     </style>
 </resources>

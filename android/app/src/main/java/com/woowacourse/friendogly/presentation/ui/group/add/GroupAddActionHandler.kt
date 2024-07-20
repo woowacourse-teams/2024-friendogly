@@ -5,4 +5,8 @@ interface GroupAddActionHandler {
         filterName:String,
         isSelected: Boolean,
     )
+
+    fun selectAllSizeFilter(isSelected: Boolean)
+
+    fun selectAllGenderFilter(isSelected: Boolean)
 }

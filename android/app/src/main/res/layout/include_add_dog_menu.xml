@@ -13,14 +13,11 @@
 
     <CheckBox
         android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectGroupFilter(menu, isChecked)}"
-        android:id="@+id/customCheckBox"
-        style="@style/CustomCheckBox"
+        style="@style/group_add_custom_checkbox"
         android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@null"
         android:minHeight="0dp"
-        android:gravity="center"
         android:text="@{menu}"
         tools:text="대형견" />
 </layout>

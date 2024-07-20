@@ -42,7 +42,7 @@
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" 기준으로 모임이 생성돼요." />
+                android:text="@string/group_add_information_main_content" />
         </LinearLayout>
         <Space
             android:layout_width="wrap_content"
@@ -68,9 +68,7 @@
             android:id="@+id/et_group_subject"
             android:hint="@string/group_add_group_subject_hint"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="14dp"
-            app:layout_constraintStart_toStartOf="@+id/tv_user_name_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_name_title" />
+            android:paddingVertical="14dp"/>
 
         <Space
             android:layout_width="wrap_content"

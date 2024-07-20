@@ -22,6 +22,7 @@ datastore = "1.1.1"
 image-cropper = "4.5.0"
 navigation = "2.7.7"
 glide = "4.16.0"
+flexbox = "3.0.0"
 
 # coroutines
 coroutines = "1.7.3"
@@ -83,6 +84,7 @@ androidx-navigation-fragemnt = { group = "androidx.navigation", name = "navigati
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+flextbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
 
 # kakao
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
@@ -107,6 +109,8 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
 
 [bundles]
+kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core"]
+android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx"]
 kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization"]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "paging-runtime-ktx"]
 navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]

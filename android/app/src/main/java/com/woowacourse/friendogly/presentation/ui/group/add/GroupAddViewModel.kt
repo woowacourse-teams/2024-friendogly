@@ -20,4 +20,12 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
             groupFilterSelector.removeGroupFilter(groupFilter)
         }
     }
+
+    override fun selectAllSizeFilter(isSelected: Boolean) {
+
+    }
+
+    override fun selectAllGenderFilter(isSelected: Boolean) {
+
+    }
 }
