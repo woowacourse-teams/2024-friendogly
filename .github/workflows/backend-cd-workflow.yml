@@ -43,6 +43,9 @@ jobs:
         working-directory: ./backend
         run: find . -name "friendogly-0.0.1-SNAPSHOT.jar"
 
+      - name: GlobalExceptionHandler 내용 확인
+        run: cat ./backend/src/main/java/com/woowacourse/friendogly/GlobalExceptionHandler.java
+        
       - name: 경로 이동
         working-directory: ./backend
         run: |
