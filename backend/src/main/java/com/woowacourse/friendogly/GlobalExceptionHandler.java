@@ -40,6 +40,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handle(Exception exception) {
-        return new ResponseEntity<>("예기치 못한 예외가 발생하였습니다. 다시 실행해주세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
