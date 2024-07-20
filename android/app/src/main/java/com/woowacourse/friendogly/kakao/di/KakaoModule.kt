@@ -1,10 +1,10 @@
 package com.woowacourse.friendogly.kakao.di
 
-import com.woowacourse.friendogly.data.datasource.KakaoLoginDataSource
 import com.woowacourse.friendogly.data.repository.KakaoLoginRepositoryImpl
+import com.woowacourse.friendogly.data.source.KakaoLoginDataSource
 import com.woowacourse.friendogly.domain.repository.KakaoLoginRepository
 import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
-import com.woowacourse.friendogly.kakao.datasource.KakaoLoginDataSourceImpl
+import com.woowacourse.friendogly.kakao.source.KakaoLoginDataSourceImpl
 
 class KakaoModule {
     private val kakaoLoginDataSource: KakaoLoginDataSource = KakaoLoginDataSourceImpl()

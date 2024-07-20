@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.data.datasource
+package com.woowacourse.friendogly.data.source
 
 import android.content.Context
 import com.woowacourse.friendogly.data.model.KakaoAccessTokenDto
