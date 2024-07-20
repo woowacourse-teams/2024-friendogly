@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
@@ -41,6 +42,12 @@ public class FootprintController {
         Long id = footprintCommandService.save(request);
         return ResponseEntity.created(URI.create("/footprints/" + id))
             .build();
+    }
+
+    @GetMapping("/{footprintId}")
+    public ResponseEntity<FindOneFootprintResponse> findOne(@PathVariable Long footprintId) {
+        FindOneFootprintResponse response = footprintQueryService.findOne(footprintId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/near")
