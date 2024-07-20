@@ -2,8 +2,8 @@ package com.woowacourse.friendogly.presentation.ui.register
 
 import androidx.activity.viewModels
 import com.google.android.gms.common.api.ApiException
-import com.woowacourse.friendogly.App.Companion.kakaoModule
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.kakaoModule
 import com.woowacourse.friendogly.databinding.ActivityRegisterBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
