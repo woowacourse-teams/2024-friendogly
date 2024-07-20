@@ -79,11 +79,11 @@ jobs:
 
       - name: Check if port 8080 
         run: |
-          lsof -t -i:8080
+          lsof -t -i:8080 | true
 
       - name: Check if port 80
         run: |
-          lsof -t -i:80
+          lsof -t -i:80 | true
           
       - name: Check if port 8080 is in use
         id: check-port
@@ -105,7 +105,7 @@ jobs:
       - name: Stop server if running
         run: |
           echo "Stopping server running on port 8080..."
-          kill -9 ${{ env.PORT_8080_PID }}
+          kill -9 ${{ env.PORT_8080_PID }} | true
           echo "Preivous running Server stopped."
           
       - name: Start server
