@@ -129,7 +129,6 @@ class WoofFragment :
     private fun moveCameraCenterPosition(latLng: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(latLng)
         map.moveCamera(cameraUpdate)
-
         setUpCircleOverlay(latLng)
     }
 
@@ -137,16 +136,10 @@ class WoofFragment :
         latLng: LatLng,
         isMine: Boolean,
     ) {
+        val iconImage = if (isMine) R.drawable.ic_my_foot_print else R.drawable.ic_other_foot_print
         val marker = Marker()
         marker.position = latLng
-        marker.icon =
-            if (isMine) {
-                OverlayImage.fromResource(
-                    R.drawable.ic_my_foot_print,
-                )
-            } else {
-                OverlayImage.fromResource(R.drawable.ic_other_foot_print)
-            }
+        marker.icon = OverlayImage.fromResource(iconImage)
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
         marker.map = map
