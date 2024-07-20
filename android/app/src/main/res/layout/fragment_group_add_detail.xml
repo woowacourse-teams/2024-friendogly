@@ -87,6 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
+            android:progressTint="@color/orange05"
+            android:thumbTint="@color/orange05"
             android:max="5"
             android:progress="@{vm.groupCounter.count}"/>
     </LinearLayout>

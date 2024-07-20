@@ -17,4 +17,5 @@ class GroupAddFilterFragment :
     private fun initDataBinding() {
         binding.vm = viewModel
     }
+
 }

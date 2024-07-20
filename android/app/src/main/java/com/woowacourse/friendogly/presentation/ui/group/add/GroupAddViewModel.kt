@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
@@ -17,6 +16,13 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
         MutableLiveData()
     val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
+
+    private val _allSizeSelectState: MutableLiveData<Boolean> = MutableLiveData(true)
+    val allSizeSelectState: LiveData<Boolean> get() = _allSizeSelectState
+
+    private val _allGenderSelectState: MutableLiveData<Boolean> = MutableLiveData(true)
+    val allGenderSelectState: LiveData<Boolean> get() = _allGenderSelectState
+
 
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
@@ -48,15 +54,24 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     }
 
     override fun selectAllSizeFilter(isSelected: Boolean) {
-        groupFilterSelector.addAllSizeFilter()
+        if(isSelected) {
+            groupFilterSelector.addAllSizeFilter()
+            _allSizeSelectState.value = true
+        }else{
+            _allSizeSelectState.value = false
+        }
     }
 
     override fun selectAllGenderFilter(isSelected: Boolean) {
-        groupFilterSelector.addAllGenderFilter()
+        if(isSelected) {
+            groupFilterSelector.addAllGenderFilter()
+            _allGenderSelectState.value = true
+        } else {
+            _allGenderSelectState.value = false
+        }
     }
 
     fun settingGroupCounter(count: Int) {
-        Log.d("sdfjlsdfjlsfdsdf",count.toString())
         _groupCounter.value = GroupCounter(count)
     }
 

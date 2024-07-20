@@ -9,12 +9,15 @@
         <variable
             name="menu"
             type="java.lang.String" />
+        <variable
+            name="selectState"
+            type="java.lang.Boolean" />
     </data>
 
     <CheckBox
         android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectGroupFilter(menu, isChecked)}"
         style="@style/group_add_custom_checkbox"
-        android:checked="true"
+        android:checked="@{selectState}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="0dp"
