@@ -16,7 +16,7 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         get() = _binding!!
 
     private val viewModel: FootPrintViewModel by viewModels<FootPrintViewModel> {
-        FootPrintViewModelFactory(
+        FootPrintViewModel.factory(
             memberId = memberId,
             footPrintRepository =
                 FootPrintRepositoryImpl(

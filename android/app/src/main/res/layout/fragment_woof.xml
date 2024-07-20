@@ -26,8 +26,8 @@
             android:layout_height="52dp"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="42dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:onClick="@{() -> actionHandler.changeLocationTrackingMode()}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
@@ -39,9 +39,9 @@
             android:background="@drawable/ripple_circle_white"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{() -> actionHandler.markFootPrint()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_btn"
-            android:onClick="@{() -> actionHandler.markFootPrint()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

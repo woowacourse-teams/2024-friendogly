@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.presentation.ui.woof.footprint
 
+import com.woowacourse.friendogly.presentation.model.FootPrintInfoUiModel
+
 sealed class FootPrintUiState {
     data object Loading : FootPrintUiState()
 

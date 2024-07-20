@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.woof.footprint
+package com.woowacourse.friendogly.domain.model
 
 import java.time.LocalDate
 

@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.woof.footprint
+package com.woowacourse.friendogly.presentation.model
 
 data class FootPrintInfoUiModel(
     val imageUrl: String,

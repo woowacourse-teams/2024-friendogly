@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -14,6 +15,8 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteWoofDataSource
+import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -34,6 +37,14 @@ class WoofFragment :
         FusedLocationSource(
             this,
             LOCATION_PERMISSION_REQUEST_CODE,
+        )
+    }
+    private val viewModel by viewModels<WoofViewModel> {
+        WoofViewModel.factory(
+            woofRepository =
+                WoofRepositoryImpl(
+                    remoteWoofDataSource,
+                ),
         )
     }
 
@@ -91,17 +102,9 @@ class WoofFragment :
         }
     }
 
-    private fun moveCameraCenterPosition() {
-        if (locationSource.lastLocation != null) {
-            val lastLocation = locationSource.lastLocation ?: return
-            val latLng =
-                LatLng(
-                    lastLocation.latitude,
-                    lastLocation.longitude,
-                )
-            val cameraUpdate = CameraUpdate.scrollTo(latLng)
-            map.moveCamera(cameraUpdate)
-        }
+    private fun moveCameraCenterPosition(latLng: LatLng) {
+        val cameraUpdate = CameraUpdate.scrollTo(latLng)
+        map.moveCamera(cameraUpdate)
     }
 
     private fun createMarker() {
@@ -113,6 +116,10 @@ class WoofFragment :
         marker.height = MARKER_HEIGHT
         marker.map = map
 
+        showFootPrintInfo(marker)
+    }
+
+    private fun showFootPrintInfo(marker: Marker) {
         marker.setOnClickListener {
             val bottomSheet =
                 FootPrintBottomSheet.newInstance(
@@ -126,8 +133,17 @@ class WoofFragment :
     override fun markFootPrint() {
         if (hasNotLocationPermissions()) return
 
-        moveCameraCenterPosition()
-        createMarker()
+        if (locationSource.lastLocation != null) {
+            val lastLocation = locationSource.lastLocation ?: return
+            val latLng =
+                LatLng(
+                    lastLocation.latitude,
+                    lastLocation.longitude,
+                )
+            moveCameraCenterPosition(latLng = latLng)
+            createMarker()
+            viewModel.loadNearFootPrints(latLng = latLng)
+        }
     }
 
     override fun changeLocationTrackingMode() {

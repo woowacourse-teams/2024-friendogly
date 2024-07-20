@@ -7,8 +7,11 @@ import com.woowacourse.friendogly.BuildConfig
 import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.data.client.RetrofitClient
 import com.woowacourse.friendogly.data.source.FootPrintDataSourceImpl
+import com.woowacourse.friendogly.data.source.WoofDataSourceImpl
 import com.woowacourse.friendogly.remote.service.FootPrintService
+import com.woowacourse.friendogly.remote.service.WoofService
 import com.woowacourse.friendogly.remote.source.FootPrintDataSource
+import com.woowacourse.friendogly.remote.source.WoofDataSource
 
 class FriendoglyApplication : Application() {
     override fun onCreate() {
@@ -19,7 +22,9 @@ class FriendoglyApplication : Application() {
 
         val retrofit = RetrofitClient.getInstance()
         val footPrintService = retrofit.create(FootPrintService::class.java)
+        val woofService = retrofit.create(WoofService::class.java)
         remoteFootPrintDataSource = FootPrintDataSourceImpl(footPrintService)
+        remoteWoofDataSource = WoofDataSourceImpl(woofService)
     }
 
     private fun initNaverMapSdk() {
@@ -29,5 +34,6 @@ class FriendoglyApplication : Application() {
 
     companion object {
         lateinit var remoteFootPrintDataSource: FootPrintDataSource
+        lateinit var remoteWoofDataSource: WoofDataSource
     }
 }
