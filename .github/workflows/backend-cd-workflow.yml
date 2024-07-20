@@ -65,10 +65,9 @@ jobs:
       - name: change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
-      - name: change permission
+      - name: 기존 jar 삭제
         run: |
-          cd ./backend/build/libs
-          rm -rf friendogly-be-develop-jar
+          rm -rf ./backend/build/libsfriendogly-be-develop-jar
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
