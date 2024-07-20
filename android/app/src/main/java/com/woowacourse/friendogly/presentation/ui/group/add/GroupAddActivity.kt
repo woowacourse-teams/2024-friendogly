@@ -30,16 +30,12 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
     private fun initObserver(){
         viewModel.navigationAction.observeEvent(this){ actionEvent ->
             when(actionEvent){
-                GroupAddNavigationAction.NavigateToHome -> {
+                GroupAddEvent.Navigation.NavigateToHome -> {
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }
-                GroupAddNavigationAction.NavigateToSelectGroupPoster -> {
-
-                }
-                GroupAddNavigationAction.NavigateToSelectDog -> {
-
-                }
+                GroupAddEvent.Navigation.NavigateToSelectDog -> TODO()
+                GroupAddEvent.Navigation.NavigateToSelectGroupPoster -> TODO()
             }
         }
     }

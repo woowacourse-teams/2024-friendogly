@@ -5,17 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.DEFAULT_PAGE
 import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import okhttp3.MultipartBody
 
 class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
-    private val _navigateAction: MutableLiveData<Event<GroupAddNavigationAction>> =
+    private val _navigateAction: MutableLiveData<Event<GroupAddEvent>> =
             MutableLiveData()
-    val navigationAction: LiveData<Event<GroupAddNavigationAction>> get() = _navigateAction
+    val navigationAction: LiveData<Event<GroupAddEvent>> get() = _navigateAction
 
-    private val _currentPage: MutableLiveData<Int> = MutableLiveData()
+    private val _currentPage: MutableLiveData<Int> = MutableLiveData(DEFAULT_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
 
     private val groupFilterSelector =
@@ -57,12 +58,12 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     }
 
     override fun cancelAddGroup() {
-        _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
+        _navigateAction.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
     //TODO : add api
     override fun submitAddGroup() {
-        _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
+        _navigateAction.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
     override fun navigatePrevPage() {

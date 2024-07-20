@@ -26,4 +26,9 @@ class GroupAddAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
             groupAddFragments[0]
         }
     }
+
+    companion object {
+        const val CURRENT_PAGE_SIZE =  3
+        const val DEFAULT_PAGE = 0
+    }
 }

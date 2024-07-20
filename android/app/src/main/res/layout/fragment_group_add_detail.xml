@@ -90,6 +90,6 @@
             android:layout_marginHorizontal="30dp"
             android:max="5"
             android:progress="@{vm.groupCounter.count}"
-            app:onProgressChanged="@{(seekBar, progress, fromUser) -> actionHandler.settingGroupCounter(progress)}" />
+            android:onProgressChanged="@{(seekBar, progress, fromUser) -> actionHandler.settingGroupCounter(progress)}" />
     </LinearLayout>
 </layout>
