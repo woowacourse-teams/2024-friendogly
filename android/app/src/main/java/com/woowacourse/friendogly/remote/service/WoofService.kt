@@ -1,13 +1,16 @@
 package com.woowacourse.friendogly.remote.service
 
-import com.naver.maps.geometry.LatLng
-import com.woowacourse.friendogly.data.model.FootPrintInfoDto
 import com.woowacourse.friendogly.data.model.LandMarkDto
+import com.woowacourse.friendogly.remote.model.response.FootPrintResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface WoofService {
-    @GET("")
-    suspend fun getNearFootPrints(latLng: LatLng): Result<List<FootPrintInfoDto>>
+    @GET("/footprints/near")
+    suspend fun getNearFootPrints(
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+    ): List<FootPrintResponse>
 
     @GET("")
     suspend fun getLandMarks(): Result<List<LandMarkDto>>

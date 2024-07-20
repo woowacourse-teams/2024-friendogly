@@ -5,6 +5,6 @@ import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
 
 fun List<FootPrint>.toUiModel(): List<FootPrintUiModel> {
     return map { footPrint ->
-        FootPrintUiModel()
+        FootPrintUiModel(footPrint.latLng, footPrint.createdAt, footPrint.isMine)
     }
 }

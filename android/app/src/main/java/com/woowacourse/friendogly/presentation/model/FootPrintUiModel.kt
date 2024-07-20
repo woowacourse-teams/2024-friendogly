@@ -1,3 +1,9 @@
 package com.woowacourse.friendogly.presentation.model
 
-class FootPrintUiModel
+import com.naver.maps.geometry.LatLng
+
+data class FootPrintUiModel(
+    val latLng: LatLng,
+    val createdAt: String,
+    val isMine: Boolean,
+)

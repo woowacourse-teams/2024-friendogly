@@ -19,6 +19,7 @@ import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.re
 import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
 
@@ -50,6 +51,7 @@ class WoofFragment :
 
     override fun initViewCreated() {
         initDataBinding()
+        initObserve()
         mapView.getMapAsync(this)
     }
 
@@ -59,6 +61,12 @@ class WoofFragment :
 
     private fun initDataBinding() {
         binding.actionHandler = this
+    }
+
+    private fun initObserve() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            markNearFootPrints(footPrints = state.nearFootPrints)
+        }
     }
 
     private fun setUpMap(naverMap: NaverMap) {
@@ -107,10 +115,9 @@ class WoofFragment :
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMarker() {
+    private fun createMarker(latLng: LatLng) {
         val marker = Marker()
-        val position = locationSource.lastLocation ?: return
-        marker.position = LatLng(position.latitude, position.longitude)
+        marker.position = latLng
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker)
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
@@ -130,6 +137,12 @@ class WoofFragment :
         }
     }
 
+    private fun markNearFootPrints(footPrints: List<FootPrintUiModel>) {
+        footPrints.forEach { footPrint ->
+            createMarker(latLng = footPrint.latLng)
+        }
+    }
+
     override fun markFootPrint() {
         if (hasNotLocationPermissions()) return
 
@@ -141,7 +154,7 @@ class WoofFragment :
                     lastLocation.longitude,
                 )
             moveCameraCenterPosition(latLng = latLng)
-            createMarker()
+            createMarker(latLng = latLng)
             viewModel.loadNearFootPrints(latLng = latLng)
         }
     }

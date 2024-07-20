@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.woof
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
                 val state = uiState.value ?: return@onSuccess
                 _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
             }.onFailure {
+                Log.e("chad", it.toString())
             }
         }
     }
