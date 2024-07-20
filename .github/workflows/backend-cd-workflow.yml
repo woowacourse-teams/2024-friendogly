@@ -77,22 +77,29 @@ jobs:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
 
-      - name: Check if room-esc server is running on port 8080
-        id: check-server-on-port
+      - name: Check if port 8080 is in use
+        id: check-port
         run: |
-          echo "Checking if port 8080 is in use..."
+          # Find the PID of the process using port 8080
           PID=$(lsof -t -i:8080 || true)
+          
+          # Check if PID is non-empty
           if [ -n "$PID" ]; then
-            echo "server_running=true" >> $GITHUB_ENV
-            echo "PID=$PID" >> $GITHUB_ENV
+            echo "PORT_8080_PID=$PID" >> $GITHUB_ENV
           else
-            echo "server_running=false" >> $GITHUB_ENV
+            echo "PORT_8080_PID=none" >> $GITHUB_ENV
           fi
+
+      - name: Debug environment variables
+        run: |
+          echo "PORT_8080_PID=${{ env.PORT_8080_PID }}"
+          
       - name: Stop server if running
         run: |
           echo "Stopping server running on port 8080..."
-          kill -9 ${{ env.PID }}
+          kill -9 ${{ env.PORT_8080_PID }}
           echo "Preivous running Server stopped."
+          
       - name: Start server
         run: |
           cd backend/build/libs
