@@ -84,6 +84,10 @@ jobs:
       - name: Check if port 80
         run: |
           lsof -t -i:80 | true
+
+      - name: Check java jar port
+        run: |
+          lsof -c java | grep friendogly-0.0.1-SNAPSHOT.jar
           
       - name: Check if port 8080 is in use
         id: check-port
