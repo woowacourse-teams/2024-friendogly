@@ -32,7 +32,7 @@ jobs:
         
       - name: Build project using Gradle
         working-directory: ./backend
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
