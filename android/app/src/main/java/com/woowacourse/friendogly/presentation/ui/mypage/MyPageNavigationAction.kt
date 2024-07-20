@@ -7,5 +7,5 @@ sealed interface MyPageNavigationAction {
 
     data object NavigateToDogRegister : MyPageNavigationAction
 
-    data object NavigateToDogDetail : MyPageNavigationAction
+    data class NavigateToDogDetail(val id: Long) : MyPageNavigationAction
 }

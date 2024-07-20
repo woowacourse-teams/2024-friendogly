@@ -34,8 +34,8 @@ class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
         _navigateAction.emit(MyPageNavigationAction.NavigateToDogRegister)
     }
 
-    override fun navigateToDogDetail() {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToDogDetail)
+    override fun navigateToDogDetail(id: Long) {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToDogDetail(id = id))
     }
 
     companion object {

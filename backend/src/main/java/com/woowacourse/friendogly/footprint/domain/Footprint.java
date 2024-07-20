@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.footprint.domain;
 
 import com.woowacourse.friendogly.member.domain.Member;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,13 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@NoArgsConstructor
 public class Footprint {
 
     private static final int RADIUS_AS_METER = 1000;
@@ -23,25 +25,40 @@ public class Footprint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
     @Embedded
+    @Column(nullable = false)
     private Location location;
 
+    private String imageUrl;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
     @Builder
     public Footprint(Member member, Location location) {
         this.member = member;
         this.location = location;
+        this.imageUrl = "";
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
     }
 
     public boolean isNear(Location location) {
         return this.location.isWithin(location, RADIUS_AS_METER);
+    }
+
+    public boolean isCreatedBy(Long memberId) {
+        return this.member.getId()
+            .equals(memberId);
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

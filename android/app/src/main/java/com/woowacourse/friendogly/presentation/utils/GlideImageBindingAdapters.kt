@@ -17,6 +17,14 @@ fun ImageView.bindGlide1000(uri: String?) {
         .into(this)
 }
 
+@BindingAdapter("glide")
+fun ImageView.bindGlide(uri: String?) {
+    if (uri == null) return
+    Glide.with(context)
+        .load(uri)
+        .into(this)
+}
+
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     if (bitmap == null) {
@@ -43,6 +51,19 @@ fun ImageView.bindProfile1000(profilePath: String?) {
         .asBitmap()
         .load(profilePath)
         .transform(CenterCrop(), RoundedCorners(1000))
+        .into(this)
+}
+
+@BindingAdapter("dogProfile")
+fun ImageView.bindDogProfile(bitmap: Bitmap?) {
+    if (bitmap == null) return
+
+    val softwareBitmap = bitmap.toSoftwareBitmap()
+
+    Glide.with(context)
+        .asBitmap()
+        .load(softwareBitmap)
+        .centerCrop()
         .into(this)
 }
 

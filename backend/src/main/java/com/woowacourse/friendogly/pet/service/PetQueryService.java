@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.pet.service;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.dto.request.FindPetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
@@ -16,16 +16,16 @@ public class PetQueryService {
         this.petRepository = petRepository;
     }
 
-    public FindPetResponse findPet(Long id) {
+    public FindPetResponse findById(Long id) {
         Pet pet = petRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Pet Id입니다."));
-        return FindPetResponse.from(pet);
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 Pet입니다."));
+        return new FindPetResponse(pet);
     }
 
-    public List<FindPetResponse> findPets(FindPetRequest findPetRequest) {
-        List<Pet> pets = petRepository.findByMemberId(findPetRequest.memberId());
+    public List<FindPetResponse> findByMemberId(Long memberId) {
+        List<Pet> pets = petRepository.findByMemberId(memberId);
         return pets.stream()
-                .map(FindPetResponse::from)
+                .map(FindPetResponse::new)
                 .toList();
     }
 }

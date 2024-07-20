@@ -1,16 +1,18 @@
 package com.woowacourse.friendogly.footprint.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,16 @@ class FootprintQueryServiceTest {
     @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {
-        Member member = memberRepository.save(
+        Member member1 = memberRepository.save(
             Member.builder()
-                .name("name")
+                .name("name1")
+                .email("test@test.com")
+                .build()
+        );
+
+        Member member2 = memberRepository.save(
+            Member.builder()
+                .name("name2")
                 .email("test@test.com")
                 .build()
         );
@@ -55,17 +64,15 @@ class FootprintQueryServiceTest {
         double farLongitude = 0.009001209;
 
         // 999m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, nearLongitude));
+        footprintCommandService.save(new SaveFootprintRequest(member1.getId(), 0.0, nearLongitude));
 
         // 1001m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 0.0, farLongitude));
+        footprintCommandService.save(new SaveFootprintRequest(member2.getId(), 0.0, farLongitude));
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-            new FindNearFootprintRequest(0.0, 0.0));
+            member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
-        Assertions.assertAll(
-            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
-                .containsExactly(member.getId()),
+        assertAll(
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.0),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
@@ -92,15 +99,57 @@ class FootprintQueryServiceTest {
             """, member.getId(), member.getId(), member.getId());
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-            new FindNearFootprintRequest(0.0, 0.0));
+            member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
-        Assertions.assertAll(
-            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::memberId)
-                .containsExactly(member.getId(), member.getId()),
+        assertAll(
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                 .containsExactly(0.00000, 0.00000),
             () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
                 .containsExactly(0.00000, 0.00000)
         );
+    }
+
+    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 있는 경우")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintExists() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
+
+        jdbcTemplate.update("""
+            INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+            VALUES
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+            (?, 0.11111, 0.11111, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+            (?, 0.22222, 0.22222, ?, FALSE);
+            """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
+
+        LocalDateTime time = footprintQueryService.findMyLatestFootprintTime(member.getId()).createdAt();
+
+        assertAll(
+            () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
+            () -> assertThat(time.getMinute()).isEqualTo(oneMinuteAgo.getMinute()),
+            () -> assertThat(time.getSecond()).isEqualTo(oneMinuteAgo.getSecond())
+        );
+    }
+
+    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 없는 경우")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
+        Member member = memberRepository.save(
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
+        );
+
+        assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
+            .extracting(FindMyLatestFootprintTimeResponse::createdAt)
+            .isNull();
     }
 }

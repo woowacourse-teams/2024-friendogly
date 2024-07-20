@@ -61,8 +61,3 @@ jobs:
         with:
           report_paths: './backend/build/test-results/test/TEST-*.xml'
           token: ${{ github.token }}
-
-      - name: Start server
-        run: |
-          sudo nohup java -jar build/libs/friendogly-0.0.1-SNAPSHOT.jar &
-          echo "Lastest Backend API Server started."
