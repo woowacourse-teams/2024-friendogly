@@ -15,6 +15,8 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
 val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
 
@@ -32,6 +34,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
+        resValue("string", "KAKAO_OAUTH_HOST", kakaoOauthHost)
         buildConfigField("String", "NAVER_CLIEND_ID", naverClientId)
         buildConfigField("String", "base_url", baseUrl)
     }

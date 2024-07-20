@@ -3,14 +3,16 @@ package com.woowacourse.friendogly.presentation.ui.register
 import androidx.activity.viewModels
 import com.google.android.gms.common.api.ApiException
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.kakaoModule
 import com.woowacourse.friendogly.databinding.ActivityRegisterBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
-import com.woowacourse.friendogly.presentation.ui.MainActivity
 import com.woowacourse.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
-    private val viewModel: RegisterViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels {
+        RegisterViewModel.factory(kakaoLoginUseCase = kakaoModule.kakaoLoginUseCase)
+    }
 
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
@@ -32,16 +34,15 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
-                is RegisterNavigationAction.NavigateToKakaoLogin -> {
-                    startActivity(MainActivity.getIntent(this))
-                    finish()
-                }
-
                 is RegisterNavigationAction.NavigateToGoogleLogin ->
-                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
+                    googleSignInLauncher.launch(
+                        SIGN_IN_REQUEST_CODE,
+                    )
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
-                    startActivity(ProfileSettingActivity.getIntent(this))
+                    startActivity(
+                        ProfileSettingActivity.getIntent(this),
+                    )
             }
         }
     }
