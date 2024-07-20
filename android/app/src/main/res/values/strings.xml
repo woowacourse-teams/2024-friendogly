@@ -80,6 +80,8 @@
     <string name="group_add_filter_main_title">모집할 댕댕이를 설정해주세요.</string>
     <string name="group_add_filter_main_content">사이즈와 성별을 선택할 수 있어요!</string>
     <string name="group_add_filter_all_select">누구나 가능해요!</string>
+    <string name="group_add_detail_main_title">모임 정보를 입력해주세요</string>
+    <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
