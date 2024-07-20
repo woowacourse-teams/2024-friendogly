@@ -115,10 +115,20 @@ class WoofFragment :
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMarker(latLng: LatLng) {
+    private fun createMarker(
+        latLng: LatLng,
+        isMine: Boolean,
+    ) {
         val marker = Marker()
         marker.position = latLng
-        marker.icon = OverlayImage.fromResource(R.drawable.ic_marker)
+        marker.icon =
+            if (isMine) {
+                OverlayImage.fromResource(
+                    R.drawable.ic_my_foot_print,
+                )
+            } else {
+                OverlayImage.fromResource(R.drawable.ic_other_foot_print)
+            }
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
         marker.map = map
@@ -139,7 +149,7 @@ class WoofFragment :
 
     private fun markNearFootPrints(footPrints: List<FootPrintUiModel>) {
         footPrints.forEach { footPrint ->
-            createMarker(latLng = footPrint.latLng)
+            createMarker(latLng = footPrint.latLng, isMine = footPrint.isMine)
         }
     }
 
@@ -154,7 +164,7 @@ class WoofFragment :
                     lastLocation.longitude,
                 )
             moveCameraCenterPosition(latLng = latLng)
-            createMarker(latLng = latLng)
+            createMarker(latLng = latLng, isMine = true)
             viewModel.loadNearFootPrints(latLng = latLng)
         }
     }
