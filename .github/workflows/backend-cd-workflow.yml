@@ -89,7 +89,6 @@ jobs:
             echo "server_running=false" >> $GITHUB_ENV
           fi
       - name: Stop server if running
-        if: env.server_running == 'true'
         run: |
           echo "Stopping server running on port 8080..."
           kill -9 ${{ env.PID }}
