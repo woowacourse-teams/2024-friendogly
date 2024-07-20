@@ -92,7 +92,7 @@ jobs:
         if: env.server_running == 'true'
         run: |
           echo "Stopping server running on port 8080..."
-          kill -9 $PID
+          kill -9 ${{ env.PID }}
           echo "Preivous running Server stopped."
       - name: Start server
         run: |
