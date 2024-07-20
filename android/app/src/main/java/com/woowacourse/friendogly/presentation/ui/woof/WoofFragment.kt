@@ -4,9 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -22,7 +19,6 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteWoofDataSource
 import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
-import com.woowacourse.friendogly.databinding.ToastCustomBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -75,12 +71,14 @@ class WoofFragment :
             markNearFootPrints(footPrints = state.nearFootPrints)
             createMarker(latLng = lastLatLng, isMine = true)
             moveCameraCenterPosition(latLng = lastLatLng)
-            showCustomToastMessage()
+            map.locationTrackingMode = LocationTrackingMode.Follow
         }
     }
 
     private fun setUpMap(naverMap: NaverMap) {
         map = naverMap
+        map.minZoom = MIN_ZOOM
+        map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
         map.locationTrackingMode = LocationTrackingMode.Follow
         map.uiSettings.apply {
@@ -91,8 +89,10 @@ class WoofFragment :
         }
     }
 
-    private fun setUpCircleOverlay(latLng: LatLng) {
-        circleOverlay.center = latLng
+    private fun setUpCircleOverlay() {
+        map.addOnLocationChangeListener { location ->
+            circleOverlay.center = LatLng(location.latitude, location.longitude)
+        }
         circleOverlay.radius = MAP_CIRCLE_RADIUS
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
@@ -111,25 +111,24 @@ class WoofFragment :
     private fun makeSettingSnackbar() {
         showSnackbar(resources.getString(R.string.woof_permission)) {
             setAction(resources.getString(R.string.woof_setting)) {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data =
-                    Uri.parse(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_package,
-                                requireContext().packageName,
-                            ),
+                val packageName =
+                    String.format(
+                        resources.getString(
+                            R.string.woof_package,
+                            requireContext().packageName,
                         ),
                     )
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse(packageName)
                 startActivity(intent)
             }
         }
     }
 
     private fun moveCameraCenterPosition(latLng: LatLng) {
-        val cameraUpdate = CameraUpdate.scrollTo(latLng)
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
         map.moveCamera(cameraUpdate)
-        setUpCircleOverlay(latLng)
+        setUpCircleOverlay()
     }
 
     private fun createMarker(
@@ -145,23 +144,6 @@ class WoofFragment :
         marker.map = map
 
         setUpMarkerAction(marker)
-    }
-
-    private fun showCustomToastMessage() {
-        val toastBinding: ToastCustomBinding =
-            DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.toast_custom,
-                null,
-                false,
-            )
-
-        val toast = Toast(context)
-        toast.apply {
-            duration = Toast.LENGTH_SHORT
-            view = toastBinding.root
-            show()
-        }
     }
 
     private fun setUpMarkerAction(marker: Marker) {
@@ -241,5 +223,8 @@ class WoofFragment :
         private const val MARKER_WIDTH = 125
         private const val MARKER_HEIGHT = 160
         private const val MAP_CIRCLE_RADIUS = 1000.0
+        private const val MIN_ZOOM = 10.0
+        private const val DEFAULT_ZOOM = 13.5
+        private const val MAX_ZOOM = 17.0
     }
 }
