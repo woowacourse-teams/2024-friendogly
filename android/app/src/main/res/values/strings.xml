@@ -62,6 +62,9 @@
     <string name="group_list_date_hours">%d시간 전</string>
     <string name="group_list_date_minutes">%d분 전</string>
     <string name="group_list_date_now">방금 전</string>
+    <string name="group_counter_count">%d명</string>
+
+    <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>
 
     <!--멍개 생성-->

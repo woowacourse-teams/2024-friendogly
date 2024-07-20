@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
 
         <variable
             name="vm"
@@ -71,14 +76,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="@{@string/group_counter_count(vm.groupCounter.count)}"
             tools:text="5명" />
+
         <Space
             android:layout_width="wrap_content"
             android:layout_height="10dp" />
 
         <SeekBar
+            android:id="@+id/seekbar_group_counter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp" />
+            android:layout_marginHorizontal="30dp"
+            android:max="5"
+            android:progress="@{vm.groupCounter.count}"
+            app:onProgressChanged="@{(seekBar, progress, fromUser) -> actionHandler.settingGroupCounter(progress)}" />
     </LinearLayout>
 </layout>

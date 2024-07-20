@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
-import android.util.Log
 import androidx.activity.viewModels
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityGroupAddBinding
@@ -35,10 +34,10 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }
-                GroupAddNavigationAction.NavigateToGroupPoster -> {
+                GroupAddNavigationAction.NavigateToSelectGroupPoster -> {
 
                 }
-                GroupAddNavigationAction.NavigateToDogSelector -> {
+                GroupAddNavigationAction.NavigateToSelectDog -> {
 
                 }
             }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import okhttp3.MultipartBody
@@ -14,11 +15,14 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
             MutableLiveData()
     val navigationAction: LiveData<Event<GroupAddNavigationAction>> get() = _navigateAction
 
+    private val _currentPage: MutableLiveData<Int> = MutableLiveData()
+    val currentPage: LiveData<Int> get() = _currentPage
+
     private val groupFilterSelector =
         GroupFilterSelector(groupList = GroupFilter.makeGroupFilterEntry())
 
-    private val _numberOfPeople: MutableLiveData<Int> = MutableLiveData()
-    val numberOfPeople: LiveData<Int> get() = _numberOfPeople
+    private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData()
+    val groupCounter: LiveData<GroupCounter> get() = _groupCounter
 
     private val _groupTitle: MutableLiveData<String> = MutableLiveData()
     val groupTitle: LiveData<String> get() = _groupTitle
@@ -48,6 +52,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
         groupFilterSelector.addAllGenderFilter()
     }
 
+    override fun settingGroupCounter(count: Int) {
+        _groupCounter.value = GroupCounter(count)
+    }
+
     override fun cancelAddGroup() {
         _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
     }
@@ -56,4 +64,17 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     override fun submitAddGroup() {
         _navigateAction.emit(GroupAddNavigationAction.NavigateToHome)
     }
+
+    override fun navigatePrevPage() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navigateNextPage() {
+        TODO("Not yet implemented")
+    }
+
+    private fun isValidInformationPage(){
+
+    }
+
 }
