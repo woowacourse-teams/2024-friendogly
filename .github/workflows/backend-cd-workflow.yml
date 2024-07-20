@@ -39,7 +39,7 @@ jobs:
         with:
           working-directory: ./backend
           name: friendogly-be-develop-jar
-          path: ./**/friendogly-0.0.1-SNAPSHOT.jar
+          path: ./build/libs/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
     needs: build
