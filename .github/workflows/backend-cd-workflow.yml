@@ -34,6 +34,15 @@ jobs:
         working-directory: ./backend
         run: ./gradlew clean build
 
+
+      - name: 디렉토리 경로 확인
+        working-directory: ./backend
+        run: pwd
+
+      - name: 파일 경로 찾기
+        working-directory: ./backend
+        run: find . -name "friendogly-0.0.1-SNAPSHOT.jar"
+        
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
