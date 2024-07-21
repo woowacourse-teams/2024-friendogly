@@ -4,9 +4,10 @@ import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
 import com.woowacourse.friendogly.club.service.ClubQueryService;
+import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +23,8 @@ public class ClubController {
         this.clubQueryService = clubQueryService;
     }
 
-
     @GetMapping("/searching")
-    public List<FindSearchingClubResponse> findSearching(@RequestBody FindSearchingClubRequest request) {
-        return clubQueryService.findSearching(request);
+    public ResponseEntity<List<FindSearchingClubResponse>> findSearching(@Valid FindSearchingClubRequest request) {
+        return ResponseEntity.ok(clubQueryService.findSearching(request));
     }
 }
