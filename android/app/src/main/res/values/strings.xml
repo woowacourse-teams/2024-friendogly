@@ -96,7 +96,8 @@
     <string name="chat_yesterday">어제</string>
     <string name="chat_date"> MM월 dd일</string>
     <string name="chat_unread_max_count">999+</string>
-
+    <string name="chat_come_message">%s님이 들어왔습니다.</string>
+    <string name="chat_out_message">%s님이 나갔습니다.</string>
     <string name="group_number_of_people">%d/%d</string>
     <string name="group_group_info">%s · %s</string>
     <string name="group_participate_name">모집중</string>
