@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.pet.dto.request;
 
+import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -39,8 +40,9 @@ public record SavePetRequest(
         String imageUrl
 ) {
 
-    public Pet toEntity() {
+    public Pet toEntity(Member member) {
         return Pet.builder()
+                .member(member)
                 .name(name)
                 .description(description)
                 .birthDate(birthDate)

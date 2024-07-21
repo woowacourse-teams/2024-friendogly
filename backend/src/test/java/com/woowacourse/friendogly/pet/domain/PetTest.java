@@ -35,6 +35,23 @@ class PetTest {
         ).doesNotThrowAnyException();
     }
 
+    @DisplayName("member가 null인 경우 예외가 발생한다.")
+    @Test
+    void create_Fail_NullMember() {
+        assertThatThrownBy(() ->
+                Pet.builder()
+                        .member(null)
+                        .name("땡이")
+                        .description("땡이입니다.")
+                        .birthDate(LocalDate.now().minusDays(1L))
+                        .sizeType(SizeType.SMALL)
+                        .gender(Gender.FEMALE_NEUTERED)
+                        .imageUrl("http://www.google.com")
+                        .build())
+                .isExactlyInstanceOf(FriendoglyException.class)
+                .hasMessage("member는 null일 수 없습니다.");
+    }
+
     @DisplayName("이름이 null인 경우 예외가 발생한다.")
     @Test
     void create_Fail_NullName() {
