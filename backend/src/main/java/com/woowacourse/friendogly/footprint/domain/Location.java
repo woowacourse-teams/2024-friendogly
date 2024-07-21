@@ -8,6 +8,7 @@ import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +25,10 @@ public class Location {
     private static final double MIN_LONGITUDE = -180.0;
     private static final double MAX_LONGITUDE = 180.0;
 
+    @Column(name = "latitude")
     private double latitude;
+
+    @Column(name = "longitude")
     private double longitude;
 
     public Location(double latitude, double longitude) {
