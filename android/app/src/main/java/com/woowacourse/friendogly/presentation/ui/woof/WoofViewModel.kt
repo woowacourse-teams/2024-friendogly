@@ -16,13 +16,23 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
 
-    fun loadNearFootPrints(latLng: LatLng) {
+    fun markFootPrint(latLng: LatLng) {
         viewModelScope.launch {
-            woofRepository.getNearFootPrints(latLng.latitude, latLng.longitude).onSuccess { nearFootPrints ->
-                val state = uiState.value ?: WoofUiState()
-                _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
+            woofRepository.postFootPrint(latLng.latitude, latLng.longitude).onSuccess {
+                loadNearFootPrints(latLng)
             }.onFailure {
             }
+        }
+    }
+
+    fun loadNearFootPrints(latLng: LatLng) {
+        viewModelScope.launch {
+            woofRepository.getNearFootPrints(latLng.latitude, latLng.longitude)
+                .onSuccess { nearFootPrints ->
+                    val state = uiState.value ?: WoofUiState()
+                    _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
+                }.onFailure {
+                }
         }
     }
 

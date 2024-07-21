@@ -179,6 +179,7 @@ class WoofFragment :
                         lastLocation.latitude,
                         lastLocation.longitude,
                     )
+                viewModel.markFootPrint(latLng = latLng)
                 viewModel.loadNearFootPrints(latLng = latLng)
             }
         } else {
