@@ -10,118 +10,129 @@
             type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/ll_group_add_information"
+    <ScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".presentation.ui.group.add.information.GroupAddInformationFragment">
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:text="@string/group_add_information_main_title"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:id="@+id/ll_group_add_information"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".presentation.ui.group.add.information.GroupAddInformationFragment">
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="잠실 6동" />
+                android:layout_marginTop="80dp"
+                android:text="@string/group_add_information_main_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="잠실 6동" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_information_main_content" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/group_add_information_main_content" />
+                android:text="@string/group_add_group_title" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
+            <EditText
+                android:id="@+id/et_group_subject"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:hint="@string/group_add_group_subject_hint"
+                android:maxLength="100"
+                android:maxLines="2"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:text="@={vm.groupTitle}" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                app:titleCount="@{vm.groupTitle}"
+                tools:text="0/100" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/group_add_group_content" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
+            <EditText
+                android:id="@+id/et_group_content"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:scrollbars="vertical"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:gravity="top"
+                android:hint="@string/group_add_content_hint"
+                android:lines="5"
+                android:maxLength="1000"
+                android:maxLines="1"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:text="@={vm.groupContent}" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                app:contentCount="@{vm.groupContent}"
+                tools:text="0/1000" />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"/>
         </LinearLayout>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="30dp" />
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/group_add_group_title" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="10dp" />
-
-        <EditText
-            android:id="@+id/et_group_subject"
-            style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rect_gray03_fill_16"
-            android:hint="@string/group_add_group_subject_hint"
-            android:maxLength="100"
-            android:maxLines="2"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="14dp"
-            android:text="@={vm.groupTitle}" />
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="end"
-            app:titleCount="@{vm.groupTitle}"
-            tools:text="0/100" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="30dp" />
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/group_add_group_content" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="10dp" />
-
-        <EditText
-            android:id="@+id/et_group_content"
-            style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/rect_gray03_fill_16"
-            android:gravity="top"
-            android:hint="@string/group_add_content_hint"
-            android:lines="5"
-            android:maxLength="1000"
-            android:maxLines="1"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="14dp"
-            android:text="@={vm.groupContent}" />
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="end"
-            app:contentCount="@{vm.groupContent}"
-            tools:text="0/1000" />
-    </LinearLayout>
+    </ScrollView>
 </layout>

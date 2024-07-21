@@ -15,7 +15,6 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityGroupAddBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
-import com.woowacourse.friendogly.presentation.ui.MainActivity
 import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter
 import com.woowacourse.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.woowacourse.friendogly.presentation.utils.toBitmap
@@ -84,10 +83,7 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
     private fun initObserver() {
         viewModel.groupAddEvent.observeEvent(this) { actionEvent ->
             when (actionEvent) {
-                GroupAddEvent.Navigation.NavigateToHome -> {
-                    startActivity(MainActivity.getIntent(this))
-                    finish()
-                }
+                GroupAddEvent.Navigation.NavigateToHome -> finish()
 
                 GroupAddEvent.Navigation.NavigateToSelectDog -> TODO()
                 GroupAddEvent.Navigation.NavigateToSelectGroupPoster -> openGroupPosterBottomSheet()

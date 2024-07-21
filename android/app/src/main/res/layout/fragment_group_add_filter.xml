@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.SMALL_DOG_NAME}" />
+                app:filterName="@{GroupFilter.SMALL_DOG_NAME}" />
 
             <include
                 layout="@layout/include_add_dog_menu"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.MEDIUM_DOG_NAME}" />
+                app:filterName="@{GroupFilter.MEDIUM_DOG_NAME}" />
 
             <include
                 layout="@layout/include_add_dog_menu"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.BIG_DOG_NAME}" />
+                app:filterName="@{GroupFilter.BIG_DOG_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
         <Space
@@ -151,7 +151,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.MALE_NAME}" />
+                app:filterName="@{GroupFilter.MALE_NAME}" />
 
             <include
                 layout="@layout/include_add_dog_menu"
@@ -160,7 +160,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
+                app:filterName="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
 
             <include
                 layout="@layout/include_add_dog_menu"
@@ -169,7 +169,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.FEMALE_NAME}" />
+                app:filterName="@{GroupFilter.FEMALE_NAME}" />
 
             <include
                 layout="@layout/include_add_dog_menu"
@@ -178,7 +178,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:menu="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
+                app:filterName="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
 </layout>
