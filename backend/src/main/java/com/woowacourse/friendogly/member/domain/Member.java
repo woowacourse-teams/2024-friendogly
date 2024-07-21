@@ -46,7 +46,13 @@ public class Member {
         this.email = new Email(email);
     }
 
-    public void validatePetCapacity() {
+    public void addPet(Pet pet) {
+        validatePetCapacity();
+        pet.updateMember(this);
+        this.pets.add(pet);
+    }
+
+    private void validatePetCapacity() {
         if (MAX_PET_CAPACITY <= this.pets.size()) {
             throw new FriendoglyException(String.format(
                     "강아지는 최대 %d 마리까지만 등록할 수 있습니다.", MAX_PET_CAPACITY));

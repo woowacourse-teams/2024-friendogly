@@ -1,15 +1,16 @@
 package com.woowacourse.friendogly.pet.domain;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
-import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PetTest {
 
@@ -32,23 +33,6 @@ class PetTest {
                         .imageUrl("http://www.google.com")
                         .build()
         ).doesNotThrowAnyException();
-    }
-
-    @DisplayName("member가 null인 경우 예외가 발생한다.")
-    @Test
-    void create_Fail_NullMember() {
-        assertThatThrownBy(() ->
-                Pet.builder()
-                        .member(null)
-                        .name("땡이")
-                        .description("땡이입니다.")
-                        .birthDate(LocalDate.now().minusDays(1L))
-                        .sizeType(SizeType.SMALL)
-                        .gender(Gender.FEMALE_NEUTERED)
-                        .imageUrl("http://www.google.com")
-                        .build())
-                .isExactlyInstanceOf(FriendoglyException.class)
-                .hasMessage("member는 null일 수 없습니다.");
     }
 
     @DisplayName("이름이 null인 경우 예외가 발생한다.")

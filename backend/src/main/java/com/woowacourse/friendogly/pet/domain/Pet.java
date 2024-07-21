@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.pet.domain;
 
-import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -12,11 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -61,8 +61,6 @@ public class Pet {
             Gender gender,
             String imageUrl
     ) {
-        validateMember(member);
-
         this.member = member;
         this.name = new Name(name);
         this.description = new Description(description);
@@ -72,9 +70,7 @@ public class Pet {
         this.imageUrl = new ImageUrl(imageUrl);
     }
 
-    private void validateMember(Member member) {
-        if (member == null) {
-            throw new FriendoglyException("member는 null일 수 없습니다.");
-        }
+    public void updateMember(Member member) {
+        this.member = member;
     }
 }

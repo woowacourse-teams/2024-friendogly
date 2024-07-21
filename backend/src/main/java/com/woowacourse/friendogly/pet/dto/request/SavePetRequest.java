@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.pet.dto.request;
 
-import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -9,8 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import org.hibernate.validator.constraints.URL;
+
+import java.time.LocalDate;
 
 public record SavePetRequest(
         @NotNull(message = "memberId는 null을 입력할 수 없습니다.")
@@ -38,9 +38,9 @@ public record SavePetRequest(
         @URL
         String imageUrl
 ) {
-    public Pet toEntity(Member member) {
+
+    public Pet toEntity() {
         return Pet.builder()
-                .member(member)
                 .name(name)
                 .description(description)
                 .birthDate(birthDate)
