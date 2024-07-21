@@ -2,7 +2,7 @@ name: deploy
 
 on:
   pull_request:
-    branches: [ "develop","fix/be/swagger-connection" ]
+    branches: [ "develop", "fix/be/swagger-connection" ]
   push:
     branches: ['develop']
      
@@ -60,9 +60,11 @@ jobs:
           echo "Checking if port 8080 is in use..."
           PID=$(lsof -t -i:8080 || true)
           if [ -n "$PID" ]; then
+            echo "Port 8080 is in use by process $PID."
             echo "server_running=true" >> $GITHUB_ENV
             echo "PID=$PID" >> $GITHUB_ENV
           else
+            echo "Port 8080 is not in use."
             echo "server_running=false" >> $GITHUB_ENV
           fi
 
@@ -73,9 +75,20 @@ jobs:
           kill -9 ${{ env.PID }}
           echo "Previous running Server stopped."
 
+      - name: Check if room-esc server is running on port 8080 after stop
+        run: |
+          PID=$(lsof -t -i:8080 || true)
+          if [ -n "$PID" ]; then
+            echo "Server is still running with PID: $PID"
+            exit 1
+          else
+            echo "Server successfully stopped."
+          fi
+
       - name: Start server
         run: |
           cd backend/build/libs
           ls -l friendogly-0.0.1-SNAPSHOT.jar
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
           echo "Latest Backend API Server started."
+
