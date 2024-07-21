@@ -8,14 +8,14 @@ VALUES ('도도', '4e52d416', 'dodo@test.com'),
        ('채드', '114d8979', 'ched@test.com'),
        ('에디', 'c065a053', 'edy@test.com');
 
-INSERT INTO footprint(member_id, latitude, longitude, created_at, is_deleted)
-VALUES (1, 37.5173316, 127.1011661, TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
-       (2, 37.5185122, 127.098778, TIMESTAMPADD(MINUTE, -20, NOW()), FALSE),
-       (3, 37.5191964, 127.1055562, TIMESTAMPADD(MINUTE, -30, NOW()), FALSE),
-       (4, 37.5136533, 127.0983182, TIMESTAMPADD(MINUTE, -40, NOW()), FALSE),
-       (5, 37.5131474, 127.1042528, TIMESTAMPADD(MINUTE, -50, NOW()), FALSE),
-       (6, 37.5171728, 127.1047797, TIMESTAMPADD(MINUTE, -60, NOW()), FALSE),
-       (7, 37.516183, 127.1068874, TIMESTAMPADD(MINUTE, -70, NOW()), FALSE);
+INSERT INTO footprint(member_id, latitude, longitude, image_url, created_at, is_deleted)
+VALUES (1, 37.5173316, 127.1011661, 'https://picsum.photos/100', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
+       (2, 37.5185122, 127.098778, 'https://picsum.photos/150', TIMESTAMPADD(MINUTE, -20, NOW()), FALSE),
+       (3, 37.5191964, 127.1055562, 'https://picsum.photos/200', TIMESTAMPADD(MINUTE, -30, NOW()), FALSE),
+       (4, 37.5136533, 127.0983182, 'https://picsum.photos/250', TIMESTAMPADD(MINUTE, -40, NOW()), FALSE),
+       (5, 37.5131474, 127.1042528, 'https://picsum.photos/300', TIMESTAMPADD(MINUTE, -50, NOW()), FALSE),
+       (6, 37.5171728, 127.1047797, 'https://picsum.photos/350', TIMESTAMPADD(MINUTE, -60, NOW()), FALSE),
+       (7, 37.516183, 127.1068874, 'https://picsum.photos/400', TIMESTAMPADD(MINUTE, -70, NOW()), FALSE);
 
 INSERT INTO pet(member_id, name, description, birth_date, size_type, gender, image_url)
 VALUES (1, '귀요미', '제 이름은 귀요미입니다', '2010-04-01', 'SMALL', 'MALE_NEUTERED', 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201901/20/28017477-0365-4a43-b546-008b603da621.jpg'),
