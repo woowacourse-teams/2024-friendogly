@@ -4,7 +4,6 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -18,10 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,27 +42,24 @@ public class Club {
     @Embedded
     private MemberCapacity memberCapacity;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private Member owner;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_gender", joinColumns = @JoinColumn(name = "club_id"))
-    @Column(name = "allowed_gender")
-    private Set<Gender> allowedGender;
+    @Column(name = "allowed_gender", nullable = false)
+    private Set<Gender> allowedGenders;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_size", joinColumns = @JoinColumn(name = "club_id"))
-    @Column(name = "allowed_size")
-    private Set<SizeType> allowedSize;
+    @Column(name = "allowed_size", nullable = false)
+    private Set<SizeType> allowedSizes;
 
     @Embedded
     private Address address;
-
-    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ClubMember> clubMembers = new ArrayList<>();
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -85,8 +78,8 @@ public class Club {
             String address,
             int memberCapacity,
             Member owner,
-            Set<Gender> allowedGender,
-            Set<SizeType> allowedSize,
+            Set<Gender> allowedGenders,
+            Set<SizeType> allowedSizes,
             String imageUrl,
             Status status,
             LocalDateTime createdAt
@@ -97,8 +90,8 @@ public class Club {
         this.address = new Address(address);
         this.memberCapacity = new MemberCapacity(memberCapacity);
         this.owner = owner;
-        this.allowedGender = allowedGender;
-        this.allowedSize = allowedSize;
+        this.allowedGenders = allowedGenders;
+        this.allowedSizes = allowedSizes;
         this.imageUrl = imageUrl;
         this.status = status;
         this.createdAt = createdAt;
@@ -127,15 +120,12 @@ public class Club {
                 .address(address)
                 .memberCapacity(memberCapacity)
                 .owner(owner)
-                .allowedGender(allowedGender)
-                .allowedSize(allowedSize)
+                .allowedGenders(allowedGender)
+                .allowedSizes(allowedSize)
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
     }
 
-    public int countParticipantMember() {
-        return clubMembers.size();
-    }
 }

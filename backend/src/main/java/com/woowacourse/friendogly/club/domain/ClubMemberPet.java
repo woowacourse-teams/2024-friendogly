@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.club.domain;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +23,11 @@ public class ClubMemberPet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "club_member_id", nullable = false)
     private ClubMember clubMember;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 
