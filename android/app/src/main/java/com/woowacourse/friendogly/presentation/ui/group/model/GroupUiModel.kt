@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.group.model
 
+import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupWoof
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import java.time.LocalDateTime
 
