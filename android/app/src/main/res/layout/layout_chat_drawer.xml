@@ -149,12 +149,12 @@
         android:id="@+id/layout_chat_dog_gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         app:alignContent="stretch"
         app:alignItems="stretch"
         app:flexWrap="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_chat_dog_gender">
+        app:layout_constraintTop_toBottomOf="@id/tv_chat_dog_gender"
+        app:showDividerHorizontal="middle">
 
 
         <CheckBox
@@ -162,6 +162,7 @@
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
@@ -179,6 +180,7 @@
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
@@ -191,38 +193,44 @@
             android:text="@string/dog_gender_male"
             android:textColor="@color/sel_chat_dog_info_checkbox" />
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_female_neutered"
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="false"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_gender_female_neutered"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            android:layout_marginTop="12dp">
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_male_neutered"
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="false"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_gender_male_neutered"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            <CheckBox
+                android:id="@+id/chb_chat_dog_female_neutered"
+                style="@style/Theme.AppCompat.TextView.Regular.Size12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/sel_chat_dog_size_checkbox"
+                android:button="@null"
+                android:checked="false"
+                android:clickable="false"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="10dp"
+                android:text="@string/dog_gender_female_neutered"
+                android:textColor="@color/sel_chat_dog_info_checkbox" />
+
+            <CheckBox
+                android:id="@+id/chb_chat_dog_male_neutered"
+                style="@style/Theme.AppCompat.TextView.Regular.Size12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_chat_dog_size_checkbox"
+                android:button="@null"
+                android:checked="false"
+                android:clickable="false"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="10dp"
+                android:text="@string/dog_gender_male_neutered"
+                android:textColor="@color/sel_chat_dog_info_checkbox" />
+        </LinearLayout>
 
     </com.google.android.flexbox.FlexboxLayout>
 
