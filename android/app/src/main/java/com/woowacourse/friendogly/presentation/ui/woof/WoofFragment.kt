@@ -193,7 +193,7 @@ class WoofFragment :
     }
 
     private fun canMarkFootPrint(): Boolean {
-        val isMarkBtnClickable = viewModel.uiState.value?.markFootPrintBtn?.isClickable ?: false
+        val isMarkBtnClickable = viewModel.uiState.value?.footPrintMarkBtnInfo?.isClickable ?: false
         return locationSource.lastLocation != null && isMarkBtnClickable
     }
 

@@ -21,9 +21,9 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
 
     fun loadMarkFootPrintBtn() {
         viewModelScope.launch {
-            woofRepository.getMyLatestFootPrintTime().onSuccess { footPrintMineLatest ->
+            woofRepository.getFootPrintMarkBtnInfo().onSuccess { footPrintMarkBtnInfo ->
                 val state = uiState.value ?: WoofUiState()
-                _uiState.postValue(state.copy(markFootPrintBtn = footPrintMineLatest.toPresentation()))
+                _uiState.postValue(state.copy(footPrintMarkBtnInfo = footPrintMarkBtnInfo.toPresentation()))
                 _isMarkFootPrintBtnLoaded.postValue(true)
             }.onFailure {
             }

@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.remote.service
 
 import com.woowacourse.friendogly.data.model.LandMarkDto
 import com.woowacourse.friendogly.remote.model.request.FootPrintRequest
-import com.woowacourse.friendogly.remote.model.response.FootPrintMineLatestResponse
+import com.woowacourse.friendogly.remote.model.response.FootPrintMarkBtnInfoResponse
 import com.woowacourse.friendogly.remote.model.response.FootPrintsNearResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,7 +16,7 @@ interface WoofService {
     )
 
     @GET("/footprints/mine/latest")
-    suspend fun getMyLatestFootPrintTime(): FootPrintMineLatestResponse
+    suspend fun getFootPrintMarkBtnInfo(): FootPrintMarkBtnInfoResponse
 
     @GET("/footprints/near")
     suspend fun getNearFootPrints(

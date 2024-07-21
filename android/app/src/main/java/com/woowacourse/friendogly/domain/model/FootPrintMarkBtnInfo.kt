@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.domain.model
 
 import java.time.LocalDateTime
 
-data class FootPrintMineLatest(val createdAt: LocalDateTime) {
+data class FootPrintMarkBtnInfo(val createdAt: LocalDateTime) {
     fun remainingTime(currentDateTime: LocalDateTime = LocalDateTime.now()): String {
         return "30"
 //        val duration = Duration.between(createdAt, currentDateTime)

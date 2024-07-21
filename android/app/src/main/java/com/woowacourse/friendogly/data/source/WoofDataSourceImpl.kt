@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.data.source
 
 import com.woowacourse.friendogly.data.model.FootPrintDto
-import com.woowacourse.friendogly.data.model.FootPrintMineLatestDto
+import com.woowacourse.friendogly.data.model.FootPrintMarkBtnInfoDto
 import com.woowacourse.friendogly.data.model.LandMarkDto
 import com.woowacourse.friendogly.remote.mapper.toData
 import com.woowacourse.friendogly.remote.model.request.FootPrintRequest
@@ -13,8 +13,8 @@ class WoofDataSourceImpl(private val woofService: WoofService) : WoofDataSource 
         return runCatching { woofService.postFootPrint(request) }
     }
 
-    override suspend fun getMyLatestFootPrintTime(): Result<FootPrintMineLatestDto> {
-        return runCatching { woofService.getMyLatestFootPrintTime().toData() }
+    override suspend fun getFootPrintMarkBtnInfo(): Result<FootPrintMarkBtnInfoDto> {
+        return runCatching { woofService.getFootPrintMarkBtnInfo().toData() }
     }
 
     override suspend fun getNearFootPrints(
