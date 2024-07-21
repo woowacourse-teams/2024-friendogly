@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.member.domain;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -20,6 +21,8 @@ import java.util.List;
 @Getter
 public class Member {
 
+    private static final int MAX_PET_CAPACITY = 5;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,5 +41,12 @@ public class Member {
         this.pets = new ArrayList<>();
         this.name = new Name(name);
         this.email = new Email(email);
+    }
+
+    public void validatePetCapacity() {
+        if (MAX_PET_CAPACITY <= this.pets.size()) {
+            throw new FriendoglyException(String.format(
+                    "강아지는 최대 %d 마리까지만 등록할 수 있습니다.", MAX_PET_CAPACITY));
+        }
     }
 }
