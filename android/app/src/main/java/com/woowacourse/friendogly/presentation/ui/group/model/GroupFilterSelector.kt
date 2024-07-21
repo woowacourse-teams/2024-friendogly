@@ -30,14 +30,14 @@ class GroupFilterSelector(
         } ?: true
     }
 
-    fun addAllGenderFilter(){
+    fun addAllGenderFilter() {
         val genderFilters = GroupFilter.makeGenderFilterEntry()
         genderFilters.forEach {
             addGroupFilter(it)
         }
     }
 
-    fun addAllSizeFilter(){
+    fun addAllSizeFilter() {
         val sizeFilters = GroupFilter.makeSizeFilterEntry()
         sizeFilters.forEach {
             addGroupFilter(it)
