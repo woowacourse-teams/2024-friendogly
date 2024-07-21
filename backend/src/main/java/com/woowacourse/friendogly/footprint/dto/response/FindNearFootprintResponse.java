@@ -10,7 +10,8 @@ public record FindNearFootprintResponse(
     double longitude,
     // TODO: 패턴을 통일시키고 나서 어노테이션 지우기
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime createdAt,
-    boolean isMine
+    boolean isMine,
+    String imageUrl
 ) {
 
     public FindNearFootprintResponse(Footprint footprint, boolean isMine) {
@@ -19,7 +20,8 @@ public record FindNearFootprintResponse(
             footprint.getLocation().getLatitude(),
             footprint.getLocation().getLongitude(),
             footprint.getCreatedAt(),
-            isMine
+            isMine,
+            footprint.getImageUrl()
         );
     }
 }

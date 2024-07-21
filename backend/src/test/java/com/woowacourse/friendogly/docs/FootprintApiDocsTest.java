@@ -81,13 +81,13 @@ public class FootprintApiDocsTest extends RestDocsTest {
         FindNearFootprintRequest request = new FindNearFootprintRequest(37.5173316, 127.1011661);
         List<FindNearFootprintResponse> response = List.of(
             new FindNearFootprintResponse(
-                1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true),
+                1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true, "https://picsum.photos/200"),
             new FindNearFootprintResponse(
-                3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false),
+                3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false, ""),
             new FindNearFootprintResponse(
-                6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false),
+                6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false, "https://picsum.photos/300"),
             new FindNearFootprintResponse(
-                11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true)
+                11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true, "https://picsum.photos/250")
         );
 
         given(footprintQueryService.findNear(any(Long.class), eq(request)))
@@ -113,7 +113,8 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         fieldWithPath("[].latitude").description("발자국 위치의 위도"),
                         fieldWithPath("[].longitude").description("발자국 위치의 경도"),
                         fieldWithPath("[].createdAt").description("발자국 생성 시간"),
-                        fieldWithPath("[].isMine").description("나의 발자국인지 여부")
+                        fieldWithPath("[].isMine").description("나의 발자국인지 여부"),
+                        fieldWithPath("[].imageUrl").description("발자국에 할당된 이미지 URL")
                     )
                     .build()
                 )
