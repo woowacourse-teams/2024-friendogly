@@ -76,12 +76,12 @@ public class ClubApiDocsTest extends RestDocsTest {
         when(clubQueryService.findSearching(request))
                 .thenReturn(responses);
 
-        mockMvc.perform(get("clubs/searching")
+        mockMvc.perform(get("/clubs/searching")
                         .param("address", request.address())
                         .param("genderParams", request.genderParams().stream().map(Enum::name).toArray(String[]::new))
                         .param("sizeParams", request.sizeParams().stream().map(Enum::name).toArray(String[]::new)))
                 .andExpect(status().isOk())
-                .andDo(document("/clubs/findSearching/200",
+                .andDo(document("clubs/findSearching/200",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
