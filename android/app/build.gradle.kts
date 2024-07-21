@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.navigation.safeargs)
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    kotlin("plugin.serialization") version "1.9.22"
     id("kotlin-parcelize")
 }
 

@@ -1,10 +1,10 @@
-package com.woowacourse.friendogly.kakao.datasource
+package com.woowacourse.friendogly.kakao.source
 
 import android.content.Context
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import com.woowacourse.friendogly.data.datasource.KakaoLoginDataSource
 import com.woowacourse.friendogly.data.model.KakaoAccessTokenDto
+import com.woowacourse.friendogly.data.source.KakaoLoginDataSource
 import com.woowacourse.friendogly.kakao.mapper.toData
 import com.woowacourse.friendogly.kakao.model.KakaoAccessTokenResponse
 import kotlinx.coroutines.suspendCancellableCoroutine
