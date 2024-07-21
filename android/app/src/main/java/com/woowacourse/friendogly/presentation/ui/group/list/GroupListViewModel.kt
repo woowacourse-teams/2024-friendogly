@@ -44,6 +44,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupLocation = "잠실6동",
                         groupLeader = "벼리",
                         groupDate = LocalDateTime.now(),
+                        groupWoofs = listOf(),
                     ),
                     GroupUiModel(
                         groupId = 0L,
@@ -60,7 +61,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         currentNumberOfPeople = 3,
                         groupLocation = "잠실5동",
                         groupLeader = "채드",
-                        groupDate = LocalDateTime.now(),
+                        groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
+                        groupWoofs = listOf(),
                     ),
                 )
         }

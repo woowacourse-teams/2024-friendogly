@@ -10,15 +10,16 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/rect_white_line_black_4"
-        android:paddingHorizontal="6dp"
+        android:background="@drawable/rect_orange100_fill_12"
+        android:paddingHorizontal="8dp"
         android:paddingVertical="3dp"
-        android:layout_marginHorizontal="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
             tools:text = "중형견"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
