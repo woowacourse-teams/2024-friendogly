@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,6 +32,7 @@
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">
 
             <TextView
+                style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="잠실6동" />
@@ -40,8 +42,8 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_bottom" />
         </LinearLayout>
 

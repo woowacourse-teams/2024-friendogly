@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="imageUrl"
+            type="java.lang.String" />
+    </data>
+
+    <ImageView
+        glide1000="@{imageUrl}"
+        app:shapeAppearanceOverlay="@style/RoundBig"
+        android:background="@drawable/shape_indicator_active"
+        android:backgroundTint="@color/orange05"
+        android:layout_width="24dp"
+        android:layout_height="24dp"/>
+</layout>

@@ -23,7 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.MainActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true">
