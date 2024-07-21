@@ -3,12 +3,19 @@ package com.woowacourse.friendogly.footprint.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.woowacourse.friendogly.footprint.domain.Footprint;
+import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.support.ServiceTest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -32,29 +39,29 @@ class FootprintQueryServiceTest extends ServiceTest {
     void findOne() {
         // given
         Member member = memberRepository.save(
-            Member.builder()
-                .name("name1")
-                .email("test@test.com")
-                .build()
+                Member.builder()
+                        .name("name1")
+                        .email("test@test.com")
+                        .build()
         );
 
         petRepository.save(
-            Pet.builder()
-                .member(member)
-                .name("petname1")
-                .description("petdescription1")
-                .birthDate(LocalDate.now().minusYears(1))
-                .sizeType(SizeType.MEDIUM)
-                .gender(Gender.MALE_NEUTERED)
-                .imageUrl("https://picsum.photos/200")
-                .build()
+                Pet.builder()
+                        .member(member)
+                        .name("petname1")
+                        .description("petdescription1")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
         );
 
         Footprint footprint = footprintRepository.save(
-            Footprint.builder()
-                .member(member)
-                .location(new Location(0.0, 0.0))
-                .build()
+                Footprint.builder()
+                        .member(member)
+                        .location(new Location(0.0, 0.0))
+                        .build()
         );
 
         // when
@@ -62,12 +69,12 @@ class FootprintQueryServiceTest extends ServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.memberName()).isEqualTo("name1"),
-            () -> assertThat(response.petName()).isEqualTo("petname1"),
-            () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-            () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-            () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-            () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED)
+                () -> assertThat(response.memberName()).isEqualTo("name1"),
+                () -> assertThat(response.petName()).isEqualTo("petname1"),
+                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
+                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
+                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
+                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED)
         );
     }
 
