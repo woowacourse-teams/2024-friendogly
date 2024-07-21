@@ -13,9 +13,17 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     private lateinit var adapter: ChatAdapter
 
     override fun initCreateView() {
+        initAdapter()
+
+        getChatList()
+    }
+
+    private fun initAdapter() {
         adapter = ChatAdapter()
         binding.rcvChatDetail.adapter = adapter
+    }
 
+    private fun getChatList() {
         val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
         viewModel.getChats(chatId)
         viewModel.chats.observe(this) {
