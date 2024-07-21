@@ -30,20 +30,6 @@ class GroupFilterSelector(
         } ?: true
     }
 
-    fun addAllGenderFilter(){
-        val genderFilters = GroupFilter.makeGenderFilterEntry()
-        genderFilters.forEach {
-            addGroupFilter(it)
-        }
-    }
-
-    fun addAllSizeFilter(){
-        val sizeFilters = GroupFilter.makeSizeFilterEntry()
-        sizeFilters.forEach {
-            addGroupFilter(it)
-        }
-    }
-
     companion object {
         const val GENDER_FILTER_SUBJECT = "성별"
         const val SIZE_FILTER_SUBJECT = "사이즈"

@@ -6,10 +6,6 @@ interface GroupAddActionHandler {
         isSelected: Boolean,
     )
 
-    fun selectAllSizeFilter(isSelected: Boolean)
-
-    fun selectAllGenderFilter(isSelected: Boolean)
-
     fun cancelAddGroup()
 
     fun submitAddGroup()

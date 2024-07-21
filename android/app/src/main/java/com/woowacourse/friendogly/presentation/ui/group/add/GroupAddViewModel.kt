@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
@@ -17,13 +18,6 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
         MutableLiveData()
     val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
 
-    private val _allSizeSelectState: MutableLiveData<Boolean> = MutableLiveData(true)
-    val allSizeSelectState: LiveData<Boolean> get() = _allSizeSelectState
-
-    private val _allGenderSelectState: MutableLiveData<Boolean> = MutableLiveData(true)
-    val allGenderSelectState: LiveData<Boolean> get() = _allGenderSelectState
-
-
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
 
@@ -33,11 +27,9 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData(GroupCounter())
     val groupCounter: LiveData<GroupCounter> get() = _groupCounter
 
-    private val _groupTitle: MutableLiveData<String> = MutableLiveData()
-    val groupTitle: LiveData<String> get() = _groupTitle
+    val groupTitle: MutableLiveData<String> = MutableLiveData("")
 
-    private val _groupContent: MutableLiveData<String> = MutableLiveData()
-    val groupContent: LiveData<String> get() = _groupContent
+    val groupContent: MutableLiveData<String> = MutableLiveData("")
 
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
@@ -51,24 +43,6 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
             groupFilterSelector.addGroupFilter(groupFilter)
         } else {
             groupFilterSelector.removeGroupFilter(groupFilter)
-        }
-    }
-
-    override fun selectAllSizeFilter(isSelected: Boolean) {
-        if (isSelected) {
-            groupFilterSelector.addAllSizeFilter()
-            _allSizeSelectState.value = true
-        } else {
-            _allSizeSelectState.value = false
-        }
-    }
-
-    override fun selectAllGenderFilter(isSelected: Boolean) {
-        if (isSelected) {
-            groupFilterSelector.addAllGenderFilter()
-            _allGenderSelectState.value = true
-        } else {
-            _allGenderSelectState.value = false
         }
     }
 

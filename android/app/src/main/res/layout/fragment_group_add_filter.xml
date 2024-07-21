@@ -66,14 +66,13 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-        <CheckBox
-            style="@style/group_add_custom_checkbox"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-            android:checked="@{vm.allSizeSelectState}"
-            android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectAllSizeFilter(isChecked)}"
-            android:text="@string/group_add_filter_all_select" />
+<!--        <CheckBox-->
+<!--            style="@style/group_add_custom_checkbox"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:minHeight="0dp"-->
+<!--            android:checked="true"-->
+<!--            android:text="@string/group_add_filter_all_select" />-->
 
         <Space
             android:layout_width="wrap_content"
@@ -92,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allSizeSelectState}"
                 app:menu="@{GroupFilter.SMALL_DOG_NAME}" />
 
             <include
@@ -101,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allSizeSelectState}"
                 app:menu="@{GroupFilter.MEDIUM_DOG_NAME}" />
 
             <include
@@ -110,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allSizeSelectState}"
                 app:menu="@{GroupFilter.BIG_DOG_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -128,14 +124,14 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-        <CheckBox
-            style="@style/group_add_custom_checkbox"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:checked="@{vm.allGenderSelectState}"
-            android:minHeight="0dp"
-            android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectAllGenderFilter(isChecked)}"
-            android:text="@string/group_add_filter_all_select" />
+<!--        <CheckBox-->
+<!--            android:id="@+id/checkbox_group_add_all_gender"-->
+<!--            style="@style/group_add_custom_checkbox"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:checked="true"-->
+<!--            android:minHeight="0dp"-->
+<!--            android:text="@string/group_add_filter_all_select" />-->
 
         <Space
             android:layout_width="wrap_content"
@@ -155,7 +151,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.MALE_NAME}" />
 
             <include
@@ -165,7 +160,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
 
             <include
@@ -175,7 +169,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.FEMALE_NAME}" />
 
             <include
@@ -185,7 +178,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
