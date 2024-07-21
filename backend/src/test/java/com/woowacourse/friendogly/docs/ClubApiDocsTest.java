@@ -76,7 +76,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         when(clubQueryService.findSearching(request))
                 .thenReturn(responses);
 
-        mockMvc.perform(get("/clubs/searching")
+        mockMvc.perform(get("clubs/searching")
                         .param("address", request.address())
                         .param("genderParams", request.genderParams().stream().map(Enum::name).toArray(String[]::new))
                         .param("sizeParams", request.sizeParams().stream().map(Enum::name).toArray(String[]::new)))
@@ -127,7 +127,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         .param("genderParams", "남자,중성화 남자")
                         .param("sizeParams", "SMALL"))
                 .andExpect(status().isBadRequest())
-                .andDo(document("/clubs/findSearching/400",
+                .andDo(document("clubs/findSearching/400",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
