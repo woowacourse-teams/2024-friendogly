@@ -7,6 +7,7 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityChatBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
+import com.woowacourse.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 
 class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     private val viewModel: ChatViewModel by viewModels()
@@ -14,11 +15,16 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
 
     override fun initCreateView() {
         initAdapter()
-
         getChatList()
-
         clickBackBtn()
+        clickChatInfo()
 
+    }
+
+    private fun clickChatInfo() {
+        binding.ibChatSideMenu.setOnClickListener {
+            ChatInfoSideSheet().show(supportFragmentManager, "")
+        }
     }
 
     private fun clickBackBtn() {

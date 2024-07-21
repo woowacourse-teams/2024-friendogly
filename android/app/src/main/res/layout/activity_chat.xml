@@ -18,8 +18,8 @@
             android:background="@drawable/rect_gray03_botline_bot1">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:layout_width="match_parent"
                 android:id="@+id/toolbar_chat"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_arrow_left"
                 app:navigationIconTint="@color/black"
@@ -27,6 +27,7 @@
                 app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18">
 
                 <ImageButton
+                    android:id="@+id/ib_chat_side_menu"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="end"
