@@ -18,7 +18,7 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
 
     fun loadNearFootPrints(latLng: LatLng) {
         viewModelScope.launch {
-            woofRepository.getNearFootPrints(latLng).onSuccess { nearFootPrints ->
+            woofRepository.getNearFootPrints(latLng.latitude, latLng.longitude).onSuccess { nearFootPrints ->
                 val state = uiState.value ?: WoofUiState()
                 _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
             }.onFailure {

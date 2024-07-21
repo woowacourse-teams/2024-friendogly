@@ -109,14 +109,14 @@ class WoofFragment :
         circleOverlay.map = map
     }
 
-    private fun hasNotLocationPermissions(): Boolean {
-        if (permissionRequester.hasNotLocationPermissions()) {
+    private fun hasLocationPermissions(): Boolean {
+        if (!permissionRequester.hasLocationPermissions()) {
             permissionRequester.checkLocationPermissions {
                 makeSettingSnackbar()
             }
-            return true
+            return false
         }
-        return false
+        return true
     }
 
     private fun makeSettingSnackbar() {
@@ -171,14 +171,15 @@ class WoofFragment :
 
     private fun markNearFootPrints(footPrints: List<FootPrintUiModel>) {
         footPrints.forEach { footPrint ->
-            createMarker(latLng = footPrint.latLng, isMine = footPrint.isMine)
+            createMarker(
+                latLng = LatLng(footPrint.latitude, footPrint.longitude),
+                isMine = footPrint.isMine,
+            )
         }
     }
 
     override fun markFootPrint() {
-        if (hasNotLocationPermissions()) return
-
-        if (locationSource.lastLocation != null) {
+        if (hasLocationPermissions() && locationSource.lastLocation != null) {
             val lastLocation = locationSource.lastLocation ?: return
             latLng =
                 LatLng(
@@ -190,10 +191,23 @@ class WoofFragment :
     }
 
     override fun changeLocationTrackingMode() {
-        if (hasNotLocationPermissions()) return
+        if (hasLocationPermissions()) {
+            map.locationTrackingMode =
+                if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
+        } else {
+            map.locationTrackingMode = LocationTrackingMode.None
+        }
+    }
 
-        map.locationTrackingMode =
-            if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (permissionRequester.hasLocationPermissions()) {
+            activateMap()
+        }
     }
 
     override fun onStart() {
