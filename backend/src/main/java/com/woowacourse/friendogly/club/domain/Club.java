@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.SizeType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -16,7 +17,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -60,6 +63,9 @@ public class Club {
     @Embedded
     private Address address;
 
+    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ClubMember> clubMembers = new ArrayList<>();
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -74,7 +80,7 @@ public class Club {
     public Club(
             String title,
             String content,
-            Address address,
+            String address,
             int memberCapacity,
             Member owner,
             List<Gender> allowedGender,
@@ -83,11 +89,10 @@ public class Club {
             Status status,
             LocalDateTime createdAt
     ) {
-        validateClubLocation(address);
         validateOwner(owner);
         this.title = new Title(title);
         this.content = new Content(content);
-        this.address = address;
+        this.address = new Address(address);
         this.memberCapacity = new MemberCapacity(memberCapacity);
         this.owner = owner;
         this.allowedGender = allowedGender;
@@ -97,15 +102,37 @@ public class Club {
         this.createdAt = createdAt;
     }
 
-    private void validateClubLocation(Address address) {
-        if (address == null) {
-            throw new FriendoglyException("모임 위치 정보는 필수입니다.");
-        }
-    }
 
     private void validateOwner(Member owner) {
         if (owner == null) {
             throw new FriendoglyException("모임 방장 정보는 필수 입니다.");
         }
+    }
+
+    public static Club create(
+            String title,
+            String content,
+            String address,
+            int memberCapacity,
+            Member owner,
+            List<Gender> allowedGender,
+            List<SizeType> allowedSize,
+            String imageUrl
+    ) {
+        return Club.builder()
+                .title(title)
+                .content(content)
+                .address(address)
+                .memberCapacity(memberCapacity)
+                .owner(owner)
+                .allowedGender(allowedGender)
+                .allowedSize(allowedSize)
+                .status(Status.OPEN)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public int countParticipantMember() {
+        return clubMembers.size();
     }
 }
