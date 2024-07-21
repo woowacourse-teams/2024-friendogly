@@ -53,36 +53,10 @@ jobs:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
 
-      - name: List all running processes
-        run: |
-          echo "Listing all running processes..."
-          ps aux
-
-      - name: Find Java Application PID
+      - name: Find Java Application PID And Kill PID
         id: find_pid
         run: |
           sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
-          
-      - name: Check if room-esc server is running on port 8080
-        id: check-server-on-port
-        run: |
-          echo "Checking if port 8080 is in use..."
-          PID=$(lsof -t -i:8080 || true)
-          if [ -n "$PID" ]; then
-            echo "Port 8080 is in use by process $PID."
-            echo "server_running=true" >> $GITHUB_ENV
-            echo "PID=$PID" >> $GITHUB_ENV
-          else
-            echo "Port 8080 is not in use."
-            echo "server_running=false" >> $GITHUB_ENV
-          fi
-
-      - name: Stop server if running
-        if: env.server_running == 'true'
-        run: |
-          echo "Stopping server running on port 8080..."
-          kill -9 ${{ env.PID }}
-          echo "Previous running Server stopped."
 
       - name: Check if room-esc server is running on port 8080 after stop
         run: |
@@ -97,6 +71,5 @@ jobs:
       - name: Start server
         run: |
           cd backend/build/libs
-          ls -l friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
-          echo "Latest Backend API Server started."
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
+          echo "start backend server"
