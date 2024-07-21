@@ -40,7 +40,6 @@ class JoinPeopleAdapter :
             binding.tvChatJoinPeopleNickname.text = item.nickName
             binding.tvChatJoinPeopleIsMe.isVisible = item.isMe
             binding.ivChatJoinPeopleLeader.isVisible = item.isLeader
-
         }
     }
 

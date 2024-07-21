@@ -11,15 +11,13 @@ import com.google.android.material.sidesheet.SideSheetDialog
 import com.woowacourse.friendogly.databinding.LayoutChatDrawerBinding
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
-
     private var _binding: LayoutChatDrawerBinding? = null
     val binding: LayoutChatDrawerBinding
         get() = requireNotNull(_binding) { "${this::class.java.simpleName} is null" }
 
     private lateinit var adapter: JoinPeopleAdapter
 
-
-    private val viewModel:ChatInfoViewModel by viewModels()
+    private val viewModel: ChatInfoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,19 +32,19 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         return SideSheetDialog(requireContext(), theme)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
 
         viewModel.getChatInfo()
-        viewModel.chatInfo.observe(viewLifecycleOwner) {info ->
+        viewModel.chatInfo.observe(viewLifecycleOwner) { info ->
             adapter.submitList(info.people)
             setChatInfo(info)
-
         }
-
-
     }
 
     private fun setChatInfo(info: ChatInfoUiModel) {

@@ -21,7 +21,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         getChatList()
         clickBackBtn()
         clickChatInfo()
-
     }
 
     private fun clickChatInfo() {

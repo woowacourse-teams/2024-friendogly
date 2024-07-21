@@ -13,11 +13,12 @@ class ChatViewModel : BaseViewModel() {
 
     val sendMessage = MutableLiveData("")
 
-    val isCanSend = MediatorLiveData<Boolean>().apply {
-        addSource(sendMessage) {
-            value = it.isNotBlank()
+    val isCanSend =
+        MediatorLiveData<Boolean>().apply {
+            addSource(sendMessage) {
+                value = it.isNotBlank()
+            }
         }
-    }
 
     fun getChats(chatId: Long) {
         _chats.value = dummyChats
@@ -33,7 +34,7 @@ class ChatViewModel : BaseViewModel() {
                 ChatUiModel.Other(
                     "채드",
                     "https://m.segye.com/content/image/2" +
-                            "021/07/29/20210729517145.jpg",
+                        "021/07/29/20210729517145.jpg",
                     "화면 보이는거 보니깐 잘 작동하는듯 \n 근데 나 긴 텍스트 필요하니깐 아무말이나 쓸게 블라블랄",
                     LocalTime.of(22, 1),
                 ),
