@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.remote.model.response
 
-data class FootPrintResponse(
+data class FootPrintsNearResponse(
     val footPrintId: Long,
     val latitude: Double,
     val longitude: Double,

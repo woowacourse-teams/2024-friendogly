@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.naver.maps.geometry.LatLng
-import com.woowacourse.friendogly.domain.mapper.toUiModel
+import com.woowacourse.friendogly.domain.mapper.toPresentation
 import com.woowacourse.friendogly.domain.repository.WoofRepository
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
@@ -15,6 +15,20 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
     BaseViewModel() {
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
+
+    private val _isMarkFootPrintBtnLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isMarkFootPrintBtnLoaded: LiveData<Boolean> get() = _isMarkFootPrintBtnLoaded
+
+    fun loadMarkFootPrintBtn() {
+        viewModelScope.launch {
+            woofRepository.getMyLatestFootPrintTime().onSuccess { footPrintMineLatest ->
+                val state = uiState.value ?: WoofUiState()
+                _uiState.postValue(state.copy(markFootPrintBtn = footPrintMineLatest.toPresentation()))
+                _isMarkFootPrintBtnLoaded.postValue(true)
+            }.onFailure {
+            }
+        }
+    }
 
     fun markFootPrint(latLng: LatLng) {
         viewModelScope.launch {
@@ -30,7 +44,7 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
             woofRepository.getNearFootPrints(latLng.latitude, latLng.longitude)
                 .onSuccess { nearFootPrints ->
                     val state = uiState.value ?: WoofUiState()
-                    _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toUiModel()))
+                    _uiState.postValue(state.copy(nearFootPrints = nearFootPrints.toPresentation()))
                 }.onFailure {
                 }
         }
@@ -40,7 +54,7 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
         viewModelScope.launch {
             woofRepository.getLandMarks().onSuccess { landMarks ->
                 val state = uiState.value ?: return@onSuccess
-                _uiState.postValue(state.copy(landMarks = landMarks.toUiModel()))
+                _uiState.postValue(state.copy(landMarks = landMarks.toPresentation()))
             }.onFailure {
             }
         }

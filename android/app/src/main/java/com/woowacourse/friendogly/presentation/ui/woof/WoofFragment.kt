@@ -73,6 +73,12 @@ class WoofFragment :
             createMarker(latLng = latLng, isMine = true)
             moveCameraCenterPosition()
         }
+
+        viewModel.isMarkFootPrintBtnLoaded.observe(viewLifecycleOwner) { isLoaded ->
+            if (isLoaded) {
+                markFootPrint()
+            }
+        }
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -170,9 +176,9 @@ class WoofFragment :
         }
     }
 
-    override fun markFootPrint() {
+    private fun markFootPrint() {
         if (permissionRequester.hasLocationPermissions()) {
-            if (locationSource.lastLocation != null) {
+            if (canMarkFootPrint()) {
                 val lastLocation = locationSource.lastLocation ?: return
                 latLng =
                     LatLng(
@@ -185,6 +191,15 @@ class WoofFragment :
         } else {
             showSettingSnackbar()
         }
+    }
+
+    private fun canMarkFootPrint(): Boolean {
+        val isMarkBtnClickable = viewModel.uiState.value?.markFootPrintBtn?.isClickable ?: false
+        return locationSource.lastLocation != null && isMarkBtnClickable
+    }
+
+    override fun loadMarkFootPrintBtn() {
+        viewModel.loadMarkFootPrintBtn()
     }
 
     override fun changeLocationTrackingMode() {

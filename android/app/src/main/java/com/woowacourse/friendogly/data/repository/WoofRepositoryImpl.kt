@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.data.repository
 
 import com.woowacourse.friendogly.data.mapper.toDomain
 import com.woowacourse.friendogly.domain.model.FootPrint
+import com.woowacourse.friendogly.domain.model.FootPrintMineLatest
 import com.woowacourse.friendogly.domain.model.LandMark
 import com.woowacourse.friendogly.domain.repository.WoofRepository
 import com.woowacourse.friendogly.remote.model.request.FootPrintRequest
@@ -20,19 +21,25 @@ class WoofRepositoryImpl(private val remoteWoofDataSource: WoofDataSource) : Woo
         )
     }
 
+    override suspend fun getMyLatestFootPrintTime(): Result<FootPrintMineLatest> {
+        return remoteWoofDataSource.getMyLatestFootPrintTime().mapCatching { dto ->
+            dto.toDomain()
+        }
+    }
+
     override suspend fun getNearFootPrints(
         latitude: Double,
         longitude: Double,
     ): Result<List<FootPrint>> {
         return remoteWoofDataSource.getNearFootPrints(latitude, longitude)
-            .mapCatching { footPrintDtos ->
-                footPrintDtos.toDomain()
+            .mapCatching { dto ->
+                dto.toDomain()
             }
     }
 
     override suspend fun getLandMarks(): Result<List<LandMark>> {
-        return remoteWoofDataSource.getLandMarks().mapCatching { landMarks ->
-            landMarks.toDomain()
+        return remoteWoofDataSource.getLandMarks().mapCatching { dto ->
+            dto.toDomain()
         }
     }
 }

@@ -39,7 +39,7 @@
             android:background="@drawable/ripple_circle_white"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> actionHandler.markFootPrint()}"
+            android:onClick="@{() -> actionHandler.loadMarkFootPrintBtn()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_btn"
             app:layout_constraintBottom_toBottomOf="parent"

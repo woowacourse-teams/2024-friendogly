@@ -1,9 +1,9 @@
 package com.woowacourse.friendogly.remote.mapper
 
 import com.woowacourse.friendogly.data.model.FootPrintDto
-import com.woowacourse.friendogly.remote.model.response.FootPrintResponse
+import com.woowacourse.friendogly.remote.model.response.FootPrintsNearResponse
 
-fun FootPrintResponse.toData(): FootPrintDto {
+fun FootPrintsNearResponse.toData(): FootPrintDto {
     return FootPrintDto(
         footPrintId = footPrintId,
         latitude = latitude,
@@ -13,7 +13,7 @@ fun FootPrintResponse.toData(): FootPrintDto {
     )
 }
 
-fun List<FootPrintResponse>.toData(): List<FootPrintDto> {
+fun List<FootPrintsNearResponse>.toData(): List<FootPrintDto> {
     return map { response ->
         response.toData()
     }

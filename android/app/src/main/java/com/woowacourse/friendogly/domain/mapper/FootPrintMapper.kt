@@ -3,17 +3,17 @@ package com.woowacourse.friendogly.domain.mapper
 import com.woowacourse.friendogly.domain.model.FootPrint
 import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
 
-fun FootPrint.toUiModel(): FootPrintUiModel {
+fun FootPrint.toPresentation(): FootPrintUiModel {
     return FootPrintUiModel(
         latitude = latitude,
         longitude = longitude,
-        createdAt = createdAt,
+        isVisible = isVisible(),
         isMine = isMine,
     )
 }
 
-fun List<FootPrint>.toUiModel(): List<FootPrintUiModel> {
-    return map { footPrint ->
-        footPrint.toUiModel()
+fun List<FootPrint>.toPresentation(): List<FootPrintUiModel> {
+    return map { domain ->
+        domain.toPresentation()
     }
 }
