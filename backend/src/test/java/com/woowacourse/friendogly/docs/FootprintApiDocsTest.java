@@ -21,6 +21,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.footprint.controller.FootprintController;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
@@ -167,6 +168,35 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         fieldWithPath("[].isMine").description("나의 발자국인지 여부"),
                         fieldWithPath("[].imageUrl").description("발자국에 할당된 이미지 URL")
                     )
+                    .build()
+                )
+            ))
+            .andExpect(status().isOk());
+    }
+
+    @DisplayName("자신의 마지막 발자국 시간 조회")
+    @Test
+    void findMyLatestFootprintTime() throws Exception {
+        FindMyLatestFootprintTimeResponse response = new FindMyLatestFootprintTimeResponse(
+            LocalDateTime.now().minusHours(1)
+        );
+
+        given(footprintQueryService.findMyLatestFootprintTime(any(Long.class)))
+            .willReturn(response);
+
+        mockMvc
+            .perform(get("/footprints/mine/latest"))
+            .andDo(print())
+            .andDo(document("footprints/findMyLatestFootprintTime",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                resource(ResourceSnippetParameters.builder()
+                    .tag("자신의 마지막 발자국 시간 조회 API")
+                    .summary("자신의 마지막 발자국 시간 조회 API")
+                    .responseFields(
+                        fieldWithPath("createdAt").description("자신의 가장 최근 발자국 생성 시간")
+                    )
+                    .responseSchema(Schema.schema("FindMyLatestFootprintTimeResponse"))
                     .build()
                 )
             ))
