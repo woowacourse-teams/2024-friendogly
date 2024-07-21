@@ -36,9 +36,8 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          working-directory: ./backend
           name: friendogly-be-develop-jar
-          path: ./**/friendogly-0.0.1-SNAPSHOT.jar
+          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
     needs: build
@@ -53,6 +52,11 @@ jobs:
         with:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
+
+      - name: List all running processes
+        run: |
+          echo "Listing all running processes..."
+          ps aux
 
       - name: Check if room-esc server is running on port 8080
         id: check-server-on-port
@@ -91,4 +95,3 @@ jobs:
           ls -l friendogly-0.0.1-SNAPSHOT.jar
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
           echo "Latest Backend API Server started."
-
