@@ -62,6 +62,15 @@ jobs:
         id: find_pid
         run: |
           pgrep -f friendogly-0.0.1-SNAPSHOT.jar
+          lsof -Pan -p 20012 | grep LISTEN
+          lsof -Pan -p 20013 | grep LISTEN
+          lsof -Pan -p 20014 | grep LISTEN
+          
+      - name: Find Java Application PID
+        run: |
+          lsof -Pan -p 20012 | grep LISTEN
+          lsof -Pan -p 20013 | grep LISTEN
+          lsof -Pan -p 20014 | grep LISTEN
           
       - name: Check if room-esc server is running on port 8080
         id: check-server-on-port
