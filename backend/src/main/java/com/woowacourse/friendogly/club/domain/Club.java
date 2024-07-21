@@ -12,6 +12,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,13 +50,13 @@ public class Club {
     @JoinColumn(name = "owner_id")
     private Member owner;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_gender", joinColumns = @JoinColumn(name = "club_id"))
     @Column(name = "allowed_gender")
     private Set<Gender> allowedGender;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_size", joinColumns = @JoinColumn(name = "club_id"))
     @Column(name = "allowed_size")
