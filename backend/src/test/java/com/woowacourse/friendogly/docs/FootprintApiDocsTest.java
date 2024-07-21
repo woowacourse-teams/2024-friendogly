@@ -22,8 +22,12 @@ import com.woowacourse.friendogly.footprint.controller.FootprintController;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
+import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.SizeType;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -73,6 +77,53 @@ public class FootprintApiDocsTest extends RestDocsTest {
             ))
             .andExpect(status().isCreated())
             .andExpect(header().string(LOCATION, "/footprints/1"));
+    }
+
+    @DisplayName("발자국 세부정보 단건 조회")
+    @Test
+    void findOne() throws Exception {
+        FindOneFootprintResponse response = new FindOneFootprintResponse(
+            "최강지호",
+            "땡이",
+            "우리 귀여운 땡이입니다",
+            LocalDate.now().minusYears(1),
+            SizeType.MEDIUM,
+            Gender.FEMALE_NEUTERED,
+            "https://picsum.photos/200",
+            true
+        );
+
+        given(footprintQueryService.findOne(any(Long.class), any(Long.class)))
+            .willReturn(response);
+
+        mockMvc
+            .perform(get("/footprints/{footprintId}", 1L))
+            .andDo(print())
+            .andDo(document("footprints/findOne",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                resource(ResourceSnippetParameters.builder()
+                    .tag("발자국 세부정보 단건 조회 API")
+                    .summary("발자국 세부정보 단건 조회 API")
+                    .pathParameters(
+                        parameterWithName("footprintId").description("발자국 ID")
+                    )
+                    .responseFields(
+                        fieldWithPath("memberName").description("발자국을 찍은 회원의 Member ID"),
+                        fieldWithPath("petName").description("발자국을 회원의 강아지 이름"),
+                        fieldWithPath("petDescription").description("발자국을 회원의 강아지 설명"),
+                        fieldWithPath("petBirthDate").description("발자국을 찍은 회원의 강아지 생일"),
+                        fieldWithPath("petSizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
+                        fieldWithPath("petGender").description("발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
+                        fieldWithPath("footprintImageUrl").description("발자국의 이미지 URL"),
+                        fieldWithPath("isMine").description("내 발자국인지 여부 (내 발자국이면 true)")
+                    )
+                    .requestSchema(Schema.schema("FindOneFootprintRequest"))
+                    .responseSchema(Schema.schema("FindOneFootprintResponse"))
+                    .build()
+                )
+            ))
+            .andExpect(status().isOk());
     }
 
     @DisplayName("주변 발자국 조회")
