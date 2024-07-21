@@ -21,6 +21,7 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,13 +53,13 @@ public class Club {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_gender", joinColumns = @JoinColumn(name = "club_id"))
     @Column(name = "allowed_gender")
-    private List<Gender> allowedGender;
+    private Set<Gender> allowedGender;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "club_size", joinColumns = @JoinColumn(name = "club_id"))
     @Column(name = "allowed_size")
-    private List<SizeType> allowedSize;
+    private Set<SizeType> allowedSize;
 
     @Embedded
     private Address address;
@@ -83,8 +84,8 @@ public class Club {
             String address,
             int memberCapacity,
             Member owner,
-            List<Gender> allowedGender,
-            List<SizeType> allowedSize,
+            Set<Gender> allowedGender,
+            Set<SizeType> allowedSize,
             String imageUrl,
             Status status,
             LocalDateTime createdAt
@@ -115,8 +116,8 @@ public class Club {
             String address,
             int memberCapacity,
             Member owner,
-            List<Gender> allowedGender,
-            List<SizeType> allowedSize,
+            Set<Gender> allowedGender,
+            Set<SizeType> allowedSize,
             String imageUrl
     ) {
         return Club.builder()
@@ -129,6 +130,7 @@ public class Club {
                 .allowedSize(allowedSize)
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
+                .imageUrl(imageUrl)
                 .build();
     }
 
