@@ -56,7 +56,7 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
                 )
         }
 
-    override fun choiceDog(dogSelectUiModel: DogSelectUiModel) {
+    override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
             dogSelectUiModel.unSelectDog()
             selectedDogs.remove(dogSelectUiModel)

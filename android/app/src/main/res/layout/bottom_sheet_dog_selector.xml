@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.group.select.DogSelectFragment">
+        tools:context=".presentation.ui.group.select.DogSelectBottomSheet">
         <View
             android:id="@+id/view_group_select_top_bar"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,29 +1,49 @@
 package com.woowacourse.friendogly.presentation.ui.group.select
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.woowacourse.friendogly.R
-import com.woowacourse.friendogly.databinding.FragmentDogSelectBinding
-import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.woowacourse.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.woowacourse.friendogly.presentation.ui.group.select.adapter.DogSelectAdapter
 import kotlin.math.abs
 
-class DogSelectFragment : BaseFragment<FragmentDogSelectBinding>(R.layout.fragment_dog_select) {
+class DogSelectBottomSheet : BottomSheetDialogFragment() {
+    private var _binding: BottomSheetDogSelectorBinding? = null
+    val binding: BottomSheetDogSelectorBinding
+        get() = _binding!!
+
     private val viewModel: DogSelectViewModel by viewModels()
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)
     }
 
-    override fun initViewCreated() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = BottomSheetDogSelectorBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
         initDataBinding()
         initObserver()
         initViewPager()
     }
 
     private fun initDataBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
     }
 
@@ -54,5 +74,10 @@ class DogSelectFragment : BaseFragment<FragmentDogSelectBinding>(R.layout.fragme
             view.scaleY = 0.8f + v * 0.2f
         }
         binding.vpGroupSelectDogList.setPageTransformer(transform)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -17,7 +17,7 @@
         app:bindingSelectBorder="@{dogUiModel}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{()->dogSelectActionHandler.choiceDog(dogUiModel)}">
+        android:onClick="@{()->dogSelectActionHandler.selectDog(dogUiModel)}">
 
         <ImageView
             android:background="@color/white"
