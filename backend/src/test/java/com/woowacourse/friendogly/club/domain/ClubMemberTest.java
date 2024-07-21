@@ -10,7 +10,7 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +37,8 @@ class ClubMemberTest {
             "서울특별시 송파구 신청동",
             5,
             member,
-            List.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-            List.of(SizeType.SMALL),
+            Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+            Set.of(SizeType.SMALL),
             "http:/image.com"
     );
 
