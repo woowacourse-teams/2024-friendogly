@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="profileUrl"
+            type="String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_chat_join_people"
+            glide="@{profileUrl}"
+            android:layout_width="32dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/Circle"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/tv_chat_join_people_nickname"
+            style="@style/Theme.AppCompat.TextView.Regular.White.Size10"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:text="@string/chat_mine"
+            android:background="@drawable/circle_chat_mine_tv"
+            app:layout_constraintBottom_toBottomOf="@id/iv_chat_join_people"
+            app:layout_constraintStart_toEndOf="@id/iv_chat_join_people"
+            app:layout_constraintTop_toTopOf="@id/iv_chat_join_people" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            app:layout_constraintStart_toEndOf="@id/tv_chat_join_people_nickname"
+            app:layout_constraintTop_toTopOf="@id/iv_chat_join_people"
+            android:layout_marginStart="5dp"
+            app:layout_goneMarginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_chat_join_people"
+            tools:text="벼리벼리"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
