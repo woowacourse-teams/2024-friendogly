@@ -7,7 +7,8 @@ import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.ui.chatlist.adapter.ChatListAdapter
 import com.woowacourse.friendogly.presentation.ui.chatlist.chat.ChatActivity
 
-class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list),
+class ChatListFragment :
+    BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list),
     ChatListNavigationAction {
     private val viewModel: ChatListViewModel by viewModels()
     private lateinit var adapter: ChatListAdapter

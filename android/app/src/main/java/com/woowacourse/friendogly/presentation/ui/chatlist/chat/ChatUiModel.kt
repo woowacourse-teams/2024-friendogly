@@ -5,7 +5,8 @@ import java.time.LocalTime
 
 sealed interface ChatUiModel {
     data class Date(val date: LocalDate) : ChatUiModel
-    data class ComeOut(val nickName: String, val isCome:Boolean) : ChatUiModel
+
+    data class ComeOut(val nickName: String, val isCome: Boolean) : ChatUiModel
 
     data class Mine(val message: String, val time: LocalTime) : ChatUiModel
 
@@ -13,8 +14,6 @@ sealed interface ChatUiModel {
         val nickName: String,
         val profileUrl: String,
         val message: String,
-        val time: LocalTime
+        val time: LocalTime,
     ) : ChatUiModel
 }
-
-

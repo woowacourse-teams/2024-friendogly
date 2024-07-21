@@ -12,9 +12,7 @@ import java.time.format.DateTimeFormatter
 
 sealed class ChatViewHolder(binding: View) : RecyclerView.ViewHolder(binding)
 
-
 class DateViewHolder(val binding: ItemChatDateBinding) : ChatViewHolder(binding.root) {
-
     fun bind(item: ChatUiModel.Date) {
         val dateFormatter =
             DateTimeFormatter.ofPattern(itemView.context.getString(R.string.chat_date))
@@ -23,21 +21,16 @@ class DateViewHolder(val binding: ItemChatDateBinding) : ChatViewHolder(binding.
 }
 
 class ComeOutViewHolder(val binding: ItemChatComeOutBinding) : ChatViewHolder(binding.root) {
-
     fun bind(item: ChatUiModel.ComeOut) {
-
         binding.tvChatComeMessage.text =
             itemView.context.getString(getComeOutString(item))
                 .format(item.nickName)
     }
 
-    private fun getComeOutString(item: ChatUiModel.ComeOut) =
-        if (item.isCome) R.string.chat_come_message else R.string.chat_out_message
-
+    private fun getComeOutString(item: ChatUiModel.ComeOut) = if (item.isCome) R.string.chat_come_message else R.string.chat_out_message
 }
 
 class MineViewHolder(val binding: ItemChatMineBinding) : ChatViewHolder(binding.root) {
-
     fun bind(item: ChatUiModel.Mine) {
         binding.tvChatMineMessage.text = item.message
         val timeFormatter =
@@ -47,7 +40,6 @@ class MineViewHolder(val binding: ItemChatMineBinding) : ChatViewHolder(binding.
 }
 
 class OtherViewHolder(val binding: ItemChatOtherBinding) : ChatViewHolder(binding.root) {
-
     fun bind(item: ChatUiModel.Other) {
         binding.tvChatOtherMessage.text = item.message
         val timeFormatter =

@@ -35,7 +35,7 @@ class ChatListAdapter(private val chatListNavigationAction: ChatListNavigationAc
 
     class ChatListViewHolder(
         private val binding: ItemChatListBinding,
-        private val chatListNavigationAction: ChatListNavigationAction
+        private val chatListNavigationAction: ChatListNavigationAction,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatListUiModel) {
             Glide.with(itemView.context).load(item.imageUrl).transform(CenterCrop())

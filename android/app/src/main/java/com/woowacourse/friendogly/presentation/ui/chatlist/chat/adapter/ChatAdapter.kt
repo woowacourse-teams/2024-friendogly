@@ -15,12 +15,13 @@ class ChatAdapter : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
         setHasStableIds(true)
     }
 
-    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
-        is ChatUiModel.Date -> ChatType.DATE.value
-        is ChatUiModel.ComeOut -> ChatType.COME_OUT.value
-        is ChatUiModel.Mine -> ChatType.MINE.value
-        is ChatUiModel.Other -> ChatType.OTHER.value
-    }
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
+            is ChatUiModel.Date -> ChatType.DATE.value
+            is ChatUiModel.ComeOut -> ChatType.COME_OUT.value
+            is ChatUiModel.Mine -> ChatType.MINE.value
+            is ChatUiModel.Other -> ChatType.OTHER.value
+        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -28,44 +29,51 @@ class ChatAdapter : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
     ): ChatViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            ChatType.DATE.value -> DateViewHolder(
-                ItemChatDateBinding.inflate(
-                    inflater,
-                    parent,
-                    false
+            ChatType.DATE.value ->
+                DateViewHolder(
+                    ItemChatDateBinding.inflate(
+                        inflater,
+                        parent,
+                        false,
+                    ),
                 )
-            )
 
-            ChatType.COME_OUT.value -> ComeOutViewHolder(
-                ItemChatComeOutBinding.inflate(
-                    inflater,
-                    parent,
-                    false
+            ChatType.COME_OUT.value ->
+                ComeOutViewHolder(
+                    ItemChatComeOutBinding.inflate(
+                        inflater,
+                        parent,
+                        false,
+                    ),
                 )
-            )
 
-            ChatType.MINE.value -> MineViewHolder(
-                ItemChatMineBinding.inflate(
-                    inflater,
-                    parent,
-                    false
+            ChatType.MINE.value ->
+                MineViewHolder(
+                    ItemChatMineBinding.inflate(
+                        inflater,
+                        parent,
+                        false,
+                    ),
                 )
-            )
 
-            ChatType.OTHER.value -> OtherViewHolder(
-                ItemChatOtherBinding.inflate(
-                    inflater,
-                    parent,
-                    false
+            ChatType.OTHER.value ->
+                OtherViewHolder(
+                    ItemChatOtherBinding.inflate(
+                        inflater,
+                        parent,
+                        false,
+                    ),
                 )
-            )
 
             else -> error("$viewType 잘못된 viewType이 들어왔습니다")
         }
     }
 
-    override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        when(holder){
+    override fun onBindViewHolder(
+        holder: ChatViewHolder,
+        position: Int,
+    ) {
+        when (holder) {
             is ComeOutViewHolder -> holder.bind(getItem(position) as ChatUiModel.ComeOut)
             is DateViewHolder -> holder.bind(getItem(position) as ChatUiModel.Date)
             is MineViewHolder -> holder.bind(getItem(position) as ChatUiModel.Mine)
@@ -86,9 +94,4 @@ class ChatAdapter : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
             ): Boolean = oldItem == newItem
         }
     }
-
-
 }
-
-
-
