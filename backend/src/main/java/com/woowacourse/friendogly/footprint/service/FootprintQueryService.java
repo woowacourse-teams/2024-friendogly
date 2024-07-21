@@ -33,18 +33,19 @@ public class FootprintQueryService {
         this.petRepository = petRepository;
     }
 
-    public FindOneFootprintResponse findOne(Long footprintId) {
+    public FindOneFootprintResponse findOne(Long memberId, Long footprintId) {
         Footprint footprint = footprintRepository.findById(footprintId)
             .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
         Member member = footprint.getMember();
         List<Pet> pets = petRepository.findByMemberId(member.getId());
+        boolean isMine = footprint.isCreatedBy(memberId);
 
         if (pets.isEmpty()) {
-            return new FindOneFootprintResponse(member, footprint);
+            return new FindOneFootprintResponse(member, footprint, isMine);
         }
 
         // TODO: 대표 펫을 지정하는 기능이 없어서, 임시로 0번째 index의 pet 리턴
-        return new FindOneFootprintResponse(member, pets.get(0), footprint);
+        return new FindOneFootprintResponse(member, pets.get(0), footprint, isMine);
     }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {

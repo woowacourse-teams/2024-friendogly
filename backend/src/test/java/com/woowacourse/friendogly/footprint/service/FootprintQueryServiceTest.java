@@ -10,20 +10,25 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
+import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.support.ServiceTest;
+import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-class FootprintQueryServiceTest extends ServiceTest {
+@SpringBootTest
+class FootprintQueryServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -34,47 +39,64 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Autowired
     private FootprintCommandService footprintCommandService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private FootprintRepository footprintRepository;
+
+    @Autowired
+    private PetRepository petRepository;
+
+    @AfterEach
+    void cleanUp() {
+        footprintRepository.deleteAll();
+        petRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
+
     @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
     @Test
     void findOne() {
         // given
         Member member = memberRepository.save(
-                Member.builder()
-                        .name("name1")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name1")
+                .email("test@test.com")
+                .build()
         );
 
         petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("petname1")
-                        .description("petdescription1")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
+            Pet.builder()
+                .member(member)
+                .name("petname1")
+                .description("petdescription1")
+                .birthDate(LocalDate.now().minusYears(1))
+                .sizeType(SizeType.MEDIUM)
+                .gender(Gender.MALE_NEUTERED)
+                .imageUrl("https://picsum.photos/200")
+                .build()
         );
 
         Footprint footprint = footprintRepository.save(
-                Footprint.builder()
-                        .member(member)
-                        .location(new Location(0.0, 0.0))
-                        .build()
+            Footprint.builder()
+                .member(member)
+                .location(new Location(0.0, 0.0))
+                .build()
         );
 
         // when
-        FindOneFootprintResponse response = footprintQueryService.findOne(footprint.getId());
+        FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
 
         // then
         assertAll(
-                () -> assertThat(response.memberName()).isEqualTo("name1"),
-                () -> assertThat(response.petName()).isEqualTo("petname1"),
-                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED)
+            () -> assertThat(response.memberName()).isEqualTo("name1"),
+            () -> assertThat(response.petName()).isEqualTo("petname1"),
+            () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
+            () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
+            () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
+            () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+            () -> assertThat(response.isMine()).isTrue()
         );
     }
 
@@ -82,17 +104,17 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Test
     void findNear() {
         Member member1 = memberRepository.save(
-                Member.builder()
-                        .name("name1")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name1")
+                .email("test@test.com")
+                .build()
         );
 
         Member member2 = memberRepository.save(
-                Member.builder()
-                        .name("name2")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name2")
+                .email("test@test.com")
+                .build()
         );
 
         double nearLongitude = 0.008993216;
@@ -105,13 +127,13 @@ class FootprintQueryServiceTest extends ServiceTest {
         footprintCommandService.save(new SaveFootprintRequest(member2.getId(), 0.0, farLongitude));
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-                member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
+            member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         assertAll(
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
-                        .containsExactly(0.0),
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
-                        .containsExactly(nearLongitude)
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
+                .containsExactly(0.0),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
+                .containsExactly(nearLongitude)
         );
     }
 
@@ -119,28 +141,28 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Test
     void findNear24Hours() {
         Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
         );
 
         jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
-                """, member.getId(), member.getId(), member.getId());
+            INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+            VALUES
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
+            """, member.getId(), member.getId(), member.getId());
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-                member.getId(), new FindNearFootprintRequest(0.0, 0.0));
+            member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         assertAll(
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
-                        .containsExactly(0.00000, 0.00000),
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
-                        .containsExactly(0.00000, 0.00000)
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
+                .containsExactly(0.00000, 0.00000),
+            () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
+                .containsExactly(0.00000, 0.00000)
         );
     }
 
@@ -148,28 +170,28 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Test
     void findMyLatestFootprintTime_MyFootprintExists() {
         Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
         );
 
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
 
         jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.11111, 0.11111, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.22222, 0.22222, ?, FALSE);
-                """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
+            INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+            VALUES
+            (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+            (?, 0.11111, 0.11111, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+            (?, 0.22222, 0.22222, ?, FALSE);
+            """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
         LocalDateTime time = footprintQueryService.findMyLatestFootprintTime(member.getId()).createdAt();
 
         assertAll(
-                () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
-                () -> assertThat(time.getMinute()).isEqualTo(oneMinuteAgo.getMinute()),
-                () -> assertThat(time.getSecond()).isEqualTo(oneMinuteAgo.getSecond())
+            () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
+            () -> assertThat(time.getMinute()).isEqualTo(oneMinuteAgo.getMinute()),
+            () -> assertThat(time.getSecond()).isEqualTo(oneMinuteAgo.getSecond())
         );
     }
 
@@ -177,14 +199,14 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Test
     void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
         Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
+            Member.builder()
+                .name("name")
+                .email("test@test.com")
+                .build()
         );
 
         assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
-                .extracting(FindMyLatestFootprintTimeResponse::createdAt)
-                .isNull();
+            .extracting(FindMyLatestFootprintTimeResponse::createdAt)
+            .isNull();
     }
 }

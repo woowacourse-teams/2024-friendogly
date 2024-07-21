@@ -14,10 +14,11 @@ public record FindOneFootprintResponse(
     LocalDate petBirthDate,
     SizeType petSizeType,
     Gender petGender,
-    String footprintImageUrl
+    String footprintImageUrl,
+    boolean isMine
 ) {
 
-    public FindOneFootprintResponse(Member member, Footprint footprint) {
+    public FindOneFootprintResponse(Member member, Footprint footprint, boolean isMine) {
         this(
             member.getName().getValue(),
             null,
@@ -25,11 +26,12 @@ public record FindOneFootprintResponse(
             null,
             null,
             null,
-            footprint.getImageUrl()
+            footprint.getImageUrl(),
+            isMine
         );
     }
 
-    public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint) {
+    public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint, boolean isMine) {
         this(
             member.getName().getValue(),
             mainPet.getName().getValue(),
@@ -37,7 +39,8 @@ public record FindOneFootprintResponse(
             mainPet.getBirthDate().getValue(),
             mainPet.getSizeType(),
             mainPet.getGender(),
-            footprint.getImageUrl()
+            footprint.getImageUrl(),
+            isMine
         );
     }
 }

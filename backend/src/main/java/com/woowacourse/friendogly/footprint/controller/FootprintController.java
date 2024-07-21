@@ -46,7 +46,8 @@ public class FootprintController {
 
     @GetMapping("/{footprintId}")
     public ResponseEntity<FindOneFootprintResponse> findOne(@PathVariable Long footprintId) {
-        FindOneFootprintResponse response = footprintQueryService.findOne(footprintId);
+        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
+        FindOneFootprintResponse response = footprintQueryService.findOne(1L, footprintId);
         return ResponseEntity.ok(response);
     }
 
