@@ -109,10 +109,8 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
 
 [bundles]
-kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core"]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx"]
 kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization"]
-android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "paging-runtime-ktx"]
 navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth"]
 network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor", "retrofit2-kotlinx-serialization-converter"]
