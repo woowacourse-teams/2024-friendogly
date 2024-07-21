@@ -41,6 +41,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
         FindSearchingClubResponse expected = expectedResponses.get(0);
 
         assertAll(
+                () -> assertThat(actual.id()).isEqualTo(expected.id()),
                 () -> assertThat(actual.title()).isEqualTo(expected.title()),
                 () -> assertThat(actual.content()).isEqualTo(expected.content()),
                 () -> assertThat(actual.address()).isEqualTo(expected.address()),

@@ -46,6 +46,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         );
 
         List<FindSearchingClubResponse> responses = List.of(new FindSearchingClubResponse(
+                        1L,
                         "모임 제목1",
                         "모임 본문 내용1",
                         "브라운",
@@ -59,6 +60,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         List.of("https://petImage1.com")
                 ),
                 new FindSearchingClubResponse(
+                        2L,
                         "모임 제목2",
                         "모임 본문 내용2",
                         "레아",
@@ -92,6 +94,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
                                         parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"))
                                 .responseFields(
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("모임 식별자"),
                                         fieldWithPath("[].title").type(JsonFieldType.STRING).description("모임 제목"),
                                         fieldWithPath("[].content").type(JsonFieldType.STRING).description("모임 본문"),
                                         fieldWithPath("[].ownerMemberName").type(JsonFieldType.STRING)

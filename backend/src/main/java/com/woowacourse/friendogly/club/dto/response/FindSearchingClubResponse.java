@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public record FindSearchingClubResponse(
+        Long id,
         String title,
         String content,
         String ownerMemberName,
@@ -29,6 +30,7 @@ public record FindSearchingClubResponse(
             List<String> petImageUrls
     ) {
         this(
+                club.getId(),
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
                 club.getOwner().getName().getValue(),
