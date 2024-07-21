@@ -41,6 +41,9 @@
             android:layout_height="50dp" />
 
         <ImageView
+            app:groupPoster="@{vm.groupPoster}"
+            onSingleClick="@{()->actionHandler.selectGroupImage()}"
+            android:id="@+id/iv_group_add_poster"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"

@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
@@ -10,7 +11,6 @@ import com.woowacourse.friendogly.presentation.ui.group.add.adapter.GroupAddAdap
 import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
-import okhttp3.MultipartBody
 
 class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
@@ -39,7 +39,8 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     private val _groupContent: MutableLiveData<String> = MutableLiveData()
     val groupContent: LiveData<String> get() = _groupContent
 
-    private val groupPoster: MultipartBody.Part? = null
+    private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
+    val groupPoster: LiveData<Bitmap?> get() = _groupPoster
 
     override fun selectGroupFilter(
         filterName: String,
@@ -54,16 +55,16 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     }
 
     override fun selectAllSizeFilter(isSelected: Boolean) {
-        if(isSelected) {
+        if (isSelected) {
             groupFilterSelector.addAllSizeFilter()
             _allSizeSelectState.value = true
-        }else{
+        } else {
             _allSizeSelectState.value = false
         }
     }
 
     override fun selectAllGenderFilter(isSelected: Boolean) {
-        if(isSelected) {
+        if (isSelected) {
             groupFilterSelector.addAllGenderFilter()
             _allGenderSelectState.value = true
         } else {
@@ -73,6 +74,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
 
     fun settingGroupCounter(count: Int) {
         _groupCounter.value = GroupCounter(count)
+    }
+
+    fun updateGroupPoster(bitmap: Bitmap? = null) {
+        _groupPoster.value = bitmap
     }
 
     override fun cancelAddGroup() {
@@ -100,6 +105,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
             _currentPage.value = newPage
             _groupAddEvent.emit(GroupAddEvent.ChangePage(newPage))
         }
+    }
+
+    override fun selectGroupImage() {
+        _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectGroupPoster)
     }
 
 }

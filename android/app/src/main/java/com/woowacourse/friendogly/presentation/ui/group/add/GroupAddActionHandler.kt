@@ -17,4 +17,6 @@ interface GroupAddActionHandler {
     fun navigatePrevPage()
 
     fun navigateNextPage()
+
+    fun selectGroupImage()
 }

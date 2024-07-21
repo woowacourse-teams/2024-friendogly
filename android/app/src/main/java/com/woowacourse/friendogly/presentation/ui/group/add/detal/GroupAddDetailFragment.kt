@@ -5,6 +5,7 @@ import androidx.fragment.app.activityViewModels
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.FragmentGroupAddDetailBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel
 import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 
@@ -19,6 +20,7 @@ class GroupAddDetailFragment :
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        binding.actionHandler = viewModel
     }
 
     private fun initSeekBar() {

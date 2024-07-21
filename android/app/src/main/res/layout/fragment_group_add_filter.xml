@@ -9,6 +9,9 @@
         <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
+        <variable
+            name="actionHandler"
+            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
     </data>
 
     <LinearLayout
@@ -69,7 +72,7 @@
             android:layout_height="wrap_content"
             android:minHeight="0dp"
             android:checked="@{vm.allSizeSelectState}"
-            android:onCheckedChanged="@{(buttonView, isChecked) -> vm.selectAllSizeFilter(isChecked)}"
+            android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectAllSizeFilter(isChecked)}"
             android:text="@string/group_add_filter_all_select" />
 
         <Space
@@ -131,7 +134,7 @@
             android:layout_height="wrap_content"
             android:checked="@{vm.allGenderSelectState}"
             android:minHeight="0dp"
-            android:onCheckedChanged="@{(buttonView, isChecked) -> vm.selectAllGenderFilter(isChecked)}"
+            android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectAllGenderFilter(isChecked)}"
             android:text="@string/group_add_filter_all_select" />
 
         <Space
@@ -150,6 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
                 app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.MALE_NAME}" />
@@ -159,6 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
                 app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
@@ -168,6 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
                 app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.FEMALE_NAME}" />
@@ -177,6 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
                 app:selectState = "@{vm.allGenderSelectState}"
                 app:menu="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
