@@ -5,7 +5,6 @@ import androidx.fragment.app.activityViewModels
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.FragmentGroupAddDetailBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
-import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel
 import com.woowacourse.friendogly.presentation.ui.group.add.model.GroupCounter
 
@@ -24,19 +23,25 @@ class GroupAddDetailFragment :
     }
 
     private fun initSeekBar() {
-        binding.seekbarGroupCounter.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (progress >= GroupCounter.MIN_COUNT) {
-                    viewModel.settingGroupCounter(progress)
-                } else {
-                    binding.seekbarGroupCounter.setProgress(GroupCounter.MIN_COUNT, true)
+        binding.seekbarGroupCounter.setOnSeekBarChangeListener(
+            object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean,
+                ) {
+                    if (progress >= GroupCounter.MIN_COUNT) {
+                        viewModel.settingGroupCounter(progress)
+                    } else {
+                        binding.seekbarGroupCounter.setProgress(GroupCounter.MIN_COUNT, true)
+                    }
                 }
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            },
+        )
     }
 }

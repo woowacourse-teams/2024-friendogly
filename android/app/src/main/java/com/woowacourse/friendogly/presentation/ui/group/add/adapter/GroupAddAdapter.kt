@@ -28,7 +28,7 @@ class GroupAddAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
     }
 
     companion object {
-        const val MAX_PAGE_SIZE =  3
+        const val MAX_PAGE_SIZE = 3
         const val MIN_PAGE = 0
     }
 }

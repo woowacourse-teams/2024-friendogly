@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -29,7 +28,6 @@ fun ImageView.bindGroupPoster(bitmap: Bitmap?) {
         .centerCrop()
         .into(this)
 }
-
 
 @BindingAdapter("contentCount")
 fun TextView.bindContentCount(content: String?) {

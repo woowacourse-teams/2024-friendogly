@@ -32,6 +32,5 @@ class GroupAddInformationFragment :
             binding.etGroupContent.clearFocus()
             false
         }
-
     }
 }

@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.presentation.ui.group.add
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
@@ -58,7 +57,7 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
-    //TODO : add api
+    // TODO : add api
     override fun submitAddGroup() {
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
@@ -84,5 +83,4 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     override fun selectGroupImage() {
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectGroupPoster)
     }
-
 }
