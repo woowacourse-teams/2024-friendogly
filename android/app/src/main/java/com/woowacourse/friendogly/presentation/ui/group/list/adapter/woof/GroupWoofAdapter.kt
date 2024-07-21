@@ -24,12 +24,18 @@ class GroupWoofAdapter : ListAdapter<GroupWoof, GroupWoofViewHolder>(GroupWoofDi
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupWoofViewHolder {
-        val binding = ItemGroupDogImageBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): GroupWoofViewHolder {
+        val binding = ItemGroupDogImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GroupWoofViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: GroupWoofViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: GroupWoofViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 }
