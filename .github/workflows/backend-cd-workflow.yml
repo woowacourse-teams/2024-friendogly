@@ -6,7 +6,6 @@ on:
   push:
     branches: ['develop']
      
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,89 +31,51 @@ jobs:
         
       - name: Build project using Gradle
         working-directory: ./backend
-        run: ./gradlew bootJar
+        run: ./gradlew build
 
-
-      - name: 디렉토리 경로 확인
-        working-directory: ./backend
-        run: pwd
-
-      - name: 파일 경로 찾기
-        working-directory: ./backend
-        run: find . -name "friendogly-0.0.1-SNAPSHOT.jar"
-
-      - name: GlobalExceptionHandler 내용 확인
-        run: cat ./backend/src/main/java/com/woowacourse/friendogly/GlobalExceptionHandler.java
-        
-      - name: 경로 이동
-        working-directory: ./backend
-        run: |
-          cd build/libs
-          pwd
-          ls
-          ls -l friendogly-0.0.1-SNAPSHOT.jar
-        
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           working-directory: ./backend
           name: friendogly-be-develop-jar
-          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
+          path: ./**/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: change permission
+      - name: Change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
-      - name: 기존 jar 삭제
-        run: |
-          rm -rf ./backend/build/libsfriendogly-be-develop-jar
+
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
 
-      - name: Check if port 8080 
+      - name: Check if room-esc server is running on port 8080
+        id: check-server-on-port
         run: |
-          lsof -t -i:8080 | true
-
-      - name: Check if port 80
-        run: |
-          lsof -t -i:80 | true
-
-      - name: Check java jar port
-        run: |
-          lsof -c java | grep friendogly-0.0.1-SNAPSHOT.jar
-          
-      - name: Check if port 8080 is in use
-        id: check-port
-        run: |
-          # Find the PID of the process using port 8080
+          echo "Checking if port 8080 is in use..."
           PID=$(lsof -t -i:8080 || true)
-          
-          # Check if PID is non-empty
           if [ -n "$PID" ]; then
-            echo "PORT_8080_PID=$PID" >> $GITHUB_ENV
+            echo "server_running=true" >> $GITHUB_ENV
+            echo "PID=$PID" >> $GITHUB_ENV
           else
-            echo "PORT_8080_PID=none" >> $GITHUB_ENV
+            echo "server_running=false" >> $GITHUB_ENV
           fi
 
-      - name: Debug environment variables
-        run: |
-          echo "PORT_8080_PID=${{ env.PORT_8080_PID }}"
-          
       - name: Stop server if running
+        if: env.server_running == 'true'
         run: |
           echo "Stopping server running on port 8080..."
-          kill -9 ${{ env.PORT_8080_PID }} | true
-          echo "Preivous running Server stopped."
-          
+          kill -9 ${{ env.PID }}
+          echo "Previous running Server stopped."
+
       - name: Start server
         run: |
           cd backend/build/libs
           ls -l friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
-          echo "Lastest Backend API Server started."
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+          echo "Latest Backend API Server started."
