@@ -33,13 +33,16 @@ public class Member {
     @Embedded
     private Name name;
 
+    private String tag;
+
     @Embedded
     private Email email;
 
     @Builder
-    public Member(String name, String email) {
+    public Member(String name, String tag, String email) {
         this.pets = new ArrayList<>();
         this.name = new Name(name);
+        this.tag = tag;
         this.email = new Email(email);
     }
 

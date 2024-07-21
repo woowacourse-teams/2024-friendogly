@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class MemberCommandService {
     public SaveMemberResponse saveMember(SaveMemberRequest request) {
         Member member = Member.builder()
                 .name(request.name())
+                .tag(UuidGenerator.generateUuid())
                 .email(request.email())
                 .build();
         Member savedMember = memberRepository.save(member);
