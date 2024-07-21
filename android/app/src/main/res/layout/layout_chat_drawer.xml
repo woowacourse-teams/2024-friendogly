@@ -83,22 +83,7 @@
 
 
         <CheckBox
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="true"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_small"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
-
-        <CheckBox
+            android:id="@+id/chb_chat_dog_small"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,12 +100,30 @@
             android:textColor="@color/sel_chat_dog_info_checkbox" />
 
         <CheckBox
+            android:id="@+id/chb_chat_dog_medium"
+            style="@style/Theme.AppCompat.TextView.Regular.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/sel_chat_dog_size_checkbox"
+            android:button="@null"
+            android:checked="false"
+            android:clickable="false"
+            android:gravity="center"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="10dp"
+            android:text="@string/dog_small"
+            android:textColor="@color/sel_chat_dog_info_checkbox" />
+
+        <CheckBox
+            android:id="@+id/chb_chat_dog_large"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
-            android:checked="true"
+            android:checked="false"
             android:clickable="false"
             android:gravity="center"
             android:minWidth="0dp"
@@ -155,13 +158,15 @@
 
 
         <CheckBox
+            android:id="@+id/chb_chat_dog_female"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
-            android:checked="true"
+            android:checked="false"
+            android:clickable="false"
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
@@ -170,6 +175,7 @@
             android:textColor="@color/sel_chat_dog_info_checkbox" />
 
         <CheckBox
+            android:id="@+id/chb_chat_dog_male"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -177,6 +183,7 @@
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
             android:checked="false"
+            android:clickable="false"
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
@@ -185,13 +192,15 @@
             android:textColor="@color/sel_chat_dog_info_checkbox" />
 
         <CheckBox
+            android:id="@+id/chb_chat_dog_female_neutered"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
-            android:checked="true"
+            android:checked="false"
+            android:clickable="false"
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
@@ -200,12 +209,14 @@
             android:textColor="@color/sel_chat_dog_info_checkbox" />
 
         <CheckBox
+            android:id="@+id/chb_chat_dog_male_neutered"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/sel_chat_dog_size_checkbox"
             android:button="@null"
-            android:checked="true"
+            android:checked="false"
+            android:clickable="false"
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
@@ -235,13 +246,14 @@
         app:layout_constraintTop_toBottomOf="@id/view_chat_dog_info_line" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_chat_join_people"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_chat_join_people"
         tools:listitem="@layout/item_chat_join_people" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
