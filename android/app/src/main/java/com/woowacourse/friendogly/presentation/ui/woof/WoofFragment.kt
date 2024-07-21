@@ -109,29 +109,21 @@ class WoofFragment :
         circleOverlay.map = map
     }
 
-    private fun hasLocationPermissions(): Boolean {
-        if (!permissionRequester.hasLocationPermissions()) {
-            permissionRequester.checkLocationPermissions {
-                makeSettingSnackbar()
-            }
-            return false
-        }
-        return true
-    }
-
-    private fun makeSettingSnackbar() {
-        showSnackbar(resources.getString(R.string.woof_permission)) {
-            setAction(resources.getString(R.string.woof_setting)) {
-                val packageName =
-                    String.format(
-                        resources.getString(
-                            R.string.woof_package,
-                            requireContext().packageName,
-                        ),
-                    )
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse(packageName)
-                startActivity(intent)
+    private fun showSettingSnackbar() {
+        permissionRequester.checkLocationPermissions {
+            showSnackbar(resources.getString(R.string.woof_permission)) {
+                setAction(resources.getString(R.string.woof_setting)) {
+                    val packageName =
+                        String.format(
+                            resources.getString(
+                                R.string.woof_package,
+                                requireContext().packageName,
+                            ),
+                        )
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.parse(packageName)
+                    startActivity(intent)
+                }
             }
         }
     }
@@ -179,23 +171,28 @@ class WoofFragment :
     }
 
     override fun markFootPrint() {
-        if (hasLocationPermissions() && locationSource.lastLocation != null) {
-            val lastLocation = locationSource.lastLocation ?: return
-            latLng =
-                LatLng(
-                    lastLocation.latitude,
-                    lastLocation.longitude,
-                )
-            viewModel.loadNearFootPrints(latLng = latLng)
+        if (permissionRequester.hasLocationPermissions()) {
+            if (locationSource.lastLocation != null) {
+                val lastLocation = locationSource.lastLocation ?: return
+                latLng =
+                    LatLng(
+                        lastLocation.latitude,
+                        lastLocation.longitude,
+                    )
+                viewModel.loadNearFootPrints(latLng = latLng)
+            }
+        } else {
+            showSettingSnackbar()
         }
     }
 
     override fun changeLocationTrackingMode() {
-        if (hasLocationPermissions()) {
+        if (permissionRequester.hasLocationPermissions()) {
             map.locationTrackingMode =
                 if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
         } else {
             map.locationTrackingMode = LocationTrackingMode.None
+            showSettingSnackbar()
         }
     }
 
