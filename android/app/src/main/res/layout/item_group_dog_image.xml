@@ -4,12 +4,12 @@
 
     <data>
         <variable
-            name="imageUrl"
-            type="java.lang.String" />
+            name="woof"
+            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupWoof" />
     </data>
 
     <ImageView
-        glide1000="@{imageUrl}"
+        glide1000="@{woof.imageUrl}"
         app:shapeAppearanceOverlay="@style/RoundBig"
         android:background="@drawable/shape_indicator_active"
         android:backgroundTint="@color/orange05"

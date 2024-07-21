@@ -15,4 +15,5 @@ data class GroupUiModel(
     val groupLocation: String,
     val groupLeader: String,
     val groupDate: LocalDateTime,
+    val groupWoofs: List<GroupWoof>,
 )
