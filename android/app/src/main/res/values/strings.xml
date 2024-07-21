@@ -87,6 +87,10 @@
     <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
     <string name="group_add_title_count">%d/100</string>
     <string name="group_add_content_count">%d/1000</string>
+    <string name="group_list_date_days">%d일 전</string>
+    <string name="group_list_date_hours">%d시간 전</string>
+    <string name="group_list_date_minutes">%d분 전</string>
+    <string name="group_list_date_now">방금 전</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
