@@ -19,7 +19,7 @@ public record FindOneFootprintResponse(
 
     public FindOneFootprintResponse(Member member, Footprint footprint) {
         this(
-            member.getName(),
+            member.getName().getValue(),
             null,
             null,
             null,
@@ -31,7 +31,7 @@ public record FindOneFootprintResponse(
 
     public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint) {
         this(
-            member.getName(),
+            member.getName().getValue(),
             mainPet.getName().getValue(),
             mainPet.getDescription().getValue(),
             mainPet.getBirthDate().getValue(),
