@@ -9,8 +9,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import org.hibernate.validator.constraints.URL;
+
+import java.time.LocalDate;
 
 public record SavePetRequest(
         @NotNull(message = "memberId는 null을 입력할 수 없습니다.")
@@ -38,6 +39,7 @@ public record SavePetRequest(
         @URL
         String imageUrl
 ) {
+
     public Pet toEntity(Member member) {
         return Pet.builder()
                 .member(member)
