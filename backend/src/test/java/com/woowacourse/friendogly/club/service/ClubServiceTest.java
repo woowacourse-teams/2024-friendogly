@@ -3,39 +3,16 @@ package com.woowacourse.friendogly.club.service;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.ClubMember;
 import com.woowacourse.friendogly.club.domain.ClubMemberPet;
-import com.woowacourse.friendogly.club.repository.ClubMemberPetRepository;
-import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
-import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.pet.repository.PetRepository;
+import com.woowacourse.friendogly.support.ServiceTest;
 import java.time.LocalDate;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 
-@SpringBootTest
-public abstract class ClubServiceTest {
-
-    @Autowired
-    protected ClubRepository clubRepository;
-
-    @Autowired
-    protected ClubMemberRepository clubMemberRepository;
-
-    @Autowired
-    protected ClubMemberPetRepository clubMemberPetRepository;
-
-    @Autowired
-    protected MemberRepository memberRepository;
-
-    @Autowired
-    protected PetRepository petRepository;
+public abstract class ClubServiceTest extends ServiceTest {
 
     protected final String address = "서울특별시 송파구 신청동";
     protected final Set<Gender> allowedGenders = Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED);
@@ -65,15 +42,6 @@ public abstract class ClubServiceTest {
             allowedGenders,
             allowedSizes,
             "https://image.com");
-
-    @BeforeEach
-    void clearDB() {
-        memberRepository.deleteAll();
-        petRepository.deleteAll();
-        clubRepository.deleteAll();
-        clubMemberRepository.deleteAll();
-        clubMemberPetRepository.deleteAll();
-    }
 
     protected Club saveNewClub() {
         memberRepository.save(member);
