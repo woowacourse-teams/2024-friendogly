@@ -16,6 +16,15 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         initAdapter()
 
         getChatList()
+
+        clickBackBtn()
+
+    }
+
+    private fun clickBackBtn() {
+        binding.toolbarChat.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     private fun initAdapter() {
