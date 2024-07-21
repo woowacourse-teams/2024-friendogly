@@ -3,9 +3,9 @@ name: deploy
 on:
   push:
     branches: ['develop']
-    paths:
-     - 'backend/**'
-
+    paths: 
+      - 'backend/**'
+     
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,43 +36,42 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          working-directory: ./backend
           name: friendogly-be-develop-jar
-          path: ./**/friendogly-0.0.1-SNAPSHOT.jar
+          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
           
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: change permission
+      - name: Change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly 
+
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
           name: friendogly-be-develop-jar
           path: ./backend/build/libs
 
-      - name: Check if room-esc server is running on port 8080
-        id: check-server-on-port
+      - name: Find Java Application PID And Kill PID
+        id: find_pid
         run: |
-          echo "Checking if port 8080 is in use..."
+          sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
+
+      - name: Check if room-esc server is running on port 8080 after stop
+        run: |
           PID=$(lsof -t -i:8080 || true)
           if [ -n "$PID" ]; then
-            echo "server_running=true" >> $GITHUB_ENV
-            echo "PID=$PID" >> $GITHUB_ENV
+            echo "Server is still running with PID: $PID"
+            exit 1
           else
-            echo "server_running=false" >> $GITHUB_ENV
+            echo "Server successfully stopped."
           fi
-      - name: Stop server if running
-        if: env.server_running == 'true'
-        run: |
-          echo "Stopping server running on port 8080..."
-          kill -9 $PID
-          echo "Preivous running Server stopped."
+
       - name: Start server
         run: |
           cd backend/build/libs
-          cd backend/build/libs
+          echo "File creation time(KR-09:00):"
+          ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
           sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
-          echo "Lastest Backend API Server started."
+          echo "start backend server"
