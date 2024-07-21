@@ -1,10 +1,10 @@
 name: deploy
 
 on:
-  pull_request:
-    branches: [ "develop", "fix/be/swagger-connection" ]
   push:
     branches: ['develop']
+    paths: 
+      - 'backend/**'
      
 jobs:
   build:
