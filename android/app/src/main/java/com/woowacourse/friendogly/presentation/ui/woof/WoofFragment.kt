@@ -86,7 +86,6 @@ class WoofFragment :
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
-
         map.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = true

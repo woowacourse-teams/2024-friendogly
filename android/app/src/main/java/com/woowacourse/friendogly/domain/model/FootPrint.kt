@@ -8,6 +8,7 @@ data class FootPrint(
     val longitude: Double,
     val createdAt: LocalDateTime,
     val isMine: Boolean,
+    val imageUrl: String?,
 ) {
     fun isVisible(currentDateTime: LocalDateTime = LocalDateTime.now()): Boolean {
         return true

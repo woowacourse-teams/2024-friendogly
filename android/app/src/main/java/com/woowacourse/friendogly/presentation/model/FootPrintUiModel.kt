@@ -5,4 +5,5 @@ data class FootPrintUiModel(
     val longitude: Double,
     val isVisible: Boolean,
     val isMine: Boolean,
+    val imageUrl: String?,
 )

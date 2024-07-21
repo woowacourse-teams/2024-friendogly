@@ -10,6 +10,7 @@ fun FootPrintsNearResponse.toData(): FootPrintDto {
         longitude = longitude,
         createdAt = createdAt,
         isMine = isMine,
+        imageUrl = imageUrl,
     )
 }
 

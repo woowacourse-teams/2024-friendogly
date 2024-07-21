@@ -6,4 +6,5 @@ data class FootPrintDto(
     val longitude: Double,
     val createdAt: String,
     val isMine: Boolean,
+    val imageUrl: String?,
 )

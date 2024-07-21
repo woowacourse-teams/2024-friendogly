@@ -14,6 +14,7 @@ fun FootPrintDto.toDomain(): FootPrint {
         longitude = longitude,
         createdAt = localDateTime,
         isMine = isMine,
+        imageUrl = imageUrl,
     )
 }
 

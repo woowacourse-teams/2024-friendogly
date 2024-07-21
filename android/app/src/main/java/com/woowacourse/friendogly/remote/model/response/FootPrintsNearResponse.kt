@@ -6,4 +6,5 @@ data class FootPrintsNearResponse(
     val longitude: Double,
     val createdAt: String,
     val isMine: Boolean,
+    val imageUrl: String?,
 )

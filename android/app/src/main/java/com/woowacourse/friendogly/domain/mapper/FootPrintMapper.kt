@@ -9,6 +9,7 @@ fun FootPrint.toPresentation(): FootPrintUiModel {
         longitude = longitude,
         isVisible = isVisible(),
         isMine = isMine,
+        imageUrl = imageUrl,
     )
 }
 
