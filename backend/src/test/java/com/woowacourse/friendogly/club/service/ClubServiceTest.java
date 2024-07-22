@@ -33,19 +33,20 @@ public abstract class ClubServiceTest extends ServiceTest {
             .sizeType(SizeType.SMALL)
             .build();
 
-    private final Club club = Club.create(
-            "강아지 산책시키실 분 모아요.",
-            "매주 주말에 정기적으로 산책 모임하실분만",
-            address,
-            5,
-            member,
-            allowedGenders,
-            allowedSizes,
-            "https://image.com");
-
-    protected Club saveNewClub() {
+    protected Club getSavedClub(Set<Gender> genders, Set<SizeType> sizes) {
         memberRepository.save(member);
         petRepository.save(pet);
+
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                address,
+                5,
+                member,
+                genders,
+                sizes,
+                "https://image.com");
+
         Club savedClub = clubRepository.save(club);
         ClubMember clubMember = ClubMember.builder()
                 .member(member)

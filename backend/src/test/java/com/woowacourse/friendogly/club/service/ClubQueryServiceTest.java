@@ -23,8 +23,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보를 조회한다.")
     @Test
     void findSearching() {
-        //서울특별시 송파구 신청동, (암컷, 중성화 암컷), 크기는 소형견이 조건인 club
-        Club club = saveNewClub();
+        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
@@ -53,5 +52,21 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 () -> assertThat(actual.currentMemberCount()).isEqualTo(expected.currentMemberCount()),
                 () -> assertThat(actual.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected.petImageUrls())
         );
+    }
+
+    @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
+    @Test
+    void findSearching_Nothing() {
+        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
+
+        FindSearchingClubRequest request = new FindSearchingClubRequest(
+                address,
+                Set.of(Gender.MALE),
+                Set.of(SizeType.SMALL)
+        );
+
+        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
+
+        assertThat(responses.isEmpty()).isTrue();
     }
 }
