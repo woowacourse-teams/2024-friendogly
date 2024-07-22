@@ -26,8 +26,8 @@ public class FootprintQueryService {
     private final PetRepository petRepository;
 
     public FootprintQueryService(
-        FootprintRepository footprintRepository,
-        PetRepository petRepository
+            FootprintRepository footprintRepository,
+            PetRepository petRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.petRepository = petRepository;
@@ -35,7 +35,7 @@ public class FootprintQueryService {
 
     public FindOneFootprintResponse findOne(Long memberId, Long footprintId) {
         Footprint footprint = footprintRepository.findById(footprintId)
-            .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
         Member member = footprint.getMember();
         List<Pet> pets = petRepository.findByMemberId(member.getId());
         boolean isMine = footprint.isCreatedBy(memberId);
@@ -55,14 +55,14 @@ public class FootprintQueryService {
         Location currentLocation = new Location(request.latitude(), request.longitude());
 
         return recentFootprints.stream()
-            .filter(footprint -> footprint.isNear(currentLocation))
-            .map(footprint -> new FindNearFootprintResponse(footprint, footprint.isCreatedBy(memberId)))
-            .toList();
+                .filter(footprint -> footprint.isNear(currentLocation))
+                .map(footprint -> new FindNearFootprintResponse(footprint, footprint.isCreatedBy(memberId)))
+                .toList();
     }
 
     public FindMyLatestFootprintTimeResponse findMyLatestFootprintTime(Long memberId) {
         return footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
-            .map(footprint -> new FindMyLatestFootprintTimeResponse(footprint.getCreatedAt()))
-            .orElse(new FindMyLatestFootprintTimeResponse(null));
+                .map(footprint -> new FindMyLatestFootprintTimeResponse(footprint.getCreatedAt()))
+                .orElse(new FindMyLatestFootprintTimeResponse(null));
     }
 }

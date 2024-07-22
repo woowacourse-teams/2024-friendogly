@@ -30,8 +30,8 @@ public class FootprintController {
     private final FootprintQueryService footprintQueryService;
 
     public FootprintController(
-        FootprintCommandService footprintCommandService,
-        FootprintQueryService footprintQueryService
+            FootprintCommandService footprintCommandService,
+            FootprintQueryService footprintQueryService
     ) {
         this.footprintCommandService = footprintCommandService;
         this.footprintQueryService = footprintQueryService;
@@ -41,7 +41,7 @@ public class FootprintController {
     public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {
         Long id = footprintCommandService.save(request);
         return ResponseEntity.created(URI.create("/footprints/" + id))
-            .build();
+                .build();
     }
 
     @GetMapping("/{footprintId}")
@@ -69,8 +69,8 @@ public class FootprintController {
 
     @PatchMapping("/image/{footprintId}")
     public ResponseEntity<UpdateFootprintImageResponse> updateFootprintImage(
-        @PathVariable Long footprintId,
-        @ModelAttribute UpdateFootprintImageRequest request
+            @PathVariable Long footprintId,
+            @ModelAttribute UpdateFootprintImageRequest request
     ) {
         UpdateFootprintImageResponse response = footprintCommandService.updateFootprintImage(footprintId, request);
         return ResponseEntity.ok(response);

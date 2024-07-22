@@ -58,7 +58,7 @@ public class Footprint {
 
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
-            .equals(memberId);
+                .equals(memberId);
     }
 
     public void updateImageUrl(String imageUrl) {
