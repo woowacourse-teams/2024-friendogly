@@ -18,7 +18,8 @@ public class ImageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println(file);
         String key = file.getOriginalFilename();
         try {
             s3ClientSample.uploadFile(key, file);

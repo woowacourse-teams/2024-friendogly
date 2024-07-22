@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.infra;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,13 +18,23 @@ public class S3ClientSample {
     }
 
     public void uploadFile(String key, MultipartFile file) throws IOException {
-        s3Client.putObject(
-                PutObjectRequest
-                        .builder()
-                        .key(key)
-                        .bucket("d3obq7hxojfffa.cloudfront.net")
-                        .build()
-                , RequestBody.fromFile(file.getResource().getFile()));
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket("d3obq7hxojfffa.cloudfront.net")
+                .key("test_dog12")
+                .build();
+        RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
+        s3Client.putObject(putObjectRequest,requestBody);
+    }
+
+    private File convertMultiPartFileToFile(MultipartFile file) {
+        File convertedFile = new File("dog" + File.separator + file.getOriginalFilename());
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
+        return convertedFile;
     }
 
 }
