@@ -5,6 +5,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -52,20 +53,24 @@ public class FootprintApiDocsTest extends RestDocsTest {
         SaveFootprintRequest request = new SaveFootprintRequest(37.5173316, 127.1011661);
         SaveFootprintResponse response = new SaveFootprintResponse(1L, 37.5173316, 127.1011661);
 
-        given(footprintCommandService.save(any(Long.class), eq(request)))
+        given(footprintCommandService.save(any(), eq(request)))
                 .willReturn(response);
 
         mockMvc
                 .perform(post("/footprints")
                         .content(objectMapper.writeValueAsString(request))
-                        .contentType(APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON)
+                        .header(AUTHORIZATION, "1"))
                 .andDo(print())
                 .andDo(document("footprints/save",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("발자국 저장 API")
+                                .tag("Footprint API")
                                 .summary("발자국 저장 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
                                 .requestFields(
                                         fieldWithPath("latitude").description("현재 위치의 위도"),
                                         fieldWithPath("longitude").description("현재 위치의 경도")
@@ -98,21 +103,26 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 SizeType.MEDIUM,
                 Gender.FEMALE_NEUTERED,
                 "https://picsum.photos/200",
+                LocalDateTime.now(),
                 true
         );
 
-        given(footprintQueryService.findOne(any(Long.class), any(Long.class)))
+        given(footprintQueryService.findOne(any(), any()))
                 .willReturn(response);
 
         mockMvc
-                .perform(get("/footprints/{footprintId}", 1L))
+                .perform(get("/footprints/{footprintId}", 1L)
+                        .header(AUTHORIZATION, 1L))
                 .andDo(print())
                 .andDo(document("footprints/findOne",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("발자국 세부정보 단건 조회 API")
+                                .tag("Footprint API")
                                 .summary("발자국 세부정보 단건 조회 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
                                 .pathParameters(
                                         parameterWithName("footprintId").description("발자국 ID")
                                 )
@@ -124,6 +134,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("petSizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
                                         fieldWithPath("petGender").description("발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
                                         fieldWithPath("footprintImageUrl").description("발자국의 이미지 URL"),
+                                        fieldWithPath("createdAt").description("발자국이 생성된 시간"),
                                         fieldWithPath("isMine").description("내 발자국인지 여부 (내 발자국이면 true)")
                                 )
                                 .requestSchema(Schema.schema("FindOneFootprintRequest"))
@@ -152,20 +163,24 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         "https://picsum.photos/250")
         );
 
-        given(footprintQueryService.findNear(any(Long.class), eq(request)))
+        given(footprintQueryService.findNear(any(), any()))
                 .willReturn(response);
 
         mockMvc
                 .perform(get("/footprints/near")
                         .param("latitude", "37.5173316")
-                        .param("longitude", "127.1011661"))
+                        .param("longitude", "127.1011661")
+                        .header(AUTHORIZATION, 1L))
                 .andDo(print())
                 .andDo(document("footprints/near",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("주변 발자국 조회 API")
+                                .tag("Footprint API")
                                 .summary("주변 발자국 조회 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
                                 .queryParameters(
                                         parameterWithName("latitude").description("현재 위치의 위도"),
                                         parameterWithName("longitude").description("현재 위치의 경도")
@@ -192,18 +207,22 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 LocalDateTime.now().minusHours(1)
         );
 
-        given(footprintQueryService.findMyLatestFootprintTime(any(Long.class)))
+        given(footprintQueryService.findMyLatestFootprintTime(any()))
                 .willReturn(response);
 
         mockMvc
-                .perform(get("/footprints/mine/latest"))
+                .perform(get("/footprints/mine/latest")
+                        .header(AUTHORIZATION, 1L))
                 .andDo(print())
                 .andDo(document("footprints/findMyLatestFootprintTime",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("자신의 마지막 발자국 시간 조회 API")
+                                .tag("Footprint API")
                                 .summary("자신의 마지막 발자국 시간 조회 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
                                 .responseFields(
                                         fieldWithPath("createdAt").description("자신의 가장 최근 발자국 생성 시간")
                                 )

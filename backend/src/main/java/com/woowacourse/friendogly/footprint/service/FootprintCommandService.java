@@ -77,9 +77,20 @@ public class FootprintCommandService {
         }
     }
 
-    public UpdateFootprintImageResponse updateFootprintImage(Long footprintId, UpdateFootprintImageRequest request) {
+    public UpdateFootprintImageResponse updateFootprintImage(
+            Long memberId,
+            Long footprintId,
+            UpdateFootprintImageRequest request
+    ) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
+
         Footprint footprint = footprintRepository.findById(footprintId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
+
+        if (!footprint.isCreatedBy(memberId)) {
+            throw new FriendoglyException("자신의 발자국만 수정할 수 있습니다.");
+        }
 
         MultipartFile multipartFile = request.imageFile();
         // TODO: 더미 데이터 URL입니다. 나중에 이미지 저장소(AWS S3)와 연동 필요 !!!
