@@ -72,6 +72,7 @@ public class FootprintController {
             @PathVariable Long footprintId,
             @ModelAttribute UpdateFootprintImageRequest request
     ) {
+        // TODO: S3가 구현되고 명세가 확정되면 그 때 문서화하기
         UpdateFootprintImageResponse response = footprintCommandService.updateFootprintImage(footprintId, request);
         return ResponseEntity.ok(response);
     }

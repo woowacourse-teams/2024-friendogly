@@ -9,7 +9,10 @@ import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageRes
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,16 +25,23 @@ public class FootprintCommandService {
 
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
+    private final PetRepository petRepository;
 
-    public FootprintCommandService(FootprintRepository footprintRepository, MemberRepository memberRepository) {
+    public FootprintCommandService(
+            FootprintRepository footprintRepository,
+            MemberRepository memberRepository,
+            PetRepository petRepository
+    ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
+        this.petRepository = petRepository;
     }
 
     public Long save(SaveFootprintRequest request) {
         Member member = memberRepository.findById(request.memberId())
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
 
+        validatePetExistence(member);
         validateRecentFootprintExists(request.memberId());
 
         Footprint footprint = footprintRepository.save(
@@ -42,6 +52,13 @@ public class FootprintCommandService {
         );
 
         return footprint.getId();
+    }
+
+    private void validatePetExistence(Member member) {
+        List<Pet> pets = petRepository.findByMemberId(member.getId());
+        if (pets.isEmpty()) {
+            throw new FriendoglyException("펫을 등록해야만 발자국을 생성할 수 있습니다.");
+        }
     }
 
     private void validateRecentFootprintExists(Long memberId) {

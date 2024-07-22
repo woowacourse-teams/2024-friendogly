@@ -117,6 +117,30 @@ class FootprintQueryServiceTest {
                         .build()
         );
 
+        petRepository.save(
+                Pet.builder()
+                        .member(member1)
+                        .name("땡이")
+                        .description("귀여운 땡이")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
+        petRepository.save(
+                Pet.builder()
+                        .member(member2)
+                        .name("땡이")
+                        .description("귀여운 땡이")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
         double nearLongitude = 0.008993216;
         double farLongitude = 0.009001209;
 
