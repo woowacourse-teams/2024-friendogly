@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.ClubMember;
-import com.woowacourse.friendogly.club.domain.ClubMemberPet;
+import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -33,31 +33,32 @@ public abstract class ClubServiceTest extends ServiceTest {
             .sizeType(SizeType.SMALL)
             .build();
 
-    private final Club club = Club.create(
-            "강아지 산책시키실 분 모아요.",
-            "매주 주말에 정기적으로 산책 모임하실분만",
-            address,
-            5,
-            member,
-            allowedGenders,
-            allowedSizes,
-            "https://image.com");
-
-    protected Club saveNewClub() {
+    protected Club getSavedClub(Set<Gender> genders, Set<SizeType> sizes) {
         memberRepository.save(member);
         petRepository.save(pet);
+
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                address,
+                5,
+                member,
+                genders,
+                sizes,
+                "https://image.com");
+
         Club savedClub = clubRepository.save(club);
         ClubMember clubMember = ClubMember.builder()
                 .member(member)
                 .club(club)
                 .build();
 
-        ClubMemberPet clubMemberPet = ClubMemberPet.builder()
-                .clubMember(clubMember)
+        ClubPet clubPet = ClubPet.builder()
+                .club(club)
                 .pet(pet)
                 .build();
         clubMemberRepository.save(clubMember);
-        clubMemberPetRepository.save(clubMemberPet);
+        clubPetRepository.save(clubPet);
 
         return savedClub;
     }
