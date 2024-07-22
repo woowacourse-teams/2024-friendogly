@@ -30,10 +30,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
         String authorizationValue = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        System.out.println("==========================");
-        System.out.println(authorizationValue);
-        System.out.println("==========================");
-
         if (authorizationValue == null) {
             throw new FriendoglyException("로그인 후에 사용할 수 있습니다.");
         }
