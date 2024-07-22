@@ -41,7 +41,7 @@
             android:focusable="true"
             android:onClick="@{() -> actionHandler.loadMarkFootPrintBtn()}"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_mark_btn"
+            android:src="@drawable/ic_mark_foot_print_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

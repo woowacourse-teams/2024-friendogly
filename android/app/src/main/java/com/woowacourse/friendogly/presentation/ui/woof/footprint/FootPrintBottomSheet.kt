@@ -17,7 +17,7 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
 
     private val viewModel: FootPrintViewModel by viewModels<FootPrintViewModel> {
         FootPrintViewModel.factory(
-            memberId = memberId,
+            footPrintId = footPrintId,
             footPrintRepository =
                 FootPrintRepositoryImpl(
                     remoteFootPrintDataSource,
@@ -25,8 +25,8 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         )
     }
 
-    private val memberId: Long by lazy {
-        arguments?.getLong(KEY_MEMBER_ID) ?: error("멤버 아이디를 받아오는데 실패하였습니다.")
+    private val footPrintId: Long by lazy {
+        arguments?.getLong(KEY_FOOT_PRINT_ID) ?: error("발자국 아이디를 받아오는데 실패하였습니다.")
     }
 
     override fun onCreateView(
@@ -44,7 +44,6 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
-        initObserve()
     }
 
     override fun onDestroyView() {
@@ -57,26 +56,14 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         binding.vm = viewModel
     }
 
-    private fun initObserve() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is FootPrintUiState.Error -> {
-                    error("발자국 정보를 받아오는데 실패하였습니다.")
-                }
-
-                else -> return@observe
-            }
-        }
-    }
-
     companion object {
-        private const val KEY_MEMBER_ID = "memberId"
+        private const val KEY_FOOT_PRINT_ID = "footPrintId"
 
-        fun newInstance(memberId: Long): FootPrintBottomSheet {
+        fun newInstance(footPrintId: Long): FootPrintBottomSheet {
             return FootPrintBottomSheet().apply {
                 arguments =
                     Bundle().apply {
-                        putLong(KEY_MEMBER_ID, memberId)
+                        putLong(KEY_FOOT_PRINT_ID, footPrintId)
                     }
             }
         }

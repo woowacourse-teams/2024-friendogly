@@ -8,15 +8,17 @@ import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.R
 
 @BindingAdapter("footPrintWalking")
-fun TextView.bindFootPrintWalking(dogName: String) {
-    val spannableString =
-        SpannableString(String.format(resources.getString(R.string.woof_dog_walking), dogName))
-    spannableString.setSpan(
-        ForegroundColorSpan(resources.getColor(R.color.orange07)),
-        0,
-        dogName.length,
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-    )
+fun TextView.bindFootPrintWalking(petName: String?) {
+    if (petName != null) {
+        val spannableString =
+            SpannableString(String.format(resources.getString(R.string.woof_dog_walking), petName))
+        spannableString.setSpan(
+            ForegroundColorSpan(resources.getColor(R.color.orange07)),
+            0,
+            petName.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
 
-    text = spannableString
+        text = spannableString
+    }
 }

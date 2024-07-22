@@ -8,19 +8,14 @@ import com.woowacourse.friendogly.domain.mapper.toPresentation
 import com.woowacourse.friendogly.domain.repository.FootPrintRepository
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
-import com.woowacourse.friendogly.presentation.model.FootPrintInfoUiModel
 import kotlinx.coroutines.launch
 
 class FootPrintViewModel(
-    private val memberId: Long,
+    private val footPrintId: Long,
     private val footPrintRepository: FootPrintRepository,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<FootPrintUiState> =
-        MutableLiveData(FootPrintUiState.Loading)
+    private val _uiState: MutableLiveData<FootPrintUiState> = MutableLiveData()
     val uiState: LiveData<FootPrintUiState> get() = _uiState
-
-    private val _footPrintInfo: MutableLiveData<FootPrintInfoUiModel> = MutableLiveData()
-    val footPrintInfo: LiveData<FootPrintInfoUiModel> get() = _footPrintInfo
 
     init {
         viewModelScope.launch {
@@ -29,21 +24,23 @@ class FootPrintViewModel(
     }
 
     private suspend fun loadFootPrintInfo() {
-        footPrintRepository.getFootPrintInfo(memberId).onSuccess { footPrintInfo ->
-            _footPrintInfo.value = footPrintInfo.toPresentation()
-            _uiState.value = FootPrintUiState.Success(footPrintInfo.toPresentation())
+        footPrintRepository.getFootPrintInfo(footPrintId).onSuccess { footPrintInfo ->
+            val state = uiState.value ?: FootPrintUiState()
+            _uiState.postValue(state.copy(footPrintInfo = footPrintInfo.toPresentation()))
         }.onFailure {
-            _uiState.value = FootPrintUiState.Error(it)
         }
     }
 
     companion object {
         fun factory(
-            memberId: Long,
+            footPrintId: Long,
             footPrintRepository: FootPrintRepository,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
-                FootPrintViewModel(memberId = memberId, footPrintRepository = footPrintRepository)
+                FootPrintViewModel(
+                    footPrintId = footPrintId,
+                    footPrintRepository = footPrintRepository,
+                )
             }
         }
     }

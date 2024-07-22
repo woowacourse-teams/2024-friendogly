@@ -16,15 +16,15 @@ class WoofViewModel(private val woofRepository: WoofRepository) :
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
 
-    private val _isMarkFootPrintBtnLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isMarkFootPrintBtnLoaded: LiveData<Boolean> get() = _isMarkFootPrintBtnLoaded
+    private val _isFootPrintMarkBtnInfoLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isFootPrintMarkBtnInfoLoaded: LiveData<Boolean> get() = _isFootPrintMarkBtnInfoLoaded
 
-    fun loadMarkFootPrintBtn() {
+    fun loadMarkFootPrintBtnInfo() {
         viewModelScope.launch {
             woofRepository.getFootPrintMarkBtnInfo().onSuccess { footPrintMarkBtnInfo ->
                 val state = uiState.value ?: WoofUiState()
                 _uiState.postValue(state.copy(footPrintMarkBtnInfo = footPrintMarkBtnInfo.toPresentation()))
-                _isMarkFootPrintBtnLoaded.postValue(true)
+                _isFootPrintMarkBtnInfoLoaded.postValue(true)
             }.onFailure {
             }
         }

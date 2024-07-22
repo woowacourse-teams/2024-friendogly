@@ -74,7 +74,7 @@ class WoofFragment :
             moveCameraCenterPosition()
         }
 
-        viewModel.isMarkFootPrintBtnLoaded.observe(viewLifecycleOwner) { isLoaded ->
+        viewModel.isFootPrintMarkBtnInfoLoaded.observe(viewLifecycleOwner) { isLoaded ->
             if (isLoaded) {
                 markFootPrint()
             }
@@ -159,7 +159,7 @@ class WoofFragment :
         marker.setOnClickListener {
             val bottomSheet =
                 FootPrintBottomSheet.newInstance(
-                    memberId = 1L,
+                    footPrintId = 1L,
                 )
             bottomSheet.show(parentFragmentManager, tag)
             true
@@ -198,7 +198,7 @@ class WoofFragment :
     }
 
     override fun loadMarkFootPrintBtn() {
-        viewModel.loadMarkFootPrintBtn()
+        viewModel.loadMarkFootPrintBtnInfo()
     }
 
     override fun changeLocationTrackingMode() {

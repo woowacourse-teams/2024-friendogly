@@ -21,7 +21,9 @@ class WoofDataSourceImpl(private val woofService: WoofService) : WoofDataSource 
         latitude: Double,
         longitude: Double,
     ): Result<List<FootPrintDto>> {
-        return runCatching { woofService.getNearFootPrints(latitude, longitude).toData() }
+        return runCatching {
+            woofService.getNearFootPrints(latitude, longitude).toData()
+        }
     }
 
     override suspend fun getLandMarks(): Result<List<LandMarkDto>> {
