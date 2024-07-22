@@ -14,7 +14,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     private lateinit var adapter: ChatAdapter
 
     override fun initCreateView() {
-        binding.lifecycleOwner = this
         binding.vm = viewModel
 
         initAdapter()
