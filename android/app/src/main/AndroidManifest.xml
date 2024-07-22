@@ -27,6 +27,8 @@
         <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false" />
+        <activity android:name=".presentation.ui.chatlist.chat.ChatActivity"
+            android:exported="false"/>
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true">
