@@ -78,7 +78,8 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("latitude").description("생성된 발자국의 위도"),
                                         fieldWithPath("longitude").description("생성된 발자국의 경도")
                                 )
-                                .requestSchema(Schema.schema("FindNearFootprintRequest"))
+                                .requestSchema(Schema.schema("SaveFootprintRequest"))
+                                .responseSchema(Schema.schema("SaveFootprintResponse"))
                                 .build()
                         )
                 ))
@@ -177,6 +178,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("[].isMine").description("나의 발자국인지 여부"),
                                         fieldWithPath("[].imageUrl").description("발자국에 할당된 이미지 URL")
                                 )
+                                .responseSchema(Schema.schema("FindNearFootprintResponse"))
                                 .build()
                         )
                 ))
