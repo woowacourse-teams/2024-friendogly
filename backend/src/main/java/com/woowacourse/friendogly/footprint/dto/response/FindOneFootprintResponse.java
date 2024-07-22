@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record FindOneFootprintResponse(
         String memberName,
@@ -15,6 +16,7 @@ public record FindOneFootprintResponse(
         SizeType petSizeType,
         Gender petGender,
         String footprintImageUrl,
+        LocalDateTime createdAt,
         boolean isMine
 ) {
 
@@ -27,6 +29,7 @@ public record FindOneFootprintResponse(
                 mainPet.getSizeType(),
                 mainPet.getGender(),
                 footprint.getImageUrl(),
+                footprint.getCreatedAt(),
                 isMine
         );
     }

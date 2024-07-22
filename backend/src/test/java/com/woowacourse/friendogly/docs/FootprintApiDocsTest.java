@@ -98,6 +98,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 SizeType.MEDIUM,
                 Gender.FEMALE_NEUTERED,
                 "https://picsum.photos/200",
+                LocalDateTime.now(),
                 true
         );
 
@@ -124,6 +125,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("petSizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
                                         fieldWithPath("petGender").description("발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
                                         fieldWithPath("footprintImageUrl").description("발자국의 이미지 URL"),
+                                        fieldWithPath("createdAt").description("발자국이 생성된 시간"),
                                         fieldWithPath("isMine").description("내 발자국인지 여부 (내 발자국이면 true)")
                                 )
                                 .requestSchema(Schema.schema("FindOneFootprintRequest"))
