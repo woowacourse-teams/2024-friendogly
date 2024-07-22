@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class FootprintCommandService {
 
-    private static final int FOOTPRINT_COOLDOWN = 30;
+    private static final int FOOTPRINT_COOLDOWN_SECOND = 30;
 
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
@@ -69,7 +69,7 @@ public class FootprintCommandService {
     private void validateRecentFootprintExists(Long memberId) {
         boolean exists = footprintRepository.existsByMemberIdAndCreatedAtAfter(
                 memberId,
-                LocalDateTime.now().minusSeconds(FOOTPRINT_COOLDOWN)
+                LocalDateTime.now().minusSeconds(FOOTPRINT_COOLDOWN_SECOND)
         );
 
         if (exists) {
