@@ -57,6 +57,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                         4,
                         1,
+                        "https:/clubImage1.com",
                         List.of("https://petImage1.com")
                 ),
                 new FindSearchingClubResponse(
@@ -71,6 +72,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         Set.of(Gender.MALE, Gender.FEMALE_NEUTERED, Gender.MALE_NEUTERED),
                         3,
                         1,
+                        "https:/clubImage2.com",
                         List.of("https://petImage1.com")
                 )
         );
@@ -112,6 +114,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                                                 .description("모임 최대 인원"),
                                         fieldWithPath("[].currentMemberCount").type(JsonFieldType.NUMBER)
                                                 .description("모임 현재 인원"),
+                                        fieldWithPath("[].imageUrl").type(JsonFieldType.STRING)
+                                                .description("모임 프로필 사진"),
                                         fieldWithPath("[].petImageUrls").type(JsonFieldType.ARRAY)
                                                 .description("모임 리스트에 팻 사진 url"))
                                 .responseSchema(Schema.schema("FindSearchingClubResponse"))

@@ -20,6 +20,7 @@ public record FindSearchingClubResponse(
         Set<Gender> allowedGender,
         int memberCapacity,
         int currentMemberCount,
+        String imageUrl,
         List<String> petImageUrls
 
 ) {
@@ -41,6 +42,7 @@ public record FindSearchingClubResponse(
                 club.getAllowedGenders(),
                 club.getMemberCapacity().getValue(),
                 currentMemberCount,
+                club.getImageUrl(),
                 petImageUrls
         );
     }
