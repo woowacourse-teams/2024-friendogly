@@ -5,6 +5,16 @@
 
     <data>
 
+        <import type="com.woowacourse.friendogly.presentation.ui.chatlist.uimodel.ChatDateTime" />
+
+        <variable
+            name="dateTime"
+            type="ChatDateTime" />
+
+        <variable
+            name="unreadMessageCount"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,16 +58,20 @@
         <TextView
             android:id="@+id/tv_chat_body"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size12"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@id/iv_chat_group"
+            app:layout_constraintEnd_toStartOf="@id/tv_chat_unread_count"
             app:layout_constraintStart_toEndOf="@id/iv_chat_group"
             tools:text="다들 언제 모이시는게 편하세요?" />
 
         <TextView
             android:id="@+id/tv_chat_date_time"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size10"
+            chatDateTime="@{dateTime}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"
@@ -67,15 +81,16 @@
             tools:text="오후 2:23" />
 
         <TextView
+            android:id="@+id/tv_chat_unread_count"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size10"
+            unreadMessageCount="@{unreadMessageCount}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rect_orange700_fill_16"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="2dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_chat_body"
             app:layout_constraintEnd_toEndOf="@id/tv_chat_date_time"
-            app:layout_constraintStart_toStartOf="@id/tv_chat_date_time"
-            android:paddingVertical="2dp"
-            android:paddingHorizontal="5dp"
             app:layout_constraintTop_toTopOf="@id/tv_chat_body"
             tools:text="999+" />
 

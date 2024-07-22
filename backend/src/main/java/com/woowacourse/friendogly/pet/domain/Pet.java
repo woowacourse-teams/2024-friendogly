@@ -1,6 +1,9 @@
 package com.woowacourse.friendogly.pet.domain;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,13 +13,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pet {
 
     @Id
@@ -24,24 +28,28 @@ public class Pet {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(nullable = false)
     private Member member;
 
-    private String name;
+    @Embedded
+    private Name name;
 
-    private String description;
+    @Embedded
+    private Description description;
 
-    private LocalDate birthDate;
+    @Embedded
+    private BirthDate birthDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SizeType sizeType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
 
-    private boolean isNeutered;
-
-    private String image;
+    @Embedded
+    private ImageUrl imageUrl;
 
     @Builder
     public Pet(
@@ -51,16 +59,22 @@ public class Pet {
             LocalDate birthDate,
             SizeType sizeType,
             Gender gender,
-            boolean isNeutered,
-            String image
+            String imageUrl
     ) {
+        validateMember(member);
+
         this.member = member;
-        this.name = name;
-        this.description = description;
-        this.birthDate = birthDate;
+        this.name = new Name(name);
+        this.description = new Description(description);
+        this.birthDate = new BirthDate(birthDate);
         this.sizeType = sizeType;
         this.gender = gender;
-        this.isNeutered = isNeutered;
-        this.image = image;
+        this.imageUrl = new ImageUrl(imageUrl);
+    }
+
+    private void validateMember(Member member) {
+        if (member == null) {
+            throw new FriendoglyException("member는 null일 수 없습니다.");
+        }
     }
 }

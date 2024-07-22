@@ -18,10 +18,15 @@ class EditProfileImageBottomSheet(
 ) : BottomSheetDialogFragment() {
     private lateinit var dlg: BottomSheetDialog
 
+    private lateinit var gallery: TextView
+    private lateinit var defaultImage: TextView
+    private lateinit var close: TextView
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dlg = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dlg.setOnShowListener {
-            val bottomSheet = dlg.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheet =
+                dlg.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
             bottomSheet.setBackgroundResource(android.R.color.transparent)
 
             val behavior = BottomSheetBehavior.from(bottomSheet)
@@ -44,11 +49,17 @@ class EditProfileImageBottomSheet(
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        initFindVIewById(view)
+        initClickListener()
+    }
 
-        val gallery = view.findViewById<TextView>(R.id.btn_gallery_select)
-        val defaultImage = view.findViewById<TextView>(R.id.btn_default_image_set)
-        val close = view.findViewById<TextView>(R.id.close_btn)
+    private fun initFindVIewById(view: View) {
+        gallery = view.findViewById(R.id.btn_gallery_select)
+        defaultImage = view.findViewById(R.id.btn_default_image_set)
+        close = view.findViewById(R.id.close_btn)
+    }
 
+    private fun initClickListener() {
         gallery.setOnClickListener {
             clickGallery.invoke()
             dismiss()

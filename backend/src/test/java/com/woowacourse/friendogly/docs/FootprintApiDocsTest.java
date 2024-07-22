@@ -2,6 +2,8 @@ package com.woowacourse.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -78,13 +80,17 @@ public class FootprintApiDocsTest extends RestDocsTest {
     void findNear() throws Exception {
         FindNearFootprintRequest request = new FindNearFootprintRequest(37.5173316, 127.1011661);
         List<FindNearFootprintResponse> response = List.of(
-            new FindNearFootprintResponse(1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10)),
-            new FindNearFootprintResponse(3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20)),
-            new FindNearFootprintResponse(6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30)),
-            new FindNearFootprintResponse(11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40))
+            new FindNearFootprintResponse(
+                1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true),
+            new FindNearFootprintResponse(
+                3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false),
+            new FindNearFootprintResponse(
+                6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false),
+            new FindNearFootprintResponse(
+                11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true)
         );
 
-        given(footprintQueryService.findNear(request))
+        given(footprintQueryService.findNear(any(Long.class), eq(request)))
             .willReturn(response);
 
         mockMvc
@@ -103,10 +109,11 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         parameterWithName("longitude").description("현재 위치의 경도")
                     )
                     .responseFields(
-                        fieldWithPath("[].memberId").description("발자국을 찍은 사용자 ID"),
+                        fieldWithPath("[].footprintId").description("발자국 ID"),
                         fieldWithPath("[].latitude").description("발자국 위치의 위도"),
                         fieldWithPath("[].longitude").description("발자국 위치의 경도"),
-                        fieldWithPath("[].createdAt").description("발자국 생성 시간")
+                        fieldWithPath("[].createdAt").description("발자국 생성 시간"),
+                        fieldWithPath("[].isMine").description("나의 발자국인지 여부")
                     )
                     .build()
                 )

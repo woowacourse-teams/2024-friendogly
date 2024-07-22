@@ -1,10 +1,11 @@
 package com.woowacourse.friendogly.pet.controller;
 
-import com.woowacourse.friendogly.pet.dto.request.FindPetRequest;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
+import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
 import com.woowacourse.friendogly.pet.service.PetCommandService;
 import com.woowacourse.friendogly.pet.service.PetQueryService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -28,21 +29,20 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePet(@RequestBody SavePetRequest savePetRequest) {
-        Long petId = petCommandService.savePet(savePetRequest);
-        return ResponseEntity.created(URI.create("/pets/" + petId)).build();
+    public ResponseEntity<SavePetResponse> savePet(@RequestBody @Valid SavePetRequest savePetRequest) {
+        SavePetResponse response = petCommandService.savePet(savePetRequest);
+        return ResponseEntity.created(URI.create("/pets/" + response.id()))
+                .body(response);
     }
 
-    @GetMapping("/{petId}")
-    public ResponseEntity<FindPetResponse> findPet(@PathVariable Long petId) {
-        FindPetResponse findPetResponse = petQueryService.findPet(petId);
-        return ResponseEntity.ok(findPetResponse);
+    @GetMapping("/{id}")
+    public ResponseEntity<FindPetResponse> findById(@PathVariable Long id) {
+        FindPetResponse response = petQueryService.findById(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mine/{memberId}")
-    public ResponseEntity<List<FindPetResponse>> findPets(@PathVariable Long memberId) {
-        List<FindPetResponse> pets = petQueryService.findPets(new FindPetRequest(memberId));
-        return ResponseEntity.ok(pets);
+    public List<FindPetResponse> findByMemberId(@PathVariable Long memberId) {
+        return petQueryService.findByMemberId(memberId);
     }
 }
-

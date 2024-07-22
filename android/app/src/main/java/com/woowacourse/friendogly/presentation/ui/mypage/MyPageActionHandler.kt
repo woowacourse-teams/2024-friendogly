@@ -1,5 +1,5 @@
 package com.woowacourse.friendogly.presentation.ui.mypage
 
 interface MyPageActionHandler {
-    fun navigateToDogDetail()
+    fun navigateToDogDetail(id: Long)
 }
