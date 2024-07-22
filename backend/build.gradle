@@ -72,8 +72,25 @@ tasks.withType(Test) {
     systemProperty 'file.encoding', 'UTF-8'
 }
 
+//tasks.withType(GenerateSwaggerUI) {
+//    dependsOn 'openapi3'
+//}
+
 tasks.withType(GenerateSwaggerUI) {
     dependsOn 'openapi3'
+    doFirst {
+        def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+
+        def securitySchemesContent = "  securitySchemes:\n" +   \
+                                       "    APIKey:\n" +   \
+                                       "      type: apiKey\n" +   \
+                                       "      name: Authorization\n" +   \
+                                       "      in: header\n" +  \
+                                       "security:\n" +
+                "  - APIKey: []  # Apply the security scheme here"
+
+        swaggerUIFile.append securitySchemesContent
+    }
 }
 
 // 생성된 SwaggerUI 를 jar 에 포함시키기 위해 build/resources 경로로 로 복사

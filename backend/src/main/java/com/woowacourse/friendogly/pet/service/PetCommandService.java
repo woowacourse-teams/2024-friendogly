@@ -24,8 +24,8 @@ public class PetCommandService {
         this.memberRepository = memberRepository;
     }
 
-    public SavePetResponse savePet(SavePetRequest request) {
-        Member member = memberRepository.findById(request.memberId())
+    public SavePetResponse savePet(Long memberId, SavePetRequest request) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 Member 입니다."));
 
         validatePetCapacity(petRepository.countByMember(member));
