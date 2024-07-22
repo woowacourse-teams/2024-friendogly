@@ -5,15 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.pet.repository.PetRepository;
+import com.woowacourse.friendogly.support.ServiceTest;
 import java.time.LocalDate;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest
-class FootprintCommandServiceTest {
+class FootprintCommandServiceTest extends ServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private FootprintCommandService footprintCommandService;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private FootprintRepository footprintRepository;
-
-    @Autowired
-    private PetRepository petRepository;
-
-    @AfterEach
-    void cleanUp() {
-        footprintRepository.deleteAll();
-        petRepository.deleteAll();
-        memberRepository.deleteAll();
-    }
 
     @DisplayName("발자국 저장")
     @Test

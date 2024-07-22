@@ -10,17 +10,14 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
-import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.pet.repository.PetRepository;
+import com.woowacourse.friendogly.support.ServiceTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest
-class FootprintQueryServiceTest {
+class FootprintQueryServiceTest extends ServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -38,22 +35,6 @@ class FootprintQueryServiceTest {
 
     @Autowired
     private FootprintCommandService footprintCommandService;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private FootprintRepository footprintRepository;
-
-    @Autowired
-    private PetRepository petRepository;
-
-    @AfterEach
-    void cleanUp() {
-        footprintRepository.deleteAll();
-        petRepository.deleteAll();
-        memberRepository.deleteAll();
-    }
 
     @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
     @Test
