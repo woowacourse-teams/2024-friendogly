@@ -18,19 +18,6 @@ public record FindOneFootprintResponse(
         boolean isMine
 ) {
 
-    public FindOneFootprintResponse(Member member, Footprint footprint, boolean isMine) {
-        this(
-                member.getName().getValue(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                footprint.getImageUrl(),
-                isMine
-        );
-    }
-
     public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint, boolean isMine) {
         this(
                 member.getName().getValue(),
