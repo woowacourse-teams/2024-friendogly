@@ -20,7 +20,7 @@ public class S3ClientSample {
     public void uploadFile(String key, MultipartFile file) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket("techcourse-project-2024")
-                .key("test_dog12")
+                .key("friendogly/"+key)
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
         s3Client.putObject(putObjectRequest,requestBody);
