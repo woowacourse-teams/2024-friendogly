@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
-import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 import kotlinx.coroutines.delay
@@ -17,8 +16,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
-    private val _groups: MutableLiveData<List<GroupUiModel>> = MutableLiveData()
-    val groups: LiveData<List<GroupUiModel>> get() = _groups
+    private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
+    val groups: LiveData<List<GroupListUiModel>> get() = _groups
 
     val groupFilterSelector = GroupFilterSelector()
 
@@ -32,7 +31,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
             delay(1000)
             _groups.value =
                 listOf(
-                    GroupUiModel(
+                    GroupListUiModel(
                         groupId = 0L,
                         filters =
                             listOf(
@@ -50,8 +49,9 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupLeader = "벼리",
                         groupDate = LocalDateTime.now(),
                         groupWoofs = listOf(),
+                        groupReaderImage = "",
                     ),
-                    GroupUiModel(
+                    GroupListUiModel(
                         groupId = 0L,
                         filters =
                             listOf(
@@ -68,6 +68,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupLeader = "채드",
                         groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
                         groupWoofs = listOf(),
+                        groupReaderImage = "",
                     ),
                 )
         }

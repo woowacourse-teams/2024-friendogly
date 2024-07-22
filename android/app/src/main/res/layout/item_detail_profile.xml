@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name=""
+            type="" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginEnd="10dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/iv_"
             android:background="@drawable/rect_white_fill_radius8"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
         <TextView
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
             tools:text = "멍멍이"

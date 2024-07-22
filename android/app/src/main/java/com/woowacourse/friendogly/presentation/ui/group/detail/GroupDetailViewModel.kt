@@ -6,15 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
-import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
-    private val _group: MutableLiveData<GroupUiModel> = MutableLiveData()
-    val group: LiveData<GroupUiModel> get() = _group
+    private val _group: MutableLiveData<GroupDetailUiModel> = MutableLiveData()
+    val group: LiveData<GroupDetailUiModel> get() = _group
 
     private val _groupDetailEvent: MutableLiveData<Event<GroupDetailEvent>> = MutableLiveData()
     val groupDetailEvent: LiveData<Event<GroupDetailEvent>> get() = _groupDetailEvent
@@ -23,7 +22,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
     fun loadGroup(groupId: Long) =
         viewModelScope.launch {
             delay(1000)
-            _group.value = GroupUiModel(
+            _group.value = GroupDetailUiModel(
                 groupId = 0L,
                 filters =
                 listOf(
@@ -40,8 +39,59 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 groupLocation = "잠실6동",
                 groupLeader = "벼리",
                 groupDate = LocalDateTime.now(),
-                groupWoofs = listOf(),
                 groupReaderImage = "",
+                userProfiles = listOf(
+                    GroupDetailProfileUiModel(
+                        "땡이",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "채드",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "벼리",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "에디",
+                        ""
+                    ),
+                ),
+                dogProfiles = listOf(
+                    GroupDetailProfileUiModel(
+                        "땡이",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "채드",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "벼리",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "에디",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "땡이",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "채드",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "벼리",
+                        ""
+                    ),
+                    GroupDetailProfileUiModel(
+                        "에디",
+                        ""
+                    ),
+                )
             )
         }
 

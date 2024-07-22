@@ -6,22 +6,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.woowacourse.friendogly.databinding.ItemGroupBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
-import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
+import com.woowacourse.friendogly.presentation.ui.group.list.GroupListUiModel
 
 class GroupListAdapter(
     private val actionHandler: GroupListActionHandler,
-) : ListAdapter<GroupUiModel, GroupViewHolder>(GroupDiffCallback()) {
-    class GroupDiffCallback : DiffUtil.ItemCallback<GroupUiModel>() {
+) : ListAdapter<GroupListUiModel, GroupViewHolder>(GroupDiffCallback()) {
+    class GroupDiffCallback : DiffUtil.ItemCallback<GroupListUiModel>() {
         override fun areItemsTheSame(
-            oldItem: GroupUiModel,
-            newItem: GroupUiModel,
+            oldItem: GroupListUiModel,
+            newItem: GroupListUiModel,
         ): Boolean {
             return oldItem.groupId == newItem.groupId
         }
 
         override fun areContentsTheSame(
-            oldItem: GroupUiModel,
-            newItem: GroupUiModel,
+            oldItem: GroupListUiModel,
+            newItem: GroupListUiModel,
         ): Boolean {
             return oldItem == newItem
         }

@@ -5,7 +5,7 @@ import com.woowacourse.friendogly.databinding.ItemGroupBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.woof.GroupWoofAdapter
-import com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel
+import com.woowacourse.friendogly.presentation.ui.group.list.GroupListUiModel
 
 class GroupViewHolder(
     private val binding: ItemGroupBinding,
@@ -19,12 +19,12 @@ class GroupViewHolder(
     }
 
     fun bind(
-        groupUiModel: GroupUiModel,
+        groupListUiModel: GroupListUiModel,
         actionHandler: GroupListActionHandler,
     ) {
-        binding.group = groupUiModel
+        binding.group = groupListUiModel
         binding.actionHandler = actionHandler
-        filterAdapter.submitList(groupUiModel.filters)
-        woofAdapter.submitList(groupUiModel.groupWoofs)
+        filterAdapter.submitList(groupListUiModel.filters)
+        woofAdapter.submitList(groupListUiModel.groupWoofs)
     }
 }
