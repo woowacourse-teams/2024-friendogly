@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.presentation.model
 
-data class FootPrintUiModel(
+data class FootprintUiModel(
     val latitude: Double,
     val longitude: Double,
     val isVisible: Boolean,

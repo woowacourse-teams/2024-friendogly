@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintViewModel" />
+            type="com.woowacourse.friendogly.presentation.ui.woof.footprint.FootprintViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

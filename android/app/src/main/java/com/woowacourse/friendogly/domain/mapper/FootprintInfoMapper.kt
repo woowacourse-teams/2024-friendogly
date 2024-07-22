@@ -1,14 +1,14 @@
 package com.woowacourse.friendogly.domain.mapper
 
-import com.woowacourse.friendogly.domain.model.FootPrintInfo
+import com.woowacourse.friendogly.domain.model.FootprintInfo
 import com.woowacourse.friendogly.domain.model.PetGender
 import com.woowacourse.friendogly.domain.model.PetSizeType
-import com.woowacourse.friendogly.presentation.model.FootPrintInfoUiModel
+import com.woowacourse.friendogly.presentation.model.FootprintInfoUiModel
 import java.time.LocalDate
 import java.time.Period
 
-fun FootPrintInfo.toPresentation(): FootPrintInfoUiModel {
-    return FootPrintInfoUiModel(
+fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
+    return FootprintInfoUiModel(
         petName = "땡이",
         petDescription = "안녕하세요! 땡이에요~",
         petAge = LocalDate.of(2020, 2, 22).toAge(),

@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.domain.repository
 
-import com.woowacourse.friendogly.domain.model.FootPrint
-import com.woowacourse.friendogly.domain.model.FootPrintMarkBtnInfo
+import com.woowacourse.friendogly.domain.model.Footprint
+import com.woowacourse.friendogly.domain.model.FootprintMarkBtnInfo
 import com.woowacourse.friendogly.domain.model.LandMark
 
 interface WoofRepository {
@@ -10,12 +10,12 @@ interface WoofRepository {
         longitude: Double,
     ): Result<Unit>
 
-    suspend fun getFootPrintMarkBtnInfo(): Result<FootPrintMarkBtnInfo>
+    suspend fun getFootPrintMarkBtnInfo(): Result<FootprintMarkBtnInfo>
 
     suspend fun getNearFootPrints(
         latitude: Double,
         longitude: Double,
-    ): Result<List<FootPrint>>
+    ): Result<List<Footprint>>
 
     suspend fun getLandMarks(): Result<List<LandMark>>
 }

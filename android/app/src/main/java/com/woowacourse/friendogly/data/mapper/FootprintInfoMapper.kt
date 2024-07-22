@@ -1,17 +1,17 @@
 package com.woowacourse.friendogly.data.mapper
 
-import com.woowacourse.friendogly.data.model.FootPrintInfoDto
-import com.woowacourse.friendogly.domain.model.FootPrintInfo
+import com.woowacourse.friendogly.data.model.FootprintInfoDto
+import com.woowacourse.friendogly.domain.model.FootprintInfo
 import com.woowacourse.friendogly.domain.model.PetGender
 import com.woowacourse.friendogly.domain.model.PetSizeType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun FootPrintInfoDto.toDomain(): FootPrintInfo {
+fun FootprintInfoDto.toDomain(): FootprintInfo {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val localDate = LocalDate.parse(petBirthDate, formatter)
 
-    return FootPrintInfo(
+    return FootprintInfo(
         memberName = memberName,
         petName = petName,
         petDescription = petDescription,

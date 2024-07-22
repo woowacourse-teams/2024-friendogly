@@ -6,21 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteFootPrintDataSource
-import com.woowacourse.friendogly.data.repository.FootPrintRepositoryImpl
-import com.woowacourse.friendogly.databinding.BottomSheetFootPrintBinding
+import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteFootprintDataSource
+import com.woowacourse.friendogly.data.repository.FootprintRepositoryImpl
+import com.woowacourse.friendogly.databinding.BottomSheetFootprintBinding
 
-class FootPrintBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetFootPrintBinding? = null
-    val binding: BottomSheetFootPrintBinding
+class FootprintBottomSheet : BottomSheetDialogFragment() {
+    private var _binding: BottomSheetFootprintBinding? = null
+    val binding: BottomSheetFootprintBinding
         get() = _binding!!
 
-    private val viewModel: FootPrintViewModel by viewModels<FootPrintViewModel> {
-        FootPrintViewModel.factory(
+    private val viewModel: FootprintViewModel by viewModels<FootprintViewModel> {
+        FootprintViewModel.factory(
             footPrintId = footPrintId,
             footPrintRepository =
-                FootPrintRepositoryImpl(
-                    remoteFootPrintDataSource,
+                FootprintRepositoryImpl(
+                    remoteFootprintDataSource,
                 ),
         )
     }
@@ -34,7 +34,7 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = BottomSheetFootPrintBinding.inflate(inflater, container, false)
+        _binding = BottomSheetFootprintBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,8 +59,8 @@ class FootPrintBottomSheet : BottomSheetDialogFragment() {
     companion object {
         private const val KEY_FOOT_PRINT_ID = "footPrintId"
 
-        fun newInstance(footPrintId: Long): FootPrintBottomSheet {
-            return FootPrintBottomSheet().apply {
+        fun newInstance(footPrintId: Long): FootprintBottomSheet {
+            return FootprintBottomSheet().apply {
                 arguments =
                     Bundle().apply {
                         putLong(KEY_FOOT_PRINT_ID, footPrintId)

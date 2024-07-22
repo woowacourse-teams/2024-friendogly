@@ -1,11 +1,11 @@
 package com.woowacourse.friendogly.presentation.ui.woof
 
-import com.woowacourse.friendogly.presentation.model.FootPrintMarkBtnInfoUiModel
-import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
+import com.woowacourse.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
+import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 import com.woowacourse.friendogly.presentation.model.LandMarkUiModel
 
 data class WoofUiState(
-    val nearFootPrints: List<FootPrintUiModel> = emptyList(),
+    val nearFootPrints: List<FootprintUiModel> = emptyList(),
     val landMarks: List<LandMarkUiModel> = emptyList(),
-    val footPrintMarkBtnInfo: FootPrintMarkBtnInfoUiModel? = null,
+    val footPrintMarkBtnInfo: FootprintMarkBtnInfoUiModel? = null,
 )

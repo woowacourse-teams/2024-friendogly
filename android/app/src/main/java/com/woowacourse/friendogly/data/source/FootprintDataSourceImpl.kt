@@ -1,14 +1,14 @@
 package com.woowacourse.friendogly.data.source
 
-import com.woowacourse.friendogly.data.model.FootPrintInfoDto
-import com.woowacourse.friendogly.remote.service.FootPrintService
-import com.woowacourse.friendogly.remote.source.FootPrintDataSource
+import com.woowacourse.friendogly.data.model.FootprintInfoDto
+import com.woowacourse.friendogly.remote.service.FootprintService
+import com.woowacourse.friendogly.remote.source.FootprintDataSource
 
-class FootPrintDataSourceImpl(private val footPrintService: FootPrintService) :
-    FootPrintDataSource {
-    override suspend fun getFootPrintInfo(footprintId: Long): Result<FootPrintInfoDto> {
+class FootprintDataSourceImpl(private val footPrintService: FootprintService) :
+    FootprintDataSource {
+    override suspend fun getFootPrintInfo(footprintId: Long): Result<FootprintInfoDto> {
         return Result.success(
-            FootPrintInfoDto(
+            FootprintInfoDto(
                 memberName = "도도",
                 petName = "땡이",
                 petDescription = "안녕하세요! 땡이에요~",

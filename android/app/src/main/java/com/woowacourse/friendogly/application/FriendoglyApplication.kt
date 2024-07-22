@@ -6,11 +6,11 @@ import com.naver.maps.map.NaverMapSdk
 import com.woowacourse.friendogly.BuildConfig
 import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.data.client.RetrofitClient
-import com.woowacourse.friendogly.data.source.FootPrintDataSourceImpl
+import com.woowacourse.friendogly.data.source.FootprintDataSourceImpl
 import com.woowacourse.friendogly.data.source.WoofDataSourceImpl
-import com.woowacourse.friendogly.remote.service.FootPrintService
+import com.woowacourse.friendogly.remote.service.FootprintService
 import com.woowacourse.friendogly.remote.service.WoofService
-import com.woowacourse.friendogly.remote.source.FootPrintDataSource
+import com.woowacourse.friendogly.remote.source.FootprintDataSource
 import com.woowacourse.friendogly.remote.source.WoofDataSource
 
 class FriendoglyApplication : Application() {
@@ -21,9 +21,9 @@ class FriendoglyApplication : Application() {
         AppModule.setInstance(applicationContext)
 
         val retrofit = RetrofitClient.getInstance()
-        val footPrintService = retrofit.create(FootPrintService::class.java)
+        val footPrintService = retrofit.create(FootprintService::class.java)
         val woofService = retrofit.create(WoofService::class.java)
-        remoteFootPrintDataSource = FootPrintDataSourceImpl(footPrintService)
+        remoteFootprintDataSource = FootprintDataSourceImpl(footPrintService)
         remoteWoofDataSource = WoofDataSourceImpl(woofService)
     }
 
@@ -33,7 +33,7 @@ class FriendoglyApplication : Application() {
     }
 
     companion object {
-        lateinit var remoteFootPrintDataSource: FootPrintDataSource
+        lateinit var remoteFootprintDataSource: FootprintDataSource
         lateinit var remoteWoofDataSource: WoofDataSource
     }
 }

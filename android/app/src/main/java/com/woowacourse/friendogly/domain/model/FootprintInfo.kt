@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.domain.model
 
 import java.time.LocalDate
 
-data class FootPrintInfo(
+data class FootprintInfo(
     val memberName: String,
     val petName: String,
     val petDescription: String,

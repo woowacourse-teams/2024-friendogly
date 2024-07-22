@@ -5,17 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.domain.mapper.toPresentation
-import com.woowacourse.friendogly.domain.repository.FootPrintRepository
+import com.woowacourse.friendogly.domain.repository.FootprintRepository
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
 import kotlinx.coroutines.launch
 
-class FootPrintViewModel(
+class FootprintViewModel(
     private val footPrintId: Long,
-    private val footPrintRepository: FootPrintRepository,
+    private val footPrintRepository: FootprintRepository,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<FootPrintUiState> = MutableLiveData()
-    val uiState: LiveData<FootPrintUiState> get() = _uiState
+    private val _uiState: MutableLiveData<FootprintUiState> = MutableLiveData()
+    val uiState: LiveData<FootprintUiState> get() = _uiState
 
     init {
         viewModelScope.launch {
@@ -25,7 +25,7 @@ class FootPrintViewModel(
 
     private suspend fun loadFootPrintInfo() {
         footPrintRepository.getFootPrintInfo(footPrintId).onSuccess { footPrintInfo ->
-            val state = uiState.value ?: FootPrintUiState()
+            val state = uiState.value ?: FootprintUiState()
             _uiState.postValue(state.copy(footPrintInfo = footPrintInfo.toPresentation()))
         }.onFailure {
         }
@@ -34,10 +34,10 @@ class FootPrintViewModel(
     companion object {
         fun factory(
             footPrintId: Long,
-            footPrintRepository: FootPrintRepository,
+            footPrintRepository: FootprintRepository,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
-                FootPrintViewModel(
+                FootprintViewModel(
                     footPrintId = footPrintId,
                     footPrintRepository = footPrintRepository,
                 )

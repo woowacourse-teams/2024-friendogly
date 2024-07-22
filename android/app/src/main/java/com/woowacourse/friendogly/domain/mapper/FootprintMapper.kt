@@ -1,10 +1,10 @@
 package com.woowacourse.friendogly.domain.mapper
 
-import com.woowacourse.friendogly.domain.model.FootPrint
-import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
+import com.woowacourse.friendogly.domain.model.Footprint
+import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 
-fun FootPrint.toPresentation(): FootPrintUiModel {
-    return FootPrintUiModel(
+fun Footprint.toPresentation(): FootprintUiModel {
+    return FootprintUiModel(
         latitude = latitude,
         longitude = longitude,
         isVisible = isVisible(),
@@ -13,7 +13,7 @@ fun FootPrint.toPresentation(): FootPrintUiModel {
     )
 }
 
-fun List<FootPrint>.toPresentation(): List<FootPrintUiModel> {
+fun List<Footprint>.toPresentation(): List<FootprintUiModel> {
     return map { domain ->
         domain.toPresentation()
     }

@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.domain.model
 
 import java.time.LocalDateTime
 
-data class FootPrint(
+data class Footprint(
     val footPrintId: Long,
     val latitude: Double,
     val longitude: Double,

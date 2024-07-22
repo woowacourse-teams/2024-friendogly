@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.presentation.model
 
-data class FootPrintInfoUiModel(
+data class FootprintInfoUiModel(
     val petName: String,
     val petDescription: String,
     val petAge: String,

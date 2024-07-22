@@ -20,9 +20,9 @@ import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.re
 import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
-import com.woowacourse.friendogly.presentation.model.FootPrintUiModel
+import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootPrintBottomSheet
+import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 
 class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
@@ -144,7 +144,7 @@ class WoofFragment :
         latLng: LatLng,
         isMine: Boolean,
     ) {
-        val iconImage = if (isMine) R.drawable.ic_my_foot_print else R.drawable.ic_other_foot_print
+        val iconImage = if (isMine) R.drawable.ic_my_footprint else R.drawable.ic_other_footprint
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(iconImage)
@@ -158,7 +158,7 @@ class WoofFragment :
     private fun setUpMarkerAction(marker: Marker) {
         marker.setOnClickListener {
             val bottomSheet =
-                FootPrintBottomSheet.newInstance(
+                FootprintBottomSheet.newInstance(
                     footPrintId = 1L,
                 )
             bottomSheet.show(parentFragmentManager, tag)
@@ -166,7 +166,7 @@ class WoofFragment :
         }
     }
 
-    private fun markNearFootPrints(footPrints: List<FootPrintUiModel>) {
+    private fun markNearFootPrints(footPrints: List<FootprintUiModel>) {
         footPrints.forEach { footPrint ->
             createMarker(
                 latLng = LatLng(footPrint.latitude, footPrint.longitude),

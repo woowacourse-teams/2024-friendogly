@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.presentation.model
 
-data class FootPrintMarkBtnInfoUiModel(
+data class FootprintMarkBtnInfoUiModel(
     val isClickable: Boolean,
     val remainingTime: String,
 )
