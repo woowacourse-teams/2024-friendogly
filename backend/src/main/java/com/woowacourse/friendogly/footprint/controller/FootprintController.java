@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
@@ -39,37 +40,45 @@ public class FootprintController {
     }
 
     @PostMapping
-    public ResponseEntity<SaveFootprintResponse> save(@Valid @RequestBody SaveFootprintRequest request) {
-        SaveFootprintResponse response = footprintCommandService.save(1L, request);
+    public ResponseEntity<SaveFootprintResponse> save(
+            @Auth Long memberId,
+            @Valid @RequestBody SaveFootprintRequest request
+    ) {
+        SaveFootprintResponse response = footprintCommandService.save(memberId, request);
         return ResponseEntity.created(URI.create("/footprints/" + response.id()))
                 .body(response);
     }
 
     @GetMapping("/{footprintId}")
-    public ResponseEntity<FindOneFootprintResponse> findOne(@PathVariable Long footprintId) {
+    public ResponseEntity<FindOneFootprintResponse> findOne(
+            @Auth Long memberId,
+            @PathVariable Long footprintId
+    ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindOneFootprintResponse response = footprintQueryService.findOne(1L, footprintId);
+        FindOneFootprintResponse response = footprintQueryService.findOne(memberId, footprintId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/near")
-    public ResponseEntity<List<FindNearFootprintResponse>> findNear(@Valid FindNearFootprintRequest request) {
-        // memberId == 1L 로 dummy data 사용
+    public ResponseEntity<List<FindNearFootprintResponse>> findNear(
+            @Auth Long memberId,
+            @Valid FindNearFootprintRequest request
+    ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        List<FindNearFootprintResponse> response = footprintQueryService.findNear(1L, request);
+        List<FindNearFootprintResponse> response = footprintQueryService.findNear(memberId, request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mine/latest")
-    public ResponseEntity<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime() {
-        // memberId == 1L 로 dummy data 사용
+    public ResponseEntity<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime(@Auth Long memberId) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(1L);
+        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(memberId);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/image/{footprintId}")
     public ResponseEntity<UpdateFootprintImageResponse> updateFootprintImage(
+            @Auth Long memberId,
             @PathVariable Long footprintId,
             @ModelAttribute UpdateFootprintImageRequest request
     ) {
