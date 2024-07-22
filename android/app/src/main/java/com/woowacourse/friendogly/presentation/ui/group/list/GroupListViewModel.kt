@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
+import com.woowacourse.friendogly.presentation.base.Event
+import com.woowacourse.friendogly.presentation.base.emit
 import com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
@@ -18,6 +20,9 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
 
     private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupListUiModel>> get() = _groups
+
+    private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
+    val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
     val groupFilterSelector = GroupFilterSelector()
 
@@ -72,4 +77,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                     ),
                 )
         }
+
+    override fun loadGroup(groupId: Long) {
+        _groupListEvent.emit(GroupListEvent.OpenGroup(groupId))
+    }
 }
