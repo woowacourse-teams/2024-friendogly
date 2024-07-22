@@ -7,6 +7,8 @@ import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
 import com.woowacourse.friendogly.pet.service.PetCommandService;
 import com.woowacourse.friendogly.pet.service.PetQueryService;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/pets")
@@ -47,7 +46,7 @@ public class PetController {
     }
 
     @GetMapping("/mine")
-    public List<FindPetResponse> findByMemberId(@Auth Long memberId) {
+    public List<FindPetResponse> findMine(@Auth Long memberId) {
         return petQueryService.findByMemberId(memberId);
     }
 }
