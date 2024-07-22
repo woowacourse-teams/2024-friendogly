@@ -7,8 +7,7 @@
 
         <variable
             name="group"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupUiModel" />
-
+            type="com.woowacourse.friendogly.presentation.ui.group.model.GroupUiModel" />
         <variable
             name="actionHandler"
             type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
@@ -159,13 +158,13 @@
                 tools:text="벼리 · 잠실6동 " />
 
             <TextView
-                app:groupDateTime="@{group.groupDate}"
                 android:id="@+id/tv_group_list_group_date"
                 style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
+                app:groupDateTime="@{group.groupDate}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_group_list_user_list_icon"

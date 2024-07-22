@@ -3,7 +3,7 @@ package com.woowacourse.friendogly.presentation.ui.group.list.adapter.selectfilt
 import androidx.recyclerview.widget.RecyclerView
 import com.woowacourse.friendogly.databinding.ItemSelectFilterBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
-import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 class SelectFilterViewHolder(
     private val binding: ItemSelectFilterBinding,

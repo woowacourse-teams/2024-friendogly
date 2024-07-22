@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter
+package com.woowacourse.friendogly.presentation.ui.group.model.groupfilter
 
 enum class ParticipationFilter(val filterName: String) {
     POSSIBLE("참여 가능"),

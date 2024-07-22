@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.group.add.GroupAddActivity"
+            android:exported="false"/>
+        <activity
             android:name=".presentation.ui.profilesetting.ProfileSettingActivity"
             android:exported="false" />
         <activity

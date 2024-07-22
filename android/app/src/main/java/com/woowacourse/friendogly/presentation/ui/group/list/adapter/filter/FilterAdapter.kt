@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.woowacourse.friendogly.databinding.ItemFilterBinding
-import com.woowacourse.friendogly.presentation.ui.group.list.model.groupfilter.GroupFilter
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 class FilterAdapter : ListAdapter<GroupFilter, FilterViewHolder>(FilterDiffCallback()) {
     class FilterDiffCallback : DiffUtil.ItemCallback<GroupFilter>() {
