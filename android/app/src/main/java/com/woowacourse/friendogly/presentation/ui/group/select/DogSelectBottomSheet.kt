@@ -10,15 +10,23 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.woowacourse.friendogly.databinding.BottomSheetDogSelectorBinding
+import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.woowacourse.friendogly.presentation.ui.group.select.adapter.DogSelectAdapter
 import kotlin.math.abs
 
-class DogSelectBottomSheet : BottomSheetDialogFragment() {
+class DogSelectBottomSheet(
+    filters: List<GroupFilter>,
+    private val cancel: () -> Unit,
+    private val submit: (List<Long>) -> Unit,
+) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDogSelectorBinding? = null
     val binding: BottomSheetDogSelectorBinding
         get() = _binding!!
 
-    private val viewModel: DogSelectViewModel by viewModels()
+    private val viewModel: DogSelectViewModel by viewModels {
+        DogSelectViewModel.factory(filters = filters)
+    }
+
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)
     }
