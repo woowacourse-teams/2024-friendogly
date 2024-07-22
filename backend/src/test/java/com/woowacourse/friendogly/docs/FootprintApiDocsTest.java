@@ -64,7 +64,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("발자국 저장 API")
+                                .tag("Footprint API")
                                 .summary("발자국 저장 API")
                                 .requestFields(
                                         fieldWithPath("latitude").description("현재 위치의 위도"),
@@ -112,7 +112,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("발자국 세부정보 단건 조회 API")
+                                .tag("Footprint API")
                                 .summary("발자국 세부정보 단건 조회 API")
                                 .pathParameters(
                                         parameterWithName("footprintId").description("발자국 ID")
@@ -166,7 +166,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("주변 발자국 조회 API")
+                                .tag("Footprint API")
                                 .summary("주변 발자국 조회 API")
                                 .queryParameters(
                                         parameterWithName("latitude").description("현재 위치의 위도"),
@@ -204,7 +204,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
-                                .tag("자신의 마지막 발자국 시간 조회 API")
+                                .tag("Footprint API")
                                 .summary("자신의 마지막 발자국 시간 조회 API")
                                 .responseFields(
                                         fieldWithPath("createdAt").description("자신의 가장 최근 발자국 생성 시간")
