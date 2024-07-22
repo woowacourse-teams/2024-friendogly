@@ -73,7 +73,7 @@ public class FootprintCommandService {
         );
 
         if (exists) {
-            throw new FriendoglyException("마지막 발자국을 찍은 뒤 30초가 경과되지 않았습니다.");
+            throw new FriendoglyException(String.format("마지막 발자국을 찍은 뒤 %d초가 경과되지 않았습니다.", FOOTPRINT_COOLDOWN_SECOND));
         }
     }
 
