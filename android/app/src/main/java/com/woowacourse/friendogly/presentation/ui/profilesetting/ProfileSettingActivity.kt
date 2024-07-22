@@ -12,6 +12,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.ActivityProfileSettingBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
@@ -25,7 +26,12 @@ import com.woowacourse.friendogly.presentation.utils.toMultipartBody
 
 class ProfileSettingActivity :
     BaseActivity<ActivityProfileSettingBinding>(R.layout.activity_profile_setting) {
-    private val viewModel: ProfileSettingViewModel by viewModels()
+    private val viewModel: ProfileSettingViewModel by viewModels {
+        ProfileSettingViewModel.factory(
+            postMemberUseCase = AppModule.getInstance().postMemberUseCase,
+            saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
+        )
+    }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>

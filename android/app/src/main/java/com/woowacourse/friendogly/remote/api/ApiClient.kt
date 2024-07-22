@@ -8,7 +8,10 @@ class ApiClient {
         const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
     }
 
-    object Member
+    object Member {
+        private const val BASE_URL = "/members"
+        const val POST_MEMBER = BASE_URL
+    }
 
     object Pet
 
