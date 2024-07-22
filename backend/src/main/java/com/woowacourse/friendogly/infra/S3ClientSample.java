@@ -26,15 +26,16 @@ public class S3ClientSample {
         s3Client.putObject(putObjectRequest,requestBody);
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file) {
-        File convertedFile = new File("dog" + File.separator + file.getOriginalFilename());
-        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+    private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
+        File tmp = File.createTempFile("tmp", null);
+        try (FileOutputStream fos = new FileOutputStream(tmp)) {
             fos.write(file.getBytes());
+            fos.flush();
         } catch (IOException e) {
-            // Handle exception
-            e.printStackTrace();
+            throw new IOException("파일 변환 중 오류 발생", e);
         }
-        return convertedFile;
+
+        return tmp;
     }
 
 }
