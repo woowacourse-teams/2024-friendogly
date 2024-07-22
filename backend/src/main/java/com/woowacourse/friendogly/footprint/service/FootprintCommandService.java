@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
+import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -37,7 +38,7 @@ public class FootprintCommandService {
         this.petRepository = petRepository;
     }
 
-    public Long save(Long memberId, SaveFootprintRequest request) {
+    public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
 
@@ -51,7 +52,11 @@ public class FootprintCommandService {
                         .build()
         );
 
-        return footprint.getId();
+        return new SaveFootprintResponse(
+                footprint.getId(),
+                footprint.getLocation().getLatitude(),
+                footprint.getLocation().getLongitude()
+        );
     }
 
     private void validatePetExistence(Member member) {

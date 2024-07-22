@@ -24,6 +24,7 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import com.woowacourse.friendogly.pet.domain.Gender;
@@ -49,9 +50,10 @@ public class FootprintApiDocsTest extends RestDocsTest {
     @Test
     void save() throws Exception {
         SaveFootprintRequest request = new SaveFootprintRequest(37.5173316, 127.1011661);
+        SaveFootprintResponse response = new SaveFootprintResponse(1L, 37.5173316, 127.1011661);
 
         given(footprintCommandService.save(any(Long.class), eq(request)))
-                .willReturn(1L);
+                .willReturn(response);
 
         mockMvc
                 .perform(post("/footprints")
@@ -70,6 +72,11 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 )
                                 .responseHeaders(
                                         headerWithName(LOCATION).description("Location")
+                                )
+                                .responseFields(
+                                        fieldWithPath("id").description("생성된 발자국 ID"),
+                                        fieldWithPath("latitude").description("생성된 발자국의 위도"),
+                                        fieldWithPath("longitude").description("생성된 발자국의 경도")
                                 )
                                 .requestSchema(Schema.schema("FindNearFootprintRequest"))
                                 .build()
