@@ -8,5 +8,6 @@ data class FootprintInfoDto(
     val petSizeType: String,
     val petGender: String,
     val footprintImageUrl: String,
+    val createdAt: String,
     val isMine: Boolean,
 )

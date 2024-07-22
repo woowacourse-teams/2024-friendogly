@@ -17,6 +17,7 @@ class FootprintDataSourceImpl(private val footPrintService: FootprintService) :
                 petGender = "FEMALE",
                 footprintImageUrl = "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
                 isMine = false,
+                createdAt = "2024-07-22 11:24:11",
             ),
         )
 //        return footPrintService.getFootPrintInfo(footprintId)

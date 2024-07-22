@@ -138,7 +138,7 @@
     <string name="group_complete_participate_name">모집완료</string>
 
     <!--멍멍 짓기-->
-    <string name="woof_dog_walking">%s가 여기서 산책하고 있어요!</string>
+    <string name="woof_dog_walking">%s가 %s에 다녀갔어요!</string>
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>

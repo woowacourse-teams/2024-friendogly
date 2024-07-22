@@ -43,7 +43,8 @@
             <TextView
                 android:id="@+id/tv_woof_dog_walking"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Gray10.Size18"
-                footPrintWalking="@{vm.uiState.footPrintInfo.petName}"
+                petName="@{vm.uiState.footPrintInfo.petName}"
+                dateOfVisit="@{vm.uiState.footPrintInfo.dateOfVisit}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

@@ -7,5 +7,6 @@ data class FootprintInfoUiModel(
     val petSizeType: String,
     val petGender: String,
     val footprintImageUrl: String,
+    val dateOfVisit: String,
     val isMine: Boolean,
 )

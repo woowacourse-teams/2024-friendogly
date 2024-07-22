@@ -4,21 +4,19 @@ import com.woowacourse.friendogly.data.model.FootprintInfoDto
 import com.woowacourse.friendogly.domain.model.FootprintInfo
 import com.woowacourse.friendogly.domain.model.PetGender
 import com.woowacourse.friendogly.domain.model.PetSizeType
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.woowacourse.friendogly.presentation.utils.parseToLocalDate
+import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTime
 
 fun FootprintInfoDto.toDomain(): FootprintInfo {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val localDate = LocalDate.parse(petBirthDate, formatter)
-
     return FootprintInfo(
         memberName = memberName,
         petName = petName,
         petDescription = petDescription,
-        petBirthDate = localDate,
+        petBirthDate = parseToLocalDate(petBirthDate),
         petSizeType = PetSizeType.from(petSizeType),
         petGender = PetGender.from(petGender),
         footprintImageUrl = footprintImageUrl,
+        createdAt = parseToLocalDateTime(createdAt),
         isMine = isMine,
     )
 }
