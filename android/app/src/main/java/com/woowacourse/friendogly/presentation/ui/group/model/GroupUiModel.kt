@@ -15,6 +15,7 @@ data class GroupUiModel(
     val currentNumberOfPeople: Int,
     val groupLocation: String,
     val groupLeader: String,
+    val groupReaderImage: String,
     val groupDate: LocalDateTime,
     val groupWoofs: List<GroupWoof>,
 )

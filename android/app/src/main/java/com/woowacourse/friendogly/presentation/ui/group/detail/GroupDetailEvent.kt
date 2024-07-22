@@ -4,5 +4,10 @@ import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupF
 
 sealed interface GroupDetailEvent {
     data class OpenDogSelector(val filters: List<GroupFilter>): GroupDetailEvent
-    data object JoinGroup : GroupDetailEvent
+    data object OpenDetailMenu : GroupDetailEvent
+
+    sealed interface Navigation: GroupDetailEvent {
+        data object NavigateToChat : Navigation
+        data object NavigateToHome: Navigation
+    }
 }

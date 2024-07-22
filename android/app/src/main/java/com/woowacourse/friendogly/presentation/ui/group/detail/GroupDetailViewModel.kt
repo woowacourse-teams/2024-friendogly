@@ -41,6 +41,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 groupLeader = "벼리",
                 groupDate = LocalDateTime.now(),
                 groupWoofs = listOf(),
+                groupReaderImage = "",
             )
         }
 
@@ -48,10 +49,18 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
         _groupDetailEvent.emit(GroupDetailEvent.OpenDogSelector(group.value?.filters ?: listOf()))
     }
 
+    override fun closeDetail() {
+        _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToHome)
+    }
+
+    override fun openMenu() {
+        _groupDetailEvent.emit(GroupDetailEvent.OpenDetailMenu)
+    }
+
     //TODO: join group api
     fun joinGroup() = viewModelScope.launch {
         //TODO : success
-        _groupDetailEvent.emit(GroupDetailEvent.JoinGroup)
+        _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
     }
 
 }

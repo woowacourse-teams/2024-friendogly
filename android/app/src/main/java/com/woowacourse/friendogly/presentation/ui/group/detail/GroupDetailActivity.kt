@@ -28,28 +28,33 @@ class GroupDetailActivity :
         if (groupId != FAIL_LOAD_DATA_ID) {
             viewModel.loadGroup(groupId)
         } else {
-            showSnackbar(resources.getString(R.string.group_detail_fail_load)){
-                setAction(resources.getString(R.string.group_detail_fail_button)){
+            showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
+                setAction(resources.getString(R.string.group_detail_fail_button)) {
                     finish()
                 }
             }
         }
     }
 
-    private fun initObserver(){
-        viewModel.groupDetailEvent.observeEvent(this){ event ->
-            when(event){
+    private fun initObserver() {
+        viewModel.groupDetailEvent.observeEvent(this) { event ->
+            when (event) {
                 is GroupDetailEvent.OpenDogSelector -> {
-                    val bottomSheet = DogSelectBottomSheet(filters = event.filters){
+                    val bottomSheet = DogSelectBottomSheet(filters = event.filters) {
                         viewModel.joinGroup()
                     }
-                    bottomSheet.show(supportFragmentManager,"TAG")
+                    bottomSheet.show(supportFragmentManager, "TAG")
                 }
 
-                GroupDetailEvent.JoinGroup -> {
-                    //TODO: delete and go chatActivity
+                //TODO: delete and go chatActivity
+                GroupDetailEvent.Navigation.NavigateToChat -> {
                     finish()
                 }
+
+                GroupDetailEvent.Navigation.NavigateToHome -> finish()
+
+                //TODO: open app bar menu
+                GroupDetailEvent.OpenDetailMenu -> {}
             }
         }
     }
@@ -63,7 +68,7 @@ class GroupDetailActivity :
             groupId: Long,
         ): Intent {
             return Intent(context, GroupDetailActivity::class.java).apply {
-                putExtra(KEY_GROUP_DETAIL_ID,groupId)
+                putExtra(KEY_GROUP_DETAIL_ID, groupId)
             }
         }
     }

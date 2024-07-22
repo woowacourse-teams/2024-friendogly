@@ -20,19 +20,22 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                app:glide="@{vm.group.groupPoster}"
                 android:id="@+id/iv_group_detail_poster"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/black"
                 android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/view_group_detail_top_bar"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                onSingleClick="@{()->vm.closeDetail()}"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_arrow_left"
                 app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
@@ -40,8 +43,9 @@
                 app:tint="@color/white" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                onSingleClick="@{()->vm.openMenu()}"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_more_vertical"
                 app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"
@@ -56,16 +60,21 @@
 
             <ImageView
                 android:id="@+id/iv_group_detail_user_image"
+                glide1000="@{vm.group.groupReaderImage}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
+                android:background="@drawable/shape_indicator_active"
+                android:backgroundTint="@color/orange05"
                 android:src="@drawable/ic_dog"
                 app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintStart_toStartOf="@id/view_group_detail_top_bar"
-                app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar" />
+                app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
+                app:shapeAppearanceOverlay="@style/RoundBig" />
 
             <TextView
                 android:id="@+id/tv_group_detail_user_name"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -82,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,6 +99,8 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_group_detail_user_name">
 
                 <TextView
+                    style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
+                    android:text="@{vm.group.groupLocation}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="잠실6동" />
@@ -99,8 +111,10 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:groupDateTime="@{vm.group.groupDate}"
                     tools:text="1일 전" />
             </LinearLayout>
 
@@ -116,31 +130,38 @@
                 android:id="@+id/rcv_group_detail_filter_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/item_filter"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/view_group_detail_line" />
+                app:layout_constraintTop_toBottomOf="@id/view_group_detail_line"
+                tools:listitem="@layout/item_filter" />
 
             <TextView
                 android:id="@+id/tv_group_detail_subject"
+                android:text="@{vm.group.title}"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:paddingTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_filter_list"
-                tools:text="모임 이름이에요~" />
+                tools:text="모임 이름이에요~모임 이름이에요~모임 이름이에요~모임 이름이에요~" />
 
             <TextView
+                android:text="@{vm.group.content}"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
                 android:id="@+id/tv_group_detail_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="10dp"
+                android:paddingTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_group_detail_subject"
-                tools:text="모임 내용입니다." />
+                tools:text="모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다." />
 
             <TextView
                 android:id="@+id/tv_group_detail_user_list_subject"
@@ -149,6 +170,7 @@
                 android:layout_margin="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/group_user_list_subject"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_group_detail_content" />
 
@@ -165,7 +187,9 @@
             <TextView
                 android:id="@+id/tv_group_list_dog_list_subject"
                 android:layout_width="0dp"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:layout_margin="10dp"
                 android:text="@string/group_dog_list_subject"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -182,12 +206,16 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_group_list_dog_list_subject"
                 tools:listitem="@layout/item_detail_dog_profile" />
 
-            <Button
+            <TextView
+                onSingleClick="@{()->vm.selectDog()}"
+                android:backgroundTint="@color/orange05"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
+                style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
                 android:background="@drawable/rect_white_fill_radius10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
