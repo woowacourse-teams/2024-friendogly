@@ -38,17 +38,15 @@ class GroupDetailActivity :
 
     private fun receiveGroupId() {
         val groupId = intent.getLongExtra(KEY_GROUP_DETAIL_ID, FAIL_LOAD_DATA_ID)
-        //TODO: change to api
-        viewModel.loadGroup(groupId)
-//        if (groupId != FAIL_LOAD_DATA_ID) {
-//            viewModel.loadGroup(groupId)
-//        } else {
-//            showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
-//                setAction(resources.getString(R.string.group_detail_fail_button)) {
-//                    finish()
-//                }
-//            }
-//        }
+        if (groupId != FAIL_LOAD_DATA_ID) {
+            viewModel.loadGroup(groupId)
+        } else {
+            showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
+                setAction(resources.getString(R.string.group_detail_fail_button)) {
+                    finish()
+                }
+            }
+        }
     }
 
     private fun initAdapter(){

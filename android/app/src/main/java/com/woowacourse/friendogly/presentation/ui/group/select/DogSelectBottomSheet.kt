@@ -1,14 +1,18 @@
 package com.woowacourse.friendogly.presentation.ui.group.select
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.BottomSheetDogSelectorBinding
@@ -25,12 +29,26 @@ class DogSelectBottomSheet(
     val binding: BottomSheetDogSelectorBinding
         get() = _binding!!
 
+    private lateinit var dlg: BottomSheetDialog
     private var toast: Toast? = null
 
     private val viewModel: DogSelectViewModel by viewModels()
 
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dlg = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dlg.setOnShowListener {
+            val bottomSheet =
+                dlg.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+            behavior.isDraggable = false
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dlg
     }
 
     override fun onCreateView(

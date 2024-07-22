@@ -397,4 +397,11 @@
     <style name="group_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progressbar_linear_progress</item>
     </style>
+
+    <style name="group_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="behavior_peekHeight">0dp</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>
