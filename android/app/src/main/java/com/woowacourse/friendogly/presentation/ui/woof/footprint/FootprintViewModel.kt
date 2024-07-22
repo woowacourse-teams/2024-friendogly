@@ -11,7 +11,7 @@ import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
 import kotlinx.coroutines.launch
 
 class FootprintViewModel(
-    private val footPrintId: Long,
+    private val footprintId: Long,
     private val footPrintRepository: FootprintRepository,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<FootprintUiState> = MutableLiveData()
@@ -24,7 +24,7 @@ class FootprintViewModel(
     }
 
     private suspend fun loadFootPrintInfo() {
-        footPrintRepository.getFootPrintInfo(footPrintId).onSuccess { footPrintInfo ->
+        footPrintRepository.getFootPrintInfo(footprintId).onSuccess { footPrintInfo ->
             val state = uiState.value ?: FootprintUiState()
             _uiState.postValue(state.copy(footPrintInfo = footPrintInfo.toPresentation()))
         }.onFailure {
@@ -38,7 +38,7 @@ class FootprintViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 FootprintViewModel(
-                    footPrintId = footPrintId,
+                    footprintId = footPrintId,
                     footPrintRepository = footPrintRepository,
                 )
             }
