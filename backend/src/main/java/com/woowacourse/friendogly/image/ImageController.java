@@ -22,8 +22,8 @@ public class ImageController {
         System.out.println(file);
         String key = file.getOriginalFilename();
         try {
-            s3ClientSample.uploadFile(key, file);
-            return ResponseEntity.ok("File uploaded successfully");
+            String imageUrl = s3ClientSample.uploadFile(key, file);
+            return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
         }

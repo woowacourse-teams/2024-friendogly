@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Component
 public class S3ClientSample {
@@ -18,14 +17,14 @@ public class S3ClientSample {
         this.s3Client = s3Client;
     }
 
-    public void uploadFile(String key, MultipartFile file) throws IOException {
+    public String uploadFile(String key, MultipartFile file) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket("techcourse-project-2024")
-                .key("friendogly/"+key)
+                .key("friendogly/" + key)
                 .contentType("image/jpg")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
-        PutObjectResponse putObjectResponse = s3Client.putObject(putObjectRequest, requestBody);
+        return "https://d3obq7hxojfffa.cloudfront.net/" + key;
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
