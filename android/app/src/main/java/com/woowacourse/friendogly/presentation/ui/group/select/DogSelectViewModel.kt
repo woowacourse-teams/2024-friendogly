@@ -2,17 +2,15 @@ package com.woowacourse.friendogly.presentation.ui.group.select
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
-import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DogSelectViewModel: BaseViewModel(), DogSelectActionHandler {
+class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
     private val _dogs: MutableLiveData<List<DogSelectUiModel>> = MutableLiveData()
     val dogs: LiveData<List<DogSelectUiModel>> get() = _dogs
 

@@ -5,9 +5,6 @@
 
     <data>
         <variable
-            name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectActionHandler" />
-        <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectViewModel" />
     </data>
@@ -25,7 +22,7 @@
 
         <ImageView
             android:id="@+id/iv_group_select_back_button"
-            onSingleClick="@{()->actionHandler.cancelSelection()}"
+            onSingleClick="@{()->vm.cancelSelection()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
@@ -74,7 +71,7 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/rect_white_fill_radius10"
             android:text="@string/group_select_commit"
-            onSingleClick="@{()->actionHandler.submitDogs()}"
+            onSingleClick="@{()->vm.submitDogs()}"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
             android:backgroundTint="@color/orange05"
             android:gravity="center"

@@ -3,10 +3,12 @@ package com.woowacourse.friendogly.presentation.ui.group.detail
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityGroupDetailBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
+import com.woowacourse.friendogly.presentation.ui.group.detail.adapter.DetailProfileAdapter
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.woowacourse.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 
@@ -16,9 +18,16 @@ class GroupDetailActivity :
     private val filterAdapter: FilterAdapter by lazy {
         FilterAdapter()
     }
+    private val dogAdapter: DetailProfileAdapter by lazy {
+        DetailProfileAdapter()
+    }
+    private val userAdapter: DetailProfileAdapter by lazy {
+        DetailProfileAdapter()
+    }
 
     override fun initCreateView() {
         initDataBinding()
+        initAdapter()
         initObserver()
         receiveGroupId()
     }
@@ -44,11 +53,15 @@ class GroupDetailActivity :
 
     private fun initAdapter(){
         binding.rcvGroupDetailFilterList.adapter = filterAdapter
+        binding.rcvGroupDetailDogList.adapter = dogAdapter
+        binding.rcvGroupDetailUserList.adapter = userAdapter
     }
 
     private fun initObserver() {
         viewModel.group.observe(this){ group ->
             filterAdapter.submitList(group.filters)
+            dogAdapter.submitList(group.dogProfiles)
+            userAdapter.submitList(group.userProfiles)
         }
 
         viewModel.groupDetailEvent.observeEvent(this) { event ->
@@ -58,6 +71,7 @@ class GroupDetailActivity :
                         viewModel.joinGroup()
                     }
                     bottomSheet.show(supportFragmentManager, "TAG")
+                    bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
                 }
 
                 //TODO: delete and go chatActivity

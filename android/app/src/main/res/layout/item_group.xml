@@ -25,12 +25,12 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:background="@drawable/rect_orange100_fill_12"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundBig"
             app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ll_group_list_main_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundBig" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_group_list_main_content"

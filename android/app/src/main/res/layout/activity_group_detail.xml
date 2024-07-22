@@ -34,8 +34,8 @@
 
             <ImageView
                 onSingleClick="@{()->vm.closeDetail()}"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_arrow_left"
                 app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
@@ -44,8 +44,8 @@
 
             <ImageView
                 onSingleClick="@{()->vm.openMenu()}"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_more_vertical"
                 app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"
@@ -75,6 +75,7 @@
             <TextView
                 android:id="@+id/tv_group_detail_user_name"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                android:text="@{vm.group.groupLeader}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -218,7 +219,7 @@
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
-                tools:text="참여하기" />
+                android:text="@string/group_detail_participate_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

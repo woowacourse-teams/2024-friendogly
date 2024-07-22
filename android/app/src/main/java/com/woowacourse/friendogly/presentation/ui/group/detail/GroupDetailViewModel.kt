@@ -27,6 +27,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 filters =
                 listOf(
                     GroupFilter.SizeFilter.SmallDog,
+                    GroupFilter.SizeFilter.BigDog,
                     GroupFilter.GenderFilter.Female,
                     GroupFilter.GenderFilter.NeutralizingMale,
                 ),
