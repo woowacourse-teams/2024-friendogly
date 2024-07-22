@@ -37,12 +37,12 @@ public class FootprintCommandService {
         this.petRepository = petRepository;
     }
 
-    public Long save(SaveFootprintRequest request) {
-        Member member = memberRepository.findById(request.memberId())
+    public Long save(Long memberId, SaveFootprintRequest request) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
 
         validatePetExistence(member);
-        validateRecentFootprintExists(request.memberId());
+        validateRecentFootprintExists(memberId);
 
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()

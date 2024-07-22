@@ -48,9 +48,9 @@ public class FootprintApiDocsTest extends RestDocsTest {
     @DisplayName("발자국 저장")
     @Test
     void save() throws Exception {
-        SaveFootprintRequest request = new SaveFootprintRequest(1L, 37.5173316, 127.1011661);
+        SaveFootprintRequest request = new SaveFootprintRequest(37.5173316, 127.1011661);
 
-        given(footprintCommandService.save(request))
+        given(footprintCommandService.save(any(Long.class), eq(request)))
                 .willReturn(1L);
 
         mockMvc
@@ -65,7 +65,6 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("발자국 저장 API")
                                 .summary("발자국 저장 API")
                                 .requestFields(
-                                        fieldWithPath("memberId").description("사용자 ID"),
                                         fieldWithPath("latitude").description("현재 위치의 위도"),
                                         fieldWithPath("longitude").description("현재 위치의 경도")
                                 )

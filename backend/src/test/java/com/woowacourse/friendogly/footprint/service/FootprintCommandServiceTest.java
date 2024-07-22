@@ -69,7 +69,7 @@ class FootprintCommandServiceTest {
         );
 
         // when
-        footprintCommandService.save(new SaveFootprintRequest(member.getId(), 30.0, 30.0));
+        footprintCommandService.save(member.getId(), new SaveFootprintRequest(30.0, 30.0));
 
         // then
         assertThat(footprintRepository.findAll()).hasSize(1);
@@ -87,11 +87,12 @@ class FootprintCommandServiceTest {
         );
 
         // when - then
-        assertThatThrownBy(() -> footprintCommandService.save(new SaveFootprintRequest(
-                member.getId(),
-                90.000,
-                90.000
-        ))).isInstanceOf(FriendoglyException.class)
+        assertThatThrownBy(
+                () -> footprintCommandService.save(
+                        member.getId(),
+                        new SaveFootprintRequest(90.000, 90.000)
+                )
+        ).isInstanceOf(FriendoglyException.class)
                 .hasMessage("펫을 등록해야만 발자국을 생성할 수 있습니다.");
     }
 
@@ -99,7 +100,10 @@ class FootprintCommandServiceTest {
     @Test
     void save_Fail_IllegalMemberId() {
         assertThatThrownBy(
-                () -> footprintCommandService.save(new SaveFootprintRequest(1L, 30.0, 30.0))
+                () -> footprintCommandService.save(
+                        -1L,
+                        new SaveFootprintRequest(30.0, 30.0)
+                )
         ).isInstanceOf(FriendoglyException.class)
                 .hasMessage("존재하지 않는 사용자 ID입니다.");
     }
@@ -133,7 +137,10 @@ class FootprintCommandServiceTest {
                 """, member.getId());
 
         assertThatThrownBy(
-                () -> footprintCommandService.save(new SaveFootprintRequest(member.getId(), 30.0, 30.0))
+                () -> footprintCommandService.save(
+                        member.getId(),
+                        new SaveFootprintRequest(30.0, 30.0)
+                )
         ).isInstanceOf(FriendoglyException.class)
                 .hasMessage("마지막 발자국을 찍은 뒤 30초가 경과되지 않았습니다.");
     }

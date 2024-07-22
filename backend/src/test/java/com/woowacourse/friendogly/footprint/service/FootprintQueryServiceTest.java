@@ -145,10 +145,16 @@ class FootprintQueryServiceTest {
         double farLongitude = 0.009001209;
 
         // 999m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member1.getId(), 0.0, nearLongitude));
+        footprintCommandService.save(
+                member1.getId(),
+                new SaveFootprintRequest(0.0, nearLongitude)
+        );
 
         // 1001m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member2.getId(), 0.0, farLongitude));
+        footprintCommandService.save(
+                member2.getId(),
+                new SaveFootprintRequest(0.0, farLongitude)
+        );
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
                 member1.getId(), new FindNearFootprintRequest(0.0, 0.0));

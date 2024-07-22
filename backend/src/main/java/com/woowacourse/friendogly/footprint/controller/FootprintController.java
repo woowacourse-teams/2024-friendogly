@@ -39,7 +39,7 @@ public class FootprintController {
 
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {
-        Long id = footprintCommandService.save(request);
+        Long id = footprintCommandService.save(1L, request);
         return ResponseEntity.created(URI.create("/footprints/" + id))
                 .build();
     }
