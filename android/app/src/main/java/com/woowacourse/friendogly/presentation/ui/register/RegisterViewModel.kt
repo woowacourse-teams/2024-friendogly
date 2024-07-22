@@ -21,8 +21,9 @@ class RegisterViewModel(
 
     fun executeKakaoLogin(context: Context) {
         viewModelScope.launch {
-            kakaoLoginUseCase(context = context).onSuccess {
-                _navigateAction.emit(RegisterNavigationAction.NavigateToGoogleLogin)
+            kakaoLoginUseCase(context = context).onSuccess { kakaAccessToken ->
+                kakaAccessToken.idToken ?: return@onSuccess
+                _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.idToken))
             }.onFailure { }
         }
     }
