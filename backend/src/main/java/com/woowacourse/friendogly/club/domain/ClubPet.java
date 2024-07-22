@@ -17,30 +17,30 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ClubMemberPet {
+public class ClubPet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_member_id", nullable = false)
-    private ClubMember clubMember;
+    @JoinColumn(name = "club_id", nullable = false)
+    private Club club;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 
     @Builder
-    public ClubMemberPet(ClubMember clubMember, Pet pet) {
-        validateClubMember(clubMember);
+    public ClubPet(Club club, Pet pet) {
+        validateClub(club);
         validatePet(pet);
-        this.clubMember = clubMember;
+        this.club = club;
         this.pet = pet;
     }
 
-    private void validateClubMember(ClubMember clubMember) {
-        if (clubMember == null) {
+    private void validateClub(Club club) {
+        if (club == null) {
             throw new FriendoglyException("모임에 참여하는 회원 정보는 필수입니다.");
         }
     }

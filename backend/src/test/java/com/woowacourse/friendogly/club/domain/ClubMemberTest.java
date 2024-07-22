@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.club.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -73,32 +72,5 @@ class ClubMemberTest {
                 .build())
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 참여하는 회원 정보는 필수입니다.");
-    }
-
-    @DisplayName("리스트업에 나오는 참여 강아지 사진을 반환한다.")
-    @Test
-    void findClubOverviewPetImage() {
-        ClubMember clubMember = ClubMember.builder()
-                .club(club)
-                .member(member)
-                .build();
-
-        clubMember.addClubMemberPets(ClubMemberPet.builder()
-                .clubMember(clubMember)
-                .pet(pet)
-                .build());
-
-        assertThat(clubMember.findOverviewPetImage()).isEqualTo(pet.getImageUrl().getValue());
-    }
-
-    @DisplayName("참여 중인 회원이 어떤 강아지도 데리고 가지 않는다면 null을 반환한다.")
-    @Test
-    void findClubOverviewPetImage_FailNonPets() {
-        ClubMember clubMember = ClubMember.builder()
-                .club(club)
-                .member(member)
-                .build();
-
-        assertThat(clubMember.findOverviewPetImage()).isNull();
     }
 }

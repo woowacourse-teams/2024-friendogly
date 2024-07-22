@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.ClubMember;
-import com.woowacourse.friendogly.club.domain.ClubMemberPet;
+import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -52,12 +52,12 @@ public abstract class ClubServiceTest extends ServiceTest {
                 .club(club)
                 .build();
 
-        ClubMemberPet clubMemberPet = ClubMemberPet.builder()
-                .clubMember(clubMember)
+        ClubPet clubPet = ClubPet.builder()
+                .club(club)
                 .pet(pet)
                 .build();
         clubMemberRepository.save(clubMember);
-        clubMemberPetRepository.save(clubMemberPet);
+        clubPetRepository.save(clubPet);
 
         return savedClub;
     }

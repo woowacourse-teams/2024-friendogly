@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.support;
 
-import com.woowacourse.friendogly.club.repository.ClubMemberPetRepository;
 import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
+import com.woowacourse.friendogly.club.repository.ClubPetRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
@@ -20,7 +20,7 @@ public abstract class ServiceTest {
     protected ClubMemberRepository clubMemberRepository;
 
     @Autowired
-    protected ClubMemberPetRepository clubMemberPetRepository;
+    protected ClubPetRepository clubPetRepository;
 
     @Autowired
     protected MemberRepository memberRepository;
@@ -34,7 +34,7 @@ public abstract class ServiceTest {
     @BeforeEach
     void clearDB() {
         clubMemberRepository.deleteAll();
-        clubMemberPetRepository.deleteAll();
+        clubPetRepository.deleteAll();
         clubRepository.deleteAll();
         footprintRepository.deleteAll();
         petRepository.deleteAll();
