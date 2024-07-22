@@ -19,7 +19,7 @@ public class S3ClientSample {
 
     public void uploadFile(String key, MultipartFile file) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket("d3obq7hxojfffa.cloudfront.net")
+                .bucket("techcourse-project-2024")
                 .key("test_dog12")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
@@ -27,7 +27,7 @@ public class S3ClientSample {
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
-        File tmp = File.createTempFile("tmp", null);
+        File tmp = File.createTempFile("/friendogly/", null);
         try (FileOutputStream fos = new FileOutputStream(tmp)) {
             fos.write(file.getBytes());
             fos.flush();
