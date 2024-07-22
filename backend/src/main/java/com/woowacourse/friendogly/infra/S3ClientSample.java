@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.infra;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,15 +29,20 @@ public class S3ClientSample {
         return "https://d3obq7hxojfffa.cloudfront.net/" + key;
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
-        File tmp = File.createTempFile("/friendogly/", null);
+    private File convertMultiPartFileToFile(MultipartFile file)  {
+        File tmp = null;
+        try {
+            tmp = File.createTempFile("tmp", null);
+        } catch (Exception e) {
+            throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생");
+        }
+
         try (FileOutputStream fos = new FileOutputStream(tmp)) {
             fos.write(file.getBytes());
             fos.flush();
-        } catch (IOException e) {
-            throw new IOException("파일 변환 중 오류 발생", e);
+        } catch (Exception e) {
+            throw new FriendoglyException("MultipartFile to File 변환 중 오류 발생");
         }
-
         return tmp;
     }
 
