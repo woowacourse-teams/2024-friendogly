@@ -22,78 +22,81 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
     fun loadGroup(groupId: Long) =
         viewModelScope.launch {
             delay(1000)
-            _group.value = GroupDetailUiModel(
-                groupId = 0L,
-                filters =
-                listOf(
-                    GroupFilter.SizeFilter.SmallDog,
-                    GroupFilter.SizeFilter.BigDog,
-                    GroupFilter.GenderFilter.Female,
-                    GroupFilter.GenderFilter.NeutralizingMale,
-                ),
-                groupPoster = "",
-                isParticipable = true,
-                title = "중형견 모임해요",
-                content = "공지 꼭 읽어주세요",
-                maximumNumberOfPeople = 5,
-                currentNumberOfPeople = 2,
-                groupLocation = "잠실6동",
-                groupLeader = "벼리",
-                groupDate = LocalDateTime.now(),
-                groupReaderImage = "",
-                userProfiles = listOf(
-                    GroupDetailProfileUiModel(
-                        "땡이",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "채드",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "벼리",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "에디",
-                        ""
-                    ),
-                ),
-                dogProfiles = listOf(
-                    GroupDetailProfileUiModel(
-                        "땡이",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "채드",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "벼리",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "에디",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "땡이",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "채드",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "벼리",
-                        ""
-                    ),
-                    GroupDetailProfileUiModel(
-                        "에디",
-                        ""
-                    ),
+            _group.value =
+                GroupDetailUiModel(
+                    groupId = 0L,
+                    filters =
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.SizeFilter.BigDog,
+                            GroupFilter.GenderFilter.Female,
+                            GroupFilter.GenderFilter.NeutralizingMale,
+                        ),
+                    groupPoster = "",
+                    isParticipable = true,
+                    title = "중형견 모임해요",
+                    content = "공지 꼭 읽어주세요",
+                    maximumNumberOfPeople = 5,
+                    currentNumberOfPeople = 2,
+                    groupLocation = "잠실6동",
+                    groupLeader = "벼리",
+                    groupDate = LocalDateTime.now(),
+                    groupReaderImage = "",
+                    userProfiles =
+                        listOf(
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                "",
+                            ),
+                        ),
+                    dogProfiles =
+                        listOf(
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                "",
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                "",
+                            ),
+                        ),
                 )
-            )
         }
 
     override fun selectDog() {
@@ -108,11 +111,10 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
         _groupDetailEvent.emit(GroupDetailEvent.OpenDetailMenu)
     }
 
-    //TODO: join group api
-    fun joinGroup() = viewModelScope.launch {
-        //TODO : success
-        _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
-    }
-
+    // TODO: join group api
+    fun joinGroup() =
+        viewModelScope.launch {
+            // TODO : success
+            _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
+        }
 }
-

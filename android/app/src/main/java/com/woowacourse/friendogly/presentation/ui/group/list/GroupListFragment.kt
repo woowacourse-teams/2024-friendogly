@@ -41,14 +41,14 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
             groupAdapter.submitList(groups)
         }
 
-        //TODO: 선택 필터 구현
+        // TODO: 선택 필터 구현
         viewModel.groupFilterSelector.currentSelectedFilters.observe(viewLifecycleOwner) { filters ->
         }
 
-        viewModel.groupListEvent.observeEvent(viewLifecycleOwner){ event ->
-            when(event){
+        viewModel.groupListEvent.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
                 is GroupListEvent.OpenGroup -> {
-                    startActivity(GroupDetailActivity.getIntent(requireContext(),event.groupId))
+                    startActivity(GroupDetailActivity.getIntent(requireContext(), event.groupId))
                 }
             }
         }

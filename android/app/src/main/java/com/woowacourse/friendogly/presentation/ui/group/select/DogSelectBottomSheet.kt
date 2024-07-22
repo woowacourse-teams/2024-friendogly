@@ -88,14 +88,15 @@ class DogSelectBottomSheet(
                 DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
                 is DogSelectEvent.PreventSelection -> {
                     toast?.cancel()
-                    toast = Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(
-                            R.string.dog_select_prevent_message,
-                            event.dogName
-                        ),
-                        Toast.LENGTH_SHORT
-                    )
+                    toast =
+                        Toast.makeText(
+                            requireContext(),
+                            requireContext().getString(
+                                R.string.dog_select_prevent_message,
+                                event.dogName,
+                            ),
+                            Toast.LENGTH_SHORT,
+                        )
                     toast?.show()
                 }
 

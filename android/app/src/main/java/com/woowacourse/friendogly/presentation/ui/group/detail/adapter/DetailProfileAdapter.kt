@@ -25,13 +25,19 @@ class DetailProfileAdapter :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailProfileViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): DetailProfileViewHolder {
         val binding =
             ItemDetailProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DetailProfileViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DetailProfileViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: DetailProfileViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 }

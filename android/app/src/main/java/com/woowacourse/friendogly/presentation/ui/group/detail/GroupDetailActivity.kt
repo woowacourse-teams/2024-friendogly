@@ -49,14 +49,14 @@ class GroupDetailActivity :
         }
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         binding.rcvGroupDetailFilterList.adapter = filterAdapter
         binding.rcvGroupDetailDogList.adapter = dogAdapter
         binding.rcvGroupDetailUserList.adapter = userAdapter
     }
 
     private fun initObserver() {
-        viewModel.group.observe(this){ group ->
+        viewModel.group.observe(this) { group ->
             filterAdapter.submitList(group.filters)
             dogAdapter.submitList(group.dogProfiles)
             userAdapter.submitList(group.userProfiles)
@@ -65,25 +65,25 @@ class GroupDetailActivity :
         viewModel.groupDetailEvent.observeEvent(this) { event ->
             when (event) {
                 is GroupDetailEvent.OpenDogSelector -> {
-                    val bottomSheet = DogSelectBottomSheet(filters = event.filters) {
-                        viewModel.joinGroup()
-                    }
+                    val bottomSheet =
+                        DogSelectBottomSheet(filters = event.filters) {
+                            viewModel.joinGroup()
+                        }
                     bottomSheet.show(supportFragmentManager, "TAG")
                     bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
                 }
 
-                //TODO: delete and go chatActivity
+                // TODO: delete and go chatActivity
                 GroupDetailEvent.Navigation.NavigateToChat -> {
                     finish()
                 }
 
                 GroupDetailEvent.Navigation.NavigateToHome -> finish()
 
-                //TODO: open app bar menu
+                // TODO: open app bar menu
                 GroupDetailEvent.OpenDetailMenu -> {}
             }
         }
-
     }
 
     companion object {

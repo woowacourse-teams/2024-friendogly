@@ -3,9 +3,9 @@ package com.woowacourse.friendogly.presentation.ui.group.list.adapter.group
 import androidx.recyclerview.widget.RecyclerView
 import com.woowacourse.friendogly.databinding.ItemGroupBinding
 import com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler
+import com.woowacourse.friendogly.presentation.ui.group.list.GroupListUiModel
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.woof.GroupWoofAdapter
-import com.woowacourse.friendogly.presentation.ui.group.list.GroupListUiModel
 
 class GroupViewHolder(
     private val binding: ItemGroupBinding,

@@ -6,14 +6,12 @@ import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.R
 
 @BindingAdapter("bindingSelectBorder")
-fun View.bindDogSelect(
-    dogSelectUiModel: DogSelectUiModel,
-) {
+fun View.bindDogSelect(dogSelectUiModel: DogSelectUiModel) {
     this.setBackgroundColor(
         if (dogSelectUiModel.isSelected) {
-            ContextCompat.getColor(context,R.color.orange05)
+            ContextCompat.getColor(context, R.color.orange05)
         } else {
-            ContextCompat.getColor(context,R.color.white)
+            ContextCompat.getColor(context, R.color.white)
         },
     )
 }

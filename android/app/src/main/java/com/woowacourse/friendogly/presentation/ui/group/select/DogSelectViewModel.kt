@@ -73,7 +73,6 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
                 )
         }
 
-
     override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
             removeDog(dogSelectUiModel)
@@ -106,13 +105,12 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
         if (selectedDogs.size == 0) return
         _dogSelectEvent.emit(
             DogSelectEvent.SelectDogs(
-                dogs = selectedDogs.map { it.id }
-            )
+                dogs = selectedDogs.map { it.id },
+            ),
         )
     }
 
     override fun cancelSelection() {
         _dogSelectEvent.emit(DogSelectEvent.CancelSelection)
     }
-
 }
