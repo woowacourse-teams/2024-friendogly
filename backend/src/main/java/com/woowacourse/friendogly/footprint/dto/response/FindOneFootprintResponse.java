@@ -8,36 +8,26 @@ import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.time.LocalDate;
 
 public record FindOneFootprintResponse(
-    String memberName,
-    String petName,
-    String petDescription,
-    LocalDate petBirthDate,
-    SizeType petSizeType,
-    Gender petGender,
-    String footprintImageUrl
+        String memberName,
+        String petName,
+        String petDescription,
+        LocalDate petBirthDate,
+        SizeType petSizeType,
+        Gender petGender,
+        String footprintImageUrl,
+        boolean isMine
 ) {
 
-    public FindOneFootprintResponse(Member member, Footprint footprint) {
+    public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint, boolean isMine) {
         this(
-            member.getName().getValue(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            footprint.getImageUrl()
-        );
-    }
-
-    public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint) {
-        this(
-            member.getName().getValue(),
-            mainPet.getName().getValue(),
-            mainPet.getDescription().getValue(),
-            mainPet.getBirthDate().getValue(),
-            mainPet.getSizeType(),
-            mainPet.getGender(),
-            footprint.getImageUrl()
+                member.getName().getValue(),
+                mainPet.getName().getValue(),
+                mainPet.getDescription().getValue(),
+                mainPet.getBirthDate().getValue(),
+                mainPet.getSizeType(),
+                mainPet.getGender(),
+                footprint.getImageUrl(),
+                isMine
         );
     }
 }

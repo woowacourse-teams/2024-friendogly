@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequ
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
@@ -30,23 +31,24 @@ public class FootprintController {
     private final FootprintQueryService footprintQueryService;
 
     public FootprintController(
-        FootprintCommandService footprintCommandService,
-        FootprintQueryService footprintQueryService
+            FootprintCommandService footprintCommandService,
+            FootprintQueryService footprintQueryService
     ) {
         this.footprintCommandService = footprintCommandService;
         this.footprintQueryService = footprintQueryService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {
-        Long id = footprintCommandService.save(request);
-        return ResponseEntity.created(URI.create("/footprints/" + id))
-            .build();
+    public ResponseEntity<SaveFootprintResponse> save(@Valid @RequestBody SaveFootprintRequest request) {
+        SaveFootprintResponse response = footprintCommandService.save(1L, request);
+        return ResponseEntity.created(URI.create("/footprints/" + response.id()))
+                .body(response);
     }
 
     @GetMapping("/{footprintId}")
     public ResponseEntity<FindOneFootprintResponse> findOne(@PathVariable Long footprintId) {
-        FindOneFootprintResponse response = footprintQueryService.findOne(footprintId);
+        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
+        FindOneFootprintResponse response = footprintQueryService.findOne(1L, footprintId);
         return ResponseEntity.ok(response);
     }
 
@@ -68,9 +70,10 @@ public class FootprintController {
 
     @PatchMapping("/image/{footprintId}")
     public ResponseEntity<UpdateFootprintImageResponse> updateFootprintImage(
-        @PathVariable Long footprintId,
-        @ModelAttribute UpdateFootprintImageRequest request
+            @PathVariable Long footprintId,
+            @ModelAttribute UpdateFootprintImageRequest request
     ) {
+        // TODO: S3가 구현되고 명세가 확정되면 그 때 문서화하기
         UpdateFootprintImageResponse response = footprintCommandService.updateFootprintImage(footprintId, request);
         return ResponseEntity.ok(response);
     }

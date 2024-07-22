@@ -65,7 +65,7 @@ class FootprintQueryServiceTest extends ServiceTest {
         );
 
         // when
-        FindOneFootprintResponse response = footprintQueryService.findOne(footprint.getId());
+        FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
 
         // then
         assertAll(
@@ -74,7 +74,8 @@ class FootprintQueryServiceTest extends ServiceTest {
                 () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
                 () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
                 () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED)
+                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+                () -> assertThat(response.isMine()).isTrue()
         );
     }
 
@@ -95,14 +96,44 @@ class FootprintQueryServiceTest extends ServiceTest {
                         .build()
         );
 
+        petRepository.save(
+                Pet.builder()
+                        .member(member1)
+                        .name("땡이")
+                        .description("귀여운 땡이")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
+        petRepository.save(
+                Pet.builder()
+                        .member(member2)
+                        .name("땡이")
+                        .description("귀여운 땡이")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
         double nearLongitude = 0.008993216;
         double farLongitude = 0.009001209;
 
         // 999m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member1.getId(), 0.0, nearLongitude));
+        footprintCommandService.save(
+                member1.getId(),
+                new SaveFootprintRequest(0.0, nearLongitude)
+        );
 
         // 1001m 떨어진 발자국 저장
-        footprintCommandService.save(new SaveFootprintRequest(member2.getId(), 0.0, farLongitude));
+        footprintCommandService.save(
+                member2.getId(),
+                new SaveFootprintRequest(0.0, farLongitude)
+        );
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
                 member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
