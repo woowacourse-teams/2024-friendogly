@@ -1,12 +1,11 @@
 package com.woowacourse.friendogly.infra;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
-import software.amazon.awssdk.core.ResponseInputStream;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
 public class S3ClientSample {
@@ -16,12 +15,14 @@ public class S3ClientSample {
         this.s3Client = s3Client;
     }
 
-    void readFile() throws IOException {
-        ResponseInputStream<GetObjectResponse> response = s3Client.getObject(
-                request -> request.bucket("d3obq7hxojfffa.cloudfront.net").key("test_dog.jpg"));
-
-        String fileContent = StreamUtils.copyToString(response, StandardCharsets.UTF_8);
-
-        System.out.println(fileContent);
+    public void uploadFile(String key, MultipartFile file) throws IOException {
+        s3Client.putObject(
+                PutObjectRequest
+                        .builder()
+                        .key(key)
+                        .bucket("d3obq7hxojfffa.cloudfront.net")
+                        .build()
+                , RequestBody.fromFile(file.getResource().getFile()));
     }
+
 }
