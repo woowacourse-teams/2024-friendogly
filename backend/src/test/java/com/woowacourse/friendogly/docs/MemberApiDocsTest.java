@@ -25,12 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberApiDocsTest extends RestDocsTest {
 
     @MockBean
-    MemberCommandService memberCommandService;
+    private MemberCommandService memberCommandService;
 
     @MockBean
-    MemberQueryService memberQueryService;
+    private MemberQueryService memberQueryService;
 
-    @DisplayName("회원 생성 문서화 테스트 예시")
+    @DisplayName("회원 생성 문서화")
     @Test
     void saveMember_Success() throws Exception {
         SaveMemberRequest request = new SaveMemberRequest("반갑개", "member@email.com");
@@ -38,13 +38,12 @@ public class MemberApiDocsTest extends RestDocsTest {
 
         Mockito.when(memberCommandService.saveMember(request))
                 .thenReturn(response);
-        // http method() static import 가능, 단 라이브러리 확인 필수
+
         mockMvc.perform(RestDocumentationRequestBuilders.post("/members")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                //*** document() static import 가능함, 단 라이브러리 확인 필수
                 .andDo(MockMvcRestDocumentationWrapper.document("member-save-201",
                         getDocumentRequest(),
                         getDocumentResponse(),
