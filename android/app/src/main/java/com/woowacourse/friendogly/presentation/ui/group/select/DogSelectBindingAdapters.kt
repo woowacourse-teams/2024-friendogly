@@ -1,19 +1,19 @@
 package com.woowacourse.friendogly.presentation.ui.group.select
 
-import android.graphics.Color
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.woowacourse.friendogly.R
 
 @BindingAdapter("bindingSelectBorder")
-fun dogSelect(
-    view: View,
+fun View.bindDogSelect(
     dogSelectUiModel: DogSelectUiModel,
 ) {
-    view.setBackgroundColor(
+    this.setBackgroundColor(
         if (dogSelectUiModel.isSelected) {
-            Color.GREEN
+            ContextCompat.getColor(context,R.color.orange05)
         } else {
-            Color.GRAY
+            ContextCompat.getColor(context,R.color.white)
         },
     )
 }
