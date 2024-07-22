@@ -4,7 +4,6 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.woowacourse.friendogly.local.di.LocalModule
 import com.woowacourse.friendogly.remote.api.BaseUrl
 import com.woowacourse.friendogly.remote.api.ClubService
-import com.woowacourse.friendogly.remote.api.FootprintService
 import com.woowacourse.friendogly.remote.interceptor.AuthorizationInterceptor
 import com.woowacourse.friendogly.remote.interceptor.ErrorResponseInterceptor
 import kotlinx.serialization.json.Json
@@ -14,16 +13,6 @@ import retrofit2.Retrofit
 
 object RemoteModule {
     private val contentType = "application/json".toMediaType()
-
-    fun createFootprintService(
-        baseUrl: BaseUrl,
-        localModule: LocalModule,
-    ): FootprintService {
-        return createRetrofit(
-            baseUrl,
-            localModule,
-        ).create(FootprintService::class.java)
-    }
 
     fun createClubService(
         baseUrl: BaseUrl,

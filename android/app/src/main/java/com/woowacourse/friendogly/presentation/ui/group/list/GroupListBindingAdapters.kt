@@ -17,7 +17,9 @@ fun TextView.bindParticipableType(isParticipable: Boolean) {
 }
 
 @BindingAdapter("groupDateTime")
-fun TextView.bindGroupDateTime(dateTime: LocalDateTime) {
+fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
+    dateTime ?: return
+
     val now = LocalDateTime.now()
     val duration = Duration.between(dateTime, now)
 
