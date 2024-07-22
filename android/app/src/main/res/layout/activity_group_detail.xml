@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.ui.group.detail.GroupDetailFragment">
+    tools:context=".presentation.ui.group.detail.GroupDetailActivity">
 
     <data>
 
@@ -112,13 +112,13 @@
                 android:background="@color/gray04"
                 app:layout_constraintTop_toBottomOf="@id/view_group_detail_top_bar" />
 
-            <!--TODO:listitem 추가-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_group_detail_filter_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
+                tools:listitem="@layout/item_filter"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/view_group_detail_line" />
 
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/tv_group_list_dog_list_subject"
                 tools:listitem="@layout/item_detail_dog_profile" />
 
@@ -193,6 +193,5 @@
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
                 tools:text="참여하기" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
 </layout>

@@ -18,8 +18,7 @@ import com.woowacourse.friendogly.presentation.ui.group.select.adapter.DogSelect
 import kotlin.math.abs
 
 class DogSelectBottomSheet(
-    filters: List<GroupFilter>,
-    private val cancel: () -> Unit,
+    private val filters: List<GroupFilter>,
     private val submit: (List<Long>) -> Unit,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDogSelectorBinding? = null
@@ -28,9 +27,7 @@ class DogSelectBottomSheet(
 
     private var toast: Toast? = null
 
-    private val viewModel: DogSelectViewModel by viewModels {
-        DogSelectViewModel.factory(filters = filters)
-    }
+    private val viewModel: DogSelectViewModel by viewModels()
 
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)
@@ -56,6 +53,7 @@ class DogSelectBottomSheet(
     }
 
     private fun initDataBinding() {
+        viewModel.loadFilters(filters = filters)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
     }
@@ -68,7 +66,7 @@ class DogSelectBottomSheet(
 
         viewModel.dogSelectEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                DogSelectEvent.CancelSelection -> cancel()
+                DogSelectEvent.CancelSelection -> this.dismissNow()
                 DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
                 is DogSelectEvent.PreventSelection -> {
                     toast?.cancel()
@@ -83,7 +81,10 @@ class DogSelectBottomSheet(
                     toast?.show()
                 }
 
-                is DogSelectEvent.SelectDogs -> submit(event.dogs)
+                is DogSelectEvent.SelectDogs -> {
+                    this.dismissNow()
+                    submit(event.dogs)
+                }
             }
         }
     }
@@ -109,5 +110,7 @@ class DogSelectBottomSheet(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        toast?.cancel()
+        toast = null
     }
 }

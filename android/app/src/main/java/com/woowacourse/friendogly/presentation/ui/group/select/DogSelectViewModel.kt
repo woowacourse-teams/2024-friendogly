@@ -12,19 +12,23 @@ import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupF
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DogSelectViewModel(
-    private val filters: List<GroupFilter>,
-) : BaseViewModel(), DogSelectActionHandler {
+class DogSelectViewModel: BaseViewModel(), DogSelectActionHandler {
     private val _dogs: MutableLiveData<List<DogSelectUiModel>> = MutableLiveData()
     val dogs: LiveData<List<DogSelectUiModel>> get() = _dogs
 
     private val selectedDogs: MutableList<DogSelectUiModel> = mutableListOf()
+
+    private var filters: List<GroupFilter> = listOf()
 
     private val _dogSelectEvent: MutableLiveData<Event<DogSelectEvent>> = MutableLiveData()
     val dogSelectEvent: LiveData<Event<DogSelectEvent>> get() = _dogSelectEvent
 
     init {
         loadMyDogs()
+    }
+
+    fun loadFilters(filters: List<GroupFilter>) {
+        this.filters = filters
     }
 
     // TODO: romove sample
@@ -113,11 +117,4 @@ class DogSelectViewModel(
         _dogSelectEvent.emit(DogSelectEvent.CancelSelection)
     }
 
-    companion object {
-        fun factory(filters: List<GroupFilter>): ViewModelProvider.Factory {
-            return BaseViewModelFactory { _ ->
-                DogSelectViewModel(filters)
-            }
-        }
-    }
 }
