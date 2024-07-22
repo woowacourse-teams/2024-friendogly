@@ -20,8 +20,8 @@ class DogSelectViewModel(
 
     private val selectedDogs: MutableList<DogSelectUiModel> = mutableListOf()
 
-    private val _dogSelectEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val dogSelectEvent: LiveData<Event<Unit>> get() = _dogSelectEvent
+    private val _dogSelectEvent: MutableLiveData<Event<DogSelectEvent>> = MutableLiveData()
+    val dogSelectEvent: LiveData<Event<DogSelectEvent>> get() = _dogSelectEvent
 
     init {
         loadMyDogs()
@@ -37,51 +37,84 @@ class DogSelectViewModel(
                         id = 0L,
                         profileImage = "",
                         name = "강아지 1",
+                        gender = GroupFilter.GenderFilter.Female,
+                        size = GroupFilter.SizeFilter.BigDog,
                     ),
                     DogSelectUiModel(
                         id = 0L,
                         profileImage = "",
                         name = "강아지 2",
+                        gender = GroupFilter.GenderFilter.Female,
+                        size = GroupFilter.SizeFilter.BigDog,
                     ),
                     DogSelectUiModel(
                         id = 0L,
                         profileImage = "",
                         name = "강아지 3",
+                        gender = GroupFilter.GenderFilter.Male,
+                        size = GroupFilter.SizeFilter.MediumDog,
                     ),
                     DogSelectUiModel(
                         id = 0L,
                         profileImage = "",
                         name = "강아지 4",
+                        gender = GroupFilter.GenderFilter.Male,
+                        size = GroupFilter.SizeFilter.SmallDog,
                     ),
                     DogSelectUiModel(
                         id = 0L,
                         profileImage = "",
                         name = "강아지 5",
+                        gender = GroupFilter.GenderFilter.NeutralizingFemale,
+                        size = GroupFilter.SizeFilter.MediumDog,
                     ),
                 )
         }
 
+
     override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
-            dogSelectUiModel.unSelectDog()
-            selectedDogs.remove(dogSelectUiModel)
+            removeDog(dogSelectUiModel)
         } else {
-            dogSelectUiModel.selectDog()
-            selectedDogs.add(dogSelectUiModel)
+            if (isValidDogFilter(dogSelectUiModel)) {
+                addDog(dogSelectUiModel)
+            } else {
+                _dogSelectEvent.emit(DogSelectEvent.PreventSelection(dogSelectUiModel.name))
+            }
         }
-        _dogSelectEvent.emit()
+    }
+
+    private fun isValidDogFilter(dogSelectUiModel: DogSelectUiModel): Boolean {
+        return filters.contains(dogSelectUiModel.gender) && filters.contains(dogSelectUiModel.size)
+    }
+
+    private fun removeDog(dogSelectUiModel: DogSelectUiModel) {
+        dogSelectUiModel.unSelectDog()
+        selectedDogs.remove(dogSelectUiModel)
+        _dogSelectEvent.emit(DogSelectEvent.SelectDog)
+    }
+
+    private fun addDog(dogSelectUiModel: DogSelectUiModel) {
+        dogSelectUiModel.selectDog()
+        selectedDogs.add(dogSelectUiModel)
+        _dogSelectEvent.emit(DogSelectEvent.SelectDog)
     }
 
     override fun submitDogs() {
-        TODO("Not yet implemented")
+        if (selectedDogs.size == 0) return
+        _dogSelectEvent.emit(
+            DogSelectEvent.SelectDogs(
+                dogs = selectedDogs.map { it.id }
+            )
+        )
     }
 
     override fun cancelSelection() {
-        TODO("Not yet implemented")
+        _dogSelectEvent.emit(DogSelectEvent.CancelSelection)
     }
 
     companion object {
-        fun factory(filters: List<GroupFilter>): ViewModelProvider.Factory{
+        fun factory(filters: List<GroupFilter>): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 DogSelectViewModel(filters)
             }

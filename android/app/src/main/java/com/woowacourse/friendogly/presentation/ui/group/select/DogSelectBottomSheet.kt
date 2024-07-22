@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.BottomSheetDogSelectorBinding
+import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.woowacourse.friendogly.presentation.ui.group.select.adapter.DogSelectAdapter
 import kotlin.math.abs
@@ -22,6 +25,8 @@ class DogSelectBottomSheet(
     private var _binding: BottomSheetDogSelectorBinding? = null
     val binding: BottomSheetDogSelectorBinding
         get() = _binding!!
+
+    private var toast: Toast? = null
 
     private val viewModel: DogSelectViewModel by viewModels {
         DogSelectViewModel.factory(filters = filters)
@@ -55,14 +60,31 @@ class DogSelectBottomSheet(
         binding.vm = viewModel
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "StringFormatInvalid")
     private fun initObserver() {
         viewModel.dogs.observe(viewLifecycleOwner) { dogs ->
             adapter.submitList(dogs)
         }
 
-        viewModel.dogSelectEvent.observe(viewLifecycleOwner) {
-            adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
+        viewModel.dogSelectEvent.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                DogSelectEvent.CancelSelection -> cancel()
+                DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
+                is DogSelectEvent.PreventSelection -> {
+                    toast?.cancel()
+                    toast = Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(
+                            R.string.dog_select_prevent_message,
+                            event.dogName
+                        ),
+                        Toast.LENGTH_SHORT
+                    )
+                    toast?.show()
+                }
+
+                is DogSelectEvent.SelectDogs -> submit(event.dogs)
+            }
         }
     }
 

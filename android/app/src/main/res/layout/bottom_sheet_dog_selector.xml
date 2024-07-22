@@ -74,6 +74,7 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/rect_white_fill_radius10"
             android:text="@string/group_select_commit"
+            onSingleClick="@{()->actionHandler.submitDogs()}"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
             android:backgroundTint="@color/orange05"
             android:gravity="center"
