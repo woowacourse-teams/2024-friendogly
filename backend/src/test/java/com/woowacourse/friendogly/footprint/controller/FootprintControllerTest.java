@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.footprint.controller;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
@@ -28,8 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 // TODO: 예외 테스트 추가
-// TODO: 공통 응답 포맷에 맞게 변경
-
+// TODO: DirtiesContext 제거
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 class FootprintControllerTest {
@@ -49,6 +49,8 @@ class FootprintControllerTest {
     private Member member1;
     private Member member2;
     private Member member3;
+
+    private Pet pet1;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +80,7 @@ class FootprintControllerTest {
                         .build()
         );
 
-        petRepository.save(
+        pet1 = petRepository.save(
                 Pet.builder()
                         .member(member1)
                         .name("멍멍이1")
@@ -130,8 +132,8 @@ class FootprintControllerTest {
                 .when().post("/footprints")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("latitude", is(latitude))
-                .body("longitude", is(longitude));
+                .body("data.latitude", is(latitude))
+                .body("data.longitude", is(longitude));
     }
 
     @DisplayName("발자국 ID로 발자국의 정보를 조회할 수 있다. (200)")
@@ -150,7 +152,16 @@ class FootprintControllerTest {
                 .pathParam("footprintId", footprint.getId())
                 .when().get("/footprints/{footprintId}")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.OK.value())
+                .body("isSuccess", is(true))
+                .body("data.memberName", is("트레"))
+                .body("data.petName", is(pet1.getName().getValue()))
+                .body("data.petDescription", is(pet1.getDescription().getValue()))
+                .body("data.petBirthDate", is(pet1.getBirthDate().getValue().toString()))
+                .body("data.petSizeType", is(pet1.getSizeType().name()))
+                .body("data.petGender", is(pet1.getGender().name()))
+                .body("data.footprintImageUrl", is(footprint.getImageUrl()))
+                .body("data.isMine", is(footprint.isCreatedBy(member1.getId())));
     }
 
     @DisplayName("위도, 경도로 주변 발자국을 조회할 수 있다. (200)")
@@ -178,12 +189,12 @@ class FootprintControllerTest {
                 .when().get("/footprints/near")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("size()", is(2))
-                .body("latitude", contains(37.51365f, 37.51314f))
-                .body("longitude", contains(127.09831f, 127.10425f));
+                .body("data.size()", is(2))
+                .body("data.latitude", contains(37.51365f, 37.51314f))
+                .body("data.longitude", contains(127.09831f, 127.10425f));
     }
 
-    @DisplayName("자신이 마지막으로 생성한 발자국의 시간을 조회할 수 있다.")
+    @DisplayName("자신이 마지막으로 생성한 발자국의 시간을 조회할 수 있다. (200)")
     @Test
     void findMyLatestFootprintTime() {
         footprintRepository.save(
@@ -198,6 +209,7 @@ class FootprintControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, member1.getId())
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.OK.value())
+                .body("data.createdAt", notNullValue());
     }
 }
