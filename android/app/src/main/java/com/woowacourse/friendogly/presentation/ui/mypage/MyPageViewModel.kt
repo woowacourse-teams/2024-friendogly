@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.presentation.ui.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -25,14 +24,6 @@ class MyPageViewModel(
 
     init {
         fetchDummy()
-
-        viewModelScope.launch {
-            getPetsMineUseCase().onSuccess {
-                Log.d("Ttt onSuccess", it.toString())
-            }.onFailure {
-                Log.d("Ttt onFailure", it.toString())
-            }
-        }
     }
 
     private fun fetchDummy() {
@@ -46,9 +37,8 @@ class MyPageViewModel(
                         email = "tottenham@gmail.com",
                         pets = pets,
                     )
-                Log.d("Ttt onSuccess", pets.toString())
             }.onFailure {
-                Log.d("Ttt onFailure", it.toString())
+                // TODO 예외 처리
             }
         }
     }

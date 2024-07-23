@@ -10,3 +10,11 @@ fun SizeTypeDto.toDomain(): SizeType {
         SizeTypeDto.LARGE -> SizeType.LARGE
     }
 }
+
+fun SizeType.toData(): SizeTypeDto {
+    return when (this) {
+        SizeType.SMALL -> SizeTypeDto.SMALL
+        SizeType.MEDIUM -> SizeTypeDto.MEDIUM
+        SizeType.LARGE -> SizeTypeDto.LARGE
+    }
+}

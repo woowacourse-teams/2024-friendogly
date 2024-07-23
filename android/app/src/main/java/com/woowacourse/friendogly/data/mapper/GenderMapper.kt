@@ -11,3 +11,12 @@ fun GenderDto.toDomain(): Gender {
         GenderDto.FEMALE_NEUTERED -> Gender.FEMALE_NEUTERED
     }
 }
+
+fun Gender.toData(): GenderDto {
+    return when (this) {
+        Gender.MALE -> GenderDto.MALE
+        Gender.FEMALE -> GenderDto.FEMALE
+        Gender.MALE_NEUTERED -> GenderDto.MALE_NEUTERED
+        Gender.FEMALE_NEUTERED -> GenderDto.FEMALE_NEUTERED
+    }
+}

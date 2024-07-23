@@ -13,6 +13,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.FragmentRegisterDogBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.base.observeEvent
@@ -28,7 +29,9 @@ import java.util.Date
 
 class RegisterDogFragment :
     BaseFragment<FragmentRegisterDogBinding>(R.layout.fragment_register_dog) {
-    private val viewModel: RegisterDogViewModel by viewModels()
+    private val viewModel: RegisterDogViewModel by viewModels {
+        RegisterDogViewModel.factory(postPetUseCase = AppModule.getInstance().postPetUseCase)
+    }
     private val navController by lazy { findNavController() }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>

@@ -26,6 +26,7 @@ import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
 import com.woowacourse.friendogly.domain.usecase.PostClubParticipationUseCase
 import com.woowacourse.friendogly.domain.usecase.PostClubUseCase
 import com.woowacourse.friendogly.domain.usecase.PostMemberUseCase
+import com.woowacourse.friendogly.domain.usecase.PostPetUseCase
 import com.woowacourse.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.woowacourse.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.woowacourse.friendogly.local.di.LocalModule
@@ -87,6 +88,7 @@ class AppModule(context: Context) {
         DeleteLocalDataUseCase(repository = localRepository)
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
+    val postPetUseCase: PostPetUseCase = PostPetUseCase(repository = petRepository)
 
     companion object {
         private var instance: AppModule? = null
