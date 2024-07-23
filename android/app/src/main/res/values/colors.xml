@@ -5,6 +5,8 @@
 
     <color name="transparent">#00000000</color>
 
+    <color name="red">#CD3838</color>
+
     <color name="gray10">#212121</color>
     <color name="gray09">#424242</color>
     <color name="gray08">#616161</color>

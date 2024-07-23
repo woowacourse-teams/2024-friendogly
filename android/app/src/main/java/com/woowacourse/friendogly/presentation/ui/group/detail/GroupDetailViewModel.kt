@@ -28,12 +28,12 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 GroupDetailUiModel(
                     groupId = 0L,
                     filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.SizeFilter.BigDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
-                        ),
+                    listOf(
+                        GroupFilter.SizeFilter.SmallDog,
+                        GroupFilter.SizeFilter.BigDog,
+                        GroupFilter.GenderFilter.Female,
+                        GroupFilter.GenderFilter.NeutralizingMale,
+                    ),
                     groupPoster = "",
                     detailViewType = DetailViewType.RECRUITMENT,
                     title = "중형견 모임해요",
@@ -45,65 +45,70 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                     groupDate = LocalDateTime.now(),
                     groupReaderImage = "",
                     userProfiles =
-                        listOf(
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                "",
-                            ),
+                    listOf(
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            "",
                         ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            "",
+                        ),
+                    ),
                     dogProfiles =
-                        listOf(
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                "",
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                "",
-                            ),
+                    listOf(
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            "",
                         ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            "",
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            "",
+                        ),
+                    ),
                 )
         }
 
     override fun confirmParticipation() {
-        when(group.value?.detailViewType){
-            DetailViewType.RECRUITMENT -> _groupDetailEvent.emit(GroupDetailEvent.OpenDogSelector(group.value?.filters ?: listOf()))
+        when (group.value?.detailViewType) {
+            DetailViewType.RECRUITMENT -> _groupDetailEvent.emit(
+                GroupDetailEvent.OpenDogSelector(
+                    group.value?.filters ?: listOf()
+                )
+            )
+
             DetailViewType.MINE -> _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
             else -> return
         }
@@ -114,7 +119,11 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
     }
 
     override fun openMenu() {
-        _groupDetailEvent.emit(GroupDetailEvent.OpenDetailMenu)
+        _groupDetailEvent.emit(
+            GroupDetailEvent.OpenDetailMenu(
+                group.value?.detailViewType ?: return
+            )
+        )
     }
 
     // TODO: join group api

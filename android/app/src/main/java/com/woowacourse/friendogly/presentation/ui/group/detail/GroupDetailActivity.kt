@@ -10,6 +10,7 @@ import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.group.detail.adapter.DetailProfileAdapter
 import com.woowacourse.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
+import com.woowacourse.friendogly.presentation.ui.group.modify.GroupModifyBottomSheet
 import com.woowacourse.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 
 class GroupDetailActivity :
@@ -80,8 +81,12 @@ class GroupDetailActivity :
 
                 GroupDetailEvent.Navigation.NavigateToHome -> finish()
 
-                // TODO: open app bar menu
-                GroupDetailEvent.OpenDetailMenu -> {}
+
+                is GroupDetailEvent.OpenDetailMenu -> {
+                    val bottomSheet =
+                        GroupModifyBottomSheet(event.detailViewType)
+                    bottomSheet.show(supportFragmentManager,"TAG")
+                }
             }
         }
     }
