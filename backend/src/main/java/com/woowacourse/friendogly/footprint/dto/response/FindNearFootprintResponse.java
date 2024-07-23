@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.footprint.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import java.time.LocalDateTime;
 
