@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.footprint.controller;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
@@ -28,7 +29,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
-// TODO: 예외 테스트 추가
 // TODO: DirtiesContext 제거
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
@@ -136,6 +136,28 @@ class FootprintControllerTest {
                 .body("data.longitude", is(longitude));
     }
 
+    @DisplayName("30초 이내에 발자국을 생성했으면, 발자국을 생성할 수 없다. (400)")
+    @Test
+    void save_Fail_DueToCooldown() {
+        footprintRepository.save(
+                Footprint.builder()
+                        .member(member1)
+                        .location(new Location(37.0, 127.0))
+                        .build()
+        );
+
+        SaveFootprintRequest request = new SaveFootprintRequest(0.0, 0.0);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .body(request)
+                .when().post("/footprints")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("isSuccess", is(false));
+    }
+
     @DisplayName("발자국 ID로 발자국의 정보를 조회할 수 있다. (200)")
     @Test
     void findOne() {
@@ -211,5 +233,17 @@ class FootprintControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.createdAt", notNullValue());
+    }
+
+    @DisplayName("발자국을 찍은 적이 없으면 마지막 생성 발자국 시간이 null이다. (200)")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .when().get("/footprints/mine/latest")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.createdAt", nullValue());
     }
 }
