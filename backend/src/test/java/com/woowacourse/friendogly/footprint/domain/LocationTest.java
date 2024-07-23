@@ -18,7 +18,7 @@ class LocationTest {
     @CsvSource(value = {"90.000, 180.000", "-90.000, -180.000", "0.000, 0.000"})
     void constructor_Success(double latitude, double longitude) {
         assertThatCode(() -> new Location(latitude, longitude))
-            .doesNotThrowAnyException();
+                .doesNotThrowAnyException();
     }
 
     @DisplayName("올바르지 않은 위도 범위로 생성하면 예외가 발생한다.")
@@ -26,8 +26,8 @@ class LocationTest {
     @ValueSource(doubles = {-90.001, 90.001})
     void constructor_Fail_IllegalLatitude(double latitude) {
         assertThatThrownBy(() -> new Location(latitude, 0.0))
-            .isInstanceOf(FriendoglyException.class)
-            .hasMessage("위도 범위가 올바르지 않습니다.");
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("위도 범위가 올바르지 않습니다.");
     }
 
     @DisplayName("올바르지 않은 경도 범위로 생성하면 예외가 발생한다.")
@@ -35,8 +35,8 @@ class LocationTest {
     @ValueSource(doubles = {-180.001, 180.001})
     void constructor_Fail_IllegalLongitude(double longitude) {
         assertThatThrownBy(() -> new Location(0.0, longitude))
-            .isInstanceOf(FriendoglyException.class)
-            .hasMessage("경도 범위가 올바르지 않습니다.");
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("경도 범위가 올바르지 않습니다.");
     }
 
     @DisplayName("약 999m 차이 나는 두 위치는 주변에 있다.")

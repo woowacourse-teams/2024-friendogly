@@ -4,17 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="profile"
+            type="com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailProfileUiModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginEnd="10dp"
         android:layout_width="80dp"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content">
         <ImageView
-            android:background="@drawable/rect_white_fill_radius8"
+            glide="@{profile.imageUrl}"
+            android:background="@drawable/rect_orange100_fill_12"
+            app:shapeAppearanceOverlay="@style/RoundBig"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_detail_profile_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="80dp"/>
         <TextView
+            android:text="@{profile.name}"
+            android:layout_marginTop="5dp"
+            android:id="@+id/tv_detail_profile_text"
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
             tools:text = "멍멍이"
             app:layout_constraintEnd_toEndOf="parent"

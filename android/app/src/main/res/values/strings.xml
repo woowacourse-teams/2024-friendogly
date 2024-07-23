@@ -97,6 +97,16 @@
     <string name="group_add_title_count">%d/100</string>
     <string name="group_add_content_count">%d/1000</string>
 
+    <!--멍개 상세-->
+    <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
+    <string name="group_detail_fail_button">뒤로가기</string>
+    <string name="group_detail_participate_text">참여하기</string>
+    <string name="group_datil_"></string>
+    
+    <!--댕댕이 선택-->
+    <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
+    <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
+    <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>

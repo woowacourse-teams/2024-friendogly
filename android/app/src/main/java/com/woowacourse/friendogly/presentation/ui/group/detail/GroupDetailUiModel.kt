@@ -1,10 +1,9 @@
-package com.woowacourse.friendogly.presentation.ui.group.model
+package com.woowacourse.friendogly.presentation.ui.group.detail
 
-import com.woowacourse.friendogly.presentation.ui.group.list.model.GroupWoof
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import java.time.LocalDateTime
 
-data class GroupUiModel(
+data class GroupDetailUiModel(
     val groupId: Long,
     val filters: List<GroupFilter>,
     val groupPoster: String,
@@ -15,6 +14,13 @@ data class GroupUiModel(
     val currentNumberOfPeople: Int,
     val groupLocation: String,
     val groupLeader: String,
+    val groupReaderImage: String,
     val groupDate: LocalDateTime,
-    val groupWoofs: List<GroupWoof>,
+    val userProfiles: List<GroupDetailProfileUiModel>,
+    val dogProfiles: List<GroupDetailProfileUiModel>,
+)
+
+data class GroupDetailProfileUiModel(
+    val name: String,
+    val imageUrl: String,
 )
