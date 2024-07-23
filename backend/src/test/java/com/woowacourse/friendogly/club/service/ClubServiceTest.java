@@ -18,12 +18,13 @@ public abstract class ClubServiceTest extends ServiceTest {
     protected final Set<Gender> allowedGenders = Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED);
     protected final Set<SizeType> allowedSizes = Set.of(SizeType.SMALL);
     protected final String petImageUrl = "https://PetimageUrl.com";
-    private final Member member = Member.builder()
+
+    protected final Member member = Member.builder()
             .name("브라운")
             .email("woowha@gmail.com")
             .build();
 
-    private final Pet pet = Pet.builder()
+    protected final Pet pet = Pet.builder()
             .member(member)
             .name("땡이")
             .imageUrl(petImageUrl)
@@ -33,7 +34,8 @@ public abstract class ClubServiceTest extends ServiceTest {
             .sizeType(SizeType.SMALL)
             .build();
 
-    protected Club getSavedClub(Set<Gender> genders, Set<SizeType> sizes) {
+
+    protected Club createSavedClub(Set<Gender> genders, Set<SizeType> sizes) {
         memberRepository.save(member);
         petRepository.save(pet);
 

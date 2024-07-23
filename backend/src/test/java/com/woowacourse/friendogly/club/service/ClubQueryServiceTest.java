@@ -23,7 +23,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보를 조회한다.")
     @Test
     void findSearching() {
-        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
+        Club club = createSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
@@ -57,7 +57,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
     @Test
     void findSearching_Nothing() {
-        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
+        Club club = createSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
