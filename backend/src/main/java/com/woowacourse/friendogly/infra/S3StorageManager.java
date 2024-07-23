@@ -6,21 +6,17 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class S3StorageManager {
 
-    @Value("${aws.s3.bucket-name}")
-    private String BUCKET_NAME;
+    private String BUCKET_NAME="techcourse-project-2024";
 
-    @Value("${aws.s3.server.endpoint}")
-    private String S3_ENDPOINT;
+    private String S3_ENDPOINT="https://d3obq7hxojfffa.cloudfront.net/";
 
-    @Value("${aws.s3.server.key-prefix}")
-    private String KEY_PREFIX;
+    private String KEY_PREFIX="friendogly/";
 
     private final AmazonS3 s3Client;
 

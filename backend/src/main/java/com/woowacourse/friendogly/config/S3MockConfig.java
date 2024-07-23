@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.findify.s3mock.S3Mock;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -19,17 +18,14 @@ import org.springframework.context.annotation.Profile;
 @Profile("local")
 public class S3MockConfig {
 
-    @Value("${aws.s3.mock.endpoint}")
-    private String ENDPOINT;
+    private String ENDPOINT = "http://localhost";
 
-    @Value("${aws.s3.bucket-name}")
-    private String BUCKET_NAME;
-    private int port;
+    private String BUCKET_NAME="techcourse-project-2024";
+    private int port=8100;
 
     private final S3Mock s3Mock;
 
-    public S3MockConfig(@Value("${aws.s3.mock.port}") int port) {
-        this.port = port;
+    public S3MockConfig() {
         this.s3Mock = new S3Mock.Builder()
                 .withPort(port)
                 .withInMemoryBackend()
