@@ -1,0 +1,5 @@
+aws:
+  s3:
+    mock:
+      enabled: true
+      port: 8100

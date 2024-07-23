@@ -66,8 +66,8 @@ dependencies {
 
     swaggerUI 'org.webjars:swagger-ui:4.11.1'
 
-    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
-    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'io.findify:s3mock_2.13:0.2.6'
 
 }
 

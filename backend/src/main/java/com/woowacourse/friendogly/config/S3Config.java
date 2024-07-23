@@ -1,19 +1,22 @@
 package com.woowacourse.friendogly.config;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("!local")
 public class S3Config {
 
     @Bean
-    public S3Client S3Client(){
-        return S3Client.builder()
-                .region(Region.AP_NORTHEAST_2)
-                .credentialsProvider(InstanceProfileCredentialsProvider.create())
+    public AmazonS3 S3Client(){
+        return AmazonS3ClientBuilder.standard()
+                .withCredentials(InstanceProfileCredentialsProvider.getInstance())
+                .withRegion(Regions.AP_NORTHEAST_2)
                 .build();
     }
 }
