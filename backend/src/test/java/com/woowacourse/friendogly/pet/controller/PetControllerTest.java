@@ -1,20 +1,20 @@
 package com.woowacourse.friendogly.pet.controller;
 
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
+import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.time.LocalDate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
@@ -23,22 +23,18 @@ class PetControllerTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     private Member member;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-
-        SaveMemberRequest request = new SaveMemberRequest("견주", "ddang@email.com");
-
-        member = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
-                .when().post("/members")
-                .then().log().all()
-                .statusCode(HttpStatus.CREATED.value())
-                .extract()
-                .as(Member.class);
+        member = memberRepository.save(Member.builder()
+                .name("견주")
+                .email("ddang@email.com")
+                .build());
     }
 
     @DisplayName("정상적으로 반려견을 생성하면 201을 반환한다.")
