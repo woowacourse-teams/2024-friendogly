@@ -14,7 +14,7 @@ fun FootprintSaveDto.toDomain(): FootprintSave {
 
 fun FootprintSaveResponse.toData(): FootprintSaveDto {
     return FootprintSaveDto(
-        footprintId = footprintId,
+        footprintId = id,
         latitude = latitude,
         longitude = longitude,
     )

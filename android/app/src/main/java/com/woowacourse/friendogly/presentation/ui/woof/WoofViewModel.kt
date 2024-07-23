@@ -77,7 +77,8 @@ class WoofViewModel(
                         footprintMarkBtnInfo = footprintMarkBtnInfo,
                         nearFootprints = nearFootprints,
                     )
-            }.onFailure {}
+            }.onFailure {
+            }
         }
     }
 
