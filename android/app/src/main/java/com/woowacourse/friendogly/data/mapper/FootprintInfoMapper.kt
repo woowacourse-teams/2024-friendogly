@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.domain.model.PetGender
 import com.woowacourse.friendogly.domain.model.PetSizeType
 import com.woowacourse.friendogly.presentation.utils.parseToLocalDate
 import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTime
+import com.woowacourse.friendogly.remote.model.response.FootprintInfoResponse
 
 fun FootprintInfoDto.toDomain(): FootprintInfo {
     return FootprintInfo(
@@ -17,6 +18,20 @@ fun FootprintInfoDto.toDomain(): FootprintInfo {
         petGender = PetGender.from(petGender),
         footprintImageUrl = footprintImageUrl,
         createdAt = parseToLocalDateTime(createdAt),
+        isMine = isMine,
+    )
+}
+
+fun FootprintInfoResponse.toData(): FootprintInfoDto {
+    return FootprintInfoDto(
+        memberName = memberName,
+        petName = petName,
+        petDescription = petDescription,
+        petBirthDate = petBirthDate,
+        petSizeType = petSizeType,
+        petGender = petGender,
+        footprintImageUrl = footprintImageUrl,
+        createdAt = createdAt,
         isMine = isMine,
     )
 }
