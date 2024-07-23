@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.woowacourse.friendogly.R
@@ -19,15 +20,10 @@ class GroupModifyBottomSheet(
     val binding: BottomSheetGroupModifyBinding
         get() = _binding!!
 
-    private lateinit var dlg: SideSheetDialog
-
-    private val viewModel: GroupModifyViewModel by lazy {
-        GroupModifyViewModel()
-    }
+    private val viewModel: GroupModifyViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dlg = SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
-        return dlg
+        return SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
     }
 
     override fun onCreateView(
@@ -44,6 +40,7 @@ class GroupModifyBottomSheet(
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         viewModel.initDetailViewType(detailViewType)
         viewModel.groupModifyEvent.observeEvent(viewLifecycleOwner) { event ->

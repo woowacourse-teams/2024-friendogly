@@ -103,12 +103,10 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
 
     override fun confirmParticipation() {
         when (group.value?.detailViewType) {
-            DetailViewType.RECRUITMENT ->
-                _groupDetailEvent.emit(
-                    GroupDetailEvent.OpenDogSelector(
-                        group.value?.filters ?: listOf(),
-                    ),
-                )
+            DetailViewType.RECRUITMENT -> {
+                val filters = group.value?.filters ?: listOf()
+                _groupDetailEvent.emit(GroupDetailEvent.OpenDogSelector(filters))
+            }
 
             DetailViewType.MINE -> _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
             else -> return
@@ -120,10 +118,9 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
     }
 
     override fun openMenu() {
+        val detailViewType = group.value?.detailViewType ?: return
         _groupDetailEvent.emit(
-            GroupDetailEvent.OpenDetailMenu(
-                group.value?.detailViewType ?: return,
-            ),
+            GroupDetailEvent.OpenDetailMenu(detailViewType),
         )
     }
 

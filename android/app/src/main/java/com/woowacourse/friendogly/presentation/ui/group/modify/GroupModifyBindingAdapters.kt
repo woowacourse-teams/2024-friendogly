@@ -1,26 +1,16 @@
 package com.woowacourse.friendogly.presentation.ui.group.modify
 
-import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.presentation.ui.group.detail.model.DetailViewType
 
 @BindingAdapter("myVisibleMenu")
 fun FrameLayout.bindMyVisibleMenu(detailViewType: DetailViewType) {
-    this.visibility =
-        if (detailViewType == DetailViewType.MINE) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+    this.isVisible = detailViewType == DetailViewType.MINE
 }
 
 @BindingAdapter("userVisibleMenu")
 fun FrameLayout.bindUserVisibleMenu(detailViewType: DetailViewType) {
-    this.visibility =
-        if (detailViewType == DetailViewType.MINE) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
+    this.isVisible = detailViewType != DetailViewType.MINE
 }

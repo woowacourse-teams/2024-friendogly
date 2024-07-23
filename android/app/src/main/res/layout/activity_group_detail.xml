@@ -239,7 +239,9 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_white_fill_radius10"
                 android:gravity="center"
-                app:detailViewType="@{vm.group.detailViewType}"
+                app:detailViewTypeBackground="@{vm.group.detailViewType}"
+                app:detailViewTypeText="@{vm.group.detailViewType}"
+                app:detailViewTypeStyle="@{vm.group.detailViewType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
                 tools:text="참여하기" />
