@@ -33,19 +33,23 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:padding="2dp"
                 onSingleClick="@{()->vm.closeDetail()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:background="@drawable/ripple_circle_white"
                 android:src="@drawable/ic_arrow_left"
                 app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
                 app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
                 app:tint="@color/white" />
 
             <ImageView
+                android:padding="2dp"
                 onSingleClick="@{()->vm.openMenu()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_circle_white"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_more_vertical"
                 app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"

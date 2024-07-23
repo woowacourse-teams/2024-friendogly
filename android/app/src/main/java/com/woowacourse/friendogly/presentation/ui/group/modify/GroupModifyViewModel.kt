@@ -11,10 +11,11 @@ class GroupModifyViewModel: BaseViewModel(), GroupModifyActionHandler {
     private val _groupModifyEvent: MutableLiveData<Event<GroupModifyEvent>> = MutableLiveData()
     val groupModifyEvent: LiveData<Event<GroupModifyEvent>> get() = _groupModifyEvent
 
-    private var detailViewType = DetailViewType.RECRUITMENT
+    private var _detailViewType : MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
+    val detailViewType : LiveData<DetailViewType> get() = _detailViewType
 
     fun initDetailViewType(detailViewType: DetailViewType){
-        this.detailViewType = detailViewType
+        _detailViewType.value = detailViewType
     }
 
     override fun close() {
