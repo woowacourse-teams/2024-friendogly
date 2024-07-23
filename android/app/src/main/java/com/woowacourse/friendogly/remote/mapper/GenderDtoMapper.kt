@@ -13,7 +13,7 @@ fun GenderResponse.toData(): GenderDto {
     }
 }
 
-fun GenderDto.toRemote(): GenderRequest  {
+fun GenderDto.toRemote(): GenderRequest {
     return when (this) {
         GenderDto.MALE -> GenderRequest.MALE
         GenderDto.FEMALE -> GenderRequest.FEMALE
