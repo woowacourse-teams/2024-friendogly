@@ -1,0 +1,6 @@
+aws:
+  s3:
+    bucket-name: techcourse-project-2024
+    server:
+      endpoint: https://d3obq7hxojfffa.cloudfront.net/
+      key-prefix: friendogly/
