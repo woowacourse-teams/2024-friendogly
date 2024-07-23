@@ -14,7 +14,7 @@ fun parseToLocalDate(
 
 fun parseToLocalDateTime(
     dateTime: String?,
-    pattern: String = "yyyy-MM-dd HH:mm:ss",
+    pattern: String = "yyyy-MM-dd HH:mm:ss.SSS",
 ): LocalDateTime {
     val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern)
     return LocalDateTime.parse(dateTime, dateTimeFormatter)

@@ -10,18 +10,6 @@ import java.time.LocalDateTime
 import java.time.Period
 
 fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
-//    return FootprintInfoUiModel(
-//        petName = "땡이",
-//        petDescription = "안녕하세요! 땡이에요~",
-//        petAge = LocalDate.of(2020, 2, 22).toAge(),
-//        petSizeType = PetSizeType.to(PetSizeType.SMALL),
-//        petGender = PetGender.to(PetGender.FEMALE),
-//        footprintImageUrl = "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
-//        dateOfVisit =
-//            LocalDateTime.of(2024, 7, 22, 11, 24, 11)
-//                .toDateOfVisit(),
-//        isMine = false,
-//    )
     return FootprintInfoUiModel(
         petName = petName,
         petDescription = petDescription,

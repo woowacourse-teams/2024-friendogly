@@ -69,8 +69,9 @@ class WoofFragment :
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            val footprintId = state.createdFootprintId ?: return@observe
             markNearFootPrints(footPrints = state.nearFootprints)
-            createMarker(latLng = latLng, isMine = true)
+            createMarker(footprintId = footprintId, latLng = latLng, isMine = true)
             moveCameraCenterPosition()
         }
 
@@ -164,6 +165,7 @@ class WoofFragment :
     }
 
     private fun createMarker(
+        footprintId: Long,
         latLng: LatLng,
         isMine: Boolean,
     ) {
@@ -175,14 +177,17 @@ class WoofFragment :
         marker.height = MARKER_HEIGHT
         marker.map = map
 
-        setUpMarkerAction(marker)
+        setUpMarkerAction(footprintId, marker)
     }
 
-    private fun setUpMarkerAction(marker: Marker) {
+    private fun setUpMarkerAction(
+        footprintId: Long,
+        marker: Marker,
+    ) {
         marker.setOnClickListener {
             val bottomSheet =
                 FootprintBottomSheet.newInstance(
-                    footPrintId = 1L,
+                    footPrintId = footprintId,
                 )
             bottomSheet.show(parentFragmentManager, tag)
             true
@@ -192,6 +197,7 @@ class WoofFragment :
     private fun markNearFootPrints(footPrints: List<FootprintUiModel>) {
         footPrints.forEach { footPrint ->
             createMarker(
+                footprintId = footPrint.footprintId,
                 latLng = LatLng(footPrint.latitude, footPrint.longitude),
                 isMine = footPrint.isMine,
             )

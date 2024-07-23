@@ -68,10 +68,11 @@ class WoofViewModel(
         nearFootprints: List<FootprintUiModel>,
     ) {
         viewModelScope.launch {
-            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess {
+            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { footprintSave ->
                 val state = uiState.value ?: WoofUiState()
                 _uiState.value =
                     state.copy(
+                        createdFootprintId = footprintSave.footprintId,
                         footprintMarkBtnInfo = footprintMarkBtnInfo,
                         nearFootprints = nearFootprints,
                     )

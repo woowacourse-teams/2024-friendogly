@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.remote.api
 import com.woowacourse.friendogly.data.model.LandMarkDto
 import com.woowacourse.friendogly.remote.model.request.FootprintRequest
 import com.woowacourse.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
+import com.woowacourse.friendogly.remote.model.response.FootprintSaveResponse
 import com.woowacourse.friendogly.remote.model.response.FootprintsNearResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -13,7 +14,7 @@ interface WoofService {
     @POST(ApiClient.Footprints.POST_FOOTPRINT)
     suspend fun postFootprint(
         @Body request: FootprintRequest,
-    ): Unit
+    ): FootprintSaveResponse
 
     @GET(ApiClient.Footprints.GET_FOOTPRINTS_NEAR)
     suspend fun getNearFootprints(

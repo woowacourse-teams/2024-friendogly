@@ -13,7 +13,6 @@ import com.woowacourse.friendogly.remote.interceptor.ErrorResponseInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object RemoteModule {

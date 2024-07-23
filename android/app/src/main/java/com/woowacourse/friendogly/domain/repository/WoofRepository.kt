@@ -2,13 +2,14 @@ package com.woowacourse.friendogly.domain.repository
 
 import com.woowacourse.friendogly.domain.model.Footprint
 import com.woowacourse.friendogly.domain.model.FootprintMarkBtnInfo
+import com.woowacourse.friendogly.domain.model.FootprintSave
 import com.woowacourse.friendogly.domain.model.LandMark
 
 interface WoofRepository {
     suspend fun postFootprint(
         latitude: Double,
         longitude: Double,
-    ): Result<Unit>
+    ): Result<FootprintSave>
 
     suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfo>
 
