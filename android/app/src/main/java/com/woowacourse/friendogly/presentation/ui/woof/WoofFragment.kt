@@ -7,6 +7,7 @@ import android.provider.Settings
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.CameraUpdate.REASON_GESTURE
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
@@ -19,14 +20,13 @@ import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 import com.woowacourse.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.woowacourse.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 
 class WoofFragment :
-    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
-    OnMapReadyCallback,
-    WoofActionHandler {
+    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
@@ -44,6 +44,7 @@ class WoofFragment :
     }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
+            permissionRequester = permissionRequester,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
@@ -63,7 +64,7 @@ class WoofFragment :
     }
 
     private fun initDataBinding() {
-        binding.actionHandler = this
+        binding.vm = viewModel
     }
 
     private fun initObserve() {
@@ -71,6 +72,29 @@ class WoofFragment :
             markNearFootPrints(footPrints = state.nearFootprints)
             createMarker(latLng = latLng, isMine = true)
             moveCameraCenterPosition()
+        }
+
+        viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                is WoofMapActions.MarkFootPrint -> viewModel.markFootprint(latLng)
+                is WoofMapActions.ChangeMapToNoFollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.NoFollow
+
+                is WoofMapActions.ChangeMapToFollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.Follow
+
+                is WoofMapActions.ChangeMapToFaceTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.Face
+            }
+        }
+
+        viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
+            }
         }
     }
 
@@ -89,6 +113,12 @@ class WoofFragment :
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
             circleOverlay.center = latLng
+        }
+
+        map.addOnCameraChangeListener { reason, _ ->
+            if (reason == REASON_GESTURE) {
+                viewModel.changeMapTrackingModeToNoFollow()
+            }
         }
     }
 
@@ -165,24 +195,6 @@ class WoofFragment :
                 latLng = LatLng(footPrint.latitude, footPrint.longitude),
                 isMine = footPrint.isMine,
             )
-        }
-    }
-
-    override fun markFootPrint() {
-        if (permissionRequester.hasLocationPermissions()) {
-            viewModel.markFootprint(latLng)
-        } else {
-            showSettingSnackbar()
-        }
-    }
-
-    override fun changeLocationTrackingMode() {
-        if (permissionRequester.hasLocationPermissions()) {
-            map.locationTrackingMode =
-                if (map.locationTrackingMode == LocationTrackingMode.Follow) LocationTrackingMode.Face else LocationTrackingMode.Follow
-        } else {
-            map.locationTrackingMode = LocationTrackingMode.None
-            showSettingSnackbar()
         }
     }
 

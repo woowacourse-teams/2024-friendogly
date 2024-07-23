@@ -12,19 +12,27 @@ import com.woowacourse.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.woowacourse.friendogly.domain.usecase.PostFootprintUseCase
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
+import com.woowacourse.friendogly.presentation.base.Event
+import com.woowacourse.friendogly.presentation.base.emit
 import com.woowacourse.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
+    private val permissionRequester: WoofPermissionRequester,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
     private val getLandMarksUseCase: GetLandMarksUseCase,
-) :
-    BaseViewModel() {
+) : BaseViewModel(), WoofActionHandler {
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
+
+    private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
+    val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
+
+    private val _snackbarActions: MutableLiveData<Event<WoofSnackbarActions>> = MutableLiveData()
+    val snackbarActions: LiveData<Event<WoofSnackbarActions>> get() = _snackbarActions
 
     fun markFootprint(latLng: LatLng) {
         viewModelScope.launch {
@@ -32,25 +40,29 @@ class WoofViewModel(
                 if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
                 }
-            }.onFailure {
-            }
+            }.onFailure {}
         }
     }
 
-    private fun loadNearFootprints(
+    fun changeMapTrackingModeToNoFollow() {
+        _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
+    }
+
+    private suspend fun loadNearFootprints(
         latLng: LatLng,
         footprintMarkBtnInfo: FootprintMarkBtnInfoUiModel,
     ) {
         viewModelScope.launch {
-            getNearFootprintsUseCase(latLng.latitude, latLng.longitude)
-                .onSuccess { nearFootPrints ->
-                    markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
-                }.onFailure {
-                }
+            getNearFootprintsUseCase(
+                latLng.latitude,
+                latLng.longitude,
+            ).onSuccess { nearFootPrints ->
+                markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
+            }.onFailure {}
         }
     }
 
-    private fun markMyFootprint(
+    private suspend fun markMyFootprint(
         latLng: LatLng,
         footprintMarkBtnInfo: FootprintMarkBtnInfoUiModel,
         nearFootprints: List<FootprintUiModel>,
@@ -63,23 +75,46 @@ class WoofViewModel(
                         footprintMarkBtnInfo = footprintMarkBtnInfo,
                         nearFootprints = nearFootprints,
                     )
-            }.onFailure {
-            }
+            }.onFailure {}
         }
     }
 
-    fun loadLandMarks() {
+    private suspend fun loadLandMarks() {
         viewModelScope.launch {
             getLandMarksUseCase().onSuccess { landMarks ->
                 val state = uiState.value ?: return@onSuccess
                 _uiState.value = state.copy(landMarks = landMarks.toPresentation())
-            }.onFailure {
-            }
+            }.onFailure {}
+        }
+    }
+
+    override fun markFootPrint() {
+        if (permissionRequester.hasLocationPermissions()) {
+            _mapActions.emit(WoofMapActions.MarkFootPrint)
+        } else {
+            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
+        }
+    }
+
+    override fun changeLocationTrackingMode() {
+        if (permissionRequester.hasLocationPermissions()) {
+            val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
+            _mapActions.emit(
+                if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
+                    WoofMapActions.ChangeMapToFaceTrackingMode
+                } else {
+                    WoofMapActions.ChangeMapToFollowTrackingMode
+                },
+            )
+        } else {
+            _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
+            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
         }
     }
 
     companion object {
         fun factory(
+            permissionRequester: WoofPermissionRequester,
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -87,6 +122,7 @@ class WoofViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
+                    permissionRequester = permissionRequester,
                     postFootprintUseCase = postFootprintUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,
