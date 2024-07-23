@@ -28,7 +28,9 @@ public class S3StorageManager {
         this.s3Client = s3Client;
     }
 
-    public String uploadFile(String key, MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file) throws IOException {
+        String key = file.getOriginalFilename();
+
         PutObjectRequest putObjectRequest = new PutObjectRequest(
                 BUCKET_NAME,
                 KEY_PREFIX + key,
@@ -38,7 +40,7 @@ public class S3StorageManager {
         return S3_ENDPOINT + key;
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file)  {
+    private File convertMultiPartFileToFile(MultipartFile file) {
         File tmp = null;
         try {
             tmp = File.createTempFile("tmp", null);

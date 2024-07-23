@@ -17,12 +17,10 @@ public class ImageController {
         this.s3StorageManager = s3StorageManager;
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        System.out.println(file);
-        String key = file.getOriginalFilename();
+    @PostMapping("/test-upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            String imageUrl = s3StorageManager.uploadFile(key, file);
+            String imageUrl = s3StorageManager.uploadFile(file);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
