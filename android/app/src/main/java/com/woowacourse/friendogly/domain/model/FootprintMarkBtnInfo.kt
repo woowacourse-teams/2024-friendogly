@@ -1,25 +1,28 @@
 package com.woowacourse.friendogly.domain.model
 
+import java.time.Duration
 import java.time.LocalDateTime
 
 data class FootprintMarkBtnInfo(val createdAt: LocalDateTime?) {
     fun isMarkBtnClickable(currentDateTime: LocalDateTime = LocalDateTime.now()): Boolean {
-        return true
-//        val duration = Duration.between(createdAt, currentDateTime)
-//        return duration.toMillis() <= SECONDS_LIMIT * MILLI_SECONDS
+        if (createdAt == null) return true
+        val duration = Duration.between(createdAt, currentDateTime)
+        return duration.toMillis() > SECONDS_LIMIT * MILLI_SECONDS
     }
 
     fun remainingTime(currentDateTime: LocalDateTime = LocalDateTime.now()): String {
-        return "30"
-//        val duration = Duration.between(createdAt, currentDateTime)
-//        val remainingTime = SECONDS_LIMIT - duration.seconds.coerceIn(MIN_REMAINING_TIME, MAX_REMAINING_TIME)
-//        return "$remainingTime"
+        if (createdAt == null) return NO_REMAINING_TIME
+        val duration = Duration.between(createdAt, currentDateTime)
+        val remainingTimeMillis = (SECONDS_LIMIT * MILLI_SECONDS) - duration.toMillis()
+        if (remainingTimeMillis <= 0) {
+            return NO_REMAINING_TIME
+        }
+        return (remainingTimeMillis / MILLI_SECONDS).toString()
     }
 
     companion object {
-        private const val MIN_REMAINING_TIME = 1L
-        private const val MAX_REMAINING_TIME = 30L
         private const val SECONDS_LIMIT = 30
         private const val MILLI_SECONDS = 1000
+        private const val NO_REMAINING_TIME = "0"
     }
 }

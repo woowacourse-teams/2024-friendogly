@@ -5,18 +5,23 @@ import com.woowacourse.friendogly.local.di.LocalModule
 import com.woowacourse.friendogly.remote.api.BaseUrl
 import com.woowacourse.friendogly.remote.api.ClubService
 import com.woowacourse.friendogly.remote.api.FootprintService
-import com.woowacourse.friendogly.remote.api.WoofService
 import com.woowacourse.friendogly.remote.api.MemberService
 import com.woowacourse.friendogly.remote.api.PetService
+import com.woowacourse.friendogly.remote.api.WoofService
 import com.woowacourse.friendogly.remote.interceptor.AuthorizationInterceptor
 import com.woowacourse.friendogly.remote.interceptor.ErrorResponseInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object RemoteModule {
     private val contentType = "application/json".toMediaType()
+    private val logging =
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
 
     fun createClubService(
         baseUrl: BaseUrl,
@@ -47,11 +52,6 @@ object RemoteModule {
             localModule,
         ).create(WoofService::class.java)
     }
-
-    private val logging =
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
 
     fun createMemberService(
         baseUrl: BaseUrl,

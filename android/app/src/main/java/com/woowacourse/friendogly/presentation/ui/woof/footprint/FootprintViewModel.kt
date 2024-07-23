@@ -24,7 +24,7 @@ class FootprintViewModel(
     }
 
     private suspend fun loadFootPrintInfo() {
-        getFootprintInfoUseCase(1L).onSuccess { footPrintInfo ->
+        getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
             val state = uiState.value ?: FootprintUiState()
             _uiState.value = state.copy(footPrintInfo = footPrintInfo.toPresentation())
         }.onFailure {

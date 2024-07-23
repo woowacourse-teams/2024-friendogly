@@ -11,6 +11,6 @@ data class FootprintInfo(
     val petSizeType: PetSizeType,
     val petGender: PetGender,
     val footprintImageUrl: String,
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime?,
     val isMine: Boolean,
 )

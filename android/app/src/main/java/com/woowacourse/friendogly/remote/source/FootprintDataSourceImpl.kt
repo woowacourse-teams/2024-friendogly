@@ -8,6 +8,6 @@ import com.woowacourse.friendogly.remote.api.FootprintService
 class FootprintDataSourceImpl(private val service: FootprintService) :
     FootprintDataSource {
     override suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfoDto> {
-        return runCatching { service.getFootprintInfo(footprintId).toData() }
+        return runCatching { service.getFootprintInfo(footprintId).data.toData() }
     }
 }

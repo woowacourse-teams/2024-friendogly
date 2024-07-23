@@ -28,7 +28,8 @@ class AuthorizationInterceptor(
         ): Request =
             request.newBuilder()
                 .removeHeader(AUTHORIZATION)
-                .addHeader(AUTHORIZATION, credentials)
+                .addHeader(AUTHORIZATION, "1")
+//                .addHeader(AUTHORIZATION, credentials)
                 .build()
     }
 }

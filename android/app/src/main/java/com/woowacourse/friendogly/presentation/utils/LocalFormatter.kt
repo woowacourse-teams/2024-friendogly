@@ -12,8 +12,19 @@ fun parseToLocalDate(
     return LocalDate.parse(date, dateFormatter)
 }
 
-fun parseToLocalDateTime(
+fun parseToLocalDateTimeOrNull(
     dateTime: String?,
+    pattern: String = "yyyy-MM-dd HH:mm:ss.SSS",
+): LocalDateTime? {
+    if (dateTime == null) {
+        return null
+    }
+    val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern)
+    return LocalDateTime.parse(dateTime, dateTimeFormatter)
+}
+
+fun parseToLocalDateTime(
+    dateTime: String,
     pattern: String = "yyyy-MM-dd HH:mm:ss.SSS",
 ): LocalDateTime {
     val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern)

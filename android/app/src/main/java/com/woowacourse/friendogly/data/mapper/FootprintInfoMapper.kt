@@ -5,7 +5,7 @@ import com.woowacourse.friendogly.domain.model.FootprintInfo
 import com.woowacourse.friendogly.domain.model.PetGender
 import com.woowacourse.friendogly.domain.model.PetSizeType
 import com.woowacourse.friendogly.presentation.utils.parseToLocalDate
-import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTime
+import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTimeOrNull
 import com.woowacourse.friendogly.remote.model.response.FootprintInfoResponse
 
 fun FootprintInfoDto.toDomain(): FootprintInfo {
@@ -17,7 +17,7 @@ fun FootprintInfoDto.toDomain(): FootprintInfo {
         petSizeType = PetSizeType.from(petSizeType),
         petGender = PetGender.from(petGender),
         footprintImageUrl = footprintImageUrl,
-        createdAt = parseToLocalDateTime(createdAt),
+        createdAt = parseToLocalDateTimeOrNull(createdAt),
         isMine = isMine,
     )
 }

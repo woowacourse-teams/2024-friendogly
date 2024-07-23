@@ -40,7 +40,8 @@ class WoofViewModel(
                 if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
                 }
-            }.onFailure {}
+            }.onFailure {
+            }
         }
     }
 

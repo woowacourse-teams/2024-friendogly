@@ -34,7 +34,10 @@ fun LocalDate.toAge(currentDate: LocalDate = LocalDate.now()): String {
     }
 }
 
-fun LocalDateTime.toDateOfVisit(currentDateTime: LocalDateTime = LocalDateTime.now()): String {
+fun LocalDateTime?.toDateOfVisit(currentDateTime: LocalDateTime = LocalDateTime.now()): String {
+    if (this == null) {
+        return "방금 전"
+    }
     val duration = Duration.between(this, currentDateTime)
 
     val minutes = duration.toMinutes()

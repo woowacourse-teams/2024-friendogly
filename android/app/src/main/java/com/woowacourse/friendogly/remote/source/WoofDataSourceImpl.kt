@@ -11,12 +11,12 @@ import com.woowacourse.friendogly.remote.model.request.FootprintRequest
 
 class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
     override suspend fun postFootprint(request: FootprintRequest): Result<FootprintSaveDto> {
-        return runCatching { service.postFootprint(request).toData() }
+        return runCatching { service.postFootprint(request).data.toData() }
     }
 
     override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
         return runCatching {
-            service.getFootprintMarkBtnInfo().toData()
+            service.getFootprintMarkBtnInfo().data.toData()
         }
     }
 
@@ -25,7 +25,7 @@ class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
         longitude: Double,
     ): Result<List<FootprintDto>> {
         return runCatching {
-            service.getNearFootprints(latitude, longitude).toData()
+            service.getNearFootprints(latitude, longitude).data.toData()
         }
     }
 
