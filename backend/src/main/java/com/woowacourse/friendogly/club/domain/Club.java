@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.club.domain;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -126,6 +127,10 @@ public class Club {
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
+    }
+
+    public boolean canParticipate(Pet pet) {
+        return allowedGenders.contains(pet.getGender()) && allowedSizes.contains(pet.getSizeType());
     }
 
 }

@@ -19,26 +19,27 @@ public abstract class ClubServiceTest extends ServiceTest {
     protected final Set<SizeType> allowedSizes = Set.of(SizeType.SMALL);
     protected final String petImageUrl = "https://PetimageUrl.com";
 
-    protected final Member member = Member.builder()
-            .name("브라운")
-            .email("woowha@gmail.com")
-            .build();
+    protected Member createSavedMember() {
+        return memberRepository.save(Member.builder()
+                .name("브라운")
+                .email("woowha@gmail.com")
+                .build());
+    }
 
-    protected final Pet pet = Pet.builder()
-            .member(member)
-            .name("땡이")
-            .imageUrl(petImageUrl)
-            .birthDate(LocalDate.of(2020, 11, 1))
-            .description("귀여운 땡이 >.<")
-            .gender(Gender.FEMALE)
-            .sizeType(SizeType.SMALL)
-            .build();
+    protected Pet createSavedPet(Member owner) {
+        return petRepository.save(Pet.builder()
+                .member(owner)
+                .name("땡이")
+                .imageUrl(petImageUrl)
+                .birthDate(LocalDate.of(2020, 11, 1))
+                .description("귀여운 땡이 >.<")
+                .gender(Gender.FEMALE)
+                .sizeType(SizeType.SMALL)
+                .build());
+    }
 
 
-    protected Club createSavedClub(Set<Gender> genders, Set<SizeType> sizes) {
-        memberRepository.save(member);
-        petRepository.save(pet);
-
+    protected Club createSavedClub(Member member, Pet pet, Set<Gender> genders, Set<SizeType> sizes) {
         Club club = Club.create(
                 "강아지 산책시키실 분 모아요.",
                 "매주 주말에 정기적으로 산책 모임하실분만",

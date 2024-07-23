@@ -13,12 +13,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
+import com.epages.restdocs.apispec.SimpleType;
 import com.woowacourse.friendogly.auth.AuthArgumentResolver;
 import com.woowacourse.friendogly.club.controller.ClubController;
 import com.woowacourse.friendogly.club.domain.Status;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
 import com.woowacourse.friendogly.club.service.ClubQueryService;
@@ -253,6 +255,67 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 .build()))
                 );
     }
+
+    @DisplayName("모임에 참여한다.")
+    @Test
+    void saveClubMember_201() throws Exception {
+
+        SaveClubMemberResponse response = new SaveClubMemberResponse(1L);
+        when(clubCommandService.saveClubMember(any(), any()))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/clubs/{clubId}/members", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("clubs/members/201",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 참여 API")
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
+                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
+                                        .description("로그인 중인 회원 ID"))
+                                .responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).type(SimpleType.STRING)
+                                                .description("모임-회원 연관관계 리소스 Location")
+                                )
+                                .responseFields(fieldWithPath("clubMemberId").type(JsonFieldType.NUMBER)
+                                        .description("모임-회원 연관관계 ID(추후 채팅 생기면 변경)"))
+                                .responseSchema(Schema.schema("SaveClubMemberResponse"))
+                                .build())
+                ));
+    }
+
+/*    @DisplayName("이미 모임에 참여 중이거나, 참여할 수 없는 경우")
+    @Test
+    void saveClubMember_400() throws Exception {
+
+        when(clubCommandService.saveClubMember(any(), any()))
+                .thenThrow(FriendoglyException.class);
+
+        mockMvc.perform(post("/clubs/{clubId}/members", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("clubs/members/400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 참여 API")
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
+                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
+                                        .description("로그인 중인 회원 ID"))
+                                //에러 Response
+                                .build())
+                ));
+    }*/
 
     @Override
     protected Object controller() {

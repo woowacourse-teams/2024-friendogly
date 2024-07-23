@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
 import com.woowacourse.friendogly.club.service.ClubQueryService;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +42,15 @@ public class ClubController {
             @Valid @RequestBody SaveClubRequest request) {
         SaveClubResponse response = clubCommandService.save(memberId, request);
         return ResponseEntity.created(URI.create("/clubs" + response.id())).body(response);
+    }
+
+    @PostMapping("/{clubId}/members")
+    public ResponseEntity<SaveClubMemberResponse> saveClubMember(
+            @PathVariable Long clubId,
+            @Auth Long memberId
+    ) {
+        SaveClubMemberResponse response = clubCommandService.saveClubMember(clubId, memberId);
+        return ResponseEntity.created(URI.create("/clubs/" + clubId + "/members/" + response.clubMemberId()))
+                .body(response);
     }
 }

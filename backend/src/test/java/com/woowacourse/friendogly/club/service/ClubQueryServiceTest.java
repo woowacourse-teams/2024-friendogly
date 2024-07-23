@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +25,10 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보를 조회한다.")
     @Test
     void findSearching() {
-        Club club = createSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
+        Member savedMember = createSavedMember();
+        Pet savedPet = createSavedPet(savedMember);
+        Club club = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL));
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
@@ -57,7 +62,10 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
     @Test
     void findSearching_Nothing() {
-        Club club = createSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
+        Member savedMember = createSavedMember();
+        Pet savedPet = createSavedPet(savedMember);
+        Club club = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL));
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
