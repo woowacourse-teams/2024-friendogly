@@ -17,16 +17,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="3dp"
         android:layout_marginEnd="5dp"
-        android:background="@drawable/rect_orange100_fill_12">
+        android:background="@drawable/rect_orange100_fill_12"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="3dp">
 
         <TextView
             android:id="@+id/tv_group_list_filter_name"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
             android:paddingEnd="5dp"
             android:text="@{groupFilter.filterName}"
             app:layout_constraintBottom_toBottomOf="parent"
