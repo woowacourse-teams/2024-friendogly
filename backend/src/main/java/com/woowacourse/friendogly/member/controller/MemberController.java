@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.member.controller;
 
+import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.service.MemberCommandService;
@@ -22,9 +23,9 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<SaveMemberResponse> saveMember(@RequestBody @Valid SaveMemberRequest request) {
+    public ResponseEntity<ApiResponse<SaveMemberResponse>> saveMember(@RequestBody @Valid SaveMemberRequest request) {
         SaveMemberResponse response = memberCommandService.saveMember(request);
         return ResponseEntity.created(URI.create("/members/" + response.id()))
-                .body(response);
+                .body(ApiResponse.ofSuccess(response));
     }
 }

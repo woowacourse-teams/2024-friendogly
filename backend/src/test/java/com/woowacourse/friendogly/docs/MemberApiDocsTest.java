@@ -1,5 +1,9 @@
 package com.woowacourse.friendogly.docs;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
@@ -16,10 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-
-import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberController.class)
 public class MemberApiDocsTest extends RestDocsTest {
@@ -54,10 +54,12 @@ public class MemberApiDocsTest extends RestDocsTest {
                                         fieldWithPath("name").type(JsonFieldType.STRING).description("회원 이름"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"))
                                 .responseFields(
-                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원 id"),
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("회원 이름"),
-                                        fieldWithPath("tag").type(JsonFieldType.STRING).description("중복된 회원 이름을 식별하기 위한 고유한 문자열"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"))
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 id"),
+                                        fieldWithPath("data.name").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("data.tag").type(JsonFieldType.STRING)
+                                                .description("중복된 회원 이름을 식별하기 위한 고유한 문자열"),
+                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"))
                                 .requestSchema(Schema.schema("saveMemberRequest"))
                                 .responseSchema(Schema.schema("응답DTO 이름"))
                                 .build()))
