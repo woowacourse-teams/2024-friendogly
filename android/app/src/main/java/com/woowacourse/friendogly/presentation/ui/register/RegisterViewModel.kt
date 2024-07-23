@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.woowacourse.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
@@ -14,15 +15,37 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val kakaoLoginUseCase: KakaoLoginUseCase,
+    private val getJwtTokenUseCase: GetJwtTokenUseCase,
 ) : BaseViewModel() {
     private val _navigateAction: MutableLiveData<Event<RegisterNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<RegisterNavigationAction>> get() = _navigateAction
 
+    val splashLoading = MutableLiveData(true)
+
+    init {
+        handleTokenState()
+    }
+
+    private fun handleTokenState() {
+        viewModelScope.launch {
+            getJwtTokenUseCase().onSuccess { jwtToken ->
+                if (jwtToken?.accessToken.isNullOrBlank()) {
+                    splashLoading.value = false
+                    return@onSuccess
+                }
+                _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
+            }.onFailure {
+                // TODO 예외처리
+            }
+        }
+    }
+
     fun executeKakaoLogin(context: Context) {
         viewModelScope.launch {
-            kakaoLoginUseCase(context = context).onSuccess {
-                _navigateAction.emit(RegisterNavigationAction.NavigateToGoogleLogin)
+            kakaoLoginUseCase(context = context).onSuccess { kakaAccessToken ->
+                kakaAccessToken.idToken ?: return@onSuccess
+                _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.idToken))
             }.onFailure { }
         }
     }
@@ -36,9 +59,15 @@ class RegisterViewModel(
     }
 
     companion object {
-        fun factory(kakaoLoginUseCase: KakaoLoginUseCase): ViewModelProvider.Factory {
+        fun factory(
+            kakaoLoginUseCase: KakaoLoginUseCase,
+            getJwtTokenUseCase: GetJwtTokenUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
-                RegisterViewModel(kakaoLoginUseCase = kakaoLoginUseCase)
+                RegisterViewModel(
+                    kakaoLoginUseCase = kakaoLoginUseCase,
+                    getJwtTokenUseCase = getJwtTokenUseCase,
+                )
             }
         }
     }
