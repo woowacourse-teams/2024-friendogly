@@ -1,5 +1,9 @@
 aws:
   s3:
+    bucket-name: techcourse-project-2024
     mock:
-      enabled: true
       port: 8100
+      endpoint: http://localhost
+    server:
+      endpoint: https://d3obq7hxojfffa.cloudfront.net/
+      key-prefix: friendogly/

@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.findify.s3mock.S3Mock;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -18,11 +19,19 @@ import org.springframework.context.annotation.Profile;
 @Profile("local")
 public class S3MockConfig {
 
+    @Value("${aws.s3.mock.endpoint}")
+    private String ENDPOINT;
+
+    @Value("${aws.s3.bucket-name}")
+    private String BUCKET_NAME;
+    private int port;
+
     private final S3Mock s3Mock;
 
-    public S3MockConfig() {
+    public S3MockConfig(@Value("${aws.s3.mock.port}") int port) {
+        this.port = port;
         this.s3Mock = new S3Mock.Builder()
-                .withPort(8100)
+                .withPort(port)
                 .withInMemoryBackend()
                 .build();
     }
@@ -35,23 +44,23 @@ public class S3MockConfig {
                 .withPathStyleAccessEnabled(true)
                 .withEndpointConfiguration(
                         new EndpointConfiguration(
-                                "http://localhost:8100",
+                                ENDPOINT + ":" + port,
                                 Regions.AP_NORTHEAST_2.getName()
                         )
                 )
                 .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
                 .build();
-        amazonS3.createBucket("techcourse-project-2024");
+        amazonS3.createBucket(BUCKET_NAME);
         return amazonS3;
     }
 
     @PostConstruct
-    public void startS3Mock(){
+    public void startS3Mock() {
         this.s3Mock.start();
     }
 
     @PreDestroy
-    public void destroyS3Mock(){
+    public void destroyS3Mock() {
         this.s3Mock.shutdown();
     }
 
