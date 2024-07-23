@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.woowacourse.friendogly.databinding.ItemDogBinding
-import com.woowacourse.friendogly.presentation.ui.mypage.Dog
+import com.woowacourse.friendogly.databinding.ItemPetBinding
+import com.woowacourse.friendogly.domain.model.Pet
 import com.woowacourse.friendogly.presentation.ui.mypage.MyPageActionHandler
 
-class DogProfileAdapter(
+class PetProfileAdapter(
     private val actionHandler: MyPageActionHandler,
-) : ListAdapter<Dog, DogProfileAdapter.ViewHolder>(DogItemDiffCallback) {
+) : ListAdapter<Pet, PetProfileAdapter.ViewHolder>(PetItemDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -21,7 +21,7 @@ class DogProfileAdapter(
         viewType: Int,
     ): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemDogBinding.inflate(inflater, parent, false)
+        val binding = ItemPetBinding.inflate(inflater, parent, false)
         binding.actionHandler = actionHandler
         return ViewHolder(binding)
     }
@@ -33,21 +33,21 @@ class DogProfileAdapter(
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Dog) {
-            binding.dog = item
+    class ViewHolder(private val binding: ItemPetBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Pet) {
+            binding.pet = item
         }
     }
 
-    internal object DogItemDiffCallback : DiffUtil.ItemCallback<Dog>() {
+    companion object PetItemDiffCallback : DiffUtil.ItemCallback<Pet>() {
         override fun areItemsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
-        ): Boolean = oldItem.name == newItem.name
+            oldItem: Pet,
+            newItem: Pet,
+        ): Boolean = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
+            oldItem: Pet,
+            newItem: Pet,
         ): Boolean = oldItem == newItem
     }
 }

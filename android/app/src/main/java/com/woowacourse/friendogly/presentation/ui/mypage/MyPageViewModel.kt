@@ -2,12 +2,19 @@ package com.woowacourse.friendogly.presentation.ui.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.woowacourse.friendogly.domain.usecase.GetPetsMineUseCase
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
+import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
+class MyPageViewModel(
+    private val getPetsMineUseCase: GetPetsMineUseCase,
+) : BaseViewModel(), MyPageActionHandler {
     private val _uiState: MutableLiveData<MyPageUiState> = MutableLiveData(MyPageUiState())
     val uiState: LiveData<MyPageUiState> get() = _uiState
 
@@ -16,18 +23,24 @@ class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
     init {
-        fetchDummy()
+        fetchPetMine()
     }
 
-    private fun fetchDummy() {
+    fun fetchPetMine() {
         val state = _uiState.value ?: return
 
-        _uiState.value =
-            state.copy(
-                nickname = "손흥민",
-                email = "tottenham@gmail.com",
-                dogs = dogs,
-            )
+        viewModelScope.launch {
+            getPetsMineUseCase().onSuccess { pets ->
+                _uiState.value =
+                    state.copy(
+                        nickname = "손흥민",
+                        email = "tottenham@gmail.com",
+                        pets = pets,
+                    )
+            }.onFailure {
+                // TODO 예외 처리
+            }
+        }
     }
 
     fun navigateToDogRegister() {
@@ -77,5 +90,13 @@ class MyPageViewModel : BaseViewModel(), MyPageActionHandler {
                     image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
                 ),
             )
+
+        fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
+            return BaseViewModelFactory { _ ->
+                MyPageViewModel(
+                    getPetsMineUseCase = getPetsMineUseCase,
+                )
+            }
+        }
     }
 }

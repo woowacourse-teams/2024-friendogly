@@ -3,7 +3,9 @@ package com.woowacourse.friendogly.remote.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BaseResponse<T>(
-    val isSuccess: Boolean,
-    val data: T,
-)
+enum class GenderResponse {
+    MALE,
+    FEMALE,
+    MALE_NEUTERED,
+    FEMALE_NEUTERED,
+}
