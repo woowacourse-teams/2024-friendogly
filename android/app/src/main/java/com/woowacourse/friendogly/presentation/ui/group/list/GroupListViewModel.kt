@@ -34,49 +34,50 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
-            _groups.value = List(5) {
-                listOf(
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
+            _groups.value =
+                List(5) {
+                    listOf(
+                        GroupListUiModel(
+                            groupId = 0L,
+                            filters =
+                                listOf(
+                                    GroupFilter.SizeFilter.SmallDog,
+                                    GroupFilter.GenderFilter.Female,
+                                    GroupFilter.GenderFilter.NeutralizingMale,
+                                ),
+                            groupPoster = "",
+                            isParticipable = true,
+                            title = "중형견 모임해요",
+                            content = "공지 꼭 읽어주세요",
+                            maximumNumberOfPeople = 5,
+                            currentNumberOfPeople = 2,
+                            groupLocation = "잠실6동",
+                            groupLeader = "벼리",
+                            groupDate = LocalDateTime.now(),
+                            groupWoofs = listOf(),
+                            groupReaderImage = "",
                         ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 2,
-                        groupLocation = "잠실6동",
-                        groupLeader = "벼리",
-                        groupDate = LocalDateTime.now(),
-                        groupWoofs = listOf(),
-                        groupReaderImage = "",
-                    ),
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
+                        GroupListUiModel(
+                            groupId = 0L,
+                            filters =
+                                listOf(
+                                    GroupFilter.SizeFilter.SmallDog,
+                                    GroupFilter.GenderFilter.Female,
+                                ),
+                            groupPoster = "",
+                            isParticipable = true,
+                            title = "중형견 모임해요",
+                            content = "공지 꼭 읽어주세요",
+                            maximumNumberOfPeople = 5,
+                            currentNumberOfPeople = 3,
+                            groupLocation = "잠실5동",
+                            groupLeader = "채드",
+                            groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
+                            groupWoofs = listOf(),
+                            groupReaderImage = "",
                         ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 3,
-                        groupLocation = "잠실5동",
-                        groupLeader = "채드",
-                        groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
-                        groupWoofs = listOf(),
-                        groupReaderImage = "",
-                    ),
-                )
-            }.flatten()
+                    )
+                }.flatten()
         }
 
     override fun loadGroup(groupId: Long) {

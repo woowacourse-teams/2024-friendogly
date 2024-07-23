@@ -81,11 +81,10 @@ class GroupDetailActivity :
 
                 GroupDetailEvent.Navigation.NavigateToHome -> finish()
 
-
                 is GroupDetailEvent.OpenDetailMenu -> {
                     val bottomSheet =
                         GroupModifyBottomSheet(event.detailViewType)
-                    bottomSheet.show(supportFragmentManager,"TAG")
+                    bottomSheet.show(supportFragmentManager, "TAG")
                 }
             }
         }

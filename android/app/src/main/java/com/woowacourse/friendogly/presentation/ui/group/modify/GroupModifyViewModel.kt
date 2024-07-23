@@ -7,14 +7,14 @@ import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
 import com.woowacourse.friendogly.presentation.ui.group.detail.model.DetailViewType
 
-class GroupModifyViewModel: BaseViewModel(), GroupModifyActionHandler {
+class GroupModifyViewModel : BaseViewModel(), GroupModifyActionHandler {
     private val _groupModifyEvent: MutableLiveData<Event<GroupModifyEvent>> = MutableLiveData()
     val groupModifyEvent: LiveData<Event<GroupModifyEvent>> get() = _groupModifyEvent
 
-    private var _detailViewType : MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
-    val detailViewType : LiveData<DetailViewType> get() = _detailViewType
+    private var _detailViewType: MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
+    val detailViewType: LiveData<DetailViewType> get() = _detailViewType
 
-    fun initDetailViewType(detailViewType: DetailViewType){
+    fun initDetailViewType(detailViewType: DetailViewType) {
         _detailViewType.value = detailViewType
     }
 
@@ -37,6 +37,4 @@ class GroupModifyViewModel: BaseViewModel(), GroupModifyActionHandler {
     override fun selectBlock() {
         _groupModifyEvent.emit(GroupModifyEvent.Block)
     }
-
-
 }

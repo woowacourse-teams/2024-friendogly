@@ -52,11 +52,12 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                     startActivity(GroupDetailActivity.getIntent(requireContext(), event.groupId))
                 }
 
-                GroupListEvent.Navigation.NavigateToAddGroup -> startActivity(
-                    GroupAddActivity.getIntent(
-                        requireContext()
+                GroupListEvent.Navigation.NavigateToAddGroup ->
+                    startActivity(
+                        GroupAddActivity.getIntent(
+                            requireContext(),
+                        ),
                     )
-                )
             }
         }
     }

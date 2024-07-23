@@ -7,18 +7,20 @@ import com.woowacourse.friendogly.presentation.ui.group.detail.model.DetailViewT
 
 @BindingAdapter("myVisibleMenu")
 fun FrameLayout.bindMyVisibleMenu(detailViewType: DetailViewType) {
-    this.visibility = if (detailViewType == DetailViewType.MINE) {
-        View.VISIBLE
-    } else {
-        View.GONE
-    }
+    this.visibility =
+        if (detailViewType == DetailViewType.MINE) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
 }
 
 @BindingAdapter("userVisibleMenu")
 fun FrameLayout.bindUserVisibleMenu(detailViewType: DetailViewType) {
-    this.visibility = if (detailViewType == DetailViewType.MINE) {
-        View.GONE
-    } else {
-        View.VISIBLE
-    }
+    this.visibility =
+        if (detailViewType == DetailViewType.MINE) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }

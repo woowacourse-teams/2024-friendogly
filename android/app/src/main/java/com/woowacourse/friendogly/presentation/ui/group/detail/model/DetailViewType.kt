@@ -4,7 +4,8 @@ enum class DetailViewType {
     RECRUITMENT,
     END_RECRUITMENT,
     PARTICIPATED,
-    MINE;
+    MINE,
+    ;
 
     companion object {
         fun from(
@@ -12,10 +13,15 @@ enum class DetailViewType {
             isMyParticipated: Boolean,
             isParticipable: Boolean,
         ): DetailViewType {
-            return if (isMine) MINE
-            else if (isMyParticipated) PARTICIPATED
-            else if (isParticipable) RECRUITMENT
-            else END_RECRUITMENT
+            return if (isMine) {
+                MINE
+            } else if (isMyParticipated) {
+                PARTICIPATED
+            } else if (isParticipable) {
+                RECRUITMENT
+            } else {
+                END_RECRUITMENT
+            }
         }
     }
 }
