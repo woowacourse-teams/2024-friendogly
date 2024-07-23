@@ -1,3 +1,4 @@
+
 aws:
   s3:
     bucket-name: techcourse-project-2024
@@ -7,3 +8,32 @@ aws:
     server:
       endpoint: https://d3obq7hxojfffa.cloudfront.net/
       key-prefix: friendogly/
+
+spring:
+  config:
+    activate:
+      on-profile: "local"
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:database
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql.init.mode: always
+
+logging.level.org:
+  hibernate:
+    SQL: debug
+    orm.jdbc.bind: trace
+
+

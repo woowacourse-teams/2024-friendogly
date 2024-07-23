@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PetCommandService {
 
+    private static final int MAX_PET_CAPACITY = 5;
+
     private final PetRepository petRepository;
     private final MemberRepository memberRepository;
 
@@ -22,12 +24,20 @@ public class PetCommandService {
         this.memberRepository = memberRepository;
     }
 
-    public SavePetResponse savePet(SavePetRequest request) {
-        Member member = memberRepository.findById(request.memberId())
+    public SavePetResponse savePet(Long memberId, SavePetRequest request) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 Member 입니다."));
-        Pet pet = request.toEntity(member);
-        Pet savedPet = petRepository.save(pet);
+
+        validatePetCapacity(petRepository.countByMember(member));
+        Pet savedPet = petRepository.save(request.toEntity(member));
 
         return new SavePetResponse(savedPet);
+    }
+
+    private void validatePetCapacity(Long size) {
+        if (MAX_PET_CAPACITY <= size) {
+            throw new FriendoglyException(String.format(
+                    "강아지는 최대 %d 마리까지만 등록할 수 있습니다.", MAX_PET_CAPACITY));
+        }
     }
 }

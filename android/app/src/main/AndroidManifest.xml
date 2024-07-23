@@ -18,7 +18,12 @@
         android:theme="@style/Theme.Friendogly"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".presentation.ui.group.detail.GroupDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.group.add.GroupAddActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.profilesetting.ProfileSettingActivity"
             android:exported="false" />
@@ -26,19 +31,35 @@
             android:name=".presentation.ui.MainActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.chatlist.chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.register.RegisterActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Friendogly.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Theme.ImageCropper" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="@string/KAKAO_OAUTH_HOST" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

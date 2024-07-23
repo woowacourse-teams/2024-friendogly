@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.presentation.ui.register
 
 sealed interface RegisterNavigationAction {
-    data object NavigateToKakaoLogin : RegisterNavigationAction
+    data object NavigateToAlreadyLogin : RegisterNavigationAction
 
     data object NavigateToGoogleLogin : RegisterNavigationAction
 

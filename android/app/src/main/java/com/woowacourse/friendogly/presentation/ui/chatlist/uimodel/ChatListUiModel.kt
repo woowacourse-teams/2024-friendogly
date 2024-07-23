@@ -15,7 +15,7 @@ data class ChatListUiModel(
     }
 }
 
-// 더미데이터
+// TODO: remove
 data class ChatDummy(
     val title: String,
     val body: String,

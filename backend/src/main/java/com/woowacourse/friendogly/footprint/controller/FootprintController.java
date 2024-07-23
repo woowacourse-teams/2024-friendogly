@@ -1,10 +1,13 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
@@ -29,42 +32,59 @@ public class FootprintController {
     private final FootprintQueryService footprintQueryService;
 
     public FootprintController(
-        FootprintCommandService footprintCommandService,
-        FootprintQueryService footprintQueryService
+            FootprintCommandService footprintCommandService,
+            FootprintQueryService footprintQueryService
     ) {
         this.footprintCommandService = footprintCommandService;
         this.footprintQueryService = footprintQueryService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody SaveFootprintRequest request) {
-        Long id = footprintCommandService.save(request);
-        return ResponseEntity.created(URI.create("/footprints/" + id))
-            .build();
+    public ResponseEntity<SaveFootprintResponse> save(
+            @Auth Long memberId,
+            @Valid @RequestBody SaveFootprintRequest request
+    ) {
+        SaveFootprintResponse response = footprintCommandService.save(memberId, request);
+        return ResponseEntity.created(URI.create("/footprints/" + response.id()))
+                .body(response);
+    }
+
+    @GetMapping("/{footprintId}")
+    public ResponseEntity<FindOneFootprintResponse> findOne(
+            @Auth Long memberId,
+            @PathVariable Long footprintId
+    ) {
+        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
+        FindOneFootprintResponse response = footprintQueryService.findOne(memberId, footprintId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/near")
-    public ResponseEntity<List<FindNearFootprintResponse>> findNear(@Valid FindNearFootprintRequest request) {
-        // memberId == 1L 로 dummy data 사용
+    public ResponseEntity<List<FindNearFootprintResponse>> findNear(
+            @Auth Long memberId,
+            @Valid FindNearFootprintRequest request
+    ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        List<FindNearFootprintResponse> response = footprintQueryService.findNear(1L, request);
+        List<FindNearFootprintResponse> response = footprintQueryService.findNear(memberId, request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/mine/latest")
-    public ResponseEntity<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime() {
-        // memberId == 1L 로 dummy data 사용
+    public ResponseEntity<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime(@Auth Long memberId) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(1L);
+        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(memberId);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/image/{footprintId}")
     public ResponseEntity<UpdateFootprintImageResponse> updateFootprintImage(
-        @PathVariable Long footprintId,
-        @ModelAttribute UpdateFootprintImageRequest request
+            @Auth Long memberId,
+            @PathVariable Long footprintId,
+            @ModelAttribute UpdateFootprintImageRequest request
     ) {
-        UpdateFootprintImageResponse response = footprintCommandService.updateFootprintImage(footprintId, request);
+        // TODO: S3가 구현되고 명세가 확정되면 그 때 문서화하기
+        UpdateFootprintImageResponse response =
+                footprintCommandService.updateFootprintImage(memberId, footprintId, request);
         return ResponseEntity.ok(response);
     }
 }

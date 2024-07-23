@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.pet.controller;
 
+import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
 import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,8 +31,11 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<SavePetResponse> savePet(@RequestBody @Valid SavePetRequest savePetRequest) {
-        SavePetResponse response = petCommandService.savePet(savePetRequest);
+    public ResponseEntity<SavePetResponse> savePet(
+            @Auth Long memberId,
+            @RequestBody @Valid SavePetRequest savePetRequest
+    ) {
+        SavePetResponse response = petCommandService.savePet(memberId, savePetRequest);
         return ResponseEntity.created(URI.create("/pets/" + response.id()))
                 .body(response);
     }
@@ -41,8 +46,13 @@ public class PetController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/mine/{memberId}")
-    public List<FindPetResponse> findByMemberId(@PathVariable Long memberId) {
+    @GetMapping("/mine")
+    public List<FindPetResponse> findMine(@Auth Long memberId) {
+        return petQueryService.findByMemberId(memberId);
+    }
+
+    @GetMapping
+    public List<FindPetResponse> findByMemberId(@RequestParam Long memberId) {
         return petQueryService.findByMemberId(memberId);
     }
 }

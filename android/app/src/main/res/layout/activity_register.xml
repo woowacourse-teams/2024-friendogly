@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.woowacourse.friendogly.presentation.ui.register.RegisterViewModel" />
@@ -40,7 +42,7 @@
 
         <ImageButton
             android:id="@+id/ib_kakao_register"
-            onSingleClick="@{() -> vm.executeKakaoLogin()}"
+            onSingleClick="@{(view) -> vm.executeKakaoLogin(view.context)}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

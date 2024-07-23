@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/tv_chat_date"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         style="@style/Theme.AppCompat.TextView.SemiBold.Gray07.Size16"

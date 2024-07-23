@@ -22,6 +22,7 @@ datastore = "1.1.1"
 image-cropper = "4.5.0"
 navigation = "2.7.7"
 glide = "4.16.0"
+flexbox = "3.0.0"
 
 # coroutines
 coroutines = "1.7.3"
@@ -45,9 +46,15 @@ google-play-services-auth = "21.2.0"
 # network
 okhttp = "4.12.0"
 retrofit = "2.11.0"
+retrofit2-kotlinx-serialization-converter = "1.0.0"
+
+# serialization
+serialization = "1.6.0"
 
 # paging
 paging = "3.3.0"
+
+splashscreen = "1.0.1"
 
 [libraries]
 # test
@@ -64,6 +71,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
 # android-library
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -78,6 +86,8 @@ androidx-navigation-fragemnt = { group = "androidx.navigation", name = "navigati
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+flextbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 
 # kakao
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
@@ -99,19 +109,17 @@ google-auth = { group = "com.google.android.gms", name = "play-services-auth", v
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-
-#ktlint
-ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
 
 [bundles]
-kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core"]
-android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "paging-runtime-ktx"]
+android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx", "splashscreen"]
+kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization"]
 navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth"]
+network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor", "retrofit2-kotlinx-serialization-converter"]
 kakao = ["kakao-user"]
 naver = ["naver-maps"]
 location = ["location"]
-network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor"]
 datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 

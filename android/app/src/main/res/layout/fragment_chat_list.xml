@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 app:title="@string/chat_list_title"
                 app:titleMarginStart="20dp"
-                app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size24">
+                app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18">
 
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>

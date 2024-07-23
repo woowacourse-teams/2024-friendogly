@@ -1,16 +1,26 @@
 package com.woowacourse.friendogly.presentation.ui.register
 
+import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.gms.common.api.ApiException
-import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.ActivityRegisterBinding
-import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.MainActivity
 import com.woowacourse.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
-class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
-    private val viewModel: RegisterViewModel by viewModels()
+class RegisterActivity : AppCompatActivity() {
+    private var _binding: ActivityRegisterBinding? = null
+    val binding get() = requireNotNull(_binding)
+
+    private val viewModel: RegisterViewModel by viewModels {
+        RegisterViewModel.factory(
+            kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase,
+            getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
+        )
+    }
 
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
@@ -20,28 +30,48 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
             viewModel.handleGoogleLogin(idToken = idToken)
         }
 
-    override fun initCreateView() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        super.onCreate(savedInstanceState)
+
+        _binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initCreateView()
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.splashLoading.value == true
+        }
+    }
+
+    private fun initCreateView() {
         initDataBinding()
         initObserve()
     }
 
     private fun initDataBinding() {
-        binding.vm = viewModel
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = this@RegisterActivity
+        }
     }
 
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
-                is RegisterNavigationAction.NavigateToKakaoLogin -> {
+                is RegisterNavigationAction.NavigateToAlreadyLogin -> {
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }
 
                 is RegisterNavigationAction.NavigateToGoogleLogin ->
-                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
+                    googleSignInLauncher.launch(
+                        SIGN_IN_REQUEST_CODE,
+                    )
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
-                    startActivity(ProfileSettingActivity.getIntent(this))
+                    startActivity(
+                        ProfileSettingActivity.getIntent(this),
+                    )
             }
         }
     }
