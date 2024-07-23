@@ -34,16 +34,16 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
-            _groups.value =
+            _groups.value = List(5) {
                 listOf(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                            GroupFilter.GenderFilter.NeutralizingMale,
+                        ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -59,10 +59,10 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                        ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -76,6 +76,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         groupReaderImage = "",
                     ),
                 )
+            }.flatten()
         }
 
     override fun loadGroup(groupId: Long) {

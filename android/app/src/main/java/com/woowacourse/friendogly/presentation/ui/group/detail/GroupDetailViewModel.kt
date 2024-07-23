@@ -35,7 +35,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                             GroupFilter.GenderFilter.NeutralizingMale,
                         ),
                     groupPoster = "",
-                    detailViewType = DetailViewType.MINE,
+                    detailViewType = DetailViewType.RECRUITMENT,
                     title = "중형견 모임해요",
                     content = "공지 꼭 읽어주세요",
                     maximumNumberOfPeople = 5,
