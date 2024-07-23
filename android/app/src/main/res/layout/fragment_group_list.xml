@@ -11,9 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <View
             android:id="@+id/view_group_list_top_bar"
@@ -64,13 +64,14 @@
             app:layout_constraintTop_toBottomOf="@id/view_group_list_top_bar" />
 
         <ImageButton
+            onSingleClick="@{()->vm.addGroup()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_circle_white"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/ripple_circle_white"
             android:src="@drawable/ic_group_add_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -6,17 +6,11 @@
 
     <data>
         <variable
-            name="participationFilter"
-            type="com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter" />
-
-        <variable
             name="groupFilterSelector"
             type="com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector" />
-
         <variable
-            name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListActionHandler" />
-
+            name="vm"
+            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +25,7 @@
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:filterName="@{participationFilter.filterName}"
+            app:filterName="@{vm.participationFilter.filterName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

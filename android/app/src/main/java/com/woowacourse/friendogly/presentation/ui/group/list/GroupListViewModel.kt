@@ -82,4 +82,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     override fun loadGroup(groupId: Long) {
         _groupListEvent.emit(GroupListEvent.OpenGroup(groupId))
     }
+
+    override fun addGroup() {
+        _groupListEvent.emit(GroupListEvent.Navigation.NavigateToAddGroup)
+    }
 }
