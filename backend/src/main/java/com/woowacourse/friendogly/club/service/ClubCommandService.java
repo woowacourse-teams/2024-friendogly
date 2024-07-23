@@ -48,12 +48,7 @@ public class ClubCommandService {
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
 
         Club newClub = clubRepository.save(request.toEntity(member));
-        clubMemberRepository.save(
-                ClubMember.builder()
-                        .club(newClub)
-                        .member(member)
-                        .build()
-        );
+        clubMemberRepository.save(ClubMember.create(newClub, member));
 
         List<Pet> participatingPets = petRepository.findByMemberId(memberId).stream()
                 .filter(pet -> request.participatingPetsId().contains(pet.getId()))
@@ -73,6 +68,10 @@ public class ClubCommandService {
         return new SaveClubResponse(newClub, 1, petImageUrls);
     }
 
+    public void deleteById(Long id) {
+
+    }
+
     public SaveClubMemberResponse saveClubMember(Long clubId, Long memberId) {
         if (clubMemberRepository.existsClubMemberByClubIdAndMemberId(clubId, memberId)) {
             throw new FriendoglyException("이미 참여 중인 모임입니다.");
@@ -83,11 +82,7 @@ public class ClubCommandService {
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
 
         validateParticipating(club, member);
-        ClubMember clubMember = ClubMember.builder()
-                .club(club)
-                .member(member)
-                .build();
-
+        ClubMember clubMember = ClubMember.create(club, member);
         ClubMember savedClubMember = clubMemberRepository.save(clubMember);
 
         return new SaveClubMemberResponse(savedClubMember);

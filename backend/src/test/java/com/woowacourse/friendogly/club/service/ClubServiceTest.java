@@ -51,16 +51,12 @@ public abstract class ClubServiceTest extends ServiceTest {
                 "https://image.com");
 
         Club savedClub = clubRepository.save(club);
-        ClubMember clubMember = ClubMember.builder()
-                .member(member)
-                .club(club)
-                .build();
 
         ClubPet clubPet = ClubPet.builder()
                 .club(club)
                 .pet(pet)
                 .build();
-        clubMemberRepository.save(clubMember);
+        clubMemberRepository.save(ClubMember.create(club, member));
         clubPetRepository.save(clubPet);
 
         return savedClub;

@@ -45,20 +45,14 @@ class ClubMemberTest {
     @Test
     void create() {
 
-        assertThatCode(() -> ClubMember.builder()
-                .club(club)
-                .member(member)
-                .build())
+        assertThatCode(() -> ClubMember.create(club, member))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("모임 정보가 없으면 예외가 발생한다.")
     @Test
     void create_FailNullClub() {
-        assertThatThrownBy(() -> ClubMember.builder()
-                .club(null)
-                .member(member)
-                .build())
+        assertThatThrownBy(() -> ClubMember.create(null, member))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임 정보는 필수입니다.");
     }
@@ -66,10 +60,7 @@ class ClubMemberTest {
     @DisplayName("참여 회원 정보가 없으면 예외가 발생한다.")
     @Test
     void create_FailNullMember() {
-        assertThatThrownBy(() -> ClubMember.builder()
-                .club(club)
-                .member(null)
-                .build())
+        assertThatThrownBy(() -> ClubMember.create(club, null))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 참여하는 회원 정보는 필수입니다.");
     }

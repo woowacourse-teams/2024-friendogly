@@ -89,11 +89,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
 
-        clubMemberRepository.save(ClubMember.builder()
-                .club(savedClub)
-                .member(savedNewMember)
-                .build()
-        );
+        clubMemberRepository.save(ClubMember.create(savedClub, newMember));
 
         assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId()))
                 .isInstanceOf(FriendoglyException.class)
