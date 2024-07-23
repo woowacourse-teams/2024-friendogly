@@ -75,12 +75,12 @@
             <TextView
                 android:id="@+id/tv_group_detail_user_name"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:text="@{vm.group.groupLeader}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{vm.group.groupLeader}"
                 app:layout_constraintBottom_toTopOf="@id/ll_group_detail_group_info"
                 app:layout_constraintStart_toEndOf="@id/iv_group_detail_user_image"
                 app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
@@ -207,9 +207,7 @@
                 tools:listitem="@layout/item_detail_profile" />
 
             <TextView
-                app:isMine="@{vm.group.mine}"
-                app:isParticipable="@{vm.group.participable}"
-                onSingleClick="@{()->vm.selectDog()}"
+                onSingleClick="@{()->vm.confirmParticipation()}"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="10dp"
@@ -217,9 +215,10 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_white_fill_radius10"
                 android:gravity="center"
+                app:detailViewType="@{vm.group.detailViewType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
-                tools:text = "참여하기" />
+                tools:text="참여하기" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

@@ -4,14 +4,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.woowacourse.friendogly.R
+import com.woowacourse.friendogly.presentation.ui.group.detail.model.DetailViewType
 
-@BindingAdapter("isMine", "isParticipable")
-fun TextView.bindTextButtonType(
-    isMine: Boolean,
-    isParticipable: Boolean,
-) {
-    val detailViewType = DetailViewType.from(isMine, isParticipable)
-
+@BindingAdapter("detailViewType")
+fun TextView.bindButtonType(detailViewType: DetailViewType?) {
+    detailViewType ?: return
     val backgroundTint = when (detailViewType) {
         DetailViewType.RECRUITMENT, DetailViewType.MINE -> ContextCompat.getColorStateList(
             context,
@@ -33,21 +30,4 @@ fun TextView.bindTextButtonType(
     this.backgroundTintList = backgroundTint
     this.text = text
     this.setTextAppearance(textStyle)
-}
-
-enum class DetailViewType {
-    RECRUITMENT,
-    END_RECRUITMENT,
-    MINE;
-
-    companion object {
-        fun from(
-            isMine: Boolean,
-            isParticipable: Boolean,
-        ): DetailViewType {
-            return if (isMine) MINE
-            else if (isParticipable) RECRUITMENT
-            else END_RECRUITMENT
-        }
-    }
 }

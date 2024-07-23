@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.ui.group.detail.model.DetailViewType
 import com.woowacourse.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import kotlinx.coroutines.delay
@@ -34,8 +35,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                             GroupFilter.GenderFilter.NeutralizingMale,
                         ),
                     groupPoster = "",
-                    isMine = false,
-                    isParticipable = false,
+                    detailViewType = DetailViewType.MINE,
                     title = "중형견 모임해요",
                     content = "공지 꼭 읽어주세요",
                     maximumNumberOfPeople = 5,
@@ -101,8 +101,12 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 )
         }
 
-    override fun selectDog() {
-        _groupDetailEvent.emit(GroupDetailEvent.OpenDogSelector(group.value?.filters ?: listOf()))
+    override fun confirmParticipation() {
+        when(group.value?.detailViewType){
+            DetailViewType.RECRUITMENT -> _groupDetailEvent.emit(GroupDetailEvent.OpenDogSelector(group.value?.filters ?: listOf()))
+            DetailViewType.MINE -> _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
+            else -> return
+        }
     }
 
     override fun closeDetail() {

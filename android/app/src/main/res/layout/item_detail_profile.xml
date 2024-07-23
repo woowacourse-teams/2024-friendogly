@@ -6,7 +6,7 @@
     <data>
         <variable
             name="profile"
-            type="com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailProfileUiModel" />
+            type="com.woowacourse.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginEnd="10dp"
