@@ -101,7 +101,8 @@
     <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
     <string name="group_detail_fail_button">뒤로가기</string>
     <string name="group_detail_participate_text">참여하기</string>
-    <string name="group_datil_"></string>
+    <string name="group_detail_un_participate_text">모집완료</string>
+    <string name="group_detail_mine_text">모임보기</string>
     
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>

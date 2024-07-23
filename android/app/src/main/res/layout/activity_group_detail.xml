@@ -207,7 +207,8 @@
                 tools:listitem="@layout/item_detail_profile" />
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+                app:isMine="@{vm.group.mine}"
+                app:isParticipable="@{vm.group.participable}"
                 onSingleClick="@{()->vm.selectDog()}"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -215,11 +216,10 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_white_fill_radius10"
-                android:backgroundTint="@color/orange05"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
-                android:text="@string/group_detail_participate_text" />
+                tools:text = "참여하기" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

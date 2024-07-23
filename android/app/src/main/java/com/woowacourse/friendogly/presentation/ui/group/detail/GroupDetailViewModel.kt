@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.Event
 import com.woowacourse.friendogly.presentation.base.emit
+import com.woowacourse.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.woowacourse.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,7 +34,8 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                             GroupFilter.GenderFilter.NeutralizingMale,
                         ),
                     groupPoster = "",
-                    isParticipable = true,
+                    isMine = false,
+                    isParticipable = false,
                     title = "중형견 모임해요",
                     content = "공지 꼭 읽어주세요",
                     maximumNumberOfPeople = 5,
