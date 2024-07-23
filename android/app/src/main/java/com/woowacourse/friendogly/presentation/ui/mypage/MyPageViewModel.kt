@@ -23,10 +23,10 @@ class MyPageViewModel(
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
     init {
-        fetchDummy()
+        fetchPetMine()
     }
 
-    private fun fetchDummy() {
+    fun fetchPetMine() {
         val state = _uiState.value ?: return
 
         viewModelScope.launch {

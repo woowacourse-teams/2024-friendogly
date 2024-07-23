@@ -53,4 +53,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             adapter.submitList(uiState.pets)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPetMine()
+    }
 }
