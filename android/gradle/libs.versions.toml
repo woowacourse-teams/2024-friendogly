@@ -49,7 +49,8 @@ retrofit = "2.11.0"
 retrofit2-kotlinx-serialization-converter = "1.0.0"
 
 # serialization
-serialization = "1.6.0"
+serialization = "1.6.3"
+kotlinx-datetime = "0.4.0"
 
 # paging
 paging = "3.3.0"
@@ -72,6 +73,7 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # android-library
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -113,7 +115,7 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 
 [bundles]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx", "splashscreen"]
-kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization"]
+kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
 navigation = ["androidx-navigation-fragemnt", "androidx-navigation-ui"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth"]
 network = ["retrofit-core", "okhttp-core", "okhttp-logging-interceptor", "retrofit2-kotlinx-serialization-converter"]

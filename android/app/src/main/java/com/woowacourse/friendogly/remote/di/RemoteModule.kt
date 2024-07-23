@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.local.di.LocalModule
 import com.woowacourse.friendogly.remote.api.BaseUrl
 import com.woowacourse.friendogly.remote.api.ClubService
 import com.woowacourse.friendogly.remote.api.MemberService
+import com.woowacourse.friendogly.remote.api.PetService
 import com.woowacourse.friendogly.remote.interceptor.AuthorizationInterceptor
 import com.woowacourse.friendogly.remote.interceptor.ErrorResponseInterceptor
 import kotlinx.serialization.json.Json
@@ -33,6 +34,16 @@ object RemoteModule {
             baseUrl,
             localModule,
         ).create(MemberService::class.java)
+    }
+
+    fun createPetService(
+        baseUrl: BaseUrl,
+        localModule: LocalModule,
+    ): PetService {
+        return createRetrofit(
+            baseUrl,
+            localModule,
+        ).create(PetService::class.java)
     }
 
     private val json =
