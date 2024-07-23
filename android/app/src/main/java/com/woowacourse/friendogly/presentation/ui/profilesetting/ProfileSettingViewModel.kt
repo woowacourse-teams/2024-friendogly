@@ -36,8 +36,13 @@ class ProfileSettingViewModel(
     fun submitProfileSelection() {
         val nickname = nickname.value ?: return
         if (nickname.isBlank()) return
+        if (regex.matches(nickname)) return
         viewModelScope.launch {
-            postMemberUseCase(name = nickname, email = "wnswkd486@gmail.com").onSuccess { member ->
+            // TODO email 필드는 임시로 넣어두었습니다.
+            postMemberUseCase(
+                name = nickname,
+                email = "test@banggapge.com",
+            ).onSuccess { member ->
                 saveJwaToken(member.id)
             }.onFailure {
                 // TODO 예외처리
@@ -70,6 +75,8 @@ class ProfileSettingViewModel(
     }
 
     companion object {
+        private val regex = "^[ㄱ-ㅎㅏ-ㅣ]+$".toRegex()
+
         fun factory(
             postMemberUseCase: PostMemberUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
