@@ -65,8 +65,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                         "서울특별시 송파구 신정동 잠실 6동",
                         Status.OPEN,
                         LocalDateTime.now(),
-                        Set.of(SizeType.SMALL),
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                        Set.of(SizeType.SMALL),
                         4,
                         1,
                         "https:/clubImage1.com",
@@ -80,8 +80,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                         "서울특별시 송파구 신정동 잠실 6동",
                         Status.OPEN,
                         LocalDateTime.now(),
-                        Set.of(SizeType.MEDIUM),
                         Set.of(Gender.MALE, Gender.FEMALE_NEUTERED, Gender.MALE_NEUTERED),
+                        Set.of(SizeType.MEDIUM),
                         3,
                         1,
                         "https:/clubImage2.com",
@@ -118,10 +118,10 @@ public class ClubApiDocsTest extends RestDocsTest {
                                                 .description("모임 상태(OPEN , CLOSED)"),
                                         fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
                                                 .description("모임 생성 시간(LocalDateTime)"),
-                                        fieldWithPath("[].allowedSize").type(JsonFieldType.ARRAY)
-                                                .description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
                                         fieldWithPath("[].allowedGender").type(JsonFieldType.ARRAY)
                                                 .description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
+                                        fieldWithPath("[].allowedSize").type(JsonFieldType.ARRAY)
+                                                .description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
                                         fieldWithPath("[].memberCapacity").type(JsonFieldType.NUMBER)
                                                 .description("모임 최대 인원"),
                                         fieldWithPath("[].currentMemberCount").type(JsonFieldType.NUMBER)
@@ -181,8 +181,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "서울특별시 송파구 신정동 잠실 5동",
                 Status.OPEN,
                 LocalDateTime.of(2024, 7, 23, 11, 5),
-                Set.of(SizeType.SMALL),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL),
                 5,
                 1,
                 "https://clubImage.com",

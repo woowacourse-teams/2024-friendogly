@@ -1,7 +1,5 @@
 package com.woowacourse.friendogly.club.service;
 
-import static java.util.stream.Collectors.toList;
-
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
@@ -59,7 +57,7 @@ public class ClubQueryService {
 
         return groupPetsByMemberId.values().stream()
                 .map(petList -> petList.get(0).getImageUrl().getValue())
-                .collect(toList());
+                .toList();
     }
 }
 
