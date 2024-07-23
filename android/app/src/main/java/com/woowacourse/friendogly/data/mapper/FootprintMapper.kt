@@ -6,7 +6,7 @@ import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTime
 
 fun FootprintDto.toDomain(): Footprint {
     return Footprint(
-        footPrintId = footPrintId,
+        footprintId = footPrintId,
         latitude = latitude,
         longitude = longitude,
         createdAt = parseToLocalDateTime(createdAt),

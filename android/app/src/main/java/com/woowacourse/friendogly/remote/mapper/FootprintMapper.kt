@@ -5,7 +5,7 @@ import com.woowacourse.friendogly.remote.model.response.FootprintsNearResponse
 
 fun FootprintsNearResponse.toData(): FootprintDto {
     return FootprintDto(
-        footPrintId = footPrintId,
+        footPrintId = footprintId,
         latitude = latitude,
         longitude = longitude,
         createdAt = createdAt,

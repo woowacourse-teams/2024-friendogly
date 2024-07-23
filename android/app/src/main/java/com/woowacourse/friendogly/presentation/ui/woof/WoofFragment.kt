@@ -16,8 +16,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.woowacourse.friendogly.R
-import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteWoofDataSource
-import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
+import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.FragmentWoofBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.model.FootprintUiModel
@@ -45,10 +44,10 @@ class WoofFragment :
     }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
-            woofRepository =
-                WoofRepositoryImpl(
-                    remoteWoofDataSource,
-                ),
+            postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
+            getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
+            getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
+            getLandMarksUseCase = AppModule.getInstance().getLandMarksUseCase,
         )
     }
 
@@ -69,15 +68,9 @@ class WoofFragment :
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            markNearFootPrints(footPrints = state.nearFootPrints)
+            markNearFootPrints(footPrints = state.nearFootprints)
             createMarker(latLng = latLng, isMine = true)
             moveCameraCenterPosition()
-        }
-
-        viewModel.isFootPrintMarkBtnInfoLoaded.observe(viewLifecycleOwner) { isLoaded ->
-            if (isLoaded) {
-                markFootPrint()
-            }
         }
     }
 
@@ -175,30 +168,12 @@ class WoofFragment :
         }
     }
 
-    private fun markFootPrint() {
+    override fun markFootPrint() {
         if (permissionRequester.hasLocationPermissions()) {
-            if (canMarkFootPrint()) {
-                val lastLocation = locationSource.lastLocation ?: return
-                latLng =
-                    LatLng(
-                        lastLocation.latitude,
-                        lastLocation.longitude,
-                    )
-                viewModel.markFootPrint(latLng = latLng)
-                viewModel.loadNearFootPrints(latLng = latLng)
-            }
+            viewModel.markFootprint(latLng)
         } else {
             showSettingSnackbar()
         }
-    }
-
-    private fun canMarkFootPrint(): Boolean {
-        val isMarkBtnClickable = viewModel.uiState.value?.footPrintMarkBtnInfo?.isClickable ?: false
-        return locationSource.lastLocation != null && isMarkBtnClickable
-    }
-
-    override fun loadMarkFootPrintBtn() {
-        viewModel.loadMarkFootPrintBtnInfo()
     }
 
     override fun changeLocationTrackingMode() {

@@ -1,7 +1,10 @@
 package com.woowacourse.friendogly.remote.model.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class FootprintsNearResponse(
-    val footPrintId: Long,
+    val footprintId: Long,
     val latitude: Double,
     val longitude: Double,
     val createdAt: String,

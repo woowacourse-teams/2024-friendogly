@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.woowacourse.friendogly.application.FriendoglyApplication.Companion.remoteFootprintDataSource
-import com.woowacourse.friendogly.data.repository.FootprintRepositoryImpl
+import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.BottomSheetFootprintBinding
 
 class FootprintBottomSheet : BottomSheetDialogFragment() {
@@ -18,10 +17,7 @@ class FootprintBottomSheet : BottomSheetDialogFragment() {
     private val viewModel: FootprintViewModel by viewModels<FootprintViewModel> {
         FootprintViewModel.factory(
             footPrintId = footPrintId,
-            footPrintRepository =
-                FootprintRepositoryImpl(
-                    remoteFootprintDataSource,
-                ),
+            getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
         )
     }
 

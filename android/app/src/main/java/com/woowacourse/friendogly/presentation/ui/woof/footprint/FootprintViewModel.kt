@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.woowacourse.friendogly.domain.mapper.toPresentation
-import com.woowacourse.friendogly.domain.repository.FootprintRepository
+import com.woowacourse.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
 import kotlinx.coroutines.launch
 
 class FootprintViewModel(
     private val footprintId: Long,
-    private val footPrintRepository: FootprintRepository,
+    private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<FootprintUiState> = MutableLiveData()
     val uiState: LiveData<FootprintUiState> get() = _uiState
@@ -24,9 +24,9 @@ class FootprintViewModel(
     }
 
     private suspend fun loadFootPrintInfo() {
-        footPrintRepository.getFootPrintInfo(footprintId).onSuccess { footPrintInfo ->
+        getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
             val state = uiState.value ?: FootprintUiState()
-            _uiState.postValue(state.copy(footPrintInfo = footPrintInfo.toPresentation()))
+            _uiState.value = state.copy(footPrintInfo = footPrintInfo.toPresentation())
         }.onFailure {
         }
     }
@@ -34,12 +34,12 @@ class FootprintViewModel(
     companion object {
         fun factory(
             footPrintId: Long,
-            footPrintRepository: FootprintRepository,
+            getFootprintInfoUseCase: GetFootprintInfoUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 FootprintViewModel(
                     footprintId = footPrintId,
-                    footPrintRepository = footPrintRepository,
+                    getFootprintInfoUseCase = getFootprintInfoUseCase,
                 )
             }
         }

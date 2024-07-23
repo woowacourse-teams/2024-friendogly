@@ -52,7 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_woof_dog"
-                tools:text="땡이가 여기서 산책하고 있어요!" />
+                tools:text="땡이가 10분 전에 다녀갔어요!" />
 
             <TextView
                 android:id="@+id/tv_woof_dog_age"

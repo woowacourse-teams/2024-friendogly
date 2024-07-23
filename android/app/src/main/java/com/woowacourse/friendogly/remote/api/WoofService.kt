@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.remote.service
+package com.woowacourse.friendogly.remote.api
 
 import com.woowacourse.friendogly.data.model.LandMarkDto
 import com.woowacourse.friendogly.remote.model.request.FootprintRequest
@@ -10,20 +10,20 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface WoofService {
-    @POST("/footprints")
-    suspend fun postFootPrint(
+    @POST(ApiClient.Footprints.POST_FOOTPRINT)
+    suspend fun postFootprint(
         @Body request: FootprintRequest,
-    )
+    ): Unit
 
-    @GET("/footprints/mine/latest")
-    suspend fun getFootPrintMarkBtnInfo(): FootprintMarkBtnInfoResponse
-
-    @GET("/footprints/near")
-    suspend fun getNearFootPrints(
+    @GET(ApiClient.Footprints.GET_FOOTPRINTS_NEAR)
+    suspend fun getNearFootprints(
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
     ): List<FootprintsNearResponse>
 
+    @GET(ApiClient.Footprints.GET_FOOTPRINT_MINE_LATEST)
+    suspend fun getFootprintMarkBtnInfo(): FootprintMarkBtnInfoResponse
+
     @GET("")
-    suspend fun getLandMarks(): Result<List<LandMarkDto>>
+    suspend fun getLandMarks(): List<LandMarkDto>
 }

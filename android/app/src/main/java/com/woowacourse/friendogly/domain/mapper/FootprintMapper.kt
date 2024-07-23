@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.presentation.model.FootprintUiModel
 
 fun Footprint.toPresentation(): FootprintUiModel {
     return FootprintUiModel(
+        footprintId = footprintId,
         latitude = latitude,
         longitude = longitude,
         isVisible = isVisible(),

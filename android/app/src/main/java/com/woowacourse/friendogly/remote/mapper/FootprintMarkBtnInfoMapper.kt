@@ -5,6 +5,6 @@ import com.woowacourse.friendogly.remote.model.response.FootprintMarkBtnInfoResp
 
 fun FootprintMarkBtnInfoResponse.toData(): FootprintMarkBtnInfoDto {
     return FootprintMarkBtnInfoDto(
-        createdAt = latestCreatedAt,
+        createdAt = createdAt,
     )
 }

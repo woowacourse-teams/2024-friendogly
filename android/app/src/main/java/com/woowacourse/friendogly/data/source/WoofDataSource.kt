@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.remote.source
+package com.woowacourse.friendogly.data.source
 
 import com.woowacourse.friendogly.data.model.FootprintDto
 import com.woowacourse.friendogly.data.model.FootprintMarkBtnInfoDto
@@ -6,11 +6,11 @@ import com.woowacourse.friendogly.data.model.LandMarkDto
 import com.woowacourse.friendogly.remote.model.request.FootprintRequest
 
 interface WoofDataSource {
-    suspend fun postFootPrint(request: FootprintRequest): Result<Unit>
+    suspend fun postFootprint(request: FootprintRequest): Result<Unit>
 
-    suspend fun getFootPrintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto>
+    suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto>
 
-    suspend fun getNearFootPrints(
+    suspend fun getNearFootprints(
         latitude: Double,
         longitude: Double,
     ): Result<List<FootprintDto>>
