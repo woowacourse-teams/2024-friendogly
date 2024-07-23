@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FootprintsNearResponse(
-    val footprintId: Long,
+    val footPrintId: Long,
     val latitude: Double,
     val longitude: Double,
     @Serializable(with = LocalDateTimeSerializer::class)

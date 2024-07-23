@@ -25,7 +25,6 @@ class MainActivity :
 
     override fun initCreateView() {
         initNavController()
-        requestLocationPermissions()
     }
 
     private fun initNavController() {
