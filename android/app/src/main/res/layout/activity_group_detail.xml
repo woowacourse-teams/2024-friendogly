@@ -37,6 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:background="@drawable/ripple_circle_white"
+                android:padding="2dp"
                 android:src="@drawable/ic_arrow_left"
                 app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
                 app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
@@ -47,6 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:background="@drawable/ripple_circle_white"
+                android:padding="2dp"
                 android:src="@drawable/ic_more_vertical"
                 app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"
                 app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
@@ -66,7 +70,6 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/shape_indicator_active"
                 android:backgroundTint="@color/orange05"
-                android:src="@drawable/ic_dog"
                 app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintStart_toStartOf="@id/view_group_detail_top_bar"
                 app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
@@ -75,12 +78,12 @@
             <TextView
                 android:id="@+id/tv_group_detail_user_name"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:text="@{vm.group.groupLeader}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{vm.group.groupLeader}"
                 app:layout_constraintBottom_toTopOf="@id/ll_group_detail_group_info"
                 app:layout_constraintStart_toEndOf="@id/iv_group_detail_user_image"
                 app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
@@ -163,16 +166,37 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_group_detail_subject"
                 tools:text="모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다." />
 
-            <TextView
-                android:id="@+id/tv_group_detail_user_list_subject"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/ll_group_detail_user_list"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:gravity="center|start"
                 android:paddingTop="10dp"
-                android:text="@string/group_user_list_subject"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_content" />
+                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_content">
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_user_list_subject" />
+
+                <ImageView
+                    android:id="@+id/iv_group_list_user_list_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_user_list" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@{@string/group_number_of_people(vm.group.currentNumberOfPeople,vm.group.maximumNumberOfPeople)}"
+                    tools:text="2/4명 참여" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_group_detail_user_list"
@@ -181,7 +205,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/tv_group_detail_user_list_subject"
+                app:layout_constraintTop_toBottomOf="@id/ll_group_detail_user_list"
                 tools:listitem="@layout/item_detail_profile" />
 
             <TextView
@@ -207,19 +231,20 @@
                 tools:listitem="@layout/item_detail_profile" />
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
-                onSingleClick="@{()->vm.selectDog()}"
+                onSingleClick="@{()->vm.confirmParticipation()}"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_white_fill_radius10"
-                android:backgroundTint="@color/orange05"
                 android:gravity="center"
+                app:detailViewTypeBackground="@{vm.group.detailViewType}"
+                app:detailViewTypeText="@{vm.group.detailViewType}"
+                app:detailViewTypeStyle="@{vm.group.detailViewType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
-                android:text="@string/group_detail_participate_text" />
+                tools:text="참여하기" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

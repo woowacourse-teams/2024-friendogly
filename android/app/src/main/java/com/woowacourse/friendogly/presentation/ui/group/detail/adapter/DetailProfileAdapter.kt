@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.woowacourse.friendogly.databinding.ItemDetailProfileBinding
-import com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailProfileUiModel
+import com.woowacourse.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 
 class DetailProfileAdapter :
     ListAdapter<GroupDetailProfileUiModel, DetailProfileViewHolder>(DetailProfileDiffCallback()) {
