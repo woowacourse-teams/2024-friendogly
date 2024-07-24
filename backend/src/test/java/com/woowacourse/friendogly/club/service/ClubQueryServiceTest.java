@@ -27,8 +27,12 @@ class ClubQueryServiceTest extends ClubServiceTest {
     void findSearching() {
         Member savedMember = createSavedMember();
         Pet savedPet = createSavedPet(savedMember);
-        Club club = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,
@@ -38,12 +42,12 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
         List<FindSearchingClubResponse> expectedResponses = List.of(
-                new FindSearchingClubResponse(club, 1, List.of(petImageUrl))
+                new FindSearchingClubResponse(club, List.of(petImageUrl))
         );
 
         FindSearchingClubResponse actual = responses.get(0);
         FindSearchingClubResponse expected = expectedResponses.get(0);
-
+        
         assertAll(
                 () -> assertThat(actual.id()).isEqualTo(expected.id()),
                 () -> assertThat(actual.title()).isEqualTo(expected.title()),
@@ -64,8 +68,12 @@ class ClubQueryServiceTest extends ClubServiceTest {
     void findSearching_Nothing() {
         Member savedMember = createSavedMember();
         Pet savedPet = createSavedPet(savedMember);
-        Club club = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 address,

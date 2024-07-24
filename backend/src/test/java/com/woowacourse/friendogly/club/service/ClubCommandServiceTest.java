@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubMember;
+import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.exception.FriendoglyException;
@@ -39,7 +39,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL),
                 5,
-                List.of(1L)
+                List.of(savedPet.getId())
         );
         SaveClubResponse actual = clubCommandService.save(savedMember.getId(), request);
 
@@ -67,10 +67,11 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .tag("tag123")
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
 
-        createSavedPet(savedNewMember);
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        assertThatCode(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId()))
+        assertThatCode(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request))
                 .doesNotThrowAnyException();
     }
 
@@ -82,37 +83,10 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL));
 
-        Member newMember = Member.builder()
-                .name("위브")
-                .email("wiib@gmail.com")
-                .tag("tag123")
-                .build();
-        Member savedNewMember = memberRepository.save(newMember);
-
-        clubMemberRepository.save(ClubMember.create(savedClub, newMember));
-
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId()))
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedPet.getId()));
+        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("이미 참여 중인 모임입니다.");
-    }
-
-    @DisplayName("강아지를 등록하지 않는 사용자는 모임에 참여할 수 없다.")
-    @Test
-    void saveClubMember_FailWithoutPet() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
-        Member newMember = Member.builder()
-                .name("위브")
-                .email("wiib@gmail.com")
-                .tag("tag123")
-                .build();
-        Member savedNewMember = memberRepository.save(newMember);
-
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId()))
-                .isInstanceOf(FriendoglyException.class)
-                .hasMessage("참여할 수 없는 모임 입니다.");
     }
 
     @DisplayName("참여 가능한 강아지가 없다면 참여할 수 없다.")
@@ -129,7 +103,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
         //대형견 수컷이라 참여 불가능
-        petRepository.save(
+        Pet savedNewMemberPet = petRepository.save(
                 Pet.builder()
                         .name("스누피")
                         .description("건강한 남자아이에용")
@@ -141,8 +115,10 @@ class ClubCommandServiceTest extends ClubServiceTest {
                         .build()
         );
 
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId()))
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
-                .hasMessage("참여할 수 없는 모임 입니다.");
+                .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
 }

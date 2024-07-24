@@ -50,4 +50,8 @@ public class ClubPet {
             throw new FriendoglyException("모임에 참여하는 회원의 반려견 정보는 필수입니다.");
         }
     }
+
+    public void updateClub(Club club) {
+        this.club = club;
+    }
 }

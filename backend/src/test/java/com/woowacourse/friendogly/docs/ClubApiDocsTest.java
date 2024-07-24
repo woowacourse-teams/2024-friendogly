@@ -18,6 +18,7 @@ import com.woowacourse.friendogly.auth.AuthArgumentResolver;
 import com.woowacourse.friendogly.club.controller.ClubController;
 import com.woowacourse.friendogly.club.domain.Status;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -259,13 +260,14 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("모임에 참여한다.")
     @Test
     void saveClubMember_201() throws Exception {
-
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(1L));
         SaveClubMemberResponse response = new SaveClubMemberResponse(1L);
-        when(clubCommandService.saveClubMember(any(), any()))
+        when(clubCommandService.saveClubMember(any(), any(), any()))
                 .thenReturn(response);
 
         mockMvc.perform(post("/clubs/{clubId}/members", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
                         .header(HttpHeaders.AUTHORIZATION, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -279,6 +281,10 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
                                 .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
                                         .description("로그인 중인 회원 ID"))
+                                .requestFields(
+                                        fieldWithPath("participatingPetsId").type(JsonFieldType.ARRAY)
+                                                .description("참여하는 팻 ID 리스트")
+                                )
                                 .responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).type(SimpleType.STRING)
                                                 .description("모임-회원 연관관계 리소스 Location")

@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.club.controller;
 
 import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -47,10 +48,12 @@ public class ClubController {
     @PostMapping("/{clubId}/members")
     public ResponseEntity<SaveClubMemberResponse> saveClubMember(
             @PathVariable Long clubId,
-            @Auth Long memberId
+            @Auth Long memberId,
+            @Valid @RequestBody SaveClubMemberRequest request
     ) {
-        SaveClubMemberResponse response = clubCommandService.saveClubMember(clubId, memberId);
+        SaveClubMemberResponse response = clubCommandService.saveClubMember(clubId, memberId, request);
         return ResponseEntity.created(URI.create("/clubs/" + clubId + "/members/" + response.clubMemberId()))
                 .body(response);
     }
+
 }

@@ -1,22 +1,19 @@
 package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubMember;
-import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.support.ServiceTest;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 
 public abstract class ClubServiceTest extends ServiceTest {
 
     protected final String address = "서울특별시 송파구 신청동";
-    protected final Set<Gender> allowedGenders = Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED);
-    protected final Set<SizeType> allowedSizes = Set.of(SizeType.SMALL);
     protected final String petImageUrl = "https://PetimageUrl.com";
 
     protected Member createSavedMember() {
@@ -49,16 +46,7 @@ public abstract class ClubServiceTest extends ServiceTest {
                 genders,
                 sizes,
                 "https://image.com");
-
-        Club savedClub = clubRepository.save(club);
-
-        ClubPet clubPet = ClubPet.builder()
-                .club(club)
-                .pet(pet)
-                .build();
-        clubMemberRepository.save(ClubMember.create(club, member));
-        clubPetRepository.save(clubPet);
-
-        return savedClub;
+        club.addClubPet(List.of(pet));
+        return clubRepository.save(club);
     }
 }

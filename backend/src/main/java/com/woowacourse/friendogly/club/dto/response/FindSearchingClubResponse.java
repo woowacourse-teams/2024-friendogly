@@ -27,7 +27,6 @@ public record FindSearchingClubResponse(
 
     public FindSearchingClubResponse(
             Club club,
-            int currentMemberCount,
             List<String> petImageUrls
     ) {
         this(
@@ -41,10 +40,9 @@ public record FindSearchingClubResponse(
                 club.getAllowedGenders(),
                 club.getAllowedSizes(),
                 club.getMemberCapacity().getValue(),
-                currentMemberCount,
+                club.countClubMember(),
                 club.getImageUrl(),
                 petImageUrls
         );
     }
-
 }

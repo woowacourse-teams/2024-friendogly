@@ -1,12 +1,12 @@
 package com.woowacourse.friendogly.club.dto.request;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 
 public record SaveClubMemberRequest(
 
-        @NotNull(message = "모임 정보는 필수입니다.")
-        @Positive(message = "올바르지 않는 모임 정보 입니다.")
-        Long clubId
+        @NotEmpty(message = "모임에 참석 할 강아지를 1마리 이상 선택해주세요.")
+        List<Long> participatingPetsId
 ) {
+
 }

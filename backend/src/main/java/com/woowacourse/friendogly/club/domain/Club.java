@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -18,7 +19,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -71,6 +76,11 @@ public class Club {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
+    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<ClubMember> clubMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<ClubPet> clubPets = new ArrayList<>();
 
     @Builder
     public Club(
@@ -115,7 +125,7 @@ public class Club {
             Set<SizeType> allowedSize,
             String imageUrl
     ) {
-        return Club.builder()
+        Club club = Club.builder()
                 .title(title)
                 .content(content)
                 .address(address)
@@ -127,10 +137,48 @@ public class Club {
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
+        club.addClubMember(club.owner);
+        return club;
     }
 
-    public boolean canParticipate(Pet pet) {
-        return allowedGenders.contains(pet.getGender()) && allowedSizes.contains(pet.getSizeType());
+    public void addClubMember(Member newMember) {
+        validateAlreadyExists(newMember);
+        validateMemberCapacity();
+        ClubMember clubMember = ClubMember.create(this, this.owner);
+        clubMembers.add(clubMember);
+        clubMember.updateClub(this);
     }
 
+
+    private void validateAlreadyExists(Member newMember) {
+        if (clubMembers.stream()
+                .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), newMember.getId()))
+        ) {
+            throw new FriendoglyException("이미 참여 중인 모임입니다.");
+        }
+    }
+
+    private void validateMemberCapacity() {
+        if (clubMembers.size() >= memberCapacity.getValue()) {
+            throw new FriendoglyException("최대 인원을 초과하여 모임에 참여할 수 없습니다.");
+        }
+    }
+
+    public void addClubPet(List<Pet> pets) {
+        pets.stream()
+                .peek(this::validateParticipatePet)
+                .map(pet -> new ClubPet(this, pet))
+                .peek(clubPet -> clubPet.updateClub(this))
+                .forEach(clubPets::add);
+    }
+
+    private void validateParticipatePet(Pet pet) {
+        if (!allowedGenders.contains(pet.getGender()) || !allowedSizes.contains(pet.getSizeType())) {
+            throw new FriendoglyException("모임에 데려갈 수 없는 강아지가 있습니다.");
+        }
+    }
+
+    public int countClubMember() {
+        return clubMembers.size();
+    }
 }
