@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -46,7 +48,11 @@ public class S3StorageManager implements FileStorageManager {
                 .contentType("image/jpg")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
-        s3Client.putObject(putObjectRequest, requestBody);
+        try {
+            s3Client.putObject(putObjectRequest, requestBody);
+        } catch (SdkException e) {
+            throw new FriendoglyException("s3전송 과정중에 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return S3_ENDPOINT + fileName;
     }
 
