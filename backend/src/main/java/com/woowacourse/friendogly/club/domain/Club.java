@@ -144,9 +144,9 @@ public class Club {
     public void addClubMember(Member newMember) {
         validateAlreadyExists(newMember);
         validateMemberCapacity();
-        ClubMember clubMember = ClubMember.create(this, this.owner);
+        ClubMember clubMember = ClubMember.create(this, newMember);
         clubMembers.add(clubMember);
-        clubMember.updateClub(this); //지워도 되지 않나?
+        clubMember.updateClub(this);
     }
 
 
@@ -182,14 +182,25 @@ public class Club {
         return clubMembers.size();
     }
 
+    public boolean isEmpty() {
+        return clubMembers.isEmpty();
+    }
+
     public void removeClubMember(Member member) {
         ClubMember target = clubMembers.stream()
                 .filter(e -> e.getMember().getId().equals(member.getId()))
                 .findAny()
                 .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
-
+        clubMembers.remove(target);
+        if (canDelegate(target)) {
+            this.owner = clubMembers.get(0).getMember();
+        }
         target.updateClub(null);
         removeClubPets(member);
+    }
+
+    private boolean canDelegate(ClubMember target) {
+        return owner.getId().equals(target.getMember().getId()) && !isEmpty();
     }
 
     private void removeClubPets(Member member) {

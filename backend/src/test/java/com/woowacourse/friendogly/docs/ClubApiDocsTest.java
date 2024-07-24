@@ -5,7 +5,10 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -302,13 +305,74 @@ public class ClubApiDocsTest extends RestDocsTest {
                                                 .description("참여하는 팻 ID 리스트")
                                 )
                                 .responseFields(
-                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN),
-                                        fieldWithPath("data.errorCode").type(JsonFieldType.STRING),
-                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING),
-                                        fieldWithPath("data.detail").type(JsonFieldType.ARRAY)
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.errorCode").type(JsonFieldType.STRING).description("에러 코드"),
+                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING)
+                                                .description("에러메세지"),
+                                        fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
                                 )
                                 .build())
                 ));
+    }
+
+    @DisplayName("모임에서 빠지면 204를 반환한다.")
+    @Test
+    void deleteClubMember_204() throws Exception {
+
+        doNothing()
+                .when(clubCommandService)
+                .deleteClubMember(any(), any());
+
+        mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, 1L))
+                .andExpect(status().isNoContent())
+                .andDo(document("clubs/{clubId}/members/400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 탈퇴 API")
+                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
+                                        .description("로그인 중인 회원 ID"))
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
+                                )
+                                .build())
+                ));
+    }
+
+    @DisplayName("모임에서 탈퇴 중 예외가 발생한다. 400")
+    @Test
+    void deleteClubMember_400() throws Exception {
+
+        doThrow(new FriendoglyException("예외 메세지"))
+                .when(clubCommandService)
+                .deleteClubMember(any(), any());
+
+        mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, 1L))
+                .andExpect(status().isBadRequest())
+                .andDo(document("clubs/{clubId}/members/400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 탈퇴 API")
+                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
+                                        .description("로그인 중인 회원 ID"))
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.errorCode").type(JsonFieldType.STRING).description("에러 코드"),
+                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING)
+                                                .description("에러메세지"),
+                                        fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
+                                )
+                                .build())
+                ));
+
     }
 
     @Override

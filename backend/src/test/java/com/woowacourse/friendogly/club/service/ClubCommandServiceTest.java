@@ -9,11 +9,14 @@ import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
+import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +28,12 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @Autowired
     private ClubCommandService clubCommandService;
+
+    @Autowired
+    private ClubMemberRepository clubMemberRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @DisplayName("모임을 저장한다.")
     @Test
@@ -122,14 +131,46 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
 
-    @DisplayName("참여 중인 회원을 삭제한다.")
+    //영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가
+    @DisplayName("참여 중인 회원을 삭제하고, 방장이면 방장을 위임한다.")
+    @Transactional
     @Test
     void deleteClubMember() {
         Member savedMember = createSavedMember();
         Pet savedPet = createSavedPet(savedMember);
         Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL));
+
+        Member newMember = Member.builder()
+                .name("위브")
+                .email("wiib@gmail.com")
+                .tag("tag123")
+                .build();
+
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
+
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
-        assertThat(savedClub.countClubMember()).isEqualTo(0);
+
+        assertAll(
+                () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
+                () -> assertThat(savedClub.getOwner().getId()).isEqualTo(savedNewMember.getId())
+        );
+    }
+
+    @DisplayName("참여 중인 회원 삭제 후 남은 인원이 없으면, 제거한다.")
+    @Transactional
+    @Test
+    void deleteClubMember_WhenIsEmptyDelete() {
+        Member savedMember = createSavedMember();
+        Pet savedPet = createSavedPet(savedMember);
+        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL));
+
+        clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
+
+        assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
     }
 }

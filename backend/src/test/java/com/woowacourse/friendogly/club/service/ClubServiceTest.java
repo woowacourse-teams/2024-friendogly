@@ -47,6 +47,7 @@ public abstract class ClubServiceTest extends ServiceTest {
                 sizes,
                 "https://image.com");
         club.addClubPet(List.of(pet));
+
         return clubRepository.save(club);
     }
 }

@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
+import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -27,8 +28,8 @@ public class ClubCommandService {
     public ClubCommandService(
             ClubRepository clubRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
-    ) {
+            PetRepository petRepository,
+            ClubMemberRepository clubMemberRepository) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
@@ -63,7 +64,7 @@ public class ClubCommandService {
         club.addClubMember(member);
         List<Pet> pets = mapToPets(request.participatingPetsId());
         club.addClubPet(pets);
-
+        //TODO : 채팅방 ID 넘기기
         return new SaveClubMemberResponse(1L);
     }
 
@@ -79,5 +80,8 @@ public class ClubCommandService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
         club.removeClubMember(member);
+        if (club.isEmpty()) {
+            clubRepository.delete(club);
+        }
     }
 }
