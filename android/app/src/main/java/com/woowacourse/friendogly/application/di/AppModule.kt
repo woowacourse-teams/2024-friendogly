@@ -6,31 +6,31 @@ import com.woowacourse.friendogly.data.repository.ClubRepositoryImpl
 import com.woowacourse.friendogly.data.repository.FootprintRepositoryImpl
 import com.woowacourse.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.woowacourse.friendogly.data.repository.LocalRepositoryImpl
-import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.data.repository.MemberRepositoryImpl
 import com.woowacourse.friendogly.data.repository.PetRepositoryImpl
+import com.woowacourse.friendogly.data.repository.WoofRepositoryImpl
 import com.woowacourse.friendogly.data.source.ClubDataSource
 import com.woowacourse.friendogly.data.source.FootprintDataSource
 import com.woowacourse.friendogly.data.source.KakaoLoginDataSource
 import com.woowacourse.friendogly.data.source.LocalDataSource
-import com.woowacourse.friendogly.data.source.WoofDataSource
 import com.woowacourse.friendogly.data.source.MemberDataSource
 import com.woowacourse.friendogly.data.source.PetDataSource
+import com.woowacourse.friendogly.data.source.WoofDataSource
 import com.woowacourse.friendogly.domain.repository.ClubRepository
 import com.woowacourse.friendogly.domain.repository.FootprintRepository
 import com.woowacourse.friendogly.domain.repository.KakaoLoginRepository
 import com.woowacourse.friendogly.domain.repository.LocalRepository
-import com.woowacourse.friendogly.domain.repository.WoofRepository
 import com.woowacourse.friendogly.domain.repository.MemberRepository
 import com.woowacourse.friendogly.domain.repository.PetRepository
+import com.woowacourse.friendogly.domain.repository.WoofRepository
 import com.woowacourse.friendogly.domain.usecase.DeleteClubUseCase
 import com.woowacourse.friendogly.domain.usecase.DeleteLocalDataUseCase
 import com.woowacourse.friendogly.domain.usecase.GetClubMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.woowacourse.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.woowacourse.friendogly.domain.usecase.GetJwtTokenUseCase
-import com.woowacourse.friendogly.domain.usecase.GetMemberMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetLandMarksUseCase
+import com.woowacourse.friendogly.domain.usecase.GetMemberMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.woowacourse.friendogly.domain.usecase.GetPetsMineUseCase
 import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
@@ -46,9 +46,9 @@ import com.woowacourse.friendogly.local.source.LocalDataSourceImpl
 import com.woowacourse.friendogly.remote.api.BaseUrl
 import com.woowacourse.friendogly.remote.di.RemoteModule
 import com.woowacourse.friendogly.remote.source.ClubDataSourceImpl
+import com.woowacourse.friendogly.remote.source.FootprintDataSourceImpl
 import com.woowacourse.friendogly.remote.source.MemberDataSourceImpl
 import com.woowacourse.friendogly.remote.source.PetDataSourceImpl
-import com.woowacourse.friendogly.remote.source.FootprintDataSourceImpl
 import com.woowacourse.friendogly.remote.source.WoofDataSourceImpl
 
 class AppModule(context: Context) {
