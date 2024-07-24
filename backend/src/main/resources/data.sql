@@ -1,12 +1,12 @@
-INSERT INTO member(name, tag, email)
-VALUES ('도도', '4e52d416', 'dodo@test.com'),
-       ('땡이', 'a582a275', 'jiho@test.com'),
-       ('트레', '68fc8014', 'tre@test.com'),
-       ('위브', '3dde7373', 'wiib@test.com'),
-       ('벼리', '525ec19f', 'byeori@test.com'),
-       ('누누', '5f0f8307', 'nunu@test.com'),
-       ('채드', '114d8979', 'ched@test.com'),
-       ('에디', 'c065a053', 'edy@test.com');
+INSERT INTO member(name, tag, email, image_url)
+VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://picsum.photos/100'),
+       ('땡이', 'a582a275', 'jiho@test.com', 'https://picsum.photos/100'),
+       ('트레', '68fc8014', 'tre@test.com', null),
+       ('위브', '3dde7373', 'wiib@test.com', 'https://picsum.photos/100'),
+       ('벼리', '525ec19f', 'byeori@test.com', null),
+       ('누누', '5f0f8307', 'nunu@test.com', null),
+       ('채드', '114d8979', 'ched@test.com', 'https://picsum.photos/100'),
+       ('에디', 'c065a053', 'edy@test.com', null);
 
 INSERT INTO footprint(member_id, latitude, longitude, image_url, created_at, is_deleted)
 VALUES (1, 37.5173316, 127.1011661, 'https://picsum.photos/100', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),

@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.member.controller;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,9 @@ class MemberControllerTest {
     void saveMember() {
         SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com");
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
+                .contentType(ContentType.MULTIPART)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/members")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
@@ -40,8 +42,9 @@ class MemberControllerTest {
     void saveMember_Fail_NameLengthOver() {
         SaveMemberRequest request = new SaveMemberRequest("1234567890123456", "member@email.com");
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
+                .contentType(ContentType.MULTIPART)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/members")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -52,8 +55,9 @@ class MemberControllerTest {
     void saveMember_Fail_InvalidEmailFormat() {
         SaveMemberRequest request = new SaveMemberRequest("땡이", "이메일 형식이 아닌 문자열");
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
+                .contentType(ContentType.MULTIPART)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/members")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());

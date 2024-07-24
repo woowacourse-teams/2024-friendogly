@@ -23,7 +23,7 @@ public record SavePetResponse(
                 pet.getBirthDate().getValue(),
                 pet.getSizeType().toString(),
                 pet.getGender().toString(),
-                pet.getImageUrl().getValue()
+                pet.getImageUrl()
         );
     }
 }

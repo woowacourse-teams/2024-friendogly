@@ -14,10 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/pets")
@@ -34,9 +35,10 @@ public class PetController {
     @PostMapping
     public ResponseEntity<ApiResponse<SavePetResponse>> savePet(
             @Auth Long memberId,
-            @RequestBody @Valid SavePetRequest savePetRequest
+            @RequestPart @Valid SavePetRequest request,
+            @RequestPart(required = false) MultipartFile image
     ) {
-        SavePetResponse response = petCommandService.savePet(memberId, savePetRequest);
+        SavePetResponse response = petCommandService.savePet(memberId, request, image);
         return ResponseEntity.created(URI.create("/pets/" + response.id()))
                 .body(ApiResponse.ofSuccess(response));
     }

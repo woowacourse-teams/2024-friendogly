@@ -1,16 +1,11 @@
 package com.woowacourse.friendogly.pet.dto.request;
 
-import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.pet.domain.Gender;
-import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.domain.SizeType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.URL;
-
 import java.time.LocalDate;
+import org.hibernate.validator.constraints.URL;
 
 public record SavePetRequest(
 
@@ -36,15 +31,4 @@ public record SavePetRequest(
         String imageUrl
 ) {
 
-    public Pet toEntity(Member member) {
-        return Pet.builder()
-                .member(member)
-                .name(name)
-                .description(description)
-                .birthDate(birthDate)
-                .sizeType(SizeType.toSizeType(sizeType))
-                .gender(Gender.toGender(gender))
-                .imageUrl(imageUrl)
-                .build();
-    }
 }

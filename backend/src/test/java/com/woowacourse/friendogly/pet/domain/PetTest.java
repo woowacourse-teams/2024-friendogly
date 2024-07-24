@@ -1,16 +1,13 @@
 package com.woowacourse.friendogly.pet.domain;
 
-import com.woowacourse.friendogly.exception.FriendoglyException;
-import com.woowacourse.friendogly.member.domain.Member;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import java.time.LocalDate;
-
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.woowacourse.friendogly.exception.FriendoglyException;
+import com.woowacourse.friendogly.member.domain.Member;
+import java.time.LocalDate;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class PetTest {
 
@@ -135,23 +132,5 @@ class PetTest {
                         .build())
                 .isExactlyInstanceOf(FriendoglyException.class)
                 .hasMessage("생년월일은 현재 날짜와 같거나, 이전이어야 합니다.");
-    }
-
-    @DisplayName("이미지 URL이 URL 형식이 아닌 경우 예외가 발생한다.")
-    @ValueSource(strings = {"google", "https://google", ".com"})
-    @ParameterizedTest
-    void create_Fail_InvalidUrlFormat(String imageUrl) {
-        assertThatThrownBy(() ->
-                Pet.builder()
-                        .member(member)
-                        .name("땡이")
-                        .description("땡이 입니다.")
-                        .birthDate(LocalDate.now().minusDays(1L))
-                        .sizeType(SizeType.SMALL)
-                        .gender(Gender.FEMALE_NEUTERED)
-                        .imageUrl(imageUrl)
-                        .build())
-                .isExactlyInstanceOf(FriendoglyException.class)
-                .hasMessage("올바른 URL 형식이 아닙니다.");
     }
 }

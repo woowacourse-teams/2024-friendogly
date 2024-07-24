@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.io.File;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,9 +51,10 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
@@ -71,9 +73,10 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -92,9 +95,10 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -113,9 +117,10 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -134,9 +139,10 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -155,49 +161,55 @@ class PetControllerTest {
         );
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
         RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(ContentType.MULTIPART)
                 .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .body(request)
+                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
+                .multiPart("request", request, "application/json")
                 .when().post("/pets")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
