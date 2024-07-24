@@ -2,7 +2,6 @@ package com.woowacourse.friendogly.presentation.ui.woof
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.provider.Settings
 import androidx.fragment.app.viewModels
 import com.naver.maps.geometry.LatLng
@@ -215,40 +214,40 @@ class WoofFragment :
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        mapView.onStart()
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        mapView.onResume()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        mapView.onPause()
+//    }
+//
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        mapView.onSaveInstanceState(outState)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        mapView.onStop()
+//    }
+//
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        mapView.onDestroy()
+//    }
+//
+//    override fun onLowMemory() {
+//        super.onLowMemory()
+//        mapView.onLowMemory()
+//    }
 
     companion object {
         private const val MARKER_WIDTH = 125
