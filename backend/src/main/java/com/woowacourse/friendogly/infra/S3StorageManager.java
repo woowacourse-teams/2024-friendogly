@@ -1,38 +1,47 @@
 package com.woowacourse.friendogly.infra;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
-public class S3StorageManager {
+@Profile("!local")
+public class S3StorageManager implements FileStorageManager {
 
-    private String BUCKET_NAME="techcourse-project-2024";
+    private String BUCKET_NAME = "techcourse-project-2024";
 
-    private String S3_ENDPOINT="https://d3obq7hxojfffa.cloudfront.net/";
+    private String S3_ENDPOINT = "https://d3obq7hxojfffa.cloudfront.net/";
 
-    private String KEY_PREFIX="friendogly/";
+    private String KEY_PREFIX = "friendogly/";
 
-    private final AmazonS3 s3Client;
+    private final S3Client s3Client;
 
-    public S3StorageManager(AmazonS3 s3Client) {
-        this.s3Client = s3Client;
+    public S3StorageManager() {
+        this.s3Client = S3Client.builder()
+                .credentialsProvider(
+                        InstanceProfileCredentialsProvider.create())
+                .region(Region.AP_NORTHEAST_2)
+                .build();
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file) {
         String key = file.getOriginalFilename();
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(
-                BUCKET_NAME,
-                KEY_PREFIX + key,
-                convertMultiPartFileToFile(file)
-        );
-        s3Client.putObject(putObjectRequest);
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(KEY_PREFIX + key)
+                .contentType("image/jpg")
+                .build();
+        RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
+        s3Client.putObject(putObjectRequest, requestBody);
         return S3_ENDPOINT + key;
     }
 
