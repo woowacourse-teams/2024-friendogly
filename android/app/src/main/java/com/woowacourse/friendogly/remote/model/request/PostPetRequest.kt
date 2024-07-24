@@ -12,5 +12,4 @@ data class PostPetRequest(
     val birthDate: LocalDate,
     val sizeType: SizeTypeRequest,
     val gender: GenderRequest,
-    val imageUrl: String,
 )
