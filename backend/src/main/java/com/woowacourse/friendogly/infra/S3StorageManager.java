@@ -1,11 +1,12 @@
 package com.woowacourse.friendogly.infra;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
@@ -51,18 +52,18 @@ public class S3StorageManager implements FileStorageManager {
         try {
             s3Client.putObject(putObjectRequest, requestBody);
         } catch (SdkException e) {
-            throw new FriendoglyException("s3전송 과정중에 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new FriendoglyException("s3전송 과정중에 에러 발생", INTERNAL_SERVER_ERROR);
         }
         return S3_ENDPOINT + fileName;
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {
-        File file = new File("tmp");
         try {
+            File file = File.createTempFile("tmp", null);
             multipartFile.transferTo(file);
+            return file;
         } catch (IllegalStateException | IOException e) {
-            throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생");
+            throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생", INTERNAL_SERVER_ERROR);
         }
-        return file;
     }
 }
