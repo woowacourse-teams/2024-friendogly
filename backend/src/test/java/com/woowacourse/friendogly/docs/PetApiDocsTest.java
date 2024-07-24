@@ -5,6 +5,9 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
@@ -29,6 +32,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -48,7 +52,7 @@ public class PetApiDocsTest extends RestDocsTest {
     @Test
     void savePet_Success() throws Exception {
         Long loginMemberId = 1L;
-        SavePetRequest request = new SavePetRequest(
+        SavePetRequest requestDto = new SavePetRequest(
                 "땡이",
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
@@ -66,32 +70,38 @@ public class PetApiDocsTest extends RestDocsTest {
                 Gender.FEMALE.toString(),
                 "https://google.com"
         );
+        MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
+        MockMultipartFile request = new MockMultipartFile("request", "request", "application/json", objectMapper.writeValueAsBytes(requestDto));
 
-        Mockito.when(petCommandService.savePet(any(), any()))
+        Mockito.when(petCommandService.savePet(any(), any(), any()))
                 .thenReturn(response);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/pets")
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
+        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/pets")
+                        .file(image)
+                        .file(request)
                         .header(HttpHeaders.AUTHORIZATION, loginMemberId.toString()))
                 .andExpect(status().isCreated())
                 .andDo(MockMvcRestDocumentationWrapper.document("pet-save-201",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestParts(
+                                partWithName("image").description("강아지 프로필 이미지 파일"),
+                                partWithName("request").description("강아지 등록 정보")
+                        ),
+                        requestPartFields(
+                                "request",
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("반려견 이름"),
+                                fieldWithPath("description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
+                                fieldWithPath("sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                        ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Pet API")
                                 .summary("반려견 등록 API")
                                 .requestHeaders(
                                         headerWithName("Authorization").description("로그인한 회원 id")
-                                )
-                                .requestFields(
-                                        fieldWithPath("name").type(JsonFieldType.STRING).description("반려견 이름"),
-                                        fieldWithPath("description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                        fieldWithPath("birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                        fieldWithPath("sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                        fieldWithPath("gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                        fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),

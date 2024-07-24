@@ -58,7 +58,7 @@ public class ClubQueryService {
                 .collect(Collectors.groupingBy(pet -> pet.getMember().getId()));
 
         return groupPetsByMemberId.values().stream()
-                .map(petList -> petList.get(0).getImageUrl().getValue())
+                .map(petList -> petList.get(0).getImageUrl())
                 .collect(toList());
     }
 }
