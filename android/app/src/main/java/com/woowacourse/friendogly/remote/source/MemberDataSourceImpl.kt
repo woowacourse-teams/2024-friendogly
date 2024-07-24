@@ -15,6 +15,6 @@ class MemberDataSourceImpl(
     ): Result<MemberDto> =
         runCatching {
             val body = PostMembersRequest(name = name, email = email)
-            service.postMember(body = body).toData()
+            service.postMember(body = body).data.toData()
         }
 }

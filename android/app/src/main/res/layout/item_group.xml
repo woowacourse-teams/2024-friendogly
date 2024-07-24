@@ -17,7 +17,7 @@
         onSingleClick="@{()->actionHandler.loadGroup(group.groupId)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginVertical="5dp"
         android:background="@drawable/rect_gray_fill_radius8"
         android:padding="10dp">
 

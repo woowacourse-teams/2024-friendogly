@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.pet.controller;
 
 import com.woowacourse.friendogly.auth.Auth;
+import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
 import com.woowacourse.friendogly.pet.dto.response.FindPetResponse;
 import com.woowacourse.friendogly.pet.dto.response.SavePetResponse;
@@ -31,28 +32,30 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<SavePetResponse> savePet(
+    public ResponseEntity<ApiResponse<SavePetResponse>> savePet(
             @Auth Long memberId,
             @RequestBody @Valid SavePetRequest savePetRequest
     ) {
         SavePetResponse response = petCommandService.savePet(memberId, savePetRequest);
         return ResponseEntity.created(URI.create("/pets/" + response.id()))
-                .body(response);
+                .body(ApiResponse.ofSuccess(response));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FindPetResponse> findById(@PathVariable Long id) {
+    public ApiResponse<FindPetResponse> findById(@PathVariable Long id) {
         FindPetResponse response = petQueryService.findById(id);
-        return ResponseEntity.ok(response);
+        return ApiResponse.ofSuccess(response);
     }
 
     @GetMapping("/mine")
-    public List<FindPetResponse> findMine(@Auth Long memberId) {
-        return petQueryService.findByMemberId(memberId);
+    public ApiResponse<List<FindPetResponse>> findMine(@Auth Long memberId) {
+        List<FindPetResponse> response = petQueryService.findByMemberId(memberId);
+        return ApiResponse.ofSuccess(response);
     }
 
     @GetMapping
-    public List<FindPetResponse> findByMemberId(@RequestParam Long memberId) {
-        return petQueryService.findByMemberId(memberId);
+    public ApiResponse<List<FindPetResponse>> findByMemberId(@RequestParam Long memberId) {
+        List<FindPetResponse> response = petQueryService.findByMemberId(memberId);
+        return ApiResponse.ofSuccess(response);
     }
 }

@@ -13,8 +13,12 @@ import com.woowacourse.friendogly.NavigationGraphDirections
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityMainBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
+import com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActivity
+import com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailActivity
 
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity :
+    BaseActivity<ActivityMainBinding>(R.layout.activity_main),
+    MainActivityActionHandler {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private var waitTime = 0L
@@ -96,5 +100,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
+    }
+
+    override fun navigateToGroupDetailActivity(groupId: Long) {
+        startActivity(GroupDetailActivity.getIntent(this, groupId))
+    }
+
+    override fun navigateToGroupAddActivity() {
+        startActivity(GroupAddActivity.getIntent(this))
     }
 }
