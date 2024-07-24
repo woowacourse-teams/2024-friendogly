@@ -49,46 +49,71 @@
                     android:id="@+id/iv_user_profile"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_dog"
                     app:glideProfile1000="@{vm.uiState.profilePath}"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginTop="16dp" />
 
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@{vm.uiState.nickname}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_user_profile"
+                    app:layout_constraintStart_toEndOf="@+id/iv_user_profile"
+                    app:layout_constraintTop_toTopOf="@+id/iv_user_profile">
 
-                <TextView
-                    android:id="@+id/tv_user_email"
-                    style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@{vm.uiState.email}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_user_name" />
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.uiState.nickname}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="손흥민" />
+
+                    <TextView
+                        android:id="@+id/tv_user_name_tag"
+                        style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@{@string/user_name_tag(vm.uiState.tag)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_user_name"
+                        app:layout_constraintStart_toEndOf="@+id/tv_user_name"
+                        app:layout_constraintTop_toTopOf="@+id/tv_user_name"
+                        tools:text="#1234" />
+
+                    <TextView
+                        android:id="@+id/tv_user_email"
+                        style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.uiState.email}"
+                        app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
+                        tools:text="sonny@gmail.com" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_user_email">
+                    app:layout_constraintTop_toBottomOf="@+id/iv_user_profile">
 
                     <TextView
                         android:id="@+id/tv_edit_profile_btn"
@@ -101,8 +126,7 @@
                         android:gravity="center"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:text="@string/edit_profile_title"
-                        app:layout_constraintTop_toBottomOf="@+id/alert_description" />
+                        android:text="@string/edit_profile_title" />
 
                     <TextView
                         android:id="@+id/tv_register_dog_btn"
@@ -117,7 +141,7 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:text="@string/register_dog_title"
-                        app:layout_constraintTop_toBottomOf="@+id/alert_description" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_alert_description" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

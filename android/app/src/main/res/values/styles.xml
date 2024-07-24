@@ -415,4 +415,41 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
+    <!-- Alert 관련 -->
+    <style name="Theme.AppCompat.Alert.Padding.Radius16" parent="Theme.AppCompat">
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+
+    <style name="Theme.AppCompat.blue.Alert.TextView.Button.Negative" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_gray02_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/gray08</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.blue.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_blue_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.Red.Alert.TextView.Button.Negative" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_gray02_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/gray08</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.Red.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_line_red_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
 </resources>

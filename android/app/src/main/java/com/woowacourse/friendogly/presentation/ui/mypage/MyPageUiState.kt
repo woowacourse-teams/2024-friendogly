@@ -6,6 +6,7 @@ import java.time.LocalDate
 data class MyPageUiState(
     val nickname: String = "",
     val email: String = "",
+    val tag: String = "",
     val profilePath: String? = null,
     val pets: List<Pet> = emptyList(),
 )

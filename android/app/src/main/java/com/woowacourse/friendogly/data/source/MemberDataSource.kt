@@ -9,4 +9,6 @@ interface MemberDataSource {
         email: String,
         file: MultipartBody.Part?,
     ): Result<MemberDto>
+
+    suspend fun getMemberMine(): Result<MemberDto>
 }

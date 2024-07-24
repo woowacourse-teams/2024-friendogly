@@ -9,4 +9,6 @@ interface MemberRepository {
         email: String,
         file: MultipartBody.Part?,
     ): Result<Member>
+
+    suspend fun getMemberMine(): Result<Member>
 }

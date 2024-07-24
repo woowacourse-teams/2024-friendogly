@@ -11,6 +11,7 @@ class ApiClient {
     object Member {
         private const val BASE_URL = "/members"
         const val POST_MEMBER = BASE_URL
+        const val GET_MEMBER_MINE = "$BASE_URL/mine"
     }
 
     object Pet {
