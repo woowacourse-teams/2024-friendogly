@@ -7,4 +7,6 @@ interface MemberRepository {
         name: String,
         email: String,
     ): Result<Member>
+
+    suspend fun getMemberMine(): Result<Member>
 }

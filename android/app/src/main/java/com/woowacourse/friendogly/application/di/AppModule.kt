@@ -21,6 +21,7 @@ import com.woowacourse.friendogly.domain.usecase.DeleteClubUseCase
 import com.woowacourse.friendogly.domain.usecase.DeleteLocalDataUseCase
 import com.woowacourse.friendogly.domain.usecase.GetClubMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetJwtTokenUseCase
+import com.woowacourse.friendogly.domain.usecase.GetMemberMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetPetsMineUseCase
 import com.woowacourse.friendogly.domain.usecase.KakaoLoginUseCase
 import com.woowacourse.friendogly.domain.usecase.PostClubParticipationUseCase
@@ -89,6 +90,8 @@ class AppModule(context: Context) {
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
     val postPetUseCase: PostPetUseCase = PostPetUseCase(repository = petRepository)
+    val getMemberMineUseCase: GetMemberMineUseCase =
+        GetMemberMineUseCase(repository = memberRepository)
 
     companion object {
         private var instance: AppModule? = null

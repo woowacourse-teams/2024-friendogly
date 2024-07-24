@@ -17,4 +17,9 @@ class MemberDataSourceImpl(
             val body = PostMembersRequest(name = name, email = email)
             service.postMember(body = body).data.toData()
         }
+
+    override suspend fun getMemberMine(): Result<MemberDto> =
+        runCatching {
+            service.getMemberMine().data.toData()
+        }
 }

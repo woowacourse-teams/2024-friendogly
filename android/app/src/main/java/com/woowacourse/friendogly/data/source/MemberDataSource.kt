@@ -7,4 +7,6 @@ interface MemberDataSource {
         name: String,
         email: String,
     ): Result<MemberDto>
+
+    suspend fun getMemberMine(): Result<MemberDto>
 }

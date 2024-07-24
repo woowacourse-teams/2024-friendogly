@@ -6,5 +6,8 @@ import com.woowacourse.friendogly.domain.model.Member
 fun MemberDto.toDomain(): Member {
     return Member(
         id = id,
+        name = name,
+        tag = tag,
+        email = email,
     )
 }
