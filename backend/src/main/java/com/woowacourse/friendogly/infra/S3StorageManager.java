@@ -37,16 +37,16 @@ public class S3StorageManager implements FileStorageManager {
     }
 
     public String uploadFile(MultipartFile file) {
-        String key = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME)
-                .key(KEY_PREFIX + key)
+                .key(KEY_PREFIX + fileName)
                 .contentType("image/jpg")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
         s3Client.putObject(putObjectRequest, requestBody);
-        return S3_ENDPOINT + key;
+        return S3_ENDPOINT + fileName;
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {
