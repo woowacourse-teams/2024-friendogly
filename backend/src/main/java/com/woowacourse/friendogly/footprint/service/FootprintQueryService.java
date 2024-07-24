@@ -57,9 +57,12 @@ public class FootprintQueryService {
                 .toList();
     }
 
-    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTime(Long memberId) {
-        return footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
-                .map(footprint -> new FindMyLatestFootprintTimeResponse(footprint.getCreatedAt()))
-                .orElse(new FindMyLatestFootprintTimeResponse(null));
+    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTimeAndPetExistence(Long memberId) {
+        LocalDateTime createdAt = footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
+                .map(Footprint::getCreatedAt)
+                .orElse(null);
+        boolean hasPet = !petRepository.findByMemberId(memberId).isEmpty();
+
+        return new FindMyLatestFootprintTimeResponse(createdAt, hasPet);
     }
 }

@@ -71,9 +71,12 @@ public class FootprintController {
     }
 
     @GetMapping("/mine/latest")
-    public ApiResponse<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime(@Auth Long memberId) {
+    public ApiResponse<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTimeAndPetExistence(
+            @Auth Long memberId
+    ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(memberId);
+        FindMyLatestFootprintTimeResponse response
+                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
     }
 

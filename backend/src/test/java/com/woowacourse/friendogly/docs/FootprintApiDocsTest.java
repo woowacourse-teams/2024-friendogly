@@ -201,14 +201,14 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("자신의 마지막 발자국 시간 조회")
+    @DisplayName("자신의 마지막 발자국 시간 및 펫 존재 여부 조회")
     @Test
-    void findMyLatestFootprintTime() throws Exception {
+    void findMyLatestFootprintTimeAndPetExistence() throws Exception {
         FindMyLatestFootprintTimeResponse response = new FindMyLatestFootprintTimeResponse(
-                LocalDateTime.now().minusHours(1)
+                LocalDateTime.now().minusHours(1), true
         );
 
-        given(footprintQueryService.findMyLatestFootprintTime(any()))
+        given(footprintQueryService.findMyLatestFootprintTimeAndPetExistence(any()))
                 .willReturn(response);
 
         mockMvc
@@ -226,7 +226,8 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.createdAt").description("자신의 가장 최근 발자국 생성 시간")
+                                        fieldWithPath("data.createdAt").description("자신의 가장 최근 발자국 생성 시간"),
+                                        fieldWithPath("data.hasPet").description("자신의 펫 존재 여부 (1마리라도 펫 존재 = true)")
                                 )
                                 .responseSchema(Schema.schema("FindMyLatestFootprintTimeResponse"))
                                 .build()
