@@ -33,7 +33,7 @@ fun saveBitmapToFile(
 
 fun File.toMultipartBody(): MultipartBody.Part {
     val requestFile = this.asRequestBody("image/*".toMediaTypeOrNull())
-    return MultipartBody.Part.createFormData("file", this.name, requestFile)
+    return MultipartBody.Part.createFormData("image", this.name, requestFile)
 }
 
 fun Uri.toBitmap(context: Context): Bitmap =
