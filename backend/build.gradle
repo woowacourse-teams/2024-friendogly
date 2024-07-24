@@ -65,6 +65,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     swaggerUI 'org.webjars:swagger-ui:4.11.1'
+
+    implementation "software.amazon.awssdk:s3:2.26.21"
 }
 
 tasks.withType(Test) {
