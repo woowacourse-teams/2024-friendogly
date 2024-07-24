@@ -73,5 +73,5 @@ jobs:
           cd backend/build/libs
           echo "File creation time(KR-09:00):"
           ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar &
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev &
           echo "start backend server"
