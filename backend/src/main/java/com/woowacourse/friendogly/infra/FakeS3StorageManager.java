@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @Profile("local")
 public class FakeS3StorageManager implements FileStorageManager {
+
     @Override
     public String uploadFile(MultipartFile file) {
         return "http://localhost/" + file.getOriginalFilename();

@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.infra;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.FileOutputStream;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,11 +17,14 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Profile("!local")
 public class S3StorageManager implements FileStorageManager {
 
-    private String BUCKET_NAME = "techcourse-project-2024";
+    @Value("${aws.s3.bucket-name}")
+    private String BUCKET_NAME;
 
-    private String S3_ENDPOINT = "https://d3obq7hxojfffa.cloudfront.net/";
+    @Value("${aws.s3.server.endpoint}")
+    private String S3_ENDPOINT;
 
-    private String KEY_PREFIX = "friendogly/";
+    @Value("${aws.s3.server.key-prefix}")
+    private String KEY_PREFIX;
 
     private final S3Client s3Client;
 
@@ -45,21 +49,20 @@ public class S3StorageManager implements FileStorageManager {
         return S3_ENDPOINT + key;
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file) {
-        File tmp = null;
+    private File convertMultiPartFileToFile(MultipartFile multipartFile) {
+        File file = null;
         try {
-            tmp = File.createTempFile("tmp", null);
+            file = File.createTempFile("tmp", null);
         } catch (Exception e) {
             throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생");
         }
 
-        try (FileOutputStream fos = new FileOutputStream(tmp)) {
-            fos.write(file.getBytes());
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(multipartFile.getBytes());
             fos.flush();
         } catch (Exception e) {
             throw new FriendoglyException("MultipartFile to File 변환 중 오류 발생");
         }
-        return tmp;
+        return file;
     }
-
 }
