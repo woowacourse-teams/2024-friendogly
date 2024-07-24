@@ -18,31 +18,54 @@
         <com.naver.maps.map.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clickable="true" />
 
-        <View
+        <FrameLayout
             android:id="@+id/btn_woof_location"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="42dp"
+            android:layout_marginBottom="40dp"
             android:onClick="@{() -> vm.changeLocationTrackingMode()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageButton
-            android:id="@+id/btn_map_mark"
+            android:id="@+id/btn_woof_mark"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="20dp"
+            android:background="@color/transparent"
             android:clickable="true"
             android:focusable="true"
-            android:background="@color/transparent"
             android:onClick="@{() -> vm.markFootPrint()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_foot_print_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/layout_woof_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_woof_progress_bar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_dog" />
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
