@@ -39,6 +39,8 @@ class WoofViewModel(
             getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
                 if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
+                } else {
+                    _snackbarActions.emit(WoofSnackbarActions.ShowCantMarkSnackbar(footPrintMarkBtnInfo.remainingTime()))
                 }
             }.onFailure {
             }
