@@ -4,5 +4,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStorageManager {
 
-    public String uploadFile(MultipartFile file);
+    String uploadFile(MultipartFile file);
 }
