@@ -16,7 +16,6 @@ public class ImageController {
         this.fileStorageManager = fileStorageManager;
     }
 
-
     @PostMapping("/test-upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         String imageUrl = fileStorageManager.uploadFile(file);
