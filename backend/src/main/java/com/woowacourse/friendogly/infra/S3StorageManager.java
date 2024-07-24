@@ -52,11 +52,11 @@ public class S3StorageManager implements FileStorageManager {
         // TODO: 실제 파일명에서 확장자 가져오기
         // TODO: jpg 이외의 이미지 파일도 가져올 수 있도록 수정하기
 //        String fileName = file.getOriginalFilename();
-        String newFilename = KEY_PREFIX + UUID.randomUUID() + ".jpg";
+        String newFilename = UUID.randomUUID() + ".jpg";
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME)
-                .key(newFilename)
+                .key(KEY_PREFIX + newFilename)
                 .contentType("image/jpg")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
