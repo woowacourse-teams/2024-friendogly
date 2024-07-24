@@ -40,7 +40,11 @@ public class PetCommandService {
 
         validatePetCapacity(petRepository.countByMember(member));
 
-        String imageUrl = fileStorageManager.uploadFile(image);
+        String imageUrl = "";
+        if (image != null && !image.isEmpty()) {
+            imageUrl = fileStorageManager.uploadFile(image);
+        }
+
         Pet savedPet = petRepository.save(Pet.builder()
                 .member(member)
                 .name(request.name())
