@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -48,11 +49,14 @@ public class S3StorageManager implements FileStorageManager {
             throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
         }
 
-        String fileName = file.getOriginalFilename();
+        // TODO: 실제 파일명에서 확장자 가져오기
+        // TODO: jpg 이외의 이미지 파일도 가져올 수 있도록 수정하기
+//        String fileName = file.getOriginalFilename();
+        String newFilename = KEY_PREFIX + UUID.randomUUID() + ".jpg";
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME)
-                .key(KEY_PREFIX + fileName)
+                .key(newFilename)
                 .contentType("image/jpg")
                 .build();
         RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
@@ -61,7 +65,7 @@ public class S3StorageManager implements FileStorageManager {
         } catch (SdkException e) {
             throw new FriendoglyException("s3전송 과정중에 에러 발생", INTERNAL_SERVER_ERROR);
         }
-        return S3_ENDPOINT + fileName;
+        return S3_ENDPOINT + newFilename;
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {
