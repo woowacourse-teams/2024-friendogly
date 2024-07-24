@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.infra;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -50,18 +50,11 @@ public class S3StorageManager implements FileStorageManager {
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {
-        File file = null;
+        File file = new File("tmp");
         try {
-            file = File.createTempFile("tmp", null);
-        } catch (Exception e) {
+            multipartFile.transferTo(file);
+        } catch (IllegalStateException | IOException e) {
             throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생");
-        }
-
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(multipartFile.getBytes());
-            fos.flush();
-        } catch (Exception e) {
-            throw new FriendoglyException("MultipartFile to File 변환 중 오류 발생");
         }
         return file;
     }
