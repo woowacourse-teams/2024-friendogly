@@ -146,7 +146,7 @@ public class Club {
         validateMemberCapacity();
         ClubMember clubMember = ClubMember.create(this, this.owner);
         clubMembers.add(clubMember);
-        clubMember.updateClub(this);
+        clubMember.updateClub(this); //지워도 되지 않나?
     }
 
 
@@ -180,5 +180,24 @@ public class Club {
 
     public int countClubMember() {
         return clubMembers.size();
+    }
+
+    public void removeClubMember(Member member) {
+        ClubMember target = clubMembers.stream()
+                .filter(e -> e.getMember().getId().equals(member.getId()))
+                .findAny()
+                .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
+
+        target.updateClub(null);
+        removeClubPets(member);
+    }
+
+    private void removeClubPets(Member member) {
+        List<ClubPet> participatingMemberPets = clubPets.stream()
+                .filter(clubPet -> clubPet.getPet().getMember().getId().equals(member.getId()))
+                .toList();
+        clubPets.removeAll(participatingMemberPets);
+        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
+
     }
 }

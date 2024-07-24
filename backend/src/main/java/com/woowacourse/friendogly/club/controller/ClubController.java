@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,15 @@ public class ClubController {
         SaveClubMemberResponse response = clubCommandService.saveClubMember(clubId, memberId, request);
         return ResponseEntity.created(URI.create("/clubs/" + clubId + "/members/" + response.clubMemberId()))
                 .body(ApiResponse.ofSuccess(response));
+    }
+
+    @DeleteMapping("/{clubId}/members")
+    public ResponseEntity<Void> deleteClubMember(
+            @Auth Long memberId,
+            @PathVariable("clubId") Long clubId
+    ) {
+        clubCommandService.deleteClubMember(clubId, memberId);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -49,7 +49,7 @@ public class ClubCommandService {
                 .toList();
 
         newClub.addClubPet(participatingPets);
-        
+
         return new SaveClubResponse(newClub, 1, petImageUrls);
     }
 
@@ -71,5 +71,13 @@ public class ClubCommandService {
         return participatingPetsId.stream()
                 .map(id -> petRepository.findById(id).orElseThrow(() -> new FriendoglyException("강아지 정보를 찾지 못했습니다.")))
                 .toList();
+    }
+
+    public void deleteClubMember(Long clubId, Long memberId) {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new FriendoglyException("모임 정보를 찾지 못했습니다."));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
+        club.removeClubMember(member);
     }
 }

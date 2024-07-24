@@ -121,4 +121,15 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
+
+    @DisplayName("참여 중인 회원을 삭제한다.")
+    @Test
+    void deleteClubMember() {
+        Member savedMember = createSavedMember();
+        Pet savedPet = createSavedPet(savedMember);
+        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL));
+        clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
+        assertThat(savedClub.countClubMember()).isEqualTo(0);
+    }
 }
