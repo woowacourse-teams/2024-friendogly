@@ -101,8 +101,7 @@
                         android:gravity="center"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:text="@string/edit_profile_title"
-                        app:layout_constraintTop_toBottomOf="@+id/alert_description" />
+                        android:text="@string/edit_profile_title" />
 
                     <TextView
                         android:id="@+id/tv_register_dog_btn"
@@ -117,7 +116,7 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:text="@string/register_dog_title"
-                        app:layout_constraintTop_toBottomOf="@+id/alert_description" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_alert_description" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
