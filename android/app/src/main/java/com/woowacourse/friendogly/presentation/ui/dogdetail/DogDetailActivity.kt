@@ -1,21 +1,20 @@
 package com.woowacourse.friendogly.presentation.ui.dogdetail
 
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import android.content.Context
+import android.content.Intent
+import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.woowacourse.friendogly.R
-import com.woowacourse.friendogly.databinding.FragmentDogDetailBinding
-import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.databinding.ActivityDogDetailBinding
+import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.ui.dogdetail.adapter.DogDetailAdapter
-import com.woowacourse.friendogly.presentation.ui.mypage.MyPageViewModel.Companion.dogs
 
-class DogDetailFragment : BaseFragment<FragmentDogDetailBinding>(R.layout.fragment_dog_detail) {
+class DogDetailActivity : BaseActivity<ActivityDogDetailBinding>(R.layout.activity_dog_detail) {
     private val viewModel: DogDetailViewModel by viewModels()
-    private val args: DogDetailFragmentArgs by navArgs()
 
     private val adapter: DogDetailAdapter by lazy { DogDetailAdapter() }
 
-    override fun initViewCreated() {
+    override fun initCreateView() {
         initDataBinding()
         initObserve()
         initAdapter()
@@ -42,6 +41,12 @@ class DogDetailFragment : BaseFragment<FragmentDogDetailBinding>(R.layout.fragme
         viewModel.uiState.observe(this) { uiState ->
             adapter.submitList(uiState.dogs)
             binding.vpDogDetail.setCurrentItem(uiState.dogs.size, false)
+        }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, DogDetailActivity::class.java)
         }
     }
 }

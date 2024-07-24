@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.application.di.AppModule
 import com.woowacourse.friendogly.databinding.FragmentMyPageBinding
 import com.woowacourse.friendogly.presentation.base.BaseFragment
 import com.woowacourse.friendogly.presentation.base.observeEvent
+import com.woowacourse.friendogly.presentation.ui.MainActivityActionHandler
 import com.woowacourse.friendogly.presentation.ui.mypage.adapter.PetProfileAdapter
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
@@ -33,17 +34,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
                 is MyPageNavigationAction.NavigateToSetting -> TODO()
-                is MyPageNavigationAction.NavigateToDogDetail ->
-                    navigate(
-                        MyPageFragmentDirections.actionMyPageFragmentToDogDetailFragment(
-                            action.id,
-                        ),
-                    )
+                is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
 
-                is MyPageNavigationAction.NavigateToDogRegister ->
-                    navigate(
-                        MyPageFragmentDirections.actionMyPageFragmentToRegisterDogFragment(),
-                    )
+                is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
 
                 is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
             }

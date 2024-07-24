@@ -9,8 +9,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<T : ViewDataBinding>(
@@ -57,12 +55,6 @@ abstract class BaseFragment<T : ViewDataBinding>(
         snackbar?.dismiss()
         snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply { action() }
         snackbar?.show()
-    }
-
-    protected fun Fragment.navigate(directions: NavDirections) {
-        val controller = findNavController()
-        controller.currentDestination?.getAction(directions.actionId) ?: return
-        controller.navigate(directions)
     }
 
     override fun onDestroyView() {

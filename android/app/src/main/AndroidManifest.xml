@@ -19,6 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.dogdetail.DogDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.registerdog.RegisterDogActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.group.detail.GroupDetailActivity"
             android:exported="false" />
         <activity
@@ -30,8 +36,9 @@
         <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false" />
-        <activity android:name=".presentation.ui.chatlist.chat.ChatActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".presentation.ui.chatlist.chat.ChatActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true"

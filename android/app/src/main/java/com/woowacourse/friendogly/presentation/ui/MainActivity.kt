@@ -4,23 +4,23 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.woowacourse.friendogly.NavigationGraphDirections
+import androidx.fragment.app.Fragment
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.databinding.ActivityMainBinding
 import com.woowacourse.friendogly.presentation.base.BaseActivity
+import com.woowacourse.friendogly.presentation.ui.chatlist.ChatListFragment
+import com.woowacourse.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailActivity
+import com.woowacourse.friendogly.presentation.ui.group.list.GroupListFragment
+import com.woowacourse.friendogly.presentation.ui.mypage.MyPageFragment
+import com.woowacourse.friendogly.presentation.ui.registerdog.RegisterDogActivity
+import com.woowacourse.friendogly.presentation.ui.woof.WoofFragment
 
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
-    private lateinit var navHostFragment: NavHostFragment
-    private lateinit var navController: NavController
     private var waitTime = 0L
 
     override fun initCreateView() {
@@ -29,50 +29,40 @@ class MainActivity :
     }
 
     private fun initNavController() {
-        navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        navController = navHostFragment.navController
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.groupListFragment, R.id.woofFragment, R.id.chatListFragment, R.id.myPageFragment -> showBottomNav()
-                else -> hideBottomNav()
-            }
-        }
-        binding.bottomNavi.setupWithNavController(navController)
+        switchFragment(GroupListFragment::class.java)
         binding.bottomNavi.setOnItemReselectedListener {}
-    }
-
-    private fun showBottomNav() {
-        binding.bottomNavi.visibility = View.VISIBLE
-    }
-
-    private fun hideBottomNav() {
-        binding.bottomNavi.visibility = View.GONE
-    }
-
-    override fun onBackPressed() {
-        try {
-            if (onBackPressedDispatcher.hasEnabledCallbacks()) {
-                super.onBackPressed()
-            } else {
-                when (navController.currentDestination?.id) {
-                    R.id.groupListFragment -> {
-                        if (System.currentTimeMillis() - waitTime >= 1500) {
-                            waitTime = System.currentTimeMillis()
-                            showToastMessage(getString(R.string.on_back_pressed_Message))
-                        } else {
-                            finishAffinity()
-                        }
-                    }
-
-                    null -> super.onBackPressed()
-                    else -> navController.navigate(NavigationGraphDirections.actionHomeFragment())
-                }
+        binding.bottomNavi.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.groupListFragment -> switchFragment(GroupListFragment::class.java)
+                R.id.woofFragment -> switchFragment(WoofFragment::class.java)
+                R.id.chatListFragment -> switchFragment(ChatListFragment::class.java)
+                R.id.myPageFragment -> switchFragment(MyPageFragment::class.java)
+                else -> false
             }
-        } catch (e: Exception) {
-            showToastMessage(e.message.toString())
         }
+    }
+
+    private fun switchFragment(fragmentClass: Class<out Fragment>): Boolean {
+        val fragment = supportFragmentManager.findFragmentByTag(fragmentClass.simpleName)
+        val transaction = supportFragmentManager.beginTransaction()
+
+        supportFragmentManager.fragments.forEach {
+            transaction.hide(it)
+        }
+
+        if (fragment == null) {
+            transaction.add(
+                R.id.nav_host_fragment_container,
+                fragmentClass.getDeclaredConstructor().newInstance(),
+                fragmentClass.simpleName,
+            )
+        } else {
+            transaction.show(fragment)
+        }
+        transaction.setReorderingAllowed(true)
+        transaction.commit()
+
+        return true
     }
 
     private fun requestLocationPermissions() {
@@ -94,19 +84,36 @@ class MainActivity :
         }
     }
 
-    companion object {
-        const val LOCATION_PERMISSION_REQUEST_CODE = 100
-
-        fun getIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
-        }
-    }
-
     override fun navigateToGroupDetailActivity(groupId: Long) {
         startActivity(GroupDetailActivity.getIntent(this, groupId))
     }
 
     override fun navigateToGroupAddActivity() {
         startActivity(GroupAddActivity.getIntent(this))
+    }
+
+    override fun navigateToRegisterDog() {
+        startActivity(RegisterDogActivity.getIntent(this))
+    }
+
+    override fun navigateToDogDetail() {
+        startActivity(DogDetailActivity.getIntent(this))
+    }
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - waitTime >= 1500) {
+            waitTime = System.currentTimeMillis()
+            showToastMessage(getString(R.string.on_back_pressed_Message))
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    companion object {
+        const val LOCATION_PERMISSION_REQUEST_CODE = 100
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
     }
 }
