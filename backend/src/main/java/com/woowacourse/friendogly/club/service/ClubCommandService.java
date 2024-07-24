@@ -46,7 +46,7 @@ public class ClubCommandService {
                 .toList();
 
         List<String> petImageUrls = participatingPets.stream()
-                .map(pet -> pet.getImageUrl().getValue())
+                .map(Pet::getImageUrl)
                 .toList();
 
         newClub.addClubPet(participatingPets);
