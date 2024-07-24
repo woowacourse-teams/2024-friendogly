@@ -36,6 +36,7 @@ public class S3StorageManager implements FileStorageManager {
                 .build();
     }
 
+    @Override
     public String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
 
