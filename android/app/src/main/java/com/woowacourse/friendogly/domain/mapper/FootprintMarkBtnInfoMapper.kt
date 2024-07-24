@@ -6,6 +6,6 @@ import com.woowacourse.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 fun FootprintMarkBtnInfo.toPresentation(): FootprintMarkBtnInfoUiModel {
     return FootprintMarkBtnInfoUiModel(
         isClickable = isMarkBtnClickable(),
-        remainingTime = remainingTime(),
+        remainingTime = remainingTime().toString(),
     )
 }

@@ -8,7 +8,6 @@ fun Footprint.toPresentation(): FootprintUiModel {
         footprintId = footprintId,
         latitude = latitude,
         longitude = longitude,
-        isVisible = isVisible(),
         isMine = isMine,
         imageUrl = imageUrl,
     )

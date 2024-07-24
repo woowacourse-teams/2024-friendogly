@@ -2,7 +2,6 @@ package com.woowacourse.friendogly.data.mapper
 
 import com.woowacourse.friendogly.data.model.FootprintDto
 import com.woowacourse.friendogly.domain.model.Footprint
-import com.woowacourse.friendogly.presentation.utils.parseToLocalDateTime
 import com.woowacourse.friendogly.remote.model.response.FootprintsNearResponse
 
 fun FootprintDto.toDomain(): Footprint {
@@ -10,7 +9,7 @@ fun FootprintDto.toDomain(): Footprint {
         footprintId = footPrintId,
         latitude = latitude,
         longitude = longitude,
-        createdAt = parseToLocalDateTime(createdAt),
+        createdAt = createdAt,
         isMine = isMine,
         imageUrl = imageUrl,
     )

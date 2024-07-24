@@ -1,12 +1,12 @@
 package com.woowacourse.friendogly.domain.mapper
 
 import com.woowacourse.friendogly.domain.model.FootprintInfo
-import com.woowacourse.friendogly.domain.model.PetGender
-import com.woowacourse.friendogly.domain.model.PetSizeType
 import com.woowacourse.friendogly.presentation.model.FootprintInfoUiModel
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Period
 
 fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
@@ -14,16 +14,21 @@ fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
         petName = petName,
         petDescription = petDescription,
         petAge = petBirthDate.toAge(),
-        petSizeType = PetSizeType.to(petSizeType),
-        petGender = PetGender.to(petGender),
+        petSizeType = petSizeType.petSizeType,
+        petGender = petGender.petGender,
         footprintImageUrl = footprintImageUrl,
         dateOfVisit = createdAt.toDateOfVisit(),
         isMine = isMine,
     )
 }
 
-fun LocalDate.toAge(currentDate: LocalDate = LocalDate.now()): String {
-    val period = Period.between(this, currentDate)
+fun LocalDate.toAge(
+    currentDate: LocalDate =
+        LocalDate.parse(
+            java.time.LocalDate.now().toString(),
+        ),
+): String {
+    val period = Period.between(this.toJavaLocalDate(), currentDate.toJavaLocalDate())
     val years = period.years
     val months = period.months
 
@@ -34,11 +39,14 @@ fun LocalDate.toAge(currentDate: LocalDate = LocalDate.now()): String {
     }
 }
 
-fun LocalDateTime?.toDateOfVisit(currentDateTime: LocalDateTime = LocalDateTime.now()): String {
-    if (this == null) {
-        return "방금 전"
-    }
-    val duration = Duration.between(this, currentDateTime)
+fun LocalDateTime.toDateOfVisit(
+    currentDateTime: LocalDateTime =
+        LocalDateTime.parse(
+            java.time.LocalDateTime.now().toString(),
+        ),
+): String {
+    val duration =
+        Duration.between(this.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
 
     val minutes = duration.toMinutes()
     val hours = duration.toHours()

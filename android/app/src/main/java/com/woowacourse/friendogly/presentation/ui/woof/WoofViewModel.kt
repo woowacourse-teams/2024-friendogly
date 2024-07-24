@@ -59,7 +59,8 @@ class WoofViewModel(
                 latLng.longitude,
             ).onSuccess { nearFootPrints ->
                 markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
-            }.onFailure {}
+            }.onFailure {
+            }
         }
     }
 
