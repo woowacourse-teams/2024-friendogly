@@ -12,12 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -49,8 +48,7 @@ public class Pet {
     @Column(nullable = false)
     private Gender gender;
 
-    @Embedded
-    private ImageUrl imageUrl;
+    private String imageUrl;
 
     @Builder
     public Pet(
@@ -70,7 +68,7 @@ public class Pet {
         this.birthDate = new BirthDate(birthDate);
         this.sizeType = sizeType;
         this.gender = gender;
-        this.imageUrl = new ImageUrl(imageUrl);
+        this.imageUrl = imageUrl;
     }
 
     private void validateMember(Member member) {
