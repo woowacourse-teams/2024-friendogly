@@ -6,7 +6,6 @@ import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
-import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -28,8 +27,8 @@ public class ClubCommandService {
     public ClubCommandService(
             ClubRepository clubRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository,
-            ClubMemberRepository clubMemberRepository) {
+            PetRepository petRepository
+    ) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;

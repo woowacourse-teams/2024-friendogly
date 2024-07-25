@@ -9,7 +9,6 @@ import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
-import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
@@ -28,9 +27,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @Autowired
     private ClubCommandService clubCommandService;
-
-    @Autowired
-    private ClubMemberRepository clubMemberRepository;
 
     @Autowired
     private EntityManager em;
