@@ -36,7 +36,7 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Autowired
     private FootprintCommandService footprintCommandService;
 
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 찍은 경우 - 발자국 사진 URL 조회)")
     @Transactional
     @Test
     void findOne() {
@@ -86,7 +86,7 @@ class FootprintQueryServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("발자국 사진을 찍지 않고 단건 조회하면 발자국 사진이 아닌 펫 이미지의 URL이 조회된다.")
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 안 찍은 경우 - 펫 사진 URL 조회)")
     @Test
     void findOne_NoTakePicture() {
         // given
