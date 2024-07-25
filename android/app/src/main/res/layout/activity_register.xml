@@ -23,7 +23,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_login_image"
+            android:src="@drawable/img_login_main"
             app:layout_constraintBottom_toTopOf="@+id/ib_kakao_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

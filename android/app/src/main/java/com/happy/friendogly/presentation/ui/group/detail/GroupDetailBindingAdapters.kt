@@ -14,7 +14,7 @@ fun TextView.bindDetailViewTypeBackground(detailViewType: DetailViewType?) {
             DetailViewType.RECRUITMENT, DetailViewType.MINE, DetailViewType.PARTICIPATED ->
                 ContextCompat.getColorStateList(
                     context,
-                    R.color.coral300,
+                    R.color.coral400,
                 )
 
             DetailViewType.END_RECRUITMENT -> ContextCompat.getColorStateList(context, R.color.gray400)

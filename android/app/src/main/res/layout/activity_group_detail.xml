@@ -21,6 +21,8 @@
 
             <ImageView
                 android:id="@+id/iv_group_detail_poster"
+                android:src="@drawable/ic_group_normal"
+                android:backgroundTint="@color/coral30"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/black"
@@ -42,19 +44,21 @@
                 android:src="@drawable/ic_arrow_left"
                 app:layout_constraintStart_toStartOf="@id/iv_group_detail_poster"
                 app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
-                app:tint="@color/white" />
+                app:tint="@color/black" />
 
             <ImageView
                 onSingleClick="@{()->vm.openMenu()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/ripple_circle_white"
                 android:padding="2dp"
                 android:src="@drawable/ic_more_vertical"
                 app:layout_constraintEnd_toEndOf="@id/iv_group_detail_poster"
                 app:layout_constraintTop_toTopOf="@id/iv_group_detail_poster"
-                app:tint="@color/white" />
+                app:tint="@color/black" />
 
             <View
                 android:id="@+id/view_group_detail_top_bar"
@@ -64,12 +68,11 @@
 
             <ImageView
                 android:id="@+id/iv_group_detail_user_image"
+                android:src="@drawable/img_profile_normal"
                 glide1000="@{vm.group.groupReaderImage}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/shape_indicator_active"
-                android:backgroundTint="@color/coral300"
                 app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintStart_toStartOf="@id/view_group_detail_top_bar"
                 app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
@@ -237,7 +240,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/rect_white_fill_radius10"
+                android:background="@drawable/rect_coral04_fill_16"
+                tools:textColor="@color/white"
                 android:gravity="center"
                 app:detailViewTypeBackground="@{vm.group.detailViewType}"
                 app:detailViewTypeText="@{vm.group.detailViewType}"

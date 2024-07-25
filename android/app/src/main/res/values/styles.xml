@@ -145,7 +145,7 @@
     </style>
 
     <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size14" parent="@style/Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/coral300</item>
+        <item name="android:textColor">@color/coral500</item>
         <item name="android:textSize">14dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
