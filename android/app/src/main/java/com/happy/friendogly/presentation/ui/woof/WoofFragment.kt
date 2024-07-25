@@ -297,6 +297,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         private const val MAP_CIRCLE_RADIUS = 1000.0
         private const val MIN_ZOOM = 10.0
         private const val DEFAULT_ZOOM = 13.5
-        private const val MAX_ZOOM = 17.0
+        private const val MAX_ZOOM = 20.0
     }
 }
