@@ -20,8 +20,32 @@ public record FindOneFootprintResponse(
         boolean isMine
 ) {
 
-    public FindOneFootprintResponse(Member member, Pet mainPet, Footprint footprint, boolean isMine) {
-        this(
+    public static FindOneFootprintResponse withMainPetImage(
+            Member member,
+            Pet mainPet,
+            Footprint footprint,
+            boolean isMine
+    ) {
+        return new FindOneFootprintResponse(
+                member.getName().getValue(),
+                mainPet.getName().getValue(),
+                mainPet.getDescription().getValue(),
+                mainPet.getBirthDate().getValue(),
+                mainPet.getSizeType(),
+                mainPet.getGender(),
+                mainPet.getImageUrl(),
+                footprint.getCreatedAt(),
+                isMine
+        );
+    }
+
+    public static FindOneFootprintResponse withFootprintImage(
+            Member member,
+            Pet mainPet,
+            Footprint footprint,
+            boolean isMine
+    ) {
+        return new FindOneFootprintResponse(
                 member.getName().getValue(),
                 mainPet.getName().getValue(),
                 mainPet.getDescription().getValue(),
