@@ -3,12 +3,10 @@ package com.happy.friendogly.presentation.ui.woof
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
-import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.DecelerateInterpolator
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
@@ -58,7 +56,8 @@ class WoofFragment :
     }
 
     override fun initViewCreated() {
-        showProgressBar()
+        binding.layoutWoofLoading.isVisible = true
+        binding.lottieWoofLoading.playAnimation()
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)
@@ -144,7 +143,13 @@ class WoofFragment :
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
             moveCameraCenterPosition()
-            hideProgressBar()
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    binding.layoutWoofLoading.isVisible = false
+                    binding.lottieWoofLoading.pauseAnimation()
+                },
+                1000,
+            )
         }
     }
 
@@ -219,57 +224,6 @@ class WoofFragment :
                 isMine = footPrint.isMine,
             )
         }
-    }
-
-    private fun showProgressBar() {
-        binding.layoutWoofProgressBar.visibility = View.VISIBLE
-        animateProgressBar(true)
-    }
-
-    private fun hideProgressBar() {
-        binding.layoutWoofProgressBar.visibility = View.GONE
-        animateProgressBar(false)
-    }
-
-    private fun animateProgressBar(show: Boolean) {
-        val fadeInDuration = 500L
-        val fadeOutDuration = 500L
-
-        val fadeIn = AlphaAnimation(0.2f, 0.8f)
-        fadeIn.interpolator = DecelerateInterpolator()
-        fadeIn.duration = fadeInDuration
-        fadeIn.setAnimationListener(
-            object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation) {
-                    binding.ivWoofProgressBar.visibility = View.VISIBLE
-                }
-
-                override fun onAnimationEnd(animation: Animation) {
-                    val fadeOut = AlphaAnimation(0.8f, 0.2f)
-                    fadeOut.interpolator = AccelerateInterpolator()
-                    fadeOut.duration = fadeOutDuration
-                    fadeOut.setAnimationListener(
-                        object : Animation.AnimationListener {
-                            override fun onAnimationStart(animation: Animation) {}
-
-                            override fun onAnimationEnd(animation: Animation) {
-                                binding.ivWoofProgressBar.visibility = View.GONE
-                                if (show) {
-                                    binding.ivWoofProgressBar.startAnimation(fadeIn)
-                                }
-                            }
-
-                            override fun onAnimationRepeat(animation: Animation) {}
-                        },
-                    )
-
-                    binding.ivWoofProgressBar.startAnimation(fadeOut)
-                }
-
-                override fun onAnimationRepeat(animation: Animation) {}
-            },
-        )
-        binding.ivWoofProgressBar.startAnimation(fadeIn)
     }
 
     override fun onRequestPermissionsResult(

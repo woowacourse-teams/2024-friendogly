@@ -29,7 +29,7 @@
             android:layout_marginBottom="40dp"
             android:onClick="@{() -> vm.changeLocationTrackingMode()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_woof_mark"
@@ -47,9 +47,10 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <FrameLayout
-            android:id="@+id/layout_woof_progress_bar"
+            android:id="@+id/layout_woof_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/lottie_layout"
             android:clickable="true"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,14 +59,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
-            <ImageView
-                android:id="@+id/iv_woof_progress_bar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_woof_loading"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@drawable/img_dog" />
+                android:autoHandwritingEnabled="false"
+                app:lottie_fileName="animation_loading.json"
+                app:lottie_loop="true" />
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
