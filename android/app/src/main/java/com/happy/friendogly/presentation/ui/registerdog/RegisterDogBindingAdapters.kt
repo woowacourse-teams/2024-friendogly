@@ -15,7 +15,7 @@ fun TextView.bindEditTextDescriptionLength(contents: String?) {
         if (length != 0) {
             ContextCompat.getColor(context, R.color.black)
         } else {
-            ContextCompat.getColor(context, R.color.gray05)
+            ContextCompat.getColor(context, R.color.gray400)
         }
 
     this.apply {
@@ -33,6 +33,6 @@ fun TextView.bindDogEditBtnBackground(isProfileComplete: Boolean?) {
         this.setTextColor(context.getColor(R.color.black))
     } else {
         this.background = context.getDrawable(R.drawable.rect_gray03_fill_16)
-        this.setTextColor(context.getColor(R.color.gray08))
+        this.setTextColor(context.getColor(R.color.gray700))
     }
 }
