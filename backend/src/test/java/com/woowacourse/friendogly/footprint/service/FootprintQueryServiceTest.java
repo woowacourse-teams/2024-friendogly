@@ -14,52 +14,21 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.support.ServiceTest;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 // TODO: Member, Dog 테스트 픽스처 생성
-class FootprintQueryServiceTest extends ServiceTest {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private FootprintQueryService footprintQueryService;
-
-    @Autowired
-    private FootprintCommandService footprintCommandService;
+class FootprintQueryServiceTest extends FootprintServiceTest {
 
     @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 찍은 경우 - 발자국 사진 URL 조회)")
     @Transactional
     @Test
     void findOne() {
         // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name1")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("petname1")
-                        .description("petdescription1")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
@@ -90,25 +59,6 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Test
     void findOne_NoTakePicture() {
         // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name1")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        Pet pet = petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("petname1")
-                        .description("petdescription1")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
@@ -135,14 +85,7 @@ class FootprintQueryServiceTest extends ServiceTest {
     @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {
-        Member member1 = memberRepository.save(
-                Member.builder()
-                        .name("name1")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        Member member2 = memberRepository.save(
+        Member otherMember = memberRepository.save(
                 Member.builder()
                         .name("name2")
                         .email("test@test.com")
@@ -151,19 +94,7 @@ class FootprintQueryServiceTest extends ServiceTest {
 
         petRepository.save(
                 Pet.builder()
-                        .member(member1)
-                        .name("땡이")
-                        .description("귀여운 땡이")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member2)
+                        .member(otherMember)
                         .name("땡이")
                         .description("귀여운 땡이")
                         .birthDate(LocalDate.now().minusYears(1))
@@ -178,18 +109,18 @@ class FootprintQueryServiceTest extends ServiceTest {
 
         // 999m 떨어진 발자국 저장
         footprintCommandService.save(
-                member1.getId(),
+                member.getId(),
                 new SaveFootprintRequest(0.0, nearLongitude)
         );
 
         // 1001m 떨어진 발자국 저장
         footprintCommandService.save(
-                member2.getId(),
+                otherMember.getId(),
                 new SaveFootprintRequest(0.0, farLongitude)
         );
 
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
-                member1.getId(), new FindNearFootprintRequest(0.0, 0.0));
+                member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         assertAll(
                 () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
@@ -202,13 +133,6 @@ class FootprintQueryServiceTest extends ServiceTest {
     @DisplayName("현재 시간 기준 24시간 보다 이전에 생성된 발자국은 조회되지 않는다.")
     @Test
     void findNear24Hours() {
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
                 VALUES
@@ -231,13 +155,6 @@ class FootprintQueryServiceTest extends ServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")
     @Test
     void findMyLatestFootprintTime_MyFootprintExists_PetExists() {
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
 
         jdbcTemplate.update("""
@@ -260,25 +177,6 @@ class FootprintQueryServiceTest extends ServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 O)")
     @Test
     void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetExists() {
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("petname1")
-                        .description("petdescription1")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
 
@@ -291,15 +189,15 @@ class FootprintQueryServiceTest extends ServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 X)")
     @Test
     void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetDoesNotExist() {
-        Member member = memberRepository.save(
+        Member memberWithoutPet = memberRepository.save(
                 Member.builder()
-                        .name("name")
-                        .email("test@test.com")
+                        .name("강아지없어요")
+                        .email("no_dog@test.com")
                         .build()
         );
 
         FindMyLatestFootprintTimeAndPetExistenceResponse response
-                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
+                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberWithoutPet.getId());
 
         assertAll(
                 () -> assertThat(response.createdAt()).isNull(),
