@@ -1,7 +1,5 @@
 package com.woowacourse.friendogly.club.dto.request;
 
-import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import jakarta.validation.constraints.Max;
@@ -41,16 +39,4 @@ public record SaveClubRequest(
         List<Long> participatingPetsId
 ) {
 
-    public Club toEntity(Member member) {
-        return Club.create(
-                title,
-                content,
-                address,
-                memberCapacity,
-                member,
-                allowedGenders,
-                allowedSizes,
-                imageUrl
-        );
-    }
 }

@@ -9,6 +9,7 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,8 @@ class ClubMemberTest {
             member,
             Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
             Set.of(SizeType.SMALL),
-            "http:/image.com"
+            "http:/image.com",
+            List.of(pet)
     );
 
     @DisplayName("모임-회원 매핑 테이블 엔티티 생성 테스트")

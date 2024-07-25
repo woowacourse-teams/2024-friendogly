@@ -84,7 +84,7 @@ public class Club {
     List<ClubPet> clubPets = new ArrayList<>();
 
     @Builder
-    public Club(
+    private Club(
             String title,
             String content,
             String address,
@@ -109,7 +109,6 @@ public class Club {
         this.createdAt = createdAt;
     }
 
-
     private void validateOwner(Member owner) {
         if (owner == null) {
             throw new FriendoglyException("모임 방장 정보는 필수 입니다.");
@@ -124,7 +123,8 @@ public class Club {
             Member owner,
             Set<Gender> allowedGender,
             Set<SizeType> allowedSize,
-            String imageUrl
+            String imageUrl,
+            List<Pet> participatingPets
     ) {
         Club club = Club.builder()
                 .title(title)
@@ -139,6 +139,7 @@ public class Club {
                 .imageUrl(imageUrl)
                 .build();
         club.addClubMember(club.owner);
+        club.addClubPet(participatingPets);
         return club;
     }
 

@@ -45,8 +45,8 @@ public abstract class ClubServiceTest extends ServiceTest {
                 member,
                 genders,
                 sizes,
-                "https://image.com");
-        club.addClubPet(List.of(pet));
+                "https://image.com",
+                List.of(pet));
 
         return clubRepository.save(club);
     }

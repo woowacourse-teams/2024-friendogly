@@ -38,9 +38,21 @@ public class ClubCommandService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
 
-        Club newClub = clubRepository.save(request.toEntity(member));
-
         List<Pet> participatingPets = mapToPets(request.participatingPetsId());
+
+        Club newClub = Club.create(
+                request.title(),
+                request.content(),
+                request.address(),
+                request.memberCapacity(),
+                member,
+                request.allowedGenders(),
+                request.allowedSizes(),
+                request.imageUrl(),
+                participatingPets
+        );
+
+        Club savedClub = clubRepository.save(newClub);
 
         List<String> petImageUrls = participatingPets.stream()
                 .map(Pet::getImageUrl)
@@ -48,7 +60,7 @@ public class ClubCommandService {
 
         newClub.addClubPet(participatingPets);
 
-        return new SaveClubResponse(newClub, 1, petImageUrls);
+        return new SaveClubResponse(savedClub, 1, petImageUrls);
     }
 
     public SaveClubMemberResponse saveClubMember(Long clubId, Long memberId, SaveClubMemberRequest request) {
