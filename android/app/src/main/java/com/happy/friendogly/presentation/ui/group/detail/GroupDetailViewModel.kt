@@ -34,7 +34,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                             GroupFilter.GenderFilter.Female,
                             GroupFilter.GenderFilter.NeutralizingMale,
                         ),
-                    groupPoster = "",
+                    groupPoster = null,
                     detailViewType = DetailViewType.MINE,
                     title = "중형견 모임해요",
                     content = "공지 꼭 읽어주세요",
@@ -43,59 +43,59 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                     groupLocation = "잠실6동",
                     groupLeader = "벼리",
                     groupDate = LocalDateTime.now(),
-                    groupReaderImage = "",
+                    groupReaderImage = null,
                     userProfiles =
                         listOf(
                             GroupDetailProfileUiModel(
                                 "땡이",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "채드",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "벼리",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "에디",
-                                "",
+                                null,
                             ),
                         ),
                     dogProfiles =
                         listOf(
                             GroupDetailProfileUiModel(
                                 "땡이",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "채드",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "벼리",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "에디",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "땡이",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "채드",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "벼리",
-                                "",
+                                null,
                             ),
                             GroupDetailProfileUiModel(
                                 "에디",
-                                "",
+                                null,
                             ),
                         ),
                 )
