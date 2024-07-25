@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.club.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -14,11 +13,11 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +27,18 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @Autowired
     private ClubCommandService clubCommandService;
 
-    @Autowired
-    private EntityManager em;
+    private Member savedMember;
+    private Pet savedPet;
+
+    @BeforeEach
+    void setMemberAndPet() {
+        savedMember = createSavedMember();
+        savedPet = createSavedPet(savedMember);
+    }
 
     @DisplayName("모임을 저장한다.")
     @Test
     void save() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
         SaveClubRequest request = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
@@ -59,12 +62,15 @@ class ClubCommandServiceTest extends ClubServiceTest {
     }
 
     @DisplayName("회원이 모임에 참여한다.")
+    @Transactional
     @Test
     void saveClubMember() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         Member newMember = Member.builder()
                 .name("위브")
@@ -76,17 +82,20 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        assertThatCode(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request))
-                .doesNotThrowAnyException();
+        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
+
+        assertThat(savedClub.countClubMember()).isEqualTo(2);
     }
 
     @DisplayName("이미 참여한 모임에는 참여할 수 없다.")
     @Test
     void saveClubMember_FailAlreadyParticipating() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedPet.getId()));
         assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedMember.getId(), request))
@@ -97,10 +106,12 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @DisplayName("참여 가능한 강아지가 없다면 참여할 수 없다.")
     @Test
     void saveClubMember_FailCanNotParticipate() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
         Member newMember = Member.builder()
                 .name("위브")
                 .email("wiib@gmail.com")
@@ -132,10 +143,12 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @Transactional
     @Test
     void deleteClubMember() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         Member newMember = Member.builder()
                 .name("위브")
@@ -160,10 +173,12 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @Transactional
     @Test
     void deleteClubMember_WhenIsEmptyDelete() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
-        Club savedClub = createSavedClub(savedMember, savedPet, Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL));
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
 
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 

@@ -71,8 +71,7 @@ public class ClubCommandService {
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
 
         club.addClubMember(member);
-        List<Pet> pets = mapToPets(request.participatingPetsId());
-        club.addClubPet(pets);
+        club.addClubPet(mapToPets(request.participatingPetsId()));
         //TODO : 채팅방 ID 넘기기
         return new SaveClubMemberResponse(1L);
     }

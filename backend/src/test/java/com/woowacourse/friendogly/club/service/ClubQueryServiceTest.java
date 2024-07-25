@@ -12,6 +12,7 @@ import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,18 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @Autowired
     private ClubQueryService clubQueryService;
 
+    private Member savedMember;
+    private Pet savedPet;
+
+    @BeforeEach
+    void setMemberAndPet() {
+        savedMember = createSavedMember();
+        savedPet = createSavedPet(savedMember);
+    }
+
     @DisplayName("필터링된 모임을 정보를 조회한다.")
     @Test
     void findSearching() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
         Club club = createSavedClub(
                 savedMember,
                 savedPet,
@@ -47,7 +55,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         FindSearchingClubResponse actual = responses.get(0);
         FindSearchingClubResponse expected = expectedResponses.get(0);
-        
+
         assertAll(
                 () -> assertThat(actual.id()).isEqualTo(expected.id()),
                 () -> assertThat(actual.title()).isEqualTo(expected.title()),
@@ -66,8 +74,6 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
     @Test
     void findSearching_Nothing() {
-        Member savedMember = createSavedMember();
-        Pet savedPet = createSavedPet(savedMember);
         Club club = createSavedClub(
                 savedMember,
                 savedPet,
