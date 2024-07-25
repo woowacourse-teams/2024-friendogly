@@ -29,8 +29,8 @@ fun TextView.bindEditTextDescriptionLength(contents: String?) {
 fun TextView.bindDogEditBtnBackground(isProfileComplete: Boolean?) {
     val completed = isProfileComplete ?: return
     if (completed) {
-        this.background = context.getDrawable(R.drawable.rect_blue_fill_16)
-        this.setTextColor(context.getColor(R.color.black))
+        this.background = context.getDrawable(R.drawable.rect_coral400_fill_12)
+        this.setTextColor(context.getColor(R.color.white))
     } else {
         this.background = context.getDrawable(R.drawable.rect_gray03_fill_16)
         this.setTextColor(context.getColor(R.color.gray700))
