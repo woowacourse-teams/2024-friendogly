@@ -8,5 +8,6 @@ fun FootprintSaveDto.toDomain(): FootprintSave {
         footprintId = footprintId,
         latitude = latitude,
         longitude = longitude,
+        createdAt = createdAt,
     )
 }

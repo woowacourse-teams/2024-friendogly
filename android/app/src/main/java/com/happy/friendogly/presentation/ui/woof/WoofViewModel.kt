@@ -40,7 +40,11 @@ class WoofViewModel(
                 if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
                 } else {
-                    _snackbarActions.emit(WoofSnackbarActions.ShowCantMarkSnackbar(footPrintMarkBtnInfo.remainingTime()))
+                    _snackbarActions.emit(
+                        WoofSnackbarActions.ShowCantMarkSnackbar(
+                            footPrintMarkBtnInfo.remainingTime(),
+                        ),
+                    )
                 }
             }.onFailure {
             }
@@ -76,7 +80,7 @@ class WoofViewModel(
                 val state = uiState.value ?: WoofUiState()
                 _uiState.value =
                     state.copy(
-                        createdFootprintId = footprintSave.footprintId,
+                        footprintSave = footprintSave,
                         footprintMarkBtnInfo = footprintMarkBtnInfo,
                         nearFootprints = nearFootprints,
                     )
