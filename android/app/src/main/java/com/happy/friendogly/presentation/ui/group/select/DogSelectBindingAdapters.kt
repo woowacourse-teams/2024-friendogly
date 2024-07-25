@@ -9,7 +9,7 @@ import com.happy.friendogly.R
 fun View.bindDogSelect(dogSelectUiModel: DogSelectUiModel) {
     this.setBackgroundColor(
         if (dogSelectUiModel.isSelected) {
-            ContextCompat.getColor(context, R.color.orange05)
+            ContextCompat.getColor(context, R.color.coral300)
         } else {
             ContextCompat.getColor(context, R.color.white)
         },

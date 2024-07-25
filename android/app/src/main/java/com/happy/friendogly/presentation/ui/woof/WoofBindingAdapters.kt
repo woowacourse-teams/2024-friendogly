@@ -25,14 +25,14 @@ fun TextView.bindFootPrintWalking(
         val dateOfVisitLength = dateOfVisit.length
         spannableString.apply {
             setSpan(
-                ForegroundColorSpan(resources.getColor(R.color.orange07)),
+                ForegroundColorSpan(resources.getColor(R.color.coral500)),
                 0,
                 petNameLength,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
             )
 
             setSpan(
-                ForegroundColorSpan(resources.getColor(R.color.orange05)),
+                ForegroundColorSpan(resources.getColor(R.color.coral300)),
                 petNameLength + 2,
                 petNameLength + dateOfVisitLength + 2,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
