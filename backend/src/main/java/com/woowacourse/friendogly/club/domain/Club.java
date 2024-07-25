@@ -166,11 +166,12 @@ public class Club {
     }
 
     public void addClubPet(List<Pet> pets) {
-        pets.stream()
+        List<ClubPet> clubPets = pets.stream()
                 .peek(this::validateParticipatePet)
                 .map(pet -> new ClubPet(this, pet))
                 .peek(clubPet -> clubPet.updateClub(this))
-                .forEach(clubPets::add);
+                .toList();
+        this.clubPets.addAll(clubPets);
     }
 
     private void validateParticipatePet(Pet pet) {
