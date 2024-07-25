@@ -18,11 +18,11 @@ VALUES (1, 37.5173316, 127.1011661, 'https://picsum.photos/100', TIMESTAMPADD(MI
        (7, 37.516183, 127.1068874, 'https://picsum.photos/400', TIMESTAMPADD(MINUTE, -70, NOW()), FALSE);
 
 INSERT INTO pet(member_id, name, description, birth_date, size_type, gender, image_url)
-VALUES (1, '귀요미', '제 이름은 귀요미입니다', '2010-04-01', 'SMALL', 'MALE_NEUTERED', 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201901/20/28017477-0365-4a43-b546-008b603da621.jpg'),
-       (2, '멍뭉이', '우리 멍뭉이 귀엽죠?', '2011-05-01', 'MEDIUM', 'FEMALE', 'https://img.freepik.com/premium-photo/cute-puppy_976589-177.jpg?w=1060'),
-       (3, '보리', '보리보리 쌀', '2021-11-01', 'LARGE', 'MALE_NEUTERED', 'https://img.extmovie.com/files/attach/images/148/921/189/074/4e27f0d91051df9ba456302557c78977.jpg'),
-       (4, '누누', '우리 누누는 최고야', '2013-08-01', 'SMALL', 'MALE', 'https://img.extmovie.com/files/attach/images/148/921/189/074/636c2d09b8613b2562070e0cff068875.jpg'),
-       (5, '윌럼프', '누누의 펫입니다', '2014-09-01', 'MEDIUM', 'FEMALE_NEUTERED', 'https://img.extmovie.com/files/attach/images/148/921/189/074/067bc1139ae789ca1fb8d7776787afd1.jpg'),
-       (6, '밥톨이', '밥토리토리', '2015-10-01', 'LARGE', 'MALE', 'https://img.extmovie.com/files/attach/images/148/921/189/074/e3e776af3209b60f127d6b393b8e5600.jpg'),
-       (7, '케이틀린', '헤드샷', '2016-11-01', 'SMALL', 'MALE_NEUTERED', 'https://img.extmovie.com/files/attach/images/148/921/189/074/20449117cdbb0d551bce93f1d67833e2.jpg'),
-       (8, '이즈리얼', 'ezreal', '2017-12-01', 'MEDIUM', 'FEMALE', 'https://sitem.ssgcdn.com/13/03/75/item/1000438750313_i1_1200.jpg');
+VALUES (1, '부', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SMALL', 'MALE_NEUTERED', 'https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.JPG'),
+       (2, '치즈', '사랑받는 걸 좋아해요!인사해주세요!', '2011-05-01', 'MEDIUM', 'FEMALE', 'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg'),
+       (3, '라떼', '겁이 많아요! 개껌 좋아해요', '2021-11-01', 'LARGE', 'MALE_NEUTERED', 'https://shop.peopet.co.kr/data/goods/388/2022/06/_temp_16557127733930view.jpg'),
+       (4, '누누', '완전E에요 친구만들고싶어해요!', '2013-08-01', 'SMALL', 'MALE', 'https://shop.peopet.co.kr/data/goods/388/2022/06/_temp_16557127733930view.jpg'),
+       (5, '두부', '만나면 인사해주세요!', '2014-09-01', 'MEDIUM', 'FEMALE_NEUTERED', 'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMTU5/MDAxNDkzMzQzOTgwNjI2.Da3oF-lT1Tq8Y2zhYhlGi6kvIjZa6YOgYy-zVWfjwBkg.r-zq73hAyuL5rkP1B8J2qveAQLapdfGiuNlxEDlVH84g.PNG.fjvfeewt/20170428_104410.png?type=w800'),
+       (6, '호두', '달리기를 정말 좋아해요', '2015-10-01', 'LARGE', 'MALE', 'https://cdn.pixabay.com/photo/2015/03/14/05/37/portrait-672799_1280.jpg'),
+       (7, '모카', '어려서 여러강아지 만나고싶어요', '2022-11-01', 'SMALL', 'MALE_NEUTERED', 'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMjg5/MDAxNDkzMzQzOTgxMDQy.4u283s2rrib7xSWR5IdL1r_yiipEITnM6VofjaJsZPUg.oTUM6w8LeF-orpapq_S8j45mjRxjofwrpq8jhQ5LC5Eg.PNG.fjvfeewt/20170428_104509.png?type=w800'),
+       (8, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE', 'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg');
