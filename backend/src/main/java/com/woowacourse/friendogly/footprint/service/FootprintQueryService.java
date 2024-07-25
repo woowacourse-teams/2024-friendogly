@@ -4,7 +4,7 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
@@ -57,12 +57,12 @@ public class FootprintQueryService {
                 .toList();
     }
 
-    public FindMyLatestFootprintTimeResponse findMyLatestFootprintTimeAndPetExistence(Long memberId) {
+    public FindMyLatestFootprintTimeAndPetExistenceResponse findMyLatestFootprintTimeAndPetExistence(Long memberId) {
         LocalDateTime createdAt = footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
                 .map(Footprint::getCreatedAt)
                 .orElse(null);
         boolean hasPet = !petRepository.findByMemberId(memberId).isEmpty();
 
-        return new FindMyLatestFootprintTimeResponse(createdAt, hasPet);
+        return new FindMyLatestFootprintTimeAndPetExistenceResponse(createdAt, hasPet);
     }
 }

@@ -4,7 +4,7 @@ import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -70,11 +70,11 @@ public class FootprintController {
     }
 
     @GetMapping("/mine/latest")
-    public ApiResponse<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTimeAndPetExistence(
+    public ApiResponse<FindMyLatestFootprintTimeAndPetExistenceResponse> findMyLatestFootprintTimeAndPetExistence(
             @Auth Long memberId
     ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindMyLatestFootprintTimeResponse response
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
     }

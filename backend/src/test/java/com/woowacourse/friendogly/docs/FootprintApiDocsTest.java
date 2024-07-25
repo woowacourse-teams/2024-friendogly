@@ -23,7 +23,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.footprint.controller.FootprintController;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -208,7 +208,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
     @DisplayName("자신의 마지막 발자국 시간 및 펫 존재 여부 조회")
     @Test
     void findMyLatestFootprintTimeAndPetExistence() throws Exception {
-        FindMyLatestFootprintTimeResponse response = new FindMyLatestFootprintTimeResponse(
+        FindMyLatestFootprintTimeAndPetExistenceResponse response = new FindMyLatestFootprintTimeAndPetExistenceResponse(
                 LocalDateTime.now().minusHours(1), true
         );
 
@@ -233,7 +233,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.createdAt").description("자신의 가장 최근 발자국 생성 시간"),
                                         fieldWithPath("data.hasPet").description("자신의 펫 존재 여부 (1마리라도 펫 존재 = true)")
                                 )
-                                .responseSchema(Schema.schema("FindMyLatestFootprintTimeResponse"))
+                                .responseSchema(Schema.schema("FindMyLatestFootprintTimeAndPetExistenceResponse"))
                                 .build()
                         )
                 ))

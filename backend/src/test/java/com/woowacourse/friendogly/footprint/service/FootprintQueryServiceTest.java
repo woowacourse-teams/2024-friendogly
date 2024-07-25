@@ -7,7 +7,7 @@ import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -227,7 +227,7 @@ class FootprintQueryServiceTest extends ServiceTest {
                         .build()
         );
 
-        FindMyLatestFootprintTimeResponse response
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
 
         assertAll(
@@ -246,7 +246,7 @@ class FootprintQueryServiceTest extends ServiceTest {
                         .build()
         );
 
-        FindMyLatestFootprintTimeResponse response
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
 
         assertAll(
