@@ -32,4 +32,8 @@ public class MemberCapacity {
             );
         }
     }
+
+    public boolean isCapacityReached(int memberCount) {
+        return memberCount >= value;
+    }
 }

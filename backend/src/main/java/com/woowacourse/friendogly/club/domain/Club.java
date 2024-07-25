@@ -159,7 +159,7 @@ public class Club {
     }
 
     private void validateMemberCapacity() {
-        if (clubMembers.size() >= memberCapacity.getValue()) {
+        if (memberCapacity.isCapacityReached(countClubMember())) {
             throw new FriendoglyException("최대 인원을 초과하여 모임에 참여할 수 없습니다.");
         }
     }
