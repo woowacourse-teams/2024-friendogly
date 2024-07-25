@@ -11,7 +11,10 @@ import com.woowacourse.friendogly.presentation.ui.mypage.adapter.PetProfileAdapt
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.factory(getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase)
+        MyPageViewModel.factory(
+            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
+            getMemberMineUseCase = AppModule.getInstance().getMemberMineUseCase,
+        )
     }
 
     private val adapter: PetProfileAdapter by lazy { PetProfileAdapter(viewModel) }

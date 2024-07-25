@@ -5,6 +5,7 @@ import com.woowacourse.friendogly.domain.model.Pet
 import com.woowacourse.friendogly.domain.model.SizeType
 import com.woowacourse.friendogly.domain.repository.PetRepository
 import kotlinx.datetime.LocalDate
+import okhttp3.MultipartBody
 
 class PostPetUseCase(
     private val repository: PetRepository,
@@ -15,7 +16,7 @@ class PostPetUseCase(
         birthday: LocalDate,
         sizeType: SizeType,
         gender: Gender,
-        imageUrl: String,
+        file: MultipartBody.Part?,
     ): Result<Pet> =
         repository.postPet(
             name = name,
@@ -23,6 +24,6 @@ class PostPetUseCase(
             birthday = birthday,
             sizeType = sizeType,
             gender = gender,
-            imageUrl = imageUrl,
+            file = file,
         )
 }

@@ -1,16 +1,18 @@
 package com.woowacourse.friendogly.remote.api
 
 class ApiClient {
-    object Footprint {
+    object Footprints {
         private const val BASE_URL = "/footprints"
         const val POST_FOOTPRINT = BASE_URL
-        const val GET_FOOTPRINTS = BASE_URL
+        const val GET_FOOTPRINTS_NEAR = "$BASE_URL/near"
+        const val GET_FOOTPRINT_INFO = "$BASE_URL/{footprintId}"
         const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
     }
 
     object Member {
         private const val BASE_URL = "/members"
         const val POST_MEMBER = BASE_URL
+        const val GET_MEMBER_MINE = "$BASE_URL/mine"
     }
 
     object Pet {

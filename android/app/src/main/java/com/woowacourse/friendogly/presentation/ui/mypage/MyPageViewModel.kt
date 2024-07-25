@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.woowacourse.friendogly.domain.usecase.GetMemberMineUseCase
 import com.woowacourse.friendogly.domain.usecase.GetPetsMineUseCase
 import com.woowacourse.friendogly.presentation.base.BaseViewModel
 import com.woowacourse.friendogly.presentation.base.BaseViewModelFactory
@@ -14,6 +15,7 @@ import java.time.LocalDate
 
 class MyPageViewModel(
     private val getPetsMineUseCase: GetPetsMineUseCase,
+    private val getMemberMineUseCase: GetMemberMineUseCase,
 ) : BaseViewModel(), MyPageActionHandler {
     private val _uiState: MutableLiveData<MyPageUiState> = MutableLiveData(MyPageUiState())
     val uiState: LiveData<MyPageUiState> get() = _uiState
@@ -23,20 +25,27 @@ class MyPageViewModel(
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
     init {
+        fetchMemberMine()
         fetchPetMine()
     }
 
-    fun fetchPetMine() {
-        val state = _uiState.value ?: return
+    private fun fetchMemberMine() {
+        viewModelScope.launch {
+            getMemberMineUseCase().onSuccess { member ->
+                val state = _uiState.value ?: return@launch
+                _uiState.value =
+                    state.copy(nickname = member.name, email = member.email, tag = member.tag)
+            }.onFailure {
+                // TODO 예외 처리
+            }
+        }
+    }
 
+    fun fetchPetMine() {
         viewModelScope.launch {
             getPetsMineUseCase().onSuccess { pets ->
-                _uiState.value =
-                    state.copy(
-                        nickname = "손흥민",
-                        email = "tottenham@gmail.com",
-                        pets = pets,
-                    )
+                val state = _uiState.value ?: return@launch
+                _uiState.value = state.copy(pets = pets)
             }.onFailure {
                 // TODO 예외 처리
             }
@@ -91,10 +100,14 @@ class MyPageViewModel(
                 ),
             )
 
-        fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
+        fun factory(
+            getPetsMineUseCase: GetPetsMineUseCase,
+            getMemberMineUseCase: GetMemberMineUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 MyPageViewModel(
                     getPetsMineUseCase = getPetsMineUseCase,
+                    getMemberMineUseCase = getMemberMineUseCase,
                 )
             }
         }

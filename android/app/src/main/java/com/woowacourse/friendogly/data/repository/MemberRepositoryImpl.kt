@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.data.mapper.toDomain
 import com.woowacourse.friendogly.data.source.MemberDataSource
 import com.woowacourse.friendogly.domain.model.Member
 import com.woowacourse.friendogly.domain.repository.MemberRepository
+import okhttp3.MultipartBody
 
 class MemberRepositoryImpl(
     private val source: MemberDataSource,
@@ -11,5 +12,10 @@ class MemberRepositoryImpl(
     override suspend fun postMember(
         name: String,
         email: String,
-    ): Result<Member> = source.postMember(name = name, email = email).mapCatching { result -> result.toDomain() }
+        file: MultipartBody.Part?,
+    ): Result<Member> =
+        source.postMember(name = name, email = email, file = file)
+            .mapCatching { result -> result.toDomain() }
+
+    override suspend fun getMemberMine(): Result<Member> = source.getMemberMine().mapCatching { result -> result.toDomain() }
 }
