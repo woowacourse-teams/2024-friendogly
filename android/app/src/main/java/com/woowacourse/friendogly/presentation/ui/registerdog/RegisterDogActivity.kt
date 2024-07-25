@@ -2,20 +2,21 @@ package com.woowacourse.friendogly.presentation.ui.registerdog
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.activity.viewModels
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.woowacourse.friendogly.R
 import com.woowacourse.friendogly.application.di.AppModule
-import com.woowacourse.friendogly.databinding.FragmentRegisterDogBinding
-import com.woowacourse.friendogly.presentation.base.BaseFragment
+import com.woowacourse.friendogly.databinding.ActivityRegisterDogBinding
+import com.woowacourse.friendogly.presentation.base.BaseActivity
 import com.woowacourse.friendogly.presentation.base.observeEvent
 import com.woowacourse.friendogly.presentation.ui.registerdog.bottom.EditDogBirthdayBottomSheet
 import com.woowacourse.friendogly.presentation.ui.registerdog.bottom.EditDogProfileImageBottomSheet
@@ -27,12 +28,11 @@ import com.woowacourse.friendogly.presentation.utils.toMultipartBody
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class RegisterDogFragment :
-    BaseFragment<FragmentRegisterDogBinding>(R.layout.fragment_register_dog) {
+class RegisterDogActivity :
+    BaseActivity<ActivityRegisterDogBinding>(R.layout.activity_register_dog) {
     private val viewModel: RegisterDogViewModel by viewModels {
         RegisterDogViewModel.factory(postPetUseCase = AppModule.getInstance().postPetUseCase)
     }
-    private val navController by lazy { findNavController() }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>
@@ -40,7 +40,7 @@ class RegisterDogFragment :
     private lateinit var cropImageOptions: CropImageOptions
     private var cameraUri: Uri? = null
 
-    override fun initViewCreated() {
+    override fun initCreateView() {
         initDataBinding()
         initObserve()
         initEditText()
@@ -75,8 +75,8 @@ class RegisterDogFragment :
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
-                is RegisterDogNavigationAction.NavigateToBack -> navController.popBackStack()
-                is RegisterDogNavigationAction.NavigateToMyPage -> navController.popBackStack()
+                is RegisterDogNavigationAction.NavigateToBack -> finish()
+                is RegisterDogNavigationAction.NavigateToMyPage -> finish()
                 is RegisterDogNavigationAction.NavigateToSetProfileImage -> editProfileImageBottomSheet()
                 is RegisterDogNavigationAction.NavigateToSetBirthday ->
                     editBirthdayBottomSheet(action.year, action.month)
@@ -124,20 +124,20 @@ class RegisterDogFragment :
     }
 
     private fun handleCroppedImage(uri: Uri) {
-        val bitmap = uri.toBitmap(requireContext())
+        val bitmap = uri.toBitmap(this)
         viewModel.updateDogProfileImage(bitmap)
-        val file = saveBitmapToFile(requireContext(), bitmap)
+        val file = saveBitmapToFile(this, bitmap)
         val partBody = file.toMultipartBody()
         viewModel.updateDogProfileFile(partBody)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initEditText() {
-        binding.etUserName.customOnFocusChangeListener(requireContext())
-        binding.etDescription.customOnFocusChangeListener(requireContext())
+        binding.etUserName.customOnFocusChangeListener(this)
+        binding.etDescription.customOnFocusChangeListener(this)
 
         binding.constraintLayoutRegisterDogMain.setOnTouchListener { _, _ ->
-            requireActivity().hideKeyboard()
+            this.hideKeyboard()
             binding.etUserName.clearFocus()
             binding.etDescription.clearFocus()
             false
@@ -151,12 +151,12 @@ class RegisterDogFragment :
                 clickCamera = { getCaptureImage() },
             )
 
-        dialog.show(parentFragmentManager, TAG)
+        dialog.show(supportFragmentManager, "tag")
     }
 
     private fun getCaptureImage() {
         cameraUri = createImageFile()
-        cameraLauncher.launch(cameraUri)
+        cameraUri?.let { cameraLauncher.launch(it) }
     }
 
     private fun createImageFile(): Uri? {
@@ -166,7 +166,7 @@ class RegisterDogFragment :
                 put(MediaStore.Images.Media.DISPLAY_NAME, "img_$now.jpg")
                 put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
             }
-        return requireContext().contentResolver.insert(
+        return this.contentResolver.insert(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             contentValues,
         )
@@ -183,10 +183,12 @@ class RegisterDogFragment :
                 clickSubmit = { year, month -> viewModel.updateDogBirthday(year, month) },
             )
 
-        dialog.show(parentFragmentManager, TAG)
+        dialog.show(supportFragmentManager, "tag")
     }
 
     companion object {
-        private const val TAG = "RegisterDogFragment"
+        fun getIntent(context: Context): Intent {
+            return Intent(context, RegisterDogActivity::class.java)
+        }
     }
 }

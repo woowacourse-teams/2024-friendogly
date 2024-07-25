@@ -4,7 +4,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.navigation.safeargs)
     id("kotlin-kapt")
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "1.9.22"
@@ -74,7 +73,6 @@ dependencies {
 
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.android)
-    implementation(libs.bundles.navigation)
     implementation(libs.bundles.google)
     implementation(libs.bundles.kakao)
     implementation(libs.bundles.naver)

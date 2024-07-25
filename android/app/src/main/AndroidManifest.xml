@@ -19,6 +19,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.dogdetail.DogDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.ui.registerdog.RegisterDogActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.ui.group.detail.GroupDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -41,8 +49,8 @@
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true"
-            android:theme="@style/Theme.Friendogly.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Friendogly.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
