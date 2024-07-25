@@ -40,9 +40,7 @@ public class ClubCommandService {
 
         Club newClub = clubRepository.save(request.toEntity(member));
 
-        List<Pet> participatingPets = request.participatingPetsId().stream()
-                .map(id -> petRepository.findById(id).orElseThrow(() -> new FriendoglyException("강아지 정보를 찾지 못했습니다.")))
-                .toList();
+        List<Pet> participatingPets = mapToPets(request.participatingPetsId());
 
         List<String> petImageUrls = participatingPets.stream()
                 .map(Pet::getImageUrl)
