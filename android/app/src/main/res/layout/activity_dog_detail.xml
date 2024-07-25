@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.dogdetail.DogDetailViewModel" />
+            type="com.happy.friendogly.presentation.ui.dogdetail.DogDetailViewModel" />
 
     </data>
 

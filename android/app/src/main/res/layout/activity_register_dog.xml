@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.woowacourse.friendogly.presentation.ui.registerdog.DogSize" />
+        <import type="com.happy.friendogly.presentation.ui.registerdog.DogSize" />
 
-        <import type="com.woowacourse.friendogly.presentation.ui.registerdog.DogGender" />
+        <import type="com.happy.friendogly.presentation.ui.registerdog.DogGender" />
 
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.registerdog.RegisterDogViewModel" />
+            type="com.happy.friendogly.presentation.ui.registerdog.RegisterDogViewModel" />
     </data>
 
     <ScrollView

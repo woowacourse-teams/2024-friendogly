@@ -7,11 +7,11 @@
 
         <variable
             name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
+            type="com.happy.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
 
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.add.GroupAddViewModel" />
     </data>
 
     <LinearLayout

@@ -9,12 +9,12 @@
 
         <variable
             name="pet"
-            type="com.woowacourse.friendogly.domain.model.Pet" />
+            type="com.happy.friendogly.domain.model.Pet" />
 
 
         <variable
             name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.mypage.MyPageActionHandler" />
+            type="com.happy.friendogly.presentation.ui.mypage.MyPageActionHandler" />
 
 
     </data>

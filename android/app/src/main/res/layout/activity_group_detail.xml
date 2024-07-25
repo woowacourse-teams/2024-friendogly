@@ -8,7 +8,7 @@
 
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group.detail.GroupDetailViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.detail.GroupDetailViewModel" />
     </data>
 
     <ScrollView

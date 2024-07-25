@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.select.DogSelectViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

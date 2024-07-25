@@ -6,10 +6,10 @@
     <data>
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.add.GroupAddViewModel" />
         <variable
             name="actionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
+            type="com.happy.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,11 +6,11 @@
     <data>
         <variable
             name="dogSelectActionHandler"
-            type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectActionHandler" />
+            type="com.happy.friendogly.presentation.ui.group.select.DogSelectActionHandler" />
 
         <variable
             name="dogUiModel"
-            type="com.woowacourse.friendogly.presentation.ui.group.select.DogSelectUiModel" />
+            type="com.happy.friendogly.presentation.ui.group.select.DogSelectUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,10 +7,10 @@
     <data>
         <variable
             name="groupFilterSelector"
-            type="com.woowacourse.friendogly.presentation.ui.group.model.GroupFilterSelector" />
+            type="com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector" />
         <variable
             name="vm"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.GroupListViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.list.GroupListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
