@@ -34,14 +34,17 @@ class ProfileSettingViewModel(
     }
 
     fun submitProfileSelection() {
-        val nickname = nickname.value ?: return
-        if (nickname.isBlank()) return
-        if (regex.matches(nickname)) return
         viewModelScope.launch {
+            val nickname = nickname.value ?: return@launch
+            if (nickname.isBlank()) return@launch
+            if (regex.matches(nickname)) return@launch
+            val profilePath = _uiState.value?.profilePath
+
             // TODO email 필드는 임시로 넣어두었습니다.
             postMemberUseCase(
                 name = nickname,
                 email = "test@banggapge.com",
+                file = _uiState.value?.profilePath,
             ).onSuccess { member ->
                 saveJwaToken(member.id)
             }.onFailure {

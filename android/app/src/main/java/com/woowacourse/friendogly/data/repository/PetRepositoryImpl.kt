@@ -8,6 +8,7 @@ import com.woowacourse.friendogly.domain.model.Pet
 import com.woowacourse.friendogly.domain.model.SizeType
 import com.woowacourse.friendogly.domain.repository.PetRepository
 import kotlinx.datetime.LocalDate
+import okhttp3.MultipartBody
 
 class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
     override suspend fun getPetsMine(): Result<List<Pet>> =
@@ -19,7 +20,7 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
         birthday: LocalDate,
         sizeType: SizeType,
         gender: Gender,
-        imageUrl: String,
+        file: MultipartBody.Part?,
     ): Result<Pet> =
         source.postPet(
             name = name,
@@ -27,6 +28,6 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
             birthday = birthday,
             sizeType = sizeType.toData(),
             gender = gender.toData(),
-            imageUrl = imageUrl,
+            file = file,
         ).mapCatching { result -> result.toDomain() }
 }

@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.domain.model.Gender
 import com.woowacourse.friendogly.domain.model.Pet
 import com.woowacourse.friendogly.domain.model.SizeType
 import kotlinx.datetime.LocalDate
+import okhttp3.MultipartBody
 
 interface PetRepository {
     suspend fun getPetsMine(): Result<List<Pet>>
@@ -14,6 +15,6 @@ interface PetRepository {
         birthday: LocalDate,
         sizeType: SizeType,
         gender: Gender,
-        imageUrl: String,
+        file: MultipartBody.Part?,
     ): Result<Pet>
 }

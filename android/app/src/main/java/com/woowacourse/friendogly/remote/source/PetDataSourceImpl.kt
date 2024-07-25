@@ -9,6 +9,7 @@ import com.woowacourse.friendogly.remote.mapper.toData
 import com.woowacourse.friendogly.remote.mapper.toRemote
 import com.woowacourse.friendogly.remote.model.request.PostPetRequest
 import kotlinx.datetime.LocalDate
+import okhttp3.MultipartBody
 
 class PetDataSourceImpl(private val service: PetService) : PetDataSource {
     override suspend fun getPetsMine(): Result<List<PetDto>> =
@@ -22,7 +23,7 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
         birthday: LocalDate,
         sizeType: SizeTypeDto,
         gender: GenderDto,
-        imageUrl: String,
+        file: MultipartBody.Part?,
     ): Result<PetDto> =
         runCatching {
             val body =
@@ -32,9 +33,8 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
                     birthDate = birthday,
                     sizeType = sizeType.toRemote(),
                     gender = gender.toRemote(),
-                    imageUrl = imageUrl,
                 )
 
-            service.postPet(body = body).data.toData()
+            service.postPet(body = body, file = file).data.toData()
         }
 }

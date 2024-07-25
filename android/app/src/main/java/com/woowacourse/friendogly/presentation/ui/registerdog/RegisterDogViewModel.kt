@@ -112,7 +112,7 @@ class RegisterDogViewModel(
                     birthday = birthday,
                     sizeType = dogSize.toSizeType(),
                     gender = dogGender.toGender(state.neutering),
-                    imageUrl = "https://docs.api.com",
+                    file = state.profilePath,
                 ).onSuccess {
                     _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
                 }.onFailure {
