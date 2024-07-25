@@ -37,14 +37,16 @@ class WoofViewModel(
     fun markFootprint(latLng: LatLng) {
         viewModelScope.launch {
             getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
-                if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
-                    loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
-                } else {
+                if (!footPrintMarkBtnInfo.hasPet) {
+                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPetSnackbar)
+                } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     _snackbarActions.emit(
-                        WoofSnackbarActions.ShowCantMarkSnackbar(
+                        WoofSnackbarActions.ShowCantClickMarkBtnSnackbar(
                             footPrintMarkBtnInfo.remainingTime(),
                         ),
                     )
+                } else {
+                    loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
                 }
             }.onFailure {
             }

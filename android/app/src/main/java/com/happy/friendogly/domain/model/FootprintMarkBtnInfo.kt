@@ -4,7 +4,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 
-data class FootprintMarkBtnInfo(val createdAt: LocalDateTime?) {
+data class FootprintMarkBtnInfo(val createdAt: LocalDateTime?, val hasPet: Boolean) {
     fun isMarkBtnClickable(): Boolean {
         if (createdAt == null) return true
         val duration = Duration.between(createdAt.toJavaLocalDateTime(), java.time.LocalDateTime.now())

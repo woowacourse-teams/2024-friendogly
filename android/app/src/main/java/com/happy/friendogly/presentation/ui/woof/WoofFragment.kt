@@ -108,7 +108,16 @@ class WoofFragment :
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
-                is WoofSnackbarActions.ShowCantMarkSnackbar -> {
+                is WoofSnackbarActions.ShowHasNotPetSnackbar ->
+                    showSnackbar(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_has_not_pet,
+                            ),
+                        ),
+                    )
+
+                is WoofSnackbarActions.ShowCantClickMarkBtnSnackbar -> {
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -214,7 +223,7 @@ class WoofFragment :
 
     private fun LocalDateTime.toZIndex(): Int {
         val duration = Duration.between(this.toJavaLocalDateTime(), java.time.LocalDateTime.now())
-        return (duration.toHours() * 100000000 + duration.toMinutes() * 1000000 + duration.toMillis()).toInt()
+        return Int.MAX_VALUE - (duration.toHours() * 100000000 + duration.toMinutes() * 1000000 + duration.toMillis()).toInt()
     }
 
     private fun setUpMarkerAction(
