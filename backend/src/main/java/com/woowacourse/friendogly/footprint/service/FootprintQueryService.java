@@ -61,7 +61,7 @@ public class FootprintQueryService {
         LocalDateTime createdAt = footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
                 .map(Footprint::getCreatedAt)
                 .orElse(null);
-        boolean hasPet = !petRepository.findByMemberId(memberId).isEmpty();
+        boolean hasPet = petRepository.existsByMemberId(memberId);
 
         return new FindMyLatestFootprintTimeAndPetExistenceResponse(createdAt, hasPet);
     }
