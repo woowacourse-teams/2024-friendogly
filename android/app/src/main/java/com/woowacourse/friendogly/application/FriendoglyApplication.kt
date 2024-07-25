@@ -9,13 +9,9 @@ import com.woowacourse.friendogly.application.di.AppModule
 class FriendoglyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        initNaverMapSdk()
-        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
-        AppModule.setInstance(applicationContext)
-    }
-
-    private fun initNaverMapSdk() {
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIEND_ID)
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+        AppModule.setInstance(applicationContext)
     }
 }
