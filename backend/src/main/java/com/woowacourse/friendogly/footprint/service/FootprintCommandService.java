@@ -58,7 +58,8 @@ public class FootprintCommandService {
         return new SaveFootprintResponse(
                 footprint.getId(),
                 footprint.getLocation().getLatitude(),
-                footprint.getLocation().getLongitude()
+                footprint.getLocation().getLongitude(),
+                footprint.getCreatedAt()
         );
     }
 
