@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="18dp"
-        android:background="@color/gray03"
+        android:background="@color/gray200"
         app:layout_constraintTop_toBottomOf="@id/tv_chat_setting_alarm" />
 
     <TextView
@@ -240,7 +240,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="18dp"
-        android:background="@color/gray03"
+        android:background="@color/gray200"
         app:layout_constraintTop_toBottomOf="@id/layout_chat_dog_gender" />
 
     <TextView

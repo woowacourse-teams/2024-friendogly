@@ -7,21 +7,24 @@
 
     <color name="red">#CD3838</color>
 
-    <color name="gray10">#212121</color>
-    <color name="gray09">#424242</color>
-    <color name="gray08">#616161</color>
-    <color name="gray07">#757575</color>
-    <color name="gray06">#9E9E9E</color>
-    <color name="gray05">#BDBDBD</color>
-    <color name="gray04">#E0E0E0</color>
-    <color name="gray03">#EEEEEE</color>
-    <color name="gray02">#F5F5F5</color>
-    <color name="gray01">#FAFAFA</color>
+    <color name="gray900">#15171E</color>
+    <color name="gray800">#1E1E20</color>
+    <color name="gray700">#353638</color>
+    <color name="gray600">#5C5E62</color>
+    <color name="gray500">#83858A</color>
+    <color name="gray400">#ABADB2</color>
+    <color name="gray300">#D1D3D9</color>
+    <color name="gray200">#EAECF0</color>
+    <color name="gray100">#F2F4F5</color>
+    <color name="gray50">#FAFAFA</color>
 
-    <color name="orange07">#FF821E</color>
-    <color name="orange05">#FFB377</color>
-    <color name="orange03">#FFCBA1</color>
-    <color name="orange01">#FFE8D6</color>
+    <color name="coral700">#C72811</color>
+    <color name="coral500">#F7634E</color>
+    <color name="coral400">#FF7C6B</color>
+    <color name="coral300">#FA9487</color>
+    <color name="coral100">#F6D0CB</color>
+    <color name="coral50">#FFEBE9</color>
+    <color name="coral30">#FFF5F3</color>
 
     <color name="blue">#8AABFF</color>
     <color name="map_circle">#1A6568EB</color>

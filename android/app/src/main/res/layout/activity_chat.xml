@@ -68,7 +68,7 @@
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:background="@drawable/rect_gray03_fill_16"
-            android:backgroundTint="@color/gray02"
+            android:backgroundTint="@color/gray100"
             android:hint="@string/chat_send_hint_message"
             android:maxLines="1"
             android:paddingHorizontal="22dp"
