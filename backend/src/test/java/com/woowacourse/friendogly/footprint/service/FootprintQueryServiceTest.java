@@ -7,7 +7,7 @@ import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+// TODO: Member, Dog 테스트 픽스처 생성
 class FootprintQueryServiceTest extends ServiceTest {
 
     @Autowired
@@ -175,9 +176,9 @@ class FootprintQueryServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 있는 경우")
+    @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")
     @Test
-    void findMyLatestFootprintTime_MyFootprintExists() {
+    void findMyLatestFootprintTime_MyFootprintExists_PetExists() {
         Member member = memberRepository.save(
                 Member.builder()
                         .name("name")
@@ -195,7 +196,7 @@ class FootprintQueryServiceTest extends ServiceTest {
                 (?, 0.22222, 0.22222, ?, FALSE);
                 """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
-        LocalDateTime time = footprintQueryService.findMyLatestFootprintTime(member.getId()).createdAt();
+        LocalDateTime time = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId()).createdAt();
 
         assertAll(
                 () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
@@ -204,9 +205,9 @@ class FootprintQueryServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("자신이 마지막으로 발자국 찍은 시간 조회 - 찍은 발자국이 없는 경우")
+    @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 O)")
     @Test
-    void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
+    void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetExists() {
         Member member = memberRepository.save(
                 Member.builder()
                         .name("name")
@@ -214,8 +215,43 @@ class FootprintQueryServiceTest extends ServiceTest {
                         .build()
         );
 
-        assertThat(footprintQueryService.findMyLatestFootprintTime(member.getId()))
-                .extracting(FindMyLatestFootprintTimeResponse::createdAt)
-                .isNull();
+        petRepository.save(
+                Pet.builder()
+                        .member(member)
+                        .name("petname1")
+                        .description("petdescription1")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
+                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
+
+        assertAll(
+                () -> assertThat(response.createdAt()).isNull(),
+                () -> assertThat(response.hasPet()).isTrue()
+        );
+    }
+
+    @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 X)")
+    @Test
+    void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetDoesNotExist() {
+        Member member = memberRepository.save(
+                Member.builder()
+                        .name("name")
+                        .email("test@test.com")
+                        .build()
+        );
+
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
+                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
+
+        assertAll(
+                () -> assertThat(response.createdAt()).isNull(),
+                () -> assertThat(response.hasPet()).isFalse()
+        );
     }
 }

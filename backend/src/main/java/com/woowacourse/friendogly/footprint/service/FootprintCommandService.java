@@ -4,10 +4,10 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
+import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -27,15 +27,18 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final FileStorageManager fileStorageManager;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
+            PetRepository petRepository,
+            FileStorageManager fileStorageManager
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
+        this.fileStorageManager = fileStorageManager;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -80,7 +83,7 @@ public class FootprintCommandService {
     public UpdateFootprintImageResponse updateFootprintImage(
             Long memberId,
             Long footprintId,
-            UpdateFootprintImageRequest request
+            MultipartFile file
     ) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
@@ -88,14 +91,11 @@ public class FootprintCommandService {
         Footprint footprint = footprintRepository.findById(footprintId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
 
-        if (!footprint.isCreatedBy(memberId)) {
+        if (!footprint.isCreatedBy(member.getId())) {
             throw new FriendoglyException("자신의 발자국만 수정할 수 있습니다.");
         }
 
-        MultipartFile multipartFile = request.imageFile();
-        // TODO: 더미 데이터 URL입니다. 나중에 이미지 저장소(AWS S3)와 연동 필요 !!!
-        // TODO: 연동 완료되면 테스트도 작성 필요합니다.
-        String imageUrl = "https://img.extmovie.com/files/attach/images/148/921/189/074/6a71e831234e113e3ed215405098109c.jpg";
+        String imageUrl = fileStorageManager.uploadFile(file);
         footprint.updateImageUrl(imageUrl);
         return new UpdateFootprintImageResponse(imageUrl);
     }

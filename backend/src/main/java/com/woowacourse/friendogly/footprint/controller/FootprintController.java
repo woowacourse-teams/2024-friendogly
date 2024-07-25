@@ -4,8 +4,7 @@ import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.request.UpdateFootprintImageRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -17,13 +16,13 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/footprints")
@@ -71,21 +70,23 @@ public class FootprintController {
     }
 
     @GetMapping("/mine/latest")
-    public ApiResponse<FindMyLatestFootprintTimeResponse> findMyLatestFootprintTime(@Auth Long memberId) {
+    public ApiResponse<FindMyLatestFootprintTimeAndPetExistenceResponse> findMyLatestFootprintTimeAndPetExistence(
+            @Auth Long memberId
+    ) {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
-        FindMyLatestFootprintTimeResponse response = footprintQueryService.findMyLatestFootprintTime(memberId);
+        FindMyLatestFootprintTimeAndPetExistenceResponse response
+                = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
     }
 
-    @PatchMapping("/image/{footprintId}")
+    @PostMapping("/image/{footprintId}")
     public ApiResponse<UpdateFootprintImageResponse> updateFootprintImage(
             @Auth Long memberId,
             @PathVariable Long footprintId,
-            @ModelAttribute UpdateFootprintImageRequest request
+            @RequestParam("file") MultipartFile file
     ) {
-        // TODO: S3가 구현되고 명세가 확정되면 그 때 문서화하기
         UpdateFootprintImageResponse response =
-                footprintCommandService.updateFootprintImage(memberId, footprintId, request);
+                footprintCommandService.updateFootprintImage(memberId, footprintId, file);
         return ApiResponse.ofSuccess(response);
     }
 }

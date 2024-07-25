@@ -8,8 +8,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -21,10 +23,11 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.footprint.controller.FootprintController;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeResponse;
+import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import com.woowacourse.friendogly.pet.domain.Gender;
@@ -36,6 +39,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 
 @WebMvcTest(FootprintController.class)
 public class FootprintApiDocsTest extends RestDocsTest {
@@ -201,14 +205,14 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("자신의 마지막 발자국 시간 조회")
+    @DisplayName("자신의 마지막 발자국 시간 및 펫 존재 여부 조회")
     @Test
-    void findMyLatestFootprintTime() throws Exception {
-        FindMyLatestFootprintTimeResponse response = new FindMyLatestFootprintTimeResponse(
-                LocalDateTime.now().minusHours(1)
+    void findMyLatestFootprintTimeAndPetExistence() throws Exception {
+        FindMyLatestFootprintTimeAndPetExistenceResponse response = new FindMyLatestFootprintTimeAndPetExistenceResponse(
+                LocalDateTime.now().minusHours(1), true
         );
 
-        given(footprintQueryService.findMyLatestFootprintTime(any()))
+        given(footprintQueryService.findMyLatestFootprintTimeAndPetExistence(any()))
                 .willReturn(response);
 
         mockMvc
@@ -226,9 +230,46 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.createdAt").description("자신의 가장 최근 발자국 생성 시간")
+                                        fieldWithPath("data.createdAt").description("자신의 가장 최근 발자국 생성 시간"),
+                                        fieldWithPath("data.hasPet").description("자신의 펫 존재 여부 (1마리라도 펫 존재 = true)")
                                 )
-                                .responseSchema(Schema.schema("FindMyLatestFootprintTimeResponse"))
+                                .responseSchema(Schema.schema("FindMyLatestFootprintTimeAndPetExistenceResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("자신의 발자국에 이미지 업로드")
+    @Test
+    void updateFootprintImage() throws Exception {
+        UpdateFootprintImageResponse response = new UpdateFootprintImageResponse("https://picsum.photos/200");
+
+        given(footprintCommandService.updateFootprintImage(any(), any(), any()))
+                .willReturn(response);
+
+        mockMvc
+                .perform(multipart("/footprints/image/{footprintId}", 1L)
+                        .file(new MockMultipartFile(
+                                "file", "test.jpg", "image/jpg", (byte[]) null))
+                        .contentType(MULTIPART_FORM_DATA)
+                        .accept(APPLICATION_JSON)
+                        .header(AUTHORIZATION, 1L))
+                .andDo(print())
+                .andDo(document("footprints/updateFootprintImage",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Footprint API")
+                                .summary("자신의 발자국에 이미지 업로드 API (multipart/form-data)")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.imageUrl").description("업로드된 이미지의 URL")
+                                )
+                                .responseSchema(Schema.schema("UpdateFootprintImageResponse"))
                                 .build()
                         )
                 ))
