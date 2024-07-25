@@ -45,6 +45,7 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
     @DisplayName("발자국 저장 실패 - 존재하지 않는 Member ID")
     @Test
     void save_Fail_IllegalMemberId() {
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         -1L,
@@ -57,12 +58,14 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
     @DisplayName("발자국 저장 실패 - 30초 전에 이미 발자국을 남긴 경우")
     @Test
     void save_Fail_TooOftenSave() {
+        // given
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
                 VALUES
                 (?, 0.00000, 0.00000, TIMESTAMPADD(SECOND, -29, NOW()), FALSE)
                 """, member.getId());
 
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         member.getId(),

@@ -85,6 +85,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {
+        // given
         Member otherMember = memberRepository.save(
                 Member.builder()
                         .name("name2")
@@ -119,9 +120,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 new SaveFootprintRequest(0.0, farLongitude)
         );
 
+        // when
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
+        // then
         assertAll(
                 () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                         .containsExactly(0.0),
@@ -133,6 +136,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @DisplayName("현재 시간 기준 24시간 보다 이전에 생성된 발자국은 조회되지 않는다.")
     @Test
     void findNear24Hours() {
+        // given
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
                 VALUES
@@ -141,9 +145,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
                 """, member.getId(), member.getId(), member.getId());
 
+        // when
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
+        // then
         assertAll(
                 () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
                         .containsExactly(0.00000, 0.00000),
@@ -155,6 +161,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")
     @Test
     void findMyLatestFootprintTime_MyFootprintExists_PetExists() {
+        // given
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
 
         jdbcTemplate.update("""
@@ -165,8 +172,10 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 (?, 0.22222, 0.22222, ?, FALSE);
                 """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
+        // when
         LocalDateTime time = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId()).createdAt();
 
+        // then
         assertAll(
                 () -> assertThat(time.getHour()).isEqualTo(oneMinuteAgo.getHour()),
                 () -> assertThat(time.getMinute()).isEqualTo(oneMinuteAgo.getMinute()),
@@ -177,9 +186,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 O)")
     @Test
     void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetExists() {
+        // when
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId());
 
+        // then
         assertAll(
                 () -> assertThat(response.createdAt()).isNull(),
                 () -> assertThat(response.hasPet()).isTrue()
@@ -189,6 +200,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 X, 강아지 X)")
     @Test
     void findMyLatestFootprintTime_MyFootprintDoesNotExist_PetDoesNotExist() {
+        // given
         Member memberWithoutPet = memberRepository.save(
                 Member.builder()
                         .name("강아지없어요")
@@ -196,9 +208,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         .build()
         );
 
+        // when
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberWithoutPet.getId());
 
+        // then
         assertAll(
                 () -> assertThat(response.createdAt()).isNull(),
                 () -> assertThat(response.hasPet()).isFalse()
