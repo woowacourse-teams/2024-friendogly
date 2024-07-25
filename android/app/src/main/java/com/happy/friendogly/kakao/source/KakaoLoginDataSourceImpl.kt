@@ -1,12 +1,12 @@
 package com.happy.friendogly.kakao.source
 
 import android.content.Context
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
 import com.happy.friendogly.data.model.KakaoAccessTokenDto
 import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.kakao.mapper.toData
 import com.happy.friendogly.kakao.model.KakaoAccessTokenResponse
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

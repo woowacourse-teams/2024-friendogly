@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.naver.maps.geometry.LatLng
 import com.happy.friendogly.domain.mapper.toPresentation
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetLandMarksUseCase
@@ -16,6 +15,7 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class WoofViewModel(

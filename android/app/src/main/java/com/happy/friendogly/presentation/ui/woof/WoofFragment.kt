@@ -10,6 +10,14 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.viewModels
+import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.databinding.FragmentWoofBinding
+import com.happy.friendogly.presentation.base.BaseFragment
+import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
@@ -21,14 +29,6 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
-import com.happy.friendogly.databinding.FragmentWoofBinding
-import com.happy.friendogly.presentation.base.BaseFragment
-import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.model.FootprintUiModel
-import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 
 class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {

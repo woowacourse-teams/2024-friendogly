@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.happy.friendogly.local.di.LocalModule
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ClubService
@@ -10,6 +9,7 @@ import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.interceptor.AuthorizationInterceptor
 import com.happy.friendogly.remote.interceptor.ErrorResponseInterceptor
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
