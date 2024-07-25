@@ -143,4 +143,5 @@
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
     <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
+    <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
 </resources>

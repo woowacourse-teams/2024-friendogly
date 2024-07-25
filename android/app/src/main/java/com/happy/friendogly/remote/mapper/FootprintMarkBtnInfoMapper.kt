@@ -6,5 +6,6 @@ import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
 fun FootprintMarkBtnInfoResponse.toData(): FootprintMarkBtnInfoDto {
     return FootprintMarkBtnInfoDto(
         createdAt = createdAt,
+        hasPet = hasPet,
     )
 }

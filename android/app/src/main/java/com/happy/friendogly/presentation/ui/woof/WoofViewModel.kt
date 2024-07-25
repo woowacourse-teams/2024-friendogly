@@ -37,10 +37,16 @@ class WoofViewModel(
     fun markFootprint(latLng: LatLng) {
         viewModelScope.launch {
             getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
-                if (footPrintMarkBtnInfo.isMarkBtnClickable()) {
-                    loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
+                if (!footPrintMarkBtnInfo.hasPet) {
+                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPetSnackbar)
+                } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
+                    _snackbarActions.emit(
+                        WoofSnackbarActions.ShowCantClickMarkBtnSnackbar(
+                            footPrintMarkBtnInfo.remainingTime(),
+                        ),
+                    )
                 } else {
-                    _snackbarActions.emit(WoofSnackbarActions.ShowCantMarkSnackbar(footPrintMarkBtnInfo.remainingTime()))
+                    loadNearFootprints(latLng, footPrintMarkBtnInfo.toPresentation())
                 }
             }.onFailure {
             }
@@ -76,7 +82,7 @@ class WoofViewModel(
                 val state = uiState.value ?: WoofUiState()
                 _uiState.value =
                     state.copy(
-                        createdFootprintId = footprintSave.footprintId,
+                        footprintSave = footprintSave,
                         footprintMarkBtnInfo = footprintMarkBtnInfo,
                         nearFootprints = nearFootprints,
                     )

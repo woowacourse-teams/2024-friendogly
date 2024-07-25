@@ -8,5 +8,6 @@ fun FootprintSaveResponse.toData(): FootprintSaveDto {
         footprintId = id,
         latitude = latitude,
         longitude = longitude,
+        createdAt = createdAt,
     )
 }

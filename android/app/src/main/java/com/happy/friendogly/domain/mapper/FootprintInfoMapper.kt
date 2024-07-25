@@ -22,13 +22,8 @@ fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
     )
 }
 
-fun LocalDate.toAge(
-    currentDate: LocalDate =
-        LocalDate.parse(
-            java.time.LocalDate.now().toString(),
-        ),
-): String {
-    val period = Period.between(this.toJavaLocalDate(), currentDate.toJavaLocalDate())
+fun LocalDate.toAge(): String {
+    val period = Period.between(this.toJavaLocalDate(), java.time.LocalDate.now())
     val years = period.years
     val months = period.months
 
@@ -39,14 +34,9 @@ fun LocalDate.toAge(
     }
 }
 
-fun LocalDateTime.toDateOfVisit(
-    currentDateTime: LocalDateTime =
-        LocalDateTime.parse(
-            java.time.LocalDateTime.now().toString(),
-        ),
-): String {
+fun LocalDateTime.toDateOfVisit(): String {
     val duration =
-        Duration.between(this.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
+        Duration.between(this.toJavaLocalDateTime(), java.time.LocalDateTime.now())
 
     val minutes = duration.toMinutes()
     val hours = duration.toHours()

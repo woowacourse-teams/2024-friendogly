@@ -54,6 +54,7 @@ class ProfileSettingActivity :
                 is ProfileSettingNavigationAction.NavigateToSetProfileImage -> editProfileImageBottomSheet()
 
                 is ProfileSettingNavigationAction.NavigateToHome -> {
+                    finishAffinity()
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }

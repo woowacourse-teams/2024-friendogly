@@ -27,6 +27,9 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
+import java.time.Duration
 
 class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
@@ -74,9 +77,14 @@ class WoofFragment :
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            val footprintId = state.createdFootprintId ?: return@observe
+            val footprintSave = state.footprintSave ?: return@observe
             markNearFootPrints(footPrints = state.nearFootprints)
-            createMarker(footprintId = footprintId, latLng = latLng, isMine = true)
+            createMarker(
+                footprintId = footprintSave.footprintId,
+                createdAt = footprintSave.createdAt,
+                latLng = latLng,
+                isMine = true,
+            )
             moveCameraCenterPosition()
         }
 
@@ -100,7 +108,16 @@ class WoofFragment :
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
-                is WoofSnackbarActions.ShowCantMarkSnackbar -> {
+                is WoofSnackbarActions.ShowHasNotPetSnackbar ->
+                    showSnackbar(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_has_not_pet,
+                            ),
+                        ),
+                    )
+
+                is WoofSnackbarActions.ShowCantClickMarkBtnSnackbar -> {
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -188,6 +205,7 @@ class WoofFragment :
 
     private fun createMarker(
         footprintId: Long,
+        createdAt: LocalDateTime,
         latLng: LatLng,
         isMine: Boolean,
     ) {
@@ -197,9 +215,15 @@ class WoofFragment :
         marker.icon = OverlayImage.fromResource(iconImage)
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
+        marker.zIndex = createdAt.toZIndex()
         marker.map = map
 
         setUpMarkerAction(footprintId, marker)
+    }
+
+    private fun LocalDateTime.toZIndex(): Int {
+        val duration = Duration.between(this.toJavaLocalDateTime(), java.time.LocalDateTime.now())
+        return Int.MAX_VALUE - (duration.toHours() * 100000000 + duration.toMinutes() * 1000000 + duration.toMillis()).toInt()
     }
 
     private fun setUpMarkerAction(
@@ -220,6 +244,7 @@ class WoofFragment :
         footPrints.forEach { footPrint ->
             createMarker(
                 footprintId = footPrint.footprintId,
+                createdAt = footPrint.createdAt,
                 latLng = LatLng(footPrint.latitude, footPrint.longitude),
                 isMine = footPrint.isMine,
             )

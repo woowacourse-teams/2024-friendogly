@@ -4,16 +4,16 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 
-data class FootprintMarkBtnInfo(val createdAt: LocalDateTime?) {
-    fun isMarkBtnClickable(currentDateTime: LocalDateTime = LocalDateTime.parse(java.time.LocalDateTime.now().toString())): Boolean {
+data class FootprintMarkBtnInfo(val createdAt: LocalDateTime?, val hasPet: Boolean) {
+    fun isMarkBtnClickable(): Boolean {
         if (createdAt == null) return true
-        val duration = Duration.between(createdAt.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
+        val duration = Duration.between(createdAt.toJavaLocalDateTime(), java.time.LocalDateTime.now())
         return duration.toMillis() > SECONDS_LIMIT * MILLI_SECONDS
     }
 
-    fun remainingTime(currentDateTime: LocalDateTime = LocalDateTime.parse(java.time.LocalDateTime.now().toString())): Int {
+    fun remainingTime(): Int {
         if (createdAt == null) return NO_REMAINING_TIME
-        val duration = Duration.between(createdAt.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
+        val duration = Duration.between(createdAt.toJavaLocalDateTime(), java.time.LocalDateTime.now())
         val remainingTimeMillis = (SECONDS_LIMIT * MILLI_SECONDS) - duration.toMillis()
         if (remainingTimeMillis <= 0) {
             return NO_REMAINING_TIME

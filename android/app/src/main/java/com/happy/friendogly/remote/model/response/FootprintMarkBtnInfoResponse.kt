@@ -8,4 +8,5 @@ import kotlinx.serialization.Serializable
 data class FootprintMarkBtnInfoResponse(
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime?,
+    val hasPet: Boolean,
 )
