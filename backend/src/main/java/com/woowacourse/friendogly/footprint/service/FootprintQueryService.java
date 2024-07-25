@@ -11,6 +11,7 @@ import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
+import io.micrometer.common.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,11 @@ public class FootprintQueryService {
         boolean isMine = footprint.isCreatedBy(memberId);
 
         // TODO: 대표 펫을 지정하는 기능이 없어서, 임시로 0번째 index의 pet 리턴
-        return new FindOneFootprintResponse(member, pets.get(0), footprint, isMine);
+        if (StringUtils.isBlank(footprint.getImageUrl())) {
+            return FindOneFootprintResponse.withMainPetImage(member, pets.get(0), footprint, isMine);
+        }
+
+        return FindOneFootprintResponse.withFootprintImage(member, pets.get(0), footprint, isMine);
     }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
