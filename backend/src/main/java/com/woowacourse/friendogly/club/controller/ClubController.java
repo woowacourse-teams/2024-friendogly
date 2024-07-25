@@ -42,7 +42,8 @@ public class ClubController {
     @PostMapping
     public ResponseEntity<ApiResponse<SaveClubResponse>> save(
             @Auth Long memberId,
-            @Valid @RequestBody SaveClubRequest request) {
+            @Valid @RequestBody SaveClubRequest request
+    ) {
         SaveClubResponse response = clubCommandService.save(memberId, request);
         return ResponseEntity.created(URI.create("/clubs" + response.id())).body(ApiResponse.ofSuccess(response));
     }

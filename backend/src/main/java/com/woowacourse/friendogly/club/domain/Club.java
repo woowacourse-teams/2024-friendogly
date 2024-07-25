@@ -76,6 +76,7 @@ public class Club {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
+
     @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
     List<ClubMember> clubMembers = new ArrayList<>();
 
@@ -149,7 +150,6 @@ public class Club {
         clubMember.updateClub(this);
     }
 
-
     private void validateAlreadyExists(Member newMember) {
         if (clubMembers.stream()
                 .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), newMember.getId()))
@@ -209,6 +209,5 @@ public class Club {
                 .toList();
         clubPets.removeAll(participatingMemberPets);
         participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
-
     }
 }

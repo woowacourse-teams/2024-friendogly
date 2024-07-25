@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public record SaveClubResponse(
-
         Long id,
         String title,
         String content,

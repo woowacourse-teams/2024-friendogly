@@ -29,6 +29,7 @@ public record SaveClubRequest(
 
         @NotEmpty(message = "모임에 참여가능한 성별을 선택해주세요.")
         Set<Gender> allowedGenders,
+
         @NotEmpty(message = "모임에 참여가능한 댕댕이 사이즈를 선택해주세요.")
         Set<SizeType> allowedSizes,
 
