@@ -54,7 +54,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
     @Test
     void save() throws Exception {
         SaveFootprintRequest request = new SaveFootprintRequest(37.5173316, 127.1011661);
-        SaveFootprintResponse response = new SaveFootprintResponse(1L, 37.5173316, 127.1011661);
+        SaveFootprintResponse response = new SaveFootprintResponse(1L, 37.5173316, 127.1011661, LocalDateTime.now());
 
         given(footprintCommandService.save(any(), eq(request)))
                 .willReturn(response);
@@ -85,7 +85,8 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.id").description("생성된 발자국 ID"),
                                         fieldWithPath("data.latitude").description("생성된 발자국의 위도"),
-                                        fieldWithPath("data.longitude").description("생성된 발자국의 경도")
+                                        fieldWithPath("data.longitude").description("생성된 발자국의 경도"),
+                                        fieldWithPath("data.createdAt").description("발자국을 생성한 시간")
                                 )
                                 .requestSchema(Schema.schema("SaveFootprintRequest"))
                                 .responseSchema(Schema.schema("SaveFootprintResponse"))

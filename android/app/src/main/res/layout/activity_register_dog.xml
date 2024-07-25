@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
-                android:background="@drawable/rect_gray03_fill_16"
+                android:background="@drawable/rect_gray50_fill_12"
                 android:hint="@string/register_dog_name_hint"
                 android:maxLength="15"
                 android:maxLines="1"
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
-                android:background="@drawable/rect_gray03_fill_16"
+                android:background="@drawable/rect_gray50_fill_12"
                 android:hint="@string/description_hint"
                 android:maxLength="20"
                 android:maxLines="2"
@@ -312,7 +312,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
-                android:background="@drawable/rect_gray03_fill_16"
+                android:background="@drawable/rect_gray50_fill_12"
                 android:clickable="true"
                 android:text="@{@string/birthday(vm.uiState.dogBirthdayYear, vm.uiState.dogBirthdayMonth)}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -339,7 +339,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_birthday"
                 app:onSingleClick="@{() -> vm.registerDog()}"
-                tools:background="@color/blue" />
+                tools:background="@color/coral400" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

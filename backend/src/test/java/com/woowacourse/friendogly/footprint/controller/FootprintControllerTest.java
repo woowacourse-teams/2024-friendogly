@@ -182,7 +182,7 @@ class FootprintControllerTest {
                 .body("data.petBirthDate", is(pet1.getBirthDate().getValue().toString()))
                 .body("data.petSizeType", is(pet1.getSizeType().name()))
                 .body("data.petGender", is(pet1.getGender().name()))
-                .body("data.footprintImageUrl", is(footprint.getImageUrl()))
+                .body("data.footprintImageUrl", is(pet1.getImageUrl()))
                 .body("data.isMine", is(footprint.isCreatedBy(member1.getId())));
     }
 

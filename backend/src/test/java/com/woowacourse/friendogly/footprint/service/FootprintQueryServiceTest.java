@@ -15,6 +15,7 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.support.ServiceTest;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +36,8 @@ class FootprintQueryServiceTest extends ServiceTest {
     @Autowired
     private FootprintCommandService footprintCommandService;
 
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 찍은 경우 - 발자국 사진 URL 조회)")
+    @Transactional
     @Test
     void findOne() {
         // given
@@ -65,6 +67,9 @@ class FootprintQueryServiceTest extends ServiceTest {
                         .build()
         );
 
+        String footprintImageUrl = "https://picsum.photos/100";
+        footprint.updateImageUrl(footprintImageUrl);
+
         // when
         FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
 
@@ -76,6 +81,53 @@ class FootprintQueryServiceTest extends ServiceTest {
                 () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
                 () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
                 () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+                () -> assertThat(response.footprintImageUrl()).isEqualTo(footprintImageUrl),
+                () -> assertThat(response.isMine()).isTrue()
+        );
+    }
+
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 안 찍은 경우 - 펫 사진 URL 조회)")
+    @Test
+    void findOne_NoTakePicture() {
+        // given
+        Member member = memberRepository.save(
+                Member.builder()
+                        .name("name1")
+                        .email("test@test.com")
+                        .build()
+        );
+
+        Pet pet = petRepository.save(
+                Pet.builder()
+                        .member(member)
+                        .name("petname1")
+                        .description("petdescription1")
+                        .birthDate(LocalDate.now().minusYears(1))
+                        .sizeType(SizeType.MEDIUM)
+                        .gender(Gender.MALE_NEUTERED)
+                        .imageUrl("https://picsum.photos/200")
+                        .build()
+        );
+
+        Footprint footprint = footprintRepository.save(
+                Footprint.builder()
+                        .member(member)
+                        .location(new Location(0.0, 0.0))
+                        .build()
+        );
+
+        // when
+        FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.memberName()).isEqualTo("name1"),
+                () -> assertThat(response.petName()).isEqualTo("petname1"),
+                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
+                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
+                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
+                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+                () -> assertThat(response.footprintImageUrl()).isEqualTo(pet.getImageUrl()),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }
