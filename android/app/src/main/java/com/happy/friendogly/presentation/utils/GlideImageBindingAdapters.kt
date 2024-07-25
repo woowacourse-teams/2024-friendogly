@@ -28,7 +28,7 @@ fun ImageView.bindGlide(uri: String?) {
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     if (bitmap == null) {
-        this.setImageResource(R.drawable.img_dog)
+        this.setImageResource(R.drawable.img_profile_normal)
         return
     }
     val softwareBitmap = bitmap.toSoftwareBitmap()
@@ -43,7 +43,7 @@ fun ImageView.bindProfile1000(bitmap: Bitmap?) {
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(profilePath: String?) {
     if (profilePath == null) {
-        this.setImageResource(R.drawable.img_dog)
+        this.setImageResource(R.drawable.img_profile_normal)
         return
     }
 
