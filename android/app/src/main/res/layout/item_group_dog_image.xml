@@ -5,7 +5,7 @@
     <data>
         <variable
             name="woof"
-            type="com.woowacourse.friendogly.presentation.ui.group.list.model.GroupWoof" />
+            type="com.happy.friendogly.presentation.ui.group.list.model.GroupWoof" />
     </data>
 
     <ImageView

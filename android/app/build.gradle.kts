@@ -21,11 +21,11 @@ val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
 
 android {
-    namespace = "com.woowacourse.friendogly"
+    namespace = "com.happy.friendogly"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.woowacourse.friendogly"
+        applicationId = "com.happy.friendogly"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

@@ -7,7 +7,7 @@
 
         <variable
             name="dog"
-            type="com.woowacourse.friendogly.presentation.ui.mypage.Dog" />
+            type="com.happy.friendogly.presentation.ui.mypage.Dog" />
 
 
     </data>
