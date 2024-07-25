@@ -10,7 +10,7 @@
     <item
         android:id="@+id/woofFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_dog"
+        android:icon="@drawable/ic_map"
         android:title="@string/bottom_woof" />
 
     <item
