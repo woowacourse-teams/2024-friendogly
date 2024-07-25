@@ -53,7 +53,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/img_profile_normal" />
+                    tools:src="@drawable/img_profile_normal" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/rect_gray01_fill_16"
+                android:background="@drawable/rect_gray03_fill_16"
                 android:hint="@string/profile_setting_nickname_hint"
                 android:maxLength="15"
                 android:maxLines="1"
@@ -120,8 +120,7 @@
                 app:editBtnBackgroundTextColor="@{vm.nickname}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/gray100"
-                tools:background="@drawable/rect_coral04_fill_16" />
+                tools:background="@color/blue" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
