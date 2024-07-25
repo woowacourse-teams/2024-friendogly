@@ -1,7 +1,6 @@
 package com.happy.friendogly.presentation.ui.register
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -11,7 +10,6 @@ import com.happy.friendogly.databinding.ActivityRegisterBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
-import com.kakao.sdk.common.util.Utility
 
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
@@ -43,8 +41,6 @@ class RegisterActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition {
             viewModel.splashLoading.value == true
         }
-        var keyHash = Utility.getKeyHash(this)
-        Log.d( "keyhash :", "$keyHash")
     }
 
     private fun initCreateView() {
