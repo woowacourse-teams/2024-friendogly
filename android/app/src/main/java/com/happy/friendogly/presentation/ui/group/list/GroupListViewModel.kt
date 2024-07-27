@@ -18,6 +18,9 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
+    private val groupFilter =
+        GroupFilterSelector(groupList = listOf())
+
     private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupListUiModel>> get() = _groups
 
