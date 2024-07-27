@@ -5,7 +5,7 @@
     <data>
         <variable
             name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
+            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterActionHandler" />
         <variable
             name="filterName"
             type="java.lang.String" />
