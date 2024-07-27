@@ -3,9 +3,8 @@
 
     <data>
         <variable
-            name="handler"
-            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHandler" />
-
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterViewModel" />
     </data>
 
     <LinearLayout
