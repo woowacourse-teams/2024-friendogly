@@ -6,13 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHandler
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
+class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterItemActionHandler {
     private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
         MutableLiveData()
     val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
