@@ -1,8 +1,11 @@
 package com.happy.friendogly.presentation.ui.group.filter
 
 interface GroupFilterActionHandler {
-    fun selectGroupFilter(
-        filterName: String,
-        isSelected: Boolean,
-    )
+    fun changeParticipationFilter(filterName: String)
+
+    fun closeSheet()
+
+    fun selectFilters()
+
+    fun selectParticipationFilter()
 }
