@@ -55,7 +55,7 @@
             android:id="@+id/rcv_group_list_group"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
             app:layout_constraintBottom_toBottomOf="parent"

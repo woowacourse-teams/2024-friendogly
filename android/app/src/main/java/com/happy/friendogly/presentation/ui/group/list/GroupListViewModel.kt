@@ -117,4 +117,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
             )
         )
     }
+
+    override fun removeFilter(groupFilter: GroupFilter) {
+        groupFilterSelector.removeGroupFilter(filter = groupFilter)
+    }
 }

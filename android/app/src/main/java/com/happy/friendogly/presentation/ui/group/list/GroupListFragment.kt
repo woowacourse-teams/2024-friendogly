@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentGroupListBinding
