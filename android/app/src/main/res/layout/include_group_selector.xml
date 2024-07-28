@@ -5,9 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="groupFilterSelector"
-            type="com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector" />
+        <import type="com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter"/>
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.group.list.GroupListViewModel" />
@@ -20,6 +18,7 @@
         android:orientation="horizontal">
 
         <include
+            onSingleClick="@{()->vm.selectParticipationFilter()}"
             android:layout_marginStart="12dp"
             android:id="@+id/include_group_list_participation_filter"
             layout="@layout/include_group_filter"
@@ -30,22 +29,24 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
+            onSingleClick="@{()->vm.selectSizeFilter()}"
             android:id="@+id/include_group_list_size_filter"
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            app:filterName="@{groupFilterSelector.SIZE_FILTER_SUBJECT}"
+            app:filterName="@{GroupFilter.SIZE_FILTER_SUBJECT}"
             app:layout_constraintStart_toEndOf="@id/include_group_list_participation_filter"
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
+            onSingleClick="@{()->vm.selectGenderFilter()}"
             android:id="@+id/include_group_list_gender_filter"
             layout="@layout/include_group_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            app:filterName="@{groupFilterSelector.GENDER_FILTER_SUBJECT}"
+            app:filterName="@{GroupFilter.GENDER_FILTER_SUBJECT}"
             app:layout_constraintStart_toEndOf="@id/include_group_list_size_filter"
             app:layout_constraintTop_toTopOf="parent" />
 
