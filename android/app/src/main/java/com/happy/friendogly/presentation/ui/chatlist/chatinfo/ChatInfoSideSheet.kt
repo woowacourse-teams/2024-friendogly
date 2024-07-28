@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import com.happy.friendogly.R
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
+import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private var _binding: LayoutChatDrawerBinding? = null
@@ -45,7 +48,28 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             adapter.submitList(info.people)
             setChatInfo(info)
         }
+
+        clickAlarmSetting()
     }
+
+    private fun clickAlarmSetting() {
+        binding.switchChatSettingAlarm.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestNotificationPermission()
+            }
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (AlarmPermission.isShouldCheckVersion()) {
+            AlarmPermission(requireActivity()).askNotificationPermission { isPermitted ->
+                if (!isPermitted){
+                    Snackbar.make(binding.root, getString(R.string.chat_setting_alarm_alert), Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun setChatInfo(info: ChatInfoUiModel) {
         with(binding) {
