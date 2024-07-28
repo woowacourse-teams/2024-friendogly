@@ -1,46 +1,44 @@
-@file:Suppress("ktlint:standard:filename")
-
 package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.error.ApiExceptionDto
 import com.happy.friendogly.data.error.ErrorDataDto
 import com.happy.friendogly.data.error.ErrorDto
-import com.happy.friendogly.remote.error.ApiExceptionResponse
-import com.happy.friendogly.remote.error.ErrorDataResponse
-import com.happy.friendogly.remote.error.ErrorResponse
+import com.happy.friendogly.domain.error.ApiException
+import com.happy.friendogly.domain.error.Error
+import com.happy.friendogly.domain.error.ErrorData
 
-fun ApiExceptionResponse.toData(): ApiExceptionDto =
+fun ApiExceptionDto.toDomain(): ApiException =
     when (this) {
-        is ApiExceptionResponse.Unauthorized -> {
-            ApiExceptionDto.Unauthorized(message = this.message, error = this.error?.toData())
+        is ApiExceptionDto.Unauthorized -> {
+            ApiException.Unauthorized(message = message, error = this.error?.toDomain())
         }
 
-        is ApiExceptionResponse.Forbidden -> {
-            ApiExceptionDto.Forbidden(message = this.message, error = this.error?.toData())
+        is ApiExceptionDto.Forbidden -> {
+            ApiException.Forbidden(message = message, error = this.error?.toDomain())
         }
 
-        is ApiExceptionResponse.BadRequest -> {
-            ApiExceptionDto.BadRequest(message = this.message, error = this.error?.toData())
+        is ApiExceptionDto.BadRequest -> {
+            ApiException.BadRequest(message = message, error = this.error?.toDomain())
         }
 
-        is ApiExceptionResponse.NotFound -> {
-            ApiExceptionDto.NotFound(message = this.message, error = this.error?.toData())
+        is ApiExceptionDto.NotFound -> {
+            ApiException.NotFound(message = message, error = this.error?.toDomain())
         }
 
-        is ApiExceptionResponse.ServerError -> {
-            ApiExceptionDto.ServerError(message = this.message, error = this.error?.toData())
+        is ApiExceptionDto.ServerError -> {
+            ApiException.ServerError(message = message, error = this.error?.toDomain())
         }
     }
 
-fun ErrorResponse.toData(): ErrorDto {
-    return ErrorDto(
+fun ErrorDto.toDomain(): Error {
+    return Error(
         isSuccess = this.isSuccess,
-        data = this.data.toData(),
+        data = this.data.toDomain(),
     )
 }
 
-fun ErrorDataResponse.toData(): ErrorDataDto {
-    return ErrorDataDto(
+fun ErrorDataDto.toDomain(): ErrorData {
+    return ErrorData(
         errorCode = errorCode,
         errorMessage = errorMessage,
         detail = detail,

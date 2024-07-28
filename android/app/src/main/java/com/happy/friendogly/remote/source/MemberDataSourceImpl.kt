@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.source
 
-import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.model.MemberDto
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.remote.api.MemberService
