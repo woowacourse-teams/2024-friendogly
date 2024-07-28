@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,8 +19,8 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
-    private val groupFilter =
-        GroupFilterSelector(groupList = listOf())
+    var groupFilterSelector = GroupFilterSelector(groupList = listOf())
+        private set
 
     private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupListUiModel>> get() = _groups
@@ -27,7 +28,6 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
-    val groupFilterSelector = GroupFilterSelector()
 
     init {
         loadGroups()
@@ -43,11 +43,11 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                                listOf(
-                                    GroupFilter.SizeFilter.SmallDog,
-                                    GroupFilter.GenderFilter.Female,
-                                    GroupFilter.GenderFilter.NeutralizingMale,
-                                ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
+                            ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -63,10 +63,10 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                                listOf(
-                                    GroupFilter.SizeFilter.SmallDog,
-                                    GroupFilter.GenderFilter.Female,
-                                ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                            ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -83,11 +83,41 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                 }.flatten()
         }
 
+    fun initGroupFilter(filters: List<GroupFilter>) {
+        Log.d("sdjflsdfjl",filters.joinToString { it.filterName })
+        this.groupFilterSelector = GroupFilterSelector(groupList = filters)
+    }
+
     override fun loadGroup(groupId: Long) {
         _groupListEvent.emit(GroupListEvent.OpenGroup(groupId))
     }
 
     override fun addGroup() {
         _groupListEvent.emit(GroupListEvent.Navigation.NavigateToAddGroup)
+    }
+
+    override fun selectParticipationFilter() {
+        val participationFilter = participationFilter.value ?: return
+        _groupListEvent.emit(GroupListEvent.OpenParticipationFilter(participationFilter))
+    }
+
+    override fun selectSizeFilter() {
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        _groupListEvent.emit(
+            GroupListEvent.OpenFilterSelector(
+                groupFilterType = GroupFilter.SizeFilter.Init,
+                groupFilters = filters,
+            )
+        )
+    }
+
+    override fun selectGenderFilter() {
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        _groupListEvent.emit(
+            GroupListEvent.OpenFilterSelector(
+                groupFilterType = GroupFilter.GenderFilter.Init,
+                groupFilters = filters,
+            )
+        )
     }
 }

@@ -4,4 +4,10 @@ interface GroupListActionHandler {
     fun loadGroup(groupId: Long)
 
     fun addGroup()
+
+    fun selectParticipationFilter()
+
+    fun selectSizeFilter()
+
+    fun selectGenderFilter()
 }

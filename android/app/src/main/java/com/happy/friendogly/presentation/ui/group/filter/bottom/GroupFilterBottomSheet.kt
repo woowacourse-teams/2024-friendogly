@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.group.filter.bottom
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import com.happy.friendogly.presentation.ui.group.filter.GroupFilterViewModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 class GroupFilterBottomSheet(
-    private val groupFilter: GroupFilter,
+    private val groupFilterType: GroupFilter,
     private val currentFilters: List<GroupFilter>,
     private val selectFilters: (filters: List<GroupFilter>) -> Unit,
 ) : BottomSheetDialogFragment() {
@@ -33,7 +34,8 @@ class GroupFilterBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return when (groupFilter) {
+        Log.d("sdjflsdfjl", currentFilters.joinToString { it.filterName })
+        return when (groupFilterType) {
             is GroupFilter.SizeFilter -> {
                 _sizeBinding =
                     BottomSheetFilterSizeSelectorBinding.inflate(inflater, container, false)
@@ -52,6 +54,7 @@ class GroupFilterBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         viewModel.initGroupFilter(currentFilters)
         initDataBinding()
+        initCurrentFilter()
         initObserver()
     }
 
@@ -62,7 +65,7 @@ class GroupFilterBottomSheet(
     }
 
     private fun initDataBinding() {
-        when (groupFilter) {
+        when (groupFilterType) {
             is GroupFilter.SizeFilter -> {
                 sizeBinding.vm = viewModel
                 sizeBinding.lifecycleOwner = viewLifecycleOwner
@@ -85,6 +88,53 @@ class GroupFilterBottomSheet(
                 }
 
                 is GroupFilterEvent.SelectParticipation -> {}
+            }
+        }
+    }
+
+    private fun initCurrentFilter() {
+        currentFilters.forEach { filter ->
+            when (groupFilterType) {
+                is GroupFilter.SizeFilter -> initSizeFilter(filter)
+
+                is GroupFilter.GenderFilter -> initGenderFilter(filter)
+            }
+        }
+    }
+
+    private fun initSizeFilter(filter: GroupFilter){
+        with(sizeBinding) {
+            when (filter) {
+                GroupFilter.SizeFilter.BigDog ->
+                    includeFilterBig.checkboxGroupFilter.isChecked = true
+
+                GroupFilter.SizeFilter.MediumDog ->
+                    includeFilterMedium.checkboxGroupFilter.isChecked = true
+
+                GroupFilter.SizeFilter.SmallDog ->
+                    includeFilterSmall.checkboxGroupFilter.isChecked = true
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun initGenderFilter(filter: GroupFilter){
+        with(genderBinding) {
+            when (filter) {
+                GroupFilter.GenderFilter.Female ->
+                    includeFilterFemale.checkboxGroupFilter.isChecked = true
+
+                GroupFilter.GenderFilter.Male ->
+                    includeFilterMale.checkboxGroupFilter.isChecked = true
+
+                GroupFilter.GenderFilter.NeutralizingFemale ->
+                    includeFilterNeutralizingFemale.checkboxGroupFilter.isChecked = true
+
+                GroupFilter.GenderFilter.NeutralizingMale ->
+                    includeFilterNeutralizingMale.checkboxGroupFilter.isChecked = true
+
+                else -> {}
             }
         }
     }

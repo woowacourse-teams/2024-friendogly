@@ -15,17 +15,14 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler,Group
 
     private var participationFilter: ParticipationFilter = ParticipationFilter.ENTIRE
 
-    val groupFilter =
-        GroupFilterSelector(groupList = listOf())
+    private var groupFilterSelector = GroupFilterSelector()
 
     fun initParticipationFilter(participationFilter: ParticipationFilter) {
         this.participationFilter = participationFilter
     }
 
     fun initGroupFilter(groupFilters: List<GroupFilter>) {
-        groupFilters.forEach {
-            this.groupFilter.addGroupFilter(it)
-        }
+        this.groupFilterSelector = GroupFilterSelector(groupList = groupFilters)
     }
 
     override fun changeParticipationFilter(filterName: String) {
@@ -38,7 +35,7 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler,Group
     }
 
     override fun selectFilters() {
-        val filters = groupFilter.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
         _groupFilterEvent.emit(GroupFilterEvent.SelectGroupFilters(filters))
     }
 
@@ -46,7 +43,15 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler,Group
         _groupFilterEvent.emit(GroupFilterEvent.SelectParticipation(participationFilter))
     }
 
-    override fun selectGroupFilter(filterName: String, isSelected: Boolean) {
-        _groupFilterEvent.emit(GroupFilterEvent.SelectParticipation(participationFilter))
+    override fun selectGroupFilter(
+        filterName: String,
+        isSelected: Boolean,
+    ) {
+        val groupFilter = GroupFilter.findGroupFilter(filterName) ?: return
+        if (isSelected) {
+            groupFilterSelector.addGroupFilter(groupFilter)
+        } else {
+            groupFilterSelector.removeGroupFilter(groupFilter)
+        }
     }
 }
