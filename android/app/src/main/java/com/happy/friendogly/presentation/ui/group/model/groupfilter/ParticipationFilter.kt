@@ -2,7 +2,9 @@ package com.happy.friendogly.presentation.ui.group.model.groupfilter
 
 sealed class ParticipationFilter(val filterName: String) {
     data object POSSIBLE : ParticipationFilter(POSSIBLE_FILTER_NAME)
+
     data object RECRUITMENT : ParticipationFilter(RECRUITMENT_FILTER_NAME)
+
     data object ENTIRE : ParticipationFilter(ENTIRE_FILTER_NAME)
 
     companion object {

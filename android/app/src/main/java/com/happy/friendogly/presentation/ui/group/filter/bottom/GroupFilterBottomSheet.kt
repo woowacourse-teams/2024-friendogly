@@ -1,7 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.filter.bottom
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,7 @@ class GroupFilterBottomSheet(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return when (groupFilterType) {
             is GroupFilter.SizeFilter -> {
@@ -49,7 +48,10 @@ class GroupFilterBottomSheet(
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initGroupFilter(currentFilters)
         initDataBinding()
@@ -101,7 +103,7 @@ class GroupFilterBottomSheet(
         }
     }
 
-    private fun initSizeFilter(filter: GroupFilter){
+    private fun initSizeFilter(filter: GroupFilter) {
         with(sizeBinding) {
             when (filter) {
                 GroupFilter.SizeFilter.BigDog ->
@@ -118,7 +120,7 @@ class GroupFilterBottomSheet(
         }
     }
 
-    private fun initGenderFilter(filter: GroupFilter){
+    private fun initGenderFilter(filter: GroupFilter) {
         with(genderBinding) {
             when (filter) {
                 GroupFilter.GenderFilter.Female ->

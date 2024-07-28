@@ -1,11 +1,8 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentGroupListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
@@ -15,7 +12,6 @@ import com.happy.friendogly.presentation.ui.group.filter.bottom.GroupFilterBotto
 import com.happy.friendogly.presentation.ui.group.filter.bottom.ParticipationFilterBottomSheet
 import com.happy.friendogly.presentation.ui.group.list.adapter.group.GroupListAdapter
 import com.happy.friendogly.presentation.ui.group.list.adapter.selectfilter.SelectFilterAdapter
-import okhttp3.internal.notifyAll
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
     private val viewModel: GroupListViewModel by viewModels()
@@ -64,14 +60,14 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                 is GroupListEvent.OpenParticipationFilter -> {
                     val bottomSheet =
                         ParticipationFilterBottomSheet(
-                            currentParticipationFilter = event.participationFilter
+                            currentParticipationFilter = event.participationFilter,
                         ) {
                             // TODO: ParticipationFilter
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
                         DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme
+                        R.style.RoundCornerBottomSheetDialogTheme,
                     )
                 }
 
@@ -86,7 +82,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
                         DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme
+                        R.style.RoundCornerBottomSheetDialogTheme,
                     )
                 }
             }

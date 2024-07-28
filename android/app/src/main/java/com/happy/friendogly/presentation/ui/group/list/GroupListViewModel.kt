@@ -26,7 +26,6 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
-
     init {
         loadGroups()
     }
@@ -41,11 +40,11 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
+                                listOf(
+                                    GroupFilter.SizeFilter.SmallDog,
+                                    GroupFilter.GenderFilter.Female,
+                                    GroupFilter.GenderFilter.NeutralizingMale,
+                                ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -61,10 +60,10 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
+                                listOf(
+                                    GroupFilter.SizeFilter.SmallDog,
+                                    GroupFilter.GenderFilter.Female,
+                                ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -104,7 +103,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.SizeFilter.Init,
                 groupFilters = filters,
-            )
+            ),
         )
     }
 
@@ -114,7 +113,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.GenderFilter.Init,
                 groupFilters = filters,
-            )
+            ),
         )
     }
 

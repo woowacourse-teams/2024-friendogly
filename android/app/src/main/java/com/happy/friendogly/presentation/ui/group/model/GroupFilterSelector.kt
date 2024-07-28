@@ -22,7 +22,7 @@ class GroupFilterSelector {
         }
     }
 
-    fun initGroupFilter(filters: List<GroupFilter>){
+    fun initGroupFilter(filters: List<GroupFilter>) {
         _currentSelectedFilters.value = filters
     }
 

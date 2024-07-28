@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.filter
 
-import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 
