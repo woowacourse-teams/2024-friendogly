@@ -64,10 +64,9 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private fun requestNotificationPermission() {
         if (AlarmPermission.isValidPermissionSDK()) {
             AlarmPermission(requireActivity()).askNotificationPermission { isPermitted ->
-                if (!isPermitted)
-                    {
-                        Snackbar.make(binding.root, getString(R.string.chat_setting_alarm_alert), Snackbar.LENGTH_SHORT).show()
-                    }
+                if (!isPermitted) {
+                    Snackbar.make(binding.root, getString(R.string.chat_setting_alarm_alert), Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
     }
