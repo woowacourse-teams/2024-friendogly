@@ -1,11 +1,9 @@
 package com.happy.friendogly.data.error
 
-import java.io.IOException
-
 sealed class ApiExceptionDto(
     override val message: String? = null,
     override val cause: Throwable? = null,
-) : IOException(message, cause) {
+) : Exception(message, cause) {
     data class BadRequest(
         override val message: String?,
         val error: ErrorDto? = null,
