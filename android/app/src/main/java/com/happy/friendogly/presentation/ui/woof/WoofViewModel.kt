@@ -15,6 +15,7 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.happy.friendogly.presentation.ui.permission.WoofPermissionRequester
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
@@ -101,7 +102,7 @@ class WoofViewModel(
     }
 
     override fun markFootPrint() {
-        if (permissionRequester.hasLocationPermissions()) {
+        if (permissionRequester.hasPermissions()) {
             _mapActions.emit(WoofMapActions.MarkFootPrint)
         } else {
             _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
@@ -109,7 +110,7 @@ class WoofViewModel(
     }
 
     override fun changeLocationTrackingMode() {
-        if (permissionRequester.hasLocationPermissions()) {
+        if (permissionRequester.hasPermissions()) {
             val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
             _mapActions.emit(
                 if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {

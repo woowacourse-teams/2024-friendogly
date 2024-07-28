@@ -15,19 +15,17 @@ import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import java.lang.ref.WeakReference
 
-class AlarmPermission(activity: FragmentActivity) {
+class AlarmPermission(activity: FragmentActivity): PermissionAction(PermissionType.Alarm) {
 
     private val activityRef = WeakReference(activity)
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun askNotificationPermission(isPermitted: (Boolean) -> Unit = {}) {
         val activity = activityRef.get() ?: return
-        if (!isNotificationGranted()) {
-            if (activity.shouldShowRequestPermissionRationale(
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
+        if (!hasPermissions()) {
+            if (shouldShowRequestPermissionRationale()
             ) {
-                alarmDialog(activity, isPermitted).show(
+                createAlarmDialog(activity, isPermitted).show(
                     activity.supportFragmentManager,
                     ALARM_DIALOG_TAG
                 )
@@ -41,13 +39,21 @@ class AlarmPermission(activity: FragmentActivity) {
         }
     }
 
+    override fun shouldShowRequestPermissionRationale():Boolean {
+        val activity = activityRef.get() ?: return false
+        return activity.shouldShowRequestPermissionRationale(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun isNotificationGranted(): Boolean {
+    override fun hasPermissions(): Boolean {
         val activity = activityRef.get() ?: return false
         return activity.checkSelfPermission(
             Manifest.permission.POST_NOTIFICATIONS,
         ) == PackageManager.PERMISSION_GRANTED
     }
+
 
     private fun requestPermissionLauncher(
         activity: FragmentActivity,
@@ -56,7 +62,7 @@ class AlarmPermission(activity: FragmentActivity) {
         ActivityResultContracts.RequestPermission(), callback = isGranted
     )
 
-    private fun alarmDialog(
+    override fun createAlarmDialog(
         activity: FragmentActivity,
         clickResult: (Boolean) -> Unit
     ): DialogFragment =
@@ -64,8 +70,8 @@ class AlarmPermission(activity: FragmentActivity) {
             alertDialogModel = AlertDialogModel(
                 activity.getString(R.string.alarm_dialog_title),
                 activity.getString(R.string.alarm_dialog_body),
-                activity.getString(R.string.alarm_cancel),
-                activity.getString(R.string.alarm_go_setting)
+                activity.getString(R.string.permission_cancel),
+                activity.getString(R.string.permission_go_setting)
             ),
             clickToNegative = {
                 clickResult(false)
@@ -81,7 +87,7 @@ class AlarmPermission(activity: FragmentActivity) {
     companion object {
         private const val ALARM_DIALOG_TAG = "alarmDialog"
 
-        fun isShouldCheckVersion(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
     }
 }
