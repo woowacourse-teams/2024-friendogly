@@ -1,7 +1,7 @@
 package com.happy.friendogly.remote.interceptor
 
-import com.happy.friendogly.remote.model.error.createErrorException
-import com.happy.friendogly.remote.model.error.createErrorResponse
+import com.happy.friendogly.remote.error.createApiException
+import com.happy.friendogly.remote.error.createErrorResponse
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -17,10 +17,9 @@ class ErrorResponseInterceptor : Interceptor {
 
             if (response.isSuccessful) return response
 
-            val requestUrl = request.url.toString()
             val errorResponse = responseBody?.string()?.let { createErrorResponse(it) }
-            val errorException = createErrorException(requestUrl, response.code, errorResponse)
-            errorException?.let { throw it }
+            val apiExceptionResponse = createApiException(response.code, errorResponse)
+            apiExceptionResponse?.let { throw it }
 
             return response
         } catch (e: Throwable) {
