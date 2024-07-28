@@ -37,6 +37,7 @@ class AlarmPermission(activity: FragmentActivity) : Permission(PermissionType.Al
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun shouldShowRequestPermissionRationale(): Boolean {
         val activity = activityRef.get() ?: return false
         return activity.shouldShowRequestPermissionRationale(
