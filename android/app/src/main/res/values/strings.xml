@@ -172,6 +172,8 @@
 
     <string name="alarm_dialog_title">알람 허용 사용 설정</string>
     <string name="alarm_dialog_body">알람을 설정하지 않으면, 채팅과 모임 알람을 받을 수 없어요!</string>
-    <string name="alarm_cancel">취소</string>
-    <string name="alarm_go_setting">설정</string>
+    <string name="location_dialog_title">위치 허용 사용 설정</string>
+    <string name="location_dialog_body">위치 설정하지 않으면, 친구를 찾을 수 없어요!</string>
+    <string name="permission_cancel">취소</string>
+    <string name="permission_go_setting">설정</string>
 </resources>
