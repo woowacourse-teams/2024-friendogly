@@ -1,9 +1,9 @@
 package com.happy.friendogly.presentation.base
 
-sealed class BaseMessage(message: String) {
-    data class Toast(val message: String) : BaseMessage(message)
+sealed interface BaseMessage {
+    data class Toast(val message: String) : BaseMessage
 
-    data class Snackbar(val message: String) : BaseMessage(message)
+    data class Snackbar(val message: String) : BaseMessage
 }
 
 enum class MessageType {
