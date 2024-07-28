@@ -73,8 +73,10 @@ class MultiPermission private constructor(
                     PermissionType.Location -> LocationPermission(activity)
                 }
             }
-        val showDialogPermissions = permissions.filter { it.shouldShowRequestPermissionRationale() }
-        val requestPermissions = permissions.filterNot { it.shouldShowRequestPermissionRationale() }
+        val showDialogPermissions =
+            permissions.filter { it.shouldShowRequestPermissionRationale() && !it.hasPermissions() }
+        val requestPermissions =
+            permissions.filterNot { it.shouldShowRequestPermissionRationale() && !it.hasPermissions() }
 
         showDialogPermissions.forEach {
             it.createAlarmDialog(
