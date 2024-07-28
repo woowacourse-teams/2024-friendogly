@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
@@ -25,6 +26,7 @@ class MainActivity :
 
     override fun initCreateView() {
         initNavController()
+        requestNotificationPermission()
         requestLocationPermissions()
     }
 
@@ -81,6 +83,13 @@ class MainActivity :
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                 )
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
+        }
+
+    }
+
+    private fun requestNotificationPermission() {
+        if (AlarmPermission.isShouldCheckVersion()) {
+            AlarmPermission(this).askNotificationPermission()
         }
     }
 
