@@ -14,7 +14,7 @@ import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import java.lang.ref.WeakReference
 
-class LocationPermission(activity: FragmentActivity): PermissionAction(PermissionType.Location) {
+class LocationPermission(activity: FragmentActivity): Permission(PermissionType.Location) {
 
     private val activityRef = WeakReference(activity)
 

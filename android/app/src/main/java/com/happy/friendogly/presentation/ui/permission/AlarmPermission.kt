@@ -15,7 +15,7 @@ import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import java.lang.ref.WeakReference
 
-class AlarmPermission(activity: FragmentActivity): PermissionAction(PermissionType.Alarm) {
+class AlarmPermission(activity: FragmentActivity): Permission(PermissionType.Alarm) {
 
     private val activityRef = WeakReference(activity)
 
