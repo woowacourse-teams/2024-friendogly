@@ -8,6 +8,7 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
@@ -16,6 +17,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.model.FootprintUiModel
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
+import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -179,22 +181,9 @@ class WoofFragment :
     }
 
     private fun showSettingSnackbar() {
-        permissionRequester.checkLocationPermissions {
-            showSnackbar(resources.getString(R.string.woof_permission)) {
-                setAction(resources.getString(R.string.woof_setting)) {
-                    val packageName =
-                        String.format(
-                            resources.getString(
-                                R.string.woof_package,
-                                requireContext().packageName,
-                            ),
-                        )
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    intent.data = Uri.parse(packageName)
-                    startActivity(intent)
-                }
-            }
-        }
+        MultiPermission.from(requireActivity()).addLocationPermission().addAlarmPermission {
+            Snackbar.make(binding.root, getString(R.string.alarm_dialog_body_woof), Snackbar.LENGTH_SHORT).show()
+        }.requestAndShowDialog()
     }
 
     private fun moveCameraCenterPosition() {

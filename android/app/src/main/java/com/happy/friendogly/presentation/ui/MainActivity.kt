@@ -9,13 +9,14 @@ import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
-import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
 import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
+import com.happy.friendogly.presentation.ui.permission.AlarmPermission
+import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
 
@@ -26,8 +27,7 @@ class MainActivity :
 
     override fun initCreateView() {
         initNavController()
-        requestNotificationPermission()
-        requestLocationPermissions()
+        MultiPermission.from(this).addAlarmPermission().addLocationPermission().request()
     }
 
     private fun initNavController() {
@@ -88,7 +88,7 @@ class MainActivity :
     }
 
     private fun requestNotificationPermission() {
-        if (AlarmPermission.isShouldCheckVersion()) {
+        if (AlarmPermission.isValidPermissionSDK()) {
             AlarmPermission(this).askNotificationPermission()
         }
     }
