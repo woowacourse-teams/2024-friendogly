@@ -84,7 +84,6 @@ class MainActivity :
                 )
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
         }
-
     }
 
     private fun requestNotificationPermission() {

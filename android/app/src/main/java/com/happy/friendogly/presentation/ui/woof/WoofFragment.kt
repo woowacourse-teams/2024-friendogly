@@ -1,11 +1,8 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar

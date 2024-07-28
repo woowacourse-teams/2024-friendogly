@@ -14,8 +14,7 @@ import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import java.lang.ref.WeakReference
 
-class LocationPermission(activity: FragmentActivity): Permission(PermissionType.Location) {
-
+class LocationPermission(activity: FragmentActivity) : Permission(PermissionType.Location) {
     private val activityRef = WeakReference(activity)
 
     override fun hasPermissions(): Boolean {
@@ -24,10 +23,10 @@ class LocationPermission(activity: FragmentActivity): Permission(PermissionType.
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                ) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun checkLocationPermissions(isPermitted: (Boolean) -> Unit) {
@@ -35,7 +34,7 @@ class LocationPermission(activity: FragmentActivity): Permission(PermissionType.
         if (!shouldShowRequestPermissionRationale()) {
             createAlarmDialog(activity, isPermitted).show(
                 activity.supportFragmentManager,
-                LOCATION_DIALOG_TAG
+                LOCATION_DIALOG_TAG,
             )
         } else {
             requestLocationPermissions()
@@ -44,15 +43,16 @@ class LocationPermission(activity: FragmentActivity): Permission(PermissionType.
 
     override fun createAlarmDialog(
         activity: FragmentActivity,
-        clickResult: (Boolean) -> Unit
+        clickResult: (Boolean) -> Unit,
     ): DialogFragment =
         DefaultBlueAlertDialog(
-            alertDialogModel = AlertDialogModel(
-                activity.getString(R.string.location_dialog_title),
-                activity.getString(R.string.location_dialog_body),
-                activity.getString(R.string.permission_cancel),
-                activity.getString(R.string.permission_go_setting)
-            ),
+            alertDialogModel =
+                AlertDialogModel(
+                    activity.getString(R.string.location_dialog_title),
+                    activity.getString(R.string.location_dialog_body),
+                    activity.getString(R.string.permission_cancel),
+                    activity.getString(R.string.permission_go_setting),
+                ),
             clickToNegative = {
                 clickResult(false)
             },
@@ -61,9 +61,8 @@ class LocationPermission(activity: FragmentActivity): Permission(PermissionType.
                     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:${activity.packageName}"))
                 activity.startActivity(intent)
                 clickResult(true)
-            }
+            },
         )
-
 
     override fun shouldShowRequestPermissionRationale(): Boolean {
         val activity = activityRef.get() ?: error("${activityRef.javaClass.simpleName} is null")
@@ -72,10 +71,10 @@ class LocationPermission(activity: FragmentActivity): Permission(PermissionType.
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
     }
 
     private fun requestLocationPermissions() {
