@@ -43,9 +43,4 @@ class GroupFilterSelector(
             addGroupFilter(it)
         }
     }
-
-    companion object {
-        const val GENDER_FILTER_SUBJECT = "성별"
-        const val SIZE_FILTER_SUBJECT = "사이즈"
-    }
 }

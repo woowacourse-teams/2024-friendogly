@@ -2,6 +2,8 @@ package com.happy.friendogly.presentation.ui.group.model.groupfilter
 
 sealed class GroupFilter(val filterName: String) {
     sealed class GenderFilter(filterName: String) : GroupFilter(filterName) {
+        data object Init : GenderFilter(GENDER_FILTER_SUBJECT)
+
         data object Female : GenderFilter(FEMALE_NAME)
 
         data object Male : GenderFilter(MALE_NAME)
@@ -12,6 +14,8 @@ sealed class GroupFilter(val filterName: String) {
     }
 
     sealed class SizeFilter(filterName: String) : GroupFilter(filterName) {
+        data object Init : SizeFilter(SIZE_FILTER_SUBJECT)
+
         data object SmallDog : SizeFilter(SMALL_DOG_NAME)
 
         data object MediumDog : SizeFilter(MEDIUM_DOG_NAME)
@@ -69,5 +73,8 @@ sealed class GroupFilter(val filterName: String) {
         const val SMALL_DOG_NAME = "소형견"
         const val MEDIUM_DOG_NAME = "중형견"
         const val BIG_DOG_NAME = "대형견"
+
+        const val GENDER_FILTER_SUBJECT = "성별"
+        const val SIZE_FILTER_SUBJECT = "사이즈"
     }
 }
