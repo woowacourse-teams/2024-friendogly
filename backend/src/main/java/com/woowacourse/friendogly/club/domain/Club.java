@@ -194,15 +194,21 @@ public class Club {
                 .findAny()
                 .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
         clubMembers.remove(target);
-        if (canDelegate(target)) {
-            this.owner = clubMembers.get(0).getMember();
+        if (isOwner(target)) {
+            updateOwner();
         }
         target.updateClub(null);
         removeClubPets(member);
     }
 
-    private boolean canDelegate(ClubMember target) {
-        return owner.getId().equals(target.getMember().getId()) && !isEmpty();
+    private void updateOwner() {
+        if (!isEmpty()) {
+            this.owner = clubMembers.get(0).getMember();
+        }
+    }
+
+    private boolean isOwner(ClubMember target) {
+        return owner.getId().equals(target.getMember().getId());
     }
 
     private void removeClubPets(Member member) {
