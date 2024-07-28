@@ -91,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.SMALL_DOG_NAME}" />
 
             <include
@@ -100,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.MEDIUM_DOG_NAME}" />
 
             <include
@@ -109,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.BIG_DOG_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -154,7 +151,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.MALE_NAME}" />
 
             <include
@@ -164,7 +160,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
 
             <include
@@ -174,7 +169,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.FEMALE_NAME}" />
 
             <include
@@ -184,7 +178,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{true}"
                 app:filterName="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>

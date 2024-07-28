@@ -11,7 +11,6 @@
             type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterViewModel" />
     </data>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,11 +21,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group_add_dog_gender_title" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/group_add_dog_size_title" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_alart" />
+        </LinearLayout>
 
         <Space
             android:layout_width="wrap_content"
@@ -40,44 +55,31 @@
             app:flexWrap="wrap">
 
             <include
+                android:id="@+id/include_filter_small"
                 layout="@layout/include_add_dog_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:checkState="@{false}"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.MALE_NAME}" />
+                app:filterName="@{GroupFilter.SMALL_DOG_NAME}" />
 
             <include
+                android:id="@+id/include_filter_medium"
                 layout="@layout/include_add_dog_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:checkState="@{false}"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.NEUTRALIZING_FEMALE_NAME}" />
+                app:filterName="@{GroupFilter.MEDIUM_DOG_NAME}" />
 
             <include
+                android:id="@+id/include_filter_big"
                 layout="@layout/include_add_dog_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:checkState="@{false}"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.FEMALE_NAME}" />
-
-            <include
-                layout="@layout/include_add_dog_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:checkState="@{false}"
-                app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.NEUTRALIZING_MALE_NAME}" />
+                app:filterName="@{GroupFilter.BIG_DOG_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
         <TextView

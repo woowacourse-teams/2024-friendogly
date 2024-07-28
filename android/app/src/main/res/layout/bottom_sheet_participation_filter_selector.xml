@@ -46,7 +46,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{false}"
                 app:filterName="@{ParticipationFilter.ENTIRE_FILTER_NAME}" />
 
             <include
@@ -56,7 +55,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{false}"
                 app:filterName="@{ParticipationFilter.POSSIBLE_FILTER_NAME}" />
 
             <include
@@ -66,7 +64,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
-                app:checkState="@{false}"
                 app:filterName="@{ParticipationFilter.RECRUITMENT_FILTER_NAME}" />
 
         </com.google.android.flexbox.FlexboxLayout>
