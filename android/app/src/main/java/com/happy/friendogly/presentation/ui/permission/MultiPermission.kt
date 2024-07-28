@@ -63,7 +63,7 @@ class MultiPermission private constructor(
         val permissions = permissionActions.map {
             when (it.key) {
                 PermissionType.Alarm -> AlarmPermission(activity)
-                PermissionType.Location -> WoofPermissionRequester(activity)
+                PermissionType.Location -> LocationPermission(activity)
             }
         }
         val showDialogPermissions = permissions.filter { it.shouldShowRequestPermissionRationale() }

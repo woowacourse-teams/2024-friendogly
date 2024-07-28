@@ -15,7 +15,7 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.model.FootprintUiModel
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.happy.friendogly.presentation.ui.permission.WoofPermissionRequester
+import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -38,8 +38,8 @@ class WoofFragment :
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val permissionRequester: WoofPermissionRequester by lazy {
-        WoofPermissionRequester(
+    private val permissionRequester: LocationPermission by lazy {
+        LocationPermission(
             requireActivity(),
         )
     }

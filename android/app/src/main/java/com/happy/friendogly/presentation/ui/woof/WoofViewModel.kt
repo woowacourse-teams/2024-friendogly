@@ -15,12 +15,12 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 import com.happy.friendogly.presentation.model.FootprintUiModel
-import com.happy.friendogly.presentation.ui.permission.WoofPermissionRequester
+import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
-    private val permissionRequester: WoofPermissionRequester,
+    private val permissionRequester: LocationPermission,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -127,7 +127,7 @@ class WoofViewModel(
 
     companion object {
         fun factory(
-            permissionRequester: WoofPermissionRequester,
+            permissionRequester: LocationPermission,
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
