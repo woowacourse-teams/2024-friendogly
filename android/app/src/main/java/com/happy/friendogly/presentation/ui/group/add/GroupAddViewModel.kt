@@ -21,8 +21,7 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterIte
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
 
-    private val groupFilterSelector =
-        GroupFilterSelector(groupList = GroupFilter.makeGroupFilterEntry())
+    private val groupFilterSelector = GroupFilterSelector()
 
     private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData(GroupCounter())
     val groupCounter: LiveData<GroupCounter> get() = _groupCounter
@@ -33,6 +32,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterIte
 
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
+
+    init {
+        groupFilterSelector.initGroupFilter(GroupFilter.makeGroupFilterEntry())
+    }
 
     override fun selectGroupFilter(
         filterName: String,

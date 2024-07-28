@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,11 +18,12 @@ import okhttp3.internal.notifyAll
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
     private val viewModel: GroupListViewModel by viewModels()
-    private val groupAdapter: GroupListAdapter by lazy {
-        GroupListAdapter(viewModel as GroupListActionHandler)
-    }
+
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as GroupListActionHandler)
+    }
+    private val groupAdapter: GroupListAdapter by lazy {
+        GroupListAdapter(viewModel as GroupListActionHandler)
     }
     private val adapter: ConcatAdapter by lazy {
         ConcatAdapter(filterAdapter, groupAdapter)

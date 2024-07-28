@@ -34,7 +34,6 @@ class GroupFilterBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("sdjflsdfjl", currentFilters.joinToString { it.filterName })
         return when (groupFilterType) {
             is GroupFilter.SizeFilter -> {
                 _sizeBinding =

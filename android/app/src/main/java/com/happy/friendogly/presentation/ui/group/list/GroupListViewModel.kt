@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,8 +18,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
-    var groupFilterSelector = GroupFilterSelector(groupList = listOf())
-        private set
+    val groupFilterSelector = GroupFilterSelector()
 
     private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupListUiModel>> get() = _groups
@@ -84,8 +82,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         }
 
     fun initGroupFilter(filters: List<GroupFilter>) {
-        Log.d("sdjflsdfjl",filters.joinToString { it.filterName })
-        this.groupFilterSelector = GroupFilterSelector(groupList = filters)
+        groupFilterSelector.initGroupFilter(filters)
     }
 
     override fun loadGroup(groupId: Long) {

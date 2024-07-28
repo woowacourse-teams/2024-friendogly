@@ -15,14 +15,14 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler,Group
 
     private var participationFilter: ParticipationFilter = ParticipationFilter.ENTIRE
 
-    private var groupFilterSelector = GroupFilterSelector()
+    private val groupFilterSelector = GroupFilterSelector()
 
     fun initParticipationFilter(participationFilter: ParticipationFilter) {
         this.participationFilter = participationFilter
     }
 
     fun initGroupFilter(groupFilters: List<GroupFilter>) {
-        this.groupFilterSelector = GroupFilterSelector(groupList = groupFilters)
+        groupFilterSelector.initGroupFilter(groupFilters)
     }
 
     override fun changeParticipationFilter(filterName: String) {
