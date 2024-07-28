@@ -4,13 +4,14 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.error.ApiException
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
+import com.happy.friendogly.presentation.base.MessageType
 import com.happy.friendogly.presentation.base.emit
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -34,7 +35,7 @@ class ProfileSettingViewModel(
     }
 
     fun submitProfileSelection() {
-        viewModelScope.launch {
+        launch {
             val nickname = nickname.value ?: return@launch
             if (nickname.isBlank()) return@launch
             if (regex.matches(nickname)) return@launch
@@ -44,11 +45,14 @@ class ProfileSettingViewModel(
             postMemberUseCase(
                 name = nickname,
                 email = "test@banggapge.com",
-                file = _uiState.value?.profilePath,
+                file = profilePath,
             ).onSuccess { member ->
                 saveJwaToken(member.id)
-            }.onFailure {
-                // TODO 예외처리
+            }.onFailure { e ->
+                when (e) {
+                    is ApiException.BadRequest -> handleBadRequest(e)
+                    else -> throw e
+                }
             }
         }
     }
@@ -57,8 +61,8 @@ class ProfileSettingViewModel(
         val jwtToken = JwtToken(accessToken = memberId.toString(), refreshToken = null)
         saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
             _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
-        }.onFailure {
-            // TODO 예외처리
+        }.onFailure { e ->
+            sendErrorMessage(throwable = e, type = MessageType.SNACKBAR)
         }
     }
 
@@ -75,6 +79,14 @@ class ProfileSettingViewModel(
     fun updateProfileFile(file: MultipartBody.Part) {
         val state = _uiState.value ?: return
         _uiState.value = state.copy(profilePath = file)
+    }
+
+    private fun handleBadRequest(exception: ApiException.BadRequest?) {
+        val error = exception?.error ?: return
+        // TODO 서버에서 내려주는 error code에 따라서 예외 처리
+        return when (error.data.errorCode) {
+            else -> sendErrorMessage(throwable = exception, type = MessageType.SNACKBAR)
+        }
     }
 
     companion object {

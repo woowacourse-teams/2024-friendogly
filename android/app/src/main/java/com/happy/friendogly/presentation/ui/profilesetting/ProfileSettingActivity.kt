@@ -15,6 +15,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityProfileSettingBinding
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.base.BaseMessage
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
@@ -49,6 +50,16 @@ class ProfileSettingActivity :
     }
 
     private fun initObserve() {
+        viewModel.message.observeEvent(this) { baseMessage ->
+            when (baseMessage) {
+                is BaseMessage.Toast -> showToastMessage(message = baseMessage.message)
+                is BaseMessage.Snackbar ->
+                    showSnackbar(message = baseMessage.message) {
+                        anchorView = binding.tvEditBtn
+                    }
+            }
+        }
+
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
                 is ProfileSettingNavigationAction.NavigateToSetProfileImage -> editProfileImageBottomSheet()
