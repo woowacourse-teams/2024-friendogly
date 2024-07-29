@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-class GroupFilterSelector(
-    groupList: List<GroupFilter> = listOf(),
-) {
+class GroupFilterSelector {
     private val _currentSelectedFilters: MutableLiveData<List<GroupFilter>> =
-        MutableLiveData(groupList)
+        MutableLiveData()
     val currentSelectedFilters: LiveData<List<GroupFilter>> get() = _currentSelectedFilters
 
     fun addGroupFilter(filter: GroupFilter) {
@@ -22,6 +20,10 @@ class GroupFilterSelector(
             _currentSelectedFilters.value =
                 _currentSelectedFilters.value?.filterNot { it.filterName == filter.filterName }
         }
+    }
+
+    fun initGroupFilter(filters: List<GroupFilter>) {
+        _currentSelectedFilters.value = filters
     }
 
     private fun confirmValidFilter(filter: GroupFilter): Boolean {
@@ -42,10 +44,5 @@ class GroupFilterSelector(
         sizeFilters.forEach {
             addGroupFilter(it)
         }
-    }
-
-    companion object {
-        const val GENDER_FILTER_SUBJECT = "성별"
-        const val SIZE_FILTER_SUBJECT = "사이즈"
     }
 }
