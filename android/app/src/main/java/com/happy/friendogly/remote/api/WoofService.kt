@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.api
 
-import com.happy.friendogly.data.model.LandMarkDto
 import com.happy.friendogly.remote.model.request.FootprintRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
@@ -25,7 +24,4 @@ interface WoofService {
 
     @GET(ApiClient.Footprints.GET_FOOTPRINT_MINE_LATEST)
     suspend fun getFootprintMarkBtnInfo(): BaseResponse<FootprintMarkBtnInfoResponse>
-
-    @GET("")
-    suspend fun getLandMarks(): BaseResponse<List<LandMarkDto>>
 }

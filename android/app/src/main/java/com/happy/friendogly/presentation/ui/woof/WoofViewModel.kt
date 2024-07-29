@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.mapper.toPresentation
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
-import com.happy.friendogly.domain.usecase.GetLandMarksUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -22,7 +21,6 @@ class WoofViewModel(
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
-    private val getLandMarksUseCase: GetLandMarksUseCase,
 ) : BaseViewModel(), WoofActionHandler {
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
@@ -90,12 +88,11 @@ class WoofViewModel(
         }
     }
 
-    private suspend fun loadLandMarks() {
-        viewModelScope.launch {
-            getLandMarksUseCase().onSuccess { landMarks ->
-                val state = uiState.value ?: return@onSuccess
-                _uiState.value = state.copy(landMarks = landMarks.toPresentation())
-            }.onFailure {}
+    override fun markFootPrint() {
+        if (permissionRequester.hasLocationPermissions()) {
+            _mapActions.emit(WoofMapActions.MarkFootPrint)
+        } else {
+            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
         }
     }
 
@@ -115,14 +112,12 @@ class WoofViewModel(
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
-            getLandMarksUseCase: GetLandMarksUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
                     postFootprintUseCase = postFootprintUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,
-                    getLandMarksUseCase = getLandMarksUseCase,
                 )
             }
         }

@@ -49,7 +49,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
-            getLandMarksUseCase = AppModule.getInstance().getLandMarksUseCase,
         )
     }
 
@@ -298,8 +297,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     companion object {
-        private const val MARKER_WIDTH = 90
-        private const val MARKER_HEIGHT = 120
         private const val MAP_CIRCLE_RADIUS = 1000
         private const val MIN_ZOOM = 10.0
         private const val MAX_ZOOM = 20.0
