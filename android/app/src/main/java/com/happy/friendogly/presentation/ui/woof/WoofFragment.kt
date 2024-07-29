@@ -15,6 +15,7 @@ import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERM
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
 import com.naver.maps.map.LocationTrackingMode
@@ -23,6 +24,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Marker.SIZE_AUTO
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.datetime.LocalDateTime
@@ -100,6 +102,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 latLng = latLng,
                 isMine = true,
             )
+            map.locationTrackingMode = LocationTrackingMode.Follow
+            setUpCircleOverlay()
             moveCameraCenterPosition()
         }
 
@@ -189,20 +193,22 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                     binding.layoutWoofLoading.isVisible = false
                     // binding.lottieWoofLoading.pauseAnimation()
                 },
-                1000,
+                1500,
             )
         }
     }
 
     private fun setUpCircleOverlay() {
         circleOverlay.center = latLng
-        circleOverlay.radius = MAP_CIRCLE_RADIUS
+        circleOverlay.radius = MAP_CIRCLE_RADIUS / map.projection.metersPerPixel
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
     }
 
     private fun moveCameraCenterPosition() {
-        val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
+        val cameraUpdate =
+            CameraUpdate.scrollTo(latLng)
+                .animate(CameraAnimation.Easing)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
         setUpCircleOverlay()
@@ -218,8 +224,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(iconImage)
-        marker.width = MARKER_WIDTH
-        marker.height = MARKER_HEIGHT
+        marker.width = SIZE_AUTO
+        marker.height = SIZE_AUTO
         marker.zIndex = createdAt.toZIndex()
         marker.map = map
 
@@ -292,11 +298,10 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     companion object {
-        private const val MARKER_WIDTH = 125
-        private const val MARKER_HEIGHT = 160
-        private const val MAP_CIRCLE_RADIUS = 1000.0
+        private const val MARKER_WIDTH = 90
+        private const val MARKER_HEIGHT = 120
+        private const val MAP_CIRCLE_RADIUS = 1000
         private const val MIN_ZOOM = 10.0
-        private const val DEFAULT_ZOOM = 13.5
         private const val MAX_ZOOM = 20.0
     }
 }
