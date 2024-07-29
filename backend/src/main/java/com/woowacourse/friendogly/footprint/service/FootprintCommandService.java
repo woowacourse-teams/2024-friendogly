@@ -1,12 +1,13 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.GOING;
+
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
-import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -25,18 +26,15 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
-    private final FileStorageManager fileStorageManager;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository,
-            FileStorageManager fileStorageManager
+            PetRepository petRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
-        this.fileStorageManager = fileStorageManager;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -50,6 +48,7 @@ public class FootprintCommandService {
                 Footprint.builder()
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
+                        .walkStatus(GOING)
                         .build()
         );
 

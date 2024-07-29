@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.GOING;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -143,6 +144,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(GOING)
                         .build()
         );
 
@@ -165,6 +167,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(GOING)
                         .build()
         );
 
@@ -192,6 +195,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member2)
                         .location(new Location(37.51365, 127.09831))
+                        .walkStatus(GOING)
                         .build()
         );
 
@@ -199,6 +203,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member3)
                         .location(new Location(37.51314, 127.10425))
+                        .walkStatus(GOING)
                         .build()
         );
 
@@ -222,6 +227,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(GOING)
                         .build()
         );
 

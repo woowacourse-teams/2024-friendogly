@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.GOING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -32,6 +33,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
+                        .walkStatus(GOING)
                         .location(new Location(0.0, 0.0))
                         .build()
         );
@@ -57,6 +59,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         // given
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
+                        .walkStatus(GOING)
                         .member(member)
                         .location(new Location(0.0, 0.0))
                         .build()
@@ -133,11 +136,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     void findNear24Hours() {
         // given
         jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
                 VALUES
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
+                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
                 """, member.getId(), member.getId(), member.getId());
 
         // when
@@ -160,11 +163,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
 
         jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
+                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
                 VALUES
-                (?, 0.00000, 0.00000, TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.11111, 0.11111, TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.22222, 0.22222, ?, FALSE);
+                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+                (?, 0.11111, 0.11111, 'END', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+                (?, 0.22222, 0.22222, 'END', ?, FALSE);
                 """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
         // when
