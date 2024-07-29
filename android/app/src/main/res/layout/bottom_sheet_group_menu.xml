@@ -5,7 +5,7 @@
     <data>
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.group.modify.GroupModifyViewModel" />
+            type="com.happy.friendogly.presentation.ui.group.menu.GroupMenuViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

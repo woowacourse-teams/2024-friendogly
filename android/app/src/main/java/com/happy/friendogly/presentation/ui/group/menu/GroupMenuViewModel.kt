@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.group.modify
+package com.happy.friendogly.presentation.ui.group.menu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +7,9 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
-class GroupModifyViewModel : BaseViewModel(), GroupModifyActionHandler {
-    private val _groupModifyEvent: MutableLiveData<Event<GroupModifyEvent>> = MutableLiveData()
-    val groupModifyEvent: LiveData<Event<GroupModifyEvent>> get() = _groupModifyEvent
+class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
+    private val _groupMenuEvent: MutableLiveData<Event<GroupMenuEvent>> = MutableLiveData()
+    val groupMenuEvent: LiveData<Event<GroupMenuEvent>> get() = _groupMenuEvent
 
     private var _detailViewType: MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
     val detailViewType: LiveData<DetailViewType> get() = _detailViewType
@@ -19,22 +19,22 @@ class GroupModifyViewModel : BaseViewModel(), GroupModifyActionHandler {
     }
 
     override fun close() {
-        _groupModifyEvent.emit(GroupModifyEvent.CancelSelection)
+        _groupMenuEvent.emit(GroupMenuEvent.CancelSelection)
     }
 
     override fun selectModify() {
-        _groupModifyEvent.emit(GroupModifyEvent.Modify)
+        _groupMenuEvent.emit(GroupMenuEvent.Modify)
     }
 
     override fun selectDelete() {
-        _groupModifyEvent.emit(GroupModifyEvent.Delete)
+        _groupMenuEvent.emit(GroupMenuEvent.Delete)
     }
 
     override fun selectReport() {
-        _groupModifyEvent.emit(GroupModifyEvent.Report)
+        _groupMenuEvent.emit(GroupMenuEvent.Report)
     }
 
     override fun selectBlock() {
-        _groupModifyEvent.emit(GroupModifyEvent.Block)
+        _groupMenuEvent.emit(GroupMenuEvent.Block)
     }
 }

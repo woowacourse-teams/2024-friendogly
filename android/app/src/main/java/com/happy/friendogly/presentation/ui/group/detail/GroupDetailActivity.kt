@@ -10,7 +10,7 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
-import com.happy.friendogly.presentation.ui.group.modify.GroupModifyBottomSheet
+import com.happy.friendogly.presentation.ui.group.menu.GroupMenuBottomSheet
 import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 
 class GroupDetailActivity :
@@ -83,7 +83,7 @@ class GroupDetailActivity :
 
                 is GroupDetailEvent.OpenDetailMenu -> {
                     val bottomSheet =
-                        GroupModifyBottomSheet(event.detailViewType)
+                        GroupMenuBottomSheet(event.detailViewType)
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
             }

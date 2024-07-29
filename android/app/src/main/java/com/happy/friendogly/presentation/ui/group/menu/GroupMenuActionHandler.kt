@@ -1,6 +1,6 @@
-package com.happy.friendogly.presentation.ui.group.modify
+package com.happy.friendogly.presentation.ui.group.menu
 
-interface GroupModifyActionHandler {
+interface GroupMenuActionHandler {
     fun close()
 
     fun selectModify()
