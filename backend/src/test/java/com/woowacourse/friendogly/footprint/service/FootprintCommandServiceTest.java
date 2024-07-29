@@ -6,47 +6,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.pet.domain.Gender;
-import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.support.ServiceTest;
-import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-class FootprintCommandServiceTest extends ServiceTest {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private FootprintCommandService footprintCommandService;
+class FootprintCommandServiceTest extends FootprintServiceTest {
 
     @DisplayName("발자국 저장")
     @Test
     void save() {
-        // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("땡이")
-                        .description("귀여운 땡이")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
         // when
         footprintCommandService.save(member.getId(), new SaveFootprintRequest(30.0, 30.0));
 
@@ -58,17 +25,17 @@ class FootprintCommandServiceTest extends ServiceTest {
     @Test
     void save_Fail_NoPets() {
         // given
-        Member member = memberRepository.save(
+        Member memberWithoutPet = memberRepository.save(
                 Member.builder()
-                        .name("name")
-                        .email("test@test.com")
+                        .name("강아지없어요")
+                        .email("no_dog@test.com")
                         .build()
         );
 
         // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
-                        member.getId(),
+                        memberWithoutPet.getId(),
                         new SaveFootprintRequest(90.000, 90.000)
                 )
         ).isInstanceOf(FriendoglyException.class)
@@ -78,6 +45,7 @@ class FootprintCommandServiceTest extends ServiceTest {
     @DisplayName("발자국 저장 실패 - 존재하지 않는 Member ID")
     @Test
     void save_Fail_IllegalMemberId() {
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         -1L,
@@ -90,31 +58,14 @@ class FootprintCommandServiceTest extends ServiceTest {
     @DisplayName("발자국 저장 실패 - 30초 전에 이미 발자국을 남긴 경우")
     @Test
     void save_Fail_TooOftenSave() {
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("땡이")
-                        .description("귀여운 땡이")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
+        // given
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
                 VALUES
                 (?, 0.00000, 0.00000, TIMESTAMPADD(SECOND, -29, NOW()), FALSE)
                 """, member.getId());
 
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         member.getId(),
