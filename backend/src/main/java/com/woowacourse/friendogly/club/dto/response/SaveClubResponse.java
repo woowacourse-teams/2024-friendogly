@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public record FindSearchingClubResponse(
+public record SaveClubResponse(
         Long id,
         String title,
         String content,
@@ -21,14 +21,11 @@ public record FindSearchingClubResponse(
         int memberCapacity,
         int currentMemberCount,
         String imageUrl,
-        List<String> petImageUrls
-
+        List<String> petImageUrls,
+        boolean isMine
 ) {
 
-    public FindSearchingClubResponse(
-            Club club,
-            List<String> petImageUrls
-    ) {
+    public SaveClubResponse(Club club, int currentMemberCount, List<String> myPetImageUrls) {
         this(
                 club.getId(),
                 club.getTitle().getValue(),
@@ -40,9 +37,10 @@ public record FindSearchingClubResponse(
                 club.getAllowedGenders(),
                 club.getAllowedSizes(),
                 club.getMemberCapacity().getValue(),
-                club.countClubMember(),
+                currentMemberCount,
                 club.getImageUrl(),
-                petImageUrls
+                myPetImageUrls,
+                true
         );
     }
 }

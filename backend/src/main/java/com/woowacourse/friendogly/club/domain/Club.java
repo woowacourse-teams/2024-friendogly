@@ -3,7 +3,9 @@ package com.woowacourse.friendogly.club.domain;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -17,7 +19,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -71,8 +77,14 @@ public class Club {
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<ClubMember> clubMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<ClubPet> clubPets = new ArrayList<>();
+
     @Builder
-    public Club(
+    private Club(
             String title,
             String content,
             String address,
@@ -97,7 +109,6 @@ public class Club {
         this.createdAt = createdAt;
     }
 
-
     private void validateOwner(Member owner) {
         if (owner == null) {
             throw new FriendoglyException("모임 방장 정보는 필수 입니다.");
@@ -112,9 +123,10 @@ public class Club {
             Member owner,
             Set<Gender> allowedGender,
             Set<SizeType> allowedSize,
-            String imageUrl
+            String imageUrl,
+            List<Pet> participatingPets
     ) {
-        return Club.builder()
+        Club club = Club.builder()
                 .title(title)
                 .content(content)
                 .address(address)
@@ -126,6 +138,84 @@ public class Club {
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
+        club.addClubMember(club.owner);
+        club.addClubPet(participatingPets);
+        return club;
     }
 
+    public void addClubMember(Member newMember) {
+        validateAlreadyExists(newMember);
+        validateMemberCapacity();
+        ClubMember clubMember = ClubMember.create(this, newMember);
+        clubMembers.add(clubMember);
+        clubMember.updateClub(this);
+    }
+
+    private void validateAlreadyExists(Member newMember) {
+        if (clubMembers.stream()
+                .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), newMember.getId()))
+        ) {
+            throw new FriendoglyException("이미 참여 중인 모임입니다.");
+        }
+    }
+
+    private void validateMemberCapacity() {
+        if (memberCapacity.isCapacityReached(countClubMember())) {
+            throw new FriendoglyException("최대 인원을 초과하여 모임에 참여할 수 없습니다.");
+        }
+    }
+
+    public void addClubPet(List<Pet> pets) {
+        List<ClubPet> clubPets = pets.stream()
+                .peek(this::validateParticipatePet)
+                .map(pet -> new ClubPet(this, pet))
+                .peek(clubPet -> clubPet.updateClub(this))
+                .toList();
+        this.clubPets.addAll(clubPets);
+    }
+
+    private void validateParticipatePet(Pet pet) {
+        if (!allowedGenders.contains(pet.getGender()) || !allowedSizes.contains(pet.getSizeType())) {
+            throw new FriendoglyException("모임에 데려갈 수 없는 강아지가 있습니다.");
+        }
+    }
+
+    public int countClubMember() {
+        return clubMembers.size();
+    }
+
+    public boolean isEmpty() {
+        return clubMembers.isEmpty();
+    }
+
+    public void removeClubMember(Member member) {
+        ClubMember target = clubMembers.stream()
+                .filter(e -> e.getMember().getId().equals(member.getId()))
+                .findAny()
+                .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
+        clubMembers.remove(target);
+        if (isOwner(target)) {
+            updateOwner();
+        }
+        target.updateClub(null);
+        removeClubPets(member);
+    }
+
+    private void updateOwner() {
+        if (!isEmpty()) {
+            this.owner = clubMembers.get(0).getMember();
+        }
+    }
+
+    private boolean isOwner(ClubMember target) {
+        return owner.getId().equals(target.getMember().getId());
+    }
+
+    private void removeClubPets(Member member) {
+        List<ClubPet> participatingMemberPets = clubPets.stream()
+                .filter(clubPet -> clubPet.getPet().getMember().getId().equals(member.getId()))
+                .toList();
+        clubPets.removeAll(participatingMemberPets);
+        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
+    }
 }
