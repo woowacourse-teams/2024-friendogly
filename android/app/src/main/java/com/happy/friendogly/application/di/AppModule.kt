@@ -39,7 +39,6 @@ import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
-import com.happy.friendogly.domain.usecase.GetLandMarksUseCase
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
@@ -174,8 +173,6 @@ class AppModule(context: Context) {
         GetNearFootprintsUseCase(repository = woofRepository)
     val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase =
         GetFootprintMarkBtnInfoUseCase(repository = woofRepository)
-    val getLandMarksUseCase: GetLandMarksUseCase =
-        GetLandMarksUseCase(repository = woofRepository)
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
     val getPetsUseCase: GetPetsUseCase = GetPetsUseCase(repository = petRepository)

@@ -3,7 +3,6 @@ package com.happy.friendogly.remote.source
 import com.happy.friendogly.data.model.FootprintDto
 import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
 import com.happy.friendogly.data.model.FootprintSaveDto
-import com.happy.friendogly.data.model.LandMarkDto
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.mapper.toData
@@ -27,10 +26,5 @@ class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
         return runCatching {
             service.getNearFootprints(latitude, longitude).data.toData()
         }
-    }
-
-    override suspend fun getLandMarks(): Result<List<LandMarkDto>> {
-        return Result.success(listOf(LandMarkDto()))
-//        return woofService.data.getLandMarks()
     }
 }

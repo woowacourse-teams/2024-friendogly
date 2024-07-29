@@ -5,7 +5,6 @@ import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.model.Footprint
 import com.happy.friendogly.domain.model.FootprintMarkBtnInfo
 import com.happy.friendogly.domain.model.FootprintSave
-import com.happy.friendogly.domain.model.LandMark
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.remote.model.request.FootprintRequest
 
@@ -38,11 +37,5 @@ class WoofRepositoryImpl(private val source: WoofDataSource) : WoofRepository {
             .mapCatching { dto ->
                 dto.toDomain()
             }
-    }
-
-    override suspend fun getLandMarks(): Result<List<LandMark>> {
-        return source.getLandMarks().mapCatching { dto ->
-            dto.toDomain()
-        }
     }
 }
