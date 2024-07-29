@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.group.modify.GroupModifyActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.dogdetail.DogDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

@@ -111,6 +111,10 @@
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
 
+    <!--모임 수정 -->
+    <string name="group_modify_title">모임 수정하기</string>
+    <string name="group_modify_commit">수정 완료</string>
+
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
