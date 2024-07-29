@@ -34,11 +34,14 @@ public class Footprint {
     @Column(nullable = false)
     private Location location;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "start_walk_time")
+    private LocalDateTime startWalkTime;
+
+    @Column(name = "end_walk_time")
+    private LocalDateTime endWalkTime;
 
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted;
@@ -47,7 +50,6 @@ public class Footprint {
     public Footprint(Member member, Location location) {
         this.member = member;
         this.location = location;
-        this.imageUrl = "";
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
     }
@@ -59,9 +61,5 @@ public class Footprint {
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
                 .equals(memberId);
-    }
-
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }

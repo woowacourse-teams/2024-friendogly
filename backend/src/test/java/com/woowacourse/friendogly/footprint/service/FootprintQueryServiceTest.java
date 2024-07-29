@@ -36,9 +36,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         .build()
         );
 
-        String footprintImageUrl = "https://picsum.photos/100";
-        footprint.updateImageUrl(footprintImageUrl);
-
         // when
         FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
 
@@ -50,7 +47,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
                 () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
                 () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
-                () -> assertThat(response.footprintImageUrl()).isEqualTo(footprintImageUrl),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }
@@ -77,7 +73,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
                 () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
                 () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
-                () -> assertThat(response.footprintImageUrl()).isEqualTo(pet.getImageUrl()),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }
