@@ -11,6 +11,8 @@ import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActionHandler
+import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
 class GroupMenuBottomSheet(
@@ -51,8 +53,7 @@ class GroupMenuBottomSheet(
                 GroupMenuEvent.Delete -> {
                 }
 
-                GroupMenuEvent.Modify -> {
-                }
+                GroupMenuEvent.Modify -> (activity as GroupDetailNavigation).navigateToModify()
 
                 GroupMenuEvent.Report -> {}
             }
