@@ -27,8 +27,11 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Marker.SIZE_AUTO
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
@@ -232,8 +235,11 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     private fun LocalDateTime.toZIndex(): Int {
-        val duration = Duration.between(this.toJavaLocalDateTime(), java.time.LocalDateTime.now())
-        return Int.MAX_VALUE - (duration.toHours() * 100000000 + duration.toMinutes() * 1000000 + duration.toMillis()).toInt()
+        val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val duration =
+            Duration.between(this.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
+        val millis = duration.toMillis()
+        return (-millis / 1000).toInt()
     }
 
     private fun setUpMarkerAction(

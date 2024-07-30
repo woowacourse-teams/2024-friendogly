@@ -9,6 +9,8 @@ import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
+import com.happy.friendogly.domain.model.WalkStatus
+import com.happy.friendogly.presentation.model.FootprintInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDate
@@ -74,10 +76,10 @@ fun TextView.bindingCreatedAt(createdAt: LocalDateTime?) {
 
         text =
             when {
-                days > 0 -> "${days}일 전"
-                hours > 0 -> "${hours}시간 전"
-                minutes > 0 -> "${minutes}분 전"
-                else -> "방금 전"
+                days > 0 -> context.getString(R.string.woof_days_ago, days)
+                hours > 0 -> context.getString(R.string.woof_hours_ago, hours)
+                minutes > 0 -> context.getString(R.string.woof_minutes_ago, minutes)
+                else -> context.getString(R.string.woof_just_now)
             }
     }
 }
@@ -103,6 +105,49 @@ fun TextView.bindPetGender(petGender: Gender?) {
                 Gender.FEMALE -> resources.getString(R.string.dog_gender_female)
                 Gender.MALE_NEUTERED -> resources.getString(R.string.dog_gender_male_neutered)
                 Gender.FEMALE_NEUTERED -> resources.getString(R.string.dog_gender_female_neutered)
+            }
+    }
+}
+
+@BindingAdapter("walkStatus")
+fun TextView.bindWalkStatus(footPrintInfo: FootprintInfoUiModel?) {
+    if (footPrintInfo != null) {
+        text =
+            when (footPrintInfo.walkStatus) {
+                WalkStatus.BEFORE -> {
+                    val duration =
+                        Duration.between(
+                            footPrintInfo.createdAt.toJavaLocalDateTime(),
+                            java.time.LocalDateTime.now(),
+                        )
+                    val minutes = duration.toMinutes()
+
+                    resources.getString(R.string.woof_walk_before, minutes)
+                }
+
+                WalkStatus.ONGOING -> {
+                    if (footPrintInfo.startWalkTime != null) {
+                        val duration =
+                            Duration.between(
+                                footPrintInfo.startWalkTime.toJavaLocalDateTime(),
+                                java.time.LocalDateTime.now(),
+                            )
+                        val minutes = duration.toMinutes()
+
+                        resources.getString(R.string.woof_walk_ongoing, minutes)
+                    }
+                    resources.getString(R.string.woof_walk_unknown)
+                }
+
+                WalkStatus.AFTER -> {
+                    if (footPrintInfo.endWalkTime != null) {
+                        val hour = footPrintInfo.endWalkTime.hour
+                        val minute = footPrintInfo.endWalkTime.minute
+
+                        resources.getString(R.string.woof_walk_after, hour, minute)
+                    }
+                    resources.getString(R.string.woof_walk_unknown)
+                }
             }
     }
 }

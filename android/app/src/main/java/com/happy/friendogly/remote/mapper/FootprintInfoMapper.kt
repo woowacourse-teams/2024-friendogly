@@ -12,6 +12,9 @@ fun FootprintInfoResponse.toData(): FootprintInfoDto {
         petSizeType = petSizeType.toData(),
         petGender = petGender.toData(),
         footprintImageUrl = footprintImageUrl,
+        walkStatus = walkStatus,
+        startWalkTime = startWalkTime,
+        endWalkTime = endWalkTime,
         createdAt = createdAt,
         isMine = isMine,
     )
