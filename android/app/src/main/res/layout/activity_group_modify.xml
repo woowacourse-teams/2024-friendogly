@@ -14,6 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:paddingHorizontal="10dp">
 
         <View
@@ -23,7 +24,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_group__back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -44,113 +44,123 @@
             app:layout_constraintStart_toStartOf="@id/view_group_modify_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_modify_top_bar" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/tv_group_modify_submit"
-            app:layout_constraintTop_toBottomOf="@+id/view_group_modify_top_bar">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                onSingleClick="@{()->vm.selectGroupImage()}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center">
+            <LinearLayout
+                android:id="@+id/linear_layout_group_modify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iv_group_add_poster"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img_profile_normal"
-                    app:groupPoster="@{vm.groupPoster}" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    onSingleClick="@{()->vm.selectGroupImage()}"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center">
 
-                <ImageView
+                    <ImageView
+                        android:id="@+id/iv_group_add_poster"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/img_profile_normal"
+                        app:groupPoster="@{vm.groupPoster}" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_user_profile_set_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_user_profile_set_button"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="@string/group_add_group_title" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
 
-            <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/group_add_group_title" />
+                <EditText
+                    android:id="@+id/et_group_subject"
+                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_gray03_fill_16"
+                    android:hint="@string/group_add_group_subject_hint"
+                    android:maxLength="100"
+                    android:maxLines="2"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    android:scrollbars="vertical"
+                    android:text="@={vm.groupTitle}" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="10dp" />
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end"
+                    app:titleCount="@{vm.groupTitle}"
+                    tools:text="0/100" />
 
-            <EditText
-                android:id="@+id/et_group_subject"
-                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rect_gray03_fill_16"
-                android:hint="@string/group_add_group_subject_hint"
-                android:maxLength="100"
-                android:maxLines="2"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="14dp"
-                android:scrollbars="vertical"
-                android:text="@={vm.groupTitle}" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
 
-            <TextView
-                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="end"
-                app:titleCount="@{vm.groupTitle}"
-                tools:text="0/100" />
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_add_group_content" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
 
-            <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/group_add_group_content" />
+                <EditText
+                    android:id="@+id/et_group_content"
+                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rect_gray03_fill_16"
+                    android:gravity="top"
+                    android:hint="@string/group_add_content_hint"
+                    android:lines="5"
+                    android:maxLength="1000"
+                    android:maxLines="1"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    android:scrollbars="vertical"
+                    android:text="@={vm.groupContent}" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="10dp" />
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end"
+                    app:contentCount="@{vm.groupContent}"
+                    tools:text="0/1000" />
 
-            <EditText
-                android:id="@+id/et_group_content"
-                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/rect_gray03_fill_16"
-                android:gravity="top"
-                android:hint="@string/group_add_content_hint"
-                android:lines="5"
-                android:maxLength="1000"
-                android:maxLines="1"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="14dp"
-                android:scrollbars="vertical"
-                android:text="@={vm.groupContent}" />
-
-            <TextView
-                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="end"
-                app:contentCount="@{vm.groupContent}"
-                tools:text="0/1000" />
-        </LinearLayout>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp" />
+            </LinearLayout>
+        </ScrollView>
 
         <TextView
             android:id="@+id/tv_group_modify_submit"

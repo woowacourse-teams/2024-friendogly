@@ -1,9 +1,11 @@
 package com.happy.friendogly.presentation.ui.group.modify
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +18,8 @@ import com.happy.friendogly.databinding.ActivityGroupModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
+import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
+import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.intentSerializable
 import com.happy.friendogly.presentation.utils.putSerializable
 import com.happy.friendogly.presentation.utils.toBitmap
@@ -31,6 +35,7 @@ class GroupModifyActivity :
 
     override fun initCreateView() {
         initDataBinding()
+        initEditText()
         initObserver()
         initUiModel()
         initImageLaunchers()
@@ -48,6 +53,18 @@ class GroupModifyActivity :
                 posterBitmap = groupModifyUiModel.groupPoster?.toUri()?.toBitmap(this),
                 groupModifyUiModel = groupModifyUiModel,
             )
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initEditText(){
+        binding.etGroupContent.customOnFocusChangeListener(this)
+        binding.etGroupSubject.customOnFocusChangeListener(this)
+        binding.linearLayoutGroupModify.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            binding.etGroupSubject.clearFocus()
+            binding.etGroupContent.clearFocus()
+            false
         }
     }
 
