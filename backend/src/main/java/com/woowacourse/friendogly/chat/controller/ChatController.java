@@ -29,7 +29,7 @@ public class ChatController {
         this.template = template;
     }
 
-    @MessageMapping("/invite/private/{receiverMemberId}")
+    @MessageMapping("/private/invite/{receiverMemberId}")
     public void inviteToPrivateRoom(
             @WebSocketAuth Long senderMemberId,
             @DestinationVariable(value = "receiverMemberId") Long receiverMemberId
@@ -41,13 +41,21 @@ public class ChatController {
         template.convertAndSend("/topic/invite/private/" + receiverMemberId, response);
     }
 
-    @MessageMapping("/rooms/{chatRoomId}")
+    @MessageMapping("/private/rooms/{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
-            @DestinationVariable(value = "chatRoomId") String chatRoomId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
         ChatMessageResponse response = chatService.parseMessage(memberId, request);
         template.convertAndSend("/topic/private/" + chatRoomId, response);
+    }
+
+    @MessageMapping("/private/leave/{chatRoomId}")
+    public void leavePrivateChatRoom(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId
+    ) {
+        privateChatRoomCommandService.leave(memberId, chatRoomId);
     }
 }

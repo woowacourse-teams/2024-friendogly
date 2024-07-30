@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class ChatRoomServiceTest extends ServiceTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    protected MemberRepository memberRepository;
 
     @Autowired
     protected PrivateChatRoomRepository privateChatRoomRepository;

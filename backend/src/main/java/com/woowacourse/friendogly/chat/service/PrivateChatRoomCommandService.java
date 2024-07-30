@@ -10,8 +10,10 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PrivateChatRoomCommandService {
 
     private final PrivateChatRoomRepository privateChatRoomRepository;
@@ -50,5 +52,18 @@ public class PrivateChatRoomCommandService {
     private boolean exists(Member member, Member otherMember) {
         return privateChatRoomRepository.existsByMemberAndOtherMember(member, otherMember)
                || privateChatRoomRepository.existsByMemberAndOtherMember(otherMember, member);
+    }
+
+    public void leave(Long memberId, Long privateChatRoomId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new FriendoglyException(memberId + "는 존재하지 않는 Member ID입니다."));
+        PrivateChatRoom chatRoom = privateChatRoomRepository.findById(privateChatRoomId)
+                .orElseThrow(() -> new FriendoglyException(memberId + "는 존재하지 않는 PrivateChatRoom ID입니다."));
+
+        chatRoom.leave(member);
+
+        if (chatRoom.isEmpty()) {
+            privateChatRoomRepository.delete(chatRoom);
+        }
     }
 }

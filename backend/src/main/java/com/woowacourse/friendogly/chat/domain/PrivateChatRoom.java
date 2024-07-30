@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.chat.domain;
 
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,5 +33,21 @@ public class PrivateChatRoom {
     public PrivateChatRoom(Member member, Member otherMember) {
         this.member = member;
         this.otherMember = otherMember;
+    }
+
+    public void leave(Member member) {
+        if (this.member != null && this.member.getId().equals(member.getId())) {
+            this.member = null;
+            return;
+        }
+        if (this.otherMember != null && this.otherMember.getId().equals(member.getId())) {
+            this.otherMember = null;
+            return;
+        }
+        throw new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다.");
+    }
+
+    public boolean isEmpty() {
+        return member == null && otherMember == null;
     }
 }
