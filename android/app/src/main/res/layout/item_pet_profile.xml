@@ -44,6 +44,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                onSingleClick="@{() -> actionHandler.navigateToPetEdit(petView.id)}"
                 android:src="@drawable/ic_user_profile_set_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

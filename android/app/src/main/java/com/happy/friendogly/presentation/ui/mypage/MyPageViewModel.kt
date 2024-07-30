@@ -72,6 +72,26 @@ class MyPageViewModel(
         _navigateAction.emit(MyPageNavigationAction.NavigateToDogRegister)
     }
 
+    override fun navigateToProfileEdit() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit)
+    }
+
+    fun navigateToSetting() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToSetting)
+    }
+
+    override fun navigateToPetEdit(id: Long) {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit)
+    }
+
+    fun navigateToMyParticipation() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToMyParticipation)
+    }
+
+    fun navigateToMyClubManger() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToMyClubManger)
+    }
+
     companion object {
         val dog =
             Dog(

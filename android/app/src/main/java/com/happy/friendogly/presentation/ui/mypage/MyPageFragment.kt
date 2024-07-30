@@ -45,12 +45,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
-                is MyPageNavigationAction.NavigateToSetting -> TODO()
+                is MyPageNavigationAction.NavigateToSetting -> {}
                 is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
 
                 is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
 
-                is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
+                is MyPageNavigationAction.NavigateToProfileEdit -> {}
+                is MyPageNavigationAction.NavigateToMyClubManger -> {}
+                is MyPageNavigationAction.NavigateToMyParticipation -> {}
+                is MyPageNavigationAction.NavigateToPetEdit -> {}
             }
         }
 
