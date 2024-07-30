@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.chat.dto;
+package com.woowacourse.friendogly.chat.dto.request;
 
 public record ChatMessageRequest(String content) {
 

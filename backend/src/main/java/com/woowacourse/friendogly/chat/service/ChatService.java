@@ -1,7 +1,7 @@
 package com.woowacourse.friendogly.chat.service;
 
-import com.woowacourse.friendogly.chat.dto.ChatMessageRequest;
-import com.woowacourse.friendogly.chat.dto.ChatMessageResponse;
+import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
+import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
@@ -16,7 +16,7 @@ public class ChatService {
         this.memberRepository = memberRepository;
     }
 
-    public ChatMessageResponse parseData(Long memberId, ChatMessageRequest request) {
+    public ChatMessageResponse parseMessage(Long memberId, ChatMessageRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 Member ID입니다."));
 

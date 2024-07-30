@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.chat.dto;
+package com.woowacourse.friendogly.chat.dto.response;
 
 public record ChatMessageResponse(
         String senderName,
