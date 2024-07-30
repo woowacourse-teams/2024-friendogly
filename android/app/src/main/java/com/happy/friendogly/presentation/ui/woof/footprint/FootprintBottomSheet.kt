@@ -1,17 +1,20 @@
 package com.happy.friendogly.presentation.ui.woof.footprint
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
-import com.happy.friendogly.databinding.BottomSheetFootprintBinding
+import com.happy.friendogly.databinding.BottomSheetMarkerBinding
 
 class FootprintBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetFootprintBinding? = null
-    val binding: BottomSheetFootprintBinding
+    private var _binding: BottomSheetMarkerBinding? = null
+    val binding: BottomSheetMarkerBinding
         get() = _binding!!
 
     private val viewModel: FootprintViewModel by viewModels<FootprintViewModel> {
@@ -25,12 +28,16 @@ class FootprintBottomSheet : BottomSheetDialogFragment() {
         arguments?.getLong(KEY_FOOT_PRINT_ID) ?: error("발자국 아이디를 받아오는데 실패하였습니다.")
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return BottomSheetDialog(requireContext(), R.style.marker_information_bottom_sheet_dialog)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = BottomSheetFootprintBinding.inflate(inflater, container, false)
+        _binding = BottomSheetMarkerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
