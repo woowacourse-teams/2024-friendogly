@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.mypage
 
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentMyPageBinding
@@ -27,10 +28,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        binding.vpDogProfile.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.updateCurrentPage(position)
+                }
+            },
+        )
     }
 
     private fun initAdapter() {
-        binding.rvDogProfile.adapter = adapter
+        binding.vpDogProfile.adapter = adapter
     }
 
     private fun initObserve() {

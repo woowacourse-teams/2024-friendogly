@@ -23,8 +23,18 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="16dp"
+            android:text="@string/mypage_title"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
         <ImageView
-            android:id="@+id/iv_edit_btn"
+            android:id="@+id/iv_setting_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -38,35 +48,49 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
 
-
-                <ImageView
-                    android:id="@+id/iv_user_profile"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout_profile_image"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_profile_normal"
-                    app:glideProfile1000="@{vm.uiState.profilePath}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_goneMarginTop="16dp" />
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/iv_user_profile_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:glideProfile1000="@{vm.uiState.profilePath}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/img_profile_normal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_user_profile_set_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_user_profile"
-                    app:layout_constraintStart_toEndOf="@+id/iv_user_profile"
-                    app:layout_constraintTop_toTopOf="@+id/iv_user_profile">
+                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout_profile_image"
+                    app:layout_constraintStart_toEndOf="@+id/constraintLayout_profile_image"
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout_profile_image">
 
                     <TextView
                         android:id="@+id/tv_user_name"
@@ -104,97 +128,94 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_user_profile">
-
-                    <TextView
-                        android:id="@+id/tv_edit_profile_btn"
-                        style="@style/Theme.AppCompat.TextView.Regular.Gray08.Size16"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray01_fill_16"
-                        android:gravity="center"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="@string/edit_profile_title" />
-
-                    <TextView
-                        android:id="@+id/tv_register_dog_btn"
-                        style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
-                        onSingleClick="@{() -> vm.navigateToDogRegister()}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_coral400_fill_12"
-                        android:gravity="center"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:text="@string/register_dog_title"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_alert_description" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_dog_profile"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout_pet_profile"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="100dp"
-                    android:visibility="@{vm.uiState.pets.size() == 0 ? View.GONE : View.VISIBLE}"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray50"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                    app:spanCount="2"
-                    tools:listitem="@layout/item_pet"
-                    tools:visibility="gone" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout_profile_image">
 
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{vm.uiState.pets.size() == 0 ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="150dp"
-                        android:src="@drawable/img_profile_normal"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <TextView
+                        android:id="@+id/tv_pet_profile_title"
+                        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/pets_profile"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size16"
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vp_dog_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/empty_pet_description"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="@+id/imageView"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_pet_profile_title"
+                        tools:visibility="visible" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_indicator"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:currentIndicator="@{vm.currentPage}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/vp_dog_profile"
+                        app:setUpIndicator="@{vm.uiState.pets.size()}" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <TextView
+                    android:id="@+id/tv_my_activities_title"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/my_activities"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout_pet_profile" />
+
+
+                <TextView
+                    android:id="@+id/tv_participation"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="16dp"
+                    android:text="@string/participation"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_activities_title" />
+
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/club_manager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_participation" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
