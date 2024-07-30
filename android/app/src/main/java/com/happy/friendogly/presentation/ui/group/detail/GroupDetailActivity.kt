@@ -11,10 +11,12 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.group.menu.GroupMenuBottomSheet
+import com.happy.friendogly.presentation.ui.group.modify.GroupModifyActivity
 import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 
 class GroupDetailActivity :
-    BaseActivity<ActivityGroupDetailBinding>(R.layout.activity_group_detail) {
+    BaseActivity<ActivityGroupDetailBinding>(R.layout.activity_group_detail),
+    GroupDetailNavigation {
     private val viewModel: GroupDetailViewModel by viewModels()
     private val filterAdapter: FilterAdapter by lazy {
         FilterAdapter()
@@ -71,7 +73,10 @@ class GroupDetailActivity :
                             viewModel.joinGroup()
                         }
                     bottomSheet.show(supportFragmentManager, "TAG")
-                    bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+                    bottomSheet.setStyle(
+                        DialogFragment.STYLE_NORMAL,
+                        R.style.RoundCornerBottomSheetDialogTheme
+                    )
                 }
 
                 // TODO: delete and go chatActivity
@@ -102,5 +107,16 @@ class GroupDetailActivity :
                 putExtra(KEY_GROUP_DETAIL_ID, groupId)
             }
         }
+    }
+
+    override fun navigateToModify() {
+        val groupDetailUiModel: GroupDetailUiModel = viewModel.group.value ?: return
+
+        startActivity(
+            GroupModifyActivity.getIntent(
+                this@GroupDetailActivity,
+                groupDetailUiModel.toGroupModifyUiModel()
+            )
+        )
     }
 }

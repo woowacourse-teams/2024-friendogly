@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.group.detail
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import java.time.LocalDateTime
 
 data class GroupDetailUiModel(
@@ -20,4 +21,12 @@ data class GroupDetailUiModel(
     val groupDate: LocalDateTime,
     val userProfiles: List<GroupDetailProfileUiModel>,
     val dogProfiles: List<GroupDetailProfileUiModel>,
-)
+) {
+    fun toGroupModifyUiModel(): GroupModifyUiModel {
+        return GroupModifyUiModel(
+            title = title,
+            content = content,
+            groupPoster = groupPoster,
+        )
+    }
+}
