@@ -9,6 +9,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -28,12 +29,12 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 GroupDetailUiModel(
                     groupId = 0L,
                     filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.SizeFilter.BigDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
-                        ),
+                    listOf(
+                        GroupFilter.SizeFilter.SmallDog,
+                        GroupFilter.SizeFilter.BigDog,
+                        GroupFilter.GenderFilter.Female,
+                        GroupFilter.GenderFilter.NeutralizingMale,
+                    ),
                     groupPoster = null,
                     detailViewType = DetailViewType.MINE,
                     title = "중형견 모임해요",
@@ -45,59 +46,59 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                     groupDate = LocalDateTime.now(),
                     groupReaderImage = null,
                     userProfiles =
-                        listOf(
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                null,
-                            ),
+                    listOf(
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            null,
                         ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            null,
+                        ),
+                    ),
                     dogProfiles =
-                        listOf(
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "땡이",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "채드",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "벼리",
-                                null,
-                            ),
-                            GroupDetailProfileUiModel(
-                                "에디",
-                                null,
-                            ),
+                    listOf(
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            null,
                         ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "땡이",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "채드",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "벼리",
+                            null,
+                        ),
+                        GroupDetailProfileUiModel(
+                            "에디",
+                            null,
+                        ),
+                    ),
                 )
         }
 
@@ -130,4 +131,8 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
             // TODO : success
             _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
         }
+
+    fun makeGroupModifyUiModel(): GroupModifyUiModel? {
+        return group.value?.toGroupModifyUiModel()
+    }
 }

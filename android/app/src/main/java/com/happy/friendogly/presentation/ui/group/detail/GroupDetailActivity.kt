@@ -95,6 +95,17 @@ class GroupDetailActivity :
         }
     }
 
+    override fun navigateToModify() {
+        val groupModifyUiModel = viewModel.makeGroupModifyUiModel() ?: return
+
+        startActivity(
+            GroupModifyActivity.getIntent(
+                this@GroupDetailActivity,
+                groupModifyUiModel,
+            ),
+        )
+    }
+
     companion object {
         private const val KEY_GROUP_DETAIL_ID = "groupDetailId"
         private const val FAIL_LOAD_DATA_ID = -1L
@@ -107,16 +118,5 @@ class GroupDetailActivity :
                 putExtra(KEY_GROUP_DETAIL_ID, groupId)
             }
         }
-    }
-
-    override fun navigateToModify() {
-        val groupDetailUiModel: GroupDetailUiModel = viewModel.group.value ?: return
-
-        startActivity(
-            GroupModifyActivity.getIntent(
-                this@GroupDetailActivity,
-                groupDetailUiModel.toGroupModifyUiModel(),
-            ),
-        )
     }
 }

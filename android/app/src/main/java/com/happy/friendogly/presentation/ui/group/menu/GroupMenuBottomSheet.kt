@@ -44,10 +44,19 @@ class GroupMenuBottomSheet(
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         viewModel.initDetailViewType(detailViewType)
+        initObserver()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initObserver(){
         viewModel.groupMenuEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 GroupMenuEvent.Block -> {}
-                GroupMenuEvent.CancelSelection -> {}
+                GroupMenuEvent.CancelSelection -> dismissNow()
 
                 GroupMenuEvent.Delete -> {
                 }
@@ -58,10 +67,5 @@ class GroupMenuBottomSheet(
             }
             this.dismissNow()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
