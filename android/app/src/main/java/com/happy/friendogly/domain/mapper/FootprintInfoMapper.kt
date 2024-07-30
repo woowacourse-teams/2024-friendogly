@@ -12,6 +12,9 @@ fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
         petSizeType = petSizeType,
         petGender = petGender,
         footprintImageUrl = footprintImageUrl,
+        walkStatus = walkStatus,
+        startWalkTime = startWalkTime,
+        endWalkTime = endWalkTime,
         createdAt = createdAt,
         isMine = isMine,
     )

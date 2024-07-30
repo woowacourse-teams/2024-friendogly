@@ -12,6 +12,9 @@ fun FootprintInfoDto.toDomain(): FootprintInfo {
         petSizeType = petSizeType.toDomain(),
         petGender = petGender.toDomain(),
         footprintImageUrl = footprintImageUrl,
+        walkStatus = walkStatus,
+        startWalkTime = startWalkTime,
+        endWalkTime = endWalkTime,
         createdAt = createdAt,
         isMine = isMine,
     )
