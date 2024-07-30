@@ -15,7 +15,6 @@ import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
 import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
-import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
@@ -23,11 +22,13 @@ import com.happy.friendogly.presentation.ui.woof.WoofFragment
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
+    private val permission =
+        MultiPermission.from(this).requestAlarmPermission().requestLocationPermission()
     private var waitTime = 0L
 
     override fun initCreateView() {
         initNavController()
-        MultiPermission.from(this).addAlarmPermission().addLocationPermission().request()
+        permission.showDialog().launch()
     }
 
     private fun initNavController() {
@@ -83,12 +84,6 @@ class MainActivity :
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                 )
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
-        }
-    }
-
-    private fun requestNotificationPermission() {
-        if (AlarmPermission.isValidPermissionSDK()) {
-            AlarmPermission(this).askNotificationPermission()
         }
     }
 

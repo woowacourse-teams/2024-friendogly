@@ -1,11 +1,11 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
@@ -31,17 +31,16 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 
-class WoofFragment :
-    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
+class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val permissionRequester: LocationPermission by lazy {
-        LocationPermission(
-            requireActivity(),
-        )
+        LocationPermission.from(this)
     }
+
+    private val multiPermission: MultiPermission = MultiPermission.from(this).requestLocationPermission()
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -59,8 +58,8 @@ class WoofFragment :
     }
 
     override fun initViewCreated() {
-        binding.layoutWoofLoading.isVisible = true
-        binding.lottieWoofLoading.playAnimation()
+        // binding.layoutWoofLoading.isVisible = true
+        // binding.lottieWoofLoading.playAnimation()
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)
@@ -91,31 +90,27 @@ class WoofFragment :
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofMapActions.MarkFootPrint -> viewModel.markFootprint(latLng)
-                is WoofMapActions.ChangeMapToNoFollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.NoFollow
+                is WoofMapActions.ChangeMapToNoFollowTrackingMode -> map.locationTrackingMode =
+                    LocationTrackingMode.NoFollow
 
-                is WoofMapActions.ChangeMapToFollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.Follow
+                is WoofMapActions.ChangeMapToFollowTrackingMode -> map.locationTrackingMode =
+                    LocationTrackingMode.Follow
 
-                is WoofMapActions.ChangeMapToFaceTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.Face
+                is WoofMapActions.ChangeMapToFaceTrackingMode -> map.locationTrackingMode =
+                    LocationTrackingMode.Face
             }
         }
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
-                is WoofSnackbarActions.ShowHasNotPetSnackbar ->
-                    showSnackbar(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_has_not_pet,
-                            ),
+                is WoofSnackbarActions.ShowHasNotPetSnackbar -> showSnackbar(
+                    String.format(
+                        resources.getString(
+                            R.string.woof_has_not_pet,
                         ),
-                    )
+                    ),
+                )
 
                 is WoofSnackbarActions.ShowCantClickMarkBtnSnackbar -> {
                     showSnackbar(
@@ -163,7 +158,7 @@ class WoofFragment :
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     binding.layoutWoofLoading.isVisible = false
-                    binding.lottieWoofLoading.pauseAnimation()
+                    // binding.lottieWoofLoading.pauseAnimation()
                 },
                 1000,
             )
@@ -178,9 +173,7 @@ class WoofFragment :
     }
 
     private fun showSettingSnackbar() {
-        MultiPermission.from(requireActivity()).addLocationPermission().addAlarmPermission {
-            Snackbar.make(binding.root, getString(R.string.alarm_dialog_body_woof), Snackbar.LENGTH_SHORT).show()
-        }.requestAndShowDialog()
+        multiPermission.showDialog().launch()
     }
 
     private fun moveCameraCenterPosition() {
@@ -218,10 +211,9 @@ class WoofFragment :
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            val bottomSheet =
-                FootprintBottomSheet.newInstance(
-                    footPrintId = footprintId,
-                )
+            val bottomSheet = FootprintBottomSheet.newInstance(
+                footPrintId = footprintId,
+            )
             bottomSheet.show(parentFragmentManager, tag)
             true
         }

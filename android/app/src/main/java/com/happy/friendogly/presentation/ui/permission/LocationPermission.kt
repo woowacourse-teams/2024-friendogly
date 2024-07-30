@@ -1,58 +1,68 @@
 package com.happy.friendogly.presentation.ui.permission
 
 import android.Manifest
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import java.lang.ref.WeakReference
 
-class LocationPermission(activity: FragmentActivity) : Permission(PermissionType.Location) {
-    private val activityRef = WeakReference(activity)
+class LocationPermission private constructor(private val lifecycleOwnerRef: WeakReference<LifecycleOwner>) :
+    Permission(PermissionType.Location),
+    DefaultLifecycleObserver {
 
     override fun hasPermissions(): Boolean {
-        val activity = activityRef.get() ?: error("${activityRef.javaClass.simpleName} is null")
-        return ActivityCompat.checkSelfPermission(
-            activity,
+        return getActivity()?.checkSelfPermission(
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ) == PackageManager.PERMISSION_GRANTED
+                getActivity()?.checkSelfPermission(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun checkLocationPermissions(isPermitted: (Boolean) -> Unit) {
-        val activity = activityRef.get() ?: error("${activityRef.javaClass.simpleName} is null")
-        if (!shouldShowRequestPermissionRationale()) {
-            createAlarmDialog(activity, isPermitted).show(
-                activity.supportFragmentManager,
-                LOCATION_DIALOG_TAG,
-            )
-        } else {
-            requestLocationPermissions()
+    private fun getActivity(): AppCompatActivity? =
+        if (lifecycleOwnerRef.get() is Fragment) (lifecycleOwnerRef.get() as? Fragment)?.context?.scanForActivity() else lifecycleOwnerRef.get() as? AppCompatActivity
+
+
+    private fun Context.scanForActivity(): AppCompatActivity? {
+        return when (this) {
+            is AppCompatActivity -> this
+            is ContextWrapper -> baseContext.scanForActivity()
+            else -> {
+                null
+            }
         }
     }
 
+
     override fun createAlarmDialog(
-        activity: FragmentActivity,
         clickResult: (Boolean) -> Unit,
-    ): DialogFragment =
-        DefaultBlueAlertDialog(
+    ): DialogFragment {
+        val activity = getActivity() ?: error("${getActivity()} is null")
+
+        return DefaultBlueAlertDialog(
             alertDialogModel =
-                AlertDialogModel(
-                    activity.getString(R.string.location_dialog_title),
-                    activity.getString(R.string.location_dialog_body),
-                    activity.getString(R.string.permission_cancel),
-                    activity.getString(R.string.permission_go_setting),
-                ),
+            AlertDialogModel(
+                activity.getString(R.string.location_dialog_title),
+                activity.getString(R.string.location_dialog_body),
+                activity.getString(R.string.permission_cancel),
+                activity.getString(R.string.permission_go_setting),
+            ),
             clickToNegative = {
                 clickResult(false)
             },
@@ -63,37 +73,23 @@ class LocationPermission(activity: FragmentActivity) : Permission(PermissionType
                 clickResult(true)
             },
         )
+    }
 
     override fun shouldShowRequestPermissionRationale(): Boolean {
-        val activity = activityRef.get() ?: error("${activityRef.javaClass.simpleName} is null")
+        val activity = getActivity() ?: error("${getActivity()} is null")
 
         return ActivityCompat.shouldShowRequestPermissionRationale(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            )
-    }
-
-    private fun requestLocationPermissions() {
-        val activity = activityRef.get() ?: error("${activityRef.javaClass.simpleName} is null")
-
-        val permissions =
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            )
-
-        ActivityCompat.requestPermissions(
-            activity,
-            permissions,
-            MainActivity.LOCATION_PERMISSION_REQUEST_CODE,
-        )
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
     }
 
     companion object {
-        private const val LOCATION_DIALOG_TAG = "locationDialog"
+        fun from(lifecycleOwner: LifecycleOwner): LocationPermission =
+            LocationPermission(WeakReference(lifecycleOwner))
     }
 }
