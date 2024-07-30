@@ -21,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -72,10 +73,10 @@ public class Club {
     private Status status;
 
     @OneToMany(mappedBy = "clubMemberPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    List<ClubMember> clubMembers = new ArrayList<>();
+    private List<ClubMember> clubMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    List<ClubPet> clubPets = new ArrayList<>();
+    private List<ClubPet> clubPets = new ArrayList<>();
 
     @Builder
     private Club(
@@ -205,9 +206,8 @@ public class Club {
     }
 
     private ClubMember findOwner() {
-        if (isEmpty()) {
-            throw new FriendoglyException("존재하지 않는 모임입니다.");
-        }
-        return clubMembers.get(0);
+        return clubMembers.stream()
+                .min(Comparator.comparing(ClubMember::getCreatedAt))
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
     }
 }
