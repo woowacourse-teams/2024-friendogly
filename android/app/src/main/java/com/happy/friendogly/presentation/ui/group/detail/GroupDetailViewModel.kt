@@ -29,12 +29,12 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                 GroupDetailUiModel(
                     groupId = 0L,
                     filters =
-                    listOf(
-                        GroupFilter.SizeFilter.SmallDog,
-                        GroupFilter.SizeFilter.BigDog,
-                        GroupFilter.GenderFilter.Female,
-                        GroupFilter.GenderFilter.NeutralizingMale,
-                    ),
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.SizeFilter.BigDog,
+                            GroupFilter.GenderFilter.Female,
+                            GroupFilter.GenderFilter.NeutralizingMale,
+                        ),
                     groupPoster = null,
                     detailViewType = DetailViewType.MINE,
                     title = "중형견 모임해요",
@@ -46,59 +46,59 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                     groupDate = LocalDateTime.now(),
                     groupReaderImage = null,
                     userProfiles =
-                    listOf(
-                        GroupDetailProfileUiModel(
-                            "땡이",
-                            null,
+                        listOf(
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                null,
+                            ),
                         ),
-                        GroupDetailProfileUiModel(
-                            "채드",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "벼리",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "에디",
-                            null,
-                        ),
-                    ),
                     dogProfiles =
-                    listOf(
-                        GroupDetailProfileUiModel(
-                            "땡이",
-                            null,
+                        listOf(
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "땡이",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "채드",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "벼리",
+                                null,
+                            ),
+                            GroupDetailProfileUiModel(
+                                "에디",
+                                null,
+                            ),
                         ),
-                        GroupDetailProfileUiModel(
-                            "채드",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "벼리",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "에디",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "땡이",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "채드",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "벼리",
-                            null,
-                        ),
-                        GroupDetailProfileUiModel(
-                            "에디",
-                            null,
-                        ),
-                    ),
                 )
         }
 

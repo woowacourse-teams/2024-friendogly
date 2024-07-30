@@ -52,7 +52,7 @@ class GroupMenuBottomSheet(
         _binding = null
     }
 
-    private fun initObserver(){
+    private fun initObserver() {
         viewModel.groupMenuEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 GroupMenuEvent.Block -> {}
