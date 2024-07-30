@@ -9,7 +9,6 @@ import com.woowacourse.friendogly.chat.service.PrivateChatRoomCommandService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,12 +42,12 @@ public class ChatController {
     }
 
     @MessageMapping("/rooms/{chatRoomId}")
-    @SendTo("/topic/private/{chatRoomId}")
-    public ChatMessageResponse sendMessage(
+    public void sendMessage(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") String chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        return chatService.parseMessage(memberId, request);
+        ChatMessageResponse response = chatService.parseMessage(memberId, request);
+        template.convertAndSend("/topic/private/" + chatRoomId, response);
     }
 }
