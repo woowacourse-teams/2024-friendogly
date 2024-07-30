@@ -1,13 +1,18 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import com.woowacourse.friendogly.footprint.domain.Footprint;
+import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.member.domain.Member;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 class FootprintCommandServiceTest extends FootprintServiceTest {
 
@@ -73,5 +78,26 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
                 )
         ).isInstanceOf(FriendoglyException.class)
                 .hasMessage("마지막 발자국을 찍은 뒤 30초가 경과되지 않았습니다.");
+    }
+
+    @DisplayName("최근 발자국이 있는 경우 발자국 생성 시 최근 발자국은 삭제된다")
+    @Transactional
+    @Test
+    void save_With_DeleteRecentFootprint() {
+        // given
+        Footprint recentFootPrint = footprintRepository.save(
+                Footprint.builder()
+                        .member(member)
+                        .location(new Location(30, 30))
+                        .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now().minusSeconds(30))
+                        .build()
+        );
+
+        // when
+        footprintCommandService.save(member.getId(), new SaveFootprintRequest(30, 30));
+
+        // then
+        assertThat(recentFootPrint.isDeleted()).isTrue();
     }
 }

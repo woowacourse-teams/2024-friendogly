@@ -44,6 +44,9 @@ public class FootprintCommandService {
         validatePetExistence(member);
         validateRecentFootprintExists(memberId);
 
+        footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
+                .ifPresent(Footprint::updateToDeleted);
+
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
