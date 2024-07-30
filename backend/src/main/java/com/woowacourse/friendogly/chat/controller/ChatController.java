@@ -39,6 +39,7 @@ public class ChatController {
 
         template.convertAndSend("/topic/invite/private/" + senderMemberId, response);
         template.convertAndSend("/topic/invite/private/" + receiverMemberId, response);
+        // TODO: 채팅방에 알림 메시지 전달하기
     }
 
     @MessageMapping("/private/rooms/{chatRoomId}")
@@ -57,5 +58,8 @@ public class ChatController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
         privateChatRoomCommandService.leave(memberId, chatRoomId);
+        // TODO: 채팅방에 알림 메시지 전달하기
     }
+
+    // TODO: 모든 API에 대해서 공통 응답 만들기
 }
