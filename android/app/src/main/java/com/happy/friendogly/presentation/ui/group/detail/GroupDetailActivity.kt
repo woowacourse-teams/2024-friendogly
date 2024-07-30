@@ -75,7 +75,7 @@ class GroupDetailActivity :
                     bottomSheet.show(supportFragmentManager, "TAG")
                     bottomSheet.setStyle(
                         DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme
+                        R.style.RoundCornerBottomSheetDialogTheme,
                     )
                 }
 
@@ -115,8 +115,8 @@ class GroupDetailActivity :
         startActivity(
             GroupModifyActivity.getIntent(
                 this@GroupDetailActivity,
-                groupDetailUiModel.toGroupModifyUiModel()
-            )
+                groupDetailUiModel.toGroupModifyUiModel(),
+            ),
         )
     }
 }

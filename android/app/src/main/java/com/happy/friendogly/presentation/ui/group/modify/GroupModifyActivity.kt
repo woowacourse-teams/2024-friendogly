@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -26,7 +25,6 @@ import com.happy.friendogly.presentation.utils.toBitmap
 
 class GroupModifyActivity :
     BaseActivity<ActivityGroupModifyBinding>(R.layout.activity_group_modify) {
-
     private val viewModel: GroupModifyViewModel by viewModels()
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
@@ -57,7 +55,7 @@ class GroupModifyActivity :
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun initEditText(){
+    private fun initEditText() {
         binding.etGroupContent.customOnFocusChangeListener(this)
         binding.etGroupSubject.customOnFocusChangeListener(this)
         binding.linearLayoutGroupModify.setOnTouchListener { _, _ ->
@@ -130,6 +128,7 @@ class GroupModifyActivity :
 
     companion object {
         private const val GROUP_MODIFY_UI_MODEL = "groupModifyUiModel"
+
         fun getIntent(
             context: Context,
             groupModifyUiModel: GroupModifyUiModel,
@@ -138,7 +137,7 @@ class GroupModifyActivity :
                 putSerializable(
                     GROUP_MODIFY_UI_MODEL,
                     groupModifyUiModel,
-                    GroupModifyUiModel.serializer()
+                    GroupModifyUiModel.serializer(),
                 )
             }
         }

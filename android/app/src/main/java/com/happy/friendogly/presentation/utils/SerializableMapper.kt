@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 
 inline fun <reified T> Intent.intentSerializable(
     key: String,
-    serializer: KSerializer<T>
+    serializer: KSerializer<T>,
 ): T? {
     return when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
@@ -23,7 +23,7 @@ inline fun <reified T> Intent.intentSerializable(
 inline fun <reified T> Intent.putSerializable(
     key: String,
     value: T,
-    serializer: KSerializer<T>
+    serializer: KSerializer<T>,
 ) {
     val jsonString = Json.encodeToString(serializer, value)
     this.putExtra(key, jsonString)

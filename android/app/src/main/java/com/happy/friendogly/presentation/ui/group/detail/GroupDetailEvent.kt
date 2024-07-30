@@ -12,6 +12,5 @@ sealed interface GroupDetailEvent {
         data object NavigateToChat : Navigation
 
         data object NavigateToHome : Navigation
-
     }
 }
