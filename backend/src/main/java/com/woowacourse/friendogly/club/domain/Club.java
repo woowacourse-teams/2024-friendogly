@@ -71,10 +71,10 @@ public class Club {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubMemberPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
     List<ClubMember> clubMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
     List<ClubPet> clubPets = new ArrayList<>();
 
     @Builder
@@ -133,12 +133,11 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
-        clubMember.updateClub(this);
     }
 
     private void validateAlreadyExists(Member member) {
         if (clubMembers.stream()
-                .anyMatch(clubMember -> clubMember.getMember().getId().equals(member.getId()))) {
+                .anyMatch(clubMember -> clubMember.isSameMember(member))) {
             throw new FriendoglyException("이미 참여 중인 모임입니다.");
         }
     }
@@ -153,7 +152,6 @@ public class Club {
         List<ClubPet> clubPets = pets.stream()
                 .peek(this::validateParticipatePet)
                 .map(pet -> new ClubPet(this, pet))
-                .peek(clubPet -> clubPet.updateClub(this))
                 .toList();
         this.clubPets.addAll(clubPets);
     }
@@ -173,7 +171,7 @@ public class Club {
 
     private ClubMember findTargetClubMember(Member member) {
         return clubMembers.stream()
-                .filter(currentClubMember -> currentClubMember.getMember().getId().equals(member.getId()))
+                .filter(currentClubMember -> currentClubMember.isSameMember(member))
                 .findAny()
                 .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
     }
@@ -186,7 +184,7 @@ public class Club {
 
     private List<ClubPet> findTargetClubPets(Member member) {
         return clubPets.stream()
-                .filter(clubPet -> clubPet.getPet().getMember().getId().equals(member.getId()))
+                .filter(clubPet -> clubPet.isSameMember(member))
                 .toList();
     }
 
@@ -199,18 +197,17 @@ public class Club {
     }
 
     public boolean isOwner(ClubMember target) {
-        validateEmpty();
-        return clubMembers.get(0).getMember().getId().equals(target.getMember().getId());
+        return findOwner().isSameMember(target.getClubMemberPk().getMember());
     }
 
-    public Name getOwnerName() {
-        validateEmpty();
-        return clubMembers.get(0).getMember().getName();
+    public Name findOwnerName() {
+        return findOwner().getClubMemberPk().getMember().getName();
     }
 
-    private void validateEmpty() {
+    private ClubMember findOwner() {
         if (isEmpty()) {
             throw new FriendoglyException("존재하지 않는 모임입니다.");
         }
+        return clubMembers.get(0);
     }
 }

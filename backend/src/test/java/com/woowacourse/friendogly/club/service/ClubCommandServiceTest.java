@@ -83,7 +83,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
 
         assertThat(savedClub.countClubMember()).isEqualTo(2);
     }
@@ -99,7 +99,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedPet.getId()));
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedMember.getId(), request))
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("이미 참여 중인 모임입니다.");
     }
@@ -134,7 +134,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request))
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
@@ -161,7 +161,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Pet savedNewMemberPet = createSavedPet(savedNewMember);
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertAll(

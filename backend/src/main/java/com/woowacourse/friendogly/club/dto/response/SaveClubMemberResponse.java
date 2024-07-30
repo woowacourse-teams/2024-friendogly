@@ -1,12 +1,12 @@
 package com.woowacourse.friendogly.club.dto.response;
 
-import com.woowacourse.friendogly.club.domain.ClubMember;
+import com.woowacourse.friendogly.member.domain.Member;
 
 public record SaveClubMemberResponse(
-        Long clubMemberId
+        Long memberId
 ) {
 
-    public SaveClubMemberResponse(ClubMember clubMember) {
-        this(clubMember.getId());
+    public SaveClubMemberResponse(Member member) {
+        this(member.getId());
     }
 }

@@ -52,18 +52,10 @@ public class ClubCommandService {
                 participatingPets
         );
 
-        Club savedClub = clubRepository.save(newClub);
-
-        List<String> petImageUrls = participatingPets.stream()
-                .map(Pet::getImageUrl)
-                .toList();
-
-        newClub.addClubPet(participatingPets);
-
-        return new SaveClubResponse(savedClub, 1, petImageUrls);
+        return new SaveClubResponse(clubRepository.save(newClub));
     }
 
-    public SaveClubMemberResponse saveClubMember(Long clubId, Long memberId, SaveClubMemberRequest request) {
+    public SaveClubMemberResponse joinClub(Long clubId, Long memberId, SaveClubMemberRequest request) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new FriendoglyException("모임 정보를 찾지 못했습니다."));
 
@@ -72,6 +64,7 @@ public class ClubCommandService {
 
         club.addClubMember(member);
         club.addClubPet(mapToPets(request.participatingPetsId()));
+
         //TODO : 채팅방 ID 넘기기
         return new SaveClubMemberResponse(1L);
     }
@@ -85,8 +78,10 @@ public class ClubCommandService {
     public void deleteClubMember(Long clubId, Long memberId) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new FriendoglyException("모임 정보를 찾지 못했습니다."));
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new FriendoglyException("회원 정보를 찾지 못했습니다."));
+
         club.removeClubMember(member);
         if (club.isEmpty()) {
             clubRepository.delete(club);

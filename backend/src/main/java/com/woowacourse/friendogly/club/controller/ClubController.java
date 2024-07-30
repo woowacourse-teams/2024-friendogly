@@ -54,8 +54,8 @@ public class ClubController {
             @Auth Long memberId,
             @Valid @RequestBody SaveClubMemberRequest request
     ) {
-        SaveClubMemberResponse response = clubCommandService.saveClubMember(clubId, memberId, request);
-        return ResponseEntity.created(URI.create("/clubs/" + clubId + "/members/" + response.clubMemberId()))
+        SaveClubMemberResponse response = clubCommandService.joinClub(clubId, memberId, request);
+        return ResponseEntity.created(URI.create("/clubs/" + clubId + "/members/" + response.memberId()))
                 .body(ApiResponse.ofSuccess(response));
     }
 
