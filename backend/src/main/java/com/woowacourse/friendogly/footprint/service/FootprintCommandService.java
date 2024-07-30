@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.footprint.service;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.GOING;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
@@ -48,7 +48,7 @@ public class FootprintCommandService {
                 Footprint.builder()
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
-                        .walkStatus(GOING)
+                        .walkStatus(BEFORE)
                         .build()
         );
 

@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.footprint.service;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.GOING;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -33,7 +33,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
-                        .walkStatus(GOING)
+                        .walkStatus(BEFORE)
                         .location(new Location(0.0, 0.0))
                         .build()
         );
@@ -59,7 +59,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         // given
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
-                        .walkStatus(GOING)
+                        .walkStatus(BEFORE)
                         .member(member)
                         .location(new Location(0.0, 0.0))
                         .build()
