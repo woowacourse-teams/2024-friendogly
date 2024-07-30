@@ -1,12 +1,18 @@
 package com.happy.friendogly.presentation.model
 
+import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.SizeType
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+
 data class FootprintInfoUiModel(
+    val memberName: String,
     val petName: String,
     val petDescription: String,
-    val petAge: String,
-    val petSizeType: String,
-    val petGender: String,
+    val petBirthDate: LocalDate,
+    val petSizeType: SizeType,
+    val petGender: Gender,
     val footprintImageUrl: String,
-    val dateOfVisit: String,
+    val createdAt: LocalDateTime,
     val isMine: Boolean,
 )
