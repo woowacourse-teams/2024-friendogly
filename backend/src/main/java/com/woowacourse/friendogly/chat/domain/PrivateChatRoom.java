@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.chat.domain;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Entity;
@@ -31,8 +33,15 @@ public class PrivateChatRoom {
     private Member otherMember;
 
     public PrivateChatRoom(Member member, Member otherMember) {
+        validate(member, otherMember);
         this.member = member;
         this.otherMember = otherMember;
+    }
+
+    private void validate(Member member, Member otherMember) {
+        if (member.getId().equals(otherMember.getId())) {
+            throw new FriendoglyException("자기 자신을 채팅방에 초대할 수 없습니다.", BAD_REQUEST);
+        }
     }
 
     public void leave(Member member) {

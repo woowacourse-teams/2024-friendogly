@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.chat.service;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.woowacourse.friendogly.chat.domain.PrivateChatRoom;
@@ -33,15 +32,10 @@ public class PrivateChatRoomCommandService {
         Member otherMember = memberRepository.findById(receiverMemberId)
                 .orElseThrow(() -> new FriendoglyException(receiverMemberId + "는 존재하지 않는 Member ID입니다."));
 
-        if (member.getId().equals(otherMember.getId())) { // TODO: equals and hashCode 구현 후 변경
-            throw new FriendoglyException("자기 자신을 채팅방에 초대할 수 없습니다.", BAD_REQUEST);
-        }
-
         if (exists(member, otherMember)) {
             PrivateChatRoom oldChatRoom = privateChatRoomRepository.findByMemberAndOtherMember(member, otherMember)
                     .or(() -> privateChatRoomRepository.findByMemberAndOtherMember(otherMember, member))
                     .orElseThrow(() -> new FriendoglyException("알 수 없는 에러 발생", INTERNAL_SERVER_ERROR));
-
             return new InvitePrivateChatRoomResponse(oldChatRoom.getId());
         }
 
