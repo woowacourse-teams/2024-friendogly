@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.club.domain;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.member.domain.Name;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -13,17 +14,14 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -47,10 +45,6 @@ public class Club {
 
     @Embedded
     private MemberCapacity memberCapacity;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    private Member owner;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -89,30 +83,21 @@ public class Club {
             String content,
             String address,
             int memberCapacity,
-            Member owner,
             Set<Gender> allowedGenders,
             Set<SizeType> allowedSizes,
             String imageUrl,
             Status status,
             LocalDateTime createdAt
     ) {
-        validateOwner(owner);
         this.title = new Title(title);
         this.content = new Content(content);
         this.address = new Address(address);
         this.memberCapacity = new MemberCapacity(memberCapacity);
-        this.owner = owner;
         this.allowedGenders = allowedGenders;
         this.allowedSizes = allowedSizes;
         this.imageUrl = imageUrl;
         this.status = status;
         this.createdAt = createdAt;
-    }
-
-    private void validateOwner(Member owner) {
-        if (owner == null) {
-            throw new FriendoglyException("모임 방장 정보는 필수 입니다.");
-        }
     }
 
     public static Club create(
@@ -131,30 +116,29 @@ public class Club {
                 .content(content)
                 .address(address)
                 .memberCapacity(memberCapacity)
-                .owner(owner)
                 .allowedGenders(allowedGender)
                 .allowedSizes(allowedSize)
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
-        club.addClubMember(club.owner);
+        club.addClubMember(owner);
         club.addClubPet(participatingPets);
         return club;
     }
 
-    public void addClubMember(Member newMember) {
-        validateAlreadyExists(newMember);
+    public void addClubMember(Member member) {
+        validateAlreadyExists(member);
         validateMemberCapacity();
-        ClubMember clubMember = ClubMember.create(this, newMember);
+
+        ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
         clubMember.updateClub(this);
     }
 
-    private void validateAlreadyExists(Member newMember) {
+    private void validateAlreadyExists(Member member) {
         if (clubMembers.stream()
-                .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), newMember.getId()))
-        ) {
+                .anyMatch(clubMember -> clubMember.getMember().getId().equals(member.getId()))) {
             throw new FriendoglyException("이미 참여 중인 모임입니다.");
         }
     }
@@ -180,6 +164,32 @@ public class Club {
         }
     }
 
+    public void removeClubMember(Member member) {
+        ClubMember targetClubMember = findTargetClubMember(member);
+        clubMembers.remove(targetClubMember);
+        targetClubMember.updateClub(null);
+        removeClubPets(member);
+    }
+
+    private ClubMember findTargetClubMember(Member member) {
+        return clubMembers.stream()
+                .filter(currentClubMember -> currentClubMember.getMember().getId().equals(member.getId()))
+                .findAny()
+                .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
+    }
+
+    private void removeClubPets(Member member) {
+        List<ClubPet> participatingMemberPets = findTargetClubPets(member);
+        clubPets.removeAll(participatingMemberPets);
+        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
+    }
+
+    private List<ClubPet> findTargetClubPets(Member member) {
+        return clubPets.stream()
+                .filter(clubPet -> clubPet.getPet().getMember().getId().equals(member.getId()))
+                .toList();
+    }
+
     public int countClubMember() {
         return clubMembers.size();
     }
@@ -188,34 +198,19 @@ public class Club {
         return clubMembers.isEmpty();
     }
 
-    public void removeClubMember(Member member) {
-        ClubMember target = clubMembers.stream()
-                .filter(e -> e.getMember().getId().equals(member.getId()))
-                .findAny()
-                .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
-        clubMembers.remove(target);
-        if (isOwner(target)) {
-            updateOwner();
+    public boolean isOwner(ClubMember target) {
+        validateEmpty();
+        return clubMembers.get(0).getMember().getId().equals(target.getMember().getId());
+    }
+
+    public Name getOwnerName() {
+        validateEmpty();
+        return clubMembers.get(0).getMember().getName();
+    }
+
+    private void validateEmpty() {
+        if (isEmpty()) {
+            throw new FriendoglyException("존재하지 않는 모임입니다.");
         }
-        target.updateClub(null);
-        removeClubPets(member);
-    }
-
-    private void updateOwner() {
-        if (!isEmpty()) {
-            this.owner = clubMembers.get(0).getMember();
-        }
-    }
-
-    private boolean isOwner(ClubMember target) {
-        return owner.getId().equals(target.getMember().getId());
-    }
-
-    private void removeClubPets(Member member) {
-        List<ClubPet> participatingMemberPets = clubPets.stream()
-                .filter(clubPet -> clubPet.getPet().getMember().getId().equals(member.getId()))
-                .toList();
-        clubPets.removeAll(participatingMemberPets);
-        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
     }
 }

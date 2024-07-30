@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
 
-    @EntityGraph(attributePaths = {"owner", "allowedGenders", "allowedSizes"})
+    @EntityGraph(attributePaths = {"allowedGenders", "allowedSizes"})
     List<Club> findAll(Specification<Club> clubSpecification);
 }

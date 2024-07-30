@@ -30,7 +30,7 @@ public record SaveClubResponse(
                 club.getId(),
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
-                club.getOwner().getName().getValue(),
+                club.getOwnerName().getValue(),
                 club.getAddress().getValue(),
                 club.getStatus(),
                 club.getCreatedAt(),
