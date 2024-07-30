@@ -62,7 +62,7 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
                 VALUES
-                (?, 0.00000, 0.00000, 'GOING', TIMESTAMPADD(SECOND, -29, NOW()), FALSE)
+                (?, 0.00000, 0.00000, 'BEFORE', TIMESTAMPADD(SECOND, -29, NOW()), FALSE)
                 """, member.getId());
 
         // when - then

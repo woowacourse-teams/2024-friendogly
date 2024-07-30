@@ -138,9 +138,9 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
                 VALUES
-                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
+                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
                 """, member.getId(), member.getId(), member.getId());
 
         // when
@@ -165,9 +165,9 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         jdbcTemplate.update("""
                 INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
                 VALUES
-                (?, 0.00000, 0.00000, 'END', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.11111, 0.11111, 'END', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.22222, 0.22222, 'END', ?, FALSE);
+                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
+                (?, 0.11111, 0.11111, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
+                (?, 0.22222, 0.22222, 'AFTER', ?, FALSE);
                 """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
 
         // when
