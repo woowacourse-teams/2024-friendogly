@@ -10,11 +10,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
-import com.happy.friendogly.databinding.BottomSheetMarkerBinding
+import com.happy.friendogly.databinding.BottomSheetFootprintBinding
 
 class FootprintBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetMarkerBinding? = null
-    val binding: BottomSheetMarkerBinding
+    private var _binding: BottomSheetFootprintBinding? = null
+    val binding: BottomSheetFootprintBinding
         get() = _binding!!
 
     private val viewModel: FootprintViewModel by viewModels<FootprintViewModel> {
@@ -37,7 +37,7 @@ class FootprintBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = BottomSheetMarkerBinding.inflate(inflater, container, false)
+        _binding = BottomSheetFootprintBinding.inflate(inflater, container, false)
         return binding.root
     }
 
