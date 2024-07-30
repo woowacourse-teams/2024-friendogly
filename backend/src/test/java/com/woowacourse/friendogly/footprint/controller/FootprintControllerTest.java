@@ -19,6 +19,7 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -145,6 +146,7 @@ class FootprintControllerTest {
                         .member(member1)
                         .location(new Location(37.0, 127.0))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now().minusSeconds(28))
                         .build()
         );
 
@@ -168,6 +170,7 @@ class FootprintControllerTest {
                         .member(member1)
                         .location(new Location(37.0, 127.0))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -180,11 +183,13 @@ class FootprintControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("isSuccess", is(true))
                 .body("data.memberName", is("트레"))
-                .body("data.petName", is(pet1.getName().getValue()))
-                .body("data.petDescription", is(pet1.getDescription().getValue()))
-                .body("data.petBirthDate", is(pet1.getBirthDate().getValue().toString()))
-                .body("data.petSizeType", is(pet1.getSizeType().name()))
-                .body("data.petGender", is(pet1.getGender().name()))
+                .body("data.walkStatus", is("BEFORE"))
+                .body("data.pets[0].name", is(pet1.getName().getValue()))
+                .body("data.pets[0].description", is(pet1.getDescription().getValue()))
+                .body("data.pets[0].birthDate", is(pet1.getBirthDate().getValue().toString()))
+                .body("data.pets[0].sizeType", is(pet1.getSizeType().name()))
+                .body("data.pets[0].gender", is(pet1.getGender().name()))
+                .body("data.pets[0].imageUrl", is(pet1.getImageUrl()))
                 .body("data.isMine", is(footprint.isCreatedBy(member1.getId())));
     }
 
@@ -196,6 +201,7 @@ class FootprintControllerTest {
                         .member(member2)
                         .location(new Location(37.51365, 127.09831))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -204,6 +210,7 @@ class FootprintControllerTest {
                         .member(member3)
                         .location(new Location(37.51314, 127.10425))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -228,6 +235,7 @@ class FootprintControllerTest {
                         .member(member1)
                         .location(new Location(37.0, 127.0))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -249,6 +257,6 @@ class FootprintControllerTest {
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.createdAt", nullValue());
+                .body("data.changedWalkStatusTime", nullValue());
     }
 }

@@ -49,6 +49,7 @@ public class FootprintCommandService {
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
                         .walkStatus(BEFORE)
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 

@@ -15,7 +15,6 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,35 +24,7 @@ import org.junit.jupiter.api.Test;
 // TODO: Member, Dog 테스트 픽스처 생성
 class FootprintQueryServiceTest extends FootprintServiceTest {
 
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 찍은 경우 - 발자국 사진 URL 조회)")
-    @Transactional
-    @Test
-    void findOne() {
-        // given
-        Footprint footprint = footprintRepository.save(
-                Footprint.builder()
-                        .member(member)
-                        .walkStatus(BEFORE)
-                        .location(new Location(0.0, 0.0))
-                        .build()
-        );
-
-        // when
-        FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
-
-        // then
-        assertAll(
-                () -> assertThat(response.memberName()).isEqualTo("name1"),
-                () -> assertThat(response.petName()).isEqualTo("petname1"),
-                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
-                () -> assertThat(response.isMine()).isTrue()
-        );
-    }
-
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 안 찍은 경우 - 펫 사진 URL 조회)")
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
     @Test
     void findOne_NoTakePicture() {
         // given
@@ -62,6 +33,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         .walkStatus(BEFORE)
                         .member(member)
                         .location(new Location(0.0, 0.0))
+                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -71,11 +43,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         // then
         assertAll(
                 () -> assertThat(response.memberName()).isEqualTo("name1"),
-                () -> assertThat(response.petName()).isEqualTo("petname1"),
-                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+                () -> assertThat(response.pets().get(0).name()).isEqualTo("petname1"),
+                () -> assertThat(response.pets().get(0).description()).isEqualTo("petdescription1"),
+                () -> assertThat(response.pets().get(0).birthDate()).isEqualTo(LocalDate.now().minusYears(1)),
+                () -> assertThat(response.pets().get(0).sizeType()).isEqualTo(SizeType.MEDIUM.toString()),
+                () -> assertThat(response.pets().get(0).gender()).isEqualTo(Gender.MALE_NEUTERED.toString()),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }

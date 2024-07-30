@@ -73,4 +73,14 @@ public class Footprint {
     public void updateToDeleted() {
         isDeleted = true;
     }
+
+    public LocalDateTime calculateChangedWalkStatusTime() {
+        if (walkStatus.isBefore()) {
+            return createdAt;
+        }
+        if (walkStatus.isOngoing()) {
+            return startWalkTime;
+        }
+        return endWalkTime;
+    }
 }
