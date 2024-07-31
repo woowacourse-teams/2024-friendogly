@@ -28,6 +28,21 @@
     <string name="register_dog_title">등록하기</string>
     <string name="empty_pet_description">등록하기를 통해 강아지를 추가해주세요</string>
     <string name="user_name_tag">#%s</string>
+    <string name="pet_small_size_title">소형견이에요</string>
+    <string name="pet_medium_size_title">중현견이에요</string>
+    <string name="pet_large_size_title">대형견이에요</string>
+    <string name="pet_months_format">(%d개월)</string>
+    <string name="pet_age_format">(%d살)</string>
+    <string name="pet_gender_title">성별</string>
+    <string name="pet_size_title">크기</string>
+    <string name="pet_description_title">소개</string>
+    <string name="caliber">구경하기</string>
+    <string name="mypage_title">나의 댕댕이</string>
+    <string name="my_activities">내 활동</string>
+    <string name="participation">내가 참여중인 모임</string>
+    <string name="club_manager">내가 방장인 모임</string>
+    <string name="pets_profile">함께하는 반려동물</string>
+    <string name="tv_pet_add">강아지를 등록해주세요</string>
 
     <!--강아지 등록-->
     <string name="dog_name_title">댕댕이 이름</string>
@@ -149,4 +164,8 @@
     <string name="woof_package">package:%s</string>
     <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
+    <string name="male">남</string>
+    <string name="female">여</string>
+    <string name="male_enutered">남(중성화했어요)</string>
+    <string name="female_enutered">여(중성화했어요)</string>
 </resources>

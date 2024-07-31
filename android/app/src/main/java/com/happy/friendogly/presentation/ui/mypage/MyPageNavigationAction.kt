@@ -7,5 +7,11 @@ sealed interface MyPageNavigationAction {
 
     data object NavigateToDogRegister : MyPageNavigationAction
 
+    data object NavigateToPetEdit : MyPageNavigationAction
+
     data class NavigateToDogDetail(val id: Long) : MyPageNavigationAction
+
+    data object NavigateToMyParticipation : MyPageNavigationAction
+
+    data object NavigateToMyClubManger : MyPageNavigationAction
 }
