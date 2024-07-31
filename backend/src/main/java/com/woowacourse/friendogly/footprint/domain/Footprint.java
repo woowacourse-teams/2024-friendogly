@@ -57,6 +57,8 @@ public class Footprint {
         this.member = member;
         this.location = location;
         this.walkStatus = walkStatus;
+        this.startWalkTime = startWalkTime;
+        this.endWalkTime = endWalkTime;
         this.createdAt = createdAt;
         this.isDeleted = false;
     }
@@ -74,7 +76,7 @@ public class Footprint {
         isDeleted = true;
     }
 
-    public LocalDateTime calculateChangedWalkStatusTime() {
+    public LocalDateTime findChangedWalkStatusTime() {
         if (walkStatus.isBefore()) {
             return createdAt;
         }
