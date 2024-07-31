@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,18 +40,21 @@ public class PrivateChatRoom {
     }
 
     private void validate(Member member, Member otherMember) {
+        if (member == null || otherMember == null) {
+            throw new FriendoglyException("Member 정보는 null일 수 없습니다.");
+        }
         if (member.getId().equals(otherMember.getId())) {
             throw new FriendoglyException("자기 자신을 채팅방에 초대할 수 없습니다.", BAD_REQUEST);
         }
     }
 
-    public void leave(Member member) {
-        if (this.member != null && this.member.getId().equals(member.getId())) {
-            this.member = null;
+    public void leave(Member m) {
+        if (isFirstMember(m)) {
+            member = null;
             return;
         }
-        if (this.otherMember != null && this.otherMember.getId().equals(member.getId())) {
-            this.otherMember = null;
+        if (isSecondMember(m)) {
+            otherMember = null;
             return;
         }
         throw new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다.");
@@ -58,5 +62,25 @@ public class PrivateChatRoom {
 
     public boolean isEmpty() {
         return member == null && otherMember == null;
+    }
+
+    private boolean isFirstMember(Member m) {
+        if (m == null) {
+            return false;
+        }
+        if (member == null) {
+            return false;
+        }
+        return Objects.equals(m.getId(), member.getId());
+    }
+
+    private boolean isSecondMember(Member m) {
+        if (m == null) {
+            return false;
+        }
+        if (otherMember == null) {
+            return false;
+        }
+        return Objects.equals(m.getId(), otherMember.getId());
     }
 }
