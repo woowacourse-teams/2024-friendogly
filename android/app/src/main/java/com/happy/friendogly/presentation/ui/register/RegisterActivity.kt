@@ -82,7 +82,9 @@ class RegisterActivity : AppCompatActivity() {
         const val SIGN_IN_REQUEST_CODE = 1
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, RegisterActivity::class.java)
+            return Intent(context, RegisterActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
         }
     }
 }

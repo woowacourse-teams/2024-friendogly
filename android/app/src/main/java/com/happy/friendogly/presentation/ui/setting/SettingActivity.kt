@@ -41,7 +41,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 is SettingNavigationAction.NavigateToLogout -> logOutDialog()
                 is SettingNavigationAction.NavigateToUnsubscribe -> userDeleteDialog()
                 is SettingNavigationAction.NavigateToRegister -> {
-                    finishAffinity()
                     startActivity(RegisterActivity.getIntent(this))
                     finish()
                 }
