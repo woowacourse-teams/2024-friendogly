@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.menu
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -16,6 +17,11 @@ class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
 
     fun initDetailViewType(detailViewType: DetailViewType) {
         _detailViewType.value = detailViewType
+    }
+
+    //TODO : delete api
+    fun withdrawGroup(){
+        _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
     }
 
     override fun close() {

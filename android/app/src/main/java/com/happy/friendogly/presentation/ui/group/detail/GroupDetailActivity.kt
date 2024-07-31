@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.group.detail
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
@@ -104,6 +105,10 @@ class GroupDetailActivity :
                 groupModifyUiModel,
             ),
         )
+    }
+
+    override fun navigateToPrev() {
+        finish()
     }
 
     companion object {

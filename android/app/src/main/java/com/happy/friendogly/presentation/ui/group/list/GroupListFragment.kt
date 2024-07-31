@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.group.list
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentGroupListBinding
 import com.happy.friendogly.presentation.base.BaseFragment

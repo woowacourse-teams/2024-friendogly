@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.group.menu
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.AlertDialogModel
+import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
@@ -56,16 +59,38 @@ class GroupMenuBottomSheet(
         viewModel.groupMenuEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 GroupMenuEvent.Block -> {}
+                GroupMenuEvent.Report -> {}
+
                 GroupMenuEvent.CancelSelection -> dismissNow()
 
-                GroupMenuEvent.Delete -> {
+                GroupMenuEvent.Delete -> openDeleteDialog()
+
+                GroupMenuEvent.Modify -> {
+                    (activity as GroupDetailNavigation).navigateToModify()
+                    dismissNow()
                 }
 
-                GroupMenuEvent.Modify -> (activity as GroupDetailNavigation).navigateToModify()
-
-                GroupMenuEvent.Report -> {}
+                GroupMenuEvent.Navigation.NavigateToPrev -> {
+                    (activity as GroupDetailNavigation).navigateToPrev()
+                    dismissNow()
+                }
             }
-            this.dismissNow()
         }
+    }
+
+    private fun openDeleteDialog(){
+        val dialog = DefaultBlueAlertDialog(
+            alertDialogModel = AlertDialogModel(
+                title = requireContext().getString(R.string.group_detail_delete_title),
+                description = null,
+                negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                positiveContents = requireContext().getString(R.string.dialog_positive_default),
+            ),
+            clickToNegative = { },
+            clickToPositive = {
+                viewModel.withdrawGroup()
+            }
+        )
+        dialog.show(parentFragmentManager, tag)
     }
 }

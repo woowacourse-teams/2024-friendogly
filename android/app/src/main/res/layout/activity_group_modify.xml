@@ -17,33 +17,6 @@
         android:clickable="true"
         android:paddingHorizontal="10dp">
 
-        <View
-            android:id="@+id/view_group_modify_top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/ripple_circle_white"
-            android:onClick="@{()->vm.cancelModify()}"
-            android:src="@drawable/ic_close"
-            app:layout_constraintBottom_toBottomOf="@id/view_group_modify_top_bar"
-            app:layout_constraintStart_toStartOf="@id/view_group_modify_top_bar"
-            app:layout_constraintTop_toTopOf="@id/view_group_modify_top_bar" />
-
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/group_modify_title"
-            app:layout_constraintBottom_toBottomOf="@id/view_group_modify_top_bar"
-            app:layout_constraintEnd_toEndOf="@id/view_group_modify_top_bar"
-            app:layout_constraintStart_toStartOf="@id/view_group_modify_top_bar"
-            app:layout_constraintTop_toTopOf="@id/view_group_modify_top_bar" />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -161,6 +134,35 @@
                     android:layout_height="150dp" />
             </LinearLayout>
         </ScrollView>
+
+
+        <View
+            android:background="@color/white"
+            android:id="@+id/view_group_modify_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/ripple_circle_white"
+            android:onClick="@{()->vm.cancelModify()}"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_modify_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_modify_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_group_modify_top_bar" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_modify_title"
+            app:layout_constraintBottom_toBottomOf="@id/view_group_modify_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/view_group_modify_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_group_modify_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_group_modify_top_bar" />
 
         <TextView
             android:id="@+id/tv_group_modify_submit"
