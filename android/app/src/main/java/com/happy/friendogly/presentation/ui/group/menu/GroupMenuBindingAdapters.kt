@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.group.modify
+package com.happy.friendogly.presentation.ui.group.menu
 
 import android.widget.FrameLayout
 import androidx.core.view.isVisible

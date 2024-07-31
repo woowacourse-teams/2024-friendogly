@@ -1,40 +1,46 @@
 package com.happy.friendogly.presentation.ui.group.modify
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
 class GroupModifyViewModel : BaseViewModel(), GroupModifyActionHandler {
-    private val _groupModifyEvent: MutableLiveData<Event<GroupModifyEvent>> = MutableLiveData()
-    val groupModifyEvent: LiveData<Event<GroupModifyEvent>> get() = _groupModifyEvent
+    private val _modifyEvent: MutableLiveData<Event<GroupModifyEvent>> = MutableLiveData()
+    val modifyEvent: LiveData<Event<GroupModifyEvent>> get() = _modifyEvent
 
-    private var _detailViewType: MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
-    val detailViewType: LiveData<DetailViewType> get() = _detailViewType
+    private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
+    val groupPoster: LiveData<Bitmap?> get() = _groupPoster
 
-    fun initDetailViewType(detailViewType: DetailViewType) {
-        _detailViewType.value = detailViewType
+    val groupTitle: MutableLiveData<String> = MutableLiveData("")
+
+    val groupContent: MutableLiveData<String> = MutableLiveData("")
+
+    fun initUiModel(
+        posterBitmap: Bitmap?,
+        groupModifyUiModel: GroupModifyUiModel,
+    ) {
+        _groupPoster.value = posterBitmap
+        groupTitle.value = groupModifyUiModel.title
+        groupContent.value = groupModifyUiModel.content
     }
 
-    override fun close() {
-        _groupModifyEvent.emit(GroupModifyEvent.CancelSelection)
+    override fun cancelModify() {
+        _modifyEvent.emit(GroupModifyEvent.Navigation.NavigatePrev)
     }
 
-    override fun selectModify() {
-        _groupModifyEvent.emit(GroupModifyEvent.Modify)
+    override fun submitModify() {
+        // TODO: submit api
+        _modifyEvent.emit(GroupModifyEvent.Navigation.NavigateSubmit)
     }
 
-    override fun selectDelete() {
-        _groupModifyEvent.emit(GroupModifyEvent.Delete)
+    override fun selectGroupImage() {
+        _modifyEvent.emit(GroupModifyEvent.Navigation.NavigateToSelectGroupPoster)
     }
 
-    override fun selectReport() {
-        _groupModifyEvent.emit(GroupModifyEvent.Report)
-    }
-
-    override fun selectBlock() {
-        _groupModifyEvent.emit(GroupModifyEvent.Block)
+    fun updateGroupPoster(bitmap: Bitmap? = null) {
+        _groupPoster.value = bitmap
     }
 }

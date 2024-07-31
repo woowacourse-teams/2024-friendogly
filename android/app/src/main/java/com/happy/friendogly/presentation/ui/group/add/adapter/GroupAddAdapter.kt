@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.group.add.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.happy.friendogly.presentation.ui.group.add.detal.GroupAddDetailFragment
+import com.happy.friendogly.presentation.ui.group.add.detail.GroupAddDetailFragment
 import com.happy.friendogly.presentation.ui.group.add.filter.GroupAddFilterFragment
 import com.happy.friendogly.presentation.ui.group.add.information.GroupAddInformationFragment
 
