@@ -30,7 +30,7 @@ public class PrivateChatRoomQueryService {
         List<PrivateChatRoom> response = privateChatRoomRepository.findByMemberOrOtherMember(member, member);
 
         return response.stream()
-                .map(FindMyPrivateChatRoomResponse::new)
+                .map(room -> new FindMyPrivateChatRoomResponse(room.getId(), room.findOppositeMemberName(member)))
                 .toList();
     }
 }

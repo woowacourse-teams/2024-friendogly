@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,6 +63,22 @@ public class PrivateChatRoom {
 
     public boolean isEmpty() {
         return member == null && otherMember == null;
+    }
+
+    public String findOppositeMemberName(Member m) {
+        return findOppositeMember(m)
+                .map(member -> member.getName().getValue())
+                .orElse("");
+    }
+
+    private Optional<Member> findOppositeMember(Member m) {
+        if (isFirstMember(m)) {
+            return Optional.ofNullable(otherMember);
+        }
+        if (isSecondMember(m)) {
+            return Optional.ofNullable(member);
+        }
+        throw new FriendoglyException("채팅방에 참여한 상태가 아닙니다.");
     }
 
     private boolean isFirstMember(Member m) {
