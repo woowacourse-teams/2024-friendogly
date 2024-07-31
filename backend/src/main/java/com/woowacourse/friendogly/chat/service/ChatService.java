@@ -21,4 +21,14 @@ public class ChatService {
         Member member = memberRepository.getById(memberId);
         return new ChatMessageResponse(member.getName().getValue(), request.content());
     }
+
+    public ChatMessageResponse parseEnterMessage(Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        return new ChatMessageResponse(member.getName().getValue(), "님이 방을 들어왔습니다.");
+    }
+
+    public ChatMessageResponse parseLeaveMessage(Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        return new ChatMessageResponse(member.getName().getValue(), "님이 방을 나갔습니다.");
+    }
 }
