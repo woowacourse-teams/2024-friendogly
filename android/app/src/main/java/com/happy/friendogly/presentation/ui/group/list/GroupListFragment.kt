@@ -61,8 +61,8 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                     val bottomSheet =
                         ParticipationFilterBottomSheet(
                             currentParticipationFilter = event.participationFilter,
-                        ) {
-                            // TODO: ParticipationFilter
+                        ) { selectFilter ->
+                            viewModel.updateParticipationFilter(selectFilter)
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
@@ -77,7 +77,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                             groupFilterType = event.groupFilterType,
                             currentFilters = event.groupFilters,
                         ) { filters ->
-                            viewModel.initGroupFilter(filters)
+                            viewModel.updateGroupFilter(filters)
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(

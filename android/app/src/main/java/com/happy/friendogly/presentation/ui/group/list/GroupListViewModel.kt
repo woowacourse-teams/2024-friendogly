@@ -80,8 +80,12 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                 }.flatten()
         }
 
-    fun initGroupFilter(filters: List<GroupFilter>) {
+    fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
+    }
+
+    fun updateParticipationFilter(participationFilter: ParticipationFilter){
+        _participationFilter.value = participationFilter
     }
 
     override fun loadGroup(groupId: Long) {

@@ -17,7 +17,7 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler, Grou
 
     private val groupFilterSelector = GroupFilterSelector()
 
-    fun initParticipationFilter(participationFilter: ParticipationFilter) {
+    fun updateParticipationFilter(participationFilter: ParticipationFilter) {
         this.participationFilter = participationFilter
     }
 
