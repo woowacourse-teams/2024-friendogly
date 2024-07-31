@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubMember;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
@@ -166,7 +165,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         assertAll(
                 () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
-                () -> assertThat(savedClub.isOwner(ClubMember.create(savedClub, savedNewMember))).isTrue()
+                () -> assertThat(savedClub.isOwner(savedNewMember)).isTrue()
         );
     }
 

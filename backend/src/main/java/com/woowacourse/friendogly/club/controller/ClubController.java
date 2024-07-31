@@ -4,6 +4,7 @@ import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
@@ -34,6 +35,12 @@ public class ClubController {
         this.clubQueryService = clubQueryService;
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<FindClubResponse> findById(@Auth Long memberId, @PathVariable Long id) {
+        return ApiResponse.ofSuccess(clubQueryService.findById(memberId, id));
+    }
+
+    // TODO: @ModelAttribute
     @GetMapping("/searching")
     public ApiResponse<List<FindSearchingClubResponse>> findSearching(@Valid FindSearchingClubRequest request) {
         return ApiResponse.ofSuccess(clubQueryService.findSearching(request));

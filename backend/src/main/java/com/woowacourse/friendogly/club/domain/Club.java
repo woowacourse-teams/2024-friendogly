@@ -137,10 +137,14 @@ public class Club {
     }
 
     private void validateAlreadyExists(Member member) {
-        if (clubMembers.stream()
-                .anyMatch(clubMember -> clubMember.isSameMember(member))) {
+        if (isAlreadyJoined(member)) {
             throw new FriendoglyException("이미 참여 중인 모임입니다.");
         }
+    }
+
+    public boolean isAlreadyJoined(Member member) {
+        return clubMembers.stream()
+                .anyMatch(clubMember -> clubMember.isSameMember(member));
     }
 
     private void validateMemberCapacity() {
@@ -158,9 +162,21 @@ public class Club {
     }
 
     private void validateParticipatePet(Pet pet) {
-        if (!allowedGenders.contains(pet.getGender()) || !allowedSizes.contains(pet.getSizeType())) {
+        if (canNotJoin(pet)) {
             throw new FriendoglyException("모임에 데려갈 수 없는 강아지가 있습니다.");
         }
+    }
+
+    private boolean canNotJoin(Pet pet) {
+        return !allowedGenders.contains(pet.getGender()) || !allowedSizes.contains(pet.getSizeType());
+    }
+
+    public boolean isJoinable(Member member, List<Pet> pets) {
+        boolean hasJoinablePet = pets.stream()
+                .anyMatch(pet -> !canNotJoin(pet));
+        boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
+
+        return hasJoinablePet && isNotFull && isAlreadyJoined(member);
     }
 
     public void removeClubMember(Member member) {
@@ -197,12 +213,16 @@ public class Club {
         return clubMembers.isEmpty();
     }
 
-    public boolean isOwner(ClubMember target) {
-        return findOwner().isSameMember(target.getClubMemberPk().getMember());
+    public boolean isOwner(Member targetMember) {
+        return findOwner().isSameMember(targetMember);
     }
 
     public Name findOwnerName() {
         return findOwner().getClubMemberPk().getMember().getName();
+    }
+
+    public String findOwnerImageUrl() {
+        return findOwner().getClubMemberPk().getMember().getImageUrl();
     }
 
     private ClubMember findOwner() {
