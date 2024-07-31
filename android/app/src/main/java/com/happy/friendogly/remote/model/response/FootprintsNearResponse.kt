@@ -12,5 +12,4 @@ data class FootprintsNearResponse(
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
     val isMine: Boolean,
-    val imageUrl: String?,
 )

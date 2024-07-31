@@ -1,4 +1,4 @@
-package com.happy.friendogly.domain.model
+package com.happy.friendogly.presentation.ui.woof.model
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime

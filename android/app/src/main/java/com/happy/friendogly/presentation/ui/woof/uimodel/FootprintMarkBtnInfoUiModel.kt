@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.model
+package com.happy.friendogly.presentation.ui.woof.uimodel
 
 data class FootprintMarkBtnInfoUiModel(
     val isClickable: Boolean,

@@ -236,7 +236,7 @@
     <string name="group_complete_participate_name">모집완료</string>
 
     <!--멍멍 짓기-->
-    <string name="woof_member_name">%s네 강아지</string>
+    <string name="woof_member_name">%s네 댕댕이</string>
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
@@ -248,8 +248,9 @@
     <string name="woof_just_now">방금 전</string>
     <string name="woof_walk_before">%d분 째 가는 중</string>
     <string name="woof_walk_ongoing">%d분 째 산책 중</string>
-    <string name="woof_walk_after">%d시 %d분에 왔다 감</string>
-    <string name="woof_walk_unknown">알 수 없음</string>
+    <string name="woof_walk_after">%d시 %d분 왔다 감</string>
+    <string name="woof_age_year">%d살</string>
+    <string name="woof_age_month">%d개월</string>
     <string name="male">남</string>
     <string name="female">여</string>
     <string name="male_enutered">남(중성화했어요)</string>
