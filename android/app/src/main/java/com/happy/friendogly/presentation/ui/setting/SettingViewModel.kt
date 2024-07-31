@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 class SettingViewModel(
     private val deleteLocalDataUseCase: DeleteLocalDataUseCase,
 ) : BaseViewModel() {
-    private val _alarmPushPermitted: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
-    val alarmPushPermitted: LiveData<Boolean> get() = _alarmPushPermitted
+    private val _uiState: MutableLiveData<SettingUiState> = MutableLiveData<SettingUiState>(SettingUiState())
+    val uiState: LiveData<SettingUiState> get() = _uiState
 
     private val _navigateAction: MutableLiveData<Event<SettingNavigationAction>> =
         MutableLiveData(null)
