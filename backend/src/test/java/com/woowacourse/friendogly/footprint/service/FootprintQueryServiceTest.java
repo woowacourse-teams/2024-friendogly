@@ -26,7 +26,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
 
     @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
     @Test
-    void findOne_NoTakePicture() {
+    void findOne() {
         // given
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
