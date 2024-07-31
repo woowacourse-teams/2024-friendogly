@@ -18,7 +18,7 @@ data class MyPageUiState(
     val pets: List<PetViewType> = emptyList(),
 )
 
-interface PetViewType {
+sealed interface PetViewType {
     val id: Long
 }
 
@@ -63,11 +63,11 @@ data class PetView(
 }
 
 data class PetAddView(
-    override val id: Long = ID,
+    override val id: Long = INVALID_ID,
     val memberId: Long,
 ) : PetViewType {
     companion object {
-        private const val ID = -1L
+        private const val INVALID_ID = -1L
     }
 }
 
