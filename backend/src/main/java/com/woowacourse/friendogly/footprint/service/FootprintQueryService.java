@@ -40,7 +40,7 @@ public class FootprintQueryService {
         Member member = footprint.getMember();
         List<Pet> pets = petRepository.findByMemberId(member.getId());
         boolean isMine = footprint.isCreatedBy(memberId);
-        LocalDateTime changedWalkStatusTime = footprint.calculateChangedWalkStatusTime();
+        LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
         return FindOneFootprintResponse.of(
                 member,
                 pets,

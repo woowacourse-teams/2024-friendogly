@@ -53,7 +53,14 @@ public class Footprint {
     private boolean isDeleted;
 
     @Builder
-    public Footprint(Member member, Location location, WalkStatus walkStatus, LocalDateTime createdAt) {
+    public Footprint(
+            Member member,
+            Location location,
+            WalkStatus walkStatus,
+            LocalDateTime startWalkTime,
+            LocalDateTime endWalkTime,
+            LocalDateTime createdAt
+    ) {
         this.member = member;
         this.location = location;
         this.walkStatus = walkStatus;
