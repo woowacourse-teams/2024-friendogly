@@ -65,5 +65,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onResume() {
         super.onResume()
         viewModel.fetchPetMine()
+        viewModel.fetchMemberMine()
+        viewModel.updateCurrentPage(0)
+        binding.vpDogProfile.setCurrentItem(0, false)
     }
 }

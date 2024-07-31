@@ -154,7 +154,7 @@
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/vp_dog_profile"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -194,7 +194,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_participation"
+                    android:id="@+id/tv_logout"
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -218,7 +218,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_participation" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_logout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

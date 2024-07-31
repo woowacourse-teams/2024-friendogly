@@ -10,6 +10,7 @@ import kotlinx.datetime.toLocalDateTime
 import java.time.LocalDate
 
 data class MyPageUiState(
+    val id: Long = -1,
     val nickname: String = "",
     val email: String = "",
     val tag: String = "",
