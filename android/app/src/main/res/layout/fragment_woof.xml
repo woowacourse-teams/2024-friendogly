@@ -27,7 +27,6 @@
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="40dp"
-            android:onClick="@{() -> vm.changeLocationTrackingMode()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -40,7 +39,6 @@
             android:background="@color/transparent"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> vm.markFootPrint()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_foot_print_btn"
             app:layout_constraintBottom_toBottomOf="parent"
