@@ -17,7 +17,7 @@ data class MyPageUiState(
     val pets: List<PetViewType> = emptyList(),
 )
 
-interface PetViewType {
+sealed interface PetViewType {
     val id: Long
 }
 
@@ -62,9 +62,13 @@ data class PetView(
 }
 
 data class PetAddView(
-    override val id: Long = -1L,
+    override val id: Long = ID,
     val memberId: Long,
-) : PetViewType
+) : PetViewType {
+    companion object {
+        private const val ID = -1L
+    }
+}
 
 // TODO 더미 데이터 모델
 data class Dog(
