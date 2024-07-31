@@ -30,6 +30,12 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        with(binding.includeGroupListFilter.swipeRefreshLayoutGroupList) {
+            setOnRefreshListener {
+                viewModel.loadGroups()
+                isRefreshing = false
+            }
+        }
     }
 
     private fun initAdapter() {

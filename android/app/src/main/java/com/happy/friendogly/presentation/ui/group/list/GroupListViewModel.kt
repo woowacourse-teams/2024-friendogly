@@ -31,7 +31,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
     }
 
     // TODO: remove dummy
-    private fun loadGroups() =
+    fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
             _groups.value =
