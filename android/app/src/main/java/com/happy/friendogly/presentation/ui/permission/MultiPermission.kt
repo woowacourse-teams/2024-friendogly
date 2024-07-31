@@ -11,9 +11,8 @@ import java.lang.ref.WeakReference
 class MultiPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
     private val permissionActions: Map<PermissionType, (Boolean) -> Unit> = mapOf(),
-    private var request: ActivityResultLauncher<Array<String>>? = null
+    private var request: ActivityResultLauncher<Array<String>>? = null,
 ) {
-
     fun addAlarmPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
         return if (AlarmPermission.isValidPermissionSDK()) {
             MultiPermission(
@@ -64,25 +63,35 @@ class MultiPermission private constructor(
 
     fun createRequest(): MultiPermission {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
-        request = if (lifecycleOwner is AppCompatActivity) {
-            lifecycleOwner.createRequest()
-        } else {
-            (lifecycleOwner as Fragment).createRequest()
-        }
+        request =
+            if (lifecycleOwner is AppCompatActivity) {
+                lifecycleOwner.createRequest()
+            } else {
+                (lifecycleOwner as Fragment).createRequest()
+            }
         return this
     }
 
     fun showDialog(): MultiPermission {
-
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
 
         val permissions =
             permissionActions.map {
                 when (it.key) {
-                    PermissionType.Alarm -> AlarmPermission.from(lifecycleOwner, isPermitted = permissionActions[it.key]
-                        ?: error("유효하지 않은 값이 들어왔습니다"))
-                    PermissionType.Location -> LocationPermission.from(lifecycleOwner, isPermitted = permissionActions[it.key]
-                        ?: error("유효하지 않은 값이 들어왔습니다"))
+                    PermissionType.Alarm ->
+                        AlarmPermission.from(
+                            lifecycleOwner,
+                            isPermitted =
+                                permissionActions[it.key]
+                                    ?: error("유효하지 않은 값이 들어왔습니다"),
+                        )
+                    PermissionType.Location ->
+                        LocationPermission.from(
+                            lifecycleOwner,
+                            isPermitted =
+                                permissionActions[it.key]
+                                    ?: error("유효하지 않은 값이 들어왔습니다"),
+                        )
                 }
             }
         val showDialogPermissions =
@@ -93,9 +102,13 @@ class MultiPermission private constructor(
         showDialogPermissions.forEach {
             it.createAlarmDialog().show(getFragmentManager(), "TAG")
         }
-        return MultiPermission(lifecycleOwnerRef, permissionActions.filterKeys {
-            requestPermissions.map { it.permissionType }.contains(it)
-        }, request)
+        return MultiPermission(
+            lifecycleOwnerRef,
+            permissionActions.filterKeys {
+                requestPermissions.map { it.permissionType }.contains(it)
+            },
+            request,
+        )
     }
 
     private fun getFragmentManager(): FragmentManager {
@@ -112,7 +125,6 @@ class MultiPermission private constructor(
     }
 
     companion object {
-        fun from(lifecycleOwner: LifecycleOwner): MultiPermission =
-            MultiPermission(WeakReference(lifecycleOwner))
+        fun from(lifecycleOwner: LifecycleOwner): MultiPermission = MultiPermission(WeakReference(lifecycleOwner))
     }
 }

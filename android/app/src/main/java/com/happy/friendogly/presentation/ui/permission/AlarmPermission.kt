@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
-    private val isPermitted: (Boolean) -> Unit
+    private val isPermitted: (Boolean) -> Unit,
 ) : Permission(PermissionType.Alarm) {
     private lateinit var request: ActivityResultLauncher<String>
     private val settingStartActivity: ActivityResultLauncher<Intent>
@@ -29,11 +29,12 @@ class AlarmPermission private constructor(
     init {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
 
-        settingStartActivity = if (lifecycleOwner is AppCompatActivity) {
-            lifecycleOwner.createStartActivity()
-        } else {
-            (lifecycleOwner as Fragment).createStartActivity()
-        }
+        settingStartActivity =
+            if (lifecycleOwner is AppCompatActivity) {
+                lifecycleOwner.createStartActivity()
+            } else {
+                (lifecycleOwner as Fragment).createStartActivity()
+            }
     }
 
     private fun AppCompatActivity.createStartActivity() =
@@ -56,11 +57,12 @@ class AlarmPermission private constructor(
 
     fun createRequest(isPermitted: (Boolean) -> Unit = {}): AlarmPermission {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
-        request = if (lifecycleOwner is AppCompatActivity) {
-            lifecycleOwner.createRequest(isPermitted)
-        } else {
-            (lifecycleOwner as Fragment).createRequest(isPermitted)
-        }
+        request =
+            if (lifecycleOwner is AppCompatActivity) {
+                lifecycleOwner.createRequest(isPermitted)
+            } else {
+                (lifecycleOwner as Fragment).createRequest(isPermitted)
+            }
         return this
     }
 
@@ -68,7 +70,6 @@ class AlarmPermission private constructor(
         if (!hasPermissions() && shouldShowRequestPermissionRationale()) return
         request.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
-
 
     override fun shouldShowRequestPermissionRationale(): Boolean {
         return getActivity()?.shouldShowRequestPermissionRationale(
@@ -82,23 +83,24 @@ class AlarmPermission private constructor(
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun AppCompatActivity.createRequest(
-        isGranted: (Boolean) -> Unit,
-    ) = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-        callback = isGranted,
-    )
+    private fun AppCompatActivity.createRequest(isGranted: (Boolean) -> Unit) =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+            callback = isGranted,
+        )
 
-    private fun Fragment.createRequest(
-        isGranted: (Boolean) -> Unit,
-    ) = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-        callback = isGranted,
-    )
+    private fun Fragment.createRequest(isGranted: (Boolean) -> Unit) =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+            callback = isGranted,
+        )
 
     private fun getActivity(): AppCompatActivity? =
-        if (lifecycleOwnerRef.get() is Fragment) (lifecycleOwnerRef.get() as? Fragment)?.context?.scanForActivity() else lifecycleOwnerRef.get() as? AppCompatActivity
-
+        if (lifecycleOwnerRef.get() is Fragment) {
+            (lifecycleOwnerRef.get() as? Fragment)?.context?.scanForActivity()
+        } else {
+            lifecycleOwnerRef.get() as? AppCompatActivity
+        }
 
     private fun Context.scanForActivity(): AppCompatActivity? {
         return when (this) {
@@ -110,42 +112,43 @@ class AlarmPermission private constructor(
         }
     }
 
-    private fun AppCompatActivity.createDialog():DialogFragment = DefaultBlueAlertDialog(
-        alertDialogModel =
-        AlertDialogModel(
-            getString(R.string.alarm_dialog_title),
-            getString(R.string.alarm_dialog_body),
-            getString(R.string.permission_cancel),
-            getString(R.string.permission_go_setting),
-        ),
-        clickToNegative = {
-            isPermitted(false)
-        },
-        clickToPositive = {
-            val intent =
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:${packageName}"))
-            settingStartActivity.launch(intent)
-        },
-    )
+    private fun AppCompatActivity.createDialog(): DialogFragment =
+        DefaultBlueAlertDialog(
+            alertDialogModel =
+                AlertDialogModel(
+                    getString(R.string.alarm_dialog_title),
+                    getString(R.string.alarm_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
+            clickToNegative = {
+                isPermitted(false)
+            },
+            clickToPositive = {
+                val intent =
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:$packageName"))
+                settingStartActivity.launch(intent)
+            },
+        )
 
-    private fun Fragment.createDialog():DialogFragment = DefaultBlueAlertDialog(
-        alertDialogModel =
-        AlertDialogModel(
-            getString(R.string.alarm_dialog_title),
-            getString(R.string.alarm_dialog_body),
-            getString(R.string.permission_cancel),
-            getString(R.string.permission_go_setting),
-        ),
-        clickToNegative = {
-            isPermitted(false)
-        },
-        clickToPositive = {
-            val intent =
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:${requireActivity().packageName}"))
-            settingStartActivity.launch(intent)
-        },
-    )
-
+    private fun Fragment.createDialog(): DialogFragment =
+        DefaultBlueAlertDialog(
+            alertDialogModel =
+                AlertDialogModel(
+                    getString(R.string.alarm_dialog_title),
+                    getString(R.string.alarm_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
+            clickToNegative = {
+                isPermitted(false)
+            },
+            clickToPositive = {
+                val intent =
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:${requireActivity().packageName}"))
+                settingStartActivity.launch(intent)
+            },
+        )
 
     override fun createAlarmDialog(): DialogFragment {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
@@ -159,9 +162,8 @@ class AlarmPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
-            isPermitted: (Boolean) -> Unit
-        ): AlarmPermission =
-            AlarmPermission(WeakReference(lifecycleOwner), isPermitted)
+            isPermitted: (Boolean) -> Unit,
+        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner), isPermitted)
 
         fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     }

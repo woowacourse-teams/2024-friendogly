@@ -25,7 +25,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
                 Snackbar.make(
                     binding.root,
                     getString(R.string.chat_setting_alarm_alert),
-                    Snackbar.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT,
                 ).show()
             }
         }
@@ -72,7 +72,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
 
     private fun requestNotificationPermission() {
         if (AlarmPermission.isValidPermissionSDK() && !alarmPermission.hasPermissions()) {
-            alarmPermission.createAlarmDialog().show(parentFragmentManager,"TAG")
+            alarmPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
         }
     }
 

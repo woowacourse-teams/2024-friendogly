@@ -37,7 +37,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val locationPermission: LocationPermission = initLocationPermission()
 
-
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -94,7 +93,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            Log.d("테스트","${state}")
+            Log.d("테스트", "$state")
             val footprintSave = state.footprintSave ?: return@observe
             markNearFootPrints(footPrints = state.nearFootprints)
             createMarker(
@@ -108,26 +107,30 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofMapActions.ChangeMapToNoFollowTrackingMode -> map.locationTrackingMode =
-                    LocationTrackingMode.NoFollow
+                is WoofMapActions.ChangeMapToNoFollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.NoFollow
 
-                is WoofMapActions.ChangeMapToFollowTrackingMode -> map.locationTrackingMode =
-                    LocationTrackingMode.Follow
+                is WoofMapActions.ChangeMapToFollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.Follow
 
-                is WoofMapActions.ChangeMapToFaceTrackingMode -> map.locationTrackingMode =
-                    LocationTrackingMode.Face
+                is WoofMapActions.ChangeMapToFaceTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.Face
             }
         }
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofSnackbarActions.ShowHasNotPetSnackbar -> showSnackbar(
-                    String.format(
-                        resources.getString(
-                            R.string.woof_has_not_pet,
+                is WoofSnackbarActions.ShowHasNotPetSnackbar ->
+                    showSnackbar(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_has_not_pet,
+                            ),
                         ),
-                    ),
-                )
+                    )
 
                 is WoofSnackbarActions.ShowCantClickMarkBtnSnackbar -> {
                     showSnackbar(
@@ -142,16 +145,17 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             }
         }
     }
-    private fun initLocationPermission() = LocationPermission.from(this) { isPermitted ->
-        if (isPermitted) {
-            activateMap()
-        } else {
-            showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
-            map.locationTrackingMode =
-                LocationTrackingMode.NoFollow
-        }
 
-    }
+    private fun initLocationPermission() =
+        LocationPermission.from(this) { isPermitted ->
+            if (isPermitted) {
+                activateMap()
+            } else {
+                showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
+                map.locationTrackingMode =
+                    LocationTrackingMode.NoFollow
+            }
+        }
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
@@ -234,9 +238,10 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            val bottomSheet = FootprintBottomSheet.newInstance(
-                footPrintId = footprintId,
-            )
+            val bottomSheet =
+                FootprintBottomSheet.newInstance(
+                    footPrintId = footprintId,
+                )
             bottomSheet.show(parentFragmentManager, tag)
             true
         }
@@ -252,7 +257,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             )
         }
     }
-
 
     override fun onStart() {
         super.onStart()

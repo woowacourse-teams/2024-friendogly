@@ -16,7 +16,6 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
 import com.happy.friendogly.presentation.model.FootprintUiModel
-import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
@@ -69,7 +68,7 @@ class WoofViewModel(
             ).onSuccess { nearFootPrints ->
                 markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
             }.onFailure {
-                Log.d("테스트","${it.message}")
+                Log.d("테스트", "${it.message}")
             }
         }
     }
