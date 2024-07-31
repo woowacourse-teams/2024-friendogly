@@ -42,8 +42,11 @@ public class ClubController {
 
     // TODO: @ModelAttribute
     @GetMapping("/searching")
-    public ApiResponse<List<FindSearchingClubResponse>> findSearching(@Valid FindSearchingClubRequest request) {
-        return ApiResponse.ofSuccess(clubQueryService.findSearching(request));
+    public ApiResponse<List<FindSearchingClubResponse>> findSearching(
+            @Auth Long memberId,
+            @Valid FindSearchingClubRequest request
+    ) {
+        return ApiResponse.ofSuccess(clubQueryService.findSearching(memberId, request));
     }
 
     @PostMapping

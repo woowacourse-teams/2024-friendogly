@@ -176,7 +176,7 @@ public class Club {
                 .anyMatch(pet -> !canNotJoin(pet));
         boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
-        return hasJoinablePet && isNotFull && isAlreadyJoined(member);
+        return hasJoinablePet && isNotFull && isAlreadyJoined(member) && isOpen();
     }
 
     public void removeClubMember(Member member) {
@@ -211,6 +211,10 @@ public class Club {
 
     public boolean isEmpty() {
         return clubMembers.isEmpty();
+    }
+
+    public boolean isOpen() {
+        return this.status == Status.OPEN;
     }
 
     public boolean isOwner(Member targetMember) {

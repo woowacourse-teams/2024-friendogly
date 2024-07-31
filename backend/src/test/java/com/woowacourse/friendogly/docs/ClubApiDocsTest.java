@@ -19,6 +19,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.epages.restdocs.apispec.SimpleType;
 import com.woowacourse.friendogly.club.controller.ClubController;
+import com.woowacourse.friendogly.club.domain.FilterCondition;
 import com.woowacourse.friendogly.club.domain.Status;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
@@ -58,6 +59,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @Test
     void findSearching_200() throws Exception {
         FindSearchingClubRequest request = new FindSearchingClubRequest(
+                FilterCondition.ALL.name(),
                 "서울특별시 송파구 신청동 잠실 6동",
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
@@ -95,10 +97,12 @@ public class ClubApiDocsTest extends RestDocsTest {
                 )
         );
 
-        when(clubQueryService.findSearching(request))
+        when(clubQueryService.findSearching(anyLong(), any()))
                 .thenReturn(responses);
 
         mockMvc.perform(get("/clubs/searching")
+                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .param("filterCondition", request.filterCondition())
                         .param("address", request.address())
                         .param("genderParams", request.genderParams().stream().map(Enum::name).toArray(String[]::new))
                         .param("sizeParams", request.sizeParams().stream().map(Enum::name).toArray(String[]::new)))
@@ -110,6 +114,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 .tag("Club API")
                                 .summary("모임 검색 조회 API")
                                 .queryParameters(
+                                        parameterWithName("filterCondition").description("모임의 필터 조건 (ALL, OPEN, ABLE_TO_JOIN)"),
                                         parameterWithName("address").description("모임의 주소"),
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
                                         parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"))

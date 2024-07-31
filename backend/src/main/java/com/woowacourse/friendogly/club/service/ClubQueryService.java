@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
+import com.woowacourse.friendogly.club.domain.FilterCondition;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
@@ -35,16 +36,41 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindSearchingClubResponse> findSearching(FindSearchingClubRequest request) {
+    public List<FindSearchingClubResponse> findSearching(Long memberId, FindSearchingClubRequest request) {
+        Member member = memberRepository.getById(memberId);
+        List<Pet> pets = petRepository.findByMemberId(memberId);
+
         Specification<Club> spec = ClubSpecification.where()
                 .equalsAddress(request.address())
                 .hasGenders(request.genderParams())
                 .hasSizeTypes(request.sizeParams())
                 .build();
 
-        return clubRepository.findAll(spec).stream()
+        List<Club> clubs = clubRepository.findAll(spec);
+
+        if (FilterCondition.toFilterCondition(request.filterCondition()) == FilterCondition.ABLE_TO_JOIN) {
+            return clubs.stream()
+                    .filter(club -> club.isJoinable(member, pets))
+                    .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
+                    .toList();
+        }
+        if (FilterCondition.toFilterCondition(request.filterCondition()) == FilterCondition.OPEN) {
+            return clubs.stream()
+                    .filter(Club::isOpen)
+                    .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
+                    .toList();
+        }
+        return clubs.stream()
                 .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
                 .toList();
+    }
+
+    public FindClubResponse findById(Long memberId, Long id) {
+        Club club = clubRepository.getById(id);
+        Member member = memberRepository.getById(memberId);
+        List<Pet> pets = petRepository.findByMemberId(memberId);
+
+        return new FindClubResponse(club, member, pets);
     }
 
     private List<String> collectOverviewPetImages(Club club) {
@@ -56,13 +82,5 @@ public class ClubQueryService {
         return groupPetsByMemberId.values().stream()
                 .map(petList -> petList.get(0).getImageUrl())
                 .toList();
-    }
-
-    public FindClubResponse findById(Long memberId, Long id) {
-        Club club = clubRepository.getById(id);
-        Member member = memberRepository.getById(memberId);
-        List<Pet> pets = petRepository.findByMemberId(memberId);
-
-        return new FindClubResponse(club, member, pets);
     }
 }
