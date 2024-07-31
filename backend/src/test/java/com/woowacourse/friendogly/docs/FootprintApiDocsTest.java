@@ -101,22 +101,22 @@ public class FootprintApiDocsTest extends RestDocsTest {
         FindOneFootprintResponse response = new FindOneFootprintResponse(
                 1L,
                 "최강지호",
-                BEFORE.toString(),
+                BEFORE,
                 LocalDateTime.now(),
                 List.of(
                         new PetDetail(
                                 "땡이",
                                 "땡이 귀여워요",
                                 LocalDate.of(2020, 12, 10),
-                                SizeType.MEDIUM.toString(),
-                                Gender.FEMALE_NEUTERED.toString(),
+                                SizeType.MEDIUM,
+                                Gender.FEMALE_NEUTERED,
                                 "http://image.com"),
                         new PetDetail(
                                 "두부",
                                 "두부처럼 하얗습니다.",
                                 LocalDate.of(2021, 10, 10),
-                                SizeType.SMALL.toString(),
-                                Gender.MALE.toString(),
+                                SizeType.SMALL,
+                                Gender.MALE,
                                 "http://image.com")
                 ),
                 true

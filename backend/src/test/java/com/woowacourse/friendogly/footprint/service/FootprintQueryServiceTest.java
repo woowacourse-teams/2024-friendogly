@@ -46,8 +46,8 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 () -> assertThat(response.pets().get(0).name()).isEqualTo("petname1"),
                 () -> assertThat(response.pets().get(0).description()).isEqualTo("petdescription1"),
                 () -> assertThat(response.pets().get(0).birthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.pets().get(0).sizeType()).isEqualTo(SizeType.MEDIUM.toString()),
-                () -> assertThat(response.pets().get(0).gender()).isEqualTo(Gender.MALE_NEUTERED.toString()),
+                () -> assertThat(response.pets().get(0).sizeType()).isEqualTo(SizeType.MEDIUM),
+                () -> assertThat(response.pets().get(0).gender()).isEqualTo(Gender.MALE_NEUTERED),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }

@@ -10,7 +10,7 @@ import java.util.List;
 public record FindOneFootprintResponse(
         Long memberId,
         String memberName,
-        String walkStatus,
+        WalkStatus walkStatus,
         LocalDateTime changedWalkStatusTime,
         List<PetDetail> pets,
         boolean isMine
@@ -29,7 +29,7 @@ public record FindOneFootprintResponse(
         return new FindOneFootprintResponse(
                 member.getId(),
                 member.getName().getValue(),
-                walkStatus.toString(),
+                walkStatus,
                 changedWalkStatusTime,
                 petDetails,
                 isMine);
