@@ -53,11 +53,11 @@ public class Footprint {
     private boolean isDeleted;
 
     @Builder
-    public Footprint(Member member, Location location, WalkStatus walkStatus) {
+    public Footprint(Member member, Location location, WalkStatus walkStatus, LocalDateTime createdAt) {
         this.member = member;
         this.location = location;
         this.walkStatus = walkStatus;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = createdAt;
         this.isDeleted = false;
     }
 
@@ -68,5 +68,9 @@ public class Footprint {
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
                 .equals(memberId);
+    }
+
+    public void updateToDeleted() {
+        isDeleted = true;
     }
 }
