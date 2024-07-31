@@ -43,7 +43,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
 
     private fun initObserve() {
-        viewModel.navigateAction.observeEvent(this) { action ->
+        viewModel.navigateAction.observeEvent(viewLifecycleOwner) { action ->
             when (action) {
                 is MyPageNavigationAction.NavigateToSetting -> {}
                 is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
