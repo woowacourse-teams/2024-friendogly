@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.club.domain;
 
+import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.domain.Name;
@@ -14,11 +15,13 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -78,6 +81,9 @@ public class Club {
     @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ClubPet> clubPets = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ChatRoom chatRoom;
+
     @Builder
     private Club(
             String title,
@@ -90,7 +96,8 @@ public class Club {
             Set<SizeType> allowedSizes,
             String imageUrl,
             Status status,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            ChatRoom chatRoom
     ) {
         this.title = new Title(title);
         this.content = new Content(content);
@@ -101,6 +108,7 @@ public class Club {
         this.imageUrl = imageUrl;
         this.status = status;
         this.createdAt = createdAt;
+        this.chatRoom = chatRoom;
     }
 
     public static Club create(
@@ -128,6 +136,7 @@ public class Club {
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
+                .chatRoom(new ChatRoom(owner))
                 .build();
         club.addClubMember(owner);
         club.addClubPet(participatingPets);
