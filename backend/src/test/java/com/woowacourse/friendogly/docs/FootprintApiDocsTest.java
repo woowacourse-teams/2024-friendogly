@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -20,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.footprint.controller.FootprintController;
-import com.woowacourse.friendogly.footprint.domain.WalkStatus;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
@@ -101,7 +101,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
         FindOneFootprintResponse response = new FindOneFootprintResponse(
                 1L,
                 "최강지호",
-                WalkStatus.BEFORE.toString(),
+                BEFORE.toString(),
                 LocalDateTime.now(),
                 List.of(
                         new PetDetail(
@@ -169,13 +169,13 @@ public class FootprintApiDocsTest extends RestDocsTest {
     void findNear() throws Exception {
         List<FindNearFootprintResponse> response = List.of(
                 new FindNearFootprintResponse(
-                        1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true),
+                        1L, 37.5136533, 127.0983182, BEFORE, LocalDateTime.now().minusMinutes(10), true),
                 new FindNearFootprintResponse(
-                        3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false),
+                        3L, 37.5131474, 127.1042528, BEFORE, LocalDateTime.now().minusMinutes(20), false),
                 new FindNearFootprintResponse(
-                        6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false),
+                        6L, 37.5171728, 127.1047797, BEFORE, LocalDateTime.now().minusMinutes(30), false),
                 new FindNearFootprintResponse(
-                        11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true)
+                        11L, 37.516183, 127.1068874, BEFORE, LocalDateTime.now().minusMinutes(40), true)
         );
 
         given(footprintQueryService.findNear(any(), any()))
@@ -205,6 +205,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].footprintId").description("발자국 ID"),
                                         fieldWithPath("data.[].latitude").description("발자국 위치의 위도"),
                                         fieldWithPath("data.[].longitude").description("발자국 위치의 경도"),
+                                        fieldWithPath("data.[].walkStatus").description("발자국의 산책 상태"),
                                         fieldWithPath("data.[].createdAt").description("발자국 생성 시간"),
                                         fieldWithPath("data.[].isMine").description("나의 발자국인지 여부")
                                 )
