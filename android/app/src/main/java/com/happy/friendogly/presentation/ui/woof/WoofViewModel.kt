@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,6 @@ import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
-    private val permissionRequester: LocationPermission,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -69,6 +69,7 @@ class WoofViewModel(
             ).onSuccess { nearFootPrints ->
                 markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
             }.onFailure {
+                Log.d("테스트","${it.message}")
             }
         }
     }
@@ -101,33 +102,19 @@ class WoofViewModel(
         }
     }
 
-    override fun markFootPrint() {
-        if (permissionRequester.hasPermissions()) {
-            _mapActions.emit(WoofMapActions.MarkFootPrint)
-        } else {
-            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
-        }
-    }
-
     override fun changeLocationTrackingMode() {
-        if (permissionRequester.hasPermissions()) {
-            val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
-            _mapActions.emit(
-                if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
-                    WoofMapActions.ChangeMapToFaceTrackingMode
-                } else {
-                    WoofMapActions.ChangeMapToFollowTrackingMode
-                },
-            )
-        } else {
-            _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
-            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
-        }
+        val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
+        _mapActions.emit(
+            if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
+                WoofMapActions.ChangeMapToFaceTrackingMode
+            } else {
+                WoofMapActions.ChangeMapToFollowTrackingMode
+            },
+        )
     }
 
     companion object {
         fun factory(
-            permissionRequester: LocationPermission,
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -135,7 +122,6 @@ class WoofViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
-                    permissionRequester = permissionRequester,
                     postFootprintUseCase = postFootprintUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,

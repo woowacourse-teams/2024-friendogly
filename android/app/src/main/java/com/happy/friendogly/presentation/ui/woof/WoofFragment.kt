@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.woof
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -34,15 +35,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val locationPermission: LocationPermission =
-        LocationPermission.from(this) { isPermitted ->
-            if (isPermitted) {
-                activateMap()
-            } else {
-                showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
-            }
+    private val locationPermission: LocationPermission = initLocationPermission()
 
-        }
 
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
@@ -52,7 +46,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
-            locationPermission = locationPermission,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
@@ -61,11 +54,33 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     override fun initViewCreated() {
-        // binding.layoutWoofLoading.isVisible = true
-        // binding.lottieWoofLoading.playAnimation()
+        binding.layoutWoofLoading.isVisible = true
+        binding.lottieWoofLoading.playAnimation()
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)
+        clickMarkBtn()
+        clickLocationBtn()
+    }
+
+    private fun clickMarkBtn() {
+        binding.btnWoofMark.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
+            } else {
+                viewModel.markFootprint(latLng)
+            }
+        }
+    }
+
+    private fun clickLocationBtn() {
+        binding.btnWoofLocation.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
+            } else {
+                viewModel.changeLocationTrackingMode()
+            }
+        }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -79,6 +94,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            Log.d("테스트","${state}")
             val footprintSave = state.footprintSave ?: return@observe
             markNearFootPrints(footPrints = state.nearFootprints)
             createMarker(
@@ -92,7 +108,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofMapActions.MarkFootPrint -> viewModel.markFootprint(latLng)
                 is WoofMapActions.ChangeMapToNoFollowTrackingMode -> map.locationTrackingMode =
                     LocationTrackingMode.NoFollow
 
@@ -106,7 +121,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
                 is WoofSnackbarActions.ShowHasNotPetSnackbar -> showSnackbar(
                     String.format(
                         resources.getString(
@@ -127,6 +141,16 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 }
             }
         }
+    }
+    private fun initLocationPermission() = LocationPermission.from(this) { isPermitted ->
+        if (isPermitted) {
+            activateMap()
+        } else {
+            showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
+            map.locationTrackingMode =
+                LocationTrackingMode.NoFollow
+        }
+
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -173,10 +197,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         circleOverlay.radius = MAP_CIRCLE_RADIUS
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
-    }
-
-    private fun showSettingSnackbar() {
-        locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
     }
 
     private fun moveCameraCenterPosition() {
