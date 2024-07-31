@@ -7,24 +7,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
-import com.happy.friendogly.presentation.ui.MainActivity
 import java.lang.ref.WeakReference
 
 class LocationPermission private constructor(private val lifecycleOwnerRef: WeakReference<LifecycleOwner>) :
-    Permission(PermissionType.Location),
-    DefaultLifecycleObserver {
+    Permission(PermissionType.Location) {
 
     override fun hasPermissions(): Boolean {
         return getActivity()?.checkSelfPermission(

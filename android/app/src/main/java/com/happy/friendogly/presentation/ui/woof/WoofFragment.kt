@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -40,7 +39,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         LocationPermission.from(this)
     }
 
-    private val multiPermission: MultiPermission = MultiPermission.from(this).requestLocationPermission()
+    private val multiPermission = MultiPermission.from(this).addLocationPermission()
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -60,6 +59,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     override fun initViewCreated() {
         // binding.layoutWoofLoading.isVisible = true
         // binding.lottieWoofLoading.playAnimation()
+        multiPermission.createRequest()
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)

@@ -1,34 +1,20 @@
 package com.happy.friendogly.presentation.ui.permission
 
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import java.lang.ref.WeakReference
 
 class MultiPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
     private val permissionActions: Map<PermissionType, (Boolean) -> Unit> = mapOf(),
-) : DefaultLifecycleObserver {
+    private var request: ActivityResultLauncher<Array<String>>? = null
+) {
 
-    private val request: ActivityResultLauncher<Array<String>>
-
-    init {
-        val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
-        request = if (lifecycleOwner is AppCompatActivity) {
-            lifecycleOwner.createRequest()
-        } else {
-            (lifecycleOwner as Fragment).createRequest()
-        }
-
-    }
-
-    fun requestAlarmPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
+    fun addAlarmPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
         return if (AlarmPermission.isValidPermissionSDK()) {
             MultiPermission(
                 lifecycleOwnerRef,
@@ -39,7 +25,7 @@ class MultiPermission private constructor(
         }
     }
 
-    fun requestLocationPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
+    fun addLocationPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
         return MultiPermission(
             lifecycleOwnerRef,
             permissionActions.plus(Pair(PermissionType.Location, isPermitted)),
@@ -76,6 +62,16 @@ class MultiPermission private constructor(
             },
         )
 
+    fun createRequest(): MultiPermission {
+        val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
+        request = if (lifecycleOwner is AppCompatActivity) {
+            lifecycleOwner.createRequest()
+        } else {
+            (lifecycleOwner as Fragment).createRequest()
+        }
+        return this
+    }
+
     fun showDialog(): MultiPermission {
 
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
@@ -98,11 +94,9 @@ class MultiPermission private constructor(
                     ?: error("유효하지 않은 값이 들어왔습니다"),
             ).show(getFragmentManager(), "TAG")
         }
-        return MultiPermission(
-            lifecycleOwnerRef,
-            permissionActions.filterKeys {
-                requestPermissions.map { it.permissionType }.contains(it)
-            })
+        return MultiPermission(lifecycleOwnerRef, permissionActions.filterKeys {
+            requestPermissions.map { it.permissionType }.contains(it)
+        }, request)
     }
 
     private fun getFragmentManager(): FragmentManager {
@@ -115,7 +109,7 @@ class MultiPermission private constructor(
     }
 
     fun launch() {
-        request.launch(permissionActions.keys.flatMap { it.permissions }.toTypedArray())
+        request?.launch(permissionActions.keys.flatMap { it.permissions }.toTypedArray())
     }
 
     companion object {

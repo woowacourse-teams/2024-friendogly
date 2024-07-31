@@ -23,7 +23,7 @@ class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
     private val permission =
-        MultiPermission.from(this).requestAlarmPermission().requestLocationPermission()
+        MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
     private var waitTime = 0L
 
     override fun initCreateView() {

@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
@@ -22,11 +21,10 @@ import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
 import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(private val lifecycleOwnerRef: WeakReference<LifecycleOwner>) :
-    Permission(PermissionType.Alarm),
-    DefaultLifecycleObserver {
+    Permission(PermissionType.Alarm) {
     private lateinit var request: ActivityResultLauncher<String>
     private lateinit var isPermitted: (Boolean) -> Unit
-    fun createRequest(isPermitted: (Boolean) -> Unit = {}):AlarmPermission {
+    fun createRequest(isPermitted: (Boolean) -> Unit = {}): AlarmPermission {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
         request = if (lifecycleOwner is AppCompatActivity) {
             lifecycleOwner.createRequest(isPermitted)
@@ -51,9 +49,15 @@ class AlarmPermission private constructor(private val lifecycleOwnerRef: WeakRef
             val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
 
             if (lifecycleOwner is AppCompatActivity) {
-                createAlarmDialog(isPermitted).show(lifecycleOwner.supportFragmentManager, ALARM_DIALOG_TAG)
-            }else {
-                createAlarmDialog(isPermitted).show((lifecycleOwner as Fragment).parentFragmentManager, ALARM_DIALOG_TAG)
+                createAlarmDialog(isPermitted).show(
+                    lifecycleOwner.supportFragmentManager,
+                    ALARM_DIALOG_TAG
+                )
+            } else {
+                createAlarmDialog(isPermitted).show(
+                    (lifecycleOwner as Fragment).parentFragmentManager,
+                    ALARM_DIALOG_TAG
+                )
             }
         }
     }
