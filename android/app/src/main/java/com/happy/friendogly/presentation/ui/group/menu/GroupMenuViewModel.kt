@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.menu
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -12,7 +11,8 @@ class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
     private val _groupMenuEvent: MutableLiveData<Event<GroupMenuEvent>> = MutableLiveData()
     val groupMenuEvent: LiveData<Event<GroupMenuEvent>> get() = _groupMenuEvent
 
-    private var _detailViewType: MutableLiveData<DetailViewType> = MutableLiveData(DetailViewType.RECRUITMENT)
+    private var _detailViewType: MutableLiveData<DetailViewType> =
+        MutableLiveData(DetailViewType.RECRUITMENT)
     val detailViewType: LiveData<DetailViewType> get() = _detailViewType
 
     fun initDetailViewType(detailViewType: DetailViewType) {
@@ -20,7 +20,7 @@ class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
     }
 
     //TODO : delete api
-    fun withdrawGroup(){
+    fun withdrawGroup() {
         _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
     }
 

@@ -1,8 +1,11 @@
 package com.happy.friendogly.presentation.ui.group.detail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
@@ -13,11 +16,14 @@ import com.happy.friendogly.presentation.ui.group.detail.adapter.DetailProfileAd
 import com.happy.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.group.menu.GroupMenuBottomSheet
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyActivity
+import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 
 class GroupDetailActivity :
     BaseActivity<ActivityGroupDetailBinding>(R.layout.activity_group_detail),
     GroupDetailNavigation {
+    private lateinit var groupModifyResultLauncher: ActivityResultLauncher<Intent>
+
     private val viewModel: GroupDetailViewModel by viewModels()
     private val filterAdapter: FilterAdapter by lazy {
         FilterAdapter()
@@ -33,15 +39,31 @@ class GroupDetailActivity :
         initDataBinding()
         initAdapter()
         initObserver()
-        receiveGroupId()
+        initGroup()
+        initGroupModifyResultLauncher()
+    }
+
+    private fun initGroupModifyResultLauncher() {
+        groupModifyResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val isModify =
+                    result.data?.getBooleanExtra(GroupModifyActivity.SUCCESS_MODIFY_STATE, false)
+                        ?: false
+                if (isModify) {
+                    viewModel.loadGroup(receiveGroupId())
+                }
+            }
+        }
     }
 
     private fun initDataBinding() {
         binding.vm = viewModel
     }
 
-    private fun receiveGroupId() {
-        val groupId = intent.getLongExtra(KEY_GROUP_DETAIL_ID, FAIL_LOAD_DATA_ID)
+    private fun initGroup() {
+        val groupId = receiveGroupId()
         if (groupId != FAIL_LOAD_DATA_ID) {
             viewModel.loadGroup(groupId)
         } else {
@@ -51,6 +73,10 @@ class GroupDetailActivity :
                 }
             }
         }
+    }
+
+    private fun receiveGroupId(): Long {
+        return intent.getLongExtra(KEY_GROUP_DETAIL_ID, FAIL_LOAD_DATA_ID)
     }
 
     private fun initAdapter() {
@@ -96,14 +122,17 @@ class GroupDetailActivity :
         }
     }
 
+
     override fun navigateToModify() {
         val groupModifyUiModel = viewModel.makeGroupModifyUiModel() ?: return
+        val modifyIntent = makeModifyIntent(groupModifyUiModel)
+        groupModifyResultLauncher.launch(modifyIntent)
+    }
 
-        startActivity(
-            GroupModifyActivity.getIntent(
-                this@GroupDetailActivity,
-                groupModifyUiModel,
-            ),
+    private fun makeModifyIntent(modifyUiModel: GroupModifyUiModel): Intent {
+        return GroupModifyActivity.getIntent(
+            this@GroupDetailActivity,
+            modifyUiModel,
         )
     }
 
