@@ -13,7 +13,6 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.model.FootprintUiModel
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -35,11 +34,16 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val permissionRequester: LocationPermission by lazy {
-        LocationPermission.from(this)
-    }
+    private val locationPermission: LocationPermission =
+        LocationPermission.from(this) { isPermitted ->
+            if (isPermitted) {
+                activateMap()
+            } else {
+                showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
+            }
 
-    private val multiPermission = MultiPermission.from(this).addLocationPermission()
+        }
+
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -48,7 +52,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
-            permissionRequester = permissionRequester,
+            locationPermission = locationPermission,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
@@ -59,7 +63,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     override fun initViewCreated() {
         // binding.layoutWoofLoading.isVisible = true
         // binding.lottieWoofLoading.playAnimation()
-        multiPermission.createRequest()
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)
@@ -173,7 +176,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     private fun showSettingSnackbar() {
-        multiPermission.showDialog().launch()
+        locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
     }
 
     private fun moveCameraCenterPosition() {
@@ -230,16 +233,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (permissionRequester.hasPermissions()) {
-            activateMap()
-        }
-    }
 
     override fun onStart() {
         super.onStart()

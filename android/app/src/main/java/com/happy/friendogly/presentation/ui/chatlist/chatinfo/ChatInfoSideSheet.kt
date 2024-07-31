@@ -20,7 +20,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
 
     private lateinit var adapter: JoinPeopleAdapter
     private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this).createRequest { isPermitted ->
+        AlarmPermission.from(this) { isPermitted ->
             if (!isPermitted) {
                 Snackbar.make(
                     binding.root,
@@ -71,9 +71,8 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     }
 
     private fun requestNotificationPermission() {
-        if (AlarmPermission.isValidPermissionSDK()) {
-            alarmPermission.showDialog()
-
+        if (AlarmPermission.isValidPermissionSDK() && !alarmPermission.hasPermissions()) {
+            alarmPermission.createAlarmDialog().show(parentFragmentManager,"TAG")
         }
     }
 

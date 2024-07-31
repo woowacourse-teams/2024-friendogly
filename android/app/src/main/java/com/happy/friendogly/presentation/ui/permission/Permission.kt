@@ -8,6 +8,5 @@ sealed class Permission(val permissionType: PermissionType) {
 
     abstract fun hasPermissions(): Boolean
 
-    abstract fun createAlarmDialog(clickResult: (Boolean) -> Unit,
-    ): DialogFragment
+    abstract fun createAlarmDialog(): DialogFragment
 }

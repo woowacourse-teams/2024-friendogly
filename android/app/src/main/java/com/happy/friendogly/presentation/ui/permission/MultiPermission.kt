@@ -79,8 +79,10 @@ class MultiPermission private constructor(
         val permissions =
             permissionActions.map {
                 when (it.key) {
-                    PermissionType.Alarm -> AlarmPermission.from(lifecycleOwner)
-                    PermissionType.Location -> LocationPermission.from(lifecycleOwner)
+                    PermissionType.Alarm -> AlarmPermission.from(lifecycleOwner, isPermitted = permissionActions[it.key]
+                        ?: error("유효하지 않은 값이 들어왔습니다"))
+                    PermissionType.Location -> LocationPermission.from(lifecycleOwner, isPermitted = permissionActions[it.key]
+                        ?: error("유효하지 않은 값이 들어왔습니다"))
                 }
             }
         val showDialogPermissions =
@@ -89,10 +91,7 @@ class MultiPermission private constructor(
             permissions.filterNot { it.shouldShowRequestPermissionRationale() && !it.hasPermissions() }
 
         showDialogPermissions.forEach {
-            it.createAlarmDialog(
-                permissionActions[it.permissionType]
-                    ?: error("유효하지 않은 값이 들어왔습니다"),
-            ).show(getFragmentManager(), "TAG")
+            it.createAlarmDialog().show(getFragmentManager(), "TAG")
         }
         return MultiPermission(lifecycleOwnerRef, permissionActions.filterKeys {
             requestPermissions.map { it.permissionType }.contains(it)
