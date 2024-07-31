@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.ui.group.detail
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -15,6 +14,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.group.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.group.menu.GroupMenuBottomSheet
+import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyActivity
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
@@ -44,18 +44,19 @@ class GroupDetailActivity :
     }
 
     private fun initGroupModifyResultLauncher() {
-        groupModifyResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val isModify =
-                    result.data?.getBooleanExtra(GroupModifyActivity.SUCCESS_MODIFY_STATE, false)
-                        ?: false
-                if (isModify) {
-                    viewModel.loadGroup(receiveGroupId())
+        groupModifyResultLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val isModify =
+                        result.data?.getBooleanExtra(GroupModifyActivity.SUCCESS_MODIFY_STATE, false)
+                            ?: false
+                    if (isModify) {
+                        viewModel.loadGroup(receiveGroupId())
+                    }
                 }
             }
-        }
     }
 
     private fun initDataBinding() {
@@ -94,17 +95,7 @@ class GroupDetailActivity :
 
         viewModel.groupDetailEvent.observeEvent(this) { event ->
             when (event) {
-                is GroupDetailEvent.OpenDogSelector -> {
-                    val bottomSheet =
-                        DogSelectBottomSheet(filters = event.filters) {
-                            viewModel.joinGroup()
-                        }
-                    bottomSheet.show(supportFragmentManager, "TAG")
-                    bottomSheet.setStyle(
-                        DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme,
-                    )
-                }
+                is GroupDetailEvent.OpenDogSelector -> openDogSelector(event.filters)
 
                 // TODO: delete and go chatActivity
                 GroupDetailEvent.Navigation.NavigateToChat -> {
@@ -122,7 +113,6 @@ class GroupDetailActivity :
         }
     }
 
-
     override fun navigateToModify() {
         val groupModifyUiModel = viewModel.makeGroupModifyUiModel() ?: return
         val modifyIntent = makeModifyIntent(groupModifyUiModel)
@@ -133,6 +123,18 @@ class GroupDetailActivity :
         return GroupModifyActivity.getIntent(
             this@GroupDetailActivity,
             modifyUiModel,
+        )
+    }
+
+    private fun openDogSelector(filters: List<GroupFilter>) {
+        val bottomSheet =
+            DogSelectBottomSheet(filters = filters) {
+                viewModel.joinGroup()
+            }
+        bottomSheet.show(supportFragmentManager, "TAG")
+        bottomSheet.setStyle(
+            DialogFragment.STYLE_NORMAL,
+            R.style.RoundCornerBottomSheetDialogTheme,
         )
     }
 

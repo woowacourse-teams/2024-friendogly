@@ -11,7 +11,7 @@ sealed interface GroupMenuEvent {
 
     data object Block : GroupMenuEvent
 
-    sealed interface Navigation: GroupMenuEvent {
+    sealed interface Navigation : GroupMenuEvent {
         data object NavigateToPrev : Navigation
     }
 }

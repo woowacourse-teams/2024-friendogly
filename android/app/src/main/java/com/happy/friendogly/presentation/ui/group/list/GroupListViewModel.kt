@@ -84,7 +84,7 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         groupFilterSelector.initGroupFilter(filters)
     }
 
-    fun updateParticipationFilter(participationFilter: ParticipationFilter){
+    fun updateParticipationFilter(participationFilter: ParticipationFilter) {
         _participationFilter.value = participationFilter
     }
 

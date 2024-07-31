@@ -74,8 +74,8 @@ class GroupModifyActivity :
                 GroupModifyEvent.Navigation.NavigateToSelectGroupPoster -> openGroupPosterBottomSheet()
 
                 GroupModifyEvent.Navigation.NavigateSubmit -> {
-                    intent.putExtra(SUCCESS_MODIFY_STATE,true)
-                    setResult(Activity.RESULT_OK,intent)
+                    intent.putExtra(SUCCESS_MODIFY_STATE, true)
+                    setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
             }

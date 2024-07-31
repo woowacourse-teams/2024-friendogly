@@ -77,9 +77,9 @@ class ParticipationFilterBottomSheet(
         }
     }
 
-    private fun initParticipation(){
+    private fun initParticipation() {
         viewModel.updateParticipationFilter(currentParticipationFilter)
-        when(currentParticipationFilter){
+        when (currentParticipationFilter) {
             ParticipationFilter.ENTIRE -> binding.radioGroupGroupEntire.isChecked = true
             ParticipationFilter.POSSIBLE -> binding.radioGroupGroupPossible.isChecked = true
             ParticipationFilter.RECRUITMENT -> binding.radioGroupGroupRecruitment.isChecked = true

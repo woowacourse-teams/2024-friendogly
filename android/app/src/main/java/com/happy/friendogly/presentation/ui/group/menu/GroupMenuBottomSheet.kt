@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.group.menu
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,19 +77,21 @@ class GroupMenuBottomSheet(
         }
     }
 
-    private fun openDeleteDialog(){
-        val dialog = DefaultBlueAlertDialog(
-            alertDialogModel = AlertDialogModel(
-                title = requireContext().getString(R.string.group_detail_delete_title),
-                description = null,
-                negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                positiveContents = requireContext().getString(R.string.dialog_positive_default),
-            ),
-            clickToNegative = { },
-            clickToPositive = {
-                viewModel.withdrawGroup()
-            }
-        )
+    private fun openDeleteDialog() {
+        val dialog =
+            DefaultBlueAlertDialog(
+                alertDialogModel =
+                    AlertDialogModel(
+                        title = requireContext().getString(R.string.group_detail_delete_title),
+                        description = null,
+                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                    ),
+                clickToNegative = { },
+                clickToPositive = {
+                    viewModel.withdrawGroup()
+                },
+            )
         dialog.show(parentFragmentManager, tag)
     }
 }

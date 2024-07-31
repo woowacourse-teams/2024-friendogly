@@ -19,7 +19,7 @@ class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
         _detailViewType.value = detailViewType
     }
 
-    //TODO : delete api
+    // TODO : delete api
     fun withdrawGroup() {
         _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
     }
