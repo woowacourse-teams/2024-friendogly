@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.setting.SettingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_habit_create_header"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                onSingleClick="@{() -> vm.navigateToBack()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_my_activities_title"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="알림 설정"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_header" />
+
+
+        <include
+            android:id="@+id/alarm_settings_total_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_total_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_total_push_switch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_activities_title"
+            app:title="@{String.format(@string/alarm_settings_total_push)}" />
+
+
+        <Switch
+            android:id="@+id/alarm_settings_total_push_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="@{vm.alarmPushPermitted}"
+            android:onCheckedChanged="@{(view, checked) -> vm.onTotalAlarmToggled(checked)}"
+            android:thumb="@drawable/switch_thumb_selector"
+            android:track="@drawable/switch_track_selector"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_total_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_total_push" />
+
+
+        <include
+            android:id="@+id/alarm_settings_chatting_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_chatting_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_chatting_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_total_push"
+            app:title="@{String.format(@string/alarm_settings_chatting_push)}" />
+
+        <Switch
+            android:id="@+id/alarm_settings_chatting_push_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="@{vm.alarmPushPermitted}"
+            android:onCheckedChanged="@{(view, checked) -> vm.onChattingAlarmToggled(checked)}"
+            android:thumb="@drawable/switch_thumb_selector"
+            android:track="@drawable/switch_track_selector"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_chatting_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_chatting_push" />
+
+
+        <include
+            android:id="@+id/alarm_settings_club_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_club_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_club_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_chatting_push"
+            app:title="@{String.format(@string/alarm_settings_club_push)}" />
+
+        <Switch
+            android:id="@+id/alarm_settings_club_push_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="@{vm.alarmPushPermitted}"
+            android:onCheckedChanged="@{(view, checked) -> vm.onClubAlarmToggled(checked)}"
+            android:thumb="@drawable/switch_thumb_selector"
+            android:track="@drawable/switch_track_selector"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_club_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_club_push" />
+
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/gray300"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_club_push"
+            tools:layout_editor_absoluteX="-16dp" />
+
+        <TextView
+            android:id="@+id/tv_etc_title"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/etc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider" />
+
+
+        <TextView
+            android:id="@+id/tv_app_info"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToAppInfo()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:text="@string/app_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_etc_title" />
+
+
+        <TextView
+            android:id="@+id/tv_privacy_policy"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToPrivacyPolicy()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/privacy_policy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_app_info" />
+
+
+        <TextView
+            android:id="@+id/tv_logout"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToLogoutDialog()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_privacy_policy" />
+
+
+        <TextView
+            android:id="@+id/tv_unsubscribe"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToUnsubscribeDialog()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/unsubscribe"
+            android:textColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_logout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

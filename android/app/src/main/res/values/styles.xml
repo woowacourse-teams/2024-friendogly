@@ -430,8 +430,8 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Theme.AppCompat.blue.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
-        <item name="android:background">@drawable/sel_dialog_blue_fill_16</item>
+    <style name="Theme.AppCompat.coral.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_coral400_fill_16</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:gravity">center</item>

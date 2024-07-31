@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.register
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -78,5 +80,9 @@ class RegisterActivity : AppCompatActivity() {
 
     companion object {
         const val SIGN_IN_REQUEST_CODE = 1
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, RegisterActivity::class.java)
+        }
     }
 }
