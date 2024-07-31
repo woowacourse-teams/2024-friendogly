@@ -8,10 +8,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -27,7 +25,6 @@ import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTi
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import com.woowacourse.friendogly.pet.domain.Gender;
@@ -39,7 +36,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
 
 @WebMvcTest(FootprintController.class)
 public class FootprintApiDocsTest extends RestDocsTest {
@@ -107,7 +103,6 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 LocalDate.now().minusYears(1),
                 SizeType.MEDIUM,
                 Gender.FEMALE_NEUTERED,
-                "https://picsum.photos/200",
                 LocalDateTime.now(),
                 true
         );
@@ -139,7 +134,6 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.petBirthDate").description("발자국을 찍은 회원의 강아지 생일"),
                                         fieldWithPath("data.petSizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
                                         fieldWithPath("data.petGender").description("발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
-                                        fieldWithPath("data.footprintImageUrl").description("발자국의 이미지 URL"),
                                         fieldWithPath("data.createdAt").description("발자국이 생성된 시간"),
                                         fieldWithPath("data.isMine").description("내 발자국인지 여부 (내 발자국이면 true)")
                                 )
@@ -156,16 +150,13 @@ public class FootprintApiDocsTest extends RestDocsTest {
     void findNear() throws Exception {
         List<FindNearFootprintResponse> response = List.of(
                 new FindNearFootprintResponse(
-                        1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true,
-                        "https://picsum.photos/200"),
+                        1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true),
                 new FindNearFootprintResponse(
-                        3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false, ""),
+                        3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false),
                 new FindNearFootprintResponse(
-                        6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false,
-                        "https://picsum.photos/300"),
+                        6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false),
                 new FindNearFootprintResponse(
-                        11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true,
-                        "https://picsum.photos/250")
+                        11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true)
         );
 
         given(footprintQueryService.findNear(any(), any()))
@@ -196,8 +187,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].latitude").description("발자국 위치의 위도"),
                                         fieldWithPath("data.[].longitude").description("발자국 위치의 경도"),
                                         fieldWithPath("data.[].createdAt").description("발자국 생성 시간"),
-                                        fieldWithPath("data.[].isMine").description("나의 발자국인지 여부"),
-                                        fieldWithPath("data.[].imageUrl").description("발자국에 할당된 이미지 URL")
+                                        fieldWithPath("data.[].isMine").description("나의 발자국인지 여부")
                                 )
                                 .responseSchema(Schema.schema("FindNearFootprintResponse"))
                                 .build()
@@ -235,42 +225,6 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.hasPet").description("자신의 펫 존재 여부 (1마리라도 펫 존재 = true)")
                                 )
                                 .responseSchema(Schema.schema("FindMyLatestFootprintTimeAndPetExistenceResponse"))
-                                .build()
-                        )
-                ))
-                .andExpect(status().isOk());
-    }
-
-    @DisplayName("자신의 발자국에 이미지 업로드")
-    @Test
-    void updateFootprintImage() throws Exception {
-        UpdateFootprintImageResponse response = new UpdateFootprintImageResponse("https://picsum.photos/200");
-
-        given(footprintCommandService.updateFootprintImage(any(), any(), any()))
-                .willReturn(response);
-
-        mockMvc
-                .perform(multipart("/footprints/image/{footprintId}", 1L)
-                        .file(new MockMultipartFile(
-                                "file", "test.jpg", "image/jpg", (byte[]) null))
-                        .contentType(MULTIPART_FORM_DATA)
-                        .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, 1L))
-                .andDo(print())
-                .andDo(document("footprints/updateFootprintImage",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag("Footprint API")
-                                .summary("자신의 발자국에 이미지 업로드 API (multipart/form-data)")
-                                .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
-                                )
-                                .responseFields(
-                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.imageUrl").description("업로드된 이미지의 URL")
-                                )
-                                .responseSchema(Schema.schema("UpdateFootprintImageResponse"))
                                 .build()
                         )
                 ))

@@ -8,8 +8,7 @@ public record FindNearFootprintResponse(
         double latitude,
         double longitude,
         LocalDateTime createdAt,
-        boolean isMine,
-        String imageUrl
+        boolean isMine
 ) {
 
     public FindNearFootprintResponse(Footprint footprint, boolean isMine) {
@@ -18,8 +17,7 @@ public record FindNearFootprintResponse(
                 footprint.getLocation().getLatitude(),
                 footprint.getLocation().getLongitude(),
                 footprint.getCreatedAt(),
-                isMine,
-                footprint.getImageUrl()
+                isMine
         );
     }
 }

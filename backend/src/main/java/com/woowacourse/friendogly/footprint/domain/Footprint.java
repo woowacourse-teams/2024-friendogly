@@ -4,6 +4,8 @@ import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,8 +36,15 @@ public class Footprint {
     @Column(nullable = false)
     private Location location;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "walk_status")
+    private WalkStatus walkStatus;
+
+    @Column(name = "start_walk_time")
+    private LocalDateTime startWalkTime;
+
+    @Column(name = "end_walk_time")
+    private LocalDateTime endWalkTime;
 
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
@@ -44,10 +53,10 @@ public class Footprint {
     private boolean isDeleted;
 
     @Builder
-    public Footprint(Member member, Location location) {
+    public Footprint(Member member, Location location, WalkStatus walkStatus) {
         this.member = member;
         this.location = location;
-        this.imageUrl = "";
+        this.walkStatus = walkStatus;
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
     }
@@ -59,9 +68,5 @@ public class Footprint {
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
                 .equals(memberId);
-    }
-
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }

@@ -1,13 +1,13 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
-import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -27,18 +26,15 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
-    private final FileStorageManager fileStorageManager;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository,
-            FileStorageManager fileStorageManager
+            PetRepository petRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
-        this.fileStorageManager = fileStorageManager;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -52,6 +48,7 @@ public class FootprintCommandService {
                 Footprint.builder()
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
@@ -79,25 +76,5 @@ public class FootprintCommandService {
         if (exists) {
             throw new FriendoglyException(String.format("마지막 발자국을 찍은 뒤 %d초가 경과되지 않았습니다.", FOOTPRINT_COOLDOWN_SECOND));
         }
-    }
-
-    public UpdateFootprintImageResponse updateFootprintImage(
-            Long memberId,
-            Long footprintId,
-            MultipartFile file
-    ) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new FriendoglyException("존재하지 않는 사용자 ID입니다."));
-
-        Footprint footprint = footprintRepository.findById(footprintId)
-                .orElseThrow(() -> new FriendoglyException("존재하지 않는 Footprint ID입니다."));
-
-        if (!footprint.isCreatedBy(member.getId())) {
-            throw new FriendoglyException("자신의 발자국만 수정할 수 있습니다.");
-        }
-
-        String imageUrl = fileStorageManager.uploadFile(file);
-        footprint.updateImageUrl(imageUrl);
-        return new UpdateFootprintImageResponse(imageUrl);
     }
 }

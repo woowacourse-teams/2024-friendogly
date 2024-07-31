@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -143,6 +144,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
@@ -165,6 +167,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
@@ -182,7 +185,6 @@ class FootprintControllerTest {
                 .body("data.petBirthDate", is(pet1.getBirthDate().getValue().toString()))
                 .body("data.petSizeType", is(pet1.getSizeType().name()))
                 .body("data.petGender", is(pet1.getGender().name()))
-                .body("data.footprintImageUrl", is(pet1.getImageUrl()))
                 .body("data.isMine", is(footprint.isCreatedBy(member1.getId())));
     }
 
@@ -193,6 +195,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member2)
                         .location(new Location(37.51365, 127.09831))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
@@ -200,6 +203,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member3)
                         .location(new Location(37.51314, 127.10425))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
@@ -223,6 +227,7 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
+                        .walkStatus(BEFORE)
                         .build()
         );
 
