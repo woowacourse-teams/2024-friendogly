@@ -22,9 +22,6 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     private val groupAdapter: GroupListAdapter by lazy {
         GroupListAdapter(viewModel as GroupListActionHandler)
     }
-    private val adapter: ConcatAdapter by lazy {
-        ConcatAdapter(filterAdapter, groupAdapter)
-    }
 
     override fun initViewCreated() {
         initDataBinding()
@@ -37,7 +34,8 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     }
 
     private fun initAdapter() {
-        binding.includeGroupListFilter.rcvGroupListGroup.adapter = adapter
+        binding.includeGroupListFilter.rcvGroupListFilter.adapter = filterAdapter
+        binding.includeGroupListFilter.rcvGroupListGroup.adapter = groupAdapter
     }
 
     private fun initObserver() {

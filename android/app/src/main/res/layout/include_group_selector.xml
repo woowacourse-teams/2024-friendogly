@@ -51,13 +51,24 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:padding="12dp"
+            android:layout_margin="10dp"
+            android:id="@+id/rcv_group_list_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
+            app:layout_constraintBottom_toTopOf="@id/rcv_group_list_group"
+            tools:listitem="@layout/item_select_filter" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:paddingHorizontal="12dp"
             android:id="@+id/rcv_group_list_group"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>
