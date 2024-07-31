@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
+import com.woowacourse.friendogly.club.domain.ClubMember;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
@@ -82,7 +83,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
 
         assertThat(savedClub.countClubMember()).isEqualTo(2);
     }
@@ -98,7 +99,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedPet.getId()));
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedMember.getId(), request))
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("이미 참여 중인 모임입니다.");
     }
@@ -133,7 +134,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
 
-        assertThatThrownBy(() -> clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request))
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
@@ -159,17 +160,17 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Member savedNewMember = memberRepository.save(newMember);
         Pet savedNewMemberPet = createSavedPet(savedNewMember);
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
-        clubCommandService.saveClubMember(savedClub.getId(), savedNewMember.getId(), request);
 
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertAll(
                 () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
-                () -> assertThat(savedClub.getOwner().getId()).isEqualTo(savedNewMember.getId())
+                () -> assertThat(savedClub.isOwner(ClubMember.create(savedClub, savedNewMember))).isTrue()
         );
     }
 
-    @DisplayName("참여 중인 회원 삭제 후 남은 인원이 없으면, 제거한다.")
+    @DisplayName("참여 중인 회원 삭제 후 남은 인원이 없으면, 모임을 삭제한다.")
     @Transactional
     @Test
     void deleteClubMember_WhenIsEmptyDelete() {

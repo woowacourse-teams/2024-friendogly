@@ -240,7 +240,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     void saveClubMember_201() throws Exception {
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(1L));
         SaveClubMemberResponse response = new SaveClubMemberResponse(1L);
-        when(clubCommandService.saveClubMember(any(), any(), any()))
+        when(clubCommandService.joinClub(any(), any(), any()))
                 .thenReturn(response);
 
         mockMvc.perform(post("/clubs/{clubId}/members", 1L)
@@ -269,7 +269,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
-                                        fieldWithPath("data.clubMemberId").type(JsonFieldType.NUMBER)
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER)
                                                 .description("모임-회원 연관관계 ID(추후 채팅 생기면 변경)"))
                                 .responseSchema(Schema.schema("SaveClubMemberResponse"))
                                 .build())
@@ -281,7 +281,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     void saveClubMember_400() throws Exception {
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(1L));
 
-        when(clubCommandService.saveClubMember(any(), any(), any()))
+        when(clubCommandService.joinClub(any(), any(), any()))
                 .thenThrow(new FriendoglyException("예외 메세지"));
 
         mockMvc.perform(post("/clubs/{clubId}/members", 1L)

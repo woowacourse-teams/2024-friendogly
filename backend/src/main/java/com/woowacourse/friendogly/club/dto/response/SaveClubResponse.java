@@ -25,21 +25,24 @@ public record SaveClubResponse(
         boolean isMine
 ) {
 
-    public SaveClubResponse(Club club, int currentMemberCount, List<String> myPetImageUrls) {
+    public SaveClubResponse(Club club) {
         this(
                 club.getId(),
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
-                club.getOwner().getName().getValue(),
+                club.findOwnerName().getValue(),
                 club.getAddress().getValue(),
                 club.getStatus(),
                 club.getCreatedAt(),
                 club.getAllowedGenders(),
                 club.getAllowedSizes(),
                 club.getMemberCapacity().getValue(),
-                currentMemberCount,
+                club.countClubMember(),
                 club.getImageUrl(),
-                myPetImageUrls,
+                club.getClubPets()
+                        .stream()
+                        .map(clubPet -> clubPet.getClubPetPk().getPet().getImageUrl())
+                        .toList(),
                 true
         );
     }

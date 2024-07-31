@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
@@ -37,8 +36,9 @@ public class ClubQueryService {
     }
 
     private List<String> collectOverviewPetImages(Club club) {
-        Map<Long, List<Pet>> groupPetsByMemberId = club.getClubPets().stream()
-                .map(ClubPet::getPet)
+        Map<Long, List<Pet>> groupPetsByMemberId = club.getClubPets()
+                .stream()
+                .map(clubPet -> clubPet.getClubPetPk().getPet())
                 .collect(Collectors.groupingBy(pet -> pet.getMember().getId()));
 
         return groupPetsByMemberId.values().stream()

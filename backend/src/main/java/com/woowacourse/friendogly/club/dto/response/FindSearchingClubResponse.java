@@ -33,7 +33,7 @@ public record FindSearchingClubResponse(
                 club.getId(),
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
-                club.getOwner().getName().getValue(),
+                club.findOwnerName().getValue(),
                 club.getAddress().getValue(),
                 club.getStatus(),
                 club.getCreatedAt(),
