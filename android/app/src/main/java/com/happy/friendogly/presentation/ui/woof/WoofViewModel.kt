@@ -19,7 +19,6 @@ import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
-    private val permissionRequester: WoofPermissionRequester,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -100,33 +99,19 @@ class WoofViewModel(
         }
     }
 
-    override fun markFootPrint() {
-        if (permissionRequester.hasLocationPermissions()) {
-            _mapActions.emit(WoofMapActions.MarkFootPrint)
-        } else {
-            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
-        }
-    }
-
     override fun changeLocationTrackingMode() {
-        if (permissionRequester.hasLocationPermissions()) {
-            val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
-            _mapActions.emit(
-                if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
-                    WoofMapActions.ChangeMapToFaceTrackingMode
-                } else {
-                    WoofMapActions.ChangeMapToFollowTrackingMode
-                },
-            )
-        } else {
-            _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
-            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
-        }
+        val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
+        _mapActions.emit(
+            if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
+                WoofMapActions.ChangeMapToFaceTrackingMode
+            } else {
+                WoofMapActions.ChangeMapToFollowTrackingMode
+            },
+        )
     }
 
     companion object {
         fun factory(
-            permissionRequester: WoofPermissionRequester,
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
@@ -134,7 +119,6 @@ class WoofViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
-                    permissionRequester = permissionRequester,
                     postFootprintUseCase = postFootprintUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,

@@ -32,6 +32,7 @@
 
     <com.google.android.material.materialswitch.MaterialSwitch
         style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+        android:id="@+id/switch_chat_setting_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
