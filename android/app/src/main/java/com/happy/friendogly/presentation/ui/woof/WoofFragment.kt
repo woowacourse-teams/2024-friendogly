@@ -3,15 +3,20 @@ package com.happy.friendogly.presentation.ui.woof
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.model.FootprintUiModel
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoAdapter
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
@@ -33,6 +38,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
+import kotlin.math.abs
 
 class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var map: NaverMap
@@ -47,11 +53,13 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
+    private val adapter by lazy { FootprintInfoAdapter() }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
+            getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
         )
     }
 
@@ -60,6 +68,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         binding.lottieWoofLoading.playAnimation()
         initDataBinding()
         initObserve()
+        initViewPager()
         mapView.getMapAsync(this)
         clickMarkBtn()
         clickLocationBtn()
@@ -109,6 +118,11 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             moveCameraCenterPosition()
         }
 
+        viewModel.footprintInfo.observe(viewLifecycleOwner) { footPrintInfo ->
+            adapter.setMemberName(footPrintInfo.memberName)
+            adapter.submitList(footPrintInfo.pets)
+        }
+
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofMapActions.ChangeMapToNoFollowTrackingMode ->
@@ -148,6 +162,24 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 }
             }
         }
+    }
+
+    private fun initViewPager() {
+        val viewPager = binding.vpWoofFootprintInfo
+        viewPager.offscreenPageLimit = 3
+        viewPager.getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
+        viewPager.adapter = adapter
+        initNearViewSize()
+    }
+
+    private fun initNearViewSize() {
+        val transform = CompositePageTransformer()
+        transform.addTransformer(MarginPageTransformer(14))
+        transform.addTransformer { view: View, fl: Float ->
+            val v = 1 - abs(fl)
+            view.scaleY = 0.8f + v * 0.2f
+        }
+        binding.vpWoofFootprintInfo.setPageTransformer(transform)
     }
 
     private fun initLocationPermission() =
@@ -193,7 +225,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     binding.layoutWoofLoading.isVisible = false
-                    // binding.lottieWoofLoading.pauseAnimation()
+                    binding.lottieWoofLoading.pauseAnimation()
                 },
                 1500,
             )
@@ -247,11 +279,9 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            val bottomSheet =
-                FootprintBottomSheet.newInstance(
-                    footPrintId = footprintId,
-                )
-            bottomSheet.show(parentFragmentManager, tag)
+            viewModel.loadFootPrintInfo(footprintId)
+            binding.vpWoofFootprintInfo.isVisible = true
+            binding.tvWoofWalkStatus.isVisible = true
             true
         }
     }

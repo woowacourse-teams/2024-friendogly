@@ -1,8 +1,8 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import com.happy.friendogly.domain.model.FootprintSave
-import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
-import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintMarkBtnInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
 
 data class WoofUiState(
     val footprintSave: FootprintSave? = null,

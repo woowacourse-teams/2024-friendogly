@@ -1,7 +1,7 @@
 package com.happy.friendogly.domain.mapper
 
-import com.happy.friendogly.domain.model.FootprintMarkBtnInfo
-import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintMarkBtnInfoUiModel
 
 fun FootprintMarkBtnInfo.toPresentation(): FootprintMarkBtnInfoUiModel {
     return FootprintMarkBtnInfoUiModel(

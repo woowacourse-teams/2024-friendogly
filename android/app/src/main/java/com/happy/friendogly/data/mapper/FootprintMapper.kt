@@ -1,7 +1,7 @@
 package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.model.FootprintDto
-import com.happy.friendogly.domain.model.Footprint
+import com.happy.friendogly.presentation.ui.woof.model.Footprint
 
 fun FootprintDto.toDomain(): Footprint {
     return Footprint(
@@ -10,7 +10,6 @@ fun FootprintDto.toDomain(): Footprint {
         longitude = longitude,
         createdAt = createdAt,
         isMine = isMine,
-        imageUrl = imageUrl,
     )
 }
 

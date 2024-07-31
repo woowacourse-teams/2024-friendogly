@@ -8,5 +8,4 @@ data class FootprintDto(
     val longitude: Double,
     val createdAt: LocalDateTime,
     val isMine: Boolean,
-    val imageUrl: String?,
 )

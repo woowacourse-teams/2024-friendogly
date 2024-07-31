@@ -44,6 +44,36 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_woof_walk_status"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            walkStatus="@{vm.footprintInfo}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rect_white_fill_30"
+            android:gravity="center"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/coral500"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/vp_woof_footprint_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="30분째 산책중"
+            tools:visibility="visible" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_woof_footprint_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <FrameLayout
             android:id="@+id/layout_woof_loading"
             android:layout_width="match_parent"

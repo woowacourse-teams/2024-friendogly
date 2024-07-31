@@ -9,8 +9,8 @@ import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
-import com.happy.friendogly.domain.model.WalkStatus
-import com.happy.friendogly.presentation.model.FootprintInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDate
@@ -57,9 +57,9 @@ fun TextView.bindPetAge(petBirthDate: LocalDate?) {
 
         text =
             if (years < 1) {
-                "${months}개월"
+                resources.getString(R.string.woof_age_month, months)
             } else {
-                "${years}살"
+                resources.getString(R.string.woof_age_year, months)
             }
     }
 }
@@ -76,10 +76,10 @@ fun TextView.bindingCreatedAt(createdAt: LocalDateTime?) {
 
         text =
             when {
-                days > 0 -> context.getString(R.string.woof_days_ago, days)
-                hours > 0 -> context.getString(R.string.woof_hours_ago, hours)
-                minutes > 0 -> context.getString(R.string.woof_minutes_ago, minutes)
-                else -> context.getString(R.string.woof_just_now)
+                days > 0 -> resources.getString(R.string.woof_days_ago, days)
+                hours > 0 -> resources.getString(R.string.woof_hours_ago, hours)
+                minutes > 0 -> resources.getString(R.string.woof_minutes_ago, minutes)
+                else -> resources.getString(R.string.woof_just_now)
             }
     }
 }
@@ -112,42 +112,51 @@ fun TextView.bindPetGender(petGender: Gender?) {
 @BindingAdapter("walkStatus")
 fun TextView.bindWalkStatus(footPrintInfo: FootprintInfoUiModel?) {
     if (footPrintInfo != null) {
-        text =
+        val duration =
+            Duration.between(
+                footPrintInfo.changedWalkStatusTime.toJavaLocalDateTime(),
+                java.time.LocalDateTime.now(),
+            )
+        val hour = duration.toHours()
+        val minute = duration.toMinutes() % 60
+
+        val (walkStatus, color) =
             when (footPrintInfo.walkStatus) {
                 WalkStatus.BEFORE -> {
-                    val duration =
-                        Duration.between(
-                            footPrintInfo.createdAt.toJavaLocalDateTime(),
-                            java.time.LocalDateTime.now(),
-                        )
-                    val minutes = duration.toMinutes()
-
-                    resources.getString(R.string.woof_walk_before, minutes)
+                    Pair(
+                        resources.getString(R.string.woof_walk_before, minute),
+                        resources.getColor(R.color.coral300),
+                    )
                 }
 
                 WalkStatus.ONGOING -> {
-                    if (footPrintInfo.startWalkTime != null) {
-                        val duration =
-                            Duration.between(
-                                footPrintInfo.startWalkTime.toJavaLocalDateTime(),
-                                java.time.LocalDateTime.now(),
-                            )
-                        val minutes = duration.toMinutes()
-
-                        resources.getString(R.string.woof_walk_ongoing, minutes)
-                    }
-                    resources.getString(R.string.woof_walk_unknown)
+                    Pair(
+                        resources.getString(R.string.woof_walk_ongoing, minute),
+                        resources.getColor(R.color.coral500),
+                    )
                 }
 
                 WalkStatus.AFTER -> {
-                    if (footPrintInfo.endWalkTime != null) {
-                        val hour = footPrintInfo.endWalkTime.hour
-                        val minute = footPrintInfo.endWalkTime.minute
-
-                        resources.getString(R.string.woof_walk_after, hour, minute)
-                    }
-                    resources.getString(R.string.woof_walk_unknown)
+                    Pair(
+                        resources.getString(R.string.woof_walk_after, hour, minute),
+                        resources.getColor(R.color.gray500),
+                    )
                 }
             }
+
+        val spannableString =
+            SpannableString(
+                walkStatus,
+            )
+        spannableString.apply {
+            setSpan(
+                ForegroundColorSpan(color),
+                0,
+                walkStatus.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+
+        text = spannableString
     }
 }

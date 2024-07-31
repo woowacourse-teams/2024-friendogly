@@ -1,7 +1,7 @@
 package com.happy.friendogly.domain.mapper
 
-import com.happy.friendogly.domain.model.Footprint
-import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.happy.friendogly.presentation.ui.woof.model.Footprint
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
 
 fun Footprint.toPresentation(): FootprintUiModel {
     return FootprintUiModel(
@@ -10,7 +10,6 @@ fun Footprint.toPresentation(): FootprintUiModel {
         longitude = longitude,
         createdAt = createdAt,
         isMine = isMine,
-        imageUrl = imageUrl,
     )
 }
 

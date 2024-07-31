@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.mapper.toPresentation
+import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
@@ -12,8 +13,9 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.model.FootprintMarkBtnInfoUiModel
-import com.happy.friendogly.presentation.model.FootprintUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintMarkBtnInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
@@ -21,9 +23,13 @@ class WoofViewModel(
     private val postFootprintUseCase: PostFootprintUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
+    private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
 ) : BaseViewModel(), WoofActionHandler {
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
+
+    private val _footprintInfo: MutableLiveData<FootprintInfoUiModel> = MutableLiveData()
+    val footprintInfo: LiveData<FootprintInfoUiModel> get() = _footprintInfo
 
     private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
     val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
@@ -52,6 +58,15 @@ class WoofViewModel(
 
     fun changeMapTrackingModeToNoFollow() {
         _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
+    }
+
+    fun loadFootPrintInfo(footprintId: Long) {
+        viewModelScope.launch {
+            getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
+                _footprintInfo.value = footPrintInfo.toPresentation()
+            }.onFailure {
+            }
+        }
     }
 
     private suspend fun loadNearFootprints(
@@ -112,12 +127,14 @@ class WoofViewModel(
             postFootprintUseCase: PostFootprintUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
+            getFootprintInfoUseCase: GetFootprintInfoUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
                     postFootprintUseCase = postFootprintUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,
+                    getFootprintInfoUseCase = getFootprintInfoUseCase,
                 )
             }
         }
