@@ -46,7 +46,8 @@ public class FootprintQueryService {
                 pets,
                 footprint.getWalkStatus(),
                 changedWalkStatusTime,
-                isMine);
+                isMine
+        );
     }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
