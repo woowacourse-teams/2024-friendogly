@@ -1,13 +1,11 @@
 package com.happy.friendogly.presentation.ui.group.modify
 
 sealed interface GroupModifyEvent {
-    data object CancelSelection : GroupModifyEvent
+    sealed interface Navigation : GroupModifyEvent {
+        data object NavigateToSelectGroupPoster : Navigation
 
-    data object Modify : GroupModifyEvent
+        data object NavigatePrev : Navigation
 
-    data object Delete : GroupModifyEvent
-
-    data object Report : GroupModifyEvent
-
-    data object Block : GroupModifyEvent
+        data object NavigateSubmit : Navigation
+    }
 }

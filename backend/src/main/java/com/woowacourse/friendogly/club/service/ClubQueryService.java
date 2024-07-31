@@ -1,13 +1,8 @@
 package com.woowacourse.friendogly.club.service;
 
-import static java.util.stream.Collectors.toList;
-
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubPet;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
-import com.woowacourse.friendogly.club.repository.ClubMemberRepository;
-import com.woowacourse.friendogly.club.repository.ClubPetRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.club.repository.ClubSpecification;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -23,17 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClubQueryService {
 
     private final ClubRepository clubRepository;
-    private final ClubMemberRepository clubMemberRepository;
-    private final ClubPetRepository clubPetRepository;
 
-    public ClubQueryService(
-            ClubRepository clubRepository,
-            ClubMemberRepository clubMemberRepository,
-            ClubPetRepository clubPetRepository
-    ) {
+    public ClubQueryService(ClubRepository clubRepository) {
         this.clubRepository = clubRepository;
-        this.clubMemberRepository = clubMemberRepository;
-        this.clubPetRepository = clubPetRepository;
     }
 
     public List<FindSearchingClubResponse> findSearching(FindSearchingClubRequest request) {
@@ -44,23 +31,18 @@ public class ClubQueryService {
                 .build();
 
         return clubRepository.findAll(spec).stream()
-                .map(club -> new FindSearchingClubResponse(
-                        club,
-                        clubMemberRepository.countByClubId(club.getId()),
-                        collectOverviewPetImages(club)
-                ))
+                .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
                 .toList();
     }
 
     private List<String> collectOverviewPetImages(Club club) {
-        Map<Long, List<Pet>> groupPetsByMemberId = clubPetRepository.findAllByClubId(club.getId()).stream()
-                .map(ClubPet::getPet)
+        Map<Long, List<Pet>> groupPetsByMemberId = club.getClubPets()
+                .stream()
+                .map(clubPet -> clubPet.getClubPetPk().getPet())
                 .collect(Collectors.groupingBy(pet -> pet.getMember().getId()));
 
         return groupPetsByMemberId.values().stream()
                 .map(petList -> petList.get(0).getImageUrl())
-                .collect(toList());
+                .toList();
     }
 }
-
-

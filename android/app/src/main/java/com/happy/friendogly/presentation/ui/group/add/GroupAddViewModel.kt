@@ -9,10 +9,11 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.group.add.model.GroupCounter
+import com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHandler
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
+class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterItemActionHandler {
     private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
         MutableLiveData()
     val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
@@ -20,8 +21,7 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage
 
-    private val groupFilterSelector =
-        GroupFilterSelector(groupList = GroupFilter.makeGroupFilterEntry())
+    private val groupFilterSelector = GroupFilterSelector()
 
     private val _groupCounter: MutableLiveData<GroupCounter> = MutableLiveData(GroupCounter())
     val groupCounter: LiveData<GroupCounter> get() = _groupCounter
@@ -32,6 +32,10 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler {
 
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
+
+    init {
+        groupFilterSelector.initGroupFilter(GroupFilter.makeGroupFilterEntry())
+    }
 
     override fun selectGroupFilter(
         filterName: String,

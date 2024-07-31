@@ -88,11 +88,7 @@ class PetProfileAdapter(
             oldItem: PetViewType,
             newItem: PetViewType,
         ): Boolean {
-            return when {
-                oldItem is PetView && newItem is PetView -> (oldItem as PetView) == (newItem as PetView)
-                oldItem is PetAddView && newItem is PetAddView -> (oldItem as PetAddView) == (newItem as PetAddView)
-                else -> false
-            }
+            return oldItem == newItem
         }
     }
 }

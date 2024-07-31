@@ -1,6 +1,17 @@
 package com.woowacourse.friendogly.club.service;
 
 
+import com.woowacourse.friendogly.club.domain.Club;
+import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
+import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
+import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
+import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
+import com.woowacourse.friendogly.club.repository.ClubRepository;
+import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.repository.PetRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,4 +19,63 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ClubCommandService {
 
+    private final ClubRepository clubRepository;
+    private final MemberRepository memberRepository;
+    private final PetRepository petRepository;
+
+    public ClubCommandService(
+            ClubRepository clubRepository,
+            MemberRepository memberRepository,
+            PetRepository petRepository
+    ) {
+        this.clubRepository = clubRepository;
+        this.memberRepository = memberRepository;
+        this.petRepository = petRepository;
+    }
+
+    public SaveClubResponse save(Long memberId, SaveClubRequest request) {
+        Member member = memberRepository.getById(memberId);
+        List<Pet> participatingPets = mapToPets(request.participatingPetsId());
+
+        Club newClub = Club.create(
+                request.title(),
+                request.content(),
+                request.address(),
+                request.memberCapacity(),
+                member,
+                request.allowedGenders(),
+                request.allowedSizes(),
+                request.imageUrl(),
+                participatingPets
+        );
+
+        return new SaveClubResponse(clubRepository.save(newClub));
+    }
+
+    public SaveClubMemberResponse joinClub(Long clubId, Long memberId, SaveClubMemberRequest request) {
+        Club club = clubRepository.getById(clubId);
+        Member member = memberRepository.getById(memberId);
+
+        club.addClubMember(member);
+        club.addClubPet(mapToPets(request.participatingPetsId()));
+
+        //TODO : 채팅방 ID 넘기기
+        return new SaveClubMemberResponse(1L);
+    }
+
+    private List<Pet> mapToPets(List<Long> participatingPetsId) {
+        return participatingPetsId.stream()
+                .map(petRepository::getById)
+                .toList();
+    }
+
+    public void deleteClubMember(Long clubId, Long memberId) {
+        Club club = clubRepository.getById(clubId);
+        Member member = memberRepository.getById(memberId);
+
+        club.removeClubMember(member);
+        if (club.isEmpty()) {
+            clubRepository.delete(club);
+        }
+    }
 }

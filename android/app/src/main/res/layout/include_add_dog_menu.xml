@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.group.add.GroupAddActionHandler" />
+            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHandler" />
+
         <variable
             name="filterName"
             type="java.lang.String" />
@@ -13,12 +15,11 @@
 
     <CheckBox
         android:id="@+id/checkbox_group_filter"
-        android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectGroupFilter(filterName, isChecked)}"
         style="@style/group_add_custom_checkbox"
-        android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="0dp"
+        android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectGroupFilter(filterName, isChecked)}"
         android:text="@{filterName}"
         tools:text="대형견" />
 </layout>

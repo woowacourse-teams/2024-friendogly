@@ -16,33 +16,33 @@ public record FindSearchingClubResponse(
         String address,
         Status status,
         LocalDateTime createdAt,
-        Set<SizeType> allowedSize,
         Set<Gender> allowedGender,
+        Set<SizeType> allowedSize,
         int memberCapacity,
         int currentMemberCount,
+        String imageUrl,
         List<String> petImageUrls
 
 ) {
 
     public FindSearchingClubResponse(
             Club club,
-            int currentMemberCount,
             List<String> petImageUrls
     ) {
         this(
                 club.getId(),
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
-                club.getOwner().getName().getValue(),
+                club.findOwnerName().getValue(),
                 club.getAddress().getValue(),
                 club.getStatus(),
                 club.getCreatedAt(),
-                club.getAllowedSizes(),
                 club.getAllowedGenders(),
+                club.getAllowedSizes(),
                 club.getMemberCapacity().getValue(),
-                currentMemberCount,
+                club.countClubMember(),
+                club.getImageUrl(),
                 petImageUrls
         );
     }
-
 }

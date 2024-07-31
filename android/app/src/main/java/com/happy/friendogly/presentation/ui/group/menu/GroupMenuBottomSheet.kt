@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.group.modify
+package com.happy.friendogly.presentation.ui.group.menu
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,18 +9,19 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
-import com.happy.friendogly.databinding.BottomSheetGroupModifyBinding
+import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
-class GroupModifyBottomSheet(
+class GroupMenuBottomSheet(
     private val detailViewType: DetailViewType,
 ) : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetGroupModifyBinding? = null
-    val binding: BottomSheetGroupModifyBinding
+    private var _binding: BottomSheetGroupMenuBinding? = null
+    val binding: BottomSheetGroupMenuBinding
         get() = _binding!!
 
-    private val viewModel: GroupModifyViewModel by viewModels()
+    private val viewModel: GroupMenuViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
@@ -31,7 +32,7 @@ class GroupModifyBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = BottomSheetGroupModifyBinding.inflate(inflater, container, false)
+        _binding = BottomSheetGroupMenuBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,25 +44,28 @@ class GroupModifyBottomSheet(
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         viewModel.initDetailViewType(detailViewType)
-        viewModel.groupModifyEvent.observeEvent(viewLifecycleOwner) { event ->
-            when (event) {
-                GroupModifyEvent.Block -> {}
-                GroupModifyEvent.CancelSelection -> {}
-
-                GroupModifyEvent.Delete -> {
-                }
-
-                GroupModifyEvent.Modify -> {
-                }
-
-                GroupModifyEvent.Report -> {}
-            }
-            this.dismissNow()
-        }
+        initObserver()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initObserver() {
+        viewModel.groupMenuEvent.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                GroupMenuEvent.Block -> {}
+                GroupMenuEvent.CancelSelection -> dismissNow()
+
+                GroupMenuEvent.Delete -> {
+                }
+
+                GroupMenuEvent.Modify -> (activity as GroupDetailNavigation).navigateToModify()
+
+                GroupMenuEvent.Report -> {}
+            }
+            this.dismissNow()
+        }
     }
 }

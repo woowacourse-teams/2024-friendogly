@@ -1,13 +1,9 @@
 package com.happy.friendogly.presentation.ui.group.modify
 
 interface GroupModifyActionHandler {
-    fun close()
+    fun cancelModify()
 
-    fun selectModify()
+    fun submitModify()
 
-    fun selectDelete()
-
-    fun selectReport()
-
-    fun selectBlock()
+    fun selectGroupImage()
 }

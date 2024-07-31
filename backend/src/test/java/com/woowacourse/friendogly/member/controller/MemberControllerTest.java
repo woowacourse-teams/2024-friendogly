@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext()
+@DirtiesContext
 class MemberControllerTest {
 
     @LocalServerPort

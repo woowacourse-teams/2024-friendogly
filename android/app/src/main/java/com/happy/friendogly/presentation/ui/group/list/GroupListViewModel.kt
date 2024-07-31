@@ -18,13 +18,13 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
+    val groupFilterSelector = GroupFilterSelector()
+
     private val _groups: MutableLiveData<List<GroupListUiModel>> = MutableLiveData()
     val groups: LiveData<List<GroupListUiModel>> get() = _groups
 
     private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
-
-    val groupFilterSelector = GroupFilterSelector()
 
     init {
         loadGroups()
@@ -80,11 +80,44 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                 }.flatten()
         }
 
+    fun initGroupFilter(filters: List<GroupFilter>) {
+        groupFilterSelector.initGroupFilter(filters)
+    }
+
     override fun loadGroup(groupId: Long) {
         _groupListEvent.emit(GroupListEvent.OpenGroup(groupId))
     }
 
     override fun addGroup() {
         _groupListEvent.emit(GroupListEvent.Navigation.NavigateToAddGroup)
+    }
+
+    override fun selectParticipationFilter() {
+        val participationFilter = participationFilter.value ?: return
+        _groupListEvent.emit(GroupListEvent.OpenParticipationFilter(participationFilter))
+    }
+
+    override fun selectSizeFilter() {
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        _groupListEvent.emit(
+            GroupListEvent.OpenFilterSelector(
+                groupFilterType = GroupFilter.SizeFilter.Init,
+                groupFilters = filters,
+            ),
+        )
+    }
+
+    override fun selectGenderFilter() {
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        _groupListEvent.emit(
+            GroupListEvent.OpenFilterSelector(
+                groupFilterType = GroupFilter.GenderFilter.Init,
+                groupFilters = filters,
+            ),
+        )
+    }
+
+    override fun removeFilter(groupFilter: GroupFilter) {
+        groupFilterSelector.removeGroupFilter(filter = groupFilter)
     }
 }

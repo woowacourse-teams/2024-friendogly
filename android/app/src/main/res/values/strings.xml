@@ -112,6 +112,7 @@
     <string name="group_list_date_minutes">%d분 전</string>
     <string name="group_list_date_now">방금 전</string>
     <string name="group_counter_count">%d명</string>
+    <string name="group_list_participation_filter">모집 조건 선택</string>
 
     <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>
@@ -147,6 +148,10 @@
     <string name="group_detail_delete">방나가기</string>
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
+
+    <!--모임 수정 -->
+    <string name="group_modify_title">모임 수정하기</string>
+    <string name="group_modify_commit">수정 완료</string>
 
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>

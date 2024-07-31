@@ -15,9 +15,11 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->actionHandler.removeFilter(groupFilter)}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
+        android:layout_marginVertical="5dp"
         android:background="@drawable/rect_orange100_fill_12"
         android:paddingHorizontal="8dp"
         android:paddingVertical="3dp">
@@ -35,8 +37,8 @@
             tools:text="중형견" />
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_close"
             app:layout_constraintBottom_toBottomOf="parent"

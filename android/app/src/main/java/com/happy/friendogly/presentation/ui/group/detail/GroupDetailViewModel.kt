@@ -9,6 +9,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -130,4 +131,8 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
             // TODO : success
             _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToChat)
         }
+
+    fun makeGroupModifyUiModel(): GroupModifyUiModel? {
+        return group.value?.toGroupModifyUiModel()
+    }
 }

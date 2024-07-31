@@ -8,7 +8,6 @@ import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTi
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.woowacourse.friendogly.footprint.dto.response.UpdateFootprintImageResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import jakarta.validation.Valid;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/footprints")
@@ -76,17 +73,6 @@ public class FootprintController {
         // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
-        return ApiResponse.ofSuccess(response);
-    }
-
-    @PostMapping("/image/{footprintId}")
-    public ApiResponse<UpdateFootprintImageResponse> updateFootprintImage(
-            @Auth Long memberId,
-            @PathVariable Long footprintId,
-            @RequestParam("file") MultipartFile file
-    ) {
-        UpdateFootprintImageResponse response =
-                footprintCommandService.updateFootprintImage(memberId, footprintId, file);
         return ApiResponse.ofSuccess(response);
     }
 }

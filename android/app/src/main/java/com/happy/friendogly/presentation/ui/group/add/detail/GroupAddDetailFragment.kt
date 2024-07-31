@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.group.add.detal
+package com.happy.friendogly.presentation.ui.group.add.detail
 
 import android.widget.SeekBar
 import androidx.fragment.app.activityViewModels
