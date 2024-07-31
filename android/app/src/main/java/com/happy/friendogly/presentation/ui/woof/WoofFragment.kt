@@ -93,7 +93,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            Log.d("테스트", "$state")
             val footprintSave = state.footprintSave ?: return@observe
             markNearFootPrints(footPrints = state.nearFootprints)
             createMarker(
@@ -151,7 +150,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             if (isPermitted) {
                 activateMap()
             } else {
-                showSnackbar("권한을 거부하여 기능을 사용할 수 없습니다.")
+                showSnackbar(getString(R.string.permission_denied_message))
                 map.locationTrackingMode =
                     LocationTrackingMode.NoFollow
             }

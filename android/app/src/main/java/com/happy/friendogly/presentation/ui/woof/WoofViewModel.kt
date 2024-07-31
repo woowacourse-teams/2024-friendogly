@@ -68,7 +68,6 @@ class WoofViewModel(
             ).onSuccess { nearFootPrints ->
                 markMyFootprint(latLng, footprintMarkBtnInfo, nearFootPrints.toPresentation())
             }.onFailure {
-                Log.d("테스트", "${it.message}")
             }
         }
     }
