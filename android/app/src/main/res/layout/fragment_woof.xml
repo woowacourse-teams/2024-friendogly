@@ -57,19 +57,19 @@
             android:paddingVertical="10dp"
             android:textColor="@color/coral500"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/vp_woof_footprint_info"
+            app:layout_constraintBottom_toTopOf="@id/vp_woof_pet_detail"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="30분째 산책중"
-            tools:visibility="visible" />
+            tools:visibility="invisible" />
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_woof_footprint_info"
+            android:id="@+id/vp_woof_pet_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingHorizontal="20dp"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -80,7 +80,7 @@
             android:layout_height="match_parent"
             android:background="@color/lottie_layout"
             android:clickable="true"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

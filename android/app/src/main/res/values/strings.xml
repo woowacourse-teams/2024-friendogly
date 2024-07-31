@@ -213,7 +213,7 @@
     <string name="group_complete_participate_name">모집완료</string>
 
     <!--멍멍 짓기-->
-    <string name="woof_member_name">%s네 댕댕이</string>
+    <string name="woof_member_name">%s\'s 댕댕이</string>
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>

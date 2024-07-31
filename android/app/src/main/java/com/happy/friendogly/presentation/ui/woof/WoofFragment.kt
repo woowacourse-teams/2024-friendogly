@@ -1,10 +1,15 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -62,6 +67,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
         )
     }
+    private var isAnimationEnded: Boolean = false
 
     override fun initViewCreated() {
         binding.layoutWoofLoading.isVisible = true
@@ -165,7 +171,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     private fun initViewPager() {
-        val viewPager = binding.vpWoofFootprintInfo
+        val viewPager = binding.vpWoofPetDetail
         viewPager.offscreenPageLimit = 3
         viewPager.getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
         viewPager.adapter = adapter
@@ -179,7 +185,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             val v = 1 - abs(fl)
             view.scaleY = 0.8f + v * 0.2f
         }
-        binding.vpWoofFootprintInfo.setPageTransformer(transform)
+        binding.vpWoofPetDetail.setPageTransformer(transform)
     }
 
     private fun initLocationPermission() =
@@ -213,6 +219,9 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         map.addOnCameraChangeListener { reason, _ ->
             if (reason == REASON_GESTURE) {
                 viewModel.changeMapTrackingModeToNoFollow()
+                if (!isAnimationEnded) {
+                    hideMarkerDetail()
+                }
             }
         }
     }
@@ -279,11 +288,63 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker: Marker,
     ) {
         marker.setOnClickListener {
+            isAnimationEnded = false
             viewModel.loadFootPrintInfo(footprintId)
-            binding.vpWoofFootprintInfo.isVisible = true
-            binding.tvWoofWalkStatus.isVisible = true
+            showMarkerDetail()
             true
         }
+    }
+
+    private fun showMarkerDetail() {
+        binding.vpWoofPetDetail.apply {
+            isVisible = true
+            viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        translationY = height.toFloat()
+                        animate()
+                            .translationY(0f)
+                            .setDuration(300)
+                            .setListener(null)
+                    }
+                },
+            )
+        }
+
+        binding.tvWoofWalkStatus.apply {
+            isVisible = true
+            viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        translationY = height.toFloat()
+                        animate()
+                            .translationY(0f)
+                            .setDuration(300)
+                            .setListener(null)
+                    }
+                },
+            )
+        }
+    }
+
+    private fun hideMarkerDetail() {
+        binding.tvWoofWalkStatus.isVisible = false
+
+        binding.vpWoofPetDetail.animate()
+            .translationY(binding.vpWoofPetDetail.height.toFloat())
+            .setDuration(300)
+            .setListener(
+                object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        super.onAnimationEnd(animation)
+                        binding.vpWoofPetDetail.isVisible = false
+                    }
+                },
+            )
+
+        isAnimationEnded = true
     }
 
     private fun markNearFootPrints(footPrints: List<FootprintUiModel>) {
