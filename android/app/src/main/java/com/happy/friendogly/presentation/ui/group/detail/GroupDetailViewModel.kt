@@ -125,6 +125,10 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
         )
     }
 
+    override fun navigateToProfile(id: Long) {
+        _groupDetailEvent.emit(GroupDetailEvent.Navigation.NavigateToProfile(id = id))
+    }
+
     // TODO: join group api
     fun joinGroup() =
         viewModelScope.launch {

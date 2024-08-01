@@ -18,6 +18,7 @@ import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyActivity
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
+import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 
 class GroupDetailActivity :
     BaseActivity<ActivityGroupDetailBinding>(R.layout.activity_group_detail),
@@ -50,7 +51,10 @@ class GroupDetailActivity :
             ) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val isModify =
-                        result.data?.getBooleanExtra(GroupModifyActivity.SUCCESS_MODIFY_STATE, false)
+                        result.data?.getBooleanExtra(
+                            GroupModifyActivity.SUCCESS_MODIFY_STATE,
+                            false,
+                        )
                             ?: false
                     if (isModify) {
                         viewModel.loadGroup(receiveGroupId())
@@ -109,6 +113,9 @@ class GroupDetailActivity :
                         GroupMenuBottomSheet(event.detailViewType)
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
+
+                is GroupDetailEvent.Navigation.NavigateToProfile ->
+                    startActivity(OtherProfileActivity.getIntent(this, event.id))
             }
         }
     }
