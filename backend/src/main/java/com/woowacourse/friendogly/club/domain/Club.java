@@ -192,8 +192,8 @@ public class Club {
     public void removeClubMember(Member member) {
         ClubMember targetClubMember = findTargetClubMember(member);
         clubMembers.remove(targetClubMember);
-        targetClubMember.updateClub(null);
         removeClubPets(member);
+        removeFromChat(member);
     }
 
     private ClubMember findTargetClubMember(Member member) {
@@ -206,13 +206,16 @@ public class Club {
     private void removeClubPets(Member member) {
         List<ClubPet> participatingMemberPets = findTargetClubPets(member);
         clubPets.removeAll(participatingMemberPets);
-        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
     }
 
     private List<ClubPet> findTargetClubPets(Member member) {
         return clubPets.stream()
                 .filter(clubPet -> clubPet.isSameMember(member))
                 .toList();
+    }
+
+    private void removeFromChat(Member member) {
+        chatRoom.removeMember(member);
     }
 
     public int countClubMember() {

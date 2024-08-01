@@ -80,5 +80,4 @@ public class ClubController {
         clubCommandService.deleteClubMember(clubId, memberId);
         return ResponseEntity.noContent().build();
     }
-
 }
