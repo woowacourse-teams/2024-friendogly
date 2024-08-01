@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
-import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
+import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
@@ -113,7 +113,7 @@ class AlarmPermission private constructor(
     }
 
     private fun AppCompatActivity.createDialog(): DialogFragment =
-        DefaultBlueAlertDialog(
+        DefaultCoralAlertDialog(
             alertDialogModel =
                 AlertDialogModel(
                     getString(R.string.alarm_dialog_title),
@@ -132,7 +132,7 @@ class AlarmPermission private constructor(
         )
 
     private fun Fragment.createDialog(): DialogFragment =
-        DefaultBlueAlertDialog(
+        DefaultCoralAlertDialog(
             alertDialogModel =
                 AlertDialogModel(
                     getString(R.string.alarm_dialog_title),

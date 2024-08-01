@@ -44,6 +44,29 @@
     <string name="pets_profile">함께하는 반려동물</string>
     <string name="tv_pet_add">강아지를 등록해주세요</string>
 
+    <!--설정-->
+    <string name="alarm_settings_total_push">반갑개에서 보내는 소식</string>
+    <string name="alarm_settings_total_push_description">반갑개의 유용한 정보나 이벤트 알림</string>
+    <string name="alarm_settings_chatting_push">모든 채팅 알림</string>
+    <string name="alarm_settings_chatting_push_description">모든 채팅 메시지 알림</string>
+    <string name="alarm_settings_club_push">모임 알림</string>
+    <string name="alarm_settings_club_push_description">가입한 모임의 알림</string>
+    <string name="setting">설정</string>
+    <string name="unsubscribe">탈퇴하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="app_info">앱 정보</string>
+    <string name="etc">기타</string>
+
+    <!--설정 다이얼로그-->
+    <string name="logout_title">로그아웃 하시겠어요?</string>
+    <string name="logout_description">언제든 다시 돌아올 수 있어요!</string>
+    <string name="no">아니요</string>
+
+    <string name="user_delete_title">정말 탈퇴하시겠어요?</string>
+    <string name="user_delete_description">탈퇴시 사용자 정보와\n채팅 메세지가 사라져요.</string>
+    <string name="user_delete_yes">회원 탈퇴</string>
+
     <!--강아지 등록-->
     <string name="dog_name_title">댕댕이 이름</string>
     <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
@@ -169,6 +192,8 @@
     <string name="female">여</string>
     <string name="male_enutered">남(중성화했어요)</string>
     <string name="female_enutered">여(중성화했어요)</string>
+    <string name="see_you_later_message">다음에 또 만나요</string>
+    <string name="withdrawn_message">회원이 탈퇴 되었어요</string>
 
     <!--권한-->
     <string name="alarm_dialog_title">알람 허용 사용 설정</string>

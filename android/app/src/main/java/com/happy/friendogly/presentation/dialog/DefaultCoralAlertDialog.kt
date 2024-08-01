@@ -2,14 +2,14 @@ package com.happy.friendogly.presentation.dialog
 
 import android.view.View
 import com.happy.friendogly.R
-import com.happy.friendogly.databinding.DialogBlueDefaultAlertBinding
+import com.happy.friendogly.databinding.DialogCoralDefaultAlertBinding
 import com.happy.friendogly.presentation.base.BaseDialog
 
-class DefaultBlueAlertDialog(
+class DefaultCoralAlertDialog(
     private val alertDialogModel: AlertDialogModel,
     private val clickToNegative: () -> Unit,
     private val clickToPositive: () -> Unit,
-) : BaseDialog<DialogBlueDefaultAlertBinding>(layoutResourceId = R.layout.dialog_blue_default_alert) {
+) : BaseDialog<DialogCoralDefaultAlertBinding>(layoutResourceId = R.layout.dialog_coral_default_alert) {
     override fun initViewCreated() {
         initDataBinding()
         initClickListener()

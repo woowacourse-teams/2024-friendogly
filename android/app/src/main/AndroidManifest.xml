@@ -20,10 +20,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.setting.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.ui.group.modify.GroupModifyActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:exported="false"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.ui.dogdetail.DogDetailActivity"
             android:exported="false"
@@ -39,8 +43,8 @@
         <activity
             android:name=".presentation.ui.group.add.GroupAddActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.ui.profilesetting.ProfileSettingActivity"
             android:exported="false"

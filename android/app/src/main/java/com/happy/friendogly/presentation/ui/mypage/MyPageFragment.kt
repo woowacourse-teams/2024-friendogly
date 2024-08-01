@@ -45,9 +45,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(viewLifecycleOwner) { action ->
             when (action) {
-                is MyPageNavigationAction.NavigateToSetting -> {}
+                is MyPageNavigationAction.NavigateToSetting -> (activity as MainActivityActionHandler).navigateToSetting()
                 is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
-
                 is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
 
                 is MyPageNavigationAction.NavigateToProfileEdit -> {}
@@ -65,5 +64,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onResume() {
         super.onResume()
         viewModel.fetchPetMine()
+        viewModel.fetchMemberMine()
+        viewModel.updateCurrentPage(0)
+        binding.vpDogProfile.setCurrentItem(0, false)
     }
 }

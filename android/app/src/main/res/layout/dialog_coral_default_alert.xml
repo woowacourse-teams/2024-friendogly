@@ -62,7 +62,7 @@
 
             <TextView
                 android:id="@+id/tv_positive"
-                style="@style/Theme.AppCompat.blue.Alert.TextView.Button.Positive"
+                style="@style/Theme.AppCompat.coral.Alert.TextView.Button.Positive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

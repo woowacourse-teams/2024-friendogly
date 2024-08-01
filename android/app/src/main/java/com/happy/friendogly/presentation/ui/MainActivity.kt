@@ -17,6 +17,7 @@ import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
+import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
 
 class MainActivity :
@@ -101,6 +102,10 @@ class MainActivity :
 
     override fun navigateToDogDetail() {
         startActivity(DogDetailActivity.getIntent(this))
+    }
+
+    override fun navigateToSetting() {
+        startActivity(SettingActivity.getIntent(this))
     }
 
     override fun onBackPressed() {
