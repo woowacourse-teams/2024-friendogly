@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
@@ -21,7 +20,6 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import jakarta.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -255,62 +253,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         // then
         assertThat(clubRepository.findById(club.getId())).isEmpty();
-    }
-
-    @DisplayName("모임에 참여하면 모임 채팅방에도 자동으로 참여한다.")
-    @Transactional
-    @Test
-    void joinClub_Then_JoinChatRoom() {
-        // given
-        Club club = saveClub(
-                member,
-                pet,
-                Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
-                Set.of(SMALL, MEDIUM, LARGE)
-        );
-
-        ChatRoom chatRoom = club.getChatRoom();
-
-        Member newMember = memberRepository.save(
-                new Member("새로운멤버", "123", "a@a.com", "https://image.com"));
-
-        Pet newPet = petRepository.save(
-                new Pet(newMember, "새로운펫", "설명", LocalDate.now().minusYears(1), SMALL, MALE, "https://image.com"));
-
-        // when
-        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(newPet.getId()));
-        clubCommandService.joinClub(club.getId(), newMember.getId(), request);
-
-        // then
-        assertThat(chatRoom.countMembers()).isEqualTo(2);
-    }
-
-    @DisplayName("모임에서 나가면 모임 채팅방에서도 자동으로 나가진다.")
-    @Test
-    void deleteClubMember_Then_LeaveChatRoom() {
-        // given
-        Club club = saveClub(
-                member,
-                pet,
-                Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
-                Set.of(SMALL, MEDIUM, LARGE)
-        );
-
-        ChatRoom chatRoom = club.getChatRoom();
-
-        Member newMember = memberRepository.save(
-                new Member("새로운멤버", "123", "a@a.com", "https://image.com"));
-
-        Pet newPet = petRepository.save(
-                new Pet(newMember, "새로운펫", "설명", LocalDate.now().minusYears(1), SMALL, MALE, "https://image.com"));
-
-        // when
-        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(newPet.getId()));
-        clubCommandService.joinClub(club.getId(), newMember.getId(), request);
-        clubCommandService.leaveClub(club.getId(), newMember.getId());
-
-        // then
-        assertThat(chatRoom.countMembers()).isEqualTo(1);
     }
 
     @DisplayName("모임이 사라지면 채팅방도 사라진다.")

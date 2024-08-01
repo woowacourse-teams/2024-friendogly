@@ -142,7 +142,6 @@ public class Club {
 
         clubMembers.add(ClubMember.create(this, member));
         addClubPet(pets);
-        chatRoom.addMember(member);
     }
 
     private void validateAlreadyExists(Member member) {
@@ -191,7 +190,6 @@ public class Club {
     public void removeMember(Member member) {
         removeClubMember(member);
         removeClubPets(member);
-        chatRoom.removeMember(member);
     }
 
     private void removeClubMember(Member member) {
@@ -237,5 +235,13 @@ public class Club {
         return clubMembers.stream()
                 .min(Comparator.comparing(ClubMember::getCreatedAt))
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
+    }
+
+    public void addMemberToChat(Member member) {
+        chatRoom.addMember(member);
+    }
+
+    public void removeMemberFromChat(Member member) {
+        chatRoom.removeMember(member);
     }
 }
