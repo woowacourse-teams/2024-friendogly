@@ -17,6 +17,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,11 +41,10 @@ public class ClubController {
         return ApiResponse.ofSuccess(clubQueryService.findById(memberId, id));
     }
 
-    // TODO: @ModelAttribute
     @GetMapping("/searching")
     public ApiResponse<List<FindSearchingClubResponse>> findByFilter(
             @Auth Long memberId,
-            @Valid FindSearchingClubRequest request
+            @Valid @ModelAttribute FindSearchingClubRequest request
     ) {
         return ApiResponse.ofSuccess(clubQueryService.findFindByFilter(memberId, request));
     }
@@ -59,7 +59,7 @@ public class ClubController {
     }
 
     @PostMapping("/{clubId}/members")
-    public ResponseEntity<ApiResponse<SaveClubMemberResponse>> saveClubMember(
+    public ResponseEntity<ApiResponse<SaveClubMemberResponse>> joinClub(
             @PathVariable Long clubId,
             @Auth Long memberId,
             @Valid @RequestBody SaveClubMemberRequest request
@@ -72,7 +72,7 @@ public class ClubController {
     @DeleteMapping("/{clubId}/members")
     public ResponseEntity<Void> deleteClubMember(
             @Auth Long memberId,
-            @PathVariable("clubId") Long clubId
+            @PathVariable Long clubId
     ) {
         clubCommandService.deleteClubMember(clubId, memberId);
         return ResponseEntity.noContent().build();
