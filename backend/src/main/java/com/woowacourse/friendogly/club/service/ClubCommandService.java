@@ -67,7 +67,7 @@ public class ClubCommandService {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
 
-        club.addClubMember(member);
+        club.addClubMemberAndJoinChatRoom(member);
         club.addClubPet(mapToPets(request.participatingPetsId(), member));
 
         return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());

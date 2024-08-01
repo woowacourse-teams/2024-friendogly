@@ -130,19 +130,20 @@ public class Club {
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
-                .chatRoom(new ChatRoom(owner))
+                .chatRoom(new ChatRoom())
                 .build();
-        club.addClubMember(owner);
+        club.addClubMemberAndJoinChatRoom(owner);
         club.addClubPet(participatingPets);
         return club;
     }
 
-    public void addClubMember(Member member) {
+    public void addClubMemberAndJoinChatRoom(Member member) {
         validateAlreadyExists(member);
         validateMemberCapacity();
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
+        chatRoom.addMember(member);
     }
 
     private void validateAlreadyExists(Member member) {
