@@ -169,6 +169,40 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .hasMessage("자신의 반려견만 모임에 데려갈 수 있습니다.");
     }
 
+    @DisplayName("모임에 참여할 때, 정원을 초과해서 참석할 수 없다.")
+    @Test
+    void joinClub_OverCapacity() {
+        // given
+        Club club = clubRepository.save(
+                Club.create(
+                        "모임 제목",
+                        "모임 설명",
+                        "모임 주소",
+                        2,
+                        member,
+                        Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                        Set.of(SMALL, MEDIUM, LARGE),
+                        "https://image.com",
+                        List.of(pet)
+                )
+        );
+
+        Member member2 = memberRepository.save(new Member("m2", "tag2", "a2@a.com", "https://a2.com"));
+        Pet pet2 = savePet(member2, SMALL, MALE);
+        SaveClubMemberRequest request2 = new SaveClubMemberRequest(List.of(pet2.getId()));
+        clubCommandService.joinClub(club.getId(), member2.getId(), request2);
+
+        // when
+        Member member3 = memberRepository.save(new Member("m3", "tag3", "a3@a.com", "https://a3.com"));
+        Pet pet3 = savePet(member3, SMALL, MALE);
+        SaveClubMemberRequest request3 = new SaveClubMemberRequest(List.of(pet3.getId()));
+
+        // then
+        assertThatThrownBy(() -> clubCommandService.joinClub(club.getId(), member3.getId(), request3))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("최대 인원을 초과하여 모임에 참여할 수 없습니다.");
+    }
+
     // 영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가
     @DisplayName("참여 중인 회원을 삭제하고, 방장이면 방장을 위임한다.")
     @Transactional
