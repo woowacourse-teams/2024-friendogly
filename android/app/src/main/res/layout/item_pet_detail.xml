@@ -11,7 +11,7 @@
 
         <variable
             name="petDetail"
-            type="com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailUiModel" />
+            type="com.happy.friendogly.presentation.ui.woof.model.PetDetail" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

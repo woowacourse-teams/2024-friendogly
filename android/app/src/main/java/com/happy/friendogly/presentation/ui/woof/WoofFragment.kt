@@ -19,7 +19,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoAdapter
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
+import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -139,7 +139,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
         map.addOnCameraChangeListener { reason, _ ->
             if (reason == REASON_GESTURE) {
-                viewModel.changeMapTrackingModeToNoFollow()
+                viewModel.changeTrackingModeToNoFollow()
                 if (!isMarkerHideAnimationEnd) {
                     hideMarkerDetail()
                 }
@@ -152,18 +152,18 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     private fun initObserve() {
-        viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            val footprintSave = state.footprintSave ?: return@observe
-            markNearFootPrints(footPrints = state.nearFootprints)
+        viewModel.nearFootprints.observe(viewLifecycleOwner) { nearFootprints ->
+            markNearFootPrints(nearFootprints)
+        }
+
+        viewModel.footprintSave.observe(viewLifecycleOwner) { footprintSave ->
             createMarker(
                 footprintId = footprintSave.footprintId,
                 createdAt = footprintSave.createdAt,
-                latLng = latLng,
+                latLng = LatLng(footprintSave.latitude, footprintSave.longitude),
                 isMine = true,
             )
             map.locationTrackingMode = LocationTrackingMode.Follow
-            showCircleOverlay()
-            moveCameraCenterPosition()
         }
 
         viewModel.footprintInfo.observe(viewLifecycleOwner) { footPrintInfo ->
@@ -247,6 +247,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+            viewModel.loadNearFootprints(latLng)
+
             moveCameraCenterPosition()
             Handler(Looper.getMainLooper()).postDelayed(
                 {
@@ -262,7 +264,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             if (!locationPermission.hasPermissions()) {
                 locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
             } else {
-                viewModel.markFootprint(latLng)
+                viewModel.loadFootprintMarkBtnInfo(latLng)
             }
         }
     }
@@ -287,7 +289,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         binding.lottieWoofLoading.pauseAnimation()
     }
 
-    private fun showCircleOverlay() {
+    private fun setUpCircleOverlay(latLng: LatLng) {
         circleOverlay.center = latLng
         circleOverlay.radius = MAP_CIRCLE_RADIUS / map.projection.metersPerPixel
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
@@ -300,7 +302,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 .animate(CameraAnimation.Easing)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
-        showCircleOverlay()
     }
 
     private fun createMarker(
@@ -319,6 +320,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker.map = map
 
         setUpMarkerAction(footprintId, marker)
+        setUpCircleOverlay(latLng)
     }
 
     private fun LocalDateTime.toZIndex(): Int {
@@ -335,7 +337,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     ) {
         marker.setOnClickListener {
             isMarkerHideAnimationEnd = false
-            viewModel.loadFootPrintInfo(footprintId)
+            viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
             true
         }
@@ -393,7 +395,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         isMarkerHideAnimationEnd = true
     }
 
-    private fun markNearFootPrints(footPrints: List<FootprintUiModel>) {
+    private fun markNearFootPrints(footPrints: List<Footprint>) {
         footPrints.forEach { footPrint ->
             createMarker(
                 footprintId = footPrint.footprintId,

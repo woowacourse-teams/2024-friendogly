@@ -10,7 +10,6 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDate
@@ -109,19 +108,22 @@ fun TextView.bindPetGender(petGender: Gender?) {
     }
 }
 
-@BindingAdapter("walkStatus")
-fun TextView.bindWalkStatus(footPrintInfo: FootprintInfoUiModel?) {
-    if (footPrintInfo != null) {
+@BindingAdapter("walkStatus", "changedWalkStatusTime")
+fun TextView.bindWalkStatusTime(
+    walkStatus: WalkStatus?,
+    changedWalkStatusTime: LocalDateTime?,
+) {
+    if (walkStatus != null && changedWalkStatusTime != null) {
         val duration =
             Duration.between(
-                footPrintInfo.changedWalkStatusTime.toJavaLocalDateTime(),
+                changedWalkStatusTime.toJavaLocalDateTime(),
                 java.time.LocalDateTime.now(),
             )
         val hour = duration.toHours()
         val minute = duration.toMinutes() % 60
 
         val (walkStatus, color) =
-            when (footPrintInfo.walkStatus) {
+            when (walkStatus) {
                 WalkStatus.BEFORE -> {
                     Pair(
                         resources.getString(R.string.woof_walk_before, minute),
