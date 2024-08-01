@@ -304,7 +304,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
-                                .summary("모임 생성 API")
+                                .summary("모임 생성 API -> 성공한 경우 /topic/chat/{chatRoomId}를 subscribe 해주세요.")
                                 .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("로그인 중 회원 정보"))
                                 .responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("생성된 모임 리소스 Location"))
@@ -359,7 +359,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
-                                .summary("모임 참여 API")
+                                .summary("모임 참여 API -> 성공한 경우 /topic/chat/{chatRoomId}를 subscribe 해주세요.")
                                 .pathParameters(
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
                                 .requestHeaders(
@@ -441,7 +441,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
-                                .summary("모임 탈퇴 API")
+                                .summary("모임 탈퇴 API -> 모임 탈퇴에 성공한 경우 /topic/chat/{chatRoomId}를 unsubscribe 해주세요.")
                                 .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
                                         .description("로그인 중인 회원 ID"))
                                 .pathParameters(
