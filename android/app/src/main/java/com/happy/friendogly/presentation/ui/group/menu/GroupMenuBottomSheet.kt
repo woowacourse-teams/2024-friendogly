@@ -12,7 +12,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
-import com.happy.friendogly.presentation.dialog.DefaultBlueAlertDialog
+import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
 import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
 
@@ -79,7 +79,7 @@ class GroupMenuBottomSheet(
 
     private fun openDeleteDialog() {
         val dialog =
-            DefaultBlueAlertDialog(
+            DefaultCoralAlertDialog(
                 alertDialogModel =
                     AlertDialogModel(
                         title = requireContext().getString(R.string.group_detail_delete_title),
