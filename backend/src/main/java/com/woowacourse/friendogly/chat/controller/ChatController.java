@@ -43,7 +43,7 @@ public class ChatController {
         // TODO: 채팅방에 알림 메시지 전달하기
     }
 
-    @MessageMapping("/private/rooms/{chatRoomId}")
+    @MessageMapping("/private/chat/{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
