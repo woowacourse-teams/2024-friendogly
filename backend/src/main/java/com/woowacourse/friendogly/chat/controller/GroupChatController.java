@@ -36,6 +36,7 @@ public class GroupChatController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
         ChatMessageResponse response = chatService.parseEnterMessage(memberId);
+        chatRoomCommandService.enter(memberId, chatRoomId);
         template.convertAndSend("/topic/invite/" + memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
