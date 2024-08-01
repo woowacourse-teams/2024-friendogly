@@ -302,7 +302,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @Test
     void saveClubMember_201() throws Exception {
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(1L));
-        SaveClubMemberResponse response = new SaveClubMemberResponse(1L);
+        SaveClubMemberResponse response = new SaveClubMemberResponse(1L, 3L);
         when(clubCommandService.joinClub(any(), any(), any()))
                 .thenReturn(response);
 
@@ -329,7 +329,11 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("모임-회원 연관관계 ID(추후 채팅 생기면 변경)"))
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER)
+                                                .description("멤버 ID(추후 채팅 생기면 변경)"),
+                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NULL)
+                                                .description("모임 채팅방 ID")
+                                )
                                 .responseSchema(Schema.schema("SaveClubMemberResponse"))
                                 .build())
                 ));

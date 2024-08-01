@@ -70,8 +70,7 @@ public class ClubCommandService {
         club.addClubMember(member);
         club.addClubPet(mapToPets(request.participatingPetsId(), member));
 
-        //TODO : 채팅방 ID 넘기기
-        return new SaveClubMemberResponse(1L);
+        return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());
     }
 
     private List<Pet> mapToPets(List<Long> participatingPetsId, Member member) {
