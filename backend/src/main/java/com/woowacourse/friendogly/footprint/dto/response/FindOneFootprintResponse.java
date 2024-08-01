@@ -24,7 +24,7 @@ public record FindOneFootprintResponse(
             boolean isMine
     ) {
         List<PetDetail> petDetails = pets.stream()
-                .map(PetDetail::from)
+                .map(PetDetail::new)
                 .toList();
         return new FindOneFootprintResponse(
                 member.getId(),

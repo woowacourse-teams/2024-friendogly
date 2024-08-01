@@ -13,8 +13,8 @@ public record PetDetail(
         Gender gender,
         String imageUrl
 ) {
-    public static PetDetail from(Pet pet) {
-        return new PetDetail(
+    public PetDetail(Pet pet) {
+        this(
                 pet.getName().getValue(),
                 pet.getDescription().getValue(),
                 pet.getBirthDate().getValue(),
