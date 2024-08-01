@@ -73,11 +73,11 @@ public class ClubController {
     }
 
     @DeleteMapping("/{clubId}/members")
-    public ResponseEntity<Void> deleteClubMember(
+    public ResponseEntity<Void> leaveClub(
             @Auth Long memberId,
             @PathVariable Long clubId
     ) {
-        clubCommandService.deleteClubMember(clubId, memberId);
+        clubCommandService.leaveClub(clubId, memberId);
         return ResponseEntity.noContent().build();
     }
 }

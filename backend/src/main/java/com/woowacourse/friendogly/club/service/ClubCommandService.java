@@ -82,7 +82,7 @@ public class ClubCommandService {
         return participatingPets;
     }
 
-    public void deleteClubMember(Long clubId, Long memberId) {
+    public void leaveClub(Long clubId, Long memberId) {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
 

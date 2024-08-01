@@ -431,7 +431,7 @@ public class ClubApiDocsTest extends RestDocsTest {
 
         doNothing()
                 .when(clubCommandService)
-                .deleteClubMember(any(), any());
+                .leaveClub(any(), any());
 
         mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
                         .header(HttpHeaders.AUTHORIZATION, 1L))
@@ -457,7 +457,7 @@ public class ClubApiDocsTest extends RestDocsTest {
 
         doThrow(new FriendoglyException("예외 메세지"))
                 .when(clubCommandService)
-                .deleteClubMember(any(), any());
+                .leaveClub(any(), any());
 
         mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
                         .header(HttpHeaders.AUTHORIZATION, 1L))

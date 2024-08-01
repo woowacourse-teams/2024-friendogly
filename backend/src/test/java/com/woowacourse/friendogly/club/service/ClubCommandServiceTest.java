@@ -229,7 +229,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         // when
         clubCommandService.joinClub(club.getId(), newMember.getId(), request);
-        clubCommandService.deleteClubMember(club.getId(), member.getId());
+        clubCommandService.leaveClub(club.getId(), member.getId());
 
         // then
         assertAll(
@@ -251,7 +251,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
 
         // when
-        clubCommandService.deleteClubMember(club.getId(), member.getId());
+        clubCommandService.leaveClub(club.getId(), member.getId());
 
         // then
         assertThat(clubRepository.findById(club.getId())).isEmpty();
@@ -307,7 +307,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         // when
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(newPet.getId()));
         clubCommandService.joinClub(club.getId(), newMember.getId(), request);
-        clubCommandService.deleteClubMember(club.getId(), newMember.getId());
+        clubCommandService.leaveClub(club.getId(), newMember.getId());
 
         // then
         assertThat(chatRoom.countMembers()).isEqualTo(1);
@@ -325,7 +325,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
 
         // when
-        clubCommandService.deleteClubMember(club.getId(), member.getId());
+        clubCommandService.leaveClub(club.getId(), member.getId());
 
         // then
         assertThat(chatRoomRepository.count()).isZero();
