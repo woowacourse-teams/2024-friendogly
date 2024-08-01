@@ -66,7 +66,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @DisplayName("회원이 모임에 참여한다.")
     @Transactional
     @Test
-    void saveClubMember() {
+    void joinClub() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -91,7 +91,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @DisplayName("이미 참여한 모임에는 참여할 수 없다.")
     @Test
-    void saveClubMember_FailAlreadyParticipating() {
+    void joinClub_FailAlreadyParticipating() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -107,7 +107,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @DisplayName("참여 가능한 강아지가 없다면 참여할 수 없다.")
     @Test
-    void saveClubMember_FailCanNotParticipate() {
+    void joinClub_FailCanNotParticipate() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -138,6 +138,40 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
+    }
+
+    @DisplayName("자신이 주인이 아닌 반려견을 모임에 참여시키는 경우 예외가 발생한다.")
+    @Test
+    void joinClub_FailUnMatchOwner() {
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        Member newMember = Member.builder()
+                .name("위브")
+                .email("wiib@gmail.com")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = petRepository.save(
+                Pet.builder()
+                        .name("땡순이")
+                        .description("귀여워요")
+                        .member(savedMember)
+                        .birthDate(LocalDate.of(2020, 12, 1))
+                        .gender(Gender.FEMALE)
+                        .sizeType(SizeType.SMALL)
+                        .imageUrl("https://image.com")
+                        .build()
+        );
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("자신의 반려견만 모임에 데려갈 수 있습니다.");
     }
 
     //영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가

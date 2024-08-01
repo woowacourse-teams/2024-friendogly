@@ -7,6 +7,7 @@ import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
@@ -40,7 +41,7 @@ public class ClubCommandService {
 
     public SaveClubResponse save(Long memberId, MultipartFile image, SaveClubRequest request) {
         Member member = memberRepository.getById(memberId);
-        List<Pet> participatingPets = mapToPets(request.participatingPetsId());
+        List<Pet> participatingPets = mapToPets(request.participatingPetsId(), member);
 
         String imageUrl = "";
         if (image != null && !image.isEmpty()) {
@@ -67,16 +68,23 @@ public class ClubCommandService {
         Member member = memberRepository.getById(memberId);
 
         club.addClubMember(member);
-        club.addClubPet(mapToPets(request.participatingPetsId()));
+        club.addClubPet(mapToPets(request.participatingPetsId(), member));
 
         //TODO : 채팅방 ID 넘기기
         return new SaveClubMemberResponse(1L);
     }
 
-    private List<Pet> mapToPets(List<Long> participatingPetsId) {
-        return participatingPetsId.stream()
+    private List<Pet> mapToPets(List<Long> participatingPetsId, Member member) {
+        List<Pet> participatingPets = participatingPetsId.stream()
                 .map(petRepository::getById)
                 .toList();
+        boolean isNotOwner = participatingPets.stream()
+                .anyMatch(pet -> !pet.getMember().getId().equals(member.getId()));
+
+        if (isNotOwner) {
+            throw new FriendoglyException("자신의 반려견만 모임에 데려갈 수 있습니다.");
+        }
+        return participatingPets;
     }
 
     public void deleteClubMember(Long clubId, Long memberId) {
