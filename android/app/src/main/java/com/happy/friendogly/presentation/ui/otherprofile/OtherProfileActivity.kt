@@ -66,8 +66,35 @@ class OtherProfileActivity :
     private fun moreBottomDialog(id: Long) {
         val dialog =
             BottomUserMore { type ->
+                when (type) {
+                    is UserMoreType.UserDeclare -> usersBlockDialog(id = id)
+                    is UserMoreType.Report -> reportDialog(id = id)
+                }
             }
         dialog.show(supportFragmentManager, "TAG")
+    }
+
+    private fun usersBlockDialog(id: Long) {
+        val alertDialogModel =
+            AlertDialogModel(
+                title = getString(R.string.user_block_title),
+                description = getString(R.string.user_block_description),
+                positiveContents = getString(R.string.user_block_yes),
+                negativeContents = getString(R.string.user_block_no),
+            )
+        val dialog =
+            DefaultRedAlertDialog(
+                alertDialogModel = alertDialogModel,
+                clickToPositive = { showSnackbar(getString(R.string.user_block_message)) },
+                clickToNegative = {},
+            )
+        dialog.show(supportFragmentManager, "TAG")
+    }
+
+    private fun reportDialog(id: Long) {
+        val bottomSheet =
+            BottomUserReport(onSaved = { reportType -> showSnackbar(getString(R.string.user_report_message)) })
+        bottomSheet.show(supportFragmentManager, "TAG")
     }
 
     override fun onResume() {
