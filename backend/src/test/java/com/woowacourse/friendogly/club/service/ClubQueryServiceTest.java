@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFiltersRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFiltersResponse;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.util.List;
@@ -31,20 +31,20 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFiltersRequest request = new FindClubByFiltersRequest(
                 FilterCondition.ALL.name(),
                 address,
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(member.getId(), request);
-        List<FindSearchingClubResponse> expectedResponses = List.of(
-                new FindSearchingClubResponse(club, List.of(petImageUrl))
+        List<FindClubByFiltersResponse> responses = clubQueryService.findFindByFilter(member.getId(), request);
+        List<FindClubByFiltersResponse> expectedResponses = List.of(
+                new FindClubByFiltersResponse(club, List.of(petImageUrl))
         );
 
-        FindSearchingClubResponse actual = responses.get(0);
-        FindSearchingClubResponse expected = expectedResponses.get(0);
+        FindClubByFiltersResponse actual = responses.get(0);
+        FindClubByFiltersResponse expected = expectedResponses.get(0);
 
         assertAll(
                 () -> assertThat(actual.id()).isEqualTo(expected.id()),
@@ -71,14 +71,14 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFiltersRequest request = new FindClubByFiltersRequest(
                 FilterCondition.ALL.name(),
                 address,
                 Set.of(Gender.MALE),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(member.getId(), request);
+        List<FindClubByFiltersResponse> responses = clubQueryService.findFindByFilter(member.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
     }

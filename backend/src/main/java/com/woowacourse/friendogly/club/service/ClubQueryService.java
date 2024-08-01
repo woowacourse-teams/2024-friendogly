@@ -2,9 +2,9 @@ package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFiltersRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFiltersResponse;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.club.repository.ClubSpecification;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -37,7 +37,7 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindSearchingClubResponse> findFindByFilter(Long memberId, FindSearchingClubRequest request) {
+    public List<FindClubByFiltersResponse> findFindByFilter(Long memberId, FindClubByFiltersRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
@@ -52,7 +52,7 @@ public class ClubQueryService {
         FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
 
         return filterClubs(clubs.stream(), filterCondition, member, pets)
-                .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
+                .map(club -> new FindClubByFiltersResponse(club, collectOverviewPetImages(club)))
                 .toList();
     }
 
