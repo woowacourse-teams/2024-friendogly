@@ -38,8 +38,8 @@ public class ChatController {
         InvitePrivateChatRoomResponse response = privateChatRoomCommandService
                 .save(senderMemberId, request.receiverMemberId());
 
-        template.convertAndSend("/topic/invite/private/" + senderMemberId, response);
-        template.convertAndSend("/topic/invite/private/" + request.receiverMemberId(), response);
+        template.convertAndSend("/topic/private/invite/" + senderMemberId, response);
+        template.convertAndSend("/topic/private/invite/" + request.receiverMemberId(), response);
     }
 
     @MessageMapping("/private/chat/{chatRoomId}")
@@ -49,7 +49,7 @@ public class ChatController {
             @Payload ChatMessageRequest request
     ) {
         ChatMessageResponse response = chatService.parseMessage(memberId, request);
-        template.convertAndSend("/topic/private/" + chatRoomId, response);
+        template.convertAndSend("/topic/private/chat/" + chatRoomId, response);
     }
 
     @MessageMapping("/private/leave/{chatRoomId}")
@@ -59,6 +59,6 @@ public class ChatController {
     ) {
         ChatMessageResponse response = chatService.parseLeaveMessage(memberId);
         privateChatRoomCommandService.leave(memberId, chatRoomId);
-        template.convertAndSend("/topic/private/" + chatRoomId, response);
+        template.convertAndSend("/topic/private/chat/" + chatRoomId, response);
     }
 }
