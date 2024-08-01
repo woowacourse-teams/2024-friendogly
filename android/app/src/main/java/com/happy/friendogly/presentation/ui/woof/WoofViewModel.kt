@@ -24,7 +24,7 @@ class WoofViewModel(
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
     private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
-) : BaseViewModel(), WoofActionHandler {
+) : BaseViewModel() {
     private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
 
@@ -103,15 +103,7 @@ class WoofViewModel(
         }
     }
 
-    override fun markFootPrint() {
-        if (permissionRequester.hasLocationPermissions()) {
-            _mapActions.emit(WoofMapActions.MarkFootPrint)
-        } else {
-            _snackbarActions.emit(WoofSnackbarActions.ShowSettingSnackbar)
-        }
-    }
-
-    override fun changeLocationTrackingMode() {
+    fun changeLocationTrackingMode() {
         val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
         _mapActions.emit(
             if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {

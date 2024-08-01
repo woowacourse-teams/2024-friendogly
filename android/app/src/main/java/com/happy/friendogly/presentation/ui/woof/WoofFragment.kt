@@ -2,12 +2,9 @@ package com.happy.friendogly.presentation.ui.woof
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
@@ -20,10 +17,9 @@ import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintUiModel
-import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -67,42 +63,88 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
         )
     }
-    private var isAnimationEnded: Boolean = false
-
-    override fun initViewCreated() {
-        binding.layoutWoofLoading.isVisible = true
-        binding.lottieWoofLoading.playAnimation()
-        initDataBinding()
-        initObserve()
-        initViewPager()
-        mapView.getMapAsync(this)
-        clickMarkBtn()
-        clickLocationBtn()
-    }
-
-    private fun clickMarkBtn() {
-        binding.btnWoofMark.setOnClickListener {
-            if (!locationPermission.hasPermissions()) {
-                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
-            } else {
-                viewModel.markFootprint(latLng)
-            }
-        }
-    }
-
-    private fun clickLocationBtn() {
-        binding.btnWoofLocation.setOnClickListener {
-            if (!locationPermission.hasPermissions()) {
-                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
-            } else {
-                viewModel.changeLocationTrackingMode()
-            }
-        }
-    }
+    private var isMarkerHideAnimationEnd: Boolean = false
 
     override fun onMapReady(naverMap: NaverMap) {
         initMap(naverMap)
         activateMap()
+    }
+
+    override fun initViewCreated() {
+        if (locationPermission.hasPermissions()) {
+            showLoadingAnimation()
+        } else {
+            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+        }
+
+        initDataBinding()
+        initObserve()
+        initViewPager()
+        clickMarkBtn()
+        clickLocationBtn()
+        mapView.getMapAsync(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
+    private fun initMap(naverMap: NaverMap) {
+        map = naverMap
+        map.minZoom = MIN_ZOOM
+        map.maxZoom = MAX_ZOOM
+        map.locationSource = locationSource
+        map.uiSettings.apply {
+            isLocationButtonEnabled = true
+            isCompassEnabled = true
+            isZoomControlEnabled = false
+            isScaleBarEnabled = false
+        }
+
+        map.addOnLocationChangeListener { location ->
+            latLng = LatLng(location.latitude, location.longitude)
+            circleOverlay.center = latLng
+        }
+
+        map.addOnCameraChangeListener { reason, _ ->
+            if (reason == REASON_GESTURE) {
+                viewModel.changeMapTrackingModeToNoFollow()
+                if (!isMarkerHideAnimationEnd) {
+                    hideMarkerDetail()
+                }
+            }
+        }
     }
 
     private fun initDataBinding() {
@@ -120,7 +162,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 isMine = true,
             )
             map.locationTrackingMode = LocationTrackingMode.Follow
-            setUpCircleOverlay()
+            showCircleOverlay()
             moveCameraCenterPosition()
         }
 
@@ -188,40 +230,15 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         binding.vpWoofPetDetail.setPageTransformer(transform)
     }
 
-    private fun initLocationPermission() =
-        LocationPermission.from(this) { isPermitted ->
+    private fun initLocationPermission(): LocationPermission {
+        return LocationPermission.from(this) { isPermitted ->
             if (isPermitted) {
+                showLoadingAnimation()
                 activateMap()
             } else {
                 showSnackbar(getString(R.string.permission_denied_message))
                 map.locationTrackingMode =
                     LocationTrackingMode.NoFollow
-            }
-        }
-
-    private fun initMap(naverMap: NaverMap) {
-        map = naverMap
-        map.minZoom = MIN_ZOOM
-        map.maxZoom = MAX_ZOOM
-        map.locationSource = locationSource
-        map.uiSettings.apply {
-            isLocationButtonEnabled = true
-            isCompassEnabled = true
-            isZoomControlEnabled = false
-            isScaleBarEnabled = false
-        }
-
-        map.addOnLocationChangeListener { location ->
-            latLng = LatLng(location.latitude, location.longitude)
-            circleOverlay.center = latLng
-        }
-
-        map.addOnCameraChangeListener { reason, _ ->
-            if (reason == REASON_GESTURE) {
-                viewModel.changeMapTrackingModeToNoFollow()
-                if (!isAnimationEnded) {
-                    hideMarkerDetail()
-                }
             }
         }
     }
@@ -233,15 +250,44 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             moveCameraCenterPosition()
             Handler(Looper.getMainLooper()).postDelayed(
                 {
-                    binding.layoutWoofLoading.isVisible = false
-                    binding.lottieWoofLoading.pauseAnimation()
+                    hideLoadingAnimation()
                 },
-                1500,
+                2000,
             )
         }
     }
 
-    private fun setUpCircleOverlay() {
+    private fun clickMarkBtn() {
+        binding.btnWoofMark.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+            } else {
+                viewModel.markFootprint(latLng)
+            }
+        }
+    }
+
+    private fun clickLocationBtn() {
+        binding.btnWoofLocation.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+            } else {
+                viewModel.changeLocationTrackingMode()
+            }
+        }
+    }
+
+    private fun showLoadingAnimation() {
+        binding.layoutWoofLoading.isVisible = true
+        binding.lottieWoofLoading.playAnimation()
+    }
+
+    private fun hideLoadingAnimation() {
+        binding.layoutWoofLoading.isVisible = false
+        binding.lottieWoofLoading.pauseAnimation()
+    }
+
+    private fun showCircleOverlay() {
         circleOverlay.center = latLng
         circleOverlay.radius = MAP_CIRCLE_RADIUS / map.projection.metersPerPixel
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
@@ -254,7 +300,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 .animate(CameraAnimation.Easing)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
-        setUpCircleOverlay()
+        showCircleOverlay()
     }
 
     private fun createMarker(
@@ -288,7 +334,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            isAnimationEnded = false
+            isMarkerHideAnimationEnd = false
             viewModel.loadFootPrintInfo(footprintId)
             showMarkerDetail()
             true
@@ -344,7 +390,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 },
             )
 
-        isAnimationEnded = true
+        isMarkerHideAnimationEnd = true
     }
 
     private fun markNearFootPrints(footPrints: List<FootprintUiModel>) {
@@ -356,41 +402,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 isMine = footPrint.isMine,
             )
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
     }
 
     companion object {
