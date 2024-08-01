@@ -22,6 +22,12 @@ public class ChatRoomCommandService {
         this.chatRoomRepository = chatRoomRepository;
     }
 
+    public void enter(Long memberId, Long chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        Member member = memberRepository.getById(memberId);
+        chatRoom.addMember(member);
+    }
+
     public void leave(Long memberId, Long chatRoomId) {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
