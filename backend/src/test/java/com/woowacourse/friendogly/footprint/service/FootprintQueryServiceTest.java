@@ -1,11 +1,9 @@
 package com.woowacourse.friendogly.footprint.service;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
-import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
@@ -28,14 +26,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @Test
     void findOne() {
         // given
-        Footprint footprint = footprintRepository.save(
-                Footprint.builder()
-                        .walkStatus(BEFORE)
-                        .member(member)
-                        .location(new Location(0.0, 0.0))
-                        .createdAt(LocalDateTime.now())
-                        .build()
-        );
+        Footprint footprint = footprintRepository.save(FOOTPRINT());
 
         // when
         FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
@@ -107,13 +98,13 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @Test
     void findNear24Hours() {
         // given
-        jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
-                """, member.getId(), member.getId(), member.getId());
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(25)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(23)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(22))
+                )
+        );
 
         // when
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
@@ -133,14 +124,13 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     void findMyLatestFootprintTime_MyFootprintExists_PetExists() {
         // given
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
-
-        jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.11111, 0.11111, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.22222, 0.22222, 'AFTER', ?, FALSE);
-                """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(25)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(23)),
+                        FOOTPRINT_STATUS_AFTER(oneMinuteAgo)
+                )
+        );
 
         // when
         LocalDateTime time = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId()).createdAt();

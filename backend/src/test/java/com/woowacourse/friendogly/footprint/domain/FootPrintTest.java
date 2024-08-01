@@ -22,12 +22,14 @@ public class FootPrintTest {
     void findChangedWalkStatusTime_when_WalkStatusIsBefore(){
         // given
         LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
-        Footprint footprint = Footprint.builder()
-                .member(member)
-                .location(new Location(30, 30))
-                .walkStatus(BEFORE)
-                .createdAt(expectedTime)
-                .build();
+        Footprint footprint = new Footprint(
+                member,
+                new Location(30, 30),
+                BEFORE,
+                null,
+                null,
+                expectedTime
+                );
 
         // when
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
@@ -41,13 +43,14 @@ public class FootPrintTest {
     void findChangedWalkStatusTime_when_WalkStatusIsOngoing(){
         // given
         LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
-        Footprint footprint = Footprint.builder()
-                .member(member)
-                .location(new Location(30, 30))
-                .walkStatus(ONGOING)
-                .startWalkTime(expectedTime)
-                .createdAt(LocalDateTime.of(2023, 12, 12, 9, 30))
-                .build();
+        Footprint footprint = new Footprint(
+                member,
+                new Location(30, 30),
+                ONGOING,
+                expectedTime,
+                null,
+                expectedTime.minusHours(2)
+        );
 
         // when
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
@@ -61,13 +64,14 @@ public class FootPrintTest {
     void findChangedWalkStatusTime_when_WalkStatusIsAfter(){
         // given
         LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
-        Footprint footprint = Footprint.builder()
-                .member(member)
-                .location(new Location(30, 30))
-                .walkStatus(AFTER)
-                .endWalkTime(expectedTime)
-                .createdAt(LocalDateTime.of(2023, 12, 12, 9, 30))
-                .build();
+        Footprint footprint = new Footprint(
+                member,
+                new Location(30, 30),
+                AFTER,
+                expectedTime.minusHours(1),
+                expectedTime,
+                expectedTime.minusHours(2)
+        );
 
         // when
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();

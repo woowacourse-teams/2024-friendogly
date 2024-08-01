@@ -1,11 +1,17 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+
+import com.woowacourse.friendogly.footprint.domain.Footprint;
+import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.support.ServiceTest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,6 +50,56 @@ public abstract class FootprintServiceTest extends ServiceTest {
                         .gender(Gender.MALE_NEUTERED)
                         .imageUrl("https://picsum.photos/200")
                         .build()
+        );
+    }
+
+    //FIXTURE
+
+    protected Footprint FOOTPRINT() {
+        return new Footprint(member, new Location(30, 30));
+    }
+
+    protected Footprint FOOTPRINT(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(30, 30),
+                BEFORE,
+                null,
+                null,
+                createdAt
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_BEFORE(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(30, 30),
+                BEFORE,
+                null,
+                null,
+                createdAt
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(30, 30),
+                AFTER,
+                null,
+                null,
+                createdAt
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_ONGOING(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(30, 30),
+                BEFORE,
+                null,
+                null,
+                createdAt
         );
     }
 }

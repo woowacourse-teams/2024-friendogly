@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.footprint.controller;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -19,7 +18,6 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -145,8 +143,6 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
-                        .walkStatus(BEFORE)
-                        .createdAt(LocalDateTime.now().minusSeconds(28))
                         .build()
         );
 
@@ -169,8 +165,6 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
-                        .walkStatus(BEFORE)
-                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -200,8 +194,6 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member2)
                         .location(new Location(37.51365, 127.09831))
-                        .walkStatus(BEFORE)
-                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -209,8 +201,6 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member3)
                         .location(new Location(37.51314, 127.10425))
-                        .walkStatus(BEFORE)
-                        .createdAt(LocalDateTime.now())
                         .build()
         );
 
@@ -234,8 +224,6 @@ class FootprintControllerTest {
                 Footprint.builder()
                         .member(member1)
                         .location(new Location(37.0, 127.0))
-                        .walkStatus(BEFORE)
-                        .createdAt(LocalDateTime.now())
                         .build()
         );
 

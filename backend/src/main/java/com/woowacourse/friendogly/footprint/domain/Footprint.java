@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.footprint.domain;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -53,6 +55,17 @@ public class Footprint {
     private boolean isDeleted;
 
     @Builder
+    public Footprint(
+            Member member,
+            Location location
+    ) {
+        this.member = member;
+        this.location = location;
+        this.walkStatus = BEFORE;
+        this.createdAt = LocalDateTime.now();
+        this.isDeleted = false;
+    }
+
     public Footprint(
             Member member,
             Location location,
