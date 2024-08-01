@@ -9,6 +9,7 @@ import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.chat.dto.response.InvitePrivateChatRoomResponse;
 import com.woowacourse.friendogly.chat.service.ChatService;
 import com.woowacourse.friendogly.chat.service.PrivateChatRoomCommandService;
+import java.time.LocalDateTime;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -52,7 +53,8 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        ChatMessageResponse response = chatService.parseMessage(memberId, request);
+        LocalDateTime createdAt = LocalDateTime.now();
+        ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
         template.convertAndSend("/topic/private/chat/" + chatRoomId, response);
     }
 
@@ -61,7 +63,7 @@ public class ChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId);
+        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, LocalDateTime.now());
         privateChatRoomCommandService.leave(memberId, chatRoomId);
         template.convertAndSend("/topic/private/chat/" + chatRoomId, response);
     }

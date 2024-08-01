@@ -4,5 +4,6 @@ public enum MessageType {
 
     ENTER,
     CHAT,
-    LEAVE
+    LEAVE,
+    DATE
 }
