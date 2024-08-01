@@ -24,8 +24,8 @@ class OtherProfileViewModel(
             requireNotNull(savedStateHandle.get<Long>(OtherProfileActivity.PUT_EXTRA_USER_ID))
     }
 
-    private val _uiState: MutableLiveData<OtherPetUiState> = MutableLiveData(OtherPetUiState())
-    val uiState: LiveData<OtherPetUiState> get() = _uiState
+    private val _uiState: MutableLiveData<OtherProfileUiState> = MutableLiveData(OtherProfileUiState())
+    val uiState: LiveData<OtherProfileUiState> get() = _uiState
 
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(0)
     val currentPage: LiveData<Int> get() = _currentPage

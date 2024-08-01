@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.otherprofile
 
 import com.happy.friendogly.domain.model.Pet
 
-data class OtherPetUiState(
+data class OtherProfileUiState(
     val nickname: String = "",
     val email: String = "",
     val tag: String = "",
