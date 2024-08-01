@@ -2,6 +2,7 @@ package com.happy.friendogly.application.di
 
 import android.content.Context
 import com.happy.friendogly.BuildConfig
+import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.FootprintRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
@@ -9,6 +10,7 @@ import com.happy.friendogly.data.repository.LocalRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.WoofRepositoryImpl
+import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.FootprintDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
@@ -16,6 +18,7 @@ import com.happy.friendogly.data.source.LocalDataSource
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.WoofDataSource
+import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.FootprintRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
@@ -42,6 +45,8 @@ import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.LocalModule
+import com.happy.friendogly.local.di.AddressModule
+import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.LocalDataSourceImpl
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.di.RemoteModule
@@ -55,6 +60,7 @@ class AppModule(context: Context) {
     private val baseUrl = BaseUrl(BuildConfig.base_url)
 
     private val localModule = LocalModule(context)
+    private val addressModule = AddressModule(context)
 
     // service
     private val clubService =
@@ -88,6 +94,7 @@ class AppModule(context: Context) {
     // data source
     private val clubDataSource: ClubDataSource = ClubDataSourceImpl(service = clubService)
     private val localDataSource: LocalDataSource = LocalDataSourceImpl(localModule = localModule)
+    private val addressDataSource: AddressDataSource = AddressDataSourceImpl(addressModule = addressModule)
     private val kakaoLoginDataSource: KakaoLoginDataSource = KakaoLoginDataSourceImpl()
     private val footprintDataSource: FootprintDataSource =
         FootprintDataSourceImpl(service = footprintService)
@@ -105,6 +112,7 @@ class AppModule(context: Context) {
     private val woofRepository: WoofRepository = WoofRepositoryImpl(source = woofDataSource)
     private val memberRepository: MemberRepository = MemberRepositoryImpl(source = memberDataSource)
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
+    private val addressRepository: AddressRepository = AddressRepositoryImpl(addressDataSource = addressDataSource)
 
     // use case
     val kakaoLoginUseCase: KakaoLoginUseCase = KakaoLoginUseCase(repository = kakaoLoginRepository)
