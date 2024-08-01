@@ -14,6 +14,7 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindSearchingClubResponse> findSearching(Long memberId, FindSearchingClubRequest request) {
+    public List<FindSearchingClubResponse> findFindByFilter(Long memberId, FindSearchingClubRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
@@ -48,21 +49,26 @@ public class ClubQueryService {
 
         List<Club> clubs = clubRepository.findAll(spec);
 
-        if (FilterCondition.toFilterCondition(request.filterCondition()) == FilterCondition.ABLE_TO_JOIN) {
-            return clubs.stream()
-                    .filter(club -> club.isJoinable(member, pets))
-                    .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
-                    .toList();
-        }
-        if (FilterCondition.toFilterCondition(request.filterCondition()) == FilterCondition.OPEN) {
-            return clubs.stream()
-                    .filter(Club::isOpen)
-                    .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
-                    .toList();
-        }
-        return clubs.stream()
+        FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
+
+        return filterClubs(clubs.stream(), filterCondition, member, pets)
                 .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
                 .toList();
+    }
+
+    private Stream<Club> filterClubs(
+            Stream<Club> clubStream,
+            FilterCondition filterCondition,
+            Member member,
+            List<Pet> pets
+    ) {
+        if (filterCondition.isAbleToJoin()) {
+            return clubStream.filter(club -> club.isJoinable(member, pets));
+        }
+        if (filterCondition.isOpen()) {
+            return clubStream.filter(Club::isOpen);
+        }
+        return clubStream;
     }
 
     public FindClubResponse findById(Long memberId, Long id) {

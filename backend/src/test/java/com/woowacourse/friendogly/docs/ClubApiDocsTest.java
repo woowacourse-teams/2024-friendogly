@@ -97,7 +97,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 )
         );
 
-        when(clubQueryService.findSearching(anyLong(), any()))
+        when(clubQueryService.findFindByFilter(anyLong(), any()))
                 .thenReturn(responses);
 
         mockMvc.perform(get("/clubs/searching")

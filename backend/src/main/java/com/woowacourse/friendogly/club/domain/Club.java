@@ -162,18 +162,18 @@ public class Club {
     }
 
     private void validateParticipatePet(Pet pet) {
-        if (canNotJoin(pet)) {
+        if (!canJoinWith(pet)) {
             throw new FriendoglyException("모임에 데려갈 수 없는 강아지가 있습니다.");
         }
     }
 
-    private boolean canNotJoin(Pet pet) {
-        return !allowedGenders.contains(pet.getGender()) || !allowedSizes.contains(pet.getSizeType());
+    private boolean canJoinWith(Pet pet) {
+        return allowedGenders.contains(pet.getGender()) && allowedSizes.contains(pet.getSizeType());
     }
 
     public boolean isJoinable(Member member, List<Pet> pets) {
         boolean hasJoinablePet = pets.stream()
-                .anyMatch(pet -> !canNotJoin(pet));
+                .anyMatch(this::canJoinWith);
         boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
         return hasJoinablePet && isNotFull && isAlreadyJoined(member) && isOpen();

@@ -8,11 +8,19 @@ public enum FilterCondition {
     OPEN,
     ABLE_TO_JOIN;
 
-    public static FilterCondition toFilterCondition(String filterCondition) {
+    public static FilterCondition from(String filterCondition) {
         try {
             return valueOf(filterCondition);
         } catch (IllegalArgumentException e) {
             throw new FriendoglyException("존재하지 않는 FilterCondition 입니다.");
         }
+    }
+
+    public boolean isOpen() {
+        return this == OPEN;
+    }
+
+    public boolean isAbleToJoin() {
+        return this == ABLE_TO_JOIN;
     }
 }

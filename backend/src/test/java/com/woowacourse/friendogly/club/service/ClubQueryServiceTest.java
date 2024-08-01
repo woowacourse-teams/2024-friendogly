@@ -50,7 +50,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(savedMember.getId(), request);
+        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
         List<FindSearchingClubResponse> expectedResponses = List.of(
                 new FindSearchingClubResponse(club, List.of(petImageUrl))
         );
@@ -90,7 +90,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(savedMember.getId(), request);
+        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
     }
