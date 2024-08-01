@@ -1,6 +1,6 @@
-package com.happy.friendogly.data.model
+package com.happy.friendogly.domain.model
 
-data class AddressDto(
+data class Address(
     val address: String,
     val subLocality: String,
     val adminArea: String,

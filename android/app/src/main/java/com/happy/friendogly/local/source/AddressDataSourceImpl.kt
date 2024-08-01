@@ -11,7 +11,9 @@ class AddressDataSourceImpl(
     override suspend fun getAddress(): Result<AddressDto> {
         return runCatching {
             val location = addressModule.myAddress.first()
-            AddressDto(location = location)
+            AddressDto(
+                location = location
+            )
         }
     }
 
