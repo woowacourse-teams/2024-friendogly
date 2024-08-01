@@ -235,4 +235,9 @@
     <string name="permission_cancel">취소</string>
     <string name="permission_go_setting">설정</string>
     <string name="permission_denied_message">권한을 거부하여 기능을 사용할 수 없습니다.</string>
+
+    <!--내 위치-->
+    <string name="my_location_title">내 동네 설정하기</string>
+    <string name="my_location_content">현재 위치</string>
+    <string name="my_location_submit">설정 완료</string>
 </resources>
