@@ -8,6 +8,7 @@ import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.chat.service.ChatRoomCommandService;
 import com.woowacourse.friendogly.chat.service.ChatService;
+import java.time.LocalDateTime;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -36,8 +37,9 @@ public class GroupChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
+        LocalDateTime createdAt = LocalDateTime.now();
         chatRoomCommandService.enter(memberId, chatRoomId);
-        ChatMessageResponse response = chatService.parseNotice(ENTER, memberId);
+        ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
         template.convertAndSend("/topic/invite/" + memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
@@ -48,7 +50,8 @@ public class GroupChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        ChatMessageResponse response = chatService.parseMessage(memberId, request);
+        LocalDateTime createdAt = LocalDateTime.now();
+        ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
@@ -57,8 +60,9 @@ public class GroupChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
+        LocalDateTime createdAt = LocalDateTime.now();
         chatRoomCommandService.leave(memberId, chatRoomId);
-        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId);
+        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 }
