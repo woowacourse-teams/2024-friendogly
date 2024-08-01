@@ -6,6 +6,7 @@ data class Footprint(
     val footprintId: Long,
     val latitude: Double,
     val longitude: Double,
+    val walkStatus: WalkStatus,
     val createdAt: LocalDateTime,
     val isMine: Boolean,
 )

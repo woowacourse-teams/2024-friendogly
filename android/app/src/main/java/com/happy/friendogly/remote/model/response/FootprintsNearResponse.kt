@@ -9,6 +9,7 @@ data class FootprintsNearResponse(
     val footprintId: Long,
     val latitude: Double,
     val longitude: Double,
+    val walkStatusResponse: WalkStatusResponse = WalkStatusResponse.ONGOING,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
     val isMine: Boolean,

@@ -8,6 +8,7 @@ fun FootprintDto.toDomain(): Footprint {
         footprintId = footprintId,
         latitude = latitude,
         longitude = longitude,
+        walkStatus = walkStatus.toDomain(),
         createdAt = createdAt,
         isMine = isMine,
     )
