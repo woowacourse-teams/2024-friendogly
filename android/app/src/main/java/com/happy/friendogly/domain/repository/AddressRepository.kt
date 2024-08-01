@@ -6,4 +6,6 @@ interface AddressRepository {
     suspend fun getAddress(): Result<Address>
 
     suspend fun saveAddress(address: Address): Result<Unit>
+
+    suspend fun deleteAddress(): Result<Unit>
 }

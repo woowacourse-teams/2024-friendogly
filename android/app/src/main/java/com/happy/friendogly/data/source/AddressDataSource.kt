@@ -7,4 +7,6 @@ interface AddressDataSource {
     suspend fun getAddress(): Result<AddressDto>
 
     suspend fun saveAddress(addressDto: AddressDto): Result<Unit>
+
+    suspend fun deleteAddress() : Result<Unit>
 }
