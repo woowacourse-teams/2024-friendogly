@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.chat.controller;
 
+import static com.woowacourse.friendogly.chat.domain.MessageType.*;
+
 import com.woowacourse.friendogly.auth.WebSocketAuth;
 import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
@@ -35,7 +37,7 @@ public class GroupChatController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        ChatMessageResponse response = chatService.parseEnterMessage(memberId);
+        ChatMessageResponse response = chatService.parseNotice(ENTER, memberId);
         chatRoomCommandService.enter(memberId, chatRoomId);
         template.convertAndSend("/topic/invite/" + memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
@@ -56,7 +58,7 @@ public class GroupChatController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        ChatMessageResponse response = chatService.parseLeaveMessage(memberId);
+        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId);
         chatRoomCommandService.leave(memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
