@@ -7,6 +7,7 @@ import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
+import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -14,6 +15,7 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -22,20 +24,28 @@ public class ClubCommandService {
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final FileStorageManager fileStorageManager;
 
     public ClubCommandService(
             ClubRepository clubRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
+            PetRepository petRepository,
+            FileStorageManager fileStorageManager
     ) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
+        this.fileStorageManager = fileStorageManager;
     }
 
-    public SaveClubResponse save(Long memberId, SaveClubRequest request) {
+    public SaveClubResponse save(Long memberId, MultipartFile image, SaveClubRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> participatingPets = mapToPets(request.participatingPetsId());
+
+        String imageUrl = "";
+        if (image != null && !image.isEmpty()) {
+            imageUrl = fileStorageManager.uploadFile(image);
+        }
 
         Club newClub = Club.create(
                 request.title(),
@@ -45,7 +55,7 @@ public class ClubCommandService {
                 member,
                 request.allowedGenders(),
                 request.allowedSizes(),
-                request.imageUrl(),
+                imageUrl,
                 participatingPets
         );
 

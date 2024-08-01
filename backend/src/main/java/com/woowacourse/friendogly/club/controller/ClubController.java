@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/clubs")
@@ -52,9 +54,10 @@ public class ClubController {
     @PostMapping
     public ResponseEntity<ApiResponse<SaveClubResponse>> save(
             @Auth Long memberId,
-            @Valid @RequestBody SaveClubRequest request
+            @Valid @RequestPart SaveClubRequest request,
+            @RequestPart(required = false) MultipartFile image
     ) {
-        SaveClubResponse response = clubCommandService.save(memberId, request);
+        SaveClubResponse response = clubCommandService.save(memberId, image, request);
         return ResponseEntity.created(URI.create("/clubs" + response.id())).body(ApiResponse.ofSuccess(response));
     }
 

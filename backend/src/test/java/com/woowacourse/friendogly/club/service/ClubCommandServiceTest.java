@@ -21,6 +21,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 class ClubCommandServiceTest extends ClubServiceTest {
 
@@ -42,19 +44,19 @@ class ClubCommandServiceTest extends ClubServiceTest {
         SaveClubRequest request = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
-                "https://clubImage.com",
                 "서울특별시 송파구 신정동 잠실 5동",
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL),
                 5,
                 List.of(savedPet.getId())
         );
-        SaveClubResponse actual = clubCommandService.save(savedMember.getId(), request);
+        MockMultipartFile image = new MockMultipartFile(
+                "image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
+        SaveClubResponse actual = clubCommandService.save(savedMember.getId(), image, request);
 
         assertAll(
                 () -> assertThat(actual.title()).isEqualTo("모임 제목"),
                 () -> assertThat(actual.content()).isEqualTo("모임 내용"),
-                () -> assertThat(actual.imageUrl()).isEqualTo("https://clubImage.com"),
                 () -> assertThat(actual.address()).isEqualTo("서울특별시 송파구 신정동 잠실 5동"),
                 () -> assertThat(actual.allowedGender()).containsExactlyInAnyOrderElementsOf(
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED))

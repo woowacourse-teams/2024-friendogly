@@ -11,8 +11,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
@@ -43,7 +47,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public class ClubApiDocsTest extends RestDocsTest {
@@ -53,7 +59,6 @@ public class ClubApiDocsTest extends RestDocsTest {
 
     @Mock
     private ClubQueryService clubQueryService;
-
 
     @DisplayName("필터링 조건을 통해 모임 리스트를 조회한다.")
     @Test
@@ -209,16 +214,20 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("모임을 생성한다.")
     @Test
     void save_201() throws Exception {
-        SaveClubRequest request = new SaveClubRequest(
+        SaveClubRequest requestDto = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
-                "https://clubImage.com",
                 "서울특별시 송파구 신정동 잠실 5동",
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL),
                 5,
                 List.of(1L)
         );
+        MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(),
+                "asdf".getBytes());
+        MockMultipartFile request = new MockMultipartFile("request", "request", "application/json",
+                objectMapper.writeValueAsBytes(requestDto));
+
         SaveClubResponse response = new SaveClubResponse(
                 1L,
                 "모임 제목",
@@ -236,32 +245,35 @@ public class ClubApiDocsTest extends RestDocsTest {
                 true
         );
 
-        when(clubCommandService.save(any(), any(SaveClubRequest.class)))
+        when(clubCommandService.save(any(), any(MultipartFile.class), any(SaveClubRequest.class)))
                 .thenReturn(response);
 
-        mockMvc.perform(post("/clubs")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                        .header(HttpHeaders.AUTHORIZATION, 1L)
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(multipart("/clubs")
+                        .file(image)
+                        .file(request)
+                        .header(HttpHeaders.AUTHORIZATION, 1L))
                 .andExpect(status().isCreated())
                 .andDo(document("clubs/post/201",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestParts(
+                                partWithName("image").description("모임 이미지 파일"),
+                                partWithName("request").description("모임 등록 정보")
+                        ),
+                        requestPartFields(
+                                "request",
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("모임 제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("모임 내용"),
+                                fieldWithPath("address").type(JsonFieldType.STRING).description("모임 주소"),
+                                fieldWithPath("allowedGenders").type(JsonFieldType.ARRAY).description("참여가능한 강아지 성별"),
+                                fieldWithPath("allowedSizes").type(JsonFieldType.ARRAY).description("참여가능한 강아지 사이즈"),
+                                fieldWithPath("memberCapacity").type(JsonFieldType.NUMBER).description("모임 최대 인원"),
+                                fieldWithPath("participatingPetsId").type(JsonFieldType.ARRAY).description("모임에 참여하는 방장 강아지의 ID 리스트")
+                        ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 생성 API")
                                 .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("로그인 중 회원 정보"))
-                                .requestFields(
-                                        fieldWithPath("title").type(JsonFieldType.STRING).description("모임 제목"),
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("모임 내용"),
-                                        fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("모임 프로필 사진 url"),
-                                        fieldWithPath("address").type(JsonFieldType.STRING).description("모임 주소"),
-                                        fieldWithPath("allowedGenders").type(JsonFieldType.ARRAY).description("참여가능한 강아지 성별"),
-                                        fieldWithPath("allowedSizes").type(JsonFieldType.ARRAY).description("참여가능한 강아지 사이즈"),
-                                        fieldWithPath("memberCapacity").type(JsonFieldType.NUMBER).description("모임 최대 인원"),
-                                        fieldWithPath("participatingPetsId").type(JsonFieldType.ARRAY).description("모임에 참여하는 방장 강아지의 ID 리스트")
-                                )
                                 .responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("생성된 모임 리소스 Location"))
                                 .responseFields(
