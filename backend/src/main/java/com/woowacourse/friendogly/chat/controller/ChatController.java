@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.chat.controller;
 
 import com.woowacourse.friendogly.auth.WebSocketAuth;
 import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
+import com.woowacourse.friendogly.chat.dto.request.InviteToPrivateRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.chat.dto.response.InvitePrivateChatRoomResponse;
 import com.woowacourse.friendogly.chat.service.ChatService;
@@ -29,16 +30,16 @@ public class ChatController {
         this.template = template;
     }
 
-    @MessageMapping("/private/invite/{receiverMemberId}")
+    @MessageMapping("/private/invite")
     public void inviteToPrivateRoom(
             @WebSocketAuth Long senderMemberId,
-            @DestinationVariable(value = "receiverMemberId") Long receiverMemberId
+            @Payload InviteToPrivateRoomRequest request
     ) {
         InvitePrivateChatRoomResponse response = privateChatRoomCommandService
-                .save(senderMemberId, receiverMemberId);
+                .save(senderMemberId, request.receiverMemberId());
 
         template.convertAndSend("/topic/invite/private/" + senderMemberId, response);
-        template.convertAndSend("/topic/invite/private/" + receiverMemberId, response);
+        template.convertAndSend("/topic/invite/private/" + request.receiverMemberId(), response);
         // TODO: 채팅방에 알림 메시지 전달하기
     }
 
