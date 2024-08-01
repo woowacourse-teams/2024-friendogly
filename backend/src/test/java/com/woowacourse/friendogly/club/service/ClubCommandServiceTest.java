@@ -1,18 +1,24 @@
 package com.woowacourse.friendogly.club.service;
 
+import static com.woowacourse.friendogly.pet.domain.Gender.FEMALE;
+import static com.woowacourse.friendogly.pet.domain.Gender.FEMALE_NEUTERED;
+import static com.woowacourse.friendogly.pet.domain.Gender.MALE;
+import static com.woowacourse.friendogly.pet.domain.Gender.MALE_NEUTERED;
+import static com.woowacourse.friendogly.pet.domain.SizeType.LARGE;
+import static com.woowacourse.friendogly.pet.domain.SizeType.MEDIUM;
+import static com.woowacourse.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.domain.SizeType;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,8 +51,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 "모임 제목",
                 "모임 내용",
                 "서울특별시 송파구 신정동 잠실 5동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL),
                 5,
                 List.of(savedPet.getId())
         );
@@ -59,7 +65,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 () -> assertThat(actual.content()).isEqualTo("모임 내용"),
                 () -> assertThat(actual.address()).isEqualTo("서울특별시 송파구 신정동 잠실 5동"),
                 () -> assertThat(actual.allowedGender()).containsExactlyInAnyOrderElementsOf(
-                        Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED))
+                        Set.of(FEMALE, FEMALE_NEUTERED))
         );
     }
 
@@ -70,8 +76,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
 
         Member newMember = Member.builder()
@@ -95,8 +101,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
 
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedPet.getId()));
@@ -111,8 +117,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
         Member newMember = Member.builder()
                 .name("위브")
@@ -127,8 +133,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
                         .description("건강한 남자아이에용")
                         .member(savedNewMember)
                         .birthDate(LocalDate.of(2020, 12, 1))
-                        .gender(Gender.MALE)
-                        .sizeType(SizeType.LARGE)
+                        .gender(MALE)
+                        .sizeType(LARGE)
                         .imageUrl("https://image.com")
                         .build()
         );
@@ -146,8 +152,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
         Member newMember = Member.builder()
                 .name("위브")
@@ -161,8 +167,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
                         .description("귀여워요")
                         .member(savedMember)
                         .birthDate(LocalDate.of(2020, 12, 1))
-                        .gender(Gender.FEMALE)
-                        .sizeType(SizeType.SMALL)
+                        .gender(FEMALE)
+                        .sizeType(SMALL)
                         .imageUrl("https://image.com")
                         .build()
         );
@@ -182,8 +188,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
 
         Member newMember = Member.builder()
@@ -212,12 +218,107 @@ class ClubCommandServiceTest extends ClubServiceTest {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(FEMALE, FEMALE_NEUTERED),
+                Set.of(SMALL)
         );
 
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("모임에 참여하면 모임 채팅방에도 자동으로 참여한다.")
+    @Transactional
+    @Test
+    void joinClub_Then_JoinChatRoom() {
+        // given
+        Club club = clubRepository.save(
+                Club.create(
+                        "모임 제목",
+                        "모임 설명",
+                        "모임 주소",
+                        5,
+                        savedMember,
+                        Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                        Set.of(SMALL, MEDIUM, LARGE),
+                        "https://image.com",
+                        List.of(savedPet)
+                )
+        );
+
+        ChatRoom chatRoom = club.getChatRoom();
+
+        Member newMember = memberRepository.save(
+                new Member("새로운멤버", "123", "a@a.com", "https://image.com"));
+
+        Pet newPet = petRepository.save(
+                new Pet(newMember, "새로운펫", "설명", LocalDate.now().minusYears(1), SMALL, MALE, "https://image.com"));
+
+        // when
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(newPet.getId()));
+        clubCommandService.joinClub(club.getId(), newMember.getId(), request);
+
+        // then
+        assertThat(chatRoom.countMembers()).isEqualTo(2);
+    }
+
+    @DisplayName("모임에서 나가면 모임 채팅방에서도 자동으로 나가진다.")
+    @Test
+    void deleteClubMember_Then_LeaveChatRoom() {
+        // given
+        Club club = clubRepository.save(
+                Club.create(
+                        "모임 제목",
+                        "모임 설명",
+                        "모임 주소",
+                        5,
+                        savedMember,
+                        Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                        Set.of(SMALL, MEDIUM, LARGE),
+                        "https://image.com",
+                        List.of(savedPet)
+                )
+        );
+
+        ChatRoom chatRoom = club.getChatRoom();
+
+        Member newMember = memberRepository.save(
+                new Member("새로운멤버", "123", "a@a.com", "https://image.com"));
+
+        Pet newPet = petRepository.save(
+                new Pet(newMember, "새로운펫", "설명", LocalDate.now().minusYears(1), SMALL, MALE, "https://image.com"));
+
+        // when
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(newPet.getId()));
+        clubCommandService.joinClub(club.getId(), newMember.getId(), request);
+        clubCommandService.deleteClubMember(club.getId(), newMember.getId());
+
+        // then
+        assertThat(chatRoom.countMembers()).isEqualTo(1);
+    }
+
+    @DisplayName("모임이 사라지면 채팅방도 사라진다.")
+    @Test
+    void ownerLeaves_Then_ChatRoomAlsoRemove() {
+        // given
+        Club club = clubRepository.save(
+                Club.create(
+                        "모임 제목",
+                        "모임 설명",
+                        "모임 주소",
+                        5,
+                        savedMember,
+                        Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                        Set.of(SMALL, MEDIUM, LARGE),
+                        "https://image.com",
+                        List.of(savedPet)
+                )
+        );
+
+        // when
+        clubCommandService.deleteClubMember(club.getId(), savedMember.getId());
+
+        // then
+        assertThat(chatRoomRepository.count()).isZero();
     }
 }

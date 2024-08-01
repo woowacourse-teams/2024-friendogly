@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.support;
 
+import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.chat.repository.PrivateChatRoomRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
@@ -28,6 +29,9 @@ public abstract class ServiceTest {
 
     @Autowired
     protected PrivateChatRoomRepository privateChatRoomRepository;
+
+    @Autowired
+    protected ChatRoomRepository chatRoomRepository;
 
     @BeforeAll
     static void setTimeZone() {
