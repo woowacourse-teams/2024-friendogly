@@ -74,7 +74,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         if (locationPermission.hasPermissions()) {
             showLoadingAnimation()
         } else {
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+            showSnackbar(getString(R.string.permission_denied_message))
         }
 
         initDataBinding()
