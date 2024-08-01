@@ -57,7 +57,8 @@ public class ChatController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
+        ChatMessageResponse response = chatService.parseLeaveMessage(memberId);
         privateChatRoomCommandService.leave(memberId, chatRoomId);
-        // TODO: 채팅방에 알림 메시지 전달하기
+        template.convertAndSend("/topic/private/" + chatRoomId, response);
     }
 }
