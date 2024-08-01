@@ -132,17 +132,16 @@ public class Club {
                 .imageUrl(imageUrl)
                 .chatRoom(new ChatRoom())
                 .build();
-        club.addClubMemberAndJoinChatRoom(owner);
-        club.addClubPet(participatingPets);
+        club.addMember(owner, participatingPets);
         return club;
     }
 
-    public void addClubMemberAndJoinChatRoom(Member member) {
+    public void addMember(Member member, List<Pet> pets) {
         validateAlreadyExists(member);
         validateMemberCapacity();
 
-        ClubMember clubMember = ClubMember.create(this, member);
-        clubMembers.add(clubMember);
+        clubMembers.add(ClubMember.create(this, member));
+        addClubPet(pets);
         chatRoom.addMember(member);
     }
 
@@ -163,7 +162,7 @@ public class Club {
         }
     }
 
-    public void addClubPet(List<Pet> pets) {
+    private void addClubPet(List<Pet> pets) {
         List<ClubPet> clubPets = pets.stream()
                 .peek(this::validateParticipatePet)
                 .map(pet -> new ClubPet(this, pet))
