@@ -136,7 +136,7 @@ public class Club {
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
-                .chatRoom(new ChatRoom(owner))
+                .chatRoom(new ChatRoom())
                 .build();
         club.addClubMember(owner);
         club.addClubPet(participatingPets);
@@ -248,5 +248,13 @@ public class Club {
         return clubMembers.stream()
                 .min(Comparator.comparing(ClubMember::getCreatedAt))
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
+    }
+
+    public void addMemberToChat(Member member) {
+        chatRoom.addMember(member);
+    }
+
+    public void removeMemberFromChat(Member member) {
+        chatRoom.removeMember(member);
     }
 }
