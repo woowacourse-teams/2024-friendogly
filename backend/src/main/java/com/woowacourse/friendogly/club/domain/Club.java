@@ -189,33 +189,25 @@ public class Club {
         return hasJoinablePet && isNotFull && isAlreadyJoined(member) && isOpen();
     }
 
-    public void removeClubMember(Member member) {
-        ClubMember targetClubMember = findTargetClubMember(member);
-        clubMembers.remove(targetClubMember);
+    public void removeMember(Member member) {
+        removeClubMember(member);
         removeClubPets(member);
-        removeFromChat(member);
+        chatRoom.removeMember(member);
     }
 
-    private ClubMember findTargetClubMember(Member member) {
-        return clubMembers.stream()
+    private void removeClubMember(Member member) {
+        ClubMember clubMember = clubMembers.stream()
                 .filter(currentClubMember -> currentClubMember.isSameMember(member))
                 .findAny()
                 .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
+        clubMembers.remove(clubMember);
     }
 
     private void removeClubPets(Member member) {
-        List<ClubPet> participatingMemberPets = findTargetClubPets(member);
-        clubPets.removeAll(participatingMemberPets);
-    }
-
-    private List<ClubPet> findTargetClubPets(Member member) {
-        return clubPets.stream()
+        List<ClubPet> participatingMemberPets = clubPets.stream()
                 .filter(clubPet -> clubPet.isSameMember(member))
                 .toList();
-    }
-
-    private void removeFromChat(Member member) {
-        chatRoom.removeMember(member);
+        clubPets.removeAll(participatingMemberPets);
     }
 
     public int countClubMember() {
@@ -230,8 +222,8 @@ public class Club {
         return this.status == Status.OPEN;
     }
 
-    public boolean isOwner(Member targetMember) {
-        return findOwner().isSameMember(targetMember);
+    public boolean isOwner(Member member) {
+        return findOwner().isSameMember(member);
     }
 
     public Name findOwnerName() {

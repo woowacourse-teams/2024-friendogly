@@ -90,7 +90,7 @@ public class ClubCommandService {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
 
-        club.removeClubMember(member);
+        club.removeMember(member);
         if (club.isEmpty()) {
             clubRepository.delete(club);
         }
