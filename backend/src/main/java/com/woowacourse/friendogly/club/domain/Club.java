@@ -185,7 +185,7 @@ public class Club {
                 .anyMatch(this::canJoinWith);
         boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
-        return hasJoinablePet && isNotFull && isAlreadyJoined(member) && isOpen();
+        return hasJoinablePet && isNotFull && !isAlreadyJoined(member) && isOpen();
     }
 
     public void removeMember(Member member) {
