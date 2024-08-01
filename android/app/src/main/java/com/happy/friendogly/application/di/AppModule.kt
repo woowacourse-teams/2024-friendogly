@@ -26,8 +26,10 @@ import com.happy.friendogly.domain.repository.LocalRepository
 import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.WoofRepository
+import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubUseCase
 import com.happy.friendogly.domain.usecase.DeleteLocalDataUseCase
+import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetClubMineUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
@@ -140,6 +142,8 @@ class AppModule(context: Context) {
     val postPetUseCase: PostPetUseCase = PostPetUseCase(repository = petRepository)
     val getMemberMineUseCase: GetMemberMineUseCase =
         GetMemberMineUseCase(repository = memberRepository)
+    val getAddressUseCase: GetAddressUseCase = GetAddressUseCase(repository = addressRepository)
+    val deleteAddressUseCase: DeleteAddressUseCase = DeleteAddressUseCase(repository = addressRepository)
 
     companion object {
         private var instance: AppModule? = null
