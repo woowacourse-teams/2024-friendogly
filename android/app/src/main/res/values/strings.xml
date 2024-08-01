@@ -67,6 +67,10 @@
     <string name="user_delete_description">탈퇴시 사용자 정보와\n채팅 메세지가 사라져요.</string>
     <string name="user_delete_yes">회원 탈퇴</string>
 
+    <!--다이얼로그-->
+    <string name="dialog_positive_default">네</string>
+    <string name="dialog_negative_default">아니오</string>
+
     <!--강아지 등록-->
     <string name="dog_name_title">댕댕이 이름</string>
     <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
@@ -148,6 +152,7 @@
     <string name="group_detail_delete">방나가기</string>
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
+    <string name="group_detail_delete_title">모임에서 나가겠습니까?</string>
 
     <!--모임 수정 -->
     <string name="group_modify_title">모임 수정하기</string>

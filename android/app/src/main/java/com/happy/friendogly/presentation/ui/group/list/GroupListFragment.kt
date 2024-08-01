@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.group.list
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentGroupListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
@@ -22,9 +21,6 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     private val groupAdapter: GroupListAdapter by lazy {
         GroupListAdapter(viewModel as GroupListActionHandler)
     }
-    private val adapter: ConcatAdapter by lazy {
-        ConcatAdapter(filterAdapter, groupAdapter)
-    }
 
     override fun initViewCreated() {
         initDataBinding()
@@ -34,10 +30,17 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        with(binding.includeGroupListFilter.swipeRefreshLayoutGroupList) {
+            setOnRefreshListener {
+                viewModel.loadGroups()
+                isRefreshing = false
+            }
+        }
     }
 
     private fun initAdapter() {
-        binding.includeGroupListFilter.rcvGroupListGroup.adapter = adapter
+        binding.includeGroupListFilter.rcvGroupListFilter.adapter = filterAdapter
+        binding.includeGroupListFilter.rcvGroupListGroup.adapter = groupAdapter
     }
 
     private fun initObserver() {
@@ -61,8 +64,8 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                     val bottomSheet =
                         ParticipationFilterBottomSheet(
                             currentParticipationFilter = event.participationFilter,
-                        ) {
-                            // TODO: ParticipationFilter
+                        ) { selectFilter ->
+                            viewModel.updateParticipationFilter(selectFilter)
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
@@ -77,7 +80,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                             groupFilterType = event.groupFilterType,
                             currentFilters = event.groupFilters,
                         ) { filters ->
-                            viewModel.initGroupFilter(filters)
+                            viewModel.updateGroupFilter(filters)
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(

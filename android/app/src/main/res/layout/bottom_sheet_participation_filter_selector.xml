@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter" />
 
         <variable
@@ -31,53 +33,54 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-
-        <com.google.android.flexbox.FlexboxLayout
+        <RadioGroup
+            android:id="@+id/radio_group_group_participation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:alignContent="stretch"
-            app:alignItems="stretch"
-            app:flexWrap="wrap">
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
-            <include
-                layout="@layout/include_add_dog_menu"
+            <RadioButton
+                android:id="@+id/radio_group_group_entire"
+                style="@style/group_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:actionHandler="@{vm}"
-                app:filterName="@{ParticipationFilter.ENTIRE_FILTER_NAME}" />
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.ENTIRE_FILTER_NAME}"
+                tools:text="대형견" />
 
-            <include
-                layout="@layout/include_add_dog_menu"
+            <RadioButton
+                android:id="@+id/radio_group_group_possible"
+                style="@style/group_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:actionHandler="@{vm}"
-                app:filterName="@{ParticipationFilter.POSSIBLE_FILTER_NAME}" />
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.POSSIBLE_FILTER_NAME}"
+                tools:text="대형견" />
 
-            <include
-                layout="@layout/include_add_dog_menu"
+            <RadioButton
+                android:id="@+id/radio_group_group_recruitment"
+                style="@style/group_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:actionHandler="@{vm}"
-                app:filterName="@{ParticipationFilter.RECRUITMENT_FILTER_NAME}" />
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.RECRUITMENT_FILTER_NAME}"
+                tools:text="대형견" />
+        </RadioGroup>
 
-        </com.google.android.flexbox.FlexboxLayout>
         <TextView
-            onSingleClick="@{() -> vm.selectParticipationFilter()}"
             android:id="@+id/tv_group_select_commit"
+            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+            onSingleClick="@{() -> vm.selectParticipationFilter()}"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginVertical="24dp"
             android:background="@drawable/rect_coral04_fill_16"
-            android:text="@string/group_select_commit"
-            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
             android:backgroundTint="@color/coral400"
             android:gravity="center"
+            android:text="@string/group_select_commit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vp_group_select_dog_list" />
     </LinearLayout>
