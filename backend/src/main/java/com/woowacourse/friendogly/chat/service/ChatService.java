@@ -1,5 +1,8 @@
 package com.woowacourse.friendogly.chat.service;
 
+import static com.woowacourse.friendogly.chat.domain.MessageType.CHAT;
+
+import com.woowacourse.friendogly.chat.domain.MessageType;
 import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -17,18 +20,13 @@ public class ChatService {
         this.memberRepository = memberRepository;
     }
 
+    public ChatMessageResponse parseNotice(MessageType messageType, Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        return new ChatMessageResponse(messageType, member.getName().getValue(), "");
+    }
+
     public ChatMessageResponse parseMessage(Long memberId, ChatMessageRequest request) {
         Member member = memberRepository.getById(memberId);
-        return new ChatMessageResponse(member.getName().getValue(), request.content());
-    }
-
-    public ChatMessageResponse parseEnterMessage(Long memberId) {
-        Member member = memberRepository.getById(memberId);
-        return new ChatMessageResponse(member.getName().getValue(), "님이 방을 들어왔습니다.");
-    }
-
-    public ChatMessageResponse parseLeaveMessage(Long memberId) {
-        Member member = memberRepository.getById(memberId);
-        return new ChatMessageResponse(member.getName().getValue(), "님이 방을 나갔습니다.");
+        return new ChatMessageResponse(CHAT, member.getName().getValue(), request.content());
     }
 }

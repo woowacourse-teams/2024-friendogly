@@ -1,5 +1,7 @@
 package com.woowacourse.friendogly.chat.controller;
 
+import static com.woowacourse.friendogly.chat.domain.MessageType.LEAVE;
+
 import com.woowacourse.friendogly.auth.WebSocketAuth;
 import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
 import com.woowacourse.friendogly.chat.dto.request.InviteToPrivateRoomRequest;
@@ -57,7 +59,7 @@ public class ChatController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        ChatMessageResponse response = chatService.parseLeaveMessage(memberId);
+        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId);
         privateChatRoomCommandService.leave(memberId, chatRoomId);
         template.convertAndSend("/topic/private/chat/" + chatRoomId, response);
     }
