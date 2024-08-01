@@ -42,11 +42,7 @@ public class ClubCommandService {
     public SaveClubResponse save(Long memberId, MultipartFile image, SaveClubRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> participatingPets = mapToPets(request.participatingPetsId(), member);
-
-        String imageUrl = "";
-        if (image != null && !image.isEmpty()) {
-            imageUrl = fileStorageManager.uploadFile(image);
-        }
+        String imageUrl = fileStorageManager.uploadFile(image);
 
         Club newClub = Club.create(
                 request.title(),

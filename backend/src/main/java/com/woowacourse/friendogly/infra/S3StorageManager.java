@@ -21,7 +21,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Profile("!local")
 public class S3StorageManager implements FileStorageManager {
 
-    private static final int FILE_SIZE_LIMIT = 5;
+    private static final int FILE_SIZE_LIMIT = 1;
     private static final int MB = 1_048_576;
 
     @Value("${aws.s3.bucket-name}")
@@ -45,7 +45,11 @@ public class S3StorageManager implements FileStorageManager {
 
     @Override
     public String uploadFile(MultipartFile file) {
-        if (file.getSize() > FILE_SIZE_LIMIT * MB) {
+        if (file == null || file.isEmpty()) {
+            throw new FriendoglyException("사진이 업로드되지 않았습니다.");
+        }
+
+        if (file.getSize() >= FILE_SIZE_LIMIT * MB) {
             throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
         }
 
