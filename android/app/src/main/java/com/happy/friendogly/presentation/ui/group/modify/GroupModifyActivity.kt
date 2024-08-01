@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.group.modify
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -73,7 +74,8 @@ class GroupModifyActivity :
                 GroupModifyEvent.Navigation.NavigateToSelectGroupPoster -> openGroupPosterBottomSheet()
 
                 GroupModifyEvent.Navigation.NavigateSubmit -> {
-                    // TODO: api prev view
+                    intent.putExtra(SUCCESS_MODIFY_STATE, true)
+                    setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
             }
@@ -128,6 +130,7 @@ class GroupModifyActivity :
 
     companion object {
         private const val GROUP_MODIFY_UI_MODEL = "groupModifyUiModel"
+        const val SUCCESS_MODIFY_STATE = "successModify"
 
         fun getIntent(
             context: Context,

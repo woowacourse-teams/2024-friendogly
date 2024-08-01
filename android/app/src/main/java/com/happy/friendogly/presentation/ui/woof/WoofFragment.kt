@@ -1,11 +1,8 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -15,6 +12,7 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.model.FootprintUiModel
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.footprint.FootprintBottomSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -31,17 +29,13 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 
-class WoofFragment :
-    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
+class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), OnMapReadyCallback {
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val permissionRequester: WoofPermissionRequester by lazy {
-        WoofPermissionRequester(
-            requireActivity(),
-        )
-    }
+    private val locationPermission: LocationPermission = initLocationPermission()
+
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -50,7 +44,6 @@ class WoofFragment :
     }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
-            permissionRequester = permissionRequester,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
@@ -64,6 +57,28 @@ class WoofFragment :
         initDataBinding()
         initObserve()
         mapView.getMapAsync(this)
+        clickMarkBtn()
+        clickLocationBtn()
+    }
+
+    private fun clickMarkBtn() {
+        binding.btnWoofMark.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
+            } else {
+                viewModel.markFootprint(latLng)
+            }
+        }
+    }
+
+    private fun clickLocationBtn() {
+        binding.btnWoofLocation.setOnClickListener {
+            if (!locationPermission.hasPermissions()) {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
+            } else {
+                viewModel.changeLocationTrackingMode()
+            }
+        }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -90,7 +105,6 @@ class WoofFragment :
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofMapActions.MarkFootPrint -> viewModel.markFootprint(latLng)
                 is WoofMapActions.ChangeMapToNoFollowTrackingMode ->
                     map.locationTrackingMode =
                         LocationTrackingMode.NoFollow
@@ -107,7 +121,6 @@ class WoofFragment :
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofSnackbarActions.ShowSettingSnackbar -> showSettingSnackbar()
                 is WoofSnackbarActions.ShowHasNotPetSnackbar ->
                     showSnackbar(
                         String.format(
@@ -130,6 +143,17 @@ class WoofFragment :
             }
         }
     }
+
+    private fun initLocationPermission() =
+        LocationPermission.from(this) { isPermitted ->
+            if (isPermitted) {
+                activateMap()
+            } else {
+                showSnackbar(getString(R.string.permission_denied_message))
+                map.locationTrackingMode =
+                    LocationTrackingMode.NoFollow
+            }
+        }
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
@@ -163,7 +187,7 @@ class WoofFragment :
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     binding.layoutWoofLoading.isVisible = false
-                    binding.lottieWoofLoading.pauseAnimation()
+                    // binding.lottieWoofLoading.pauseAnimation()
                 },
                 1000,
             )
@@ -175,25 +199,6 @@ class WoofFragment :
         circleOverlay.radius = MAP_CIRCLE_RADIUS
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
-    }
-
-    private fun showSettingSnackbar() {
-        permissionRequester.checkLocationPermissions {
-            showSnackbar(resources.getString(R.string.woof_permission)) {
-                setAction(resources.getString(R.string.woof_setting)) {
-                    val packageName =
-                        String.format(
-                            resources.getString(
-                                R.string.woof_package,
-                                requireContext().packageName,
-                            ),
-                        )
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    intent.data = Uri.parse(packageName)
-                    startActivity(intent)
-                }
-            }
-        }
     }
 
     private fun moveCameraCenterPosition() {
@@ -248,17 +253,6 @@ class WoofFragment :
                 latLng = LatLng(footPrint.latitude, footPrint.longitude),
                 isMine = footPrint.isMine,
             )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (permissionRequester.hasLocationPermissions()) {
-            activateMap()
         }
     }
 

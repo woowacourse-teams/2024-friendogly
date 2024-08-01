@@ -8,4 +8,6 @@ interface MainActivityActionHandler {
     fun navigateToRegisterDog()
 
     fun navigateToDogDetail()
+
+    fun navigateToSetting()
 }

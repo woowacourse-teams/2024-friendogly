@@ -32,11 +32,14 @@ class MyPageViewModel(
         fetchPetMine()
     }
 
-    private fun fetchMemberMine() {
+    fun fetchMemberMine() {
         viewModelScope.launch {
             getMemberMineUseCase().onSuccess { member ->
+                val state = uiState.value ?: return@launch
+
                 _uiState.value =
-                    uiState.value?.copy(
+                    state.copy(
+                        id = member.id,
                         nickname = member.name,
                         email = member.email,
                         tag = member.tag,
@@ -52,8 +55,9 @@ class MyPageViewModel(
             getPetsMineUseCase().onSuccess { pets ->
                 val petsView = pets.map { pet -> PetView.from(pet = pet) }
 
-                _uiState.value =
-                    uiState.value?.copy(pets = petsView + PetAddView(memberId = pets.first().memberId))
+                val state = uiState.value ?: return@launch
+
+                _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
             }.onFailure {
                 // TODO 예외 처리
             }

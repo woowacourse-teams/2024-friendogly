@@ -10,6 +10,7 @@ import kotlinx.datetime.toLocalDateTime
 import java.time.LocalDate
 
 data class MyPageUiState(
+    val id: Long = -1,
     val nickname: String = "",
     val email: String = "",
     val tag: String = "",
@@ -62,11 +63,11 @@ data class PetView(
 }
 
 data class PetAddView(
-    override val id: Long = ID,
+    override val id: Long = INVALID_ID,
     val memberId: Long,
 ) : PetViewType {
     companion object {
-        private const val ID = -1L
+        private const val INVALID_ID = -1L
     }
 }
 
