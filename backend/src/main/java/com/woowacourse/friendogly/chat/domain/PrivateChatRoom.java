@@ -22,6 +22,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PrivateChatRoom {
 
+    // TODO: 추후 그룹 채팅방과 1대1 채팅방이 합쳐지면 현재 클래스 삭제하기
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

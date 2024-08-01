@@ -30,8 +30,6 @@ public class GroupChatSocketController {
         this.template = template;
     }
 
-    // TODO: 모임은 chatRoomId를 갖고, 모임에 들어가면 클라이언트가 알아서 이 주소로 publish 하기
-    // TODO: 채팅방을 만드는 역할은 ClubService가 하게 하기
     @MessageMapping("/enter/{chatRoomId}")
     public void enter(
             @WebSocketAuth Long memberId,
