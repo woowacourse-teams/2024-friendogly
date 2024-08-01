@@ -62,7 +62,7 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
     @Test
     void save_Fail_TooOftenSave() {
         // given
-        footprintRepository.save(FOOTPRINT(LocalDateTime.now().minusHours(29)));
+        footprintRepository.save(FOOTPRINT(LocalDateTime.now().minusSeconds(29)));
 
         // when - then
         assertThatThrownBy(
