@@ -1,11 +1,13 @@
 package com.woowacourse.friendogly.chat.controller;
 
-import static com.woowacourse.friendogly.chat.domain.MessageType.*;
+import static com.woowacourse.friendogly.chat.domain.MessageType.ENTER;
+import static com.woowacourse.friendogly.chat.domain.MessageType.LEAVE;
 
 import com.woowacourse.friendogly.auth.WebSocketAuth;
 import com.woowacourse.friendogly.chat.dto.request.ChatMessageRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.chat.service.ChatRoomCommandService;
+import com.woowacourse.friendogly.chat.service.ChatRoomQueryService;
 import com.woowacourse.friendogly.chat.service.ChatService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,15 +20,18 @@ public class GroupChatSocketController {
 
     private final ChatService chatService;
     private final ChatRoomCommandService chatRoomCommandService;
+    private final ChatRoomQueryService chatRoomQueryService;
     private final SimpMessagingTemplate template;
 
     public GroupChatSocketController(
             ChatService chatService,
             ChatRoomCommandService chatRoomCommandService,
+            ChatRoomQueryService chatRoomQueryService,
             SimpMessagingTemplate template
     ) {
         this.chatService = chatService;
         this.chatRoomCommandService = chatRoomCommandService;
+        this.chatRoomQueryService = chatRoomQueryService;
         this.template = template;
     }
 
@@ -35,8 +40,8 @@ public class GroupChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
+        chatRoomQueryService.validate(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(ENTER, memberId);
-        chatRoomCommandService.enter(memberId, chatRoomId);
         template.convertAndSend("/topic/invite/" + memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
@@ -56,8 +61,9 @@ public class GroupChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
+        chatRoomQueryService.validate(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId);
-        chatRoomCommandService.leave(memberId, chatRoomId);
+//        chatRoomCommandService.leave(memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 }
