@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemPetDetailBinding
-import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailUiModel
+import com.happy.friendogly.presentation.ui.woof.model.PetDetail
 
 class FootprintInfoAdapter :
-    ListAdapter<PetDetailUiModel, PetDetailViewHolder>(diffUtil) {
+    ListAdapter<PetDetail, PetDetailViewHolder>(diffUtil) {
     private lateinit var memberName: String
 
     override fun onCreateViewHolder(
@@ -33,17 +33,17 @@ class FootprintInfoAdapter :
 
     companion object {
         private val diffUtil =
-            object : DiffUtil.ItemCallback<PetDetailUiModel>() {
+            object : DiffUtil.ItemCallback<PetDetail>() {
                 override fun areItemsTheSame(
-                    oldItem: PetDetailUiModel,
-                    newItem: PetDetailUiModel,
+                    oldItem: PetDetail,
+                    newItem: PetDetail,
                 ): Boolean {
                     return oldItem.name == newItem.name
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: PetDetailUiModel,
-                    newItem: PetDetailUiModel,
+                    oldItem: PetDetail,
+                    newItem: PetDetail,
                 ): Boolean {
                     return oldItem == newItem
                 }

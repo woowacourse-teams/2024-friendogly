@@ -47,7 +47,8 @@
         <TextView
             android:id="@+id/tv_woof_walk_status"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            walkStatus="@{vm.footprintInfo}"
+            changedWalkStatusTime="@{vm.footprintInfo.changedWalkStatusTime}"
+            walkStatus="@{vm.footprintInfo.walkStatus}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
