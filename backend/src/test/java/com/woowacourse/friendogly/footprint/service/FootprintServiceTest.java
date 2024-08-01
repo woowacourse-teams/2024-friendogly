@@ -62,7 +62,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
     protected Footprint FOOTPRINT(LocalDateTime createdAt) {
         return new Footprint(
                 member,
-                new Location(30, 30),
+                new Location(0, 0),
                 BEFORE,
                 null,
                 null,
@@ -73,7 +73,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
     protected Footprint FOOTPRINT_STATUS_BEFORE(LocalDateTime createdAt) {
         return new Footprint(
                 member,
-                new Location(30, 30),
+                new Location(0, 0),
                 BEFORE,
                 null,
                 null,
@@ -84,7 +84,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
     protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
         return new Footprint(
                 member,
-                new Location(30, 30),
+                new Location(0, 0),
                 AFTER,
                 null,
                 null,
@@ -95,7 +95,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
     protected Footprint FOOTPRINT_STATUS_ONGOING(LocalDateTime createdAt) {
         return new Footprint(
                 member,
-                new Location(30, 30),
+                new Location(0, 0),
                 BEFORE,
                 null,
                 null,
