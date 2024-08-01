@@ -71,12 +71,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     override fun initViewCreated() {
-        if (locationPermission.hasPermissions()) {
-            showLoadingAnimation()
-        } else {
-            showSnackbar(getString(R.string.permission_denied_message))
-        }
-
         initDataBinding()
         initObserve()
         initViewPager()
@@ -118,6 +112,21 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (locationPermission.hasPermissions()) {
+            showLoadingAnimation()
+            activateMap()
+        } else {
+            hideLoadingAnimation()
+            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+        }
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -232,17 +241,15 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     private fun initLocationPermission(): LocationPermission {
         return LocationPermission.from(this) { isPermitted ->
             if (isPermitted) {
-                showLoadingAnimation()
                 activateMap()
             } else {
                 showSnackbar(getString(R.string.permission_denied_message))
-                map.locationTrackingMode =
-                    LocationTrackingMode.NoFollow
             }
         }
     }
 
     private fun activateMap() {
+        showLoadingAnimation()
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
@@ -260,20 +267,20 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun clickMarkBtn() {
         binding.btnWoofMark.setOnClickListener {
-            if (!locationPermission.hasPermissions()) {
-                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
-            } else {
+            if (locationPermission.hasPermissions()) {
                 viewModel.loadFootprintMarkBtnInfo(latLng)
+            } else {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
             }
         }
     }
 
     private fun clickLocationBtn() {
         binding.btnWoofLocation.setOnClickListener {
-            if (!locationPermission.hasPermissions()) {
-                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
-            } else {
+            if (locationPermission.hasPermissions()) {
                 viewModel.changeLocationTrackingMode()
+            } else {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
             }
         }
     }

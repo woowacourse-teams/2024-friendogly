@@ -73,6 +73,7 @@ class WoofViewModel(
                     )
                 } else {
                     markFootprint(latLng)
+                    loadNearFootprints(latLng)
                 }
             }.onFailure {
             }

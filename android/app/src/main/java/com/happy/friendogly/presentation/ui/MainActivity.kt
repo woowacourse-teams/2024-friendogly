@@ -1,10 +1,7 @@
 package com.happy.friendogly.presentation.ui
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
@@ -72,25 +69,6 @@ class MainActivity :
         transaction.commit()
 
         return true
-    }
-
-    private fun requestLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            val permissions =
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
-            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
-        }
     }
 
     override fun navigateToGroupDetailActivity(groupId: Long) {
