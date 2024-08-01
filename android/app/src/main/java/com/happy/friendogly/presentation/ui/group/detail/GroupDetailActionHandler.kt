@@ -6,4 +6,6 @@ interface GroupDetailActionHandler {
     fun closeDetail()
 
     fun openMenu()
+
+    fun navigateToProfile(id: Long)
 }

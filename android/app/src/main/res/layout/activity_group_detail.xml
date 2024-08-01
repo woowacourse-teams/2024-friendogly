@@ -21,12 +21,12 @@
 
             <ImageView
                 android:id="@+id/iv_group_detail_poster"
-                android:src="@drawable/ic_group_normal"
-                android:backgroundTint="@color/coral30"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/black"
+                android:backgroundTint="@color/coral30"
                 android:scaleType="centerCrop"
+                android:src="@drawable/ic_group_normal"
                 app:glide="@{vm.group.groupPoster}"
                 app:layout_constraintBottom_toTopOf="@+id/view_group_detail_top_bar"
                 app:layout_constraintDimensionRatio="1:1"
@@ -66,11 +66,12 @@
 
             <ImageView
                 android:id="@+id/iv_group_detail_user_image"
-                android:src="@drawable/img_profile_normal"
                 glide1000="@{vm.group.groupReaderImage}"
+                onSingleClick="@{() -> vm.navigateToProfile(1)}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
+                android:src="@drawable/img_profile_normal"
                 app:layout_constraintBottom_toBottomOf="@id/view_group_detail_top_bar"
                 app:layout_constraintStart_toStartOf="@id/view_group_detail_top_bar"
                 app:layout_constraintTop_toTopOf="@id/view_group_detail_top_bar"
@@ -239,14 +240,14 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_coral04_fill_16"
-                tools:textColor="@color/white"
                 android:gravity="center"
                 app:detailViewTypeBackground="@{vm.group.detailViewType}"
-                app:detailViewTypeText="@{vm.group.detailViewType}"
                 app:detailViewTypeStyle="@{vm.group.detailViewType}"
+                app:detailViewTypeText="@{vm.group.detailViewType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_group_detail_dog_list"
-                tools:text="참여하기" />
+                tools:text="참여하기"
+                tools:textColor="@color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

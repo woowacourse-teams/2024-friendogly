@@ -12,5 +12,7 @@ sealed interface GroupDetailEvent {
         data object NavigateToChat : Navigation
 
         data object NavigateToHome : Navigation
+
+        data class NavigateToProfile(val id: Long) : Navigation
     }
 }
