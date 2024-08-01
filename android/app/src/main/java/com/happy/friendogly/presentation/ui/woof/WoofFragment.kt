@@ -134,7 +134,6 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
-            circleOverlay.center = latLng
         }
 
         map.addOnCameraChangeListener { reason, _ ->
@@ -320,7 +319,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         marker.map = map
 
         setUpMarkerAction(footprintId, marker)
-        setUpCircleOverlay(latLng)
+        if (isMine) setUpCircleOverlay(latLng)
     }
 
     private fun LocalDateTime.toZIndex(): Int {
