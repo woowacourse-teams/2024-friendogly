@@ -16,13 +16,13 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ChatController {
+public class ChatSocketController {
 
     private final ChatService chatService;
     private final PrivateChatRoomCommandService privateChatRoomCommandService;
     private final SimpMessagingTemplate template;
 
-    public ChatController(
+    public ChatSocketController(
             ChatService chatService,
             PrivateChatRoomCommandService privateChatRoomCommandService,
             SimpMessagingTemplate template
