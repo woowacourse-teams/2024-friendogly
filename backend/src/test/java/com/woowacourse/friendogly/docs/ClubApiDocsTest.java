@@ -160,8 +160,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 false,
                 List.of(new ClubMemberDetailResponse(2L, "정지호", "https://땡이 영공때 사진.com"),
                         new ClubMemberDetailResponse(3L, "쪙찌효", "https://땡이 근공때 사진.com")),
-                List.of(new ClubPetDetailResponse(1L, "땡이", "https://땡이의 귀여운 이미지.com"),
-                        new ClubPetDetailResponse(2L, "땡이 동생", "https://땡이 동생의 귀여운 이미지.com"))
+                List.of(new ClubPetDetailResponse(1L, "땡이", "https://땡이의 귀여운 이미지.com", true),
+                        new ClubPetDetailResponse(2L, "땡이 동생", "https://땡이 동생의 귀여운 이미지.com", true))
         );
 
         when(clubQueryService.findById(anyLong(), anyLong()))
@@ -199,7 +199,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.memberDetails[].imageUrl").type(JsonFieldType.STRING).description("모임에 참여한 사용자 이미지 URL"),
                                         fieldWithPath("data.petDetails[].id").type(JsonFieldType.NUMBER).description("모임에 참여한 반려견 id"),
                                         fieldWithPath("data.petDetails[].name").type(JsonFieldType.STRING).description("모임에 참여한 반려견 이름"),
-                                        fieldWithPath("data.petDetails[].imageUrl").type(JsonFieldType.STRING).description("모임에 참여한 반려견 이미지 URL"))
+                                        fieldWithPath("data.petDetails[].imageUrl").type(JsonFieldType.STRING).description("모임에 참여한 반려견 이미지 URL"),
+                                        fieldWithPath("data.petDetails[].isMine").type(JsonFieldType.BOOLEAN).description("로그인한 사용자의 반려견인지 여부"))
                                 .responseSchema(Schema.schema("FindClubResponse"))
                                 .build()))
                 );

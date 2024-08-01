@@ -5,10 +5,11 @@ import com.woowacourse.friendogly.pet.domain.Pet;
 public record ClubPetDetailResponse(
         Long id,
         String name,
-        String imageUrl
+        String imageUrl,
+        boolean isMine
 ){
 
-    public ClubPetDetailResponse(Pet pet) {
-        this(pet.getId(),pet.getName().getValue(), pet.getImageUrl());
+    public ClubPetDetailResponse(Pet pet, boolean isMine) {
+        this(pet.getId(),pet.getName().getValue(), pet.getImageUrl(), isMine);
     }
 }

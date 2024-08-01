@@ -55,7 +55,7 @@ public record FindClubResponse(
                         .toList(),
                 club.getClubPets().stream()
                         .map(clubPet -> clubPet.getClubPetPk().getPet())
-                        .map(ClubPetDetailResponse::new)
+                        .map(pet -> new ClubPetDetailResponse(pet, pet.isOwner(member)))
                         .toList()
         );
     }
