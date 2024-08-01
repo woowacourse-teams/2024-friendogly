@@ -9,7 +9,7 @@ sealed interface MyPageNavigationAction {
 
     data object NavigateToPetEdit : MyPageNavigationAction
 
-    data class NavigateToDogDetail(val id: Long) : MyPageNavigationAction
+    data class NavigateToPetDetail(val id: Long) : MyPageNavigationAction
 
     data object NavigateToMyParticipation : MyPageNavigationAction
 

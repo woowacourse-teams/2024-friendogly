@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.dogdetail
+package com.happy.friendogly.presentation.ui.petdetail
 
 import android.view.View
 import android.view.ViewGroup

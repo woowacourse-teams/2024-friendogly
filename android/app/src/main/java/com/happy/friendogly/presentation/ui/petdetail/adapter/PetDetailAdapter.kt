@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.dogdetail.adapter
+package com.happy.friendogly.presentation.ui.petdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemDogDetailBinding
 import com.happy.friendogly.presentation.ui.mypage.Dog
 
-class DogDetailAdapter : ListAdapter<Dog, DogDetailAdapter.ViewHolder>(DogItemDiffCallback) {
+class PetDetailAdapter : ListAdapter<Dog, PetDetailAdapter.ViewHolder>(PetItemDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -38,7 +38,7 @@ class DogDetailAdapter : ListAdapter<Dog, DogDetailAdapter.ViewHolder>(DogItemDi
         }
     }
 
-    internal object DogItemDiffCallback : DiffUtil.ItemCallback<Dog>() {
+    internal object PetItemDiffCallback : DiffUtil.ItemCallback<Dog>() {
         override fun areItemsTheSame(
             oldItem: Dog,
             newItem: Dog,

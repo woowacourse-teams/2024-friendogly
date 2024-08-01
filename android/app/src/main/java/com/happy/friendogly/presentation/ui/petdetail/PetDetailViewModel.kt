@@ -1,13 +1,13 @@
-package com.happy.friendogly.presentation.ui.dogdetail
+package com.happy.friendogly.presentation.ui.petdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.ui.mypage.MyPageViewModel.Companion.dogs
 
-class DogDetailViewModel : BaseViewModel() {
-    private val _uiState: MutableLiveData<DogDetailUiState> = MutableLiveData(DogDetailUiState())
-    val uiState: LiveData<DogDetailUiState> get() = _uiState
+class PetDetailViewModel : BaseViewModel() {
+    private val _uiState: MutableLiveData<PetDetailUiState> = MutableLiveData(PetDetailUiState())
+    val uiState: LiveData<PetDetailUiState> get() = _uiState
 
     private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIDDLE_PAGE)
     val currentPage: LiveData<Int> get() = _currentPage

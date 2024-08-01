@@ -1,7 +1,7 @@
-package com.happy.friendogly.presentation.ui.dogdetail
+package com.happy.friendogly.presentation.ui.petdetail
 
 import com.happy.friendogly.presentation.ui.mypage.Dog
 
-data class DogDetailUiState(
+data class PetDetailUiState(
     val dogs: List<Dog> = emptyList(),
 )

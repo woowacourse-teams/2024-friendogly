@@ -135,7 +135,7 @@
 
         <TextView
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
-            onSingleClick="@{() -> actionHandler.navigateToDogDetail(petView.id)}"
+            onSingleClick="@{() -> actionHandler.navigateToPetDetail(petView.id)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rect_coral400_fill_20"

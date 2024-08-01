@@ -68,8 +68,8 @@ class MyPageViewModel(
         _currentPage.value = page
     }
 
-    override fun navigateToDogDetail(id: Long) {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToDogDetail(id = id))
+    override fun navigateToPetDetail(id: Long) {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToPetDetail(id = id))
     }
 
     override fun navigateToRegisterDog(id: Long) {

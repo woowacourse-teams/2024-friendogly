@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.dogdetail.DogDetailViewModel" />
+            type="com.happy.friendogly.presentation.ui.petdetail.PetDetailViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_dog_detail"
+            android:id="@+id/vp_pet_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
             android:orientation="horizontal"
             android:padding="15dp"
             app:currentIndicator="@{vm.currentPage}"
-            app:layout_constraintBottom_toBottomOf="@+id/vp_dog_detail"
+            app:layout_constraintBottom_toBottomOf="@+id/vp_pet_detail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:setUpIndicator="@{vm.uiState.dogs.size()}" />

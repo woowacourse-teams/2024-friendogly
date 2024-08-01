@@ -74,8 +74,8 @@ class OtherProfileViewModel(
         _navigateAction.emit(OtherProfileNavigationAction.NavigateToBack)
     }
 
-    override fun navigateToDogDetail(id: Long) {
-        _navigateAction.emit(OtherProfileNavigationAction.NavigateToDogDetail(id = id))
+    override fun navigateToPetDetail(id: Long) {
+        _navigateAction.emit(OtherProfileNavigationAction.NavigateToPetDetail(id = id))
     }
 
     fun navigateToMore(id: Long) {

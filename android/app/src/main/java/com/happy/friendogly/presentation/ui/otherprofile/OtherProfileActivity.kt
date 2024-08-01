@@ -35,7 +35,7 @@ class OtherProfileActivity :
 
     private fun initDataBinding() {
         binding.vm = viewModel
-        binding.vpDogProfile.registerOnPageChangeCallback(
+        binding.vpPetProfile.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -46,14 +46,14 @@ class OtherProfileActivity :
     }
 
     private fun initAdapter() {
-        binding.vpDogProfile.adapter = adapter
+        binding.vpPetProfile.adapter = adapter
     }
 
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
                 is OtherProfileNavigationAction.NavigateToBack -> finish()
-                is OtherProfileNavigationAction.NavigateToDogDetail -> {}
+                is OtherProfileNavigationAction.NavigateToPetDetail -> {}
                 is OtherProfileNavigationAction.NavigateToUserMore -> moreBottomDialog(id = action.id)
             }
         }

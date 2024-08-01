@@ -1,18 +1,18 @@
-package com.happy.friendogly.presentation.ui.dogdetail
+package com.happy.friendogly.presentation.ui.petdetail
 
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-import com.happy.friendogly.databinding.ActivityDogDetailBinding
+import com.happy.friendogly.databinding.ActivityPetDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
-import com.happy.friendogly.presentation.ui.dogdetail.adapter.DogDetailAdapter
+import com.happy.friendogly.presentation.ui.petdetail.adapter.PetDetailAdapter
 
-class DogDetailActivity : BaseActivity<ActivityDogDetailBinding>(R.layout.activity_dog_detail) {
-    private val viewModel: DogDetailViewModel by viewModels()
+class PetDetailActivity : BaseActivity<ActivityPetDetailBinding>(R.layout.activity_pet_detail) {
+    private val viewModel: PetDetailViewModel by viewModels()
 
-    private val adapter: DogDetailAdapter by lazy { DogDetailAdapter() }
+    private val adapter: PetDetailAdapter by lazy { PetDetailAdapter() }
 
     override fun initCreateView() {
         initDataBinding()
@@ -23,7 +23,7 @@ class DogDetailActivity : BaseActivity<ActivityDogDetailBinding>(R.layout.activi
     private fun initDataBinding() {
         binding.vm = viewModel
 
-        binding.vpDogDetail.registerOnPageChangeCallback(
+        binding.vpPetDetail.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -34,19 +34,19 @@ class DogDetailActivity : BaseActivity<ActivityDogDetailBinding>(R.layout.activi
     }
 
     private fun initAdapter() {
-        binding.vpDogDetail.adapter = adapter
+        binding.vpPetDetail.adapter = adapter
     }
 
     private fun initObserve() {
         viewModel.uiState.observe(this) { uiState ->
             adapter.submitList(uiState.dogs)
-            binding.vpDogDetail.setCurrentItem(uiState.dogs.size, false)
+            binding.vpPetDetail.setCurrentItem(uiState.dogs.size, false)
         }
     }
 
     companion object {
         fun getIntent(context: Context): Intent {
-            return Intent(context, DogDetailActivity::class.java)
+            return Intent(context, PetDetailActivity::class.java)
         }
     }
 }
