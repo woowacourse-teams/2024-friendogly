@@ -9,7 +9,9 @@ import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.club.repository.ClubSpecification;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +47,8 @@ public class ClubQueryService {
                 .equalsProvince(request.province())
                 .equalsCity(request.city())
                 .equalsVillage(request.village())
-                .hasGenders(request.genderParams())
-                .hasSizeTypes(request.sizeParams())
+                .hasGenders(Gender.toGenders(request.genderParams()))
+                .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
                 .build();
 
         List<Club> clubs = clubRepository.findAll(spec);

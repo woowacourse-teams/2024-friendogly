@@ -69,8 +69,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "서울특별시",
                 "송파구",
                 "신천동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
         List<FindSearchingClubResponse> responses = List.of(new FindSearchingClubResponse(
@@ -114,8 +114,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                         .param("province", request.province())
                         .param("city", request.city())
                         .param("village", request.village())
-                        .param("genderParams", request.genderParams().stream().map(Enum::name).toArray(String[]::new))
-                        .param("sizeParams", request.sizeParams().stream().map(Enum::name).toArray(String[]::new)))
+                        .param("genderParams", request.genderParams().toArray(String[]::new))
+                        .param("sizeParams", request.sizeParams().toArray(String[]::new)))
                 .andExpect(status().isOk())
                 .andDo(document("clubs/findSearching/200",
                         getDocumentRequest(),
@@ -231,8 +231,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "서울특별시",
                 "송파구",
                 "신천동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name()),
                 5,
                 List.of(1L)
         );

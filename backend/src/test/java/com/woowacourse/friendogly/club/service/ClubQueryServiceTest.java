@@ -48,8 +48,8 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 province,
                 city,
                 village,
-                Set.of(Gender.FEMALE),
-                Set.of(SizeType.SMALL)
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
         List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
@@ -90,8 +90,8 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 province,
                 city,
                 village,
-                Set.of(Gender.MALE),
-                Set.of(SizeType.SMALL)
+                Set.of(Gender.MALE.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
         List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);

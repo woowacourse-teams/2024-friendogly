@@ -47,8 +47,8 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 "서울특별시",
                 "송파구",
                 "신천동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name()),
                 5,
                 List.of(savedPet.getId())
         );

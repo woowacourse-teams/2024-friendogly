@@ -11,7 +11,9 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -56,8 +58,8 @@ public class ClubCommandService {
                 request.village(),
                 request.memberCapacity(),
                 member,
-                request.allowedGenders(),
-                request.allowedSizes(),
+                Gender.toGenders(request.allowedGenders()),
+                SizeType.toSizeTypes(request.allowedSizes()),
                 imageUrl,
                 participatingPets
         );

@@ -1,6 +1,8 @@
 package com.woowacourse.friendogly.pet.domain;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum Gender {
 
@@ -15,5 +17,11 @@ public enum Gender {
         } catch (IllegalArgumentException e) {
             throw new FriendoglyException("존재하지 않는 Gender 입니다.");
         }
+    }
+
+    public static Set<Gender> toGenders(Set<String> genders) {
+        return genders.stream()
+                .map(Gender::toGender)
+                .collect(Collectors.toSet());
     }
 }
