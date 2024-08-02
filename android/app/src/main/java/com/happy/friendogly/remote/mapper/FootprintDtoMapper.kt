@@ -8,7 +8,7 @@ fun FootprintsNearResponse.toData(): FootprintDto {
         footprintId = footprintId,
         latitude = latitude,
         longitude = longitude,
-        walkStatus = walkStatusResponse.toData(),
+        walkStatus = walkStatus.toData(),
         createdAt = createdAt,
         isMine = isMine,
     )
