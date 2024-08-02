@@ -39,7 +39,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.ui.registerdog.RegisterDogActivity"
+            android:name=".presentation.ui.registerpet.RegisterPetActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

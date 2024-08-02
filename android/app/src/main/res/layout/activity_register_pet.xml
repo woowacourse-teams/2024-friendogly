@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.registerdog.DogSize" />
+        <import type="com.happy.friendogly.presentation.ui.registerpet.PetSize" />
 
-        <import type="com.happy.friendogly.presentation.ui.registerdog.DogGender" />
+        <import type="com.happy.friendogly.presentation.ui.registerpet.PetGender" />
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.registerdog.RegisterDogViewModel" />
+            type="com.happy.friendogly.presentation.ui.registerpet.RegisterPetViewModel" />
     </data>
 
     <ScrollView
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="24dp"
-                android:text="@string/register_dog_toolbar_title"
+                android:text="@string/register_pet_toolbar_title"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="@string/dog_add_image_title"
+                android:text="@string/pet_add_image_title"
                 app:layout_constraintEnd_toEndOf="@+id/iv_add_dog_image"
                 app:layout_constraintStart_toStartOf="@+id/iv_add_dog_image"
                 app:layout_constraintTop_toBottomOf="@+id/iv_add_dog_image" />
@@ -89,7 +89,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                app:onSingleClick="@{() -> vm.selectDogProfileImage()}" />
+                app:onSingleClick="@{() -> vm.selectPetProfileImage()}" />
 
             <TextView
                 android:id="@+id/tv_dog_name_title"
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/dog_name_title"
+                android:text="@string/pet_name_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_dog_image" />
 
@@ -111,10 +111,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
-                android:hint="@string/register_dog_name_hint"
+                android:hint="@string/register_pet_name_hint"
                 android:maxLength="15"
                 android:maxLines="1"
-                android:text="@={vm.dogName}"
+                android:text="@={vm.petName}"
                 app:layout_constraintStart_toStartOf="@+id/tv_dog_name_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dog_name_title" />
 
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                app:editTextLength="@{vm.dogName}"
+                app:editTextLength="@{vm.petName}"
                 app:layout_constraintBottom_toBottomOf="@+id/et_user_name"
                 app:layout_constraintEnd_toEndOf="@+id/et_user_name"
                 app:layout_constraintTop_toTopOf="@+id/et_user_name"
@@ -154,7 +154,7 @@
                 android:hint="@string/description_hint"
                 android:maxLength="20"
                 android:maxLines="2"
-                android:text="@={vm.dogDescription}"
+                android:text="@={vm.petDescription}"
                 app:layout_constraintStart_toStartOf="@+id/tv_description"
                 app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                app:editTextDescriptionLength="@{vm.dogDescription}"
+                app:editTextDescriptionLength="@{vm.petDescription}"
                 app:layout_constraintBottom_toBottomOf="@+id/et_description"
                 app:layout_constraintEnd_toEndOf="@+id/et_description"
                 app:layout_constraintTop_toTopOf="@+id/et_description"
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/dog_size_title"
+                android:text="@string/pet_size_type_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_description" />
 
@@ -204,7 +204,7 @@
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
-                    android:text="@{DogSize.SMALL.title}" />
+                    android:text="@{PetSize.SMALL.title}" />
 
                 <RadioButton
                     android:id="@+id/rb_medium"
@@ -215,7 +215,7 @@
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="@{DogSize.MEDIUM.title}" />
+                    android:text="@{PetSize.MEDIUM.title}" />
 
                 <RadioButton
                     android:id="@+id/rb_large"
@@ -226,7 +226,7 @@
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="@{DogSize.LARGE.title}" />
+                    android:text="@{PetSize.LARGE.title}" />
 
 
             </RadioGroup>
@@ -238,7 +238,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/dog_gender_title"
+                android:text="@string/pet_gender_type_title"
                 app:layout_constraintStart_toStartOf="@+id/radio_group_dog_size"
                 app:layout_constraintTop_toBottomOf="@+id/radio_group_dog_size" />
 
@@ -264,7 +264,7 @@
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
-                    android:text="@{DogGender.MAIL.title}" />
+                    android:text="@{PetGender.MAIL.title}" />
 
                 <RadioButton
                     android:id="@+id/rb_female"
@@ -276,7 +276,7 @@
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="@{DogGender.FEMALE.title}" />
+                    android:text="@{PetGender.FEMALE.title}" />
 
 
             </RadioGroup>
@@ -306,14 +306,14 @@
             <TextView
                 android:id="@+id/tv_birthday"
                 style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
-                onSingleClick="@{() -> vm.selectDogBirthday()}"
+                onSingleClick="@{() -> vm.selectPetBirthday()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
                 android:clickable="true"
-                android:text="@{@string/birthday(vm.uiState.dogBirthdayYear, vm.uiState.dogBirthdayMonth)}"
+                android:text="@{@string/birthday(vm.uiState.petBirthdayYear, vm.uiState.petBirthdayMonth)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dog_birthday"
@@ -331,13 +331,13 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:padding="18dp"
-                android:text="@string/dog_submit_title"
+                android:text="@string/pet_submit_title"
                 app:dogEditBtnBackground="@{vm.isProfileComplete()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_birthday"
-                app:onSingleClick="@{() -> vm.registerDog()}"
+                app:onSingleClick="@{() -> vm.registerPet()}"
                 tools:background="@color/coral400" />
 
 

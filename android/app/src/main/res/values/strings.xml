@@ -99,9 +99,9 @@
     <string name="dialog_negative_default">아니오</string>
 
     <!--강아지 등록-->
-    <string name="dog_name_title">댕댕이 이름</string>
-    <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
-    <string name="register_dog_name_hint">댕댕이 이름을 입력해주세요</string>
+    <string name="pet_name_title">댕댕이 이름</string>
+    <string name="register_pet_toolbar_title">댕댕이 등록하기</string>
+    <string name="register_pet_name_hint">댕댕이 이름을 입력해주세요</string>
     <string name="description_title">한 줄 소개</string>
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
@@ -110,11 +110,11 @@
     <string name="birthday_year">년</string>
     <string name="birthday_month">%02d월</string>
     <string name="neutralized_title">중성화했어요.</string>
-    <string name="dog_size_title">댕댕이 사이즈</string>
-    <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
-    <string name="dog_gender_title">댕댕이 성별</string>
-    <string name="dog_submit_title">등록완료!</string>
-    <string name="bottom_sheet_dog_edit_birthday_title">언제 태어났나요?</string>
+    <string name="pet_size_type_title">댕댕이 사이즈</string>
+    <string name="pet_add_image_title">댕댕이 사진을 추가하세요</string>
+    <string name="pet_gender_type_title">댕댕이 성별</string>
+    <string name="pet_submit_title">등록완료!</string>
+    <string name="bottom_sheet_pet_edit_birthday_title">언제 태어났나요?</string>
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>

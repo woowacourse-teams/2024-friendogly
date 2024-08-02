@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.registerdog
+package com.happy.friendogly.presentation.ui.registerpet
 
 import android.annotation.SuppressLint
 import android.widget.TextView

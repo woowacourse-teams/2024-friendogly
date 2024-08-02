@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.registerdog
+package com.happy.friendogly.presentation.ui.registerpet
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
@@ -16,73 +16,73 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
 
-class RegisterDogViewModel(
+class RegisterPetViewModel(
     private val postPetUseCase: PostPetUseCase,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<RegisterDogUiState> =
-        MutableLiveData(RegisterDogUiState())
-    val uiState: LiveData<RegisterDogUiState> get() = _uiState
+    private val _uiState: MutableLiveData<RegisterPetUiState> =
+        MutableLiveData(RegisterPetUiState())
+    val uiState: LiveData<RegisterPetUiState> get() = _uiState
 
     private val _profileImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val profileImage: LiveData<Bitmap?> get() = _profileImage
 
-    val dogName = MutableLiveData<String>("")
-    val dogDescription = MutableLiveData<String>("")
-    private var dogSize: DogSize = DogSize.SMALL
-    private var dogGender: DogGender = DogGender.MAIL
+    val petName = MutableLiveData<String>("")
+    val petDescription = MutableLiveData<String>("")
+    private var petSize: PetSize = PetSize.SMALL
+    private var petGender: PetGender = PetGender.MAIL
 
     val isProfileComplete =
         MediatorLiveData<Boolean>().apply {
             addSourceList(
-                dogName,
-                dogDescription,
+                petName,
+                petDescription,
                 profileImage,
             ) {
-                val name = dogName.value ?: return@addSourceList false
-                val description = dogDescription.value ?: return@addSourceList false
+                val name = petName.value ?: return@addSourceList false
+                val description = petDescription.value ?: return@addSourceList false
 
                 name.isNotBlank() && description.isNotBlank() && profileImage.value != null
             }
         }
 
-    private val _navigateAction: MutableLiveData<Event<RegisterDogNavigationAction>> =
+    private val _navigateAction: MutableLiveData<Event<RegisterPetNavigationAction>> =
         MutableLiveData(null)
-    val navigateAction: LiveData<Event<RegisterDogNavigationAction>> get() = _navigateAction
+    val navigateAction: LiveData<Event<RegisterPetNavigationAction>> get() = _navigateAction
 
     fun executeBackAction() {
-        _navigateAction.emit(RegisterDogNavigationAction.NavigateToBack)
+        _navigateAction.emit(RegisterPetNavigationAction.NavigateToBack)
     }
 
-    fun selectDogProfileImage() {
-        _navigateAction.emit(RegisterDogNavigationAction.NavigateToSetProfileImage)
+    fun selectPetProfileImage() {
+        _navigateAction.emit(RegisterPetNavigationAction.NavigateToSetProfileImage)
     }
 
-    fun selectDogBirthday() {
+    fun selectPetBirthday() {
         val state = _uiState.value ?: return
 
         _navigateAction.emit(
-            RegisterDogNavigationAction.NavigateToSetBirthday(
-                state.dogBirthdayYear,
-                state.dogBirthdayMonth,
+            RegisterPetNavigationAction.NavigateToSetBirthday(
+                state.petBirthdayYear,
+                state.petBirthdayMonth,
             ),
         )
     }
 
-    fun updateDogProfileImage(bitmap: Bitmap) {
+    fun updatePetProfileImage(bitmap: Bitmap) {
         _profileImage.value = bitmap
     }
 
-    fun updateDogProfileFile(file: MultipartBody.Part) {
+    fun updatePetProfileFile(file: MultipartBody.Part) {
         val state = _uiState.value ?: return
         _uiState.value = state.copy(profilePath = file)
     }
 
-    fun updateDogSize(dogSize: DogSize) {
-        this.dogSize = dogSize
+    fun updatePetSize(petSize: PetSize) {
+        this.petSize = petSize
     }
 
-    fun updateDogGender(dogGender: DogGender) {
-        this.dogGender = dogGender
+    fun updatePetGender(petGender: PetGender) {
+        this.petGender = petGender
     }
 
     fun updateNeutering() {
@@ -90,31 +90,31 @@ class RegisterDogViewModel(
         _uiState.value = state.copy(neutering = !state.neutering)
     }
 
-    fun updateDogBirthday(
+    fun updatePetBirthday(
         year: Int,
         month: Int,
     ) {
         val state = _uiState.value ?: return
-        _uiState.value = state.copy(dogBirthdayYear = year, dogBirthdayMonth = month)
+        _uiState.value = state.copy(petBirthdayYear = year, petBirthdayMonth = month)
     }
 
-    fun registerDog() {
+    fun registerPet() {
         if (isProfileComplete.value == true) {
             viewModelScope.launch {
                 val state = uiState.value ?: return@launch
-                val name = dogName.value ?: return@launch
-                val description = dogDescription.value ?: return@launch
-                val birthday = LocalDate(state.dogBirthdayYear, state.dogBirthdayMonth, 1)
+                val name = petName.value ?: return@launch
+                val description = petDescription.value ?: return@launch
+                val birthday = LocalDate(state.petBirthdayYear, state.petBirthdayMonth, 1)
 
                 postPetUseCase(
                     name = name,
                     description = description,
                     birthday = birthday,
-                    sizeType = dogSize.toSizeType(),
-                    gender = dogGender.toGender(state.neutering),
+                    sizeType = petSize.toSizeType(),
+                    gender = petGender.toGender(state.neutering),
                     file = state.profilePath,
                 ).onSuccess {
-                    _navigateAction.emit(RegisterDogNavigationAction.NavigateToMyPage)
+                    _navigateAction.emit(RegisterPetNavigationAction.NavigateToMyPage)
                 }.onFailure {
                     // TODO 예외 처리
                 }
@@ -125,7 +125,7 @@ class RegisterDogViewModel(
     companion object {
         fun factory(postPetUseCase: PostPetUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
-                RegisterDogViewModel(postPetUseCase = postPetUseCase)
+                RegisterPetViewModel(postPetUseCase = postPetUseCase)
             }
         }
     }
