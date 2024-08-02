@@ -60,7 +60,7 @@ class WoofViewModel(
         }
     }
 
-    fun loadFootprintMarkBtnInfo(latLng: LatLng) {
+    fun loadFootprintMarkBtnInfo() {
         viewModelScope.launch {
             getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
                 if (!footPrintMarkBtnInfo.hasPet) {
@@ -72,9 +72,7 @@ class WoofViewModel(
                         ),
                     )
                 } else {
-                    markFootprint(latLng)
-                    _mapActions.emit(WoofMapActions.RemoveNearFootprints)
-                    loadNearFootprints(latLng)
+                    _mapActions.emit(WoofMapActions.ShowRegisterMarkerLayout)
                 }
             }.onFailure {
             }
@@ -96,10 +94,14 @@ class WoofViewModel(
         _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
     }
 
-    private suspend fun markFootprint(latLng: LatLng) {
+    fun markFootprint(latLng: LatLng) {
         viewModelScope.launch {
             postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { footprintSave ->
                 _footprintSave.value = footprintSave
+                _mapActions.value = Event(WoofMapActions.RemoveNearFootprints)
+                _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
+                _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
+                loadNearFootprints(latLng)
             }.onFailure {
             }
         }
