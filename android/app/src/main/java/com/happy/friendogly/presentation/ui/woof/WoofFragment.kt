@@ -409,45 +409,39 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
 
     private fun showMarkerDetail() {
-        binding.vpWoofPetDetail.post {
-            binding.vpWoofPetDetail.apply {
-                isVisible = true
-                translationY = height.toFloat()
-                animate()
-                    .translationY(0f)
-                    .setDuration(300)
-                    .setListener(null)
-            }
+        binding.vpWoofPetDetail.apply {
+            isVisible = true
+            translationY = 920f
+            animate()
+                .translationY(0f)
+                .setDuration(300)
+                .setListener(null)
         }
 
-        binding.tvWoofWalkStatus.post {
-            binding.tvWoofWalkStatus.apply {
-                isVisible = true
-                translationY = height.toFloat()
-                animate()
-                    .translationY(0f)
-                    .setDuration(300)
-                    .setListener(null)
-            }
+        binding.tvWoofWalkStatus.apply {
+            isVisible = true
+            translationY = 110f
+            animate()
+                .translationY(0f)
+                .setDuration(300)
+                .setListener(null)
         }
     }
 
     private fun hideMarkerDetail() {
         binding.tvWoofWalkStatus.isVisible = false
 
-        binding.vpWoofPetDetail.post {
-            binding.vpWoofPetDetail.animate()
-                .translationY(binding.vpWoofPetDetail.height.toFloat())
-                .setDuration(300)
-                .setListener(
-                    object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            super.onAnimationEnd(animation)
-                            binding.vpWoofPetDetail.isVisible = false
-                        }
-                    },
-                )
-        }
+        binding.vpWoofPetDetail.animate()
+            .translationY(binding.vpWoofPetDetail.height.toFloat())
+            .setDuration(300)
+            .setListener(
+                object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        super.onAnimationEnd(animation)
+                        binding.vpWoofPetDetail.isVisible = false
+                    }
+                },
+            )
 
         isMarkerHideAnimationEnd = true
     }
