@@ -55,4 +55,10 @@ public class ChatRoom {
 
         chatRoomMembers.remove(chatRoomMember);
     }
+
+    public List<String> findMemberNames() {
+        return chatRoomMembers.stream()
+                .map(ChatRoomMember::findMemberName)
+                .toList();
+    }
 }

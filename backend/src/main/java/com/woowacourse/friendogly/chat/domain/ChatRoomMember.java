@@ -41,4 +41,8 @@ public class ChatRoomMember {
         }
         return this.member.getId().equals(member.getId());
     }
+
+    public String findMemberName() {
+        return member.getName().getValue();
+    }
 }
