@@ -25,14 +25,14 @@ import com.epages.restdocs.apispec.SimpleType;
 import com.woowacourse.friendogly.club.controller.ClubController;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
 import com.woowacourse.friendogly.club.domain.Status;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.AddressDetailResponse;
 import com.woowacourse.friendogly.club.dto.response.ClubMemberDetailResponse;
 import com.woowacourse.friendogly.club.dto.response.ClubPetDetailResponse;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
@@ -64,7 +64,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("필터링 조건을 통해 모임 리스트를 조회한다.")
     @Test
     void findSearching_200() throws Exception {
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
                 FilterCondition.ALL.name(),
                 "서울특별시",
                 "송파구",
@@ -73,7 +73,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 Set.of(SizeType.SMALL.name())
         );
 
-        List<FindSearchingClubResponse> responses = List.of(new FindSearchingClubResponse(
+        List<FindClubByFilterResponse> responses = List.of(new FindClubByFilterResponse(
                         1L,
                         "모임 제목1",
                         "모임 본문 내용1",
@@ -88,7 +88,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         "https:/clubImage1.com",
                         List.of("https://petImage1.com")
                 ),
-                new FindSearchingClubResponse(
+                new FindClubByFilterResponse(
                         2L,
                         "모임 제목2",
                         "모임 본문 내용2",

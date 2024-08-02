@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public record FindSearchingClubResponse(
+public record FindClubByFilterResponse(
         Long id,
         String title,
         String content,
@@ -25,7 +25,7 @@ public record FindSearchingClubResponse(
 
 ) {
 
-    public FindSearchingClubResponse(
+    public FindClubByFilterResponse(
             Club club,
             List<String> petImageUrls
     ) {
