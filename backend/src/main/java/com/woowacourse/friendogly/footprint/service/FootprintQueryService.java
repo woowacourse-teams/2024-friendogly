@@ -40,9 +40,14 @@ public class FootprintQueryService {
         Member member = footprint.getMember();
         List<Pet> pets = petRepository.findByMemberId(member.getId());
         boolean isMine = footprint.isCreatedBy(memberId);
-
-        // TODO: 모든 펫을 반환하도록 수정
-        return FindOneFootprintResponse.withFootprintImage(member, pets.get(0), footprint, isMine);
+        LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
+        return FindOneFootprintResponse.of(
+                member,
+                pets,
+                footprint.getWalkStatus(),
+                changedWalkStatusTime,
+                isMine
+        );
     }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
