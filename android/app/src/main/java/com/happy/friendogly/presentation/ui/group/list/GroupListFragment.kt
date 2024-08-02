@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -27,6 +26,11 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     }
     private val groupAdapter: GroupListAdapter by lazy {
         GroupListAdapter(viewModel as GroupListActionHandler)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.reloadGroupsWithAddress()
     }
 
     override fun initViewCreated() {
@@ -104,19 +108,22 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
         }
     }
 
-    private fun initStateObserver(){
-        viewModel.uiState.observe(viewLifecycleOwner){ state ->
-            when(state){
+    private fun initStateObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
                 GroupListUiState.Init -> {
                     binding.includeGroupList.rcvGroupListGroup.visibility = View.VISIBLE
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
                     binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
                 }
+
                 GroupListUiState.NotAddress -> {
-                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.VISIBLE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility =
+                        View.VISIBLE
                     binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
                 }
+
                 GroupListUiState.NotData -> {
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.VISIBLE
                     binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE

@@ -24,9 +24,9 @@ class GroupListViewModel(
         MutableLiveData(GroupListUiState.Init)
     val uiState: MutableLiveData<GroupListUiState> get() = _uiState
 
-    private val _myUserAddress: MutableLiveData<UserAddress> =
+    private val _myAddress: MutableLiveData<UserAddress> =
         MutableLiveData()
-    val myUserAddress: LiveData<UserAddress> get() = _myUserAddress
+    val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
         MutableLiveData(ParticipationFilter.POSSIBLE)
@@ -45,8 +45,15 @@ class GroupListViewModel(
         loadGroups()
     }
 
+    fun reloadGroupsWithAddress(){
+        if (myAddress.value == null){
+            loadAddress()
+            loadGroups()
+        }
+    }
+
     fun loadGroups() = viewModelScope.launch {
-        myUserAddress.value ?: return@launch
+        myAddress.value ?: return@launch
 
         delay(1000)
         _groups.value = dummy()
@@ -57,10 +64,10 @@ class GroupListViewModel(
         }
     }
 
-    fun loadAddress() = viewModelScope.launch {
+    private fun loadAddress() = viewModelScope.launch {
         getAddressUseCase()
             .onSuccess {
-                _myUserAddress.value = it
+                _myAddress.value = it
             }
             .onFailure {
                 _uiState.value = GroupListUiState.NotAddress
