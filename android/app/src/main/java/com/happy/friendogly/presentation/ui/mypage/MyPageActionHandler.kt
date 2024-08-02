@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.mypage
 
 interface MyPageActionHandler {
-    fun navigateToPetDetail(id: Long)
+    fun navigateToPetDetail()
 
     fun navigateToRegisterDog(id: Long)
 

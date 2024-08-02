@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.utils
 
 import android.content.Intent
 import android.os.Build
+import androidx.lifecycle.SavedStateHandle
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
@@ -27,4 +28,11 @@ inline fun <reified T> Intent.putSerializable(
 ) {
     val jsonString = Json.encodeToString(serializer, value)
     this.putExtra(key, jsonString)
+}
+
+inline fun <reified T> SavedStateHandle.getSerializable(
+    key: String,
+    serializer: KSerializer<T>,
+): T? {
+    return this.get<String>(key)?.let { Json.decodeFromString(serializer, it) }
 }

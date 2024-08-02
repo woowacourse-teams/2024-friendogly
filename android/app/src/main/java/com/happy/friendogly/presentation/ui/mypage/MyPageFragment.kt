@@ -46,7 +46,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.navigateAction.observeEvent(viewLifecycleOwner) { action ->
             when (action) {
                 is MyPageNavigationAction.NavigateToSetting -> (activity as MainActivityActionHandler).navigateToSetting()
-                is MyPageNavigationAction.NavigateToPetDetail -> (activity as MainActivityActionHandler).navigateToPetDetail()
+                is MyPageNavigationAction.NavigateToPetDetail ->
+                    (activity as MainActivityActionHandler).navigateToPetDetail(
+                        currentPage = action.currentPage,
+                        petsDetail = action.petsDetail,
+                    )
+
                 is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
 
                 is MyPageNavigationAction.NavigateToProfileEdit -> {}
