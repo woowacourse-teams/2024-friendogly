@@ -1,7 +1,5 @@
 package com.woowacourse.friendogly.footprint.service;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
-
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
@@ -44,11 +42,13 @@ public class FootprintCommandService {
         validatePetExistence(member);
         validateRecentFootprintExists(memberId);
 
+        footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
+                .ifPresent(Footprint::updateToDeleted);
+
         Footprint footprint = footprintRepository.save(
                 Footprint.builder()
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
-                        .walkStatus(BEFORE)
                         .build()
         );
 
