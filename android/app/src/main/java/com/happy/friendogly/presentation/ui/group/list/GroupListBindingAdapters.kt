@@ -44,7 +44,7 @@ fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
 @BindingAdapter("address")
 fun LinearLayout.bindMyLocation(address: Address?){
     this.visibility = if (address==null){
-        View.INVISIBLE
+        View.GONE
     }else{
         View.VISIBLE
     }

@@ -100,18 +100,41 @@
             android:layout_margin="5dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/include_group_list"
+            app:layout_constraintBottom_toTopOf="@id/swipe_refresh_layout_group_list"
             app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
             tools:listitem="@layout/item_select_filter" />
 
-        <include
-            android:id="@+id/include_group_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_group_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            layout="@layout/include_group_list_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter"
-            app:vm="@{vm}" />
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/include_group_list"
+                    layout="@layout/include_group_list_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_group_address"
+                    layout="@layout/include_group_not_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/include_group_data"
+                    layout="@layout/include_group_not_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ImageButton
             onSingleClick="@{()->vm.addGroup()}"

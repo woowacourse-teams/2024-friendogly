@@ -41,58 +41,32 @@ class GroupListViewModel(
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
     init {
+        loadAddress()
         loadGroups()
     }
 
-    // TODO: remove dummy
-    fun loadGroups() =
-        viewModelScope.launch {
-            delay(1000)
-            _groups.value =
-                List(5) {
-                    listOf(
-                        GroupListUiModel(
-                            groupId = 0L,
-                            filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
-                            groupPoster = "",
-                            isParticipable = true,
-                            title = "중형견 모임해요",
-                            content = "공지 꼭 읽어주세요",
-                            maximumNumberOfPeople = 5,
-                            currentNumberOfPeople = 2,
-                            groupLocation = "잠실6동",
-                            groupLeader = "벼리",
-                            groupDate = LocalDateTime.now(),
-                            groupWoofs = listOf(),
-                            groupReaderImage = "",
-                        ),
-                        GroupListUiModel(
-                            groupId = 0L,
-                            filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
-                            groupPoster = "",
-                            isParticipable = true,
-                            title = "중형견 모임해요",
-                            content = "공지 꼭 읽어주세요",
-                            maximumNumberOfPeople = 5,
-                            currentNumberOfPeople = 3,
-                            groupLocation = "잠실5동",
-                            groupLeader = "채드",
-                            groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
-                            groupWoofs = listOf(),
-                            groupReaderImage = "",
-                        ),
-                    )
-                }.flatten()
+    fun loadGroups() = viewModelScope.launch {
+        myAddress.value ?: return@launch
+
+        delay(1000)
+        _groups.value = dummy()
+        if (groups.value.isNullOrEmpty()) {
+            _uiState.value = GroupListUiState.NotData
+        } else {
+            _uiState.value = GroupListUiState.Init
         }
+    }
+
+    fun loadAddress() = viewModelScope.launch {
+        getAddressUseCase()
+            .onSuccess {
+                _myAddress.value = it
+            }
+            .onFailure {
+                _uiState.value = GroupListUiState.NotAddress
+            }
+
+    }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
@@ -148,6 +122,53 @@ class GroupListViewModel(
                     getAddressUseCase = getAddressUseCase
                 )
             }
+        }
+
+        // TODO: remove dummy
+        fun dummy(): List<GroupListUiModel> {
+            return List(5) {
+                listOf(
+                    GroupListUiModel(
+                        groupId = 0L,
+                        filters =
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                            GroupFilter.GenderFilter.NeutralizingMale,
+                        ),
+                        groupPoster = "",
+                        isParticipable = true,
+                        title = "중형견 모임해요",
+                        content = "공지 꼭 읽어주세요",
+                        maximumNumberOfPeople = 5,
+                        currentNumberOfPeople = 2,
+                        groupLocation = "잠실6동",
+                        groupLeader = "벼리",
+                        groupDate = LocalDateTime.now(),
+                        groupWoofs = listOf(),
+                        groupReaderImage = "",
+                    ),
+                    GroupListUiModel(
+                        groupId = 0L,
+                        filters =
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                        ),
+                        groupPoster = "",
+                        isParticipable = true,
+                        title = "중형견 모임해요",
+                        content = "공지 꼭 읽어주세요",
+                        maximumNumberOfPeople = 5,
+                        currentNumberOfPeople = 3,
+                        groupLocation = "잠실5동",
+                        groupLeader = "채드",
+                        groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
+                        groupWoofs = listOf(),
+                        groupReaderImage = "",
+                    ),
+                )
+            }.flatten()
         }
     }
 }

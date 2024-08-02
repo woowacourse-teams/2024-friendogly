@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.util.Log
+import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -30,13 +32,14 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     override fun initViewCreated() {
         initDataBinding()
         initAdapter()
+        initStateObserver()
         initObserver()
     }
 
     private fun initDataBinding() {
         binding.vm = viewModel
 
-        with(binding.includeGroupList.swipeRefreshLayoutGroupList) {
+        with(binding.swipeRefreshLayoutGroupList) {
             setOnRefreshListener {
                 viewModel.loadGroups()
                 isRefreshing = false
@@ -93,6 +96,28 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                         DialogFragment.STYLE_NORMAL,
                         R.style.RoundCornerBottomSheetDialogTheme,
                     )
+                }
+            }
+        }
+    }
+
+    private fun initStateObserver(){
+        viewModel.uiState.observe(viewLifecycleOwner){ state ->
+            when(state){
+                GroupListUiState.Init -> {
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.VISIBLE
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                }
+                GroupListUiState.NotAddress -> {
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.VISIBLE
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
+                }
+                GroupListUiState.NotData -> {
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.VISIBLE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
                 }
             }
         }

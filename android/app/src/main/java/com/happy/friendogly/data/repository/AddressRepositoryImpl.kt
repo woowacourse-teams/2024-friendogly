@@ -10,7 +10,10 @@ class AddressRepositoryImpl(
     private val addressDataSource: AddressDataSource,
 ) : AddressRepository {
     override suspend fun getAddress(): Result<Address> =
-        addressDataSource.getAddress().mapCatching { it.toDomain() }
+        addressDataSource.getAddress().mapCatching {
+            if (it.address.isEmpty() || it.adminArea.isEmpty() || it.subLocality.isEmpty()) throw Exception()
+            it.toDomain()
+        }
 
     override suspend fun saveAddress(address: Address): Result<Unit> =
         addressDataSource.saveAddress(addressDto = address.toData())
