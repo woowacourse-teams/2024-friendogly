@@ -33,7 +33,7 @@ public class ChatRoom {
         chatRoomMembers.add(new ChatRoomMember(this, member));
     }
 
-    private boolean containsMember(Member member) {
+    public boolean containsMember(Member member) {
         return chatRoomMembers.stream()
                 .anyMatch(chatRoomMember -> chatRoomMember.hasMember(member));
     }
