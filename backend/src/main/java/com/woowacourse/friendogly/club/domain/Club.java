@@ -82,7 +82,9 @@ public class Club {
     private Club(
             String title,
             String content,
-            String address,
+            String province,
+            String city,
+            String village,
             int memberCapacity,
             Set<Gender> allowedGenders,
             Set<SizeType> allowedSizes,
@@ -92,7 +94,7 @@ public class Club {
     ) {
         this.title = new Title(title);
         this.content = new Content(content);
-        this.address = new Address(address);
+        this.address = new Address(province, city, village);
         this.memberCapacity = new MemberCapacity(memberCapacity);
         this.allowedGenders = allowedGenders;
         this.allowedSizes = allowedSizes;
@@ -104,7 +106,9 @@ public class Club {
     public static Club create(
             String title,
             String content,
-            String address,
+            String province,
+            String city,
+            String village,
             int memberCapacity,
             Member owner,
             Set<Gender> allowedGender,
@@ -115,7 +119,9 @@ public class Club {
         Club club = Club.builder()
                 .title(title)
                 .content(content)
-                .address(address)
+                .province(province)
+                .city(city)
+                .village(village)
                 .memberCapacity(memberCapacity)
                 .allowedGenders(allowedGender)
                 .allowedSizes(allowedSize)

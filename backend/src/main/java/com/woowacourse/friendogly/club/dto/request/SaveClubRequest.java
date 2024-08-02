@@ -19,8 +19,14 @@ public record SaveClubRequest(
         @Size(min = 1, max = 1000, message = "본문은 1글자 1000글자 사이입니다.")
         String content,
 
-        @NotBlank(message = "주소를 읽을 수 없습니다. 다시 시도해주세요.")
-        String address,
+        @NotBlank(message = "도/광역시/특별시 정보는 필수 값입니다.")
+        String province,
+
+        @NotBlank(message = "시/군/구 정보는 필수 값입니다.")
+        String city,
+
+        @NotBlank(message = "읍/면/동 정보는 필수 값입니다.")
+        String village,
 
         @NotEmpty(message = "모임에 참여가능한 성별을 선택해주세요.")
         Set<Gender> allowedGenders,

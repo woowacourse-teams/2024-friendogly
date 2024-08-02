@@ -51,7 +51,9 @@ public class ClubCommandService {
         Club newClub = Club.create(
                 request.title(),
                 request.content(),
-                request.address(),
+                request.province(),
+                request.city(),
+                request.village(),
                 request.memberCapacity(),
                 member,
                 request.allowedGenders(),

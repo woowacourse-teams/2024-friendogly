@@ -35,9 +35,9 @@ VALUES (1, '부', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SMALL', 
        (8, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE',
         'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg');
 
-INSERT INTO club (title, content, member_capacity, address, image_url, created_at, status)
-VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울 송파구 신천동', 'http://example.com/image.jpg', '2023-08-01 12:00:00', 'OPEN'),
-       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울 송파구 신천동', 'http://example.com/image.jpg', '2023-07-31 01:00:00', 'OPEN');
+INSERT INTO club (title, content, member_capacity, province,city,village, image_url, created_at, status)
+VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-08-01 12:00:00', 'OPEN'),
+       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-07-31 01:00:00', 'OPEN');
 
 INSERT INTO club_gender (club_id, allowed_gender)
 VALUES (1, 'MALE'),

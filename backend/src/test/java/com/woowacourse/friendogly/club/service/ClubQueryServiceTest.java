@@ -45,7 +45,9 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 FilterCondition.ALL.name(),
-                address,
+                province,
+                city,
+                village,
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
@@ -85,7 +87,9 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
                 FilterCondition.ALL.name(),
-                address,
+                province,
+                city,
+                village,
                 Set.of(Gender.MALE),
                 Set.of(SizeType.SMALL)
         );

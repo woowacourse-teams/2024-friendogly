@@ -24,12 +24,24 @@ public class ClubSpecification {
         return new ClubSpecification();
     }
 
-    public ClubSpecification equalsAddress(String address) {
-        if (StringUtils.isBlank(address)) {
+    public ClubSpecification equalsProvince(String province) {
+        return equalsAddressDetail(province, "province");
+    }
+
+    public ClubSpecification equalsCity(String city) {
+        return equalsAddressDetail(city, "city");
+    }
+
+    public ClubSpecification equalsVillage(String village) {
+        return equalsAddressDetail(village, "village");
+    }
+
+    private ClubSpecification equalsAddressDetail(String province, String fieldName) {
+        if (StringUtils.isBlank(province)) {
             return this;
         }
         spec = spec.and(
-                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("address").get("value"), address)
+                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("address").get(fieldName), province)
         );
         return this;
     }

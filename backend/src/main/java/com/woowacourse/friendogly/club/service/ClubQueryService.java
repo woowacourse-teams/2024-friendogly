@@ -42,7 +42,9 @@ public class ClubQueryService {
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
         Specification<Club> spec = ClubSpecification.where()
-                .equalsAddress(request.address())
+                .equalsProvince(request.province())
+                .equalsCity(request.city())
+                .equalsVillage(request.village())
                 .hasGenders(request.genderParams())
                 .hasSizeTypes(request.sizeParams())
                 .build();
