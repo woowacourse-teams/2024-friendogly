@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.petdetail.PetDetailViewModel" />
@@ -15,10 +17,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_black_gradient_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:tint="@color/white"
+            onSingleClick="@{() -> vm.navigateToBack()}"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_left" />
+
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_pet_detail"
+            viewPager2Swipe="@{vm.uiState.petsDetail}"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:nestedScrollingEnabled="false"
+            android:saveEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +59,12 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="15dp"
+            android:visibility="@{vm.uiState.petsDetail.data.size() == 1 ? View.GONE : View.VISIBLE}"
             app:currentIndicator="@{vm.currentPage}"
             app:layout_constraintBottom_toBottomOf="@+id/vp_pet_detail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:setUpIndicator="@{vm.uiState.dogs.size()}" />
+            app:setUpIndicator="@{vm.uiState.petsDetail.data.size()}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

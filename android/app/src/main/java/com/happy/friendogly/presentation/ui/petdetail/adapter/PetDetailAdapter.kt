@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemDogDetailBinding
-import com.happy.friendogly.presentation.ui.mypage.Dog
+import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 
-class PetDetailAdapter : ListAdapter<Dog, PetDetailAdapter.ViewHolder>(PetItemDiffCallback) {
+class PetDetailAdapter : ListAdapter<PetDetail, PetDetailAdapter.ViewHolder>(PetDetailItemDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -33,20 +33,20 @@ class PetDetailAdapter : ListAdapter<Dog, PetDetailAdapter.ViewHolder>(PetItemDi
 
     class ViewHolder(private val binding: ItemDogDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Dog) {
-            binding.dog = item
+        fun bind(item: PetDetail) {
+            binding.petDetail = item
         }
     }
 
-    internal object PetItemDiffCallback : DiffUtil.ItemCallback<Dog>() {
+    internal object PetDetailItemDiffCallback : DiffUtil.ItemCallback<PetDetail>() {
         override fun areItemsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
-        ): Boolean = oldItem.name == newItem.name
+            oldItem: PetDetail,
+            newItem: PetDetail,
+        ): Boolean = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
+            oldItem: PetDetail,
+            newItem: PetDetail,
         ): Boolean = oldItem == newItem
     }
 }

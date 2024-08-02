@@ -7,10 +7,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityPetDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.petdetail.adapter.PetDetailAdapter
+import com.happy.friendogly.presentation.utils.putSerializable
 
 class PetDetailActivity : BaseActivity<ActivityPetDetailBinding>(R.layout.activity_pet_detail) {
-    private val viewModel: PetDetailViewModel by viewModels()
+    private val viewModel: PetDetailViewModel by viewModels {
+        PetDetailViewModel.factory()
+    }
 
     private val adapter: PetDetailAdapter by lazy { PetDetailAdapter() }
 
@@ -39,14 +43,35 @@ class PetDetailActivity : BaseActivity<ActivityPetDetailBinding>(R.layout.activi
 
     private fun initObserve() {
         viewModel.uiState.observe(this) { uiState ->
-            adapter.submitList(uiState.dogs)
-            binding.vpPetDetail.setCurrentItem(uiState.dogs.size, false)
+            adapter.submitList(uiState.petsDetail.data)
+            binding.vpPetDetail.setCurrentItem(uiState.petsDetail.data.size, false)
+        }
+
+        viewModel.navigateAction.observeEvent(this) { action ->
+            when (action) {
+                is PetProfileNavigationAction.NavigateToBack -> finish()
+            }
         }
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
+        const val PUT_EXTRA_CURRENT_PAGE = "PUT_EXTRA_CURRENT_PAGE"
+        const val PUT_EXTRA_PETS_DETAIL = "PUT_EXTRA_PETS_DETAIL"
+
+        fun getIntent(
+            context: Context,
+            currentPage: Int,
+            petsDetail: PetsDetail,
+        ): Intent {
             return Intent(context, PetDetailActivity::class.java)
+                .apply {
+                    putSerializable(
+                        PUT_EXTRA_PETS_DETAIL,
+                        petsDetail,
+                        PetsDetail.serializer(),
+                    )
+                    putExtra(PUT_EXTRA_CURRENT_PAGE, currentPage)
+                }
         }
     }
 }
