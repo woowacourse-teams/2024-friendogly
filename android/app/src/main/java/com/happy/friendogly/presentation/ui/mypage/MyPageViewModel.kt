@@ -12,6 +12,7 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -44,7 +45,7 @@ class MyPageViewModel(
                         nickname = member.name,
                         email = member.email,
                         tag = member.tag,
-                        profilePath = member.imageUrl,
+                        imageUrl = member.imageUrl,
                     )
             }.onFailure {
                 // TODO 예외 처리
@@ -101,7 +102,13 @@ class MyPageViewModel(
     }
 
     override fun navigateToProfileEdit() {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit)
+        val state = uiState.value ?: return
+        val profile =
+            Profile(
+                name = state.nickname,
+                imageUrl = state.imageUrl,
+            )
+        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit(profile = profile))
     }
 
     fun navigateToSetting() {

@@ -17,6 +17,8 @@ import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
@@ -99,6 +101,10 @@ class MainActivity :
 
     override fun navigateToRegisterDog() {
         startActivity(RegisterDogActivity.getIntent(this))
+    }
+
+    override fun navigateToProfileSetting(profile: Profile?) {
+        startActivity(ProfileSettingActivity.getIntent(this, profile))
     }
 
     override fun navigateToPetDetail(

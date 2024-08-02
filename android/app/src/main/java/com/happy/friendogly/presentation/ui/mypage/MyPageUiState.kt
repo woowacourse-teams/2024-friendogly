@@ -14,7 +14,7 @@ data class MyPageUiState(
     val nickname: String = "",
     val email: String = "",
     val tag: String = "",
-    val profilePath: String? = null,
+    val imageUrl: String? = null,
     val pets: List<PetViewType> = emptyList(),
 )
 
