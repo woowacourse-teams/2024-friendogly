@@ -2,8 +2,12 @@ package com.happy.friendogly.presentation.ui.group.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
@@ -13,7 +17,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
+class GroupListViewModel(
+    private val getAddressUseCase: GetAddressUseCase,
+) : BaseViewModel(), GroupListActionHandler {
+    private val _uiState: MutableLiveData<GroupListUiState> =
+        MutableLiveData(GroupListUiState.Init)
+    val uiState: MutableLiveData<GroupListUiState> get() = _uiState
+
+    private val _myAddress: MutableLiveData<Address> =
+        MutableLiveData()
+    val myAddress: LiveData<Address> get() = _myAddress
+
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
         MutableLiveData(ParticipationFilter.POSSIBLE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
@@ -40,11 +54,11 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                                listOf(
-                                    GroupFilter.SizeFilter.SmallDog,
-                                    GroupFilter.GenderFilter.Female,
-                                    GroupFilter.GenderFilter.NeutralizingMale,
-                                ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
+                            ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -60,10 +74,10 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
                         GroupListUiModel(
                             groupId = 0L,
                             filters =
-                                listOf(
-                                    GroupFilter.SizeFilter.SmallDog,
-                                    GroupFilter.GenderFilter.Female,
-                                ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                            ),
                             groupPoster = "",
                             isParticipable = true,
                             title = "중형견 모임해요",
@@ -123,5 +137,17 @@ class GroupListViewModel : BaseViewModel(), GroupListActionHandler {
 
     override fun removeFilter(groupFilter: GroupFilter) {
         groupFilterSelector.removeGroupFilter(filter = groupFilter)
+    }
+
+    companion object {
+        fun factory(
+            getAddressUseCase: GetAddressUseCase
+        ): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                GroupListViewModel(
+                    getAddressUseCase = getAddressUseCase
+                )
+            }
+        }
     }
 }

@@ -143,6 +143,11 @@
     <string name="group_list_date_now">방금 전</string>
     <string name="group_counter_count">%d명</string>
     <string name="group_list_participation_filter">모집 조건 선택</string>
+    <string name="group_list_no_address_title">등록 된 주소가 없습니다</string>
+    <string name="group_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>
+    <string name="group_list_no_data_title">등록 된 모임이 없습니다.</string>
+    <string name="group_list_no_data_content">관련 모임을 등록해 보세요</string>
+    <string name="group_list_submit_text">등록하기</string>
 
     <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>

@@ -1,8 +1,11 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
+import com.happy.friendogly.domain.model.Address
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -36,4 +39,13 @@ fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
         }
 
     this.text = formattedString
+}
+
+@BindingAdapter("address")
+fun LinearLayout.bindMyLocation(address: Address?){
+    this.visibility = if (address==null){
+        View.INVISIBLE
+    }else{
+        View.VISIBLE
+    }
 }

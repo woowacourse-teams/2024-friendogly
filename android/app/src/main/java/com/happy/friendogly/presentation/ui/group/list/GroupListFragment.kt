@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.group.list
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentGroupListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
@@ -13,7 +14,11 @@ import com.happy.friendogly.presentation.ui.group.list.adapter.group.GroupListAd
 import com.happy.friendogly.presentation.ui.group.list.adapter.selectfilter.SelectFilterAdapter
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
-    private val viewModel: GroupListViewModel by viewModels()
+    private val viewModel: GroupListViewModel by viewModels<GroupListViewModel> {
+        GroupListViewModel.factory(
+            getAddressUseCase = AppModule.getInstance().getAddressUseCase,
+        )
+    }
 
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as GroupListActionHandler)
@@ -30,7 +35,8 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
 
     private fun initDataBinding() {
         binding.vm = viewModel
-        with(binding.includeGroupListFilter.swipeRefreshLayoutGroupList) {
+
+        with(binding.includeGroupList.swipeRefreshLayoutGroupList) {
             setOnRefreshListener {
                 viewModel.loadGroups()
                 isRefreshing = false
@@ -39,8 +45,8 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     }
 
     private fun initAdapter() {
-        binding.includeGroupListFilter.rcvGroupListFilter.adapter = filterAdapter
-        binding.includeGroupListFilter.rcvGroupListGroup.adapter = groupAdapter
+        binding.rcvGroupListFilter.adapter = filterAdapter
+        binding.includeGroupList.rcvGroupListGroup.adapter = groupAdapter
     }
 
     private fun initObserver() {
