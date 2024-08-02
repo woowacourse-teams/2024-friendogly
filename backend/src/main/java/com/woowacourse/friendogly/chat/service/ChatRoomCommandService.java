@@ -1,5 +1,8 @@
 package com.woowacourse.friendogly.chat.service;
 
+import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
+import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
@@ -12,15 +15,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ChatRoomCommandService {
 
+    private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
 
     public ChatRoomCommandService(
+            ChatRoomRepository chatRoomRepository,
             MemberRepository memberRepository,
             ClubRepository clubRepository
     ) {
+        this.chatRoomRepository = chatRoomRepository;
         this.memberRepository = memberRepository;
         this.clubRepository = clubRepository;
+    }
+
+    public SaveChatRoomResponse save(Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom());
+        chatRoom.addMember(member);
+        return new SaveChatRoomResponse(chatRoom.getId());
     }
 
     public void enter(Long memberId, Long chatRoomId) {

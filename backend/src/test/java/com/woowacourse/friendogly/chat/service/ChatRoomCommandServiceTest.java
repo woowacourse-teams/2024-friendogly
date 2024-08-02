@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
+import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -25,6 +27,9 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Autowired
     private ChatRoomCommandService chatRoomCommandService;
 
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
+
     private Member validMember;
     private Member invalidMember;
     private Pet pet;
@@ -40,6 +45,19 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         club = clubRepository.save(
                 Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, validMember, Set.of(MALE), Set.of(SMALL), "https://a.com", List.of(pet)));
         chatRoom = club.getChatRoom();
+    }
+
+    @DisplayName("새로운 채팅방을 개설할 수 있다.")
+    @Transactional
+    @Test
+    void save() {
+        // when
+        SaveChatRoomResponse response = chatRoomCommandService.save(validMember.getId());
+        Long chatRoomId = response.chatRoomId();
+
+        // then
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        assertThat(chatRoom.findMembers()).containsExactly(validMember);
     }
 
     @DisplayName("모임에 참여한 경우, 모임 채팅에 참여할 수 있다.")
