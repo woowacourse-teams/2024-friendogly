@@ -42,7 +42,11 @@ public class ClubCommandService {
     public SaveClubResponse save(Long memberId, MultipartFile image, SaveClubRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> participatingPets = mapToPets(request.participatingPetsId(), member);
-        String imageUrl = fileStorageManager.uploadFile(image);
+
+        String imageUrl = "";
+        if (image != null && !image.isEmpty()) {
+            imageUrl = fileStorageManager.uploadFile(image);
+        }
 
         Club newClub = Club.create(
                 request.title(),
@@ -63,10 +67,11 @@ public class ClubCommandService {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
 
-        List<Pet> pets = mapToPets(request.participatingPetsId(), member);
-        club.addMember(member, pets);
+        club.addClubMember(member);
+        club.addClubPet(mapToPets(request.participatingPetsId(), member));
 
-        return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());
+        //TODO : 채팅방 ID 넘기기
+        return new SaveClubMemberResponse(1L, club.getChatRoom().getId());
     }
 
     private List<Pet> mapToPets(List<Long> participatingPetsId, Member member) {
@@ -82,11 +87,11 @@ public class ClubCommandService {
         return participatingPets;
     }
 
-    public void leaveClub(Long clubId, Long memberId) {
+    public void deleteClubMember(Long clubId, Long memberId) {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
 
-        club.removeMember(member);
+        club.removeClubMember(member);
         if (club.isEmpty()) {
             clubRepository.delete(club);
         }

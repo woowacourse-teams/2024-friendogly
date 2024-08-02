@@ -132,16 +132,17 @@ public class Club {
                 .imageUrl(imageUrl)
                 .chatRoom(new ChatRoom())
                 .build();
-        club.addMember(owner, participatingPets);
+        club.addClubMember(owner);
+        club.addClubPet(participatingPets);
         return club;
     }
 
-    public void addMember(Member member, List<Pet> pets) {
+    public void addClubMember(Member member) {
         validateAlreadyExists(member);
         validateMemberCapacity();
 
-        clubMembers.add(ClubMember.create(this, member));
-        addClubPet(pets);
+        ClubMember clubMember = ClubMember.create(this, member);
+        clubMembers.add(clubMember);
     }
 
     private void validateAlreadyExists(Member member) {
@@ -161,7 +162,7 @@ public class Club {
         }
     }
 
-    private void addClubPet(List<Pet> pets) {
+    public void addClubPet(List<Pet> pets) {
         List<ClubPet> clubPets = pets.stream()
                 .peek(this::validateParticipatePet)
                 .map(pet -> new ClubPet(this, pet))
@@ -184,27 +185,33 @@ public class Club {
                 .anyMatch(this::canJoinWith);
         boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
-        return hasJoinablePet && isNotFull && !isAlreadyJoined(member) && isOpen();
+        return hasJoinablePet && isNotFull && isAlreadyJoined(member) && isOpen();
     }
 
-    public void removeMember(Member member) {
-        removeClubMember(member);
+    public void removeClubMember(Member member) {
+        ClubMember targetClubMember = findTargetClubMember(member);
+        clubMembers.remove(targetClubMember);
+        targetClubMember.updateClub(null);
         removeClubPets(member);
     }
 
-    private void removeClubMember(Member member) {
-        ClubMember clubMember = clubMembers.stream()
+    private ClubMember findTargetClubMember(Member member) {
+        return clubMembers.stream()
                 .filter(currentClubMember -> currentClubMember.isSameMember(member))
                 .findAny()
                 .orElseThrow(() -> new FriendoglyException("참여 중인 모임이 아닙니다."));
-        clubMembers.remove(clubMember);
     }
 
     private void removeClubPets(Member member) {
-        List<ClubPet> participatingMemberPets = clubPets.stream()
+        List<ClubPet> participatingMemberPets = findTargetClubPets(member);
+        clubPets.removeAll(participatingMemberPets);
+        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
+    }
+
+    private List<ClubPet> findTargetClubPets(Member member) {
+        return clubPets.stream()
                 .filter(clubPet -> clubPet.isSameMember(member))
                 .toList();
-        clubPets.removeAll(participatingMemberPets);
     }
 
     public int countClubMember() {
@@ -219,8 +226,8 @@ public class Club {
         return this.status == Status.OPEN;
     }
 
-    public boolean isOwner(Member member) {
-        return findOwner().isSameMember(member);
+    public boolean isOwner(Member targetMember) {
+        return findOwner().isSameMember(targetMember);
     }
 
     public Name findOwnerName() {

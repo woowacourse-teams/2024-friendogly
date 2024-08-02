@@ -45,21 +45,19 @@ VALUES (1, 6, '2023-08-01 12:00:00'),
        (2, 7, '2023-08-03 12:00:00');
 
 INSERT INTO club (title, content, member_capacity, address, image_url, created_at, status, chat_room_id)
-VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울 송파구 신천동', 'http://example.com/image.jpg', '2023-08-01 12:00:00', 'OPEN', 1),
-       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울 송파구 신천동', 'http://example.com/image.jpg', '2023-07-31 01:00:00', 'OPEN', 2);
+VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울 송파구 신천동', 'http://example.com/image.jpg',
+        '2023-08-01 12:00:00', 'OPEN', 1),
+       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울 송파구 신천동', 'http://example.com/image.jpg',
+        '2023-07-31 01:00:00', 'OPEN', 2);
 
 INSERT INTO club_gender (club_id, allowed_gender)
 VALUES (1, 'MALE'),
        (1, 'FEMALE'),
-       (1, 'MALE_NEUTERED'),
-       (1, 'FEMALE_NEUTERED'),
        (2, 'MALE_NEUTERED'),
        (2, 'FEMALE_NEUTERED');
 
 INSERT INTO club_size (club_id, allowed_size)
-VALUES (1, 'SMALL'),
-       (1, 'MEDIUM'),
-       (1, 'LARGE'),
+VALUES (1, 'LARGE'),
        (2, 'SMALL'),
        (2, 'MEDIUM');
 

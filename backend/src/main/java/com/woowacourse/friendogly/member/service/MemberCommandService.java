@@ -23,7 +23,10 @@ public class MemberCommandService {
     }
 
     public SaveMemberResponse saveMember(SaveMemberRequest request, MultipartFile image) {
-        String imageUrl = fileStorageManager.uploadFile(image);
+        String imageUrl = "";
+        if (image != null && !image.isEmpty()) {
+            imageUrl = fileStorageManager.uploadFile(image);
+        }
 
         Member member = Member.builder()
                 .name(request.name())

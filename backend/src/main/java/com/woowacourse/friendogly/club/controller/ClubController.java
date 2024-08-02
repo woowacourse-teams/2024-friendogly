@@ -1,11 +1,11 @@
 package com.woowacourse.friendogly.club.controller;
 
 import com.woowacourse.friendogly.auth.Auth;
-import com.woowacourse.friendogly.club.dto.request.FindClubByFiltersRequest;
+import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindClubByFiltersResponse;
+import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
@@ -44,9 +44,9 @@ public class ClubController {
     }
 
     @GetMapping("/searching")
-    public ApiResponse<List<FindClubByFiltersResponse>> findByFilter(
+    public ApiResponse<List<FindSearchingClubResponse>> findByFilter(
             @Auth Long memberId,
-            @Valid @ModelAttribute FindClubByFiltersRequest request
+            @Valid @ModelAttribute FindSearchingClubRequest request
     ) {
         return ApiResponse.ofSuccess(clubQueryService.findFindByFilter(memberId, request));
     }
@@ -73,11 +73,12 @@ public class ClubController {
     }
 
     @DeleteMapping("/{clubId}/members")
-    public ResponseEntity<Void> leaveClub(
+    public ResponseEntity<Void> deleteClubMember(
             @Auth Long memberId,
             @PathVariable Long clubId
     ) {
-        clubCommandService.leaveClub(clubId, memberId);
+        clubCommandService.deleteClubMember(clubId, memberId);
         return ResponseEntity.noContent().build();
     }
+
 }
