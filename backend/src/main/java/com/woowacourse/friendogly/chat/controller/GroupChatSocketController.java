@@ -40,7 +40,6 @@ public class GroupChatSocketController {
         LocalDateTime createdAt = LocalDateTime.now();
         chatRoomCommandService.enter(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
-        template.convertAndSend("/topic/invite/" + memberId, chatRoomId);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
