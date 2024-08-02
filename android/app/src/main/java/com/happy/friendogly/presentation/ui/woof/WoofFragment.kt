@@ -76,6 +76,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         initViewPager()
         clickMarkBtn()
         clickLocationBtn()
+        clickMyMFootprint()
         mapView.getMapAsync(this)
     }
 
@@ -285,6 +286,23 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         binding.btnWoofLocation.setOnClickListener {
             if (locationPermission.hasPermissions()) {
                 viewModel.changeLocationTrackingMode()
+            } else {
+                locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+            }
+        }
+    }
+
+    private fun clickMyMFootprint() {
+        binding.btnWoofMyFootprint.setOnClickListener {
+            if (locationPermission.hasPermissions()) {
+                val nearFootprints = viewModel.nearFootprints.value ?: return@setOnClickListener
+                val myMarker = nearFootprints.firstOrNull { footprint -> footprint.isMine }
+                if (myMarker == null) {
+                    showSnackbar(resources.getString(R.string.woof_not_exist_my_footprint))
+                    return@setOnClickListener
+                }
+                val position = LatLng(myMarker.latitude, myMarker.longitude)
+                moveCameraCenterPosition(position)
             } else {
                 locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
             }

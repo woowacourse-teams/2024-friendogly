@@ -23,11 +23,25 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_woof_my_footprint"
+            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rect_coral400_fill_12"
+            android:gravity="center"
+            android:text="MY"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@id/btn_woof_mark"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
@@ -83,14 +97,13 @@
             android:layout_height="match_parent"
             android:background="@color/lottie_layout"
             android:clickable="true"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible">
+            app:layout_constraintVertical_bias="0.0">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_woof_loading"

@@ -228,12 +228,14 @@
     <string name="woof_walk_after">%d시 %d분 왔다 감</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
+    <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
     <string name="male">남</string>
     <string name="female">여</string>
     <string name="male_enutered">남(중성화했어요)</string>
     <string name="female_enutered">여(중성화했어요)</string>
     <string name="see_you_later_message">다음에 또 만나요</string>
     <string name="withdrawn_message">회원이 탈퇴 되었어요</string>
+
 
     <!--권한-->
     <string name="alarm_dialog_title">알람 허용 사용 설정</string>
