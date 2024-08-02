@@ -12,6 +12,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
@@ -73,7 +74,12 @@ class SettingMyLocationActivity :
     }
 
     private fun initObserver() {
-
+        viewModel.event.observeEvent(this){ event ->
+            when(event){
+                SettingMyLocationEvent.InvalidLocation -> showSnackbar(getString(R.string.my_location_submit_fail))
+                SettingMyLocationEvent.Navigation.NavigateToPrev -> finish()
+            }
+        }
     }
 
     private fun initLocationPermission() =

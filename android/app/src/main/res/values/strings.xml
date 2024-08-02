@@ -245,4 +245,5 @@
     <string name="my_location_title">내 동네 설정하기</string>
     <string name="my_location_content">현재 위치</string>
     <string name="my_location_submit">설정 완료</string>
+    <string name="my_location_submit_fail">올바른 위치가 아닙니다!</string>
 </resources>
