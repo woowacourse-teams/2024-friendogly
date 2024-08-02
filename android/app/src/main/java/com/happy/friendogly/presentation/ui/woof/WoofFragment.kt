@@ -64,6 +64,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
     }
     private var isMarkerHideAnimationEnd: Boolean = false
     private var recentlyClickedMarker: Marker? = null
+    private var myMarker: Marker? = null
+    private val nearMarkers: MutableList<Marker> = mutableListOf()
 
     override fun onMapReady(naverMap: NaverMap) {
         initMap(naverMap)
@@ -76,7 +78,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         initViewPager()
         clickMarkBtn()
         clickLocationBtn()
-        clickMyMFootprint()
+        clickMyFootprint()
         mapView.getMapAsync(this)
     }
 
@@ -170,10 +172,11 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         }
 
         viewModel.footprintSave.observe(viewLifecycleOwner) { footprintSave ->
+            myMarker?.map = null
             createMarker(
                 footprintId = footprintSave.footprintId,
                 latLng = LatLng(footprintSave.latitude, footprintSave.longitude),
-                // 수정해야함.
+                // API 생기면 수정해야함.
                 walkStatus = WalkStatus.BEFORE,
                 createdAt = footprintSave.createdAt,
                 isMine = true,
@@ -199,6 +202,10 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 is WoofMapActions.ChangeMapToFaceTrackingMode ->
                     map.locationTrackingMode =
                         LocationTrackingMode.Face
+
+                is WoofMapActions.RemoveNearFootprints -> {
+                    clearNearMarkers()
+                }
             }
         }
 
@@ -292,16 +299,14 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         }
     }
 
-    private fun clickMyMFootprint() {
+    private fun clickMyFootprint() {
         binding.btnWoofMyFootprint.setOnClickListener {
             if (locationPermission.hasPermissions()) {
-                val nearFootprints = viewModel.nearFootprints.value ?: return@setOnClickListener
-                val myMarker = nearFootprints.firstOrNull { footprint -> footprint.isMine }
                 if (myMarker == null) {
                     showSnackbar(resources.getString(R.string.woof_not_exist_my_footprint))
                     return@setOnClickListener
                 }
-                val position = LatLng(myMarker.latitude, myMarker.longitude)
+                val position = myMarker?.position ?: return@setOnClickListener
                 moveCameraCenterPosition(position)
             } else {
                 locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
@@ -340,22 +345,24 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         createdAt: LocalDateTime,
         isMine: Boolean,
     ) {
-        val iconImage =
-            decideMarkerIcon(isMine, walkStatus)
-
         val marker = Marker()
         marker.position = latLng
-        marker.icon = OverlayImage.fromResource(iconImage)
+        marker.icon = OverlayImage.fromResource(markerIcon(isMine, walkStatus))
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
         marker.zIndex = createdAt.toZIndex()
         marker.map = map
-
         setUpMarkerAction(footprintId, marker)
-        if (isMine) setUpCircleOverlay(latLng)
+
+        if (isMine) {
+            myMarker = marker
+            setUpCircleOverlay(latLng)
+        } else {
+            nearMarkers.add(marker)
+        }
     }
 
-    private fun decideMarkerIcon(
+    private fun markerIcon(
         isMine: Boolean,
         walkStatus: WalkStatus,
     ): Int {
@@ -457,8 +464,15 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         }
     }
 
+    private fun clearNearMarkers() {
+        nearMarkers.forEach { marker ->
+            marker.map = null
+        }
+        nearMarkers.clear()
+    }
+
     companion object {
-        private const val MARKER_CIRCLE_RADIUS = 500
+        private const val MARKER_CIRCLE_RADIUS = 1000
         private const val MIN_ZOOM = 10.0
         private const val MAX_ZOOM = 20.0
         private const val MARKER_WIDTH = 72
