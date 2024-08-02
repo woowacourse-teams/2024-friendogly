@@ -13,7 +13,6 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.MainActivity
-import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -49,9 +48,10 @@ class SettingMyLocationActivity :
 
     override fun initCreateView() {
         requestUserPermission()
-        startAnimation()
         initDataBinding()
         initObserver()
+        startAnimation()
+        mapView.getMapAsync(this)
     }
 
     private fun requestUserPermission() {
@@ -80,6 +80,7 @@ class SettingMyLocationActivity :
     private fun initLocationPermission() =
         LocationPermission.from(this) { isPermitted ->
             if (isPermitted) {
+                mapView.getMapAsync(this)
                 activateMap()
             } else {
                 showSnackbar(getString(R.string.permission_denied_message))
@@ -96,10 +97,10 @@ class SettingMyLocationActivity :
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     cancelAnimation()
+                    initMarker()
                 },
-                1000,
+                1000
             )
-            initMarker()
         }
     }
 
@@ -171,8 +172,8 @@ class SettingMyLocationActivity :
 
     companion object {
         private const val DEFAULT_ZOOM = 13.5
-        private const val MARKER_WIDTH = 140
-        private const val MARKER_HEIGHT = 180
+        private const val MARKER_WIDTH = 24 * 5
+        private const val MARKER_HEIGHT = 37 * 5
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingMyLocationActivity::class.java)
