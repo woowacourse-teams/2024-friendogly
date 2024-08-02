@@ -73,6 +73,7 @@ class WoofViewModel(
                     )
                 } else {
                     markFootprint(latLng)
+                    _mapActions.emit(WoofMapActions.RemoveNearFootprints)
                     loadNearFootprints(latLng)
                 }
             }.onFailure {

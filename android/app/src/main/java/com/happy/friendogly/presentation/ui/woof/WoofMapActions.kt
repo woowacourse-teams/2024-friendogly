@@ -6,4 +6,6 @@ sealed interface WoofMapActions {
     data object ChangeMapToFollowTrackingMode : WoofMapActions
 
     data object ChangeMapToFaceTrackingMode : WoofMapActions
+
+    data object RemoveNearFootprints : WoofMapActions
 }
