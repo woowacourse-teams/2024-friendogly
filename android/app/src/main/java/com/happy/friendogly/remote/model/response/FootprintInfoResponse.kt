@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FootprintInfoResponse(
+    val memberId: Long,
     val memberName: String,
     val walkStatus: WalkStatusResponse,
     @Serializable(with = LocalDateTimeSerializer::class)

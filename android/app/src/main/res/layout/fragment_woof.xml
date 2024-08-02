@@ -23,24 +23,23 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="12dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/btn_woof_my_footprint"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="12dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/rect_coral400_fill_12"
             android:gravity="center"
             android:text="MY"
-            android:clickable="true"
             app:layout_constraintBottom_toTopOf="@id/btn_woof_mark"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -77,6 +76,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="30분째 산책중"
             tools:visibility="invisible" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></FrameLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_woof_pet_detail"

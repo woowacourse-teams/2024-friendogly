@@ -5,6 +5,7 @@ import com.happy.friendogly.remote.model.response.FootprintInfoResponse
 
 fun FootprintInfoResponse.toData(): FootprintInfoDto {
     return FootprintInfoDto(
+        memberId = memberId,
         memberName = memberName,
         walkStatus = walkStatus.toData(),
         changedWalkStatusTime = changedWalkStatusTime,

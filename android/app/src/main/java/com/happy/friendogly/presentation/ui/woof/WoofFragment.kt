@@ -166,7 +166,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
 
     private fun initObserve() {
         viewModel.nearFootprints.observe(viewLifecycleOwner) { nearFootprints ->
-            markNearFootPrints(nearFootprints)
+            markNearFootprints(nearFootprints)
         }
 
         viewModel.footprintSave.observe(viewLifecycleOwner) { footprintSave ->
@@ -174,7 +174,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 footprintId = footprintSave.footprintId,
                 latLng = LatLng(footprintSave.latitude, footprintSave.longitude),
                 // 수정해야함.
-                walkStatus = WalkStatus.ONGOING,
+                walkStatus = WalkStatus.BEFORE,
                 createdAt = footprintSave.createdAt,
                 isMine = true,
             )
@@ -267,7 +267,7 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
                 {
                     hideLoadingAnimation()
                 },
-                2000,
+                LOADING_DELAY_MILLIS,
             )
         }
     }
@@ -346,8 +346,8 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(iconImage)
-        marker.width = 72
-        marker.height = 111
+        marker.width = MARKER_WIDTH
+        marker.height = MARKER_HEIGHT
         marker.zIndex = createdAt.toZIndex()
         marker.map = map
 
@@ -391,11 +391,11 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
             val position = LatLng(marker.position.latitude - 0.0025, marker.position.longitude)
             moveCameraCenterPosition(position)
             if (recentlyClickedMarker != null) {
-                recentlyClickedMarker?.width = 72
-                recentlyClickedMarker?.height = 111
+                recentlyClickedMarker?.width = MARKER_WIDTH
+                recentlyClickedMarker?.height = MARKER_HEIGHT
             }
-            marker.width = 96
-            marker.height = 148
+            marker.width = MARKER_CLICKED_WIDTH
+            marker.height = MARKER_CLICKED_HEIGHT
             recentlyClickedMarker = marker
             true
         }
@@ -445,14 +445,14 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         isMarkerHideAnimationEnd = true
     }
 
-    private fun markNearFootPrints(footPrints: List<Footprint>) {
-        footPrints.forEach { footPrint ->
+    private fun markNearFootprints(footprints: List<Footprint>) {
+        footprints.forEach { footprint ->
             createMarker(
-                footprintId = footPrint.footprintId,
-                latLng = LatLng(footPrint.latitude, footPrint.longitude),
-                walkStatus = footPrint.walkStatus,
-                createdAt = footPrint.createdAt,
-                isMine = footPrint.isMine,
+                footprintId = footprint.footprintId,
+                latLng = LatLng(footprint.latitude, footprint.longitude),
+                walkStatus = footprint.walkStatus,
+                createdAt = footprint.createdAt,
+                isMine = footprint.isMine,
             )
         }
     }
@@ -461,5 +461,10 @@ class WoofFragment : BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof), 
         private const val MARKER_CIRCLE_RADIUS = 500
         private const val MIN_ZOOM = 10.0
         private const val MAX_ZOOM = 20.0
+        private const val MARKER_WIDTH = 72
+        private const val MARKER_HEIGHT = 111
+        private const val MARKER_CLICKED_WIDTH = 96
+        private const val MARKER_CLICKED_HEIGHT = 148
+        private const val LOADING_DELAY_MILLIS = 2000L
     }
 }

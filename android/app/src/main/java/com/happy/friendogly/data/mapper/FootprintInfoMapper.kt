@@ -5,6 +5,7 @@ import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 
 fun FootprintInfoDto.toDomain(): FootprintInfo {
     return FootprintInfo(
+        memberId = memberId,
         memberName = memberName,
         walkStatus = walkStatus.toDomain(),
         changedWalkStatusTime = changedWalkStatusTime,
