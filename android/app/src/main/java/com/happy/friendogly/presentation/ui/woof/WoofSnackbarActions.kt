@@ -6,4 +6,6 @@ sealed interface WoofSnackbarActions {
     data class ShowCantClickMarkBtnSnackbar(
         val remainingTime: Int,
     ) : WoofSnackbarActions
+
+    data object ShowMarkerRegistered : WoofSnackbarActions
 }

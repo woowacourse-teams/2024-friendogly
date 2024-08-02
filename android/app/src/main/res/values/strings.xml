@@ -218,14 +218,15 @@
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
     <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
+    <string name="woof_marker_registered">발자국이 등록됐어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
     <string name="woof_days_ago">%d일 전</string>
     <string name="woof_hours_ago">%d시간 전</string>
     <string name="woof_minutes_ago">%d분 전</string>
     <string name="woof_just_now">방금 전</string>
-    <string name="woof_walk_before">%d분 째 가는 중</string>
+    <string name="woof_walk_before">%d분 째 산책 준비</string>
     <string name="woof_walk_ongoing">%d분 째 산책 중</string>
-    <string name="woof_walk_after">%d시 %d분 왔다 감</string>
+    <string name="woof_walk_after">%d시 %d분 산책 완료</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
