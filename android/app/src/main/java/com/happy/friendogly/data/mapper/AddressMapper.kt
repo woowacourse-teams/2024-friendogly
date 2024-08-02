@@ -5,7 +5,7 @@ import com.happy.friendogly.domain.model.Address
 
 fun AddressDto.toDomain(): Address {
     return Address(
-        address = address,
+        thoroughfare = thoroughfare,
         subLocality = subLocality,
         adminArea = adminArea,
     )
@@ -13,7 +13,7 @@ fun AddressDto.toDomain(): Address {
 
 fun Address.toData(): AddressDto {
     return AddressDto(
-        address = address,
+        thoroughfare = thoroughfare,
         subLocality = subLocality,
         adminArea = adminArea,
     )

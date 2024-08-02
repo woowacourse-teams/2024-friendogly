@@ -28,14 +28,13 @@ class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
     OnMapReadyCallback {
     private lateinit var map: NaverMap
-    private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapViewMyLocation }
     private val loadingView: LottieAnimationView by lazy { binding.lottieMyLocationLoading }
     private val locationPermission: LocationPermission = initLocationPermission()
 
     private val viewModel: SettingMyLocationViewModel by viewModels<SettingMyLocationViewModel> {
         SettingMyLocationViewModel.factory(
-            getAddressUseCase = AppModule.getInstance().getAddressUseCase
+            saveAddressUseCase = AppModule.getInstance().saveAddressUseCase
         )
     }
 
@@ -92,12 +91,12 @@ class SettingMyLocationActivity :
     private fun activateMap() {
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
-            latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            moveCameraCenterPosition()
+            val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+            moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     cancelAnimation()
-                    initMarker()
+                    initMarker(latLng)
                 },
                 1000
             )
@@ -109,13 +108,13 @@ class SettingMyLocationActivity :
         activateMap()
     }
 
-    private fun moveCameraCenterPosition() {
+    private fun moveCameraCenterPosition(latLng: LatLng) {
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
     }
 
-    private fun initMarker() {
+    private fun initMarker(latLng: LatLng) {
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)

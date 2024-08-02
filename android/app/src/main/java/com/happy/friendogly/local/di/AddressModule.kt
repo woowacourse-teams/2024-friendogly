@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.map
 class AddressModule(val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
-    private val keyAddress = stringPreferencesKey(KEY_ADDRESS)
-    private val keyLocality = stringPreferencesKey(KEY_SUB_LOCALITY)
     private val keyAdmin = stringPreferencesKey(KEY_ADMIN)
+    private val keyLocality = stringPreferencesKey(KEY_SUB_LOCALITY)
+    private val keyThoroughfare = stringPreferencesKey(KEY_THOROUGHFARE)
 
-    var address: Flow<String> =
+    var adminArea: Flow<String> =
         context.dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -28,7 +28,7 @@ class AddressModule(val context: Context) {
                 throw exception
             }
         }.map { preferences ->
-            preferences[keyAddress] ?: ""
+            preferences[keyAdmin] ?: ""
         }
 
     var subLocality: Flow<String> =
@@ -42,7 +42,8 @@ class AddressModule(val context: Context) {
             preferences[keyLocality] ?: ""
         }
 
-    var adminArea: Flow<String> =
+
+    var thoroughfare: Flow<String> =
         context.dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -50,13 +51,13 @@ class AddressModule(val context: Context) {
                 throw exception
             }
         }.map { preferences ->
-            preferences[keyAdmin] ?: ""
+            preferences[keyThoroughfare] ?: ""
         }
 
 
     suspend fun saveAddress(addressDto: AddressDto) {
         context.dataStore.edit { preferences ->
-            preferences[keyAddress] = addressDto.address
+            preferences[keyThoroughfare] = addressDto.thoroughfare
             preferences[keyLocality] = addressDto.subLocality
             preferences[keyAdmin] = addressDto.adminArea
         }
@@ -66,12 +67,12 @@ class AddressModule(val context: Context) {
         context.dataStore.edit { prefs ->
             prefs.remove(keyAdmin)
             prefs.remove(keyLocality)
-            prefs.remove(keyAddress)
+            prefs.remove(keyThoroughfare)
         }
     }
 
     companion object {
-        private const val KEY_ADDRESS = "myAddress"
+        private const val KEY_THOROUGHFARE = "thoroughfare"
         private const val KEY_SUB_LOCALITY = "subLocality"
         private const val KEY_ADMIN = "adminArea"
         private const val DATA_STORE_NAME = "addressDataStore"

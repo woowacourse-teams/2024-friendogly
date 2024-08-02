@@ -10,7 +10,7 @@ class AddressDataSourceImpl(
 ) : AddressDataSource {
     override suspend fun getAddress(): Result<AddressDto> = runCatching {
         AddressDto(
-            address = addressModule.address.first(),
+            thoroughfare = addressModule.thoroughfare.first(),
             subLocality = addressModule.subLocality.first(),
             adminArea = addressModule.adminArea.first()
         )
