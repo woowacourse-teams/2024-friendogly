@@ -26,14 +26,14 @@ public class ChatRoomCommandService {
     public void enter(Long memberId, Long chatRoomId) {
         Club club = clubRepository.getByChatRoomId(chatRoomId);
         Member member = memberRepository.getById(memberId);
-//        validateParticipation(club, member);
+        validateParticipation(club, member);
         club.addMemberToChat(member);
     }
 
     public void leave(Long memberId, Long chatRoomId) {
         Club club = clubRepository.getByChatRoomId(chatRoomId);
         Member member = memberRepository.getById(memberId);
-//        validateParticipation(club, member);
+        validateParticipation(club, member);
         club.removeMemberFromChat(member);
     }
 
