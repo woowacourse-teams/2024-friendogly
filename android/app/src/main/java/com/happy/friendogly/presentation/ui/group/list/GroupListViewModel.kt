@@ -113,6 +113,12 @@ class GroupListViewModel(
         groupFilterSelector.removeGroupFilter(filter = groupFilter)
     }
 
+    override fun addMyLocation() {
+        _groupListEvent.emit(
+            GroupListEvent.Navigation.NavigateToAddress
+        )
+    }
+
     companion object {
         fun factory(
             getAddressUseCase: GetAddressUseCase

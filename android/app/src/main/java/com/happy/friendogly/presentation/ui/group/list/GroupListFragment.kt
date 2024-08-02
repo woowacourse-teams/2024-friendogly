@@ -97,6 +97,9 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                         R.style.RoundCornerBottomSheetDialogTheme,
                     )
                 }
+
+                GroupListEvent.Navigation.NavigateToAddress ->
+                    (activity as MainActivityActionHandler).navigateToSettingLocation()
             }
         }
     }

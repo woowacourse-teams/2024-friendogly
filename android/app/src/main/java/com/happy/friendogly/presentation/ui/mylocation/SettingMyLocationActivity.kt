@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.mylocation
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +13,7 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.MainActivity
+import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -51,9 +54,9 @@ class SettingMyLocationActivity :
         initObserver()
     }
 
-    private fun requestUserPermission(){
-        if (!locationPermission.hasPermissions()){
-            locationPermission.createAlarmDialog().show(supportFragmentManager,"TAG")
+    private fun requestUserPermission() {
+        if (!locationPermission.hasPermissions()) {
+            locationPermission.createAlarmDialog().show(supportFragmentManager, "TAG")
         }
     }
 
@@ -111,7 +114,7 @@ class SettingMyLocationActivity :
         map.locationTrackingMode = LocationTrackingMode.Follow
     }
 
-    private fun initMarker(){
+    private fun initMarker() {
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
@@ -170,5 +173,9 @@ class SettingMyLocationActivity :
         private const val DEFAULT_ZOOM = 13.5
         private const val MARKER_WIDTH = 140
         private const val MARKER_HEIGHT = 180
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, SettingMyLocationActivity::class.java)
+        }
     }
 }
