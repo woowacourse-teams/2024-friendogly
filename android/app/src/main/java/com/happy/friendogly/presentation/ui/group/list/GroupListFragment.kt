@@ -30,7 +30,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
 
     override fun onResume() {
         super.onResume()
-        viewModel.reloadGroupsWithAddress()
+        viewModel.loadGroupsWithAddress()
     }
 
     override fun initViewCreated() {

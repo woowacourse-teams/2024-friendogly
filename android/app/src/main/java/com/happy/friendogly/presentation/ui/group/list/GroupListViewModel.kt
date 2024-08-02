@@ -40,12 +40,7 @@ class GroupListViewModel(
     private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
-    init {
-        loadAddress()
-        loadGroups()
-    }
-
-    fun reloadGroupsWithAddress(){
+    fun loadGroupsWithAddress(){
         if (myAddress.value == null){
             loadAddress()
             loadGroups()
