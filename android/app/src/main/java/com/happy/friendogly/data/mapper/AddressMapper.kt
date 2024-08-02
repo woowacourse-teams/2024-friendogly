@@ -1,18 +1,18 @@
 package com.happy.friendogly.data.mapper
 
-import com.happy.friendogly.data.model.AddressDto
-import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.data.model.UserAddressDto
+import com.happy.friendogly.domain.model.UserAddress
 
-fun AddressDto.toDomain(): Address {
-    return Address(
+fun UserAddressDto.toDomain(): UserAddress {
+    return UserAddress(
         thoroughfare = thoroughfare,
         subLocality = subLocality,
         adminArea = adminArea,
     )
 }
 
-fun Address.toData(): AddressDto {
-    return AddressDto(
+fun UserAddress.toData(): UserAddressDto {
+    return UserAddressDto(
         thoroughfare = thoroughfare,
         subLocality = subLocality,
         adminArea = adminArea,

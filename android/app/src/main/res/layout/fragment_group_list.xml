@@ -30,7 +30,7 @@
             android:layout_marginStart="16dp"
             android:gravity="center"
             android:orientation="horizontal"
-            app:address="@{vm.myAddress}"
+            app:address="@{vm.myUserAddress}"
             app:layout_constraintBottom_toBottomOf="@id/view_group_list_top_bar"
             app:layout_constraintStart_toStartOf="@id/view_group_list_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">

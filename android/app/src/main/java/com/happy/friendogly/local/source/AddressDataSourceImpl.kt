@@ -1,6 +1,6 @@
 package com.happy.friendogly.local.source
 
-import com.happy.friendogly.data.model.AddressDto
+import com.happy.friendogly.data.model.UserAddressDto
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.local.di.AddressModule
 import kotlinx.coroutines.flow.first
@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.first
 class AddressDataSourceImpl(
     private val addressModule: AddressModule,
 ) : AddressDataSource {
-    override suspend fun getAddress(): Result<AddressDto> = runCatching {
-        AddressDto(
+    override suspend fun getAddress(): Result<UserAddressDto> = runCatching {
+        UserAddressDto(
             thoroughfare = addressModule.thoroughfare.first(),
             subLocality = addressModule.subLocality.first(),
             adminArea = addressModule.adminArea.first()
         )
     }
 
-    override suspend fun saveAddress(addressDto: AddressDto): Result<Unit> =
+    override suspend fun saveAddress(userAddressDto: UserAddressDto): Result<Unit> =
         runCatching {
-            addressModule.saveAddress(addressDto)
+            addressModule.saveAddress(userAddressDto)
         }
 
     override suspend fun deleteAddress(): Result<Unit>  = runCatching {

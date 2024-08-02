@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -18,15 +18,15 @@ class SettingMyLocationViewModel(
     private val _event: MutableLiveData<Event<SettingMyLocationEvent>> = MutableLiveData()
     val event: LiveData<Event<SettingMyLocationEvent>> get() = _event
 
-    private val _address: MutableLiveData<Address> = MutableLiveData()
-    val address: LiveData<Address> get() = _address
+    private val _User_address: MutableLiveData<UserAddress> = MutableLiveData()
+    val userAddress: LiveData<UserAddress> get() = _User_address
 
     fun updateAddress(
         adminArea: String,
         subLocality: String,
         thoroughfare: String,
     ) {
-        _address.value = Address(
+        _User_address.value = UserAddress(
             adminArea = adminArea,
             subLocality = subLocality,
             thoroughfare = thoroughfare,
@@ -50,12 +50,12 @@ class SettingMyLocationViewModel(
     }
 
     override fun submitSelect() {
-        val address = address.value ?: return submitInValidLocation()
+        val address = userAddress.value ?: return submitInValidLocation()
         saveLocation(address)
     }
 
-    private fun saveLocation(address: Address) = viewModelScope.launch {
-        saveAddressUseCase.invoke(address = address)
+    private fun saveLocation(userAddress: UserAddress) = viewModelScope.launch {
+        saveAddressUseCase.invoke(userAddress = userAddress)
             .onSuccess {
                 _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrev)
             }

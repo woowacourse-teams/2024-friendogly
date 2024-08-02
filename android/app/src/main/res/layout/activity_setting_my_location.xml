@@ -74,7 +74,7 @@
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{vm.address.thoroughfare}"
+                android:text="@{vm.userAddress.thoroughfare}"
                 tools:text="대한민국 제주특별자치도 제주시 이도1동 1250-15" />
 
             <Space

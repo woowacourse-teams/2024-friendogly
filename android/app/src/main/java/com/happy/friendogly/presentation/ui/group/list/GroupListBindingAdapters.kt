@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
-import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.domain.model.UserAddress
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -42,8 +42,8 @@ fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
 }
 
 @BindingAdapter("address")
-fun LinearLayout.bindMyLocation(address: Address?){
-    this.visibility = if (address==null){
+fun LinearLayout.bindMyLocation(userAddress: UserAddress?){
+    this.visibility = if (userAddress==null){
         View.GONE
     }else{
         View.VISIBLE

@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.happy.friendogly.data.model.AddressDto
+import com.happy.friendogly.data.model.UserAddressDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -55,11 +55,11 @@ class AddressModule(val context: Context) {
         }
 
 
-    suspend fun saveAddress(addressDto: AddressDto) {
+    suspend fun saveAddress(userAddressDto: UserAddressDto) {
         context.dataStore.edit { preferences ->
-            preferences[keyThoroughfare] = addressDto.thoroughfare
-            preferences[keyLocality] = addressDto.subLocality
-            preferences[keyAdmin] = addressDto.adminArea
+            preferences[keyThoroughfare] = userAddressDto.thoroughfare
+            preferences[keyLocality] = userAddressDto.subLocality
+            preferences[keyAdmin] = userAddressDto.adminArea
         }
     }
 

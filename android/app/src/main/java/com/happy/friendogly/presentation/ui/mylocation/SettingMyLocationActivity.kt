@@ -2,12 +2,17 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.content.Context
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.gms.location.LocationServices
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
@@ -24,6 +29,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import java.util.Locale
 
 class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
@@ -103,6 +109,7 @@ class SettingMyLocationActivity :
                 {
                     cancelAnimation()
                     initMarker(latLng)
+                    loadAddress(latLng)
                 },
                 1000
             )
@@ -137,6 +144,29 @@ class SettingMyLocationActivity :
             isZoomGesturesEnabled = false
             isTiltGesturesEnabled = false
             isRotateGesturesEnabled = false
+        }
+    }
+
+    private fun loadAddress(latLng: LatLng){
+        val geocoder = Geocoder(this, Locale.KOREA)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) { addressList->
+                saveAddress(addressList[0])
+            }
+        } else {
+            val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                ?: return showSnackbar(getString(R.string.my_location_load_fail))
+            saveAddress(addressList[0])
+        }
+    }
+
+    private fun saveAddress(address: Address){
+        with(address) {
+            viewModel.updateAddress(
+                adminArea = adminArea,
+                subLocality = subLocality,
+                thoroughfare = thoroughfare,
+            )
         }
     }
 

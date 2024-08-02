@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -24,9 +24,9 @@ class GroupListViewModel(
         MutableLiveData(GroupListUiState.Init)
     val uiState: MutableLiveData<GroupListUiState> get() = _uiState
 
-    private val _myAddress: MutableLiveData<Address> =
+    private val _myUserAddress: MutableLiveData<UserAddress> =
         MutableLiveData()
-    val myAddress: LiveData<Address> get() = _myAddress
+    val myUserAddress: LiveData<UserAddress> get() = _myUserAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
         MutableLiveData(ParticipationFilter.POSSIBLE)
@@ -46,7 +46,7 @@ class GroupListViewModel(
     }
 
     fun loadGroups() = viewModelScope.launch {
-        myAddress.value ?: return@launch
+        myUserAddress.value ?: return@launch
 
         delay(1000)
         _groups.value = dummy()
@@ -60,7 +60,7 @@ class GroupListViewModel(
     fun loadAddress() = viewModelScope.launch {
         getAddressUseCase()
             .onSuccess {
-                _myAddress.value = it
+                _myUserAddress.value = it
             }
             .onFailure {
                 _uiState.value = GroupListUiState.NotAddress

@@ -1,12 +1,11 @@
 package com.happy.friendogly.data.source
 
-import com.happy.friendogly.data.model.AddressDto
-import com.happy.friendogly.domain.model.Address
+import com.happy.friendogly.data.model.UserAddressDto
 
 interface AddressDataSource {
-    suspend fun getAddress(): Result<AddressDto>
+    suspend fun getAddress(): Result<UserAddressDto>
 
-    suspend fun saveAddress(addressDto: AddressDto): Result<Unit>
+    suspend fun saveAddress(userAddressDto: UserAddressDto): Result<Unit>
 
     suspend fun deleteAddress() : Result<Unit>
 }
