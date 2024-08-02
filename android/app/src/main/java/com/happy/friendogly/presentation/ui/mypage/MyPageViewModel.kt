@@ -44,6 +44,7 @@ class MyPageViewModel(
                         nickname = member.name,
                         email = member.email,
                         tag = member.tag,
+                        profilePath = member.imageUrl,
                     )
             }.onFailure {
                 // TODO 예외 처리

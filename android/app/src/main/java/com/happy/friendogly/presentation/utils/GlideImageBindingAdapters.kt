@@ -42,7 +42,7 @@ fun ImageView.bindProfile1000(bitmap: Bitmap?) {
 
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(profilePath: String?) {
-    if (profilePath == null) {
+    if (profilePath.isNullOrBlank()) {
         this.setImageResource(R.drawable.img_profile_normal)
         return
     }
