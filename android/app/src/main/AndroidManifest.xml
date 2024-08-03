@@ -74,9 +74,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Friendogly.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
