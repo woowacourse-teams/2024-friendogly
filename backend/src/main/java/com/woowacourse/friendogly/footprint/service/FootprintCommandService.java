@@ -81,6 +81,17 @@ public class FootprintCommandService {
     }
 
     public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
-        return null;
+        Footprint footprint = footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
+                .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
+        if (footprint.isDeleted()) {
+            throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
+        }
+        if (footprint.isBeforeWalk() && footprint.isNear(new Location(request.latitude(), request.longitude()))) {
+            footprint.startWalk();
+        }
+        if (footprint.isOngoingWalk() && !footprint.isNear(new Location(request.latitude(), request.longitude()))) {
+            footprint.endWalk();
+        }
+        return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
 }

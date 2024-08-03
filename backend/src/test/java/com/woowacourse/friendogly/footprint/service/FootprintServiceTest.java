@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.footprint.service;
 
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
@@ -56,7 +57,17 @@ public abstract class FootprintServiceTest extends ServiceTest {
     //FIXTURE
 
     protected Footprint FOOTPRINT() {
-        return new Footprint(member, new Location(30, 30));
+        return new Footprint(member, new Location(0, 0));
+    }
+
+    protected Footprint FOOTPRINT_DELETED() {
+        return new Footprint(member,
+                new Location(0, 0),
+                BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                true);
     }
 
     protected Footprint FOOTPRINT(LocalDateTime createdAt) {
@@ -66,10 +77,21 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
         );
     }
-
+    protected Footprint FOOTPRINT_STATUS_BEFORE(Location location){
+        return new Footprint(
+                member,
+                location,
+                BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                false
+        );
+    }
     protected Footprint FOOTPRINT_STATUS_BEFORE(LocalDateTime createdAt) {
         return new Footprint(
                 member,
@@ -77,18 +99,20 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
         );
     }
 
-    protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
+    protected Footprint FOOTPRINT_STATUS_ONGOING(Location location){
         return new Footprint(
                 member,
-                new Location(0, 0),
-                AFTER,
+                location,
+                ONGOING,
                 null,
                 null,
-                createdAt
+                LocalDateTime.now(),
+                false
         );
     }
 
@@ -99,7 +123,32 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_AFTER(Location location) {
+        return new Footprint(
+                member,
+                location,
+                AFTER,
+                null,
+                null,
+                LocalDateTime.now(),
+                false
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(0, 0),
+                AFTER,
+                null,
+                null,
+                createdAt,
+                false
         );
     }
 }

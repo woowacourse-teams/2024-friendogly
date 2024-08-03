@@ -1,6 +1,8 @@
 package com.woowacourse.friendogly.footprint.domain;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
@@ -72,7 +74,8 @@ public class Footprint {
             WalkStatus walkStatus,
             LocalDateTime startWalkTime,
             LocalDateTime endWalkTime,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean isDeleted
     ) {
         this.member = member;
         this.location = location;
@@ -80,7 +83,7 @@ public class Footprint {
         this.startWalkTime = startWalkTime;
         this.endWalkTime = endWalkTime;
         this.createdAt = createdAt;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
     }
 
     public boolean isNear(Location location) {
@@ -104,5 +107,23 @@ public class Footprint {
             return startWalkTime;
         }
         return endWalkTime;
+    }
+
+    public void startWalk() {
+        walkStatus = ONGOING;
+        startWalkTime = LocalDateTime.now();
+    }
+
+    public void endWalk() {
+        walkStatus = AFTER;
+        endWalkTime = LocalDateTime.now();
+    }
+
+    public boolean isBeforeWalk() {
+        return walkStatus.isBefore();
+    }
+
+    public boolean isOngoingWalk() {
+        return walkStatus.isOngoing();
     }
 }

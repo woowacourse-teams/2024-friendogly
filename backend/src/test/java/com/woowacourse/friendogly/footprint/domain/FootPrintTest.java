@@ -28,7 +28,8 @@ public class FootPrintTest {
                 BEFORE,
                 null,
                 null,
-                expectedTime
+                expectedTime,
+                false
                 );
 
         // when
@@ -49,7 +50,8 @@ public class FootPrintTest {
                 ONGOING,
                 expectedTime,
                 null,
-                expectedTime.minusHours(2)
+                expectedTime.minusHours(2),
+                false
         );
 
         // when
@@ -70,7 +72,8 @@ public class FootPrintTest {
                 AFTER,
                 expectedTime.minusHours(1),
                 expectedTime,
-                expectedTime.minusHours(2)
+                expectedTime.minusHours(2),
+                false
         );
 
         // when
