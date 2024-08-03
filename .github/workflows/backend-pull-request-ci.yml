@@ -48,16 +48,16 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-      - name: 테스트 결과를 PR에 코멘트로 등록합니다
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: './backend/build/test-results/test/TEST-*.xml'
+      # - name: 테스트 결과를 PR에 코멘트로 등록합니다
+      #   uses: EnricoMi/publish-unit-test-result-action@v1
+      #   if: always()
+      #   with:
+      #     files: './backend/build/test-results/test/TEST-*.xml'
 
 
-      - name: 실패 테스트결과의 원인을 Report 합니다
-        uses: mikepenz/action-junit-report@v3
-        if: always()
-        with:
-          report_paths: './backend/build/test-results/test/TEST-*.xml'
-          token: ${{ github.token }}
+      # - name: 실패 테스트결과의 원인을 Report 합니다
+      #   uses: mikepenz/action-junit-report@v3
+      #   if: always()
+      #   with:
+      #     report_paths: './backend/build/test-results/test/TEST-*.xml'
+      #     token: ${{ github.token }}
