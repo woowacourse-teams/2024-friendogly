@@ -46,8 +46,9 @@ class GroupListViewModel(
 
     fun loadGroupWithAddress() =
         viewModelScope.launch {
-            if (myAddress.value != null) loadGroups()
-            else {
+            if (myAddress.value != null) {
+                loadGroups()
+            } else {
                 getAddressUseCase()
                     .onSuccess {
                         _myAddress.value = it
@@ -138,11 +139,11 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -158,10 +159,10 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
