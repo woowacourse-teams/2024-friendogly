@@ -1,6 +1,8 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -15,6 +17,8 @@ import com.happy.friendogly.presentation.ui.group.list.adapter.group.GroupListAd
 import com.happy.friendogly.presentation.ui.group.list.adapter.selectfilter.SelectFilterAdapter
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
+    private lateinit var groupListResultLauncher: ActivityResultLauncher<Bundle>
+
     private val viewModel: GroupListViewModel by viewModels<GroupListViewModel> {
         GroupListViewModel.factory(
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
@@ -26,11 +30,6 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     }
     private val groupAdapter: GroupListAdapter by lazy {
         GroupListAdapter(viewModel as GroupListActionHandler)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadGroupsWithAddress()
     }
 
     override fun initViewCreated() {

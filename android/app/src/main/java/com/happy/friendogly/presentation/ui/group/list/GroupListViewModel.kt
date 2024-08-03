@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -40,29 +41,26 @@ class GroupListViewModel(
     private val _groupListEvent: MutableLiveData<Event<GroupListEvent>> = MutableLiveData()
     val groupListEvent: LiveData<Event<GroupListEvent>> get() = _groupListEvent
 
-    fun loadGroupsWithAddress(){
-        if (myAddress.value == null){
-            loadAddress()
-            loadGroups()
-        }
+    init {
+        loadGroupWithAddress()
     }
 
     fun loadGroups() = viewModelScope.launch {
-        myAddress.value ?: return@launch
-
         delay(1000)
-        _groups.value = dummy()
-        if (groups.value.isNullOrEmpty()) {
+        val groupData = dummy()
+        if (groupData.isEmpty()) {
             _uiState.value = GroupListUiState.NotData
         } else {
             _uiState.value = GroupListUiState.Init
         }
+        _groups.value = groupData
     }
 
-    private fun loadAddress() = viewModelScope.launch {
+    private fun loadGroupWithAddress() = viewModelScope.launch {
         getAddressUseCase()
             .onSuccess {
                 _myAddress.value = it
+                loadGroups()
             }
             .onFailure {
                 _uiState.value = GroupListUiState.NotAddress

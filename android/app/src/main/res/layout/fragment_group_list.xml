@@ -24,6 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            onSingleClick="@{()->vm.addMyLocation()}"
             android:id="@+id/linear_layout_group_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,6 +37,7 @@
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">
 
             <TextView
+                android:text="@{vm.myAddress.thoroughfare}"
                 style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
