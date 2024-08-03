@@ -8,11 +8,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
-import com.google.android.gms.location.LocationServices
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
@@ -30,6 +29,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import java.util.Locale
+import kotlin.math.floor
 
 class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
@@ -71,8 +71,8 @@ class SettingMyLocationActivity :
     }
 
     private fun cancelAnimation() {
-        binding.lottieMyLocationLoading.isVisible = false
-        binding.lottieMyLocationLoading.cancelAnimation()
+        loadingView.isVisible = false
+        loadingView.cancelAnimation()
     }
 
     private fun initDataBinding() {
@@ -80,9 +80,9 @@ class SettingMyLocationActivity :
     }
 
     private fun initObserver() {
-        viewModel.event.observeEvent(this){ event ->
-            when(event){
-                SettingMyLocationEvent.InvalidLocation -> showSnackbar(getString(R.string.my_location_submit_fail))
+        viewModel.event.observeEvent(this) { event ->
+            when (event) {
+                SettingMyLocationEvent.InvalidLocation -> showLoadFailSnackBar()
                 SettingMyLocationEvent.Navigation.NavigateToPrev -> finish()
             }
         }
@@ -147,27 +147,33 @@ class SettingMyLocationActivity :
         }
     }
 
-    private fun loadAddress(latLng: LatLng){
+    private fun loadAddress(latLng: LatLng) {
         val geocoder = Geocoder(this, Locale.KOREA)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) { addressList->
-                saveAddress(addressList[0])
+            geocoder.getFromLocation(
+                convertAddress(latLng.latitude),
+                convertAddress(latLng.longitude),
+                1
+            ) { addressList ->
+                runOnUiThread {
+                    viewModel.updateAddress(addressList[0])
+                }
             }
         } else {
-            val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                ?: return showSnackbar(getString(R.string.my_location_load_fail))
-            saveAddress(addressList[0])
+            viewModel.saveLowLevelSdkAddress(
+                geocoder = geocoder,
+                latitude = convertAddress(latLng.latitude),
+                longitude = convertAddress(latLng.longitude),
+            )
         }
     }
 
-    private fun saveAddress(address: Address){
-        with(address) {
-            viewModel.updateAddress(
-                adminArea = adminArea,
-                subLocality = subLocality,
-                thoroughfare = thoroughfare,
-            )
-        }
+    private fun convertAddress(latLngArg: Double): Double {
+        return floor(latLngArg * 100) / 100
+    }
+
+    private fun showLoadFailSnackBar() {
+        showSnackbar(getString(R.string.my_location_load_fail))
     }
 
     override fun onStart() {
@@ -207,8 +213,8 @@ class SettingMyLocationActivity :
 
     companion object {
         private const val DEFAULT_ZOOM = 13.5
-        private const val MARKER_WIDTH = 24 * 5
-        private const val MARKER_HEIGHT = 37 * 5
+        private const val MARKER_WIDTH = 24
+        private const val MARKER_HEIGHT = 37
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingMyLocationActivity::class.java)

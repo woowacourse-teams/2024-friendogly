@@ -1,5 +1,8 @@
 package com.happy.friendogly.presentation.ui.mylocation
 
+import android.location.Address
+import android.location.Geocoder
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -18,17 +21,17 @@ class SettingMyLocationViewModel(
     private val _event: MutableLiveData<Event<SettingMyLocationEvent>> = MutableLiveData()
     val event: LiveData<Event<SettingMyLocationEvent>> get() = _event
 
-    private val _User_address: MutableLiveData<UserAddress> = MutableLiveData()
-    val userAddress: LiveData<UserAddress> get() = _User_address
+    private val _userAddress: MutableLiveData<UserAddress> = MutableLiveData()
+    val userAddress: LiveData<UserAddress> get() = _userAddress
 
-    fun updateAddress(
-        adminArea: String,
-        subLocality: String,
-        thoroughfare: String,
-    ) {
-        _User_address.value = UserAddress(
+    fun updateAddress(address: Address) {
+        val adminArea = address.adminArea
+        val locality = address.locality
+        val thoroughfare = address.thoroughfare
+
+        _userAddress.value = UserAddress(
             adminArea = adminArea,
-            subLocality = subLocality,
+            subLocality = locality,
             thoroughfare = thoroughfare,
         )
     }
@@ -66,6 +69,23 @@ class SettingMyLocationViewModel(
 
     private fun submitInValidLocation() {
         _event.emit(SettingMyLocationEvent.InvalidLocation)
+    }
+
+    fun saveLowLevelSdkAddress(
+        geocoder: Geocoder,
+        latitude: Double,
+        longitude: Double,
+    ) = viewModelScope.launch {
+        runCatching {
+            geocoder.getFromLocation(latitude, longitude, 1)
+                ?: return@launch submitInValidLocation()
+        }
+            .onSuccess {
+                updateAddress(it[0])
+            }
+            .onFailure {
+                submitInValidLocation()
+            }
     }
 
 }

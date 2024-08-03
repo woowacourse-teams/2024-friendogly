@@ -60,22 +60,23 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.ui.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.ui.chatlist.chat.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Friendogly.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
