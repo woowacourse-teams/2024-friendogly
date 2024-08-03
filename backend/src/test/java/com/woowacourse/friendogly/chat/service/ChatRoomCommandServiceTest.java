@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
-import com.woowacourse.friendogly.chat.dto.response.SavePrivateChatRoomResponse;
+import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.exception.FriendoglyException;
@@ -52,12 +52,12 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Test
     void save() {
         // when
-        SavePrivateChatRoomResponse response = chatRoomCommandService.savePrivate(member1.getId(), member2.getId());
+        SaveChatRoomResponse response = chatRoomCommandService.save(member1.getId());
         Long chatRoomId = response.chatRoomId();
 
         // then
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        assertThat(chatRoom.findMembers()).containsExactly(member1, member2);
+        assertThat(chatRoom.findMembers()).containsExactly(member1);
     }
 
     @DisplayName("모임에 참여한 경우, 모임 채팅에 참여할 수 있다.")
@@ -71,27 +71,18 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         assertThat(chatRoom.countMembers()).isOne();
     }
 
-    @DisplayName("모임에 참여하지 않은 경우, 모임 채팅에 참여할 수 없다.")
-    @Test
-    void enter_Fail_NotInClub() {
-        // when - then
-        assertThatThrownBy(() -> chatRoomCommandService.enter(member2.getId(), chatRoom.getId()))
-                .isInstanceOf(FriendoglyException.class)
-                .hasMessage("모임의 구성원이 아닙니다.");
-    }
-
-    @DisplayName("모임과 모임 채팅방에 참여한 경우, 모임 채팅방에서 나갈 수 있다.")
+    @DisplayName("채팅방에 참여한 경우, 채팅방에서 나갈 수 있다.")
     @Transactional
     @Test
     void leave() {
         // given
-        chatRoom.addMember(member1);
+        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.withInitialMemberOf(member1));
 
         // when
-        chatRoomCommandService.leave(member1.getId(), chatRoom.getId());
+        chatRoomCommandService.leave(member1.getId(), newChatRoom.getId());
 
         // then
-        assertThat(chatRoom.countMembers()).isZero();
+        assertThat(newChatRoom.countMembers()).isZero();
     }
 
     @DisplayName("모임에 참여하지 않은 경우, 모임 채팅방에서 나갈 수 없다.")
@@ -100,6 +91,6 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         // when - then
         assertThatThrownBy(() -> chatRoomCommandService.leave(member2.getId(), chatRoom.getId()))
                 .isInstanceOf(FriendoglyException.class)
-                .hasMessage("모임의 구성원이 아닙니다.");
+                .hasMessage("채팅에 참여한 상태가 아닙니다.");
     }
 }

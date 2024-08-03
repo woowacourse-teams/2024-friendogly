@@ -64,7 +64,10 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                         .containsExactly(chatRoom1.getId(), chatRoom2.getId()),
                 () -> assertThat(response)
                         .extracting(FindMyChatRoomResponse::memberNames)
-                        .containsExactly(List.of("name", "name2"), List.of("name", "name3"))
+                        .containsExactly(List.of("name", "name2"), List.of("name", "name3")),
+                () -> assertThat(response)
+                        .extracting(FindMyChatRoomResponse::memberCount)
+                        .containsExactly(2, 2)
         );
     }
 

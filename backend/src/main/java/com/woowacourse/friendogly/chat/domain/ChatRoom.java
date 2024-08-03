@@ -26,10 +26,10 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
 
-    public ChatRoom(Member... members) {
-        for (Member member : members) {
-            addMember(member);
-        }
+    public static ChatRoom withInitialMemberOf(Member member) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.addMember(member);
+        return chatRoom;
     }
 
     public void addMember(Member member) {
@@ -53,7 +53,6 @@ public class ChatRoom {
                 .anyMatch(chatRoomMember -> chatRoomMember.hasMember(member));
     }
 
-    // TODO: 미사용 메서드
     public int countMembers() {
         return chatRoomMembers.size();
     }
