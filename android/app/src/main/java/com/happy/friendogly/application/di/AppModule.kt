@@ -1,7 +1,6 @@
 package com.happy.friendogly.application.di
 
 import android.content.Context
-import android.service.autofill.SaveCallback
 import com.happy.friendogly.BuildConfig
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
@@ -48,8 +47,8 @@ import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
-import com.happy.friendogly.local.di.LocalModule
 import com.happy.friendogly.local.di.AddressModule
+import com.happy.friendogly.local.di.LocalModule
 import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.LocalDataSourceImpl
 import com.happy.friendogly.remote.api.BaseUrl

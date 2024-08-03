@@ -2,13 +2,11 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.content.Context
 import android.content.Intent
-import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
@@ -41,7 +39,7 @@ class SettingMyLocationActivity :
 
     private val viewModel: SettingMyLocationViewModel by viewModels<SettingMyLocationViewModel> {
         SettingMyLocationViewModel.factory(
-            saveAddressUseCase = AppModule.getInstance().saveAddressUseCase
+            saveAddressUseCase = AppModule.getInstance().saveAddressUseCase,
         )
     }
 
@@ -111,7 +109,7 @@ class SettingMyLocationActivity :
                     initMarker(latLng)
                     loadAddress(latLng)
                 },
-                1000
+                1000,
             )
         }
     }
@@ -153,7 +151,7 @@ class SettingMyLocationActivity :
             geocoder.getFromLocation(
                 convertAddress(latLng.latitude),
                 convertAddress(latLng.longitude),
-                1
+                1,
             ) { addressList ->
                 runOnUiThread {
                     viewModel.updateAddress(addressList[0])

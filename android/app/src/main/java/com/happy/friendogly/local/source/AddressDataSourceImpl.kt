@@ -8,20 +8,22 @@ import kotlinx.coroutines.flow.first
 class AddressDataSourceImpl(
     private val addressModule: AddressModule,
 ) : AddressDataSource {
-    override suspend fun getAddress(): Result<UserAddressDto> = runCatching {
-        UserAddressDto(
-            thoroughfare = addressModule.thoroughfare.first(),
-            subLocality = addressModule.subLocality.first(),
-            adminArea = addressModule.adminArea.first()
-        )
-    }
+    override suspend fun getAddress(): Result<UserAddressDto> =
+        runCatching {
+            UserAddressDto(
+                thoroughfare = addressModule.thoroughfare.first(),
+                subLocality = addressModule.subLocality.first(),
+                adminArea = addressModule.adminArea.first(),
+            )
+        }
 
     override suspend fun saveAddress(userAddressDto: UserAddressDto): Result<Unit> =
         runCatching {
             addressModule.saveAddress(userAddressDto)
         }
 
-    override suspend fun deleteAddress(): Result<Unit>  = runCatching {
-        addressModule.deleteAddressData()
-    }
+    override suspend fun deleteAddress(): Result<Unit> =
+        runCatching {
+            addressModule.deleteAddressData()
+        }
 }

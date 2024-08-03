@@ -15,6 +15,7 @@ sealed interface GroupListEvent {
 
     sealed interface Navigation : GroupListEvent {
         data object NavigateToAddGroup : Navigation
+
         data object NavigateToAddress : Navigation
     }
 }

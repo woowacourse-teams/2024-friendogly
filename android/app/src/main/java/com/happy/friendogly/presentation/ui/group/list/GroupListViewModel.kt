@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -45,28 +44,29 @@ class GroupListViewModel(
         loadGroupWithAddress()
     }
 
-    fun loadGroups() = viewModelScope.launch {
-        delay(1000)
-        val groupData = dummy()
-        if (groupData.isEmpty()) {
-            _uiState.value = GroupListUiState.NotData
-        } else {
-            _uiState.value = GroupListUiState.Init
+    fun loadGroups() =
+        viewModelScope.launch {
+            delay(1000)
+            val groupData = dummy()
+            if (groupData.isEmpty()) {
+                _uiState.value = GroupListUiState.NotData
+            } else {
+                _uiState.value = GroupListUiState.Init
+            }
+            _groups.value = groupData
         }
-        _groups.value = groupData
-    }
 
-    private fun loadGroupWithAddress() = viewModelScope.launch {
-        getAddressUseCase()
-            .onSuccess {
-                _myAddress.value = it
-                loadGroups()
-            }
-            .onFailure {
-                _uiState.value = GroupListUiState.NotAddress
-            }
-
-    }
+    private fun loadGroupWithAddress() =
+        viewModelScope.launch {
+            getAddressUseCase()
+                .onSuccess {
+                    _myAddress.value = it
+                    loadGroups()
+                }
+                .onFailure {
+                    _uiState.value = GroupListUiState.NotAddress
+                }
+        }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
@@ -115,17 +115,15 @@ class GroupListViewModel(
 
     override fun addMyLocation() {
         _groupListEvent.emit(
-            GroupListEvent.Navigation.NavigateToAddress
+            GroupListEvent.Navigation.NavigateToAddress,
         )
     }
 
     companion object {
-        fun factory(
-            getAddressUseCase: GetAddressUseCase
-        ): ViewModelProvider.Factory {
+        fun factory(getAddressUseCase: GetAddressUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 GroupListViewModel(
-                    getAddressUseCase = getAddressUseCase
+                    getAddressUseCase = getAddressUseCase,
                 )
             }
         }
@@ -137,11 +135,11 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -157,10 +155,10 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",

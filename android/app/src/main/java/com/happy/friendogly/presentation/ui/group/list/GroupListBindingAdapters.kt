@@ -42,10 +42,11 @@ fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
 }
 
 @BindingAdapter("address")
-fun LinearLayout.bindMyLocation(userAddress: UserAddress?){
-    this.visibility = if (userAddress==null){
-        View.GONE
-    }else{
-        View.VISIBLE
-    }
+fun LinearLayout.bindMyLocation(userAddress: UserAddress?) {
+    this.visibility =
+        if (userAddress == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }

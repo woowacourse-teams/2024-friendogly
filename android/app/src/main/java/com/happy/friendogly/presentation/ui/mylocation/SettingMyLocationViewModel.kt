@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -29,20 +28,19 @@ class SettingMyLocationViewModel(
         val locality = address.locality
         val thoroughfare = address.thoroughfare
 
-        _userAddress.value = UserAddress(
-            adminArea = adminArea,
-            subLocality = locality,
-            thoroughfare = thoroughfare,
-        )
+        _userAddress.value =
+            UserAddress(
+                adminArea = adminArea,
+                subLocality = locality,
+                thoroughfare = thoroughfare,
+            )
     }
 
     companion object {
-        fun factory(
-            saveAddressUseCase: SaveAddressUseCase,
-        ): ViewModelProvider.Factory {
+        fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 SettingMyLocationViewModel(
-                    saveAddressUseCase = saveAddressUseCase
+                    saveAddressUseCase = saveAddressUseCase,
                 )
             }
         }
@@ -57,15 +55,16 @@ class SettingMyLocationViewModel(
         saveLocation(address)
     }
 
-    private fun saveLocation(userAddress: UserAddress) = viewModelScope.launch {
-        saveAddressUseCase.invoke(userAddress = userAddress)
-            .onSuccess {
-                _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrev)
-            }
-            .onFailure {
-                submitInValidLocation()
-            }
-    }
+    private fun saveLocation(userAddress: UserAddress) =
+        viewModelScope.launch {
+            saveAddressUseCase.invoke(userAddress = userAddress)
+                .onSuccess {
+                    _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrev)
+                }
+                .onFailure {
+                    submitInValidLocation()
+                }
+        }
 
     private fun submitInValidLocation() {
         _event.emit(SettingMyLocationEvent.InvalidLocation)
@@ -87,5 +86,4 @@ class SettingMyLocationViewModel(
                 submitInValidLocation()
             }
     }
-
 }

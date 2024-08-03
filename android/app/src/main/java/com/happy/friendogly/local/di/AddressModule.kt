@@ -42,7 +42,6 @@ class AddressModule(val context: Context) {
             preferences[keyLocality] ?: ""
         }
 
-
     var thoroughfare: Flow<String> =
         context.dataStore.data.catch { exception ->
             if (exception is IOException) {
@@ -53,7 +52,6 @@ class AddressModule(val context: Context) {
         }.map { preferences ->
             preferences[keyThoroughfare] ?: ""
         }
-
 
     suspend fun saveAddress(userAddressDto: UserAddressDto) {
         context.dataStore.edit { preferences ->

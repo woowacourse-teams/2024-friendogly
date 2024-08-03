@@ -21,8 +21,7 @@ class AddressRepositoryImpl(
             if (isInValidAddress(userAddress)) throw Exception()
         }
 
-    override suspend fun deleteAddress(): Result<Unit> =
-        addressDataSource.deleteAddress()
+    override suspend fun deleteAddress(): Result<Unit> = addressDataSource.deleteAddress()
 
     private fun isInValidAddress(userAddress: UserAddress) =
         userAddress.thoroughfare.isEmpty() || userAddress.adminArea.isEmpty() || userAddress.subLocality.isEmpty()

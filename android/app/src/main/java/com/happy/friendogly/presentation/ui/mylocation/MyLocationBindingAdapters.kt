@@ -8,12 +8,13 @@ import com.happy.friendogly.domain.model.UserAddress
 
 @SuppressLint("StringFormatInvalid")
 @BindingAdapter("myLocation")
-fun TextView.bindMyLocation(userAddress: UserAddress?){
+fun TextView.bindMyLocation(userAddress: UserAddress?) {
     if (userAddress == null) return
-    this.text = context.getString(
-        R.string.my_location_full_address,
-        userAddress.adminArea,
-        userAddress.subLocality,
-        userAddress.thoroughfare
-    )
+    this.text =
+        context.getString(
+            R.string.my_location_full_address,
+            userAddress.adminArea,
+            userAddress.subLocality,
+            userAddress.thoroughfare,
+        )
 }
