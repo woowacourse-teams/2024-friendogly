@@ -56,7 +56,7 @@ public class FootPrintTest {
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
 
         // then
-        assertThat(changedWalkStatusTime).isEqualTo(null);
+        assertThat(changedWalkStatusTime).isEqualTo(expectedTime);
     }
 
     @DisplayName("산책후일경우, 산책 상태 변경된 시간은 산책 종료 시간이 반환된다.")
