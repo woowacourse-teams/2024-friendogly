@@ -109,21 +109,21 @@ public class Footprint {
         return endWalkTime;
     }
 
-    public void startWalk() {
+    public void changeWalkStatus(Location location) {
+        if (walkStatus.isBefore() && isNear(location)) {
+            startWalk();
+        }
+        if (walkStatus.isOngoing() && !isNear(location)) {
+            endWalk();
+        }
+    }
+
+    private void startWalk() {
         walkStatus = ONGOING;
         startWalkTime = LocalDateTime.now();
     }
-
-    public void endWalk() {
+    private void endWalk() {
         walkStatus = AFTER;
         endWalkTime = LocalDateTime.now();
-    }
-
-    public boolean isBeforeWalk() {
-        return walkStatus.isBefore();
-    }
-
-    public boolean isOngoingWalk() {
-        return walkStatus.isOngoing();
     }
 }
