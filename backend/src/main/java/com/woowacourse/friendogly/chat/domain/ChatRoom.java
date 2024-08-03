@@ -26,6 +26,12 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
 
+    public ChatRoom(Member... members) {
+        for (Member member : members) {
+            addMember(member);
+        }
+    }
+
     public void addMember(Member member) {
         if (containsMember(member)) {
             throw new FriendoglyException("이미 참여한 채팅방입니다.");

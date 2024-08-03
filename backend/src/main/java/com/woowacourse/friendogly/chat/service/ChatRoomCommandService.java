@@ -2,7 +2,7 @@ package com.woowacourse.friendogly.chat.service;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.chat.dto.request.InviteToChatRoomRequest;
-import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
+import com.woowacourse.friendogly.chat.dto.response.SavePrivateChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
@@ -30,11 +30,11 @@ public class ChatRoomCommandService {
         this.clubRepository = clubRepository;
     }
 
-    public SaveChatRoomResponse save(Long memberId) {
-        Member member = memberRepository.getById(memberId);
-        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom());
-        chatRoom.addMember(member);
-        return new SaveChatRoomResponse(chatRoom.getId());
+    public SavePrivateChatRoomResponse savePrivate(Long memberId, Long receiverMemberId) {
+        Member sender = memberRepository.getById(memberId);
+        Member receiver = memberRepository.getById(receiverMemberId);
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(sender, receiver));
+        return new SavePrivateChatRoomResponse(chatRoom.getId());
     }
 
     public void addMember(InviteToChatRoomRequest request) {
