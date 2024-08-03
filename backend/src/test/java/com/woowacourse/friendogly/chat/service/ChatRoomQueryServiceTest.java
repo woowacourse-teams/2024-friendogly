@@ -81,7 +81,8 @@ class ChatRoomQueryServiceTest extends ServiceTest {
         chatRoom1.addMember(member3);
 
         // when
-        List<FindChatRoomMembersInfoResponse> response = chatRoomQueryService.findMemberInfo(chatRoom1.getId());
+        List<FindChatRoomMembersInfoResponse> response
+                = chatRoomQueryService.findMemberInfo(member1.getId(), chatRoom1.getId());
 
         // then
         assertThat(response)

@@ -32,8 +32,10 @@ public class ChatRoomQueryService {
                 .toList();
     }
 
-    public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long chatRoomId) {
+    public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long memberId, Long chatRoomId) {
+        Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        validateParticipation(chatRoomId, memberId);
         List<Member> members = chatRoom.findMembers();
         return members.stream()
                 .map(FindChatRoomMembersInfoResponse::new)
