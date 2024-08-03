@@ -25,9 +25,9 @@ public class ChatRoomCommandService {
         this.memberRepository = memberRepository;
     }
 
-    public SaveChatRoomResponse save(Long memberId) {
+    public SaveChatRoomResponse savePrivate(Long memberId) {
         Member member = memberRepository.getById(memberId);
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.withInitialMemberOf(member));
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member));
         return new SaveChatRoomResponse(chatRoom.getId());
     }
 

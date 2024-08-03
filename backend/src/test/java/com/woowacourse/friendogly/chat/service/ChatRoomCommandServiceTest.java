@@ -52,7 +52,7 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Test
     void save() {
         // when
-        SaveChatRoomResponse response = chatRoomCommandService.save(member1.getId());
+        SaveChatRoomResponse response = chatRoomCommandService.savePrivate(member1.getId());
         Long chatRoomId = response.chatRoomId();
 
         // then
@@ -76,7 +76,7 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Test
     void leave() {
         // given
-        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.withInitialMemberOf(member1));
+        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1));
 
         // when
         chatRoomCommandService.leave(member1.getId(), newChatRoom.getId());

@@ -30,10 +30,8 @@ public class ChatRoomController {
     }
 
     @PostMapping
-    public ApiResponse<SaveChatRoomResponse> save(
-            @Auth Long memberId
-    ) {
-        return ApiResponse.ofSuccess(chatRoomCommandService.save(memberId));
+    public ApiResponse<SaveChatRoomResponse> savePrivate(@Auth Long memberId) {
+        return ApiResponse.ofSuccess(chatRoomCommandService.savePrivate(memberId));
     }
 
     @GetMapping("/mine")

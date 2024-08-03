@@ -136,7 +136,7 @@ public class Club {
                 .status(Status.OPEN)
                 .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
-                .chatRoom(new ChatRoom())
+                .chatRoom(new ChatRoom(memberCapacity))
                 .build();
         club.addClubMember(owner);
         club.addClubPet(participatingPets);

@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.chat.domain;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ChatRoom {
 
@@ -26,9 +27,16 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
 
-    public static ChatRoom withInitialMemberOf(Member member) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.addMember(member);
+    @Embedded
+    private MemberCapacity memberCapacity;
+
+    public ChatRoom(int capacity) {
+        this.memberCapacity = new MemberCapacity(capacity);
+    }
+
+    public static ChatRoom createPrivate(Member initialMember) {
+        ChatRoom chatRoom = new ChatRoom(2);
+        chatRoom.addMember(initialMember);
         return chatRoom;
     }
 
@@ -36,7 +44,14 @@ public class ChatRoom {
         if (containsMember(member)) {
             throw new FriendoglyException("이미 참여한 채팅방입니다.");
         }
+        if (isFull()) {
+            throw new FriendoglyException("정원을 초과한 채팅방입니다.");
+        }
         chatRoomMembers.add(new ChatRoomMember(this, member));
+    }
+
+    private boolean isFull() {
+        return chatRoomMembers.size() >= memberCapacity.getValue();
     }
 
     public void removeMember(Member member) {

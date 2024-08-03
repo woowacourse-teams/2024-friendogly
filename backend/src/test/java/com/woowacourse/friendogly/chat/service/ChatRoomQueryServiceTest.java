@@ -39,8 +39,8 @@ class ChatRoomQueryServiceTest extends ServiceTest {
         member2 = memberRepository.save(new Member("name2", "b", "b@a.com", "https://b.com"));
         member3 = memberRepository.save(new Member("name3", "c", "c@a.com", "https://c.com"));
 
-        chatRoom1 = chatRoomRepository.save(new ChatRoom());
-        chatRoom2 = chatRoomRepository.save(new ChatRoom());
+        chatRoom1 = chatRoomRepository.save(new ChatRoom(5));
+        chatRoom2 = chatRoomRepository.save(new ChatRoom(5));
     }
 
     @DisplayName("내가 속해 있는 채팅방을 찾을 수 있다.")
