@@ -39,6 +39,15 @@ public class ChatRoom {
         chatRoomMembers.add(new ChatRoomMember(this, member));
     }
 
+    public void removeMember(Member member) {
+        ChatRoomMember chatRoomMember = chatRoomMembers.stream()
+                .filter(row -> row.hasMember(member))
+                .findAny()
+                .orElseThrow(() -> new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다."));
+
+        chatRoomMembers.remove(chatRoomMember);
+    }
+
     public boolean containsMember(Member member) {
         return chatRoomMembers.stream()
                 .anyMatch(chatRoomMember -> chatRoomMember.hasMember(member));
@@ -51,15 +60,6 @@ public class ChatRoom {
 
     public boolean isEmpty() {
         return chatRoomMembers.isEmpty();
-    }
-
-    public void removeMember(Member member) {
-        ChatRoomMember chatRoomMember = chatRoomMembers.stream()
-                .filter(row -> row.hasMember(member))
-                .findAny()
-                .orElseThrow(() -> new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다."));
-
-        chatRoomMembers.remove(chatRoomMember);
     }
 
     public List<String> findMemberNames() {
