@@ -44,7 +44,22 @@ class GroupListViewModel(
         loadGroupWithAddress()
     }
 
-    fun loadGroups() =
+    fun loadGroupWithAddress() =
+        viewModelScope.launch {
+            if (myAddress.value != null) loadGroups()
+            else {
+                getAddressUseCase()
+                    .onSuccess {
+                        _myAddress.value = it
+                        loadGroups()
+                    }
+                    .onFailure {
+                        _uiState.value = GroupListUiState.NotAddress
+                    }
+            }
+        }
+
+    private fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
             val groupData = dummy()
@@ -54,18 +69,6 @@ class GroupListViewModel(
                 _uiState.value = GroupListUiState.Init
             }
             _groups.value = groupData
-        }
-
-    private fun loadGroupWithAddress() =
-        viewModelScope.launch {
-            getAddressUseCase()
-                .onSuccess {
-                    _myAddress.value = it
-                    loadGroups()
-                }
-                .onFailure {
-                    _uiState.value = GroupListUiState.NotAddress
-                }
         }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
@@ -135,11 +138,11 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                            GroupFilter.GenderFilter.NeutralizingMale,
+                        ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -155,10 +158,10 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
+                        listOf(
+                            GroupFilter.SizeFilter.SmallDog,
+                            GroupFilter.GenderFilter.Female,
+                        ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",

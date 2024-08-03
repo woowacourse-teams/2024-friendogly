@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +28,6 @@ class SettingMyLocationViewModel(
         val adminArea = address.adminArea
         val locality = address.locality
         val thoroughfare = address.thoroughfare
-
         _userAddress.value =
             UserAddress(
                 adminArea = adminArea,

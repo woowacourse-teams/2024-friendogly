@@ -17,7 +17,6 @@ import com.happy.friendogly.presentation.ui.group.list.adapter.group.GroupListAd
 import com.happy.friendogly.presentation.ui.group.list.adapter.selectfilter.SelectFilterAdapter
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
-    private lateinit var groupListResultLauncher: ActivityResultLauncher<Bundle>
 
     private val viewModel: GroupListViewModel by viewModels<GroupListViewModel> {
         GroupListViewModel.factory(
@@ -44,7 +43,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
 
         with(binding.swipeRefreshLayoutGroupList) {
             setOnRefreshListener {
-                viewModel.loadGroups()
+                viewModel.loadGroupWithAddress()
                 isRefreshing = false
             }
         }
