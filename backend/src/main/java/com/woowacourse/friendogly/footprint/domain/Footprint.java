@@ -90,6 +90,10 @@ public class Footprint {
         return this.location.isWithin(location, RADIUS_AS_METER);
     }
 
+    public boolean isInsideBoundary(Location location) {
+        return this.location.isWithin(location, RADIUS_AS_METER);
+    }
+
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
                 .equals(memberId);
@@ -109,11 +113,11 @@ public class Footprint {
         return endWalkTime;
     }
 
-    public void updateWalkStatusWithCurrentLocation(Location location) {
-        if (walkStatus.isBefore() && isNear(location)) {
+    public void updateWalkStatusWithCurrentLocation(Location currentLocation) {
+        if (walkStatus.isBefore() && isInsideBoundary(currentLocation)) {
             startWalk();
         }
-        if (walkStatus.isOngoing() && !isNear(location)) {
+        if (walkStatus.isOngoing() && !isInsideBoundary(currentLocation)) {
             endWalk();
         }
     }
