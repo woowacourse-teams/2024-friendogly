@@ -21,6 +21,7 @@ fun ClubDto.toDomain(): Club{
     )
 }
 
+
 fun Club.toData(): ClubDto {
     return ClubDto(
         id = id,

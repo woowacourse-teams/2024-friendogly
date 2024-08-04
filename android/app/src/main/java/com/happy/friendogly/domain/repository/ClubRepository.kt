@@ -1,13 +1,43 @@
 package com.happy.friendogly.domain.repository
 
-import com.happy.friendogly.domain.model.Location
+import com.happy.friendogly.domain.model.Club
+import com.happy.friendogly.domain.model.ClubAddress
+import com.happy.friendogly.domain.model.ClubDetail
+import com.happy.friendogly.domain.model.ClubFilterCondition
+import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.SizeType
+import okhttp3.MultipartBody
 
 interface ClubRepository {
-    suspend fun postClub(): Result<Location>
+    suspend fun postClub(
+        title: String,
+        content: String,
+        address: ClubAddress,
+        allowedGender: List<Gender>,
+        allowedSize: List<SizeType>,
+        memberCapacity: Int,
+        file: MultipartBody.Part?,
+        petIds: List<Long>,
+    ): Result<Unit>
 
-    suspend fun deleteClub(id: Long): Result<Location>
+    suspend fun getSearchingClubs(
+        filterCondition: ClubFilterCondition,
+        address: ClubAddress,
+        genderParams: List<Gender>,
+        sizeParams: List<SizeType>,
+    ): Result<List<Club>>
 
-    suspend fun postClubParticipation(): Result<Unit>
 
-    suspend fun getClubMine(): Result<Unit>
+    suspend fun getClub(
+        clubId: Long,
+    ): Result<ClubDetail>
+
+    suspend fun postClubMember(
+        clubId: Long,
+        participatingPetsId: List<Long>,
+    ): Result<Unit>
+
+    suspend fun deleteClubMember(
+        clubId: Long,
+    ): Result<Unit>
 }
