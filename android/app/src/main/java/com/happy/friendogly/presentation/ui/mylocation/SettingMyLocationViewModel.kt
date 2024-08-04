@@ -35,16 +35,6 @@ class SettingMyLocationViewModel(
             )
     }
 
-    companion object {
-        fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
-            return BaseViewModelFactory {
-                SettingMyLocationViewModel(
-                    saveAddressUseCase = saveAddressUseCase,
-                )
-            }
-        }
-    }
-
     override fun closeSelect() {
         _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrev)
     }
@@ -84,5 +74,16 @@ class SettingMyLocationViewModel(
             .onFailure {
                 submitInValidLocation()
             }
+    }
+
+
+    companion object {
+        fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                SettingMyLocationViewModel(
+                    saveAddressUseCase = saveAddressUseCase,
+                )
+            }
+        }
     }
 }
