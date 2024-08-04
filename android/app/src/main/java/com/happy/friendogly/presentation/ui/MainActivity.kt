@@ -13,6 +13,7 @@ import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
 import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
+import com.happy.friendogly.presentation.ui.mylocation.SettingMyLocationActivity
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
@@ -116,6 +117,10 @@ class MainActivity :
 
     override fun navigateToSetting() {
         startActivity(SettingActivity.getIntent(this))
+    }
+
+    override fun navigateToSettingLocation() {
+        startActivity(SettingMyLocationActivity.getIntent(this))
     }
 
     override fun onBackPressed() {

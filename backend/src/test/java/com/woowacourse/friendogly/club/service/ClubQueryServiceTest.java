@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
+import com.woowacourse.friendogly.club.domain.FilterCondition;
 import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
 import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -43,12 +44,13 @@ class ClubQueryServiceTest extends ClubServiceTest {
         );
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
+                FilterCondition.ALL.name(),
                 address,
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
+        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
         List<FindSearchingClubResponse> expectedResponses = List.of(
                 new FindSearchingClubResponse(club, List.of(petImageUrl))
         );
@@ -82,12 +84,13 @@ class ClubQueryServiceTest extends ClubServiceTest {
         );
 
         FindSearchingClubRequest request = new FindSearchingClubRequest(
+                FilterCondition.ALL.name(),
                 address,
                 Set.of(Gender.MALE),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
+        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
     }

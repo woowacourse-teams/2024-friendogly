@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.mylocation.SettingMyLocationViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.mylocation.SettingMyLocationActivity">
+
+        <com.naver.maps.map.MapView
+            android:id="@+id/map_view_my_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:id="@+id/view_my_location_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/gray50"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            onSingleClick="@{()->vm.closeSelect()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/ripple_circle_white"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="@id/view_my_location_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_my_location_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_my_location_top_bar" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_location_title"
+            app:layout_constraintBottom_toBottomOf="@id/view_my_location_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/view_my_location_top_bar"
+            app:layout_constraintStart_toStartOf="@id/view_my_location_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_my_location_top_bar" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_my_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray50"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_location_content" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                app:myLocation ="@{vm.userAddress}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="대한민국 제주특별자치도 제주시 이도1동 1250-15" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="20dp" />
+
+            <TextView
+                onSingleClick="@{()->vm.submitSelect()}"
+                style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginVertical="24dp"
+                android:background="@drawable/rect_coral04_fill_16"
+                android:backgroundTint="@color/coral400"
+                android:gravity="center"
+                android:text="@string/my_location_submit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vp_group_select_dog_list" />
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_my_location_loading"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:autoHandwritingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@+id/view_my_location_top_bar"
+            app:layout_constraintBottom_toTopOf="@+id/linear_layout_my_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_fileName="animation_loading.json"
+            app:lottie_loop="true" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

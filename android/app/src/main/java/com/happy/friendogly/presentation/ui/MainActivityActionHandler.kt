@@ -18,4 +18,6 @@ interface MainActivityActionHandler {
     )
 
     fun navigateToSetting()
+
+    fun navigateToSettingLocation()
 }

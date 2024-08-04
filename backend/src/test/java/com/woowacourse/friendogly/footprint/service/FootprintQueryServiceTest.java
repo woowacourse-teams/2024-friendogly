@@ -1,11 +1,9 @@
 package com.woowacourse.friendogly.footprint.service;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
-import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
@@ -15,7 +13,6 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,18 +22,11 @@ import org.junit.jupiter.api.Test;
 // TODO: Member, Dog 테스트 픽스처 생성
 class FootprintQueryServiceTest extends FootprintServiceTest {
 
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 찍은 경우 - 발자국 사진 URL 조회)")
-    @Transactional
+    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다.")
     @Test
     void findOne() {
         // given
-        Footprint footprint = footprintRepository.save(
-                Footprint.builder()
-                        .member(member)
-                        .walkStatus(BEFORE)
-                        .location(new Location(0.0, 0.0))
-                        .build()
-        );
+        Footprint footprint = footprintRepository.save(FOOTPRINT());
 
         // when
         FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
@@ -44,38 +34,11 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         // then
         assertAll(
                 () -> assertThat(response.memberName()).isEqualTo("name1"),
-                () -> assertThat(response.petName()).isEqualTo("petname1"),
-                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
-                () -> assertThat(response.isMine()).isTrue()
-        );
-    }
-
-    @DisplayName("Footprint ID를 통해 발자국의 정보를 조회할 수 있다. (발자국 사진을 안 찍은 경우 - 펫 사진 URL 조회)")
-    @Test
-    void findOne_NoTakePicture() {
-        // given
-        Footprint footprint = footprintRepository.save(
-                Footprint.builder()
-                        .walkStatus(BEFORE)
-                        .member(member)
-                        .location(new Location(0.0, 0.0))
-                        .build()
-        );
-
-        // when
-        FindOneFootprintResponse response = footprintQueryService.findOne(member.getId(), footprint.getId());
-
-        // then
-        assertAll(
-                () -> assertThat(response.memberName()).isEqualTo("name1"),
-                () -> assertThat(response.petName()).isEqualTo("petname1"),
-                () -> assertThat(response.petDescription()).isEqualTo("petdescription1"),
-                () -> assertThat(response.petBirthDate()).isEqualTo(LocalDate.now().minusYears(1)),
-                () -> assertThat(response.petSizeType()).isEqualTo(SizeType.MEDIUM),
-                () -> assertThat(response.petGender()).isEqualTo(Gender.MALE_NEUTERED),
+                () -> assertThat(response.pets().get(0).name()).isEqualTo("petname1"),
+                () -> assertThat(response.pets().get(0).description()).isEqualTo("petdescription1"),
+                () -> assertThat(response.pets().get(0).birthDate()).isEqualTo(LocalDate.now().minusYears(1)),
+                () -> assertThat(response.pets().get(0).sizeType()).isEqualTo(SizeType.MEDIUM),
+                () -> assertThat(response.pets().get(0).gender()).isEqualTo(Gender.MALE_NEUTERED),
                 () -> assertThat(response.isMine()).isTrue()
         );
     }
@@ -135,13 +98,13 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     @Test
     void findNear24Hours() {
         // given
-        jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -22, NOW()), FALSE);
-                """, member.getId(), member.getId(), member.getId());
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(25)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(23)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(22))
+                )
+        );
 
         // when
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
@@ -161,14 +124,13 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
     void findMyLatestFootprintTime_MyFootprintExists_PetExists() {
         // given
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
-
-        jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, walk_status, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, 'AFTER', TIMESTAMPADD(HOUR, -25, NOW()), FALSE),
-                (?, 0.11111, 0.11111, 'AFTER', TIMESTAMPADD(HOUR, -23, NOW()), FALSE),
-                (?, 0.22222, 0.22222, 'AFTER', ?, FALSE);
-                """, member.getId(), member.getId(), member.getId(), oneMinuteAgo);
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(25)),
+                        FOOTPRINT_STATUS_AFTER(LocalDateTime.now().minusHours(23)),
+                        FOOTPRINT_STATUS_AFTER(oneMinuteAgo)
+                )
+        );
 
         // when
         LocalDateTime time = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(member.getId()).createdAt();

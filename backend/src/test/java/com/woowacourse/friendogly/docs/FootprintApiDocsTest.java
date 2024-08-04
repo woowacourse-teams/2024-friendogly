@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -25,6 +26,7 @@ import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTi
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.detail.PetDetail;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import com.woowacourse.friendogly.pet.domain.Gender;
@@ -97,13 +99,26 @@ public class FootprintApiDocsTest extends RestDocsTest {
     @Test
     void findOne() throws Exception {
         FindOneFootprintResponse response = new FindOneFootprintResponse(
+                1L,
                 "최강지호",
-                "땡이",
-                "우리 귀여운 땡이입니다",
-                LocalDate.now().minusYears(1),
-                SizeType.MEDIUM,
-                Gender.FEMALE_NEUTERED,
+                BEFORE,
                 LocalDateTime.now(),
+                List.of(
+                        new PetDetail(
+                                "땡이",
+                                "땡이 귀여워요",
+                                LocalDate.of(2020, 12, 10),
+                                SizeType.MEDIUM,
+                                Gender.FEMALE_NEUTERED,
+                                "http://image.com"),
+                        new PetDetail(
+                                "두부",
+                                "두부처럼 하얗습니다.",
+                                LocalDate.of(2021, 10, 10),
+                                SizeType.SMALL,
+                                Gender.MALE,
+                                "http://image.com")
+                ),
                 true
         );
 
@@ -128,13 +143,17 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.memberId").description("발자국을 찍은 회원의 Member ID"),
                                         fieldWithPath("data.memberName").description("발자국을 찍은 회원의 Member ID"),
-                                        fieldWithPath("data.petName").description("발자국을 회원의 강아지 이름"),
-                                        fieldWithPath("data.petDescription").description("발자국을 회원의 강아지 설명"),
-                                        fieldWithPath("data.petBirthDate").description("발자국을 찍은 회원의 강아지 생일"),
-                                        fieldWithPath("data.petSizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
-                                        fieldWithPath("data.petGender").description("발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
-                                        fieldWithPath("data.createdAt").description("발자국이 생성된 시간"),
+                                        fieldWithPath("data.walkStatus").description("발자국의 산책 상태"),
+                                        fieldWithPath("data.changedWalkStatusTime").description("발자국의 산책 상태가 변경된 시간"),
+                                        fieldWithPath("data.pets[].name").description("발자국을 회원의 강아지 이름"),
+                                        fieldWithPath("data.pets[].description").description("발자국을 회원의 강아지 설명"),
+                                        fieldWithPath("data.pets[].birthDate").description("발자국을 찍은 회원의 강아지 생일"),
+                                        fieldWithPath("data.pets[].sizeType").description("발자국을 찍은 회원의 강아지 사이즈"),
+                                        fieldWithPath("data.pets[].gender").description(
+                                                "발자국을 찍은 회원의 강아지 성별(중성화 포함)"),
+                                        fieldWithPath("data.pets[].imageUrl").description("발자국 찍은 회원의 강아지 사진"),
                                         fieldWithPath("data.isMine").description("내 발자국인지 여부 (내 발자국이면 true)")
                                 )
                                 .requestSchema(Schema.schema("FindOneFootprintRequest"))
@@ -150,13 +169,13 @@ public class FootprintApiDocsTest extends RestDocsTest {
     void findNear() throws Exception {
         List<FindNearFootprintResponse> response = List.of(
                 new FindNearFootprintResponse(
-                        1L, 37.5136533, 127.0983182, LocalDateTime.now().minusMinutes(10), true),
+                        1L, 37.5136533, 127.0983182, BEFORE, LocalDateTime.now().minusMinutes(10), true),
                 new FindNearFootprintResponse(
-                        3L, 37.5131474, 127.1042528, LocalDateTime.now().minusMinutes(20), false),
+                        3L, 37.5131474, 127.1042528, BEFORE, LocalDateTime.now().minusMinutes(20), false),
                 new FindNearFootprintResponse(
-                        6L, 37.5171728, 127.1047797, LocalDateTime.now().minusMinutes(30), false),
+                        6L, 37.5171728, 127.1047797, BEFORE, LocalDateTime.now().minusMinutes(30), false),
                 new FindNearFootprintResponse(
-                        11L, 37.516183, 127.1068874, LocalDateTime.now().minusMinutes(40), true)
+                        11L, 37.516183, 127.1068874, BEFORE, LocalDateTime.now().minusMinutes(40), true)
         );
 
         given(footprintQueryService.findNear(any(), any()))
@@ -186,6 +205,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].footprintId").description("발자국 ID"),
                                         fieldWithPath("data.[].latitude").description("발자국 위치의 위도"),
                                         fieldWithPath("data.[].longitude").description("발자국 위치의 경도"),
+                                        fieldWithPath("data.[].walkStatus").description("발자국의 산책 상태"),
                                         fieldWithPath("data.[].createdAt").description("발자국 생성 시간"),
                                         fieldWithPath("data.[].isMine").description("나의 발자국인지 여부")
                                 )

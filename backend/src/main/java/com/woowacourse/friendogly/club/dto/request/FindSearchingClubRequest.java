@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.Set;
 
 public record FindSearchingClubRequest(
+        @NotBlank(message = "필터링 조건은 필수입니다.")
+        String filterCondition,
+
         @NotBlank(message = "주소 정보는 필수입니다.")
         String address,
 

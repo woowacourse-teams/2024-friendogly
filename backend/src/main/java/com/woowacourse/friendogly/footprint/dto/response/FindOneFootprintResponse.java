@@ -1,38 +1,37 @@
 package com.woowacourse.friendogly.footprint.dto.response;
 
-import com.woowacourse.friendogly.footprint.domain.Footprint;
+import com.woowacourse.friendogly.footprint.domain.WalkStatus;
+import com.woowacourse.friendogly.footprint.dto.response.detail.PetDetail;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.domain.SizeType;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record FindOneFootprintResponse(
+        Long memberId,
         String memberName,
-        String petName,
-        String petDescription,
-        LocalDate petBirthDate,
-        SizeType petSizeType,
-        Gender petGender,
-        LocalDateTime createdAt,
+        WalkStatus walkStatus,
+        LocalDateTime changedWalkStatusTime,
+        List<PetDetail> pets,
         boolean isMine
 ) {
-    public static FindOneFootprintResponse withFootprintImage(
+
+    public static FindOneFootprintResponse of(
             Member member,
-            Pet mainPet,
-            Footprint footprint,
+            List<Pet> pets,
+            WalkStatus walkStatus,
+            LocalDateTime changedWalkStatusTime,
             boolean isMine
     ) {
+        List<PetDetail> petDetails = pets.stream()
+                .map(PetDetail::new)
+                .toList();
         return new FindOneFootprintResponse(
+                member.getId(),
                 member.getName().getValue(),
-                mainPet.getName().getValue(),
-                mainPet.getDescription().getValue(),
-                mainPet.getBirthDate().getValue(),
-                mainPet.getSizeType(),
-                mainPet.getGender(),
-                footprint.getCreatedAt(),
-                isMine
-        );
+                walkStatus,
+                changedWalkStatusTime,
+                petDetails,
+                isMine);
     }
 }

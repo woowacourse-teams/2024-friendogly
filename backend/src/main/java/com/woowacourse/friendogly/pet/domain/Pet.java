@@ -76,4 +76,8 @@ public class Pet {
             throw new FriendoglyException("member는 null일 수 없습니다.");
         }
     }
+
+    public boolean isOwner(Member member) {
+        return this.member.getId().equals(member.getId());
+    }
 }
