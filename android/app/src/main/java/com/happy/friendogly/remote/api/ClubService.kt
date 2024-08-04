@@ -1,7 +1,12 @@
 package com.happy.friendogly.remote.api
 
+import com.happy.friendogly.remote.model.request.FilterConditionRequest
 import com.happy.friendogly.remote.model.request.POSTClubMemberRequest
+import com.happy.friendogly.remote.model.request.PostClubRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
+import com.happy.friendogly.remote.model.response.ClubDetailResponse
+import com.happy.friendogly.remote.model.response.ClubSaveResponse
+import com.happy.friendogly.remote.model.response.ClubSearchingResponse
 import com.happy.friendogly.remote.model.response.LocationResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,26 +17,28 @@ import retrofit2.http.Query
 
 interface ClubService {
     @POST(ApiClient.Club.POST_CLUB)
-    suspend fun postClub(): BaseResponse<LocationResponse>
+    suspend fun postClub(
+        @Body request: PostClubRequest,
+    ): BaseResponse<ClubSaveResponse>
 
     @GET(ApiClient.Club.GET_CLUB_SEARCHING)
     suspend fun getSearchingClubs(
-        @Query("filterCondition") filterCondition: String,
+        @Query("filterCondition") filterCondition: FilterConditionRequest,
         @Query("address") address: String,
         @Query("genderParams") genderParams: List<String>,
         @Query("sizeParams") sizeParams: List<String>,
-    )
+    ): BaseResponse<ClubSearchingResponse>
 
     @GET(ApiClient.Club.GET_CLUB)
     suspend fun getClub(
         @Path("id") id: Long
-    )
+    ): BaseResponse<ClubDetailResponse>
 
     @POST(ApiClient.Club.POST_CLUB_MEMBER)
     suspend fun postClubMember(
         @Path("clubId") clubId: Long,
         @Body request: POSTClubMemberRequest,
-    )
+    ): BaseResponse<Unit>
 
     @DELETE(ApiClient.Club.DELETE_CLUB_MEMBER)
     suspend fun deleteClubMember(
