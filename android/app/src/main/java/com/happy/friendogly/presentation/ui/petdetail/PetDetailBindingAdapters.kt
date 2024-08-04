@@ -1,5 +1,6 @@
-package com.happy.friendogly.presentation.ui.dogdetail
+package com.happy.friendogly.presentation.ui.petdetail
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -7,9 +8,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.SizeType
 
 @BindingAdapter("setUpIndicator")
 fun LinearLayout.bindSetUpIndicator(size: Int) {
@@ -48,40 +50,52 @@ fun LinearLayout.bindCurrentIndicator(currentPage: Int) {
 }
 
 @BindingAdapter("genderDrawable")
-fun ImageView.bindGenderDrawable(gender: String) {
-    if (gender == "수컷") {
-        this.setImageResource(R.drawable.img_dog_male)
-    } else {
-        this.setImageResource(R.drawable.img_dog_female)
+fun ImageView.bindGenderDrawable(gender: Gender) {
+    when (gender) {
+        Gender.MALE -> this.setImageResource(R.drawable.img_dog_male)
+        Gender.FEMALE -> this.setImageResource(R.drawable.img_dog_female)
+        else -> {}
     }
 }
 
 @BindingAdapter("neuteredTitle")
-fun TextView.bindNeuteredTitle(isNeutered: Boolean) {
-    if (isNeutered) {
-        this.apply {
+fun TextView.bindNeuteredTitle(gender: Gender) {
+    when (gender) {
+        Gender.MALE_NEUTERED, Gender.FEMALE_NEUTERED -> {
             text = "중성화를 했어요"
             visibility = View.VISIBLE
         }
-    } else {
-        this.visibility = View.GONE
+
+        else -> visibility = View.INVISIBLE
     }
 }
 
 @BindingAdapter("dogSize")
-fun TextView.bindDogSize(sizeType: String) {
+fun TextView.bindDogSize(sizeType: SizeType) {
     text =
         when (sizeType) {
-            "소형견" -> "소형견이에요"
-            "중형견" -> "중현견이에요"
-            "대형견" -> "대형견이에요"
-            else -> ""
+            SizeType.SMALL -> "소형견이에요"
+            SizeType.MEDIUM -> "중현견이에요"
+            SizeType.LARGE -> "대형견이에요"
         }
 }
 
-@BindingAdapter("dogBirthday")
-fun TextView.binDogBirthday(birthday: LocalDate) {
-    val formatter = DateTimeFormatter.ofPattern("yyyy.MM")
-    val formattedDate = birthday.format(formatter)
-    this.text = formattedDate
+@SuppressLint("SetTextI18n")
+@BindingAdapter("age", "isAtLeastOneYearOld")
+fun TextView.binDogTitleAndAge(
+    age: Int?,
+    isAtLeastOneYearOld: Boolean?,
+) {
+    isAtLeastOneYearOld ?: return
+    text =
+        if (isAtLeastOneYearOld) {
+            context.getString(R.string.pet_age_format).format(age)
+        } else {
+            context.getString(R.string.pet_months_format).format(age)
+        }
+}
+
+@BindingAdapter("viewPager2Swipe")
+fun ViewPager2.bindViewPager2Swipe(petsDetail: PetsDetail) {
+    isUserInputEnabled = petsDetail.data.size != 1
 }

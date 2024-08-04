@@ -1,14 +1,14 @@
-package com.happy.friendogly.presentation.ui.dogdetail.adapter
+package com.happy.friendogly.presentation.ui.petdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.happy.friendogly.databinding.ItemDogDetailBinding
-import com.happy.friendogly.presentation.ui.mypage.Dog
+import com.happy.friendogly.databinding.ItemPetDetailBinding
+import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 
-class DogDetailAdapter : ListAdapter<Dog, DogDetailAdapter.ViewHolder>(DogItemDiffCallback) {
+class PetDetailAdapter : ListAdapter<PetDetail, PetDetailAdapter.ViewHolder>(PetDetailItemDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -18,7 +18,7 @@ class DogDetailAdapter : ListAdapter<Dog, DogDetailAdapter.ViewHolder>(DogItemDi
         viewType: Int,
     ): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemDogDetailBinding.inflate(inflater, parent, false)
+        val binding = ItemPetDetailBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -31,22 +31,22 @@ class DogDetailAdapter : ListAdapter<Dog, DogDetailAdapter.ViewHolder>(DogItemDi
         holder.bind(getItem(position % currentList.size))
     }
 
-    class ViewHolder(private val binding: ItemDogDetailBinding) :
+    class ViewHolder(private val binding: ItemPetDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Dog) {
-            binding.dog = item
+        fun bind(item: PetDetail) {
+            binding.petDetail = item
         }
     }
 
-    internal object DogItemDiffCallback : DiffUtil.ItemCallback<Dog>() {
+    internal object PetDetailItemDiffCallback : DiffUtil.ItemCallback<PetDetail>() {
         override fun areItemsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
-        ): Boolean = oldItem.name == newItem.name
+            oldItem: PetDetail,
+            newItem: PetDetail,
+        ): Boolean = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: Dog,
-            newItem: Dog,
+            oldItem: PetDetail,
+            newItem: PetDetail,
         ): Boolean = oldItem == newItem
     }
 }

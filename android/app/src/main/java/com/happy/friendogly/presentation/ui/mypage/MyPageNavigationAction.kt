@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.mypage
 
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+
 sealed interface MyPageNavigationAction {
     data object NavigateToProfileEdit : MyPageNavigationAction
 
@@ -9,7 +11,8 @@ sealed interface MyPageNavigationAction {
 
     data object NavigateToPetEdit : MyPageNavigationAction
 
-    data class NavigateToDogDetail(val id: Long) : MyPageNavigationAction
+    data class NavigateToPetDetail(val currentPage: Int, val petsDetail: PetsDetail) :
+        MyPageNavigationAction
 
     data object NavigateToMyParticipation : MyPageNavigationAction
 

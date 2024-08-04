@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui
 
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+
 interface MainActivityActionHandler {
     fun navigateToGroupDetailActivity(groupId: Long)
 
@@ -7,7 +9,10 @@ interface MainActivityActionHandler {
 
     fun navigateToRegisterDog()
 
-    fun navigateToDogDetail()
+    fun navigateToPetDetail(
+        currentPage: Int,
+        petsDetail: PetsDetail,
+    )
 
     fun navigateToSetting()
 }

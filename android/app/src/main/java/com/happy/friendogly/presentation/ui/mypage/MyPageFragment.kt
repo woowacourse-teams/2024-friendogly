@@ -28,7 +28,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun initDataBinding() {
         binding.vm = viewModel
-        binding.vpDogProfile.registerOnPageChangeCallback(
+        binding.vpPetProfile.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -39,14 +39,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
 
     private fun initAdapter() {
-        binding.vpDogProfile.adapter = adapter
+        binding.vpPetProfile.adapter = adapter
     }
 
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(viewLifecycleOwner) { action ->
             when (action) {
                 is MyPageNavigationAction.NavigateToSetting -> (activity as MainActivityActionHandler).navigateToSetting()
-                is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
+                is MyPageNavigationAction.NavigateToPetDetail ->
+                    (activity as MainActivityActionHandler).navigateToPetDetail(
+                        currentPage = action.currentPage,
+                        petsDetail = action.petsDetail,
+                    )
+
                 is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
 
                 is MyPageNavigationAction.NavigateToProfileEdit -> {}
@@ -66,6 +71,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.fetchPetMine()
         viewModel.fetchMemberMine()
         viewModel.updateCurrentPage(0)
-        binding.vpDogProfile.setCurrentItem(0, false)
+        binding.vpPetProfile.setCurrentItem(0, false)
     }
 }

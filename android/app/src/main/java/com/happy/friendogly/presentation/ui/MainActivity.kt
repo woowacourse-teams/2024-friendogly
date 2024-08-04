@@ -10,12 +10,13 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
-import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
 import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
+import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
 import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
@@ -100,8 +101,11 @@ class MainActivity :
         startActivity(RegisterDogActivity.getIntent(this))
     }
 
-    override fun navigateToDogDetail() {
-        startActivity(DogDetailActivity.getIntent(this))
+    override fun navigateToPetDetail(
+        currentPage: Int,
+        petsDetail: PetsDetail,
+    ) {
+        startActivity(PetDetailActivity.getIntent(this, currentPage, petsDetail))
     }
 
     override fun navigateToSetting() {
