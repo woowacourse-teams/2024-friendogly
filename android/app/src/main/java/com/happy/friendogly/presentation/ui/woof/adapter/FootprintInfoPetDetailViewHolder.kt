@@ -2,16 +2,12 @@ package com.happy.friendogly.presentation.ui.woof.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemPetDetailBinding
-import com.happy.friendogly.presentation.ui.woof.model.PetDetail
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
 
-class PetDetailViewHolder(
+class FootprintInfoPetDetailViewHolder(
     private val binding: ItemPetDetailBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(
-        memberName: String,
-        petDetail: PetDetail,
-    ) {
-        binding.memberName = memberName
-        binding.petDetail = petDetail
+    fun bind(footprintPetDetail: FootprintInfoPetDetailUiModel) {
+        binding.footprintPetDetail = footprintPetDetail
     }
 }

@@ -9,7 +9,7 @@ fun FootprintInfoDto.toDomain(): FootprintInfo {
         memberName = memberName,
         walkStatus = walkStatus.toDomain(),
         changedWalkStatusTime = changedWalkStatusTime,
-        pets = pets.toDomain(),
+        petDetails = pets.toDomain(),
         isMine = isMine,
     )
 }
