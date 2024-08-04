@@ -5,7 +5,6 @@ import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.data.model.FilterConditionDto
 import com.happy.friendogly.data.model.GenderDto
-import com.happy.friendogly.data.model.LocationDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import okhttp3.MultipartBody
 

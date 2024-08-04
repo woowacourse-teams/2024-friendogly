@@ -4,44 +4,44 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.domain.model.GroupDetailViewType
 
 @BindingAdapter("detailViewTypeBackground")
-fun TextView.bindDetailViewTypeBackground(detailViewType: DetailViewType?) {
-    detailViewType ?: return
+fun TextView.bindDetailViewTypeBackground(groupDetailViewType: GroupDetailViewType?) {
+    groupDetailViewType ?: return
     val backgroundTint =
-        when (detailViewType) {
-            DetailViewType.RECRUITMENT, DetailViewType.MINE, DetailViewType.PARTICIPATED ->
+        when (groupDetailViewType) {
+            GroupDetailViewType.RECRUITMENT, GroupDetailViewType.MINE, GroupDetailViewType.PARTICIPATED ->
                 ContextCompat.getColorStateList(
                     context,
                     R.color.coral400,
                 )
 
-            DetailViewType.END_RECRUITMENT -> ContextCompat.getColorStateList(context, R.color.gray400)
+            GroupDetailViewType.END_RECRUITMENT -> ContextCompat.getColorStateList(context, R.color.gray400)
         }
     this.backgroundTintList = backgroundTint
 }
 
 @BindingAdapter("detailViewTypeText")
-fun TextView.bindDetailViewTypeText(detailViewType: DetailViewType?) {
-    detailViewType ?: return
+fun TextView.bindDetailViewTypeText(groupDetailViewType: GroupDetailViewType?) {
+    groupDetailViewType ?: return
     val text =
-        when (detailViewType) {
-            DetailViewType.RECRUITMENT -> context.getString(R.string.group_detail_participate_text)
-            DetailViewType.END_RECRUITMENT -> context.getString(R.string.group_detail_un_participate_text)
-            DetailViewType.MINE, DetailViewType.PARTICIPATED -> context.getString(R.string.group_detail_mine_text)
+        when (groupDetailViewType) {
+            GroupDetailViewType.RECRUITMENT -> context.getString(R.string.group_detail_participate_text)
+            GroupDetailViewType.END_RECRUITMENT -> context.getString(R.string.group_detail_un_participate_text)
+            GroupDetailViewType.MINE, GroupDetailViewType.PARTICIPATED -> context.getString(R.string.group_detail_mine_text)
         }
     this.text = text
 }
 
 @BindingAdapter("detailViewTypeStyle")
-fun TextView.bindDetailViewTypeStyle(detailViewType: DetailViewType?) {
-    detailViewType ?: return
+fun TextView.bindDetailViewTypeStyle(groupDetailViewType: GroupDetailViewType?) {
+    groupDetailViewType ?: return
     val textStyle =
-        when (detailViewType) {
-            DetailViewType.RECRUITMENT, DetailViewType.MINE -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
-            DetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
-            DetailViewType.PARTICIPATED -> TODO()
+        when (groupDetailViewType) {
+            GroupDetailViewType.RECRUITMENT, GroupDetailViewType.MINE -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
+            GroupDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
+            GroupDetailViewType.PARTICIPATED -> TODO()
         }
     this.setTextAppearance(textStyle)
 }

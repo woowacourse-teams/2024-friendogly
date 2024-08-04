@@ -1,12 +1,11 @@
-package com.happy.friendogly.presentation.ui.group.list
+package com.happy.friendogly.domain.model
 
-import com.happy.friendogly.presentation.ui.group.list.model.GroupWoof
-import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import java.time.LocalDateTime
 
-data class GroupListUiModel(
+data class Group(
     val groupId: Long,
-    val filters: List<GroupFilter>,
+    val allowedGender: List<Gender>,
+    val allowedSize: List<SizeType>,
     val groupPoster: String,
     val isParticipable: Boolean,
     val title: String,
@@ -17,5 +16,5 @@ data class GroupListUiModel(
     val groupLeader: String,
     val groupLeaderImage: String,
     val groupDate: LocalDateTime,
-    val groupWoofs: List<GroupWoof>,
+    val groupWoofs: List<GroupPet>,
 )

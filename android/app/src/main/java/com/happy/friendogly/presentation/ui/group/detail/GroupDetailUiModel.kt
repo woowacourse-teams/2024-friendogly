@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.detail
 
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.domain.model.GroupDetailViewType
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
@@ -10,14 +10,14 @@ data class GroupDetailUiModel(
     val groupId: Long,
     val filters: List<GroupFilter>,
     val groupPoster: String? = null,
-    val detailViewType: DetailViewType,
+    val groupDetailViewType: GroupDetailViewType,
     val title: String,
     val content: String,
     val maximumNumberOfPeople: Int,
     val currentNumberOfPeople: Int,
     val groupLocation: String,
     val groupLeader: String,
-    val groupReaderImage: String? = null,
+    val groupLeaderImage: String? = null,
     val groupDate: LocalDateTime,
     val userProfiles: List<GroupDetailProfileUiModel>,
     val dogProfiles: List<GroupDetailProfileUiModel>,

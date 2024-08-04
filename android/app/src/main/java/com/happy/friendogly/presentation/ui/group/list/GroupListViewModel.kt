@@ -158,7 +158,7 @@ class GroupListViewModel(
                         groupLeader = "벼리",
                         groupDate = LocalDateTime.now(),
                         groupWoofs = listOf(),
-                        groupReaderImage = "",
+                        groupLeaderImage = "",
                     ),
                     GroupListUiModel(
                         groupId = 0L,
@@ -177,7 +177,7 @@ class GroupListViewModel(
                         groupLeader = "채드",
                         groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
                         groupWoofs = listOf(),
-                        groupReaderImage = "",
+                        groupLeaderImage = "",
                     ),
                 )
             }.flatten()

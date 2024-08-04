@@ -5,18 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.domain.model.GroupDetailViewType
 
 class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
     private val _groupMenuEvent: MutableLiveData<Event<GroupMenuEvent>> = MutableLiveData()
     val groupMenuEvent: LiveData<Event<GroupMenuEvent>> get() = _groupMenuEvent
 
-    private var _detailViewType: MutableLiveData<DetailViewType> =
-        MutableLiveData(DetailViewType.RECRUITMENT)
-    val detailViewType: LiveData<DetailViewType> get() = _detailViewType
+    private var _Group_detailViewType: MutableLiveData<GroupDetailViewType> =
+        MutableLiveData(GroupDetailViewType.RECRUITMENT)
+    val groupDetailViewType: LiveData<GroupDetailViewType> get() = _Group_detailViewType
 
-    fun initDetailViewType(detailViewType: DetailViewType) {
-        _detailViewType.value = detailViewType
+    fun initDetailViewType(groupDetailViewType: GroupDetailViewType) {
+        _Group_detailViewType.value = groupDetailViewType
     }
 
     // TODO : delete api

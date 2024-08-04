@@ -14,10 +14,10 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.domain.model.GroupDetailViewType
 
 class GroupMenuBottomSheet(
-    private val detailViewType: DetailViewType,
+    private val groupDetailViewType: GroupDetailViewType,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetGroupMenuBinding? = null
     val binding: BottomSheetGroupMenuBinding
@@ -45,7 +45,7 @@ class GroupMenuBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        viewModel.initDetailViewType(detailViewType)
+        viewModel.initDetailViewType(groupDetailViewType)
         initObserver()
     }
 
