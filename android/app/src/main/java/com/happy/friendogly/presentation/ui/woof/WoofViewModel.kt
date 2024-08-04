@@ -33,6 +33,9 @@ class WoofViewModel(
     private val _footprintInfo: MutableLiveData<FootprintInfo> = MutableLiveData()
     val footprintInfo: LiveData<FootprintInfo> get() = _footprintInfo
 
+    private val _address: MutableLiveData<String> = MutableLiveData()
+    val address: LiveData<String> get() = _address
+
     private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
     val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
 
@@ -105,6 +108,10 @@ class WoofViewModel(
             }.onFailure {
             }
         }
+    }
+
+    fun loadAddress(address: String) {
+        _address.value = address
     }
 
     companion object {
