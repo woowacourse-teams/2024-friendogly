@@ -55,8 +55,7 @@ class RegisterPetViewModel(
 
     private fun isProfileUpdateNeeded(): Boolean {
         val state = uiState.value ?: return false
-        val beforePetProfile = state.beforePetProfile ?: return false
-
+        val beforePetProfile = state.beforePetProfile
         val petName = petName.value ?: return false
         val petDescription = petDescription.value ?: return false
         val petSize = petSize.value ?: return false
@@ -74,21 +73,71 @@ class RegisterPetViewModel(
 
     private fun isPetProfileDifferent(
         state: RegisterPetUiState,
-        beforePetProfile: PetProfile,
+        beforePetProfile: PetProfile?,
         petName: String,
         petDescription: String,
         petSize: PetSize,
         petGender: PetGender,
     ): Boolean {
-        return !(
-            (state.profileImageUrl == beforePetProfile.imageUrl) &&
-                (petName == beforePetProfile.name || petName.isBlank()) &&
-                (petDescription == beforePetProfile.description || petDescription.isBlank()) &&
-                (petSize.toSizeType() == beforePetProfile.sizeType) &&
-                (petGender.toGender(state.neutering) == beforePetProfile.gender) &&
+        return if (state.isFirstTimeSetup) {
+            isFirstTimeSetupProfileDifferent(
+                state,
+                beforePetProfile,
+                petName,
+                petDescription,
+                petSize,
+                petGender,
+            )
+        } else {
+            isExistingProfileDifferent(
+                state,
+                beforePetProfile,
+                petName,
+                petDescription,
+                petSize,
+                petGender,
+            )
+        }
+    }
+
+    private fun isFirstTimeSetupProfileDifferent(
+        state: RegisterPetUiState,
+        beforePetProfile: PetProfile?,
+        petName: String,
+        petDescription: String,
+        petSize: PetSize,
+        petGender: PetGender,
+    ): Boolean {
+        return (
+            (state.profileImageUrl == null && state.profilePath != null) &&
+                (petName != beforePetProfile?.name && petName.isNotBlank()) &&
+                (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) &&
+                (petSize.toSizeType() != beforePetProfile?.sizeType) &&
+                (petGender.toGender(state.neutering) != beforePetProfile?.gender) &&
                 (
-                    state.petBirthdayYear == beforePetProfile.birthDate.year &&
-                        state.petBirthdayMonth == beforePetProfile.birthDate.monthNumber
+                    (state.petBirthdayYear != beforePetProfile?.birthDate?.year) ||
+                        (state.petBirthdayMonth != beforePetProfile.birthDate.month.value)
+                )
+        )
+    }
+
+    private fun isExistingProfileDifferent(
+        state: RegisterPetUiState,
+        beforePetProfile: PetProfile?,
+        petName: String,
+        petDescription: String,
+        petSize: PetSize,
+        petGender: PetGender,
+    ): Boolean {
+        return (
+            (state.profileImageUrl == null && state.profilePath != null) ||
+                (petName != beforePetProfile?.name && petName.isNotBlank()) ||
+                (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) ||
+                (petSize.toSizeType() != beforePetProfile?.sizeType) ||
+                (petGender.toGender(state.neutering) != beforePetProfile.gender) ||
+                (
+                    (state.petBirthdayYear != beforePetProfile.birthDate.year) ||
+                        (state.petBirthdayMonth != beforePetProfile.birthDate.month.value)
                 )
         )
     }

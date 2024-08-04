@@ -11,7 +11,7 @@ data class RegisterPetUiState(
     val profilePath: MultipartBody.Part? = null,
     val profileImageUrl: String? = null,
     val petBirthdayYear: Int = LocalDate.now().year,
-    val petBirthdayMonth: Int = LocalDate.now().monthValue,
+    val petBirthdayMonth: Int = LocalDate.now().month.value,
     val neutering: Boolean = false,
     val beforePetProfile: PetProfile? = null,
 )
