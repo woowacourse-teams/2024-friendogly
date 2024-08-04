@@ -230,6 +230,8 @@
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
+
+    <!--프로필-->
     <string name="male">남</string>
     <string name="female">여</string>
     <string name="male_enutered">남(중성화했어요)</string>
