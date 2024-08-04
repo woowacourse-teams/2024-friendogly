@@ -8,7 +8,7 @@ data class ClubDetailDto(
     val content: String,
     val ownerMemberName: String,
     val address: String,
-    val status: String,
+    val status: ClubStateDto,
     val createdAt: LocalDateTime,
     val allowedGender: List<GenderDto>,
     val allowedSize: List<SizeTypeDto>,
