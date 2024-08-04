@@ -1,7 +1,9 @@
 package com.happy.friendogly.remote.api
 
+import com.happy.friendogly.remote.model.request.POSTClubMemberRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.LocationResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -28,6 +30,7 @@ interface ClubService {
     @POST(ApiClient.Club.POST_CLUB_MEMBER)
     suspend fun postClubMember(
         @Path("clubId") clubId: Long,
+        @Body request: POSTClubMemberRequest,
     )
 
     @DELETE(ApiClient.Club.DELETE_CLUB_MEMBER)
