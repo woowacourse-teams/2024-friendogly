@@ -81,7 +81,8 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 false
         );
     }
-    protected Footprint FOOTPRINT_STATUS_BEFORE(Location location){
+
+    protected Footprint FOOTPRINT_STATUS_BEFORE(Location location) {
         return new Footprint(
                 member,
                 location,
@@ -92,6 +93,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 false
         );
     }
+
     protected Footprint FOOTPRINT_STATUS_BEFORE(LocalDateTime createdAt) {
         return new Footprint(
                 member,
@@ -104,7 +106,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
         );
     }
 
-    protected Footprint FOOTPRINT_STATUS_ONGOING(Location location){
+    protected Footprint FOOTPRINT_STATUS_ONGOING(Location location) {
         return new Footprint(
                 member,
                 location,
@@ -150,5 +152,11 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 createdAt,
                 false
         );
+    }
+
+    protected static double ONE_METER_LOCATION_UNIT = 0.0000089847;
+
+    protected static double LONGITUDE_WITH_METER_FROM_ZERO(double meter) {
+        return meter * ONE_METER_LOCATION_UNIT;
     }
 }

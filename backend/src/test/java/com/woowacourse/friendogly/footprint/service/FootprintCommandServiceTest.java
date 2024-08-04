@@ -130,7 +130,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_BEFORE(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.008993216));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(ONGOING);
@@ -144,7 +147,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_BEFORE(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.01));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(BEFORE);
@@ -158,7 +164,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_ONGOING(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.01));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
@@ -173,7 +182,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_ONGOING(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.008993216));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(ONGOING);
@@ -188,7 +200,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_AFTER(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.008993216));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
@@ -202,7 +217,10 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_AFTER(new Location(0, 0)));
 
         // when
-        footprintCommandService.updateWalkStatus(member.getId(), new UpdateWalkStatusRequest(0.0, 0.008993216));
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
