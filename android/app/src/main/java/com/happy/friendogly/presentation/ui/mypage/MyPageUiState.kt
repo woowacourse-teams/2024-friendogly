@@ -10,13 +10,17 @@ import kotlinx.datetime.toLocalDateTime
 import java.time.LocalDate
 
 data class MyPageUiState(
-    val id: Long = -1,
+    val id: Long = INVALID_ID,
     val nickname: String = "",
     val email: String = "",
     val tag: String = "",
     val imageUrl: String? = null,
     val pets: List<PetViewType> = emptyList(),
-)
+) {
+    companion object {
+        private const val INVALID_ID = -1L
+    }
+}
 
 sealed interface PetViewType {
     val id: Long
@@ -33,6 +37,7 @@ data class PetView(
 ) : PetViewType {
     val age: Int
         get() {
+            val currentDate = getCurrentDate()
             return if (isAtLeastOneYearOld) {
                 currentDate.year - birthDate.year
             } else {
@@ -41,12 +46,16 @@ data class PetView(
         }
 
     val isAtLeastOneYearOld: Boolean
-        get() = currentDate.year - birthDate.year > 0
+        get() = getCurrentDate().year - birthDate.year > MINIMUM_AGE
+
+    private fun getCurrentDate(): kotlinx.datetime.LocalDate {
+        val now: Instant = Clock.System.now()
+        val timeZone = TimeZone.currentSystemDefault()
+        return now.toLocalDateTime(timeZone).date
+    }
 
     companion object {
-        private val now: Instant = Clock.System.now()
-        private val timeZone = TimeZone.currentSystemDefault()
-        private val currentDate = now.toLocalDateTime(timeZone).date
+        const val MINIMUM_AGE = 0
 
         fun from(pet: Pet): PetView {
             return PetView(
