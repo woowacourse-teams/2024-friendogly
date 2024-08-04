@@ -23,9 +23,11 @@ class ApiClient {
 
     object Club {
         private const val BASE_URL = "/clubs"
+        private const val MEMBER_URL = "/members"
         const val POST_CLUB = BASE_URL
-        const val DELETE_CLUB = "$BASE_URL{id}"
-        const val POST_CLUB_PARTICIPATION = "$BASE_URL/participation"
-        const val GET_CLUB_MINE = "$BASE_URL/mine"
+        const val GET_CLUB_SEARCHING = "$BASE_URL/searching"
+        const val GET_CLUB = "$BASE_URL/{id}"
+        const val POST_CLUB_MEMBER ="$BASE_URL/{id}$MEMBER_URL"
+        const val DELETE_CLUB_MEMBER = "$BASE_URL/{id}$MEMBER_URL"
     }
 }

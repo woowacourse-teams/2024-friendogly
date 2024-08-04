@@ -6,19 +6,32 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ClubService {
     @POST(ApiClient.Club.POST_CLUB)
     suspend fun postClub(): BaseResponse<LocationResponse>
 
-    @DELETE(ApiClient.Club.DELETE_CLUB)
-    suspend fun deleteClub(
-        @Path("id") id: Long,
-    ): BaseResponse<LocationResponse>
+    @GET(ApiClient.Club.GET_CLUB_SEARCHING)
+    suspend fun getSearchingClubs(
+        @Query("filterCondition") filterCondition: String,
+        @Query("address") address: String,
+        @Query("genderParams") genderParams: List<String>,
+        @Query("sizeParams") sizeParams: List<String>,
+    )
 
-    @POST(ApiClient.Club.POST_CLUB_PARTICIPATION)
-    suspend fun postClubParticipation(): BaseResponse<Unit>
+    @GET(ApiClient.Club.GET_CLUB)
+    suspend fun getClub(
+        @Path("id") id: Long
+    )
 
-    @GET(ApiClient.Club.GET_CLUB_MINE)
-    suspend fun getClubMine(): BaseResponse<Unit>
+    @POST(ApiClient.Club.POST_CLUB_MEMBER)
+    suspend fun postClubMember(
+        @Path("clubId") clubId: Long,
+    )
+
+    @DELETE(ApiClient.Club.DELETE_CLUB_MEMBER)
+    suspend fun deleteClubMember(
+        @Path("clubId") clubId: Long,
+    )
 }
