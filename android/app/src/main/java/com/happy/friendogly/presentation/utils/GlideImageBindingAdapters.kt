@@ -93,13 +93,12 @@ fun ImageView.bindDogProfile(bitmap: Bitmap?) {
         .into(this)
 }
 
-@BindingAdapter("dogImageBitmap", "dogImageUrl")
-fun ImageView.bindGlideDogProfileImage(
+@BindingAdapter("petImageBitmap", "petImageUrl")
+fun ImageView.bindGlidePetProfileImage(
     imageBitmap: Bitmap?,
     imageUrl: String?,
 ) {
     if (imageBitmap == null && imageUrl.isNullOrBlank()) {
-        this.setImageResource(R.drawable.img_profile_normal)
         return
     }
     if (imageBitmap != null) {

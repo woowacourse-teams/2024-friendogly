@@ -38,11 +38,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="24dp"
-                android:text="@string/register_pet_toolbar_title"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:registerPetTitle="@{vm.uiState.isFirstTimeSetup}"
+                tools:text="댕댕이 등록하기" />
 
             <ImageView
                 android:id="@+id/iv_arrow"
@@ -83,9 +84,9 @@
                 android:id="@+id/iv_dog_image"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                app:dogImageBitmap="@{vm.profileImage}"
-                app:dogImageUrl="@{vm.uiState.profileImageUrl}"
                 android:adjustViewBounds="true"
+                app:petImageBitmap="@{vm.profileImage}"
+                app:petImageUrl="@{vm.uiState.profileImageUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

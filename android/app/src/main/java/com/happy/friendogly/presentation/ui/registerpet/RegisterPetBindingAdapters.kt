@@ -19,7 +19,7 @@ fun TextView.bindEditTextDescriptionLength(contents: String?) {
         }
 
     this.apply {
-        text = "$length/20"
+        text = context.getString(R.string.pet_name_length, length)
         setTextColor(color)
     }
 }
@@ -35,4 +35,14 @@ fun TextView.bindDogEditBtnBackground(isProfileComplete: Boolean?) {
         this.background = context.getDrawable(R.drawable.rect_gray03_fill_16)
         this.setTextColor(context.getColor(R.color.gray700))
     }
+}
+
+@BindingAdapter("registerPetTitle")
+fun TextView.bindRegisterPetTitle(isFirstTimeSetup: Boolean) {
+    text =
+        if (isFirstTimeSetup) {
+            context.getString(R.string.register_pet_toolbar_title)
+        } else {
+            context.getString(R.string.patch_pet_toolbar_title)
+        }
 }
