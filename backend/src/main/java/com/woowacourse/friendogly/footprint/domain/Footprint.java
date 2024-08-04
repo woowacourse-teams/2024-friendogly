@@ -122,6 +122,7 @@ public class Footprint {
         walkStatus = ONGOING;
         startWalkTime = LocalDateTime.now();
     }
+
     private void endWalk() {
         walkStatus = AFTER;
         endWalkTime = LocalDateTime.now();
