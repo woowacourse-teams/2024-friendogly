@@ -3,7 +3,7 @@ package com.happy.friendogly.remote.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ClubPetDetailResponse(
+data class ClubDetailPetResponse(
     val id: Long,
     val name : String,
     val imageUrl: String,
