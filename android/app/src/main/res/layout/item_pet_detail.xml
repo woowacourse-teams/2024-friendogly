@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="memberName"
-            type="String" />
-
-        <variable
-            name="petDetail"
-            type="com.happy.friendogly.presentation.ui.woof.model.PetDetail" />
+            name="footprintPetDetail"
+            type="com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +21,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_woof_dog"
-            glide="@{petDetail.imageUrl}"
+            glide="@{footprintPetDetail.petDetail.imageUrl}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
@@ -42,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:text="@{petDetail.name}"
+            android:text="@{footprintPetDetail.petDetail.name}"
             app:layout_constraintBottom_toTopOf="@id/tv_woof_member_name"
             app:layout_constraintStart_toEndOf="@id/iv_woof_dog"
             app:layout_constraintTop_toTopOf="@id/iv_woof_dog"
@@ -51,7 +47,7 @@
         <TextView
             android:id="@+id/tv_woof_member_name"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
-            memberName="@{memberName}"
+            memberName="@{footprintPetDetail.memberName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -74,7 +70,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_age"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petAge="@{petDetail.birthDate}"
+            petAge="@{footprintPetDetail.petDetail.birthDate}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -89,7 +85,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_size"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petSizeType="@{petDetail.sizeType}"
+            petSizeType="@{footprintPetDetail.petDetail.sizeType}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -104,7 +100,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_gender"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petGender="@{petDetail.gender}"
+            petGender="@{footprintPetDetail.petDetail.gender}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -138,7 +134,7 @@
             android:maxLines="2"
             android:minHeight="60dp"
             android:padding="15dp"
-            android:text="@{petDetail.description}"
+            android:text="@{footprintPetDetail.petDetail.description}"
             android:textColor="@color/gray800"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_introduce"

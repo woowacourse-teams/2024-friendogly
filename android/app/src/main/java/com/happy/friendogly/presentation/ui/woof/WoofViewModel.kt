@@ -12,9 +12,12 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.woof.mapper.toPetDetailsUiModel
+import com.happy.friendogly.presentation.ui.woof.mapper.toWalkStatusUiModel
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoWalkStatusUiModel
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
@@ -30,8 +33,13 @@ class WoofViewModel(
     private val _footprintSave: MutableLiveData<FootprintSave> = MutableLiveData()
     val footprintSave: LiveData<FootprintSave> get() = _footprintSave
 
-    private val _footprintInfo: MutableLiveData<FootprintInfo> = MutableLiveData()
-    val footprintInfo: LiveData<FootprintInfo> get() = _footprintInfo
+    private val _footprintWalkStatus: MutableLiveData<FootprintInfoWalkStatusUiModel> =
+        MutableLiveData()
+    val footprintWalkStatus: LiveData<FootprintInfoWalkStatusUiModel> get() = _footprintWalkStatus
+
+    private val _footprintPetDetails: MutableLiveData<List<FootprintInfoPetDetailUiModel>> =
+        MutableLiveData()
+    val footprintPetDetails: LiveData<List<FootprintInfoPetDetailUiModel>> get() = _footprintPetDetails
 
     private val _address: MutableLiveData<String> = MutableLiveData()
     val address: LiveData<String> get() = _address
@@ -57,7 +65,8 @@ class WoofViewModel(
     fun loadFootprintInfo(footprintId: Long) {
         viewModelScope.launch {
             getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
-                _footprintInfo.value = footPrintInfo
+                _footprintWalkStatus.value = footPrintInfo.toWalkStatusUiModel()
+                _footprintPetDetails.value = footPrintInfo.toPetDetailsUiModel()
             }.onFailure {
             }
         }

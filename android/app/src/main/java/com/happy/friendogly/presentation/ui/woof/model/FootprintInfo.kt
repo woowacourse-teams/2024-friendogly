@@ -7,6 +7,6 @@ data class FootprintInfo(
     val memberName: String,
     val walkStatus: WalkStatus,
     val changedWalkStatusTime: LocalDateTime,
-    val pets: List<PetDetail>,
+    val petDetails: List<PetDetail>,
     val isMine: Boolean,
 )

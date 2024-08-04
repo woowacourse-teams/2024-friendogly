@@ -19,7 +19,7 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoAdapter
+import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.naver.maps.geometry.LatLng
@@ -60,7 +60,7 @@ class WoofFragment :
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
-    private val adapter by lazy { FootprintInfoAdapter() }
+    private val adapter by lazy { FootprintInfoPetDetailAdapter() }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
@@ -191,7 +191,11 @@ class WoofFragment :
             viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
 
-            val position = LatLng(marker.position.latitude - 0.0025, marker.position.longitude)
+            val position =
+                LatLng(
+                    marker.position.latitude - MARKER_CLICKED_CAMERA_LATITUDE_UP,
+                    marker.position.longitude,
+                )
             moveCameraCenterPosition(position)
 
             changeRecentlyClickedMarkerSize()
@@ -262,9 +266,8 @@ class WoofFragment :
             )
         }
 
-        viewModel.footprintInfo.observe(viewLifecycleOwner) { footPrintInfo ->
-            adapter.setMemberName(footPrintInfo.memberName)
-            adapter.submitList(footPrintInfo.pets)
+        viewModel.footprintPetDetails.observe(viewLifecycleOwner) { footPrintPetDetails ->
+            adapter.submitList(footPrintPetDetails)
         }
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
@@ -462,7 +465,7 @@ class WoofFragment :
             translationY = height.toFloat()
             animate()
                 .translationY(0f)
-                .setDuration(300)
+                .setDuration(ANIMATE_DURATION_MILLIS)
                 .setListener(
                     object : AnimatorListenerAdapter() {
                         override fun onAnimationStart(animation: Animator) {
@@ -477,7 +480,7 @@ class WoofFragment :
     private fun hideViewAnimation(view: View) {
         view.animate()
             .translationY(view.height.toFloat())
-            .setDuration(300)
+            .setDuration(ANIMATE_DURATION_MILLIS)
             .setListener(
                 object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
@@ -596,5 +599,7 @@ class WoofFragment :
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
         private const val LOADING_DELAY_MILLIS = 2000L
+        private const val ANIMATE_DURATION_MILLIS = 300L
+        private const val MARKER_CLICKED_CAMERA_LATITUDE_UP = 0.0025
     }
 }

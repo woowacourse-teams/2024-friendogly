@@ -230,6 +230,7 @@
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
+    <string name="woof_my_footprint">MY</string>
 
     <!--프로필-->
     <string name="male">남</string>
@@ -249,4 +250,6 @@
     <string name="permission_cancel">취소</string>
     <string name="permission_go_setting">설정</string>
     <string name="permission_denied_message">권한을 거부하여 기능을 사용할 수 없습니다.</string>
+    <string name="woof_register_walking_area">산책 영역 등록</string>
+    <string name="woof_register_footprint">이 위치에 발자국 등록</string>
 </resources>
