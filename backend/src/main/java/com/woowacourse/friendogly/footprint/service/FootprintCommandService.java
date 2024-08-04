@@ -81,8 +81,7 @@ public class FootprintCommandService {
     }
 
     public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
-        Footprint footprint = footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
+        Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
