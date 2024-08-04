@@ -7,9 +7,11 @@ import okhttp3.MultipartBody
 import java.time.LocalDate
 
 data class RegisterPetUiState(
+    val isFirstTimeSetup: Boolean = true,
     val profilePath: MultipartBody.Part? = null,
+    val profileImageUrl: String? = null,
     val petBirthdayYear: Int = LocalDate.now().year,
-    val petBirthdayMonth: Int = LocalDate.now().month.value,
+    val petBirthdayMonth: Int = LocalDate.now().monthValue,
     val neutering: Boolean = false,
     val beforePetProfile: PetProfile? = null,
 )
@@ -29,6 +31,14 @@ enum class PetSize(val title: String) {
     }
 }
 
+fun SizeType.toPetSize(): PetSize {
+    return when (this) {
+        SizeType.SMALL -> PetSize.SMALL
+        SizeType.MEDIUM -> PetSize.MEDIUM
+        SizeType.LARGE -> PetSize.LARGE
+    }
+}
+
 enum class PetGender(val title: String) {
     MAIL("수컷"),
     FEMALE("암컷"),
@@ -44,5 +54,12 @@ enum class PetGender(val title: String) {
                 if (neutering) Gender.FEMALE_NEUTERED else Gender.FEMALE
             }
         }
+    }
+}
+
+fun Gender.toPetGender(): PetGender {
+    return when (this) {
+        Gender.MALE, Gender.MALE_NEUTERED -> PetGender.MAIL
+        Gender.FEMALE, Gender.FEMALE_NEUTERED -> PetGender.FEMALE
     }
 }
