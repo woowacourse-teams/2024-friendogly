@@ -1,6 +1,6 @@
 package com.happy.friendogly.data.model
 
-enum class FilterConditionDto {
+enum class ClubFilterConditionDto {
     ALL,
     OPEN,
     ABLE_TO_JOIN,

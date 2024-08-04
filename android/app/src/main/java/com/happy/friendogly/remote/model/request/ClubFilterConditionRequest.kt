@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class FilterConditionRequest {
+enum class ClubFilterConditionRequest {
     @SerializedName("ALL")
     ALL,
 

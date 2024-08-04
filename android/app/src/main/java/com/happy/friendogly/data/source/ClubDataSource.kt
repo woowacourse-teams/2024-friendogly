@@ -3,7 +3,7 @@ package com.happy.friendogly.data.source
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubDto
-import com.happy.friendogly.data.model.FilterConditionDto
+import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import okhttp3.MultipartBody
@@ -21,7 +21,7 @@ interface ClubDataSource {
     ): Result<Unit>
 
     suspend fun getSearchingClubs(
-        filterCondition: FilterConditionDto,
+        filterCondition: ClubFilterConditionDto,
         address: ClubAddressDto,
         genderParams: List<GenderDto>,
         sizeParams: List<SizeTypeDto>,

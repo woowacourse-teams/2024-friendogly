@@ -3,7 +3,7 @@ package com.happy.friendogly.remote.source
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubDto
-import com.happy.friendogly.data.model.FilterConditionDto
+import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.data.source.ClubDataSource
@@ -42,7 +42,7 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
     }
 
     override suspend fun getSearchingClubs(
-        filterCondition: FilterConditionDto,
+        filterCondition: ClubFilterConditionDto,
         address: ClubAddressDto,
         genderParams: List<GenderDto>,
         sizeParams: List<SizeTypeDto>
