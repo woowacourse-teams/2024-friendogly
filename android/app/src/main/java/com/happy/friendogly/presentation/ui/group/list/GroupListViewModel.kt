@@ -52,16 +52,17 @@ class GroupListViewModel(
         }
     }
 
-    private fun loadAddress() = viewModelScope.launch {
-        getAddressUseCase()
-            .onSuccess {
-                _myAddress.value = it
-                loadGroups()
-            }
-            .onFailure {
-                _uiState.value = GroupListUiState.NotAddress
-            }
-    }
+    private fun loadAddress() =
+        viewModelScope.launch {
+            getAddressUseCase()
+                .onSuccess {
+                    _myAddress.value = it
+                    loadGroups()
+                }
+                .onFailure {
+                    _uiState.value = GroupListUiState.NotAddress
+                }
+        }
 
     private fun loadGroups() =
         viewModelScope.launch {
@@ -142,11 +143,11 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                            GroupFilter.GenderFilter.NeutralizingMale,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                                GroupFilter.GenderFilter.NeutralizingMale,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",
@@ -162,10 +163,10 @@ class GroupListViewModel(
                     GroupListUiModel(
                         groupId = 0L,
                         filters =
-                        listOf(
-                            GroupFilter.SizeFilter.SmallDog,
-                            GroupFilter.GenderFilter.Female,
-                        ),
+                            listOf(
+                                GroupFilter.SizeFilter.SmallDog,
+                                GroupFilter.GenderFilter.Female,
+                            ),
                         groupPoster = "",
                         isParticipable = true,
                         title = "중형견 모임해요",

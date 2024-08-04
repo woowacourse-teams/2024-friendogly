@@ -76,7 +76,6 @@ class SettingMyLocationViewModel(
             }
     }
 
-
     companion object {
         fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
