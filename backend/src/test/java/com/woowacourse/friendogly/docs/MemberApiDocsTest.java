@@ -1,19 +1,11 @@
 package com.woowacourse.friendogly.docs;
 
-import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
-import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
-import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.auth.AuthArgumentResolver;
+import com.woowacourse.friendogly.auth.dto.KakaoUserResponse;
+import com.woowacourse.friendogly.auth.service.KakaoOauthService;
 import com.woowacourse.friendogly.member.controller.MemberController;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.FindMemberResponse;
@@ -32,6 +24,16 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
+import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(MemberController.class)
 public class MemberApiDocsTest extends RestDocsTest {
 
@@ -44,20 +46,29 @@ public class MemberApiDocsTest extends RestDocsTest {
     @Autowired
     private AuthArgumentResolver authArgumentResolver;
 
+    @MockBean
+    private KakaoOauthService kakaoOauthService;
+
     @DisplayName("회원 생성 문서화")
     @Test
     void saveMember_Success() throws Exception {
+        KakaoUserResponse kakaoUserResponse = new KakaoUserResponse(1L);
         SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com");
         SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416", "member@email.com", "http://google.com");
         MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
         MockMultipartFile request = new MockMultipartFile("request", "request", "application/json", objectMapper.writeValueAsBytes(requestDto));
 
-        Mockito.when(memberCommandService.saveMember(any(), any()))
+        Mockito.when(kakaoOauthService.getUserInfo(any()))
+                .thenReturn(kakaoUserResponse);
+//        Mockito.when(oAuthArgumentResolver.resolveArgument(any(), any(), any(), any()))
+//                .thenReturn(kakaoUserResponse.id());
+        Mockito.when(memberCommandService.saveMember(any(), any(), any()))
                 .thenReturn(response);
 
         mockMvc.perform(RestDocumentationRequestBuilders.multipart("/members")
                         .file(image)
-                        .file(request))
+                        .file(request)
+                        .header(HttpHeaders.AUTHORIZATION, "accessTokenValue"))
                 .andExpect(status().isCreated())
                 .andDo(MockMvcRestDocumentationWrapper.document("member-save-201",
                         getDocumentRequest(),
@@ -74,6 +85,9 @@ public class MemberApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Member API")
                                 .summary("회원 생성 API")
+                                .requestHeaders(
+                                        headerWithName("Authorization").description("카카오 로그인 access token")
+                                )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 id"),

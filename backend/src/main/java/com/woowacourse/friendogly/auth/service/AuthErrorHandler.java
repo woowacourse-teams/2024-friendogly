@@ -19,7 +19,8 @@ public class AuthErrorHandler implements ResponseErrorHandler {
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         throw new FriendoglyException(
-                "로그인에 실패했습니다. 다시 시도해주세요.",
+//                "로그인에 실패했습니다. 다시 시도해주세요.",
+                response.getBody().toString(),
                 HttpStatus.valueOf(response.getStatusCode().value())
         );
     }
