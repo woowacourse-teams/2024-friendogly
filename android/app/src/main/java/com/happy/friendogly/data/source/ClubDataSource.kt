@@ -7,6 +7,7 @@ import com.happy.friendogly.data.model.FilterConditionDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.LocationDto
 import com.happy.friendogly.data.model.SizeTypeDto
+import okhttp3.MultipartBody
 
 interface ClubDataSource {
     suspend fun postClub(
@@ -16,13 +17,13 @@ interface ClubDataSource {
         allowedGender: List<GenderDto>,
         allowedSize: List<SizeTypeDto>,
         memberCapacity: Int,
-        imageUrl: String,
+        file: MultipartBody.Part?,
         petIds: List<Long>,
     ): Result<Unit>
 
     suspend fun getSearchingClubs(
         filterCondition: FilterConditionDto,
-        address: String,
+        address: ClubAddressDto,
         genderParams: List<GenderDto>,
         sizeParams: List<SizeTypeDto>,
     ): Result<List<ClubDto>>

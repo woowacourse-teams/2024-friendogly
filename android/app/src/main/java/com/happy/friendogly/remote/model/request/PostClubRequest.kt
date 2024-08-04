@@ -10,6 +10,5 @@ data class PostClubRequest(
     val allowedGender: List<GenderRequest>,
     val allowedSize: List<SizeTypeRequest>,
     val memberCapacity: Int,
-    val imageUrl: String,
     val petIds: List<Long>,
 )
