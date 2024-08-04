@@ -1,6 +1,6 @@
 package com.happy.friendogly.domain.model
 
-data class GroupPet(
+data class ClubPet(
     val id: Long,
     val name : String,
     val imageUrl: String,

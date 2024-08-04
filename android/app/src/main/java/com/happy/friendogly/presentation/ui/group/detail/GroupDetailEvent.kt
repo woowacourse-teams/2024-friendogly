@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.detail
 
-import com.happy.friendogly.domain.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 sealed interface GroupDetailEvent {

@@ -14,7 +14,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
-import com.happy.friendogly.domain.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 class GroupMenuBottomSheet(
     private val groupDetailViewType: GroupDetailViewType,

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.domain.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 class GroupMenuViewModel : BaseViewModel(), GroupMenuActionHandler {
     private val _groupMenuEvent: MutableLiveData<Event<GroupMenuEvent>> = MutableLiveData()

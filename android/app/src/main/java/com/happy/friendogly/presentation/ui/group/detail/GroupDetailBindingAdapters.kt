@@ -4,7 +4,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
-import com.happy.friendogly.domain.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 @BindingAdapter("detailViewTypeBackground")
 fun TextView.bindDetailViewTypeBackground(groupDetailViewType: GroupDetailViewType?) {

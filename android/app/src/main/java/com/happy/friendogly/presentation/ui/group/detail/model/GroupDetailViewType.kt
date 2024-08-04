@@ -1,4 +1,4 @@
-package com.happy.friendogly.domain.model
+package com.happy.friendogly.presentation.ui.group.detail.model
 
 enum class GroupDetailViewType {
     RECRUITMENT,

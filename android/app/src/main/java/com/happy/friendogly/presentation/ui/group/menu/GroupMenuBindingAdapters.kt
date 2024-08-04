@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.group.menu
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import com.happy.friendogly.domain.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 @BindingAdapter("myVisibleMenu")
 fun FrameLayout.bindMyVisibleMenu(groupDetailViewType: GroupDetailViewType) {
