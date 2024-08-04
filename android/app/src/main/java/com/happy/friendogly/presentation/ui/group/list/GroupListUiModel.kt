@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.group.list
 
 import com.happy.friendogly.presentation.ui.group.list.model.GroupWoof
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 data class GroupListUiModel(
     val groupId: Long,
@@ -15,7 +15,6 @@ data class GroupListUiModel(
     val currentNumberOfPeople: Int,
     val groupLocation: String,
     val groupLeader: String,
-    val groupLeaderImage: String,
     val groupDate: LocalDateTime,
     val groupWoofs: List<GroupWoof>,
 )

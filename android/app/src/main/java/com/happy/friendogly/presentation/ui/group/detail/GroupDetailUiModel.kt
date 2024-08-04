@@ -4,7 +4,7 @@ import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewTy
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 data class GroupDetailUiModel(
     val groupId: Long,
