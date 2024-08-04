@@ -24,7 +24,9 @@ interface ClubService {
     @GET(ApiClient.Club.GET_CLUB_SEARCHING)
     suspend fun getSearchingClubs(
         @Query("filterCondition") filterCondition: FilterConditionRequest,
-        @Query("address") address: String,
+        @Query("province") province: String,
+        @Query("city") city: String,
+        @Query("village") village: String,
         @Query("genderParams") genderParams: List<String>,
         @Query("sizeParams") sizeParams: List<String>,
     ): BaseResponse<ClubSearchingResponse>

@@ -23,6 +23,6 @@ data class ClubDetailResponse(
     val isMine: Boolean,
     val alreadyParticipate: Boolean,
     val canParticipate: Boolean,
-    val memberDetails: List<MemberResponse>,
-    val petDetails: List<PetResponse>,
+    val memberDetails: List<ClubMemberDetailResponse>,
+    val petDetails: List<ClubPetDetailResponse>,
 )
