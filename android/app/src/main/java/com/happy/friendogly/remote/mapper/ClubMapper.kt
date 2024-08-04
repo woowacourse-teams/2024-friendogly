@@ -14,7 +14,7 @@ fun ClubResponse.toData(): ClubDto{
         title = title,
         content = content,
         ownerMemberName = ownerMemberName,
-        address = address,
+        address = address.toData(),
         status = status.toData(),
         createdAt = createdAt,
         allowedGender = allowedGender.map { it.toData() },

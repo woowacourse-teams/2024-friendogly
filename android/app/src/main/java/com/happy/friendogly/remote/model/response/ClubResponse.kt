@@ -10,7 +10,7 @@ data class ClubResponse(
     val title: String,
     val content: String,
     val ownerMemberName: String,
-    val address: String,
+    val address: ClubAddressResponse,
     val status: ClubStateResponse,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,

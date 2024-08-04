@@ -4,6 +4,7 @@ import com.happy.friendogly.remote.util.LocalDateTimeSerializer
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
+// TODO: 뷰 플로우에 따라서 활용할 지 결정될 것 같음
 @Serializable
 data class ClubSaveResponse(
     val id: Long,
