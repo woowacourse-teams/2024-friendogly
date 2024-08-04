@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.petdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -50,6 +51,7 @@ class PetDetailViewModel(
     }
 
     fun navigateToBack() {
+        Log.d("ttt", "hihi")
         _navigateAction.emit(PetProfileNavigationAction.NavigateToBack)
     }
 
