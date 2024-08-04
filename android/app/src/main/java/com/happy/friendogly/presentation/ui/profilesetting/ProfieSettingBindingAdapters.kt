@@ -29,7 +29,7 @@ fun TextView.bindEditTextLength(contents: String?) {
         }
 
     this.apply {
-        text = "$length/15"
+        text = context.getString(R.string.user_name_length, length)
         setTextColor(color)
     }
 }
