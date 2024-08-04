@@ -45,18 +45,14 @@ class ClubRepositoryImpl(
         address = address.toData(),
         genderParams = genderParams.map { it.toData() },
         sizeParams = sizeParams.map { it.toData() }
-    ).mapCatching { contents ->
-        contents.map { clubDto ->
-            clubDto.toDomain()
-        }
-    }
+    ).mapCatching { it.toDomain() }
 
     override suspend fun getClub(clubId: Long): Result<ClubDetail> =
         source.getClub(clubId).mapCatching { it.toDomain() }
 
     override suspend fun postClubMember(
         clubId: Long,
-        participatingPetsId: List<Long>
+        participatingPetsId: List<Long>,
     ): Result<Unit> = source.postClubMember(
         clubId = clubId,
         participatingPetsId = participatingPetsId,
