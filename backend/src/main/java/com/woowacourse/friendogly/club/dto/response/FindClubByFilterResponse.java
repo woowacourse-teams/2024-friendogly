@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public record FindSearchingClubResponse(
+public record FindClubByFilterResponse(
         Long id,
         String title,
         String content,
         String ownerMemberName,
-        String address,
+        AddressDetailResponse address,
         Status status,
         LocalDateTime createdAt,
         Set<Gender> allowedGender,
@@ -25,7 +25,7 @@ public record FindSearchingClubResponse(
 
 ) {
 
-    public FindSearchingClubResponse(
+    public FindClubByFilterResponse(
             Club club,
             List<String> petImageUrls
     ) {
@@ -34,7 +34,7 @@ public record FindSearchingClubResponse(
                 club.getTitle().getValue(),
                 club.getContent().getValue(),
                 club.findOwnerName().getValue(),
-                club.getAddress().getValue(),
+                new AddressDetailResponse(club.getAddress()),
                 club.getStatus(),
                 club.getCreatedAt(),
                 club.getAllowedGenders(),

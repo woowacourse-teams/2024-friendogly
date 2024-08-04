@@ -2,14 +2,16 @@ package com.woowacourse.friendogly.club.service;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.club.repository.ClubSpecification;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
+import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +39,16 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindSearchingClubResponse> findFindByFilter(Long memberId, FindSearchingClubRequest request) {
+    public List<FindClubByFilterResponse> findFindByFilter(Long memberId, FindClubByFilterRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
         Specification<Club> spec = ClubSpecification.where()
-                .equalsAddress(request.address())
-                .hasGenders(request.genderParams())
-                .hasSizeTypes(request.sizeParams())
+                .equalsProvince(request.province())
+                .equalsCity(request.city())
+                .equalsVillage(request.village())
+                .hasGenders(Gender.toGenders(request.genderParams()))
+                .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
                 .build();
 
         List<Club> clubs = clubRepository.findAll(spec);
@@ -52,7 +56,7 @@ public class ClubQueryService {
         FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
 
         return filterClubs(clubs.stream(), filterCondition, member, pets)
-                .map(club -> new FindSearchingClubResponse(club, collectOverviewPetImages(club)))
+                .map(club -> new FindClubByFilterResponse(club, collectOverviewPetImages(club)))
                 .toList();
     }
 

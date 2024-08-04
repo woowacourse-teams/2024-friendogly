@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
@@ -43,20 +43,22 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
                 FilterCondition.ALL.name(),
-                address,
-                Set.of(Gender.FEMALE),
-                Set.of(SizeType.SMALL)
+                province,
+                city,
+                village,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
-        List<FindSearchingClubResponse> expectedResponses = List.of(
-                new FindSearchingClubResponse(club, List.of(petImageUrl))
+        List<FindClubByFilterResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
+        List<FindClubByFilterResponse> expectedResponses = List.of(
+                new FindClubByFilterResponse(club, List.of(petImageUrl))
         );
 
-        FindSearchingClubResponse actual = responses.get(0);
-        FindSearchingClubResponse expected = expectedResponses.get(0);
+        FindClubByFilterResponse actual = responses.get(0);
+        FindClubByFilterResponse expected = expectedResponses.get(0);
 
         assertAll(
                 () -> assertThat(actual.id()).isEqualTo(expected.id()),
@@ -83,14 +85,16 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
                 FilterCondition.ALL.name(),
-                address,
-                Set.of(Gender.MALE),
-                Set.of(SizeType.SMALL)
+                province,
+                city,
+                village,
+                Set.of(Gender.MALE.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
+        List<FindClubByFilterResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
     }
