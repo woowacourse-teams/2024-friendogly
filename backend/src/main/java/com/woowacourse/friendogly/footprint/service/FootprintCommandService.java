@@ -86,7 +86,7 @@ public class FootprintCommandService {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
 
-        footprint.changeWalkStatus(new Location(request.latitude(), request.longitude()));
+        footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
 }

@@ -109,7 +109,7 @@ public class Footprint {
         return endWalkTime;
     }
 
-    public void changeWalkStatus(Location location) {
+    public void updateWalkStatusWithCurrentLocation(Location location) {
         if (walkStatus.isBefore() && isNear(location)) {
             startWalk();
         }
