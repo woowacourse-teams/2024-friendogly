@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -17,6 +18,8 @@ import com.happy.friendogly.databinding.ActivityGroupAddBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter
+import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.happy.friendogly.presentation.ui.group.select.DogSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.utils.toBitmap
 
@@ -90,7 +93,7 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
             when (actionEvent) {
                 GroupAddEvent.Navigation.NavigateToHome -> finish()
 
-                GroupAddEvent.Navigation.NavigateToSelectDog -> TODO()
+                is GroupAddEvent.Navigation.NavigateToSelectDog -> openDogSelector(actionEvent.filters)
                 GroupAddEvent.Navigation.NavigateToSelectGroupPoster -> openGroupPosterBottomSheet()
                 is GroupAddEvent.ChangePage -> {
                     binding.vpGroupAdd.setCurrentItem(actionEvent.page, true)
@@ -99,6 +102,18 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
                 GroupAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.group_add_information_fail_address))
             }
         }
+    }
+
+    private fun openDogSelector(filters: List<GroupFilter>) {
+        val bottomSheet =
+            DogSelectBottomSheet(filters = filters) {
+                viewModel.submitAddGroup()
+            }
+        bottomSheet.show(supportFragmentManager, "TAG")
+        bottomSheet.setStyle(
+            DialogFragment.STYLE_NORMAL,
+            R.style.RoundCornerBottomSheetDialogTheme,
+        )
     }
 
     private fun openGroupPosterBottomSheet() {

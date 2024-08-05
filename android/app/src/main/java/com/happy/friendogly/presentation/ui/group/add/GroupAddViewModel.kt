@@ -17,7 +17,6 @@ import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Co
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.group.add.model.GroupCounter
 import com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHandler
-import com.happy.friendogly.presentation.ui.group.list.GroupListUiState
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.utils.addSourceList
@@ -57,7 +56,7 @@ class GroupAddViewModel(
                 groupFilterSelector.currentSelectedFilters,
                 groupCounter,
                 myAddress,
-            ){
+            ) {
                 isValidAddedData()
             }
         }
@@ -99,12 +98,16 @@ class GroupAddViewModel(
                 }
         }
 
-    private fun isValidAddedData(): Boolean{
+    private fun isValidAddedData(): Boolean {
         return isValidEditGroup() && isValidFilterGroup() && isValidGroupCount() && isValidAddress()
     }
 
     private fun isValidPage(page: Int): Boolean {
         return page in MIN_PAGE until MAX_PAGE_SIZE
+    }
+
+    private fun isSubmitPage(page: Int): Boolean {
+        return page == MAX_PAGE_SIZE
     }
 
     private fun isValidPrevPage(): Boolean {
@@ -129,7 +132,7 @@ class GroupAddViewModel(
         return groupCounter.value?.isValid() ?: false
     }
 
-    private fun isValidAddress(): Boolean{
+    private fun isValidAddress(): Boolean {
         return myAddress.value != null
     }
 
@@ -169,7 +172,14 @@ class GroupAddViewModel(
         if (isValidPage(newPage)) {
             _currentPage.value = newPage
             _groupAddEvent.emit(GroupAddEvent.ChangePage(newPage))
+        } else if (isSubmitPage(newPage)) {
+            selectDogs()
         }
+    }
+
+    private fun selectDogs() {
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectDog(filters))
     }
 
     override fun selectGroupImage() {
