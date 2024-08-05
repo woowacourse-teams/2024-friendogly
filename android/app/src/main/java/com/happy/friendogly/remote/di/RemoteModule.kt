@@ -3,7 +3,6 @@ package com.happy.friendogly.remote.di
 import com.happy.friendogly.local.di.LocalModule
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ClubService
-import com.happy.friendogly.remote.api.FootprintService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.WoofService
@@ -31,16 +30,6 @@ object RemoteModule {
             baseUrl,
             localModule,
         ).create(ClubService::class.java)
-    }
-
-    fun createFootprintService(
-        baseUrl: BaseUrl,
-        localModule: LocalModule,
-    ): FootprintService {
-        return createRetrofit(
-            baseUrl,
-            localModule,
-        ).create(FootprintService::class.java)
     }
 
     fun createWoofService(
@@ -83,7 +72,7 @@ object RemoteModule {
         baseUrl: BaseUrl,
         localModule: LocalModule,
     ): Retrofit {
-        return Retrofit.Builder().baseUrl(baseUrl.url).client(
+        return Retrofit.Builder().baseUrl("http://10.0.2.2:8080/").client(
             createOkHttpClient {
                 addInterceptor(AuthorizationInterceptor(localModule = localModule))
                 addInterceptor(ErrorResponseInterceptor())
