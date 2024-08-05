@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.footprint.domain;
 
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 
 import com.woowacourse.friendogly.member.domain.Member;
@@ -61,11 +60,15 @@ public class Footprint {
             Member member,
             Location location
     ) {
-        this.member = member;
-        this.location = location;
-        this.walkStatus = BEFORE;
-        this.createdAt = LocalDateTime.now();
-        this.isDeleted = false;
+        this(
+                member,
+                location,
+                WalkStatus.BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                false
+        );
     }
 
     public Footprint(
