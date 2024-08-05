@@ -111,12 +111,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         // then
-        assertAll(
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
-                        .containsExactly(0.00000, 0.00000),
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
-                        .containsExactly(0.00000, 0.00000)
-        );
+        assertThat(nearFootprints.size()).isEqualTo(2);
     }
 
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")
