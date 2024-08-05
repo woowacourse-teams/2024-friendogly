@@ -42,7 +42,6 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
     @SuppressLint("ClickableViewAccessibility")
     private fun initDataBinding() {
         binding.vm = viewModel
-        binding.actionHandler = viewModel
     }
 
     private fun initViewPager() {

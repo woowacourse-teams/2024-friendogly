@@ -40,6 +40,24 @@ class GroupAddViewModel(
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
 
+    val isValidNextPage: LiveData<Boolean>
+        get() = MutableLiveData(
+            when (currentPage.value) {
+                0 -> isValidEditGroup()
+                1 -> isValidFilterGroup()
+                2 -> isValidGroupCount()
+                else -> false
+            }
+        )
+
+    val isValidPrevPage: LiveData<Boolean>
+        get() = MutableLiveData(
+            when (currentPage.value) {
+                1, 2 -> true
+                else -> false
+            }
+        )
+
     init {
         groupFilterSelector.initGroupFilter(GroupFilter.makeGroupFilterEntry())
     }
@@ -95,7 +113,28 @@ class GroupAddViewModel(
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectGroupPoster)
     }
 
+    private fun isValidEditGroup(): Boolean {
+        val groupTitleLength = groupTitle.value?.length ?: (MIN_TEXT_LENGTH - 1)
+        val groupContentLength = groupContent.value?.length ?: (MIN_TEXT_LENGTH - 1)
+        return groupTitleLength in MIN_TEXT_LENGTH..MAX_TITLE_LENGTH &&
+                groupContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
+    }
+
+    private fun isValidFilterGroup(): Boolean {
+        return with(groupFilterSelector) {
+            isContainSizeFilter() && isContainGenderFilter()
+        }
+    }
+
+    private fun isValidGroupCount(): Boolean {
+        return _groupCounter.value?.isValid() ?: false
+    }
+
     companion object {
+        private const val MIN_TEXT_LENGTH = 1
+        private const val MAX_TITLE_LENGTH = 100
+        private const val MAX_CONTENT_LENGTH = 1000
+
         fun factory(
             getAddressUseCase: GetAddressUseCase,
             postClubUseCase: PostClubUseCase,

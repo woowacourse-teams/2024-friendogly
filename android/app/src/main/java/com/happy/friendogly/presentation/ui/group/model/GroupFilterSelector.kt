@@ -32,6 +32,14 @@ class GroupFilterSelector {
         } ?: true
     }
 
+    fun isContainSizeFilter(): Boolean {
+        return currentSelectedFilters.value?.any { it is GroupFilter.SizeFilter } ?: false
+    }
+
+    fun isContainGenderFilter(): Boolean {
+        return currentSelectedFilters.value?.any { it is GroupFilter.GenderFilter } ?: false
+    }
+
     fun addAllGenderFilter() {
         val genderFilters = GroupFilter.makeGenderFilterEntry()
         genderFilters.forEach {

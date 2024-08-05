@@ -17,7 +17,10 @@ fun TextView.bindDetailViewTypeBackground(groupDetailViewType: GroupDetailViewTy
                     R.color.coral400,
                 )
 
-            GroupDetailViewType.END_RECRUITMENT -> ContextCompat.getColorStateList(context, R.color.gray400)
+            GroupDetailViewType.END_RECRUITMENT -> ContextCompat.getColorStateList(
+                context,
+                R.color.gray400
+            )
         }
     this.backgroundTintList = backgroundTint
 }
@@ -39,9 +42,8 @@ fun TextView.bindDetailViewTypeStyle(groupDetailViewType: GroupDetailViewType?) 
     groupDetailViewType ?: return
     val textStyle =
         when (groupDetailViewType) {
-            GroupDetailViewType.RECRUITMENT, GroupDetailViewType.MINE -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
+            GroupDetailViewType.PARTICIPATED, GroupDetailViewType.RECRUITMENT, GroupDetailViewType.MINE -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
             GroupDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
-            GroupDetailViewType.PARTICIPATED -> TODO()
         }
     this.setTextAppearance(textStyle)
 }
