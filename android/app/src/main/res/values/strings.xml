@@ -165,6 +165,7 @@
     <string name="group_list_prev_btn">이전</string>
     <string name="group_add_information_main_title">모임을 소개해주세요.</string>
     <string name="group_add_information_main_content"> 기준으로 모임이 생성돼요.</string>
+    <string name="group_add_information_fail_address">모임 생성을 위해서 주소를 등록해주세요!</string>
     <string name="group_add_dog_size_title">댕댕이 사이즈 선택</string>
     <string name="group_add_dog_gender_title">댕댕이 성별 선택</string>
     <string name="group_add_group_title">모임 제목</string>

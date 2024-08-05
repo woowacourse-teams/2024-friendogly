@@ -12,9 +12,20 @@ class GroupAddFilterFragment :
 
     override fun initViewCreated() {
         initDataBinding()
+        checkAllFilters()
     }
 
     private fun initDataBinding() {
         binding.vm = viewModel
+    }
+
+    private fun checkAllFilters(){
+        binding.includeAddGroupBig.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupMedium.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupSmail.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupNeutralizingFemale.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupNeutralizingMale.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupMale.checkboxGroupFilter.isChecked = true
+        binding.includeAddGroupFemale.checkboxGroupFilter.isChecked = true
     }
 }

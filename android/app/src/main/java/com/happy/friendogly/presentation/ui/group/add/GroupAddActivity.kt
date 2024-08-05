@@ -95,6 +95,8 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
                 is GroupAddEvent.ChangePage -> {
                     binding.vpGroupAdd.setCurrentItem(actionEvent.page, true)
                 }
+
+                GroupAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.group_add_information_fail_address))
             }
         }
     }
