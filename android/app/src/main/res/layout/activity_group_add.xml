@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.group.add.GroupAddViewModel" />
@@ -50,55 +51,54 @@
 
         <ProgressBar
             android:id="@+id/progressbar_add_group"
+            style="@style/group_add_custom_progressbar"
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:layout_marginBottom="5dp"
             android:indeterminate="false"
             android:max="100"
-            style="@style/group_add_custom_progressbar"
             app:currentPageProgress="@{vm.currentPage}"
             app:layout_constraintBottom_toTopOf="@id/tv_group_add_prev_button" />
 
         <TextView
-            onSingleClick="@{()->vm.navigatePrevPage()}"
             android:id="@+id/tv_group_add_prev_button"
+            onSingleClick="@{()->vm.navigatePrevPage()}"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
-            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
             android:background="@drawable/rect_coral04_fill_8"
-            tools:textColor="@color/white"
-            app:validButtonBackground = "@{vm.isValidPrevPage()}"
-            app:validButtonStyle = "@{vm.isValidPrevPage()}"
             android:clickable="@{vm.isValidPrevPage()}"
-            android:textColor="@color/white"
             android:gravity="center"
-            android:padding="16dp"
             android:text="@string/group_list_prev_btn"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_group_add_next_button"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:validButtonBackground="@{vm.isValidPrevPage()}"
+            app:validButtonStyle="@{vm.isValidPrevPage()}"
+            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            tools:textColor="@color/white" />
 
         <TextView
-            onSingleClick="@{()->vm.navigateNextPage()}"
             android:id="@+id/tv_group_add_next_button"
+            onSingleClick="@{()->vm.navigateNextPage()}"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginBottom="20dp"
-            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
             android:background="@drawable/rect_coral04_fill_8"
-            tools:textColor="@color/white"
-            app:validButtonBackground = "@{vm.isValidNextPage()}"
-            app:validButtonStyle = "@{vm.isValidNextPage()}"
             android:clickable="@{vm.isValidNextPage()}"
             android:gravity="center"
-            android:padding="16dp"
-            android:text="@string/group_list_next_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/tv_group_add_prev_button" />
+            app:layout_constraintStart_toEndOf="@id/tv_group_add_prev_button"
+            app:validButtonBackground="@{vm.isValidNextPage()}"
+            app:validButtonStyle="@{vm.isValidNextPage()}"
+            app:validNextButtonText="@{vm.currentPage}"
+            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            tools:text="다음"
+            tools:textColor="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

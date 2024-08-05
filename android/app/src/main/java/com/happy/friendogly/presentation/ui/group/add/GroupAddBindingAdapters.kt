@@ -9,13 +9,12 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter
-import com.happy.friendogly.presentation.ui.group.detail.bindDetailViewTypeBackground
-import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
+import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.utils.toSoftwareBitmap
 
 @BindingAdapter("currentPageProgress")
 fun ProgressBar.bindProgress(currentPage: Int) {
-    val progress = (currentPage + 1) * 100 / GroupAddAdapter.MAX_PAGE_SIZE
+    val progress = (currentPage + 1) * 100 / (GroupAddAdapter.MAX_PAGE_SIZE)
     this.progress = progress
 }
 
@@ -43,7 +42,7 @@ fun TextView.bindTitleCount(title: String?) {
 }
 
 @BindingAdapter("validButtonBackground")
-fun TextView.bindValidBackground(isValid: Boolean){
+fun TextView.bindValidBackground(isValid: Boolean) {
     val backgroundTint =
         when (isValid) {
             true ->
@@ -65,4 +64,13 @@ fun TextView.bindValidStyle(isValid: Boolean) {
             false -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
         }
     this.setTextAppearance(textStyle)
+}
+
+@BindingAdapter("validNextButtonText")
+fun TextView.bindValidNextButtonText(currentPage: Int) {
+    this.text = if (currentPage == MAX_PAGE_SIZE - 1) {
+        context.getString(R.string.group_list_commit_btn)
+    } else {
+        context.getString(R.string.group_list_next_btn)
+    }
 }

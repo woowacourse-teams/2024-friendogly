@@ -58,7 +58,7 @@ class GroupAddViewModel(
                 groupCounter,
                 myAddress,
             ){
-               isValidAddress()
+                isValidAddedData()
             }
         }
 
