@@ -7,7 +7,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.time.LocalDate
 
 data class MyPageUiState(
     val id: Long = INVALID_ID,
@@ -79,14 +78,3 @@ data class PetAddView(
         private const val INVALID_ID = -1L
     }
 }
-
-// TODO 더미 데이터 모델
-data class Dog(
-    val name: String,
-    val description: String,
-    val birthDate: LocalDate,
-    val sizeType: String,
-    val gender: String,
-    val isNeutered: Boolean,
-    val image: String,
-)
