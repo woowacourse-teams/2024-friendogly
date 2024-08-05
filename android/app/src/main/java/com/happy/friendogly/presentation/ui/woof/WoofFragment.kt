@@ -231,10 +231,9 @@ class WoofFragment :
 
                 if (binding.tvWoofWalkStatus.isVisible) {
                     hideMarkerDetail()
+                    changeRecentlyClickedMarkerSize()
                 }
             }
-
-            changeRecentlyClickedMarkerSize()
         }
 
         map.addOnCameraIdleListener {
