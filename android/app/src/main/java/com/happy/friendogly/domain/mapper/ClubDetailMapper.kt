@@ -19,10 +19,11 @@ fun ClubDetail.toPresentation(): GroupDetailUiModel {
         groupLocation = address.toPresentation(),
         groupPoster = imageUrl,
         maximumNumberOfPeople = memberCapacity,
-        groupDetailViewType = GroupDetailViewType.from(
-            isMine = isMine,
-            isMyParticipated = alreadyParticipate,
-            isParticipable = canParticipate,
-        )
+        groupDetailViewType =
+            GroupDetailViewType.from(
+                isMine = isMine,
+                isMyParticipated = alreadyParticipate,
+                isParticipable = canParticipate,
+            ),
     )
 }

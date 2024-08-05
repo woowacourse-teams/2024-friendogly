@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClubSearchingResponse(
-    val contents: List<ClubResponse>
+    val contents: List<ClubResponse>,
 )

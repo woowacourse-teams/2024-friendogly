@@ -4,11 +4,11 @@ import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.remote.model.response.ClubResponse
 import com.happy.friendogly.remote.model.response.ClubSearchingResponse
 
-fun ClubSearchingResponse.toData(): List<ClubDto>{
+fun ClubSearchingResponse.toData(): List<ClubDto> {
     return contents.map { it.toData() }
 }
 
-fun ClubResponse.toData(): ClubDto{
+fun ClubResponse.toData(): ClubDto {
     return ClubDto(
         id = id,
         title = title,

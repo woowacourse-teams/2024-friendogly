@@ -4,8 +4,7 @@ import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.presentation.ui.group.list.GroupListUiModel
 import com.happy.friendogly.presentation.ui.group.list.model.GroupWoof
 
-
-fun Club.toPresentation(): GroupListUiModel{
+fun Club.toPresentation(): GroupListUiModel {
     return GroupListUiModel(
         groupId = id,
         groupPoster = imageUrl,

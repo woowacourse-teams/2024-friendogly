@@ -20,7 +20,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ClubService {
-
     @Multipart
     @POST(ApiClient.Club.POST_CLUB)
     suspend fun postClub(
@@ -38,7 +37,7 @@ interface ClubService {
 
     @GET(ApiClient.Club.GET_CLUB)
     suspend fun getClub(
-        @Path("id") id: Long
+        @Path("id") id: Long,
     ): BaseResponse<ClubDetailResponse>
 
     @POST(ApiClient.Club.POST_CLUB_MEMBER)

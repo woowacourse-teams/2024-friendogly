@@ -23,42 +23,42 @@ class ClubRepositoryImpl(
         allowedSize: List<SizeType>,
         memberCapacity: Int,
         file: MultipartBody.Part?,
-        petIds: List<Long>
-    ): Result<Unit> = source.postClub(
-        title = title,
-        content = content,
-        address = address.toData(),
-        allowedGender = allowedGender.map { it.toData() },
-        allowedSize = allowedSize.map { it.toData() },
-        memberCapacity = memberCapacity,
-        file = file,
-        petIds = petIds,
-    )
+        petIds: List<Long>,
+    ): Result<Unit> =
+        source.postClub(
+            title = title,
+            content = content,
+            address = address.toData(),
+            allowedGender = allowedGender.map { it.toData() },
+            allowedSize = allowedSize.map { it.toData() },
+            memberCapacity = memberCapacity,
+            file = file,
+            petIds = petIds,
+        )
 
     override suspend fun getSearchingClubs(
         filterCondition: ClubFilterCondition,
         address: ClubAddress,
         genderParams: List<Gender>,
-        sizeParams: List<SizeType>
-    ): Result<List<Club>> = source.getSearchingClubs(
-        filterCondition = filterCondition.toData(),
-        address = address.toData(),
-        genderParams = genderParams.map { it.toData() },
-        sizeParams = sizeParams.map { it.toData() }
-    ).mapCatching { it.toDomain() }
+        sizeParams: List<SizeType>,
+    ): Result<List<Club>> =
+        source.getSearchingClubs(
+            filterCondition = filterCondition.toData(),
+            address = address.toData(),
+            genderParams = genderParams.map { it.toData() },
+            sizeParams = sizeParams.map { it.toData() },
+        ).mapCatching { it.toDomain() }
 
-    override suspend fun getClub(clubId: Long): Result<ClubDetail> =
-        source.getClub(clubId).mapCatching { it.toDomain() }
+    override suspend fun getClub(clubId: Long): Result<ClubDetail> = source.getClub(clubId).mapCatching { it.toDomain() }
 
     override suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
-    ): Result<Unit> = source.postClubMember(
-        clubId = clubId,
-        participatingPetsId = participatingPetsId,
-    )
+    ): Result<Unit> =
+        source.postClubMember(
+            clubId = clubId,
+            participatingPetsId = participatingPetsId,
+        )
 
-    override suspend fun deleteClubMember(clubId: Long): Result<Unit> =
-        source.deleteClubMember(clubId)
-
+    override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
 }

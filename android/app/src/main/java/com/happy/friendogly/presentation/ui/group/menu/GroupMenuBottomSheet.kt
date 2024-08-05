@@ -86,12 +86,12 @@ class GroupMenuBottomSheet(
         val dialog =
             DefaultCoralAlertDialog(
                 alertDialogModel =
-                AlertDialogModel(
-                    title = requireContext().getString(R.string.group_detail_delete_title),
-                    description = null,
-                    negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                    positiveContents = requireContext().getString(R.string.dialog_positive_default),
-                ),
+                    AlertDialogModel(
+                        title = requireContext().getString(R.string.group_detail_delete_title),
+                        description = null,
+                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                    ),
                 clickToNegative = { },
                 clickToPositive = {
                     viewModel.withdrawGroup()

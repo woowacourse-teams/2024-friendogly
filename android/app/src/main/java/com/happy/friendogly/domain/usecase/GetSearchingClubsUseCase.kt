@@ -8,17 +8,18 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.ClubRepository
 
 class GetSearchingClubsUseCase(
-    private val repository: ClubRepository
+    private val repository: ClubRepository,
 ) {
     suspend operator fun invoke(
         filterCondition: ClubFilterCondition,
         address: ClubAddress,
         genderParams: List<Gender>,
         sizeParams: List<SizeType>,
-    ): Result<List<Club>> = repository.getSearchingClubs(
-        filterCondition = filterCondition,
-        address = address,
-        genderParams = genderParams,
-        sizeParams = sizeParams,
-    )
+    ): Result<List<Club>> =
+        repository.getSearchingClubs(
+            filterCondition = filterCondition,
+            address = address,
+            genderParams = genderParams,
+            sizeParams = sizeParams,
+        )
 }

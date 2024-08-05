@@ -15,7 +15,6 @@ import com.happy.friendogly.remote.model.request.PostClubRequest
 import okhttp3.MultipartBody
 
 class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
-
     override suspend fun postClub(
         title: String,
         content: String,
@@ -24,53 +23,59 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
         allowedSize: List<SizeTypeDto>,
         memberCapacity: Int,
         file: MultipartBody.Part?,
-        petIds: List<Long>
-    ): Result<Unit> = runCatching {
-        val request = PostClubRequest(
-            title = title,
-            content = content,
-            address = address.toRemote(),
-            allowedGender = allowedGender.map { it.toRemote() },
-            allowedSize = allowedSize.map { it.toRemote() },
-            memberCapacity = memberCapacity,
-            petIds = petIds,
-        )
-        service.postClub(
-            body = request,
-            file = file
-        ).data
-    }
+        petIds: List<Long>,
+    ): Result<Unit> =
+        runCatching {
+            val request =
+                PostClubRequest(
+                    title = title,
+                    content = content,
+                    address = address.toRemote(),
+                    allowedGender = allowedGender.map { it.toRemote() },
+                    allowedSize = allowedSize.map { it.toRemote() },
+                    memberCapacity = memberCapacity,
+                    petIds = petIds,
+                )
+            service.postClub(
+                body = request,
+                file = file,
+            ).data
+        }
 
     override suspend fun getSearchingClubs(
         filterCondition: ClubFilterConditionDto,
         address: ClubAddressDto,
         genderParams: List<GenderDto>,
-        sizeParams: List<SizeTypeDto>
-    ): Result<List<ClubDto>> = runCatching {
-        service.getSearchingClubs(
-            filterCondition = filterCondition.toRemote(),
-            address = address.toRemote(),
-            genderParams = genderParams.map { it.toRemote() },
-            sizeParams = sizeParams.map { it.toRemote() },
-        ).data.toData()
-    }
+        sizeParams: List<SizeTypeDto>,
+    ): Result<List<ClubDto>> =
+        runCatching {
+            service.getSearchingClubs(
+                filterCondition = filterCondition.toRemote(),
+                address = address.toRemote(),
+                genderParams = genderParams.map { it.toRemote() },
+                sizeParams = sizeParams.map { it.toRemote() },
+            ).data.toData()
+        }
 
-    override suspend fun getClub(clubId: Long): Result<ClubDetailDto> = runCatching{
-        service.getClub(clubId).data.toData()
-    }
+    override suspend fun getClub(clubId: Long): Result<ClubDetailDto> =
+        runCatching {
+            service.getClub(clubId).data.toData()
+        }
 
     override suspend fun postClubMember(
         clubId: Long,
-        participatingPetsId: List<Long>
-    ): Result<Unit> = runCatching{
-        val request = PostClubMemberRequest(participatingPetsId = participatingPetsId)
-        service.postClubMember(
-            clubId = clubId,
-            request = request
-        ).data
-    }
+        participatingPetsId: List<Long>,
+    ): Result<Unit> =
+        runCatching {
+            val request = PostClubMemberRequest(participatingPetsId = participatingPetsId)
+            service.postClubMember(
+                clubId = clubId,
+                request = request,
+            ).data
+        }
 
-    override suspend fun deleteClubMember(clubId: Long): Result<Unit>  = runCatching {
-       service.deleteClubMember(clubId).data
-    }
+    override suspend fun deleteClubMember(clubId: Long): Result<Unit> =
+        runCatching {
+            service.deleteClubMember(clubId).data
+        }
 }

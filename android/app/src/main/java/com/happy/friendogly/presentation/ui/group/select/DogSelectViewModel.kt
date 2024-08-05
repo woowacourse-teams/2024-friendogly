@@ -120,12 +120,10 @@ class DogSelectViewModel(
     }
 
     companion object {
-        fun factory(
-            getPetsMineUseCase: GetPetsMineUseCase,
-        ):ViewModelProvider.Factory{
+        fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 DogSelectViewModel(
-                    getPetsMineUseCase = getPetsMineUseCase
+                    getPetsMineUseCase = getPetsMineUseCase,
                 )
             }
         }

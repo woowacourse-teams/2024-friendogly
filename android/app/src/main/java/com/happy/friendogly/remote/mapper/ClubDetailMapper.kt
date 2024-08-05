@@ -3,9 +3,9 @@ package com.happy.friendogly.remote.mapper
 import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubMemberDto
 import com.happy.friendogly.data.model.ClubPetDto
-import com.happy.friendogly.remote.model.response.ClubDetailResponse
 import com.happy.friendogly.remote.model.response.ClubDetailMemberResponse
 import com.happy.friendogly.remote.model.response.ClubDetailPetResponse
+import com.happy.friendogly.remote.model.response.ClubDetailResponse
 
 fun ClubDetailResponse.toData(): ClubDetailDto {
     return ClubDetailDto(
@@ -29,7 +29,6 @@ fun ClubDetailResponse.toData(): ClubDetailDto {
         petDetails = petDetails.map { it.toData() },
     )
 }
-
 
 fun ClubDetailMemberResponse.toData(): ClubMemberDto {
     return ClubMemberDto(

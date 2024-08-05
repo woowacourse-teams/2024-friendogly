@@ -16,7 +16,6 @@ import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 
 class GroupListViewModel(
     private val getAddressUseCase: GetAddressUseCase,

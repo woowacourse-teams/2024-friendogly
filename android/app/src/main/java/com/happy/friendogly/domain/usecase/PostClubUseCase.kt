@@ -17,15 +17,16 @@ class PostClubUseCase(
         allowedSize: List<SizeType>,
         memberCapacity: Int,
         file: MultipartBody.Part?,
-        petIds: List<Long>
-    ): Result<Unit> = repository.postClub(
-        title = title,
-        content = content,
-        address = address,
-        allowedGender = allowedGender,
-        allowedSize = allowedSize,
-        memberCapacity = memberCapacity,
-        file = file,
-        petIds = petIds,
-    )
+        petIds: List<Long>,
+    ): Result<Unit> =
+        repository.postClub(
+            title = title,
+            content = content,
+            address = address,
+            allowedGender = allowedGender,
+            allowedSize = allowedSize,
+            memberCapacity = memberCapacity,
+            file = file,
+            petIds = petIds,
+        )
 }

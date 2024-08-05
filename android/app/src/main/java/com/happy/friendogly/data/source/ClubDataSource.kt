@@ -27,16 +27,12 @@ interface ClubDataSource {
         sizeParams: List<SizeTypeDto>,
     ): Result<List<ClubDto>>
 
-    suspend fun getClub(
-        clubId: Long,
-    ): Result<ClubDetailDto>
+    suspend fun getClub(clubId: Long): Result<ClubDetailDto>
 
     suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
     ): Result<Unit>
 
-    suspend fun deleteClubMember(
-        clubId: Long,
-    ): Result<Unit>
+    suspend fun deleteClubMember(clubId: Long): Result<Unit>
 }

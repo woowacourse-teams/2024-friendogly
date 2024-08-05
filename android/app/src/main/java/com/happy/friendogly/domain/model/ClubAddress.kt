@@ -5,4 +5,3 @@ data class ClubAddress(
     val city: String,
     val village: String,
 )
-

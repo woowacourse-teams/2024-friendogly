@@ -3,11 +3,11 @@ package com.happy.friendogly.data.mapper
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.domain.model.Club
 
-fun List<ClubDto>.toDomain(): List<Club>{
+fun List<ClubDto>.toDomain(): List<Club> {
     return this.map { it.toDomain() }
 }
 
-fun ClubDto.toDomain(): Club{
+fun ClubDto.toDomain(): Club {
     return Club(
         id = id,
         title = title,

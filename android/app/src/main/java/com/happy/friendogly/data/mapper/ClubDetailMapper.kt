@@ -22,7 +22,7 @@ fun ClubDetailDto.toDomain(): ClubDetail {
         currentMemberCount = currentMemberCount,
         imageUrl = imageUrl,
         memberCapacity = memberCapacity,
-        status = status.toDomain()
+        status = status.toDomain(),
     )
 }
 
@@ -45,7 +45,6 @@ fun ClubDetail.toData(): ClubDetailDto {
         currentMemberCount = currentMemberCount,
         imageUrl = imageUrl,
         memberCapacity = memberCapacity,
-        status = status.toData()
+        status = status.toData(),
     )
 }
-

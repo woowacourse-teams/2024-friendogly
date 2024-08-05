@@ -21,7 +21,7 @@ import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileIma
 import com.happy.friendogly.presentation.utils.toBitmap
 
 class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity_group_add) {
-    private val viewModel: GroupAddViewModel by viewModels<GroupAddViewModel>{
+    private val viewModel: GroupAddViewModel by viewModels<GroupAddViewModel> {
         GroupAddViewModel.factory(
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
             postClubUseCase = AppModule.getInstance().postClubUseCase,

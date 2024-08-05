@@ -50,9 +50,7 @@ class GroupMenuViewModel(
     }
 
     companion object {
-        fun factory(
-            deleteClubMemberUseCase: DeleteClubMemberUseCase,
-        ): ViewModelProvider.Factory {
+        fun factory(deleteClubMemberUseCase: DeleteClubMemberUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 GroupMenuViewModel(
                     deleteClubMemberUseCase = deleteClubMemberUseCase,

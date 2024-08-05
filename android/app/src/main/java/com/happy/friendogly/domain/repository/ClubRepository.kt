@@ -27,17 +27,12 @@ interface ClubRepository {
         sizeParams: List<SizeType>,
     ): Result<List<Club>>
 
-
-    suspend fun getClub(
-        clubId: Long,
-    ): Result<ClubDetail>
+    suspend fun getClub(clubId: Long): Result<ClubDetail>
 
     suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
     ): Result<Unit>
 
-    suspend fun deleteClubMember(
-        clubId: Long,
-    ): Result<Unit>
+    suspend fun deleteClubMember(clubId: Long): Result<Unit>
 }
