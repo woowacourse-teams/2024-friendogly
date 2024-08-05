@@ -6,6 +6,7 @@ on:
 #    paths:
 #      - 'backend/**'
 # 테스트가 끝나면 삭제합니다.
+# testing
 
 defaults:
   run:
