@@ -58,10 +58,7 @@ class WoofViewModel(
                 latLng.latitude,
                 latLng.longitude,
             ).onSuccess { nearFootprints ->
-                _nearFootprints.value =
-                    nearFootprints.filter { footprint ->
-                        !footprint.isMine
-                    }
+                _nearFootprints.value = nearFootprints
             }.onFailure {
             }
         }
