@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityGroupDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -25,7 +26,12 @@ class GroupDetailActivity :
     GroupDetailNavigation {
     private lateinit var groupModifyResultLauncher: ActivityResultLauncher<Intent>
 
-    private val viewModel: GroupDetailViewModel by viewModels()
+    private val viewModel: GroupDetailViewModel by viewModels<GroupDetailViewModel> {
+        GroupDetailViewModel.factory(
+            getClubUseCase = AppModule.getInstance().getClubUseCase,
+            postClubMemberUseCase = AppModule.getInstance().postClubMemberUseCase,
+        )
+    }
     private val filterAdapter: FilterAdapter by lazy {
         FilterAdapter()
     }
@@ -110,7 +116,7 @@ class GroupDetailActivity :
 
                 is GroupDetailEvent.OpenDetailMenu -> {
                     val bottomSheet =
-                        GroupMenuBottomSheet(event.detailViewType)
+                        GroupMenuBottomSheet(event.groupDetailViewType)
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
 

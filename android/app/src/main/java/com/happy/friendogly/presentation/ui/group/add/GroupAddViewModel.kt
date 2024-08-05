@@ -3,7 +3,11 @@ package com.happy.friendogly.presentation.ui.group.add
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
@@ -13,7 +17,10 @@ import com.happy.friendogly.presentation.ui.group.filter.GroupFilterItemActionHa
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterItemActionHandler {
+class GroupAddViewModel(
+    private val getAddressUseCase: GetAddressUseCase,
+    private val postClubUseCase: PostClubUseCase,
+) : BaseViewModel(), GroupAddActionHandler, GroupFilterItemActionHandler {
     private val _groupAddEvent: MutableLiveData<Event<GroupAddEvent>> =
         MutableLiveData()
     val groupAddEvent: LiveData<Event<GroupAddEvent>> get() = _groupAddEvent
@@ -86,5 +93,19 @@ class GroupAddViewModel : BaseViewModel(), GroupAddActionHandler, GroupFilterIte
 
     override fun selectGroupImage() {
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectGroupPoster)
+    }
+
+    companion object {
+        fun factory(
+            getAddressUseCase: GetAddressUseCase,
+            postClubUseCase: PostClubUseCase,
+        ): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                GroupAddViewModel(
+                    getAddressUseCase = getAddressUseCase,
+                    postClubUseCase = postClubUseCase,
+                )
+            }
+        }
     }
 }

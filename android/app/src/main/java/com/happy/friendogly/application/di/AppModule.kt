@@ -27,10 +27,10 @@ import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
-import com.happy.friendogly.domain.usecase.DeleteClubUseCase
+import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteLocalDataUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
-import com.happy.friendogly.domain.usecase.GetClubMineUseCase
+import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
@@ -38,8 +38,9 @@ import com.happy.friendogly.domain.usecase.GetLandMarksUseCase
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
+import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
-import com.happy.friendogly.domain.usecase.PostClubParticipationUseCase
+import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
@@ -119,11 +120,11 @@ class AppModule(context: Context) {
 
     // use case
     val kakaoLoginUseCase: KakaoLoginUseCase = KakaoLoginUseCase(repository = kakaoLoginRepository)
-    val deleteClubUseCase: DeleteClubUseCase = DeleteClubUseCase(repository = clubRepository)
-    val getClubMineUseCase: GetClubMineUseCase = GetClubMineUseCase(repository = clubRepository)
-    val postClubParticipationUseCase: PostClubParticipationUseCase =
-        PostClubParticipationUseCase(repository = clubRepository)
     val postClubUseCase: PostClubUseCase = PostClubUseCase(repository = clubRepository)
+    val getSearchingClubsUseCase: GetSearchingClubsUseCase = GetSearchingClubsUseCase(repository = clubRepository)
+    val getClubUseCase: GetClubUseCase = GetClubUseCase(repository = clubRepository)
+    val postClubMemberUseCase: PostClubMemberUseCase = PostClubMemberUseCase(repository = clubRepository)
+    val deleteClubMemberUseCase: DeleteClubMemberUseCase = DeleteClubMemberUseCase(repository = clubRepository)
     val getJwtTokenUseCase: GetJwtTokenUseCase = GetJwtTokenUseCase(repository = localRepository)
     val saveJwtTokenUseCase: SaveJwtTokenUseCase = SaveJwtTokenUseCase(repository = localRepository)
     val deleteLocalDataUseCase: DeleteLocalDataUseCase =
