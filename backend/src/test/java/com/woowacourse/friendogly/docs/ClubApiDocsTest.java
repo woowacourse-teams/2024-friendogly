@@ -346,10 +346,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER)
-                                                .description("멤버 ID(추후 채팅 생기면 변경)"),
-                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NULL)
-                                                .description("모임 채팅방 ID")
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("멤버 ID(추후 채팅 생기면 변경)"),
+                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("모임 채팅방 ID")
                                 )
                                 .responseSchema(Schema.schema("SaveClubMemberResponse"))
                                 .build())

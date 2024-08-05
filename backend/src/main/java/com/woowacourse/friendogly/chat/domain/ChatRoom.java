@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 public class ChatRoom {
 
@@ -38,16 +38,6 @@ public class ChatRoom {
                 .anyMatch(chatRoomMember -> chatRoomMember.hasMember(member));
     }
 
-    public void removeMember(Member member) {
-        ChatRoomMember chatRoomMember = chatRoomMembers.stream()
-                .filter(row -> row.hasMember(member))
-                .findAny()
-                .orElseThrow(() -> new FriendoglyException("자신이 참여한 채팅방에서만 나갈 수 있습니다."));
-
-        chatRoomMembers.remove(chatRoomMember);
-        chatRoomMember.removeChatRoom();
-    }
-
     // TODO: 미사용 메서드
     public int countMembers() {
         return chatRoomMembers.size();
@@ -55,5 +45,14 @@ public class ChatRoom {
 
     public boolean isEmpty() {
         return chatRoomMembers.isEmpty();
+    }
+
+    public void removeMember(Member member) {
+        ChatRoomMember chatRoomMember = chatRoomMembers.stream()
+                .filter(row -> row.hasMember(member))
+                .findAny()
+                .orElseThrow(() -> new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다."));
+
+        chatRoomMembers.remove(chatRoomMember);
     }
 }

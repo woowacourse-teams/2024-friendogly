@@ -38,7 +38,7 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         pet = petRepository.save(
                 new Pet(validMember, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
         club = clubRepository.save(
-                Club.create("t", "c", "a", 5, validMember, Set.of(MALE), Set.of(SMALL), "https://a.com", List.of(pet)));
+                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, validMember, Set.of(MALE), Set.of(SMALL), "https://a.com", List.of(pet)));
         chatRoom = club.getChatRoom();
     }
 
