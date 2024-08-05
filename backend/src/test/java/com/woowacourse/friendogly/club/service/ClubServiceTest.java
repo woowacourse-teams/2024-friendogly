@@ -13,7 +13,9 @@ import java.util.Set;
 
 public abstract class ClubServiceTest extends ServiceTest {
 
-    protected final String address = "서울특별시 송파구 신청동";
+    protected final String province = "서울특별시";
+    protected final String city = "송파구";
+    protected final String village = "신천동";
     protected final String petImageUrl = "https://PetimageUrl.com";
 
     protected Member createSavedMember() {
@@ -40,7 +42,9 @@ public abstract class ClubServiceTest extends ServiceTest {
         Club club = Club.create(
                 "강아지 산책시키실 분 모아요.",
                 "매주 주말에 정기적으로 산책 모임하실분만",
-                address,
+                province,
+                city,
+                village,
                 5,
                 member,
                 genders,

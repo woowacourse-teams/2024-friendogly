@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.domain.ClubMember;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
@@ -22,6 +21,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 class ClubCommandServiceTest extends ClubServiceTest {
 
@@ -43,20 +44,24 @@ class ClubCommandServiceTest extends ClubServiceTest {
         SaveClubRequest request = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
-                "https://clubImage.com",
-                "서울특별시 송파구 신정동 잠실 5동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                "서울특별시",
+                "송파구",
+                "신천동",
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name()),
                 5,
                 List.of(savedPet.getId())
         );
-        SaveClubResponse actual = clubCommandService.save(savedMember.getId(), request);
+        MockMultipartFile image = new MockMultipartFile(
+                "image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
+        SaveClubResponse actual = clubCommandService.save(savedMember.getId(), image, request);
 
         assertAll(
                 () -> assertThat(actual.title()).isEqualTo("모임 제목"),
                 () -> assertThat(actual.content()).isEqualTo("모임 내용"),
-                () -> assertThat(actual.imageUrl()).isEqualTo("https://clubImage.com"),
-                () -> assertThat(actual.address()).isEqualTo("서울특별시 송파구 신정동 잠실 5동"),
+                () -> assertThat(actual.address().province()).isEqualTo("서울특별시"),
+                () -> assertThat(actual.address().city()).isEqualTo("송파구"),
+                () -> assertThat(actual.address().village()).isEqualTo("신천동"),
                 () -> assertThat(actual.allowedGender()).containsExactlyInAnyOrderElementsOf(
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED))
         );
@@ -65,7 +70,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     @DisplayName("회원이 모임에 참여한다.")
     @Transactional
     @Test
-    void saveClubMember() {
+    void joinClub() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -90,7 +95,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @DisplayName("이미 참여한 모임에는 참여할 수 없다.")
     @Test
-    void saveClubMember_FailAlreadyParticipating() {
+    void joinClub_FailAlreadyParticipating() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -106,7 +111,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @DisplayName("참여 가능한 강아지가 없다면 참여할 수 없다.")
     @Test
-    void saveClubMember_FailCanNotParticipate() {
+    void joinClub_FailCanNotParticipate() {
         Club savedClub = createSavedClub(
                 savedMember,
                 savedPet,
@@ -139,6 +144,40 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .hasMessage("모임에 데려갈 수 없는 강아지가 있습니다.");
     }
 
+    @DisplayName("자신이 주인이 아닌 반려견을 모임에 참여시키는 경우 예외가 발생한다.")
+    @Test
+    void joinClub_FailUnMatchOwner() {
+        Club savedClub = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        Member newMember = Member.builder()
+                .name("위브")
+                .email("wiib@gmail.com")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = petRepository.save(
+                Pet.builder()
+                        .name("땡순이")
+                        .description("귀여워요")
+                        .member(savedMember)
+                        .birthDate(LocalDate.of(2020, 12, 1))
+                        .gender(Gender.FEMALE)
+                        .sizeType(SizeType.SMALL)
+                        .imageUrl("https://image.com")
+                        .build()
+        );
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("자신의 반려견만 모임에 데려갈 수 있습니다.");
+    }
+
     //영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가
     @DisplayName("참여 중인 회원을 삭제하고, 방장이면 방장을 위임한다.")
     @Transactional
@@ -166,7 +205,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         assertAll(
                 () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
-                () -> assertThat(savedClub.isOwner(ClubMember.create(savedClub, savedNewMember))).isTrue()
+                () -> assertThat(savedClub.isOwner(savedNewMember)).isTrue()
         );
     }
 

@@ -34,7 +34,9 @@ class ClubMemberTest {
     private final Club club = Club.create(
             "강아지 산책시키실 분 모아요.",
             "매주 주말에 정기적으로 산책 모임하실분만",
-            "서울특별시 송파구 신청동",
+            "서울특별시",
+            "송파구",
+            "신청동",
             5,
             member,
             Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),

@@ -126,7 +126,7 @@ class ProfileSettingViewModel(
 
     fun updateProfileImage(bitmap: Bitmap) {
         val state = _uiState.value ?: return
-        _uiState.value = state.copy(profileImage = bitmap)
+        _uiState.value = state.copy(profileImage = bitmap, profileImageUrl = null)
     }
 
     fun resetProfileImage() {
