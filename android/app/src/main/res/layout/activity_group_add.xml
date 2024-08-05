@@ -69,17 +69,20 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/rect_coral04_fill_8"
             android:clickable="@{vm.isValidPrevPage()}"
+            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            tools:background="@drawable/rect_white_fill_radius8"
+            tools:backgroundTint="@color/coral400"
+            tools:textColor="@color/white"
+            app:validButtonBackground = "@{vm.isValidPrevPage()}"
+            app:validButtonStyle = "@{vm.isValidPrevPage()}"
+            android:textColor="@color/white"
             android:gravity="center"
             android:text="@string/group_list_prev_btn"
-            android:textColor="@color/white"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_group_add_next_button"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:validButtonBackground="@{vm.isValidPrevPage()}"
-            app:validButtonStyle="@{vm.isValidPrevPage()}"
-            tools:style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            tools:textColor="@color/white" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tv_group_add_next_button"
