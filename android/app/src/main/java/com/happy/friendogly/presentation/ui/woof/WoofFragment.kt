@@ -539,24 +539,13 @@ class WoofFragment :
 
     private fun markNearFootprints(footprints: List<Footprint>) {
         footprints.forEach { footprint ->
-            // API 수정되면 수정해야함.
-            if (!footprint.isMine) {
-                createMarker(
-                    footprintId = footprint.footprintId,
-                    latLng = LatLng(footprint.latitude, footprint.longitude),
-                    walkStatus = footprint.walkStatus,
-                    createdAt = footprint.createdAt,
-                    isMine = footprint.isMine,
-                )
-            }
-
-//            createMarker(
-//                footprintId = footprint.footprintId,
-//                latLng = LatLng(footprint.latitude, footprint.longitude),
-//                walkStatus = footprint.walkStatus,
-//                createdAt = footprint.createdAt,
-//                isMine = footprint.isMine,
-//            )
+            createMarker(
+                footprintId = footprint.footprintId,
+                latLng = LatLng(footprint.latitude, footprint.longitude),
+                walkStatus = footprint.walkStatus,
+                createdAt = footprint.createdAt,
+                isMine = footprint.isMine,
+            )
         }
     }
 
