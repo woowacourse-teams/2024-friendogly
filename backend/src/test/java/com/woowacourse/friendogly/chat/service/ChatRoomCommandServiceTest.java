@@ -33,12 +33,39 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
     @BeforeEach
     void setUp() {
-        validMember = memberRepository.save(new Member("n", "t", "a@a.com", "https://a.com"));
-        invalidMember = memberRepository.save(new Member("a", "b", "b@b.com", "https://b.com"));
+        validMember = memberRepository.save(
+                new Member("트레", "a2fbc4d8", "tre@test.com", "https://image.com/tre.jpg"));
+
+        invalidMember = memberRepository.save(
+                new Member("도도", "5f92bef9", "dodo@test.com", "https://image.com/dodo.jpg"));
+
         pet = petRepository.save(
-                new Pet(validMember, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
+                new Pet(
+                        validMember,
+                        "보리", "귀여운 보리입니다.",
+                        LocalDate.now().minusYears(1),
+                        SMALL,
+                        MALE,
+                        "https://image.com/bori.jpg"
+                )
+        );
+
         club = clubRepository.save(
-                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, validMember, Set.of(MALE), Set.of(SMALL), "https://a.com", List.of(pet)));
+                Club.create(
+                        "성동구 소형견 견주 모임",
+                        "보리와 함께 모이실 분 구합니다.",
+                        "서울특별시",
+                        "성동구",
+                        "옥수동",
+                        5,
+                        validMember,
+                        Set.of(MALE),
+                        Set.of(SMALL),
+                        "https://a.com",
+                        List.of(pet)
+                )
+        );
+
         chatRoom = club.getChatRoom();
     }
 
