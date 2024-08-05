@@ -256,19 +256,24 @@ class WoofFragment :
 
     private fun initObserve() {
         viewModel.nearFootprints.observe(viewLifecycleOwner) { nearFootprints ->
-            markNearFootprints(nearFootprints)
+            val footprints =
+                if (myMarker == null) nearFootprints else nearFootprints.filter { footprint -> !footprint.isMine }
+            markNearFootprints(footprints)
         }
 
         viewModel.footprintSave.observe(viewLifecycleOwner) { footprintSave ->
             myMarker?.map = null
-            createMarker(
-                footprintId = footprintSave.footprintId,
-                latLng = LatLng(footprintSave.latitude, footprintSave.longitude),
-                // API 생기면 수정해야함.
-                walkStatus = WalkStatus.BEFORE,
-                createdAt = footprintSave.createdAt,
-                isMine = true,
-            )
+            val footprint =
+                Footprint(
+                    footprintId = footprintSave.footprintId,
+                    latitude = footprintSave.latitude,
+                    longitude = footprintSave.longitude,
+                    // API 생기면 수정해야함.
+                    walkStatus = WalkStatus.BEFORE,
+                    createdAt = footprintSave.createdAt,
+                    isMine = true,
+                )
+            createMarker(footprint)
         }
 
         viewModel.footprintPetDetails.observe(viewLifecycleOwner) { footPrintPetDetails ->
@@ -404,23 +409,17 @@ class WoofFragment :
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMarker(
-        footprintId: Long,
-        latLng: LatLng,
-        walkStatus: WalkStatus,
-        createdAt: LocalDateTime,
-        isMine: Boolean,
-    ) {
+    private fun createMarker(footprint: Footprint) {
         val marker = Marker()
-        marker.position = latLng
-        marker.icon = OverlayImage.fromResource(markerIcon(isMine, walkStatus))
+        marker.position = LatLng(footprint.latitude, footprint.longitude)
+        marker.icon = OverlayImage.fromResource(markerIcon(footprint.isMine, footprint.walkStatus))
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
-        marker.zIndex = createdAt.toZIndex()
+        marker.zIndex = footprint.createdAt.toZIndex()
         marker.map = map
-        clickFootprint(footprintId, marker)
+        clickFootprint(footprintId = footprint.footprintId, marker = marker)
 
-        if (isMine) {
+        if (footprint.isMine) {
             myMarker = marker
             setUpCircleOverlay(latLng)
         } else {
@@ -547,13 +546,7 @@ class WoofFragment :
 
     private fun markNearFootprints(footprints: List<Footprint>) {
         footprints.forEach { footprint ->
-            createMarker(
-                footprintId = footprint.footprintId,
-                latLng = LatLng(footprint.latitude, footprint.longitude),
-                walkStatus = footprint.walkStatus,
-                createdAt = footprint.createdAt,
-                isMine = footprint.isMine,
-            )
+            createMarker(footprint)
         }
     }
 
