@@ -8,6 +8,10 @@
         <variable
             name="footprintPetDetail"
             type="com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel" />
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.woof.WoofActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:onClick="@{() -> actionHandler.clickFootprintMemberName(footprintPetDetail.memberId)}"
             app:layout_constraintStart_toEndOf="@id/iv_woof_dog"
             app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_name"
             tools:text="누누네 댕댕이" />

@@ -19,4 +19,6 @@ interface WoofActionHandler {
         footprintId: Long,
         marker: Marker,
     )
+
+    fun clickFootprintMemberName(memberId: Long)
 }
