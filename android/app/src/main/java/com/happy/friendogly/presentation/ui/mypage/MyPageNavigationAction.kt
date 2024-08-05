@@ -1,9 +1,10 @@
 package com.happy.friendogly.presentation.ui.mypage
 
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 
 sealed interface MyPageNavigationAction {
-    data object NavigateToProfileEdit : MyPageNavigationAction
+    data class NavigateToProfileEdit(val profile: Profile?) : MyPageNavigationAction
 
     data object NavigateToSetting : MyPageNavigationAction
 

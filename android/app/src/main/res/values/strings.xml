@@ -18,7 +18,9 @@
     <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
     <string name="profile_setting_profile_pic">프로필 사진</string>
     <string name="make_profile_title">프로필 만들기</string>
+    <string name="make_profile_edit_title">프로필 수정하기</string>
     <string name="make_profile_edit_btn_title">선택 완료!</string>
+    <string name="user_name_length">%d/15</string>
 
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
@@ -43,6 +45,12 @@
     <string name="club_manager">내가 방장인 모임</string>
     <string name="pets_profile">함께하는 반려동물</string>
     <string name="tv_pet_add">강아지를 등록해주세요</string>
+
+    <!--강아지 상세 화면-->
+    <string name="neuterd_status">중성화를 했어요</string>
+    <string name="small_pet_description">소형견이에요</string>
+    <string name="medium_pet_description">중현견이에요</string>
+    <string name="large_pet_description">대형견이에요</string>
 
     <!--다른 사용자 프로필-->
     <string name="empty_other_pet">함께하는 반려동물이 없어요</string>

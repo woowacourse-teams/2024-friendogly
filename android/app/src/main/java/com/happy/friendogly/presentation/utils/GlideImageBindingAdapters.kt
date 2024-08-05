@@ -42,7 +42,7 @@ fun ImageView.bindProfile1000(bitmap: Bitmap?) {
 
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(profilePath: String?) {
-    if (profilePath == null) {
+    if (profilePath.isNullOrBlank()) {
         this.setImageResource(R.drawable.img_profile_normal)
         return
     }
@@ -52,6 +52,32 @@ fun ImageView.bindProfile1000(profilePath: String?) {
         .load(profilePath)
         .transform(CenterCrop(), RoundedCorners(1000))
         .into(this)
+}
+
+@BindingAdapter("imageBitmap", "imageUrl")
+fun ImageView.bindGlideProfileImage(
+    imageBitmap: Bitmap?,
+    imageUrl: String?,
+) {
+    if (imageBitmap == null && imageUrl.isNullOrBlank()) {
+        this.setImageResource(R.drawable.img_profile_normal)
+        return
+    }
+    if (imageBitmap != null) {
+        val softwareBitmap = imageBitmap.toSoftwareBitmap()
+
+        Glide.with(context)
+            .asBitmap()
+            .load(softwareBitmap)
+            .transform(CenterCrop(), RoundedCorners(1000))
+            .into(this)
+    } else {
+        Glide.with(context)
+            .asBitmap()
+            .load(imageUrl)
+            .transform(CenterCrop(), RoundedCorners(1000))
+            .into(this)
+    }
 }
 
 @BindingAdapter("dogProfile")
