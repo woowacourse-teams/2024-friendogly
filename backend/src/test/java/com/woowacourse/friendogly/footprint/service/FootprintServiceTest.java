@@ -111,9 +111,9 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 member,
                 location,
                 ONGOING,
-                null,
-                null,
                 LocalDateTime.now(),
+                null,
+                LocalDateTime.now().minusHours(1),
                 false
         );
     }
@@ -123,7 +123,7 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 member,
                 new Location(0, 0),
                 BEFORE,
-                null,
+                LocalDateTime.now(),
                 null,
                 createdAt,
                 false
@@ -135,9 +135,9 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 member,
                 location,
                 AFTER,
-                null,
-                null,
+                LocalDateTime.now().minusHours(1),
                 LocalDateTime.now(),
+                LocalDateTime.now().minusHours(2),
                 false
         );
     }
@@ -147,8 +147,8 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 member,
                 new Location(0, 0),
                 AFTER,
-                null,
-                null,
+                LocalDateTime.now().minusHours(1),
+                LocalDateTime.now(),
                 createdAt,
                 false
         );
