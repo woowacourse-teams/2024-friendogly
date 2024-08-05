@@ -10,12 +10,16 @@ VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://picsum.photos/100'),
 
 INSERT INTO footprint(member_id, latitude, longitude, walk_status, created_at, is_deleted)
 VALUES (1, 37.5173316, 127.1011661, 'BEFORE', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
-       (2, 37.5185122, 127.098778, 'ONGOING', TIMESTAMPADD(MINUTE, -20, NOW()), FALSE),
-       (3, 37.5191964, 127.1055562, 'AFTER', TIMESTAMPADD(MINUTE, -30, NOW()), FALSE),
-       (4, 37.5136533, 127.0983182, 'BEFORE', TIMESTAMPADD(MINUTE, -40, NOW()), FALSE),
-       (5, 37.5131474, 127.1042528, 'ONGOING', TIMESTAMPADD(MINUTE, -50, NOW()), FALSE),
-       (6, 37.5171728, 127.1047797, 'AFTER', TIMESTAMPADD(MINUTE, -60, NOW()), FALSE),
-       (7, 37.516183, 127.1068874, 'ONGOING', TIMESTAMPADD(MINUTE, -70, NOW()), FALSE);
+       (4, 37.5136533, 127.0983182, 'BEFORE', TIMESTAMPADD(MINUTE, -40, NOW()), FALSE);
+
+INSERT INTO footprint(member_id, latitude, longitude, walk_status, start_walk_time, created_at, is_deleted)
+VALUES (2, 37.5185122, 127.098778, 'ONGOING', TIMESTAMPADD(MINUTE, -20, NOW()), TIMESTAMPADD(MINUTE, -30, NOW()), FALSE),
+       (5, 37.5131474, 127.1042528, 'ONGOING', TIMESTAMPADD(MINUTE, -50, NOW()), TIMESTAMPADD(MINUTE, -70, NOW()), FALSE),
+       (7, 37.516183, 127.1068874, 'ONGOING', TIMESTAMPADD(MINUTE, -70, NOW()), TIMESTAMPADD(MINUTE, -90, NOW()), FALSE);
+
+INSERT INTO footprint(member_id, latitude, longitude, walk_status, start_walk_time, end_walk_time, created_at, is_deleted)
+VALUES (3, 37.5191964, 127.1055562, 'AFTER', TIMESTAMPADD(MINUTE, -30, NOW()), TIMESTAMPADD(MINUTE, -20, NOW()), TIMESTAMPADD(MINUTE, -50, NOW()), FALSE),
+       (6, 37.5171728, 127.1047797, 'AFTER', TIMESTAMPADD(MINUTE, -60, NOW()), TIMESTAMPADD(MINUTE, -20, NOW()), TIMESTAMPADD(MINUTE, -90, NOW()), FALSE);
 
 INSERT INTO pet(member_id, name, description, birth_date, size_type, gender, image_url)
 VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SMALL', 'MALE_NEUTERED',
