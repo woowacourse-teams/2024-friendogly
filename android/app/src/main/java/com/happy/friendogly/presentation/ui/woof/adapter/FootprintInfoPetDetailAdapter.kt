@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemPetDetailBinding
+import com.happy.friendogly.presentation.ui.woof.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
 
-class FootprintInfoPetDetailAdapter :
+class FootprintInfoPetDetailAdapter(private val actionHandler: WoofActionHandler) :
     ListAdapter<FootprintInfoPetDetailUiModel, FootprintInfoPetDetailViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -22,7 +23,7 @@ class FootprintInfoPetDetailAdapter :
         holder: FootprintInfoPetDetailViewHolder,
         position: Int,
     ) {
-        holder.bind(footprintPetDetail = getItem(position))
+        holder.bind(footprintPetDetail = getItem(position), actionHandler = actionHandler)
     }
 
     companion object {

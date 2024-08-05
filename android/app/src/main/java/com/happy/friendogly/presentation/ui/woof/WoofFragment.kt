@@ -18,6 +18,7 @@ import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
@@ -60,7 +61,7 @@ class WoofFragment :
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
-    private val adapter by lazy { FootprintInfoPetDetailAdapter() }
+    private val adapter by lazy { FootprintInfoPetDetailAdapter(this) }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
@@ -206,6 +207,10 @@ class WoofFragment :
 
             true
         }
+    }
+
+    override fun clickFootprintMemberName(memberId: Long) {
+        startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))
     }
 
     private fun initMap(naverMap: NaverMap) {

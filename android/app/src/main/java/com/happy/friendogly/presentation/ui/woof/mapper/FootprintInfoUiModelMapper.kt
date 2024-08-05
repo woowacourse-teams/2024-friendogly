@@ -14,6 +14,7 @@ fun FootprintInfo.toWalkStatusUiModel(): FootprintInfoWalkStatusUiModel {
 fun FootprintInfo.toPetDetailsUiModel(): List<FootprintInfoPetDetailUiModel> {
     return petDetails.map { petDetail ->
         FootprintInfoPetDetailUiModel(
+            memberId = memberId,
             memberName = memberName,
             petDetail = petDetail,
         )
