@@ -6,7 +6,6 @@ import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.Authenticator
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ClubService
-import com.happy.friendogly.remote.api.FootprintService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.WoofService

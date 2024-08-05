@@ -4,6 +4,7 @@ import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
+import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
 import com.happy.friendogly.remote.model.request.FootprintRequest
@@ -37,5 +38,10 @@ class WoofRepositoryImpl(private val source: WoofDataSource) : WoofRepository {
             .mapCatching { dto ->
                 dto.toDomain()
             }
+    }
+
+    override suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfo> {
+        return source.getFootprintInfo(footprintId)
+            .mapCatching { dto -> dto.toDomain() }
     }
 }
