@@ -93,6 +93,31 @@ fun ImageView.bindDogProfile(bitmap: Bitmap?) {
         .into(this)
 }
 
+@BindingAdapter("petImageBitmap", "petImageUrl")
+fun ImageView.bindGlidePetProfileImage(
+    imageBitmap: Bitmap?,
+    imageUrl: String?,
+) {
+    if (imageBitmap == null && imageUrl.isNullOrBlank()) {
+        return
+    }
+    if (imageBitmap != null) {
+        val softwareBitmap = imageBitmap.toSoftwareBitmap()
+
+        Glide.with(context)
+            .asBitmap()
+            .load(softwareBitmap)
+            .centerCrop()
+            .into(this)
+    } else {
+        Glide.with(context)
+            .asBitmap()
+            .load(imageUrl)
+            .centerCrop()
+            .into(this)
+    }
+}
+
 @BindingAdapter("urlToImage")
 fun ImageView.bindUrlToImage(imageUrl: String?) {
     imageUrl?.let { url ->
