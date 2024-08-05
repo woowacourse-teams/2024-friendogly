@@ -72,7 +72,8 @@ public class Footprint {
             WalkStatus walkStatus,
             LocalDateTime startWalkTime,
             LocalDateTime endWalkTime,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean isDeleted
     ) {
         this.member = member;
         this.location = location;
@@ -80,7 +81,7 @@ public class Footprint {
         this.startWalkTime = startWalkTime;
         this.endWalkTime = endWalkTime;
         this.createdAt = createdAt;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
     }
 
     public boolean isNear(Location location) {

@@ -121,6 +121,26 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         );
     }
 
+    @DisplayName("주변 발자국 조회시 삭제된 발자국은 조회되지 않는다.")
+    @Test
+    void findNearExceptDeletedFootprint() {
+        // given
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT(),
+                        FOOTPRINT_DELETED(),
+                        FOOTPRINT_DELETED()
+                )
+        );
+        System.out.println(footprintRepository.findAll().size());
+        // when
+        List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
+                member.getId(), new FindNearFootprintRequest(0.0, 0.0));
+
+        // then
+        assertThat(nearFootprints).hasSize(1);
+    }
+
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")
     @Test
     void findMyLatestFootprintTime_MyFootprintExists_PetExists() {

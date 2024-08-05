@@ -56,7 +56,19 @@ public abstract class FootprintServiceTest extends ServiceTest {
     //FIXTURE
 
     protected Footprint FOOTPRINT() {
-        return new Footprint(member, new Location(30, 30));
+        return new Footprint(member, new Location(0, 0));
+    }
+
+    protected Footprint FOOTPRINT(Member member) {
+        return new Footprint(
+                member,
+                new Location(0, 0),
+                BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                false
+        );
     }
 
     protected Footprint FOOTPRINT(LocalDateTime createdAt) {
@@ -66,7 +78,20 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
+        );
+    }
+
+    protected Footprint FOOTPRINT_DELETED() {
+        return new Footprint(
+                member,
+                new Location(0, 0),
+                BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                true
         );
     }
 
@@ -77,7 +102,8 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
         );
     }
 
@@ -88,7 +114,8 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 AFTER,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
         );
     }
 
@@ -99,7 +126,8 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 BEFORE,
                 null,
                 null,
-                createdAt
+                createdAt,
+                false
         );
     }
 }

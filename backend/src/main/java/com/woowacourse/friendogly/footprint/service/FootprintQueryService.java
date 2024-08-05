@@ -58,6 +58,7 @@ public class FootprintQueryService {
 
         return recentFootprints.stream()
                 .filter(footprint -> footprint.isNear(currentLocation))
+                .filter(footprint -> !footprint.isDeleted())
                 .map(footprint -> new FindNearFootprintResponse(footprint, footprint.isCreatedBy(memberId)))
                 .toList();
     }
