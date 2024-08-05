@@ -12,6 +12,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityGroupAddBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -20,7 +21,12 @@ import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileIma
 import com.happy.friendogly.presentation.utils.toBitmap
 
 class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity_group_add) {
-    private val viewModel: GroupAddViewModel by viewModels()
+    private val viewModel: GroupAddViewModel by viewModels<GroupAddViewModel>{
+        GroupAddViewModel.factory(
+            getAddressUseCase = AppModule.getInstance().getAddressUseCase,
+            postClubUseCase = AppModule.getInstance().postClubUseCase,
+        )
+    }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>

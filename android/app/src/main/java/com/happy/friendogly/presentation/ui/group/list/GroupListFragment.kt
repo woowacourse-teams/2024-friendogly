@@ -18,6 +18,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     private val viewModel: GroupListViewModel by viewModels<GroupListViewModel> {
         GroupListViewModel.factory(
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
+            searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
         )
     }
 

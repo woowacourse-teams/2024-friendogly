@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
@@ -23,7 +24,11 @@ class GroupMenuBottomSheet(
     val binding: BottomSheetGroupMenuBinding
         get() = _binding!!
 
-    private val viewModel: GroupMenuViewModel by viewModels()
+    private val viewModel: GroupMenuViewModel by viewModels<GroupMenuViewModel> {
+        GroupMenuViewModel.factory(
+            deleteClubMemberUseCase = AppModule.getInstance().deleteClubMemberUseCase,
+        )
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
@@ -81,12 +86,12 @@ class GroupMenuBottomSheet(
         val dialog =
             DefaultCoralAlertDialog(
                 alertDialogModel =
-                    AlertDialogModel(
-                        title = requireContext().getString(R.string.group_detail_delete_title),
-                        description = null,
-                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
-                    ),
+                AlertDialogModel(
+                    title = requireContext().getString(R.string.group_detail_delete_title),
+                    description = null,
+                    negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                    positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                ),
                 clickToNegative = { },
                 clickToPositive = {
                     viewModel.withdrawGroup()

@@ -2,8 +2,12 @@ package com.happy.friendogly.presentation.ui.group.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.usecase.GetClubUseCase
+import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
@@ -15,7 +19,10 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
-class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
+class GroupDetailViewModel(
+    private val getClubUseCase: GetClubUseCase,
+    private val postClubMemberUseCase: PostClubMemberUseCase,
+) : BaseViewModel(), GroupDetailActionHandler {
     private val _group: MutableLiveData<GroupDetailUiModel> = MutableLiveData()
     val group: LiveData<GroupDetailUiModel> get() = _group
 
@@ -139,5 +146,19 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
 
     fun makeGroupModifyUiModel(): GroupModifyUiModel? {
         return group.value?.toGroupModifyUiModel()
+    }
+
+    companion object {
+        fun factory(
+            getClubUseCase: GetClubUseCase,
+            postClubMemberUseCase: PostClubMemberUseCase,
+        ): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                GroupDetailViewModel(
+                    getClubUseCase = getClubUseCase,
+                    postClubMemberUseCase = postClubMemberUseCase,
+                )
+            }
+        }
     }
 }

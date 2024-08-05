@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
@@ -19,6 +20,7 @@ import kotlinx.datetime.LocalDateTime
 
 class GroupListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
+    private val searchingClubsUseCase: GetSearchingClubsUseCase,
 ) : BaseViewModel(), GroupListActionHandler {
     private val _uiState: MutableLiveData<GroupListUiState> =
         MutableLiveData(GroupListUiState.Init)
@@ -128,10 +130,14 @@ class GroupListViewModel(
     }
 
     companion object {
-        fun factory(getAddressUseCase: GetAddressUseCase): ViewModelProvider.Factory {
+        fun factory(
+            getAddressUseCase: GetAddressUseCase,
+            searchingClubsUseCase: GetSearchingClubsUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 GroupListViewModel(
                     getAddressUseCase = getAddressUseCase,
+                    searchingClubsUseCase = searchingClubsUseCase,
                 )
             }
         }
