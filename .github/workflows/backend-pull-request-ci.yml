@@ -61,9 +61,9 @@ jobs:
         if: always()
         with:
           files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+            ./backend/build/test-results/**/*.xml
+            ./backend/build/test-results/**/*.trx
+            ./backend/build/test-results/**/*.json
 
       - name: 실패 테스트결과의 원인을 Report 합니다
         uses: mikepenz/action-junit-report@v3
