@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.chat.service;
 
-import com.woowacourse.friendogly.chat.repository.PrivateChatRoomRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.support.ServiceTest;
@@ -11,9 +10,6 @@ public abstract class ChatRoomServiceTest extends ServiceTest {
 
     @Autowired
     protected MemberRepository memberRepository;
-
-    @Autowired
-    protected PrivateChatRoomRepository privateChatRoomRepository;
 
     protected Member member1;
 
