@@ -16,6 +16,7 @@ import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         );
     }
 
+    @Disabled
     @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {

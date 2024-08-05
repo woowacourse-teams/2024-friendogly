@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Footprint {
 
-    private static final int RADIUS_AS_METER = 1000;
+    private static final int NEAR_RADIUS_AS_METER = 400_000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,7 +84,7 @@ public class Footprint {
     }
 
     public boolean isNear(Location location) {
-        return this.location.isWithin(location, RADIUS_AS_METER);
+        return this.location.isWithin(location, NEAR_RADIUS_AS_METER);
     }
 
     public boolean isCreatedBy(Long memberId) {
