@@ -35,16 +35,15 @@ public class ChatRoomQueryService {
     public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long memberId, Long chatRoomId) {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        validateParticipation(chatRoomId, memberId);
+        validateParticipation(chatRoom, member);
+
         List<Member> members = chatRoom.findMembers();
         return members.stream()
                 .map(FindChatRoomMembersInfoResponse::new)
                 .toList();
     }
 
-    public void validateParticipation(Long chatRoomId, Long memberId) {
-        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        Member member = memberRepository.getById(memberId);
+    public void validateParticipation(ChatRoom chatRoom, Member member) {
         if (!chatRoom.containsMember(member)) {
             throw new FriendoglyException("채팅방에 참여해 있지 않습니다.");
         }
