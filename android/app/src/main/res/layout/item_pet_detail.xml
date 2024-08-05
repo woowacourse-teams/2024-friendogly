@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:text="정보"
+            android:text="@string/woof_information"
             app:layout_constraintBottom_toTopOf="@id/tv_woof_dog_age"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_woof_dog" />
@@ -118,18 +118,18 @@
             tools:text="암컷" />
 
         <TextView
-            android:id="@+id/tv_woof_dog_introduce"
+            android:id="@+id/tv_woof_dog_description_title"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:text="소개"
+            android:text="@string/woof_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_age" />
 
         <TextView
-            android:id="@+id/tv_woof_dog_desc"
+            android:id="@+id/tv_woof_dog_description"
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
             android:text="@{footprintPetDetail.petDetail.description}"
             android:textColor="@color/gray800"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_introduce"
+            app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_description_title"
             tools:text="땡이는 사람을 좋아해요! 땡이를 보게 되면 말 걸어주세요!!" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

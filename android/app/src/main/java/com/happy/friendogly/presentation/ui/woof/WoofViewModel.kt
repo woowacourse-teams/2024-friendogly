@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.location.Address
+import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -41,8 +43,8 @@ class WoofViewModel(
         MutableLiveData()
     val footprintPetDetails: LiveData<List<FootprintInfoPetDetailUiModel>> get() = _footprintPetDetails
 
-    private val _address: MutableLiveData<String> = MutableLiveData()
-    val address: LiveData<String> get() = _address
+    private val _registerAddress: MutableLiveData<String> = MutableLiveData()
+    val registerAddress: LiveData<String> get() = _registerAddress
 
     private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
     val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
@@ -122,8 +124,29 @@ class WoofViewModel(
         }
     }
 
-    fun loadAddress(address: String) {
-        _address.value = address
+    fun loadAddress(address: Address) {
+        _registerAddress.value = address.getAddressLine(0).substring(5)
+    }
+
+    fun saveLowLevelSdkAddress(
+        geocoder: Geocoder,
+        latitude: Double,
+        longitude: Double,
+    ) = viewModelScope.launch {
+        runCatching {
+            geocoder.getFromLocation(latitude, longitude, 1)
+                ?: return@launch submitInValidLocation()
+        }
+            .onSuccess { address ->
+                loadAddress(address[0])
+            }
+            .onFailure {
+                submitInValidLocation()
+            }
+    }
+
+    private fun submitInValidLocation() {
+        _snackbarActions.emit(WoofSnackbarActions.ShowInvalidLocationSnackbar)
     }
 
     companion object {

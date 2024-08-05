@@ -8,4 +8,6 @@ sealed interface WoofSnackbarActions {
     ) : WoofSnackbarActions
 
     data object ShowMarkerRegistered : WoofSnackbarActions
+
+    data object ShowInvalidLocationSnackbar : WoofSnackbarActions
 }

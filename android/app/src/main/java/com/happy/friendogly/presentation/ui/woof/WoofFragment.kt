@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.woof
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -326,6 +327,9 @@ class WoofFragment :
 
                 is WoofSnackbarActions.ShowMarkerRegistered ->
                     showSnackbar(resources.getString(R.string.woof_marker_registered))
+
+                is WoofSnackbarActions.ShowInvalidLocationSnackbar ->
+                    showSnackbar(resources.getString(R.string.woof_location_load_fail))
             }
         }
     }
@@ -562,20 +566,22 @@ class WoofFragment :
 
     private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
-        val cameraLatLng =
-            LatLng(convertLtnLng(position.latitude), convertLtnLng(position.longitude))
-        try {
-            val addresses =
-                geocoder.getFromLocation(
-                    cameraLatLng.latitude,
-                    cameraLatLng.longitude,
-                    1,
-                ) ?: return
-
-            val address = addresses[0].getAddressLine(0).substring(5)
-            viewModel.loadAddress(address)
-        } catch (e: Exception) {
-            getAddress(cameraLatLng)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geocoder.getFromLocation(
+                convertLtnLng(position.latitude),
+                convertLtnLng(position.longitude),
+                1,
+            ) { addresses ->
+                activity?.runOnUiThread {
+                    viewModel.loadAddress(addresses[0])
+                }
+            }
+        } else {
+            viewModel.saveLowLevelSdkAddress(
+                geocoder = geocoder,
+                latitude = convertLtnLng(position.latitude),
+                longitude = convertLtnLng(position.longitude),
+            )
         }
     }
 
