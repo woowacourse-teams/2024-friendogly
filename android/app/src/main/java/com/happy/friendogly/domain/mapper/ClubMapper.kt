@@ -13,7 +13,7 @@ fun Club.toPresentation(): GroupListUiModel{
         groupLocation = address.toPresentation(),
         groupLeader = ownerMemberName,
         title = title,
-        filters = allowedGender.toGroupFilters() + allowedSize.toGroupFilters(),
+        filters = allowedGender.toGenderGroupFilters() + allowedSize.toSizeGroupFilters(),
         groupDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         content = content,

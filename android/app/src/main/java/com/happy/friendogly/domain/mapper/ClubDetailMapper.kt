@@ -7,7 +7,7 @@ import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewTy
 fun ClubDetail.toPresentation(): GroupDetailUiModel {
     return GroupDetailUiModel(
         groupId = id,
-        filters = allowedGender.toGroupFilters() + allowedSize.toGroupFilters(),
+        filters = allowedGender.toGenderGroupFilters() + allowedSize.toSizeGroupFilters(),
         content = content,
         title = title,
         dogProfiles = petDetails.map { it.toPresentation() },

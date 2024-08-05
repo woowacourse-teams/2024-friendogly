@@ -15,7 +15,7 @@ import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 class GroupListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
@@ -67,7 +67,7 @@ class GroupListViewModel(
     private fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
-            val groupData = dummy()
+            val groupData: List<GroupListUiModel> = emptyList()
             if (groupData.isEmpty()) {
                 _uiState.value = GroupListUiState.NotData
             } else {
@@ -134,53 +134,6 @@ class GroupListViewModel(
                     getAddressUseCase = getAddressUseCase,
                 )
             }
-        }
-
-        // TODO: remove dummy
-        fun dummy(): List<GroupListUiModel> {
-            return List(5) {
-                listOf(
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 2,
-                        groupLocation = "잠실6동",
-                        groupLeader = "벼리",
-                        groupDate = LocalDateTime.now(),
-                        groupWoofs = listOf(),
-                        groupLeaderImage = "",
-                    ),
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 3,
-                        groupLocation = "잠실5동",
-                        groupLeader = "채드",
-                        groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
-                        groupWoofs = listOf(),
-                        groupLeaderImage = "",
-                    ),
-                )
-            }.flatten()
         }
     }
 }

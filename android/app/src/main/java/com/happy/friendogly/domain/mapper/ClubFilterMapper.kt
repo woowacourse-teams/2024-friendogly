@@ -4,11 +4,11 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
-fun List<Gender>.toGroupFilters(): List<GroupFilter>{
+fun List<Gender>.toGenderGroupFilters(): List<GroupFilter>{
     return this.map { it.toGroupFilter() }
 }
 
-fun List<SizeType>.toGroupFilters(): List<GroupFilter>{
+fun List<SizeType>.toSizeGroupFilters(): List<GroupFilter>{
     return this.map { it.toGroupFilter() }
 }
 

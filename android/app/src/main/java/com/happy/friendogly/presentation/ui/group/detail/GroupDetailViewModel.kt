@@ -12,6 +12,7 @@ import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.modify.GroupModifyUiModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
 class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
@@ -43,7 +44,7 @@ class GroupDetailViewModel : BaseViewModel(), GroupDetailActionHandler {
                     currentNumberOfPeople = 2,
                     groupLocation = "잠실6동",
                     groupLeader = "벼리",
-                    groupDate = LocalDateTime.now(),
+                    groupDate = LocalDateTime.now().toKotlinLocalDateTime(),
                     groupLeaderImage = null,
                     userProfiles =
                         listOf(
