@@ -35,9 +35,9 @@ VALUES (1, '부', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SMALL', 
        (8, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE',
         'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg');
 
-INSERT INTO chat_room (id)
-VALUES (1),
-       (2);
+INSERT INTO chat_room (member_capacity)
+VALUES (5),
+       (5);
 
 INSERT INTO chat_room_member (chat_room_id, member_id, created_at)
 VALUES (1, 6, '2023-08-01 12:00:00'),
