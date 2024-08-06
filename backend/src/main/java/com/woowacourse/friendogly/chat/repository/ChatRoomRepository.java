@@ -20,4 +20,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             WHERE chatRoomMember.member.id = :memberId
             """)
     List<ChatRoom> findMine(@Param("memberId") Long memberId);
+
+    @Query(value = """
+            SELECT new java.lang.Boolean(count(*) > 0)
+            FROM ChatRoomMember chatRoomMember
+            WHERE chatRoomMember.chatRoom.id = :chatRoomId AND chatRoomMember.member.id = :memberId
+            """)
+    boolean existsBy(@Param("chatRoomId") Long chatRoomId, @Param("memberId") Long memberId);
 }

@@ -104,4 +104,8 @@ public class ChatRoom {
     public boolean isPrivateChat() {
         return chatRoomType == ChatRoomType.PRIVATE;
     }
+
+    public boolean isGroupChat() {
+        return chatRoomType == ChatRoomType.GROUP;
+    }
 }

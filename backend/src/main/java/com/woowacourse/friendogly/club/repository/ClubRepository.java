@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
 
@@ -24,4 +26,12 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
         return findByChatRoomId(chatRoomId)
                 .orElseThrow(() -> new FriendoglyException("채팅방에 해당하는 모임을 찾지 못했습니다."));
     }
+
+    @Query(value = """
+            SELECT new java.lang.Boolean(count(*) > 0)
+            FROM ClubMember clubMember
+            WHERE clubMember.clubMemberPk.club.chatRoom.id = :chatRoomId
+                AND clubMember.clubMemberPk.member.id = :memberId
+            """)
+    boolean existsBy(@Param("chatRoomId") Long chatRoomId, @Param("memberId") Long memberId);
 }

@@ -3,9 +3,10 @@ package com.woowacourse.friendogly.config;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.messaging.simp.stomp.StompCommand.SUBSCRIBE;
 
-import com.woowacourse.friendogly.chat.repository.ChatRoomMemberRepository;
+import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
+import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyWebSocketException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -13,16 +14,20 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public class WebSocketInterceptor implements ChannelInterceptor {
 
     private static final String TOPIC_CHAT_ENDPOINT = "/topic/chat/";
     private static final String TOPIC_INVITE_ENDPOINT = "/topic/invite/";
 
-    private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ClubRepository clubRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
-    public WebSocketInterceptor(ChatRoomMemberRepository chatRoomMemberRepository) {
-        this.chatRoomMemberRepository = chatRoomMemberRepository;
+    public WebSocketInterceptor(
+            ClubRepository clubRepository,
+            ChatRoomRepository chatRoomRepository
+    ) {
+        this.clubRepository = clubRepository;
+        this.chatRoomRepository = chatRoomRepository;
     }
 
     @Override
@@ -67,8 +72,14 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
         long chatRoomId = convertToLong(rawChatRoomId);
 
-        if (!chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId)) {
-            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+
+        if (chatRoom.isPrivateChat()) {
+            validateChatParticipation(chatRoomId, memberId);
+        }
+
+        if (chatRoom.isGroupChat()) {
+            validateClubParticipation(chatRoomId, memberId);
         }
     }
 
@@ -83,6 +94,18 @@ public class WebSocketInterceptor implements ChannelInterceptor {
             return Long.parseLong(rawId);
         } catch (NumberFormatException e) {
             throw new FriendoglyWebSocketException("식별자는 숫자만 입력 가능합니다.");
+        }
+    }
+
+    private void validateChatParticipation(long chatRoomId, long memberId) {
+        if (!chatRoomRepository.existsBy(chatRoomId, memberId)) {
+            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
+        }
+    }
+
+    private void validateClubParticipation(long chatRoomId, long memberId) {
+        if (!clubRepository.existsBy(chatRoomId, memberId)) {
+            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
         }
     }
 }
