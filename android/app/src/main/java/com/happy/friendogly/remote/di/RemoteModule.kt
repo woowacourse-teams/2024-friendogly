@@ -1,6 +1,6 @@
 package com.happy.friendogly.remote.di
 
-import com.happy.friendogly.local.di.LocalModule
+import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.FootprintService
@@ -25,51 +25,51 @@ object RemoteModule {
 
     fun createClubService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): ClubService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
         ).create(ClubService::class.java)
     }
 
     fun createFootprintService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): FootprintService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
         ).create(FootprintService::class.java)
     }
 
     fun createWoofService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): WoofService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
         ).create(WoofService::class.java)
     }
 
     fun createMemberService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): MemberService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
         ).create(MemberService::class.java)
     }
 
     fun createPetService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): PetService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
         ).create(PetService::class.java)
     }
 
@@ -81,11 +81,11 @@ object RemoteModule {
 
     private fun createRetrofit(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
     ): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl.url).client(
             createOkHttpClient {
-                addInterceptor(AuthorizationInterceptor(localModule = localModule))
+                addInterceptor(AuthorizationInterceptor(tokenManager = tokenManager))
                 addInterceptor(ErrorResponseInterceptor())
                 addInterceptor(logging)
             },

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class LocalModule(val context: Context) {
+class TokenManager(val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
     private val key = stringPreferencesKey(KEY_ACCESS_TOKEN)
