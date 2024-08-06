@@ -42,6 +42,7 @@ import com.happy.friendogly.domain.repository.SettingRepository
 
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteAlarmTokenUseCase
+import com.happy.friendogly.domain.usecase.DeleteAlarmUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
@@ -216,10 +217,10 @@ class AppModule(context: Context) {
     val saveAddressUseCase: SaveAddressUseCase = SaveAddressUseCase(repository = addressRepository)
     val deleteAddressUseCase: DeleteAddressUseCase =
         DeleteAddressUseCase(repository = addressRepository)
-
+    val deleteAlarmUseCase: DeleteAlarmUseCase = DeleteAlarmUseCase(repository = settingRepository)
     val saveAlarmUseCase: SaveAlarmUseCase = SaveAlarmUseCase(repository = settingRepository)
     val getAlarmUseCase: GetAlarmUseCase = GetAlarmUseCase(repository = settingRepository)
-    val deleteAlarmUseCase: DeleteAlarmTokenUseCase = DeleteAlarmTokenUseCase(repository = alarmTokenRepository)
+    val deleteAlarmTokenUseCase: DeleteAlarmTokenUseCase = DeleteAlarmTokenUseCase(repository = alarmTokenRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase = SaveAlamTokenUseCase(repository = alarmTokenRepository)
     val getAlarmTokenUseCase: GetAlarmTokenUseCase = GetAlarmTokenUseCase(repository = alarmTokenRepository)
 
