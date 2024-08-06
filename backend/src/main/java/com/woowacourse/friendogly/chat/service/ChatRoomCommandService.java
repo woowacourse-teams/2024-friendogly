@@ -8,6 +8,8 @@ import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,18 @@ public class ChatRoomCommandService {
     public SaveChatRoomResponse savePrivate(Long memberId, SaveChatRoomRequest request) {
         Member member = memberRepository.getById(memberId);
         Member otherMember = memberRepository.getById(request.otherMemberId());
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member, otherMember));
+
+        ChatRoom chatRoom = findExistingChatRoom(memberId, otherMember)
+                .orElse(chatRoomRepository.save(ChatRoom.createPrivate(member, otherMember)));
+
         return new SaveChatRoomResponse(chatRoom.getId());
+    }
+
+    private Optional<ChatRoom> findExistingChatRoom(Long memberId, Member otherMember) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findMine(memberId);
+        return chatRooms.stream()
+                .filter(chatRoom -> chatRoom.containsMember(otherMember))
+                .findAny();
     }
 
     public void invite(Long senderMemberId, InviteToChatRoomRequest request) {

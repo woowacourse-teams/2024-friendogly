@@ -65,6 +65,21 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         assertThat(chatRoom.findMembers()).containsExactly(member1, member2);
     }
 
+    @DisplayName("1대1 채팅방 저장 과정에서, 이미 채팅방이 존재하면 기존 채팅방 ID를 반환한다.")
+    @Transactional
+    @Test
+    void save_AlreadyExists() {
+        // given
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1, member2));
+
+        // when
+        SaveChatRoomRequest request = new SaveChatRoomRequest(member1.getId());
+        SaveChatRoomResponse response = chatRoomCommandService.savePrivate(member2.getId(), request);
+
+        // then
+        assertThat(response.chatRoomId()).isEqualTo(chatRoom.getId());
+    }
+
     @DisplayName("채팅방에 참여한 경우, 채팅방에서 나갈 수 있다.")
     @Transactional
     @Test
