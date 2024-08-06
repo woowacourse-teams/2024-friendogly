@@ -120,7 +120,10 @@ class GroupDetailActivity :
 
                 is GroupDetailEvent.OpenDetailMenu -> {
                     val bottomSheet =
-                        GroupMenuBottomSheet(event.groupDetailViewType)
+                        GroupMenuBottomSheet(
+                            groupId = receiveGroupId(),
+                            groupDetailViewType = event.groupDetailViewType,
+                        )
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
 
