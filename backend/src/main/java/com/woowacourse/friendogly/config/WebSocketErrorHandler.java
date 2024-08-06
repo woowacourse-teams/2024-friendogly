@@ -30,7 +30,7 @@ public class WebSocketErrorHandler extends StompSubProtocolErrorHandler {
         if (causeException instanceof FriendoglyWebSocketException) {
             return createMessageBytes(causeException.getMessage());
         }
-        return clientMessage;
+        return super.handleClientMessageProcessingError(clientMessage, ex);
     }
 
     private Message<byte[]> createMessageBytes(String message) {
