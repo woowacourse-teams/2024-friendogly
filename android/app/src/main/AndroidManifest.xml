@@ -61,7 +61,8 @@
         <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name=".presentation.ui.chatlist.chat.ChatActivity"
             android:exported="false"

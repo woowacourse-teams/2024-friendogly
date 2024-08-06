@@ -23,7 +23,7 @@ interface ClubService {
     @Multipart
     @POST(ApiClient.Club.POST_CLUB)
     suspend fun postClub(
-        @Path("request") body: PostClubRequest,
+        @Part("request") body: PostClubRequest,
         @Part file: MultipartBody.Part?,
     ): BaseResponse<Unit>
 
