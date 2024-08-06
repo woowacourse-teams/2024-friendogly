@@ -21,8 +21,8 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
-import org.junit.jupiter.api.AfterEach;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -120,6 +120,11 @@ class FootprintControllerTest {
                         .imageUrl("https://picsum.photos/200")
                         .build()
         );
+    }
+
+    @AfterEach
+    void setDown() {
+        footprintRepository.deleteAll();
     }
 
     @DisplayName("발자국을 정상적으로 생성한다. (201)")
