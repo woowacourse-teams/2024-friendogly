@@ -61,7 +61,6 @@ public class WebSocketInterceptor implements ChannelInterceptor {
 
     private void validateChatSubscription(StompHeaderAccessor accessor, String destination) {
         String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
-
         validateLogin(rawMemberId);
         long memberId = convertToLong(rawMemberId);
 
