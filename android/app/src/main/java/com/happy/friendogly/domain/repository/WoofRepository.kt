@@ -4,12 +4,18 @@ import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 
 interface WoofRepository {
     suspend fun postFootprint(
         latitude: Double,
         longitude: Double,
     ): Result<FootprintSave>
+
+    suspend fun patchWalkStatus(
+        latitude: Double,
+        longitude: Double,
+    ): Result<WalkStatus>
 
     suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfo>
 
