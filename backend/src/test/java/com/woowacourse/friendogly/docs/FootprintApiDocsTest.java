@@ -3,14 +3,17 @@ package com.woowacourse.friendogly.docs;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -20,12 +23,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.controller.FootprintController;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.woowacourse.friendogly.footprint.dto.response.detail.PetDetail;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
@@ -38,6 +44,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(FootprintController.class)
 public class FootprintApiDocsTest extends RestDocsTest {
@@ -249,6 +256,78 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         )
                 ))
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("발자국 산책 상태 변경")
+    @Test
+    void updateWalkStatus_200() throws Exception {
+        UpdateWalkStatusRequest request = new UpdateWalkStatusRequest(37.5136533, 127.0983182);
+        UpdateWalkStatusResponse response = new UpdateWalkStatusResponse(ONGOING);
+
+        given(footprintCommandService.updateWalkStatus(any(), any()))
+                .willReturn(response);
+
+        mockMvc
+                .perform(patch("/footprints/walk-status")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON)
+                        .header(AUTHORIZATION, 1L))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("footprints/walk-status/200",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Footprint API")
+                                .summary("발자국 산책 상태 변경 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.walkStatus").description("발자국 산책 상태")
+                                )
+                                .requestSchema(Schema.schema("updateWalkStatusResponse"))
+                                .build()
+                        )
+                ));
+    }
+
+    @DisplayName("발자국 산책 상태 변경실패 - 발자국이 없을 경우")
+    @Test
+    void updateWalkStatus_400() throws Exception {
+        UpdateWalkStatusRequest request = new UpdateWalkStatusRequest(37.5136533, 127.0983182);
+        UpdateWalkStatusResponse response = new UpdateWalkStatusResponse(ONGOING);
+
+        when(footprintCommandService.updateWalkStatus(any(), any()))
+                .thenThrow(new FriendoglyException("예외 메세지"));
+
+        mockMvc
+                .perform(patch("/footprints/walk-status")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON)
+                        .header(AUTHORIZATION, 1L))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("footprints/walk-status/400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Footprint API")
+                                .summary("발자국 산책 상태 변경 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.errorCode").type(JsonFieldType.STRING).description("에러 코드"),
+                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING).description("에러메세지"),
+                                        fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
+                                )
+                                .requestSchema(Schema.schema("updateWalkStatusResponse"))
+                                .build()
+                        )
+                ));
     }
 
     @Override

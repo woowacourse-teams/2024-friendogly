@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.footprint.service;
 
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
@@ -59,16 +60,14 @@ public abstract class FootprintServiceTest extends ServiceTest {
         return new Footprint(member, new Location(0, 0));
     }
 
-    protected Footprint FOOTPRINT(Member member) {
-        return new Footprint(
-                member,
+    protected Footprint FOOTPRINT_DELETED() {
+        return new Footprint(member,
                 new Location(0, 0),
                 BEFORE,
                 null,
                 null,
                 LocalDateTime.now(),
-                false
-        );
+                true);
     }
 
     protected Footprint FOOTPRINT(LocalDateTime createdAt) {
@@ -83,15 +82,15 @@ public abstract class FootprintServiceTest extends ServiceTest {
         );
     }
 
-    protected Footprint FOOTPRINT_DELETED() {
+    protected Footprint FOOTPRINT_STATUS_BEFORE(Location location) {
         return new Footprint(
                 member,
-                new Location(0, 0),
+                location,
                 BEFORE,
                 null,
                 null,
                 LocalDateTime.now(),
-                true
+                false
         );
     }
 
@@ -107,14 +106,14 @@ public abstract class FootprintServiceTest extends ServiceTest {
         );
     }
 
-    protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
+    protected Footprint FOOTPRINT_STATUS_ONGOING(Location location) {
         return new Footprint(
                 member,
-                new Location(0, 0),
-                AFTER,
+                location,
+                ONGOING,
+                LocalDateTime.now(),
                 null,
-                null,
-                createdAt,
+                LocalDateTime.now().minusHours(1),
                 false
         );
     }
@@ -124,10 +123,40 @@ public abstract class FootprintServiceTest extends ServiceTest {
                 member,
                 new Location(0, 0),
                 BEFORE,
-                null,
+                LocalDateTime.now(),
                 null,
                 createdAt,
                 false
         );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_AFTER(Location location) {
+        return new Footprint(
+                member,
+                location,
+                AFTER,
+                LocalDateTime.now().minusHours(1),
+                LocalDateTime.now(),
+                LocalDateTime.now().minusHours(2),
+                false
+        );
+    }
+
+    protected Footprint FOOTPRINT_STATUS_AFTER(LocalDateTime createdAt) {
+        return new Footprint(
+                member,
+                new Location(0, 0),
+                AFTER,
+                LocalDateTime.now().minusHours(1),
+                LocalDateTime.now(),
+                createdAt,
+                false
+        );
+    }
+
+    protected static double ONE_METER_LOCATION_UNIT = 0.0000089847;
+
+    protected static double LONGITUDE_WITH_METER_FROM_ZERO(double meter) {
+        return meter * ONE_METER_LOCATION_UNIT;
     }
 }

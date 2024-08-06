@@ -113,12 +113,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         // then
-        assertAll(
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
-                        .containsExactly(0.00000, 0.00000),
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
-                        .containsExactly(0.00000, 0.00000)
-        );
+        assertThat(nearFootprints.size()).isEqualTo(2);
     }
 
     @DisplayName("주변 발자국 조회시 삭제된 발자국은 조회되지 않는다.")

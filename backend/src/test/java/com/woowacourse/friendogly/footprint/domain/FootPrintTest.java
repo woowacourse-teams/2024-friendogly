@@ -21,14 +21,14 @@ public class FootPrintTest {
     @Test
     void findChangedWalkStatusTime_when_WalkStatusIsBefore(){
         // given
-        LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
+        LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(
                 member,
                 new Location(30, 30),
                 BEFORE,
                 null,
                 null,
-                expectedTime,
+                expectedChangedWalkStatusTime,
                 false
                 );
 
@@ -36,21 +36,21 @@ public class FootPrintTest {
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
 
         // then
-        assertThat(changedWalkStatusTime).isEqualTo(expectedTime);
+        assertThat(changedWalkStatusTime).isEqualTo(expectedChangedWalkStatusTime);
     }
 
     @DisplayName("산책중일경우, 산책 상태 변경된 시간은 산책 시작 시간이 반환된다.")
     @Test
     void findChangedWalkStatusTime_when_WalkStatusIsOngoing(){
         // given
-        LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
+        LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(
                 member,
                 new Location(30, 30),
                 ONGOING,
-                expectedTime,
+                expectedChangedWalkStatusTime,
                 null,
-                expectedTime.minusHours(2),
+                expectedChangedWalkStatusTime.minusHours(2),
                 false
         );
 
@@ -58,21 +58,21 @@ public class FootPrintTest {
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
 
         // then
-        assertThat(changedWalkStatusTime).isEqualTo(expectedTime);
+        assertThat(changedWalkStatusTime).isEqualTo(expectedChangedWalkStatusTime);
     }
 
     @DisplayName("산책후일경우, 산책 상태 변경된 시간은 산책 종료 시간이 반환된다.")
     @Test
     void findChangedWalkStatusTime_when_WalkStatusIsAfter(){
         // given
-        LocalDateTime expectedTime = LocalDateTime.of(2023, 12, 12, 10, 30);
+        LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(
                 member,
                 new Location(30, 30),
                 AFTER,
-                expectedTime.minusHours(1),
-                expectedTime,
-                expectedTime.minusHours(2),
+                expectedChangedWalkStatusTime.minusHours(1),
+                expectedChangedWalkStatusTime,
+                expectedChangedWalkStatusTime.minusHours(2),
                 false
         );
 
@@ -80,6 +80,6 @@ public class FootPrintTest {
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
 
         // then
-        assertThat(changedWalkStatusTime).isEqualTo(expectedTime);
+        assertThat(changedWalkStatusTime).isEqualTo(expectedChangedWalkStatusTime);
     }
 }
