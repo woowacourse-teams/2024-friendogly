@@ -56,6 +56,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
         LocalDateTime createdAt = LocalDateTime.now();
+        chatRoomCommandService.enter(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }

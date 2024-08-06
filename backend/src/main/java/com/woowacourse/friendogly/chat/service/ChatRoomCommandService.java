@@ -57,4 +57,12 @@ public class ChatRoomCommandService {
             throw new FriendoglyException("채팅에 참여한 상태가 아닙니다.");
         }
     }
+
+    public void enter(Long memberId, Long chatRoomId) {
+        Member member = memberRepository.getById(memberId);
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        if (chatRoom.isGroupChat()) {
+            chatRoom.addMember(member);
+        }
+    }
 }
