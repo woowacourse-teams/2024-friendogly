@@ -217,8 +217,8 @@ class AppModule(context: Context) {
     val deleteAddressUseCase: DeleteAddressUseCase =
         DeleteAddressUseCase(repository = addressRepository)
 
-    val saveAlarmUseCase:SaveAlarmUseCase = SaveAlarmUseCase(repository = settingRepository)
-    val getAlarmUseCase:GetAlarmUseCase = GetAlarmUseCase(repository = settingRepository)
+    val saveAlarmUseCase: SaveAlarmUseCase = SaveAlarmUseCase(repository = settingRepository)
+    val getAlarmUseCase: GetAlarmUseCase = GetAlarmUseCase(repository = settingRepository)
     val deleteAlarmUseCase: DeleteAlarmTokenUseCase = DeleteAlarmTokenUseCase(repository = alarmTokenRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase = SaveAlamTokenUseCase(repository = alarmTokenRepository)
     val getAlarmTokenUseCase: GetAlarmTokenUseCase = GetAlarmTokenUseCase(repository = alarmTokenRepository)

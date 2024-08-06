@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AlarmReceiver : FirebaseMessagingService() {
-
     private lateinit var notificationManager: NotificationManager
 
     override fun onNewToken(token: String) {
@@ -37,7 +36,7 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     private fun onReceive(
         title: String?,
-        body: String?
+        body: String?,
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -74,7 +73,6 @@ class AlarmReceiver : FirebaseMessagingService() {
                 contentIntent,
                 PendingIntent.FLAG_IMMUTABLE,
             )
-
 
         val builder =
             NotificationCompat.Builder(this, CHANNEL_ID)
