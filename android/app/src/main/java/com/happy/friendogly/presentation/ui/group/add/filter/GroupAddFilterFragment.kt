@@ -19,7 +19,7 @@ class GroupAddFilterFragment :
         binding.vm = viewModel
     }
 
-    private fun checkAllFilters(){
+    private fun checkAllFilters() {
         binding.includeAddGroupBig.checkboxGroupFilter.isChecked = true
         binding.includeAddGroupMedium.checkboxGroupFilter.isChecked = true
         binding.includeAddGroupSmail.checkboxGroupFilter.isChecked = true

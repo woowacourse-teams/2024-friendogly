@@ -9,8 +9,8 @@ fun ClubAddress.toPresentation(): String {
 
 fun UserAddress.toSizeType(): ClubAddress {
     return ClubAddress(
-        province = adminArea ,
-        city = subLocality ,
+        province = adminArea,
+        city = subLocality,
         village = thoroughfare,
     )
 }

@@ -1,7 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.add
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -52,27 +51,28 @@ class GroupAddViewModel(
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
 
-    val isValidNextPage: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
-        .apply {
-            addSourceList(
-                groupTitle,
-                groupContent,
-                groupFilterSelector.currentSelectedFilters,
-                groupCounter,
-                myAddress,
-            ) {
-                isValidAddedData()
+    val isValidNextPage: MediatorLiveData<Boolean> =
+        MediatorLiveData<Boolean>()
+            .apply {
+                addSourceList(
+                    groupTitle,
+                    groupContent,
+                    groupFilterSelector.currentSelectedFilters,
+                    groupCounter,
+                    myAddress,
+                ) {
+                    isValidAddedData()
+                }
             }
-        }
-
 
     val isValidPrevPage:
-            MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
-        .apply {
-            addSourceList(currentPage) {
-                isValidPrevPage()
+        MediatorLiveData<Boolean> =
+        MediatorLiveData<Boolean>()
+            .apply {
+                addSourceList(currentPage) {
+                    isValidPrevPage()
+                }
             }
-        }
 
     init {
         loadAddress()
@@ -123,7 +123,7 @@ class GroupAddViewModel(
         val groupTitleLength = groupTitle.value?.length ?: (MIN_TEXT_LENGTH - 1)
         val groupContentLength = groupContent.value?.length ?: (MIN_TEXT_LENGTH - 1)
         return groupTitleLength in MIN_TEXT_LENGTH..MAX_TITLE_LENGTH &&
-                groupContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
+            groupContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
     }
 
     private fun isValidFilterGroup(): Boolean {
@@ -156,7 +156,6 @@ class GroupAddViewModel(
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
-
     fun submitAddGroup(
         dogs: List<Long>,
         file: MultipartBody.Part?,
@@ -164,7 +163,7 @@ class GroupAddViewModel(
         postClubUseCase(
             title = groupTitle.value ?: return@launch,
             content = groupContent.value ?: return@launch,
-            address = myAddress.value?.toSizeType() ?:return@launch,
+            address = myAddress.value?.toSizeType() ?: return@launch,
             allowedGender = groupFilterSelector.selectGenderFilters().toGender(),
             allowedSize = groupFilterSelector.selectSizeFilters().toSizeType(),
             memberCapacity = groupCounter.value?.count ?: return@launch,

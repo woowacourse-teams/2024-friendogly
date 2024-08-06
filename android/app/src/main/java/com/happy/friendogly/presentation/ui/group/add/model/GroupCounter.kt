@@ -1,9 +1,8 @@
 package com.happy.friendogly.presentation.ui.group.add.model
 
 class GroupCounter(val count: Int = MAX_COUNT) {
-
-    fun isValid(): Boolean{
-        return count in MIN_COUNT .. MAX_COUNT
+    fun isValid(): Boolean {
+        return count in MIN_COUNT..MAX_COUNT
     }
 
     companion object {

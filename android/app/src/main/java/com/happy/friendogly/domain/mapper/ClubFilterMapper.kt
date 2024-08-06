@@ -35,7 +35,7 @@ fun List<GroupFilter.SizeFilter>.toSizeType(): List<SizeType> {
     }
 }
 
-fun List<GroupFilter.GenderFilter>.toGender(): List<Gender>{
+fun List<GroupFilter.GenderFilter>.toGender(): List<Gender> {
     return this.mapNotNull {
         it.toSizeType()
     }

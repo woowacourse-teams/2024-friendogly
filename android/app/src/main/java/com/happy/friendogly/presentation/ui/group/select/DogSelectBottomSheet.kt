@@ -91,23 +91,25 @@ class DogSelectBottomSheet(
             when (event) {
                 DogSelectEvent.CancelSelection -> this.dismissNow()
                 DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
-                is DogSelectEvent.PreventSelection -> makeToast(
-                    requireContext().getString(
-                        R.string.dog_select_prevent_message,
-                        event.dogName,
+                is DogSelectEvent.PreventSelection ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_select_prevent_message,
+                            event.dogName,
+                        ),
                     )
-                )
 
                 is DogSelectEvent.SelectDogs -> {
                     this.dismissNow()
                     submit(event.dogs)
                 }
 
-                DogSelectEvent.FailLoadDog -> makeToast(
-                    requireContext().getString(
-                        R.string.dog_select_load_fail,
+                DogSelectEvent.FailLoadDog ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_select_load_fail,
+                        ),
                     )
-                )
             }
         }
     }

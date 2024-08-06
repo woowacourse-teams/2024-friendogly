@@ -33,17 +33,19 @@ class DogSelectViewModel(
         this.filters = filters
     }
 
-    private fun loadMyDogs() = viewModelScope.launch {
-        getPetsMineUseCase()
-            .onSuccess {
-                _dogs.value = it.map { pet ->
-                    pet.toDogSelectUiModel()
+    private fun loadMyDogs() =
+        viewModelScope.launch {
+            getPetsMineUseCase()
+                .onSuccess {
+                    _dogs.value =
+                        it.map { pet ->
+                            pet.toDogSelectUiModel()
+                        }
                 }
-            }
-            .onFailure {
-                _dogSelectEvent.emit(DogSelectEvent.FailLoadDog)
-            }
-    }
+                .onFailure {
+                    _dogSelectEvent.emit(DogSelectEvent.FailLoadDog)
+                }
+        }
 
     override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {

@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter

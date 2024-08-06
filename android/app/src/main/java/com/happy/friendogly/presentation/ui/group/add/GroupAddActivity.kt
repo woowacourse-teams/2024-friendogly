@@ -110,7 +110,7 @@ class GroupAddActivity : BaseActivity<ActivityGroupAddBinding>(R.layout.activity
 
     private fun openDogSelector(filters: List<GroupFilter>) {
         val bottomSheet =
-            DogSelectBottomSheet(filters = filters) { dogs->
+            DogSelectBottomSheet(filters = filters) { dogs ->
                 viewModel.submitAddGroup(
                     dogs = dogs,
                     file = makePartImage(),

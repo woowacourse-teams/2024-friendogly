@@ -68,9 +68,10 @@ fun TextView.bindValidStyle(isValid: Boolean) {
 
 @BindingAdapter("validNextButtonText")
 fun TextView.bindValidNextButtonText(currentPage: Int) {
-    this.text = if (currentPage == MAX_PAGE_SIZE - 1) {
-        context.getString(R.string.group_list_commit_btn)
-    } else {
-        context.getString(R.string.group_list_next_btn)
-    }
+    this.text =
+        if (currentPage == MAX_PAGE_SIZE - 1) {
+            context.getString(R.string.group_list_commit_btn)
+        } else {
+            context.getString(R.string.group_list_next_btn)
+        }
 }
