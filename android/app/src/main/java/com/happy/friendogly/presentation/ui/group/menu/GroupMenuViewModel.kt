@@ -3,12 +3,14 @@ package com.happy.friendogly.presentation.ui.group.menu
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
+import kotlinx.coroutines.launch
 
 class GroupMenuViewModel(
     private val deleteClubMemberUseCase: DeleteClubMemberUseCase,
@@ -24,10 +26,16 @@ class GroupMenuViewModel(
         _groupDetailViewType.value = groupDetailViewType
     }
 
-    // TODO : delete api
-    fun withdrawGroup() {
-        _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
-    }
+    fun withdrawGroup(groupId: Long) =
+        viewModelScope.launch {
+            deleteClubMemberUseCase(groupId)
+                .onSuccess {
+                    _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
+                }
+                .onFailure {
+                    _groupMenuEvent.emit(GroupMenuEvent.FailDelete)
+                }
+        }
 
     override fun close() {
         _groupMenuEvent.emit(GroupMenuEvent.CancelSelection)

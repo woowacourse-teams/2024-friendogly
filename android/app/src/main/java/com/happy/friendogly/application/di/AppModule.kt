@@ -2,6 +2,8 @@ package com.happy.friendogly.application.di
 
 import android.content.Context
 import com.happy.friendogly.BuildConfig
+import com.happy.friendogly.analytics.AnalyticsHelper
+import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.FootprintRepositoryImpl
@@ -62,6 +64,10 @@ import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WoofDataSourceImpl
 
 class AppModule(context: Context) {
+    // analytics & crashlytics
+    val analyticsHelper = AnalyticsHelper(context)
+    val crashlyticsHelper = CrashlyticsHelper()
+
     private val baseUrl = BaseUrl(BuildConfig.base_url)
 
     private val tokenManager = TokenManager(context)
