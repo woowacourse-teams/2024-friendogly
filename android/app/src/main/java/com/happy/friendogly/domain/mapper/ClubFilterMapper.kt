@@ -6,7 +6,6 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 
-
 fun ParticipationFilter.toDomain(): ClubFilterCondition {
     return when (this) {
         ParticipationFilter.ENTIRE -> ClubFilterCondition.ALL

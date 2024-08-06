@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.mapper.toGenders
 import com.happy.friendogly.domain.mapper.toDomain
+import com.happy.friendogly.domain.mapper.toGenders
 import com.happy.friendogly.domain.mapper.toSizeTypes
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase

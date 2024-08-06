@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -74,18 +73,19 @@ class GroupListViewModel(
             searchingClubsUseCase(
                 filterCondition = participationFilter.value?.toDomain() ?: return@launch,
                 address = myAddress.value?.toDomain() ?: return@launch,
-                genderParams =  groupFilterSelector.selectGenderFilters().toGenders(),
+                genderParams = groupFilterSelector.selectGenderFilters().toGenders(),
                 sizeParams = groupFilterSelector.selectSizeFilters().toSizeTypes(),
             )
                 .onSuccess {
-                    if (it.isEmpty()){
+                    if (it.isEmpty()) {
                         _uiState.value = GroupListUiState.NotData
-                    }else{
+                    } else {
                         _uiState.value = GroupListUiState.Init
                     }
-                    _groups.value = it.map { group ->
-                        group.toPresentation()
-                    }
+                    _groups.value =
+                        it.map { group ->
+                            group.toPresentation()
+                        }
                 }
         }
 

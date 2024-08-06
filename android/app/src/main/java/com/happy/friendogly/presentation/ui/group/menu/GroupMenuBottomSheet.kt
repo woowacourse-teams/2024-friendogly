@@ -83,9 +83,10 @@ class GroupMenuBottomSheet(
                     dismissNow()
                 }
 
-                GroupMenuEvent.FailDelete -> makeToast(
-                    requireContext().getString(R.string.group_detail_delete_fail)
-                )
+                GroupMenuEvent.FailDelete ->
+                    makeToast(
+                        requireContext().getString(R.string.group_detail_delete_fail),
+                    )
             }
         }
     }

@@ -82,7 +82,7 @@ class GroupDetailActivity :
         }
     }
 
-    private fun openFailGroupDetailLoad(){
+    private fun openFailGroupDetailLoad() {
         showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
             setAction(resources.getString(R.string.group_detail_fail_button)) {
                 finish()
@@ -131,9 +131,10 @@ class GroupDetailActivity :
                     startActivity(OtherProfileActivity.getIntent(this, event.id))
 
                 GroupDetailEvent.FailLoadDetail -> openFailGroupDetailLoad()
-                GroupDetailEvent.FailParticipation -> showSnackbar(
-                    getString(R.string.group_detail_participate_fail)
-                )
+                GroupDetailEvent.FailParticipation ->
+                    showSnackbar(
+                        getString(R.string.group_detail_participate_fail),
+                    )
             }
         }
     }

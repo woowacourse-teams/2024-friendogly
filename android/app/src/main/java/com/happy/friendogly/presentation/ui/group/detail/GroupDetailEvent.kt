@@ -16,6 +16,7 @@ sealed interface GroupDetailEvent {
         data class NavigateToProfile(val id: Long) : Navigation
     }
 
-    data object FailLoadDetail: GroupDetailEvent
-    data object FailParticipation: GroupDetailEvent
+    data object FailLoadDetail : GroupDetailEvent
+
+    data object FailParticipation : GroupDetailEvent
 }

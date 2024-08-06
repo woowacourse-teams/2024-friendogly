@@ -26,15 +26,16 @@ class GroupMenuViewModel(
         _groupDetailViewType.value = groupDetailViewType
     }
 
-    fun withdrawGroup(groupId: Long) = viewModelScope.launch {
-        deleteClubMemberUseCase(groupId)
-            .onSuccess {
-                _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
-            }
-            .onFailure {
-                _groupMenuEvent.emit(GroupMenuEvent.FailDelete)
-            }
-    }
+    fun withdrawGroup(groupId: Long) =
+        viewModelScope.launch {
+            deleteClubMemberUseCase(groupId)
+                .onSuccess {
+                    _groupMenuEvent.emit(GroupMenuEvent.Navigation.NavigateToPrev)
+                }
+                .onFailure {
+                    _groupMenuEvent.emit(GroupMenuEvent.FailDelete)
+                }
+        }
 
     override fun close() {
         _groupMenuEvent.emit(GroupMenuEvent.CancelSelection)
