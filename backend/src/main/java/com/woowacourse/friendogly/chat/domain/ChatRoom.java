@@ -3,8 +3,11 @@ package com.woowacourse.friendogly.chat.domain;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,15 +33,24 @@ public class ChatRoom {
     @Embedded
     private MemberCapacity memberCapacity;
 
-    public ChatRoom(int capacity) {
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "chat_room_type", nullable = false)
+    private ChatRoomType chatRoomType;
+
+    private ChatRoom(int capacity, ChatRoomType chatRoomType) {
         this.memberCapacity = new MemberCapacity(capacity);
+        this.chatRoomType = chatRoomType;
     }
 
     public static ChatRoom createPrivate(Member member, Member otherMember) {
-        ChatRoom chatRoom = new ChatRoom(2);
+        ChatRoom chatRoom = new ChatRoom(2, ChatRoomType.PRIVATE);
         chatRoom.addMember(member);
         chatRoom.addMember(otherMember);
         return chatRoom;
+    }
+
+    public static ChatRoom createGroup(int capacity) {
+        return new ChatRoom(capacity, ChatRoomType.GROUP);
     }
 
     public void addMember(Member member) {
@@ -87,5 +99,9 @@ public class ChatRoom {
         return chatRoomMembers.stream()
                 .map(ChatRoomMember::getMember)
                 .toList();
+    }
+
+    public boolean isPrivateChat() {
+        return chatRoomType == ChatRoomType.PRIVATE;
     }
 }
