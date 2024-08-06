@@ -1,5 +1,8 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -18,6 +21,7 @@ import com.woowacourse.friendogly.pet.repository.PetRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -246,5 +250,65 @@ class FootprintControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.changedWalkStatusTime", nullValue());
+    }
+
+    @DisplayName("발자국 범위밖에서 안으로 들어오면 산책중으로 상태가 변한다 (200)")
+    @Test
+    void updateWalkStatus_toOngoing() {
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0,0),
+                        BEFORE,
+                        null,
+                        null,
+                        LocalDateTime.now(),
+                        false
+                        )
+        );
+
+        float latitude = 0.0F;
+        float longitude = 0.0F;
+
+        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .body(request)
+                .when().patch("/footprints/walk-status")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus", is(ONGOING.toString()));
+    }
+
+    @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
+    @Test
+    void updateWalkStatus_toAfter(){
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0,0),
+                        ONGOING,
+                        LocalDateTime.now(),
+                        null,
+                        LocalDateTime.now().minusHours(1),
+                        false
+                )
+        );
+
+        float latitude = 37.0F;
+        float longitude = 127.0F;
+
+        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .body(request)
+                .when().patch("/footprints/walk-status")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus",is(AFTER.toString()));
     }
 }
