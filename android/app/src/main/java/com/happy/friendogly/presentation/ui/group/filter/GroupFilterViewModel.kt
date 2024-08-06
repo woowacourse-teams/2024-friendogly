@@ -35,7 +35,7 @@ class GroupFilterViewModel : BaseViewModel(), GroupFilterItemActionHandler, Grou
     }
 
     override fun selectFilters() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupFilterEvent.emit(GroupFilterEvent.SelectGroupFilters(filters))
     }
 

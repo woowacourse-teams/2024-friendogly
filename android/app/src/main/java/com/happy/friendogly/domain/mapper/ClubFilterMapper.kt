@@ -47,7 +47,7 @@ fun GroupFilter.GenderFilter.toSizeType(): Gender? {
         GroupFilter.GenderFilter.Male -> Gender.MALE
         GroupFilter.GenderFilter.NeutralizingFemale -> Gender.FEMALE_NEUTERED
         GroupFilter.GenderFilter.NeutralizingMale -> Gender.MALE_NEUTERED
-        else -> null
+        GroupFilter.GenderFilter.Init -> null
     }
 }
 
@@ -56,6 +56,6 @@ fun GroupFilter.SizeFilter.toSizeType(): SizeType? {
         GroupFilter.SizeFilter.SmallDog -> SizeType.SMALL
         GroupFilter.SizeFilter.MediumDog -> SizeType.MEDIUM
         GroupFilter.SizeFilter.BigDog -> SizeType.LARGE
-        else -> null
+        GroupFilter.SizeFilter.Init -> null
     }
 }

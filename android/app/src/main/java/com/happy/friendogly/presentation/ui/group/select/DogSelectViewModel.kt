@@ -36,9 +36,9 @@ class DogSelectViewModel(
     private fun loadMyDogs() =
         viewModelScope.launch {
             getPetsMineUseCase()
-                .onSuccess {
+                .onSuccess { pets ->
                     _dogs.value =
-                        it.map { pet ->
+                        pets.map { pet ->
                             pet.toDogSelectUiModel()
                         }
                 }

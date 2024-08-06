@@ -199,7 +199,7 @@ class GroupAddViewModel(
     }
 
     private fun selectDogs() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToSelectDog(filters))
     }
 

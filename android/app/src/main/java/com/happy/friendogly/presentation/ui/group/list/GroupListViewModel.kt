@@ -99,7 +99,7 @@ class GroupListViewModel(
     }
 
     override fun selectSizeFilter() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupListEvent.emit(
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.SizeFilter.Init,
@@ -109,7 +109,7 @@ class GroupListViewModel(
     }
 
     override fun selectGenderFilter() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupListEvent.emit(
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.GenderFilter.Init,
