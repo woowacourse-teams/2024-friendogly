@@ -123,7 +123,7 @@ class FootprintControllerTest {
     }
 
     @AfterEach
-    void setDown() {
+    void tearDown() {
         footprintRepository.deleteAll();
     }
 
