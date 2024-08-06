@@ -52,6 +52,7 @@ import com.happy.friendogly.local.di.AddressModule
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
+import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.di.RemoteModule
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
@@ -64,6 +65,8 @@ class AppModule(context: Context) {
     private val baseUrl = BaseUrl(BuildConfig.base_url)
 
     private val tokenManager = TokenManager(context)
+    private val authenticationListener: AuthenticationListener =
+        AuthenticationListenerImpl(context, tokenManager)
     private val addressModule = AddressModule(context)
 
     // service
@@ -71,28 +74,33 @@ class AppModule(context: Context) {
         RemoteModule.createClubService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
         )
     private val footprintService =
         RemoteModule.createFootprintService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
         )
     private val woofService =
         RemoteModule.createWoofService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
         )
 
     private val memberService =
         RemoteModule.createMemberService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
         )
 
     private val petService =
         RemoteModule.createPetService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
         )
 
     // data source

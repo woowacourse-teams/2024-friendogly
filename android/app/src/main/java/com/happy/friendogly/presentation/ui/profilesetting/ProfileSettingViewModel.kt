@@ -109,7 +109,8 @@ class ProfileSettingViewModel(
     }
 
     private suspend fun saveJwaToken(memberId: Long) {
-        val jwtToken = JwtToken(accessToken = memberId.toString(), refreshToken = null)
+        val jwtToken =
+            JwtToken(accessToken = memberId.toString(), refreshToken = memberId.toString())
         saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
             _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
         }.onFailure {

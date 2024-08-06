@@ -13,18 +13,22 @@ class TokenDataSourceImpl(
     override suspend fun getJwtToken(): Result<JwtTokenDto> =
         runCatching {
             val accessToken = tokenManager.accessToken.first()
-            // TODO refreshToken 임시 값
-            JwtTokenEntity(accessToken = accessToken, refreshToken = "").toData()
+            val refreshToken = tokenManager.refreshToken.first()
+
+            JwtTokenEntity(accessToken = accessToken, refreshToken = refreshToken).toData()
         }
 
     override suspend fun saveJwtToken(jwtTokenDto: JwtTokenDto): Result<Unit> =
         runCatching {
             val accessToken = jwtTokenDto.accessToken ?: return@runCatching
+            val refreshToken = jwtTokenDto.refreshToken ?: return@runCatching
+
             tokenManager.saveAccessToken(accessToken)
+            tokenManager.saveRefreshToken(refreshToken)
         }
 
     override suspend fun deleteLocalData(): Result<Unit> =
         runCatching {
-            tokenManager.deleteAccessToken()
+            tokenManager.deleteToken()
         }
 }
