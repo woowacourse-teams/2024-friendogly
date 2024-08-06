@@ -98,10 +98,6 @@ public class Footprint {
         return this.location.isWithin(location, RADIUS_AS_METER);
     }
 
-    public boolean isInsideBoundary(Location location) {
-        return this.location.isWithin(location, RADIUS_AS_METER);
-    }
-
     public boolean isCreatedBy(Long memberId) {
         return this.member.getId()
                 .equals(memberId);
