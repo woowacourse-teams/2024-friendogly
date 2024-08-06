@@ -259,6 +259,10 @@ class WoofFragment :
                     changeRecentlyClickedMarkerSize()
                 }
             }
+
+            if (binding.layoutWoofLocationRegister.isVisible) {
+                circleOverlay.center = map.cameraPosition.target
+            }
         }
 
         map.addOnCameraIdleListener {
@@ -552,7 +556,7 @@ class WoofFragment :
 
     private fun showRegisterMarkerLayout() {
         myMarker?.map = null
-        circleOverlay.map = null
+        circleOverlay.center = map.cameraPosition.target
         getAddress(map.cameraPosition.target)
 
         showViewAnimation(binding.layoutWoofRegisterMarker)
@@ -565,9 +569,11 @@ class WoofFragment :
     }
 
     private fun hideRegisterMarkerLayout() {
-        if (myMarker != null && myMarker?.map == null) {
-            myMarker?.map = map
-            circleOverlay.map = map
+        myMarker?.let { marker ->
+            if (marker.map == null) {
+                marker.map = map
+            }
+            setUpCircleOverlay(marker.position)
         }
 
         hideViewAnimation(binding.layoutWoofRegisterMarker)
