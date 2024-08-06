@@ -1,5 +1,8 @@
 package com.happy.friendogly.presentation.ui.group.detail
 
+import com.happy.friendogly.domain.mapper.toPresentation
+import com.happy.friendogly.domain.model.Club
+import com.happy.friendogly.domain.model.ClubDetail
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter

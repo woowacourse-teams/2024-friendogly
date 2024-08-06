@@ -78,10 +78,14 @@ class GroupDetailActivity :
         if (groupId != FAIL_LOAD_DATA_ID) {
             viewModel.loadGroup(groupId)
         } else {
-            showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
-                setAction(resources.getString(R.string.group_detail_fail_button)) {
-                    finish()
-                }
+            openFailGroupDetailLoad()
+        }
+    }
+
+    private fun openFailGroupDetailLoad(){
+        showSnackbar(resources.getString(R.string.group_detail_fail_load)) {
+            setAction(resources.getString(R.string.group_detail_fail_button)) {
+                finish()
             }
         }
     }
@@ -122,6 +126,11 @@ class GroupDetailActivity :
 
                 is GroupDetailEvent.Navigation.NavigateToProfile ->
                     startActivity(OtherProfileActivity.getIntent(this, event.id))
+
+                GroupDetailEvent.FailLoadDetail -> openFailGroupDetailLoad()
+                GroupDetailEvent.FailParticipation -> showSnackbar(
+                    getString(R.string.group_detail_participate_fail)
+                )
             }
         }
     }
@@ -141,8 +150,8 @@ class GroupDetailActivity :
 
     private fun openDogSelector(filters: List<GroupFilter>) {
         val bottomSheet =
-            DogSelectBottomSheet(filters = filters) {
-                viewModel.joinGroup()
+            DogSelectBottomSheet(filters = filters) { dogs ->
+                viewModel.joinGroup(dogs)
             }
         bottomSheet.show(supportFragmentManager, "TAG")
         bottomSheet.setStyle(
@@ -157,7 +166,7 @@ class GroupDetailActivity :
 
     companion object {
         private const val KEY_GROUP_DETAIL_ID = "groupDetailId"
-        private const val FAIL_LOAD_DATA_ID = -1L
+        const val FAIL_LOAD_DATA_ID = -1L
 
         fun getIntent(
             context: Context,
