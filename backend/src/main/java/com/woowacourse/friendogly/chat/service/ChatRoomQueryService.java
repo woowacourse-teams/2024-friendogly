@@ -48,4 +48,8 @@ public class ChatRoomQueryService {
             throw new FriendoglyException("채팅방에 참여해 있지 않습니다.");
         }
     }
+
+    public ChatRoom findById(Long chatRoomId) {
+        return chatRoomRepository.getById(chatRoomId);
+    }
 }

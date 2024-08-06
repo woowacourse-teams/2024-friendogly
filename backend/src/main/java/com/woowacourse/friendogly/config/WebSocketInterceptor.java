@@ -3,8 +3,8 @@ package com.woowacourse.friendogly.config;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.messaging.simp.stomp.StompCommand.SUBSCRIBE;
 
+import com.woowacourse.friendogly.chat.repository.ChatRoomMemberRepository;
 import com.woowacourse.friendogly.exception.FriendoglyWebSocketException;
-import com.woowacourse.friendogly.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -16,10 +16,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WebSocketInterceptor implements ChannelInterceptor {
 
-    private final MemberRepository memberRepository;
+    private static final String TOPIC_CHAT_ENDPOINT = "/topic/chat/";
 
-    public WebSocketInterceptor(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    private final ChatRoomMemberRepository chatRoomMemberRepository;
+
+    public WebSocketInterceptor(ChatRoomMemberRepository chatRoomMemberRepository) {
+        this.chatRoomMemberRepository = chatRoomMemberRepository;
     }
 
     @Override
@@ -27,16 +29,30 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (accessor.getCommand() == SUBSCRIBE) {
             // TODO: token 정보를 이용하도록 수정 필요!! 현재는 Authorization에 member ID를 raw data로 넣고 있음.
-            String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
-            validate(rawMemberId);
+            String destination = accessor.getDestination();
+
+            if (destination == null) {
+                throw new FriendoglyWebSocketException("잘못된 subscribe 요청입니다.");
+            }
+
+            if (destination.startsWith(TOPIC_CHAT_ENDPOINT)) {
+                validateChatSubscription(accessor, destination);
+            }
+//            if (destination.startsWith("/topic/invite/")) {
+//                validateInviteSubscription(accessor);
+//            }
         }
         return message;
     }
 
-    private void validate(String rawMemberId) {
+    private void validateChatSubscription(StompHeaderAccessor accessor, String destination) {
+        String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
+
         validateLogin(rawMemberId);
-        long memberId = parse(rawMemberId);
-        validateMemberExist(memberId);
+        long memberId = parseMemberId(rawMemberId);
+        long chatRoomId = parseChatRoomId(destination);
+
+        validateMemberInChatRoom(memberId, chatRoomId);
     }
 
     private void validateLogin(String rawMemberId) {
@@ -45,7 +61,7 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         }
     }
 
-    private long parse(String rawMemberId) {
+    private long parseMemberId(String rawMemberId) {
         try {
             return Long.parseLong(rawMemberId);
         } catch (NumberFormatException e) {
@@ -53,9 +69,18 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         }
     }
 
-    private void validateMemberExist(long memberId) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new FriendoglyWebSocketException("존재하지 않는 회원입니다.");
+    private long parseChatRoomId(String destination) {
+        try {
+            String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
+            return Long.parseLong(rawChatRoomId);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            throw new FriendoglyWebSocketException("올바르지 않은 채팅방 ID입니다.");
+        }
+    }
+
+    private void validateMemberInChatRoom(long memberId, long chatRoomId) {
+        if (!chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId)) {
+            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
         }
     }
 }
