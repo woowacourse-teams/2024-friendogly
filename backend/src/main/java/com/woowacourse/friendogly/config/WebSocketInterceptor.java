@@ -49,8 +49,10 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
 
         validateLogin(rawMemberId);
-        long memberId = parseMemberId(rawMemberId);
-        long chatRoomId = parseChatRoomId(destination);
+        long memberId = convertToLong(rawMemberId);
+
+        String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
+        long chatRoomId = convertToLong(rawChatRoomId);
 
         validateMemberInChatRoom(memberId, chatRoomId);
     }
@@ -61,20 +63,11 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         }
     }
 
-    private long parseMemberId(String rawMemberId) {
+    private long convertToLong(String rawId) {
         try {
-            return Long.parseLong(rawMemberId);
+            return Long.parseLong(rawId);
         } catch (NumberFormatException e) {
-            throw new FriendoglyWebSocketException("올바르지 않은 토큰 형식입니다.");
-        }
-    }
-
-    private long parseChatRoomId(String destination) {
-        try {
-            String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
-            return Long.parseLong(rawChatRoomId);
-        } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            throw new FriendoglyWebSocketException("올바르지 않은 채팅방 ID입니다.");
+            throw new FriendoglyWebSocketException("식별자는 숫자만 입력 가능합니다.");
         }
     }
 
