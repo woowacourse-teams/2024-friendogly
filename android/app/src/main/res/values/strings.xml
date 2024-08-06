@@ -197,6 +197,8 @@
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
     <string name="group_detail_delete_title">모임에서 나가겠습니까?</string>
+    <string name="group_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
+    <string name="group_detail_delete_fail">모임 삭제에 실패하였습니다.</string>
 
     <!--모임 수정 -->
     <string name="group_modify_title">모임 수정하기</string>
