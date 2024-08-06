@@ -236,6 +236,8 @@
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
+    <string name="woof_ongoing_walk_status">산책을 시작했어요!</string>
+    <string name="woof_after_walk_status">산책을 완료했어요!\n</string>
 
     <!--프로필-->
     <string name="male">남</string>

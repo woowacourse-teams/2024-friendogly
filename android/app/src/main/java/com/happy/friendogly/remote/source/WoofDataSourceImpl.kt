@@ -4,14 +4,20 @@ import com.happy.friendogly.data.model.FootprintDto
 import com.happy.friendogly.data.model.FootprintInfoDto
 import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
 import com.happy.friendogly.data.model.FootprintSaveDto
+import com.happy.friendogly.data.model.WalkStatusDto
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.FootprintRequest
+import com.happy.friendogly.remote.model.request.WalkStatusRequest
 
 class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
     override suspend fun postFootprint(request: FootprintRequest): Result<FootprintSaveDto> {
         return runCatching { service.postFootprint(request).data.toData() }
+    }
+
+    override suspend fun patchWalkStatus(request: WalkStatusRequest): Result<WalkStatusDto> {
+        return runCatching { service.patchWalkStatus(request).data.toData() }
     }
 
     override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
