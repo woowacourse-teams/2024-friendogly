@@ -2,6 +2,8 @@ package com.happy.friendogly.application.di
 
 import android.content.Context
 import com.happy.friendogly.BuildConfig
+import com.happy.friendogly.analytics.AnalyticsHelper
+import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.FootprintRepositoryImpl
@@ -61,6 +63,10 @@ import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WoofDataSourceImpl
 
 class AppModule(context: Context) {
+    // analytics & crashlytics
+    val analyticsHelper = AnalyticsHelper(context)
+    val crashlyticsHelper = CrashlyticsHelper()
+
     private val baseUrl = BaseUrl(BuildConfig.base_url)
 
     private val localModule = LocalModule(context)
@@ -98,7 +104,8 @@ class AppModule(context: Context) {
     // data source
     private val clubDataSource: ClubDataSource = ClubDataSourceImpl(service = clubService)
     private val localDataSource: LocalDataSource = LocalDataSourceImpl(localModule = localModule)
-    private val addressDataSource: AddressDataSource = AddressDataSourceImpl(addressModule = addressModule)
+    private val addressDataSource: AddressDataSource =
+        AddressDataSourceImpl(addressModule = addressModule)
     private val kakaoLoginDataSource: KakaoLoginDataSource = KakaoLoginDataSourceImpl()
     private val footprintDataSource: FootprintDataSource =
         FootprintDataSourceImpl(service = footprintService)
@@ -116,15 +123,19 @@ class AppModule(context: Context) {
     private val woofRepository: WoofRepository = WoofRepositoryImpl(source = woofDataSource)
     private val memberRepository: MemberRepository = MemberRepositoryImpl(source = memberDataSource)
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
-    private val addressRepository: AddressRepository = AddressRepositoryImpl(addressDataSource = addressDataSource)
+    private val addressRepository: AddressRepository =
+        AddressRepositoryImpl(addressDataSource = addressDataSource)
 
     // use case
     val kakaoLoginUseCase: KakaoLoginUseCase = KakaoLoginUseCase(repository = kakaoLoginRepository)
     val postClubUseCase: PostClubUseCase = PostClubUseCase(repository = clubRepository)
-    val getSearchingClubsUseCase: GetSearchingClubsUseCase = GetSearchingClubsUseCase(repository = clubRepository)
+    val getSearchingClubsUseCase: GetSearchingClubsUseCase =
+        GetSearchingClubsUseCase(repository = clubRepository)
     val getClubUseCase: GetClubUseCase = GetClubUseCase(repository = clubRepository)
-    val postClubMemberUseCase: PostClubMemberUseCase = PostClubMemberUseCase(repository = clubRepository)
-    val deleteClubMemberUseCase: DeleteClubMemberUseCase = DeleteClubMemberUseCase(repository = clubRepository)
+    val postClubMemberUseCase: PostClubMemberUseCase =
+        PostClubMemberUseCase(repository = clubRepository)
+    val deleteClubMemberUseCase: DeleteClubMemberUseCase =
+        DeleteClubMemberUseCase(repository = clubRepository)
     val getJwtTokenUseCase: GetJwtTokenUseCase = GetJwtTokenUseCase(repository = localRepository)
     val saveJwtTokenUseCase: SaveJwtTokenUseCase = SaveJwtTokenUseCase(repository = localRepository)
     val deleteLocalDataUseCase: DeleteLocalDataUseCase =
@@ -146,7 +157,8 @@ class AppModule(context: Context) {
         GetMemberMineUseCase(repository = memberRepository)
     val getAddressUseCase: GetAddressUseCase = GetAddressUseCase(repository = addressRepository)
     val saveAddressUseCase: SaveAddressUseCase = SaveAddressUseCase(repository = addressRepository)
-    val deleteAddressUseCase: DeleteAddressUseCase = DeleteAddressUseCase(repository = addressRepository)
+    val deleteAddressUseCase: DeleteAddressUseCase =
+        DeleteAddressUseCase(repository = addressRepository)
 
     companion object {
         private var instance: AppModule? = null

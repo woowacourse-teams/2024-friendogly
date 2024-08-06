@@ -19,6 +19,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private val viewModel: RegisterViewModel by viewModels {
         RegisterViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase,
             getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
         )
