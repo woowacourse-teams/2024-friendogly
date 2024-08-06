@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
@@ -32,7 +33,11 @@ class DogSelectBottomSheet(
     private lateinit var dlg: BottomSheetDialog
     private var toast: Toast? = null
 
-    private val viewModel: DogSelectViewModel by viewModels()
+    private val viewModel: DogSelectViewModel by viewModels<DogSelectViewModel> {
+        DogSelectViewModel.factory(
+            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
+        )
+    }
 
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)

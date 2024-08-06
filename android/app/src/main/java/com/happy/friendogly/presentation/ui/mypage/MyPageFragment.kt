@@ -52,12 +52,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                         petsDetail = action.petsDetail,
                     )
 
-                is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
+                is MyPageNavigationAction.NavigateToDogRegister ->
+                    (activity as MainActivityActionHandler).navigateToRegisterPet(null)
 
-                is MyPageNavigationAction.NavigateToProfileEdit -> {}
+                is MyPageNavigationAction.NavigateToProfileEdit ->
+                    (activity as MainActivityActionHandler).navigateToProfileSetting(profile = action.profile)
+
                 is MyPageNavigationAction.NavigateToMyClubManger -> {}
                 is MyPageNavigationAction.NavigateToMyParticipation -> {}
-                is MyPageNavigationAction.NavigateToPetEdit -> {}
+                is MyPageNavigationAction.NavigateToPetEdit ->
+                    (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
             }
         }
 

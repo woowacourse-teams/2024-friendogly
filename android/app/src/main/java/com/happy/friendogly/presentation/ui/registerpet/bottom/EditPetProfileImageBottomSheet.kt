@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.registerdog.bottom
+package com.happy.friendogly.presentation.ui.registerpet.bottom
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 
-class EditDogProfileImageBottomSheet(
+class EditPetProfileImageBottomSheet(
     private val clickGallery: () -> Unit,
     private val clickCamera: () -> Unit,
 ) : BottomSheetDialogFragment() {

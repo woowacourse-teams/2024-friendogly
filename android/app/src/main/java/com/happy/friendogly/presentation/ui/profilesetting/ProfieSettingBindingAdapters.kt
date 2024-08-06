@@ -6,6 +6,16 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 
+@BindingAdapter("profileSettingTitle")
+fun TextView.bindProfileSettingTitle(isFirstTimeSetup: Boolean) {
+    text =
+        if (isFirstTimeSetup) {
+            context.getString(R.string.make_profile_title)
+        } else {
+            context.getString(R.string.make_profile_edit_title)
+        }
+}
+
 @SuppressLint("SetTextI18n")
 @BindingAdapter("editTextLength")
 fun TextView.bindEditTextLength(contents: String?) {
@@ -19,17 +29,15 @@ fun TextView.bindEditTextLength(contents: String?) {
         }
 
     this.apply {
-        text = "$length/15"
+        text = context.getString(R.string.user_name_length, length)
         setTextColor(color)
     }
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
 @BindingAdapter("editBtnBackgroundTextColor")
-fun TextView.bindEditBtnBackground(contents: String?) {
-    val length = contents?.length ?: 0
-
-    if (length > 0) {
+fun TextView.bindEditBtnBackground(isButtonActive: Boolean) {
+    if (isButtonActive) {
         this.background = context.getDrawable(R.drawable.rect_coral04_fill_16)
         this.setTextColor(context.getColor(R.color.gray100))
     } else {

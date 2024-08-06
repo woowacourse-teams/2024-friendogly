@@ -18,6 +18,7 @@ data class Pet(
 ) {
     val age: Int
         get() {
+            val currentDate = getCurrentDate()
             return if (isAtLeastOneYearOld) {
                 currentDate.year - birthDate.year
             } else {
@@ -26,11 +27,15 @@ data class Pet(
         }
 
     val isAtLeastOneYearOld: Boolean
-        get() = currentDate.year - birthDate.year > 0
+        get() = getCurrentDate().year - birthDate.year > MINIMUM_AGE
+
+    private fun getCurrentDate(): LocalDate {
+        val now: Instant = Clock.System.now()
+        val timeZone = TimeZone.currentSystemDefault()
+        return now.toLocalDateTime(timeZone).date
+    }
 
     companion object {
-        private val now: Instant = Clock.System.now()
-        private val timeZone = TimeZone.currentSystemDefault()
-        private val currentDate = now.toLocalDateTime(timeZone).date
+        const val MINIMUM_AGE = 0
     }
 }

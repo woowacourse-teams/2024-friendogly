@@ -12,6 +12,8 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import kotlinx.coroutines.launch
 
 class MyPageViewModel(
@@ -44,6 +46,7 @@ class MyPageViewModel(
                         nickname = member.name,
                         email = member.email,
                         tag = member.tag,
+                        imageUrl = member.imageUrl,
                     )
             }.onFailure {
                 // TODO 예외 처리
@@ -100,7 +103,13 @@ class MyPageViewModel(
     }
 
     override fun navigateToProfileEdit() {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit)
+        val state = uiState.value ?: return
+        val profile =
+            Profile(
+                name = state.nickname,
+                imageUrl = state.imageUrl,
+            )
+        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit(profile = profile))
     }
 
     fun navigateToSetting() {
@@ -108,7 +117,22 @@ class MyPageViewModel(
     }
 
     override fun navigateToPetEdit(id: Long) {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit)
+        val state = uiState.value ?: return
+        val currentPage = currentPage.value ?: return
+        val pet = state.pets[currentPage] as PetView
+
+        val petProfile =
+            PetProfile(
+                id = pet.id,
+                name = pet.name,
+                description = pet.description,
+                birthDate = pet.birthDate,
+                sizeType = pet.sizeType,
+                gender = pet.gender,
+                imageUrl = pet.imageUrl,
+            )
+
+        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit(petProfile))
     }
 
     fun navigateToMyParticipation() {

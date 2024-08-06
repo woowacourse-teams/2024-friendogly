@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content">
 
                 <FrameLayout
-                    app:myVisibleMenu = "@{vm.detailViewType}"
+                    app:myVisibleMenu = "@{vm.groupDetailViewType}"
                     onSingleClick="@{()->vm.selectDelete()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -44,7 +44,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    app:myVisibleMenu = "@{vm.detailViewType}"
+                    app:myVisibleMenu = "@{vm.groupDetailViewType}"
                     onSingleClick="@{()->vm.selectModify()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -59,7 +59,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    app:userVisibleMenu = "@{vm.detailViewType}"
+                    app:userVisibleMenu = "@{vm.groupDetailViewType}"
                     onSingleClick="@{()->vm.selectBlock()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -74,7 +74,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    app:userVisibleMenu = "@{vm.detailViewType}"
+                    app:userVisibleMenu = "@{vm.groupDetailViewType}"
                     onSingleClick="@{()->vm.selectReport()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
