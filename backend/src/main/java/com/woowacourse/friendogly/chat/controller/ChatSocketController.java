@@ -9,6 +9,7 @@ import com.woowacourse.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.ChatMessageResponse;
 import com.woowacourse.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.woowacourse.friendogly.chat.service.ChatRoomCommandService;
+import com.woowacourse.friendogly.chat.service.ChatRoomQueryService;
 import com.woowacourse.friendogly.chat.service.ChatService;
 import java.time.LocalDateTime;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -22,15 +23,18 @@ public class ChatSocketController {
 
     private final ChatService chatService;
     private final ChatRoomCommandService chatRoomCommandService;
+    private final ChatRoomQueryService chatRoomQueryService;
     private final SimpMessagingTemplate template;
 
     public ChatSocketController(
             ChatService chatService,
             ChatRoomCommandService chatRoomCommandService,
+            ChatRoomQueryService chatRoomQueryService,
             SimpMessagingTemplate template
     ) {
         this.chatService = chatService;
         this.chatRoomCommandService = chatRoomCommandService;
+        this.chatRoomQueryService = chatRoomQueryService;
         this.template = template;
     }
 
@@ -39,7 +43,7 @@ public class ChatSocketController {
             @WebSocketAuth Long senderMemberId,
             @Payload InviteToChatRoomRequest request
     ) {
-        chatRoomCommandService.invite(senderMemberId, request);
+        chatRoomQueryService.validateInvitation(senderMemberId, request);
         template.convertAndSend(
                 "/topic/invite/" + request.receiverMemberId(),
                 new InviteToChatRoomResponse(request.chatRoomId())

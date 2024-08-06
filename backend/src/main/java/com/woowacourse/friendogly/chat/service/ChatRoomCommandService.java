@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.chat.service;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
-import com.woowacourse.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
@@ -43,14 +42,6 @@ public class ChatRoomCommandService {
         return chatRooms.stream()
                 .filter(chatRoom -> chatRoom.containsMember(otherMember))
                 .findAny();
-    }
-
-    public void invite(Long senderMemberId, InviteToChatRoomRequest request) {
-        Member sender = memberRepository.getById(senderMemberId);
-        Member receiver = memberRepository.getById(request.receiverMemberId());
-        ChatRoom chatRoom = chatRoomRepository.getById(request.chatRoomId());
-        validateParticipation(chatRoom, sender);
-        chatRoom.addMember(receiver);
     }
 
     public void leave(Long memberId, Long chatRoomId) {
