@@ -50,7 +50,7 @@ public class ChatRoomQueryService {
         validateParticipation(chatRoom, sender);
     }
 
-    public void validateParticipation(ChatRoom chatRoom, Member member) {
+    private void validateParticipation(ChatRoom chatRoom, Member member) {
         if (!chatRoom.containsMember(member)) {
             throw new FriendoglyException("채팅방에 참여해 있지 않습니다.");
         }
