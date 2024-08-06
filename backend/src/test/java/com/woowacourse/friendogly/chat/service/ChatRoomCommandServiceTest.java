@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.domain.Club;
@@ -43,7 +44,8 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         pet = petRepository.save(
                 new Pet(member1, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
         club = clubRepository.save(
-                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, member1, Set.of(MALE), Set.of(SMALL), "https://a.com", List.of(pet)));
+                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, member1, Set.of(MALE), Set.of(SMALL), "https://a.com",
+                        List.of(pet)));
         chatRoom = club.getChatRoom();
     }
 
@@ -51,24 +53,16 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Transactional
     @Test
     void save() {
+        // given
+        SaveChatRoomRequest request = new SaveChatRoomRequest(member2.getId());
+
         // when
-        SaveChatRoomResponse response = chatRoomCommandService.savePrivate(member1.getId());
+        SaveChatRoomResponse response = chatRoomCommandService.savePrivate(member1.getId(), request);
         Long chatRoomId = response.chatRoomId();
 
         // then
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        assertThat(chatRoom.findMembers()).containsExactly(member1);
-    }
-
-    @DisplayName("모임에 참여한 경우, 모임 채팅에 참여할 수 있다.")
-    @Transactional
-    @Test
-    void enter() {
-        // when
-        chatRoomCommandService.enter(member1.getId(), chatRoom.getId());
-
-        // then
-        assertThat(chatRoom.countMembers()).isOne();
+        assertThat(chatRoom.findMembers()).containsExactly(member1, member2);
     }
 
     @DisplayName("채팅방에 참여한 경우, 채팅방에서 나갈 수 있다.")
@@ -76,13 +70,13 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Test
     void leave() {
         // given
-        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1));
+        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1, member2));
 
         // when
         chatRoomCommandService.leave(member1.getId(), newChatRoom.getId());
 
         // then
-        assertThat(newChatRoom.countMembers()).isZero();
+        assertThat(newChatRoom.countMembers()).isOne();
     }
 
     @DisplayName("모임에 참여하지 않은 경우, 모임 채팅방에서 나갈 수 없다.")

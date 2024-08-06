@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.chat.controller;
 
 import com.woowacourse.friendogly.auth.Auth;
+import com.woowacourse.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
 import com.woowacourse.friendogly.chat.dto.response.FindMyChatRoomResponse;
 import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
@@ -30,8 +31,8 @@ public class ChatRoomController {
     }
 
     @PostMapping
-    public ApiResponse<SaveChatRoomResponse> savePrivate(@Auth Long memberId) {
-        return ApiResponse.ofSuccess(chatRoomCommandService.savePrivate(memberId));
+    public ApiResponse<SaveChatRoomResponse> savePrivate(@Auth Long memberId, SaveChatRoomRequest request) {
+        return ApiResponse.ofSuccess(chatRoomCommandService.savePrivate(memberId, request));
     }
 
     @GetMapping("/mine")

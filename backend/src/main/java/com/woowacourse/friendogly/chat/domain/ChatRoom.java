@@ -34,9 +34,10 @@ public class ChatRoom {
         this.memberCapacity = new MemberCapacity(capacity);
     }
 
-    public static ChatRoom createPrivate(Member initialMember) {
+    public static ChatRoom createPrivate(Member member, Member otherMember) {
         ChatRoom chatRoom = new ChatRoom(2);
-        chatRoom.addMember(initialMember);
+        chatRoom.addMember(member);
+        chatRoom.addMember(otherMember);
         return chatRoom;
     }
 

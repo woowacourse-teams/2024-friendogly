@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.chat.service;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.chat.dto.request.InviteToChatRoomRequest;
+import com.woowacourse.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.woowacourse.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
@@ -25,9 +26,10 @@ public class ChatRoomCommandService {
         this.memberRepository = memberRepository;
     }
 
-    public SaveChatRoomResponse savePrivate(Long memberId) {
+    public SaveChatRoomResponse savePrivate(Long memberId, SaveChatRoomRequest request) {
         Member member = memberRepository.getById(memberId);
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member));
+        Member otherMember = memberRepository.getById(request.otherMemberId());
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member, otherMember));
         return new SaveChatRoomResponse(chatRoom.getId());
     }
 
@@ -37,12 +39,6 @@ public class ChatRoomCommandService {
         ChatRoom chatRoom = chatRoomRepository.getById(request.chatRoomId());
         validateParticipation(chatRoom, sender);
         chatRoom.addMember(receiver);
-    }
-
-    public void enter(Long memberId, Long chatRoomId) {
-        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        Member member = memberRepository.getById(memberId);
-        chatRoom.addMember(member);
     }
 
     public void leave(Long memberId, Long chatRoomId) {
