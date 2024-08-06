@@ -19,6 +19,13 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     private lateinit var notificationManager: NotificationManager
 
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        CoroutineScope(Dispatchers.IO).launch {
+            AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
+        }
+    }
+
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if (message.notification != null) {
