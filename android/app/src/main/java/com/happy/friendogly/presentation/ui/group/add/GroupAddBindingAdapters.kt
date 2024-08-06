@@ -14,7 +14,7 @@ import com.happy.friendogly.presentation.utils.toSoftwareBitmap
 
 @BindingAdapter("currentPageProgress")
 fun ProgressBar.bindProgress(currentPage: Int) {
-    val progress = (currentPage + 1) * 100 / (GroupAddAdapter.MAX_PAGE_SIZE)
+    val progress = (currentPage + 1) * 100 / (MAX_PAGE_SIZE)
     this.progress = progress
 }
 
@@ -44,14 +44,13 @@ fun TextView.bindTitleCount(title: String?) {
 @BindingAdapter("validButtonBackground")
 fun TextView.bindValidBackground(isValid: Boolean) {
     val backgroundTint =
-        when (isValid) {
-            true ->
-                ContextCompat.getColorStateList(
-                    context,
-                    R.color.coral400,
-                )
-
-            false -> ContextCompat.getColorStateList(context, R.color.gray400)
+        if (isValid) {
+            ContextCompat.getColorStateList(
+                context,
+                R.color.coral400,
+            )
+        } else {
+            ContextCompat.getColorStateList(context, R.color.gray400)
         }
     this.backgroundTintList = backgroundTint
 }
@@ -59,9 +58,10 @@ fun TextView.bindValidBackground(isValid: Boolean) {
 @BindingAdapter("validButtonStyle")
 fun TextView.bindValidStyle(isValid: Boolean) {
     val textStyle =
-        when (isValid) {
-            true -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
-            false -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
+        if (isValid) {
+            R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
+        } else {
+             R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
         }
     this.setTextAppearance(textStyle)
 }
