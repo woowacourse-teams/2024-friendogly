@@ -68,7 +68,9 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
         long chatRoomId = convertToLong(rawChatRoomId);
 
-        validateMemberInChatRoom(memberId, chatRoomId);
+        if (!chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId)) {
+            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
+        }
     }
 
     private void validateLogin(String rawMemberId) {
@@ -82,12 +84,6 @@ public class WebSocketInterceptor implements ChannelInterceptor {
             return Long.parseLong(rawId);
         } catch (NumberFormatException e) {
             throw new FriendoglyWebSocketException("식별자는 숫자만 입력 가능합니다.");
-        }
-    }
-
-    private void validateMemberInChatRoom(long memberId, long chatRoomId) {
-        if (!chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId)) {
-            throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
         }
     }
 }
