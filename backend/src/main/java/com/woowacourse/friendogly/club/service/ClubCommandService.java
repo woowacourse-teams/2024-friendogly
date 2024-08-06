@@ -73,6 +73,7 @@ public class ClubCommandService {
 
         club.addClubMember(member);
         club.addClubPet(mapToPets(request.participatingPetsId(), member));
+        club.addChatRoomMember(member);
 
         return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());
     }
@@ -95,6 +96,7 @@ public class ClubCommandService {
         Member member = memberRepository.getById(memberId);
 
         club.removeClubMember(member);
+        club.removeChatRoomMember(member);
         if (club.isEmpty()) {
             clubRepository.delete(club);
         }

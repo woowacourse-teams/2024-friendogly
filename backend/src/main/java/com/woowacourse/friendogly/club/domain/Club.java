@@ -140,7 +140,16 @@ public class Club {
                 .build();
         club.addClubMember(owner);
         club.addClubPet(participatingPets);
+        club.addChatRoomMember(owner);
         return club;
+    }
+
+    public void addChatRoomMember(Member member) {
+        this.chatRoom.addMember(member);
+    }
+
+    public void removeChatRoomMember(Member member) {
+        this.chatRoom.removeMember(member);
     }
 
     public void addClubMember(Member member) {
