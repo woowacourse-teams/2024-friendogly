@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class WebSocketInterceptor implements ChannelInterceptor {
 
     private static final String TOPIC_CHAT_ENDPOINT = "/topic/chat/";
+    private static final String TOPIC_INVITE_ENDPOINT = "/topic/invite/";
 
     private final ChatRoomMemberRepository chatRoomMemberRepository;
 
@@ -38,9 +39,9 @@ public class WebSocketInterceptor implements ChannelInterceptor {
             if (destination.startsWith(TOPIC_CHAT_ENDPOINT)) {
                 validateChatSubscription(accessor, destination);
             }
-//            if (destination.startsWith("/topic/invite/")) {
-//                validateInviteSubscription(accessor);
-//            }
+            if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
+                validateInviteSubscription(accessor, destination);
+            }
         }
         return message;
     }
@@ -55,6 +56,19 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         long chatRoomId = convertToLong(rawChatRoomId);
 
         validateMemberInChatRoom(memberId, chatRoomId);
+    }
+
+    private void validateInviteSubscription(StompHeaderAccessor accessor, String destination) {
+        String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
+        validateLogin(rawMemberId);
+        long memberId = convertToLong(rawMemberId);
+
+        String rawMemberIdToSubscribe = destination.substring(TOPIC_INVITE_ENDPOINT.length());
+        long memberIdToSubscribe = convertToLong(rawMemberIdToSubscribe);
+
+        if (memberId != memberIdToSubscribe) {
+            throw new FriendoglyWebSocketException("자신의 초대 endpoint만 구독할 수 있습니다.");
+        }
     }
 
     private void validateLogin(String rawMemberId) {
