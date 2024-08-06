@@ -205,6 +205,7 @@
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
+    <string name="dog_select_load_fail">데이터를 불러오지 못했습니다..</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>

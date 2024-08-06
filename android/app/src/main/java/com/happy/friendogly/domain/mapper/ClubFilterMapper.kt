@@ -12,7 +12,7 @@ fun List<SizeType>.toSizeGroupFilters(): List<GroupFilter> {
     return this.map { it.toGroupFilter() }
 }
 
-fun Gender.toGroupFilter(): GroupFilter {
+fun Gender.toGroupFilter(): GroupFilter.GenderFilter {
     return when (this) {
         Gender.MALE -> GroupFilter.GenderFilter.Male
         Gender.FEMALE -> GroupFilter.GenderFilter.Female
@@ -21,7 +21,7 @@ fun Gender.toGroupFilter(): GroupFilter {
     }
 }
 
-fun SizeType.toGroupFilter(): GroupFilter {
+fun SizeType.toGroupFilter(): GroupFilter.SizeFilter {
     return when (this) {
         SizeType.MEDIUM -> GroupFilter.SizeFilter.MediumDog
         SizeType.LARGE -> GroupFilter.SizeFilter.BigDog

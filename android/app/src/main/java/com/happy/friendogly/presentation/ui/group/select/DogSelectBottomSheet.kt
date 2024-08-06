@@ -91,26 +91,36 @@ class DogSelectBottomSheet(
             when (event) {
                 DogSelectEvent.CancelSelection -> this.dismissNow()
                 DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
-                is DogSelectEvent.PreventSelection -> {
-                    toast?.cancel()
-                    toast =
-                        Toast.makeText(
-                            requireContext(),
-                            requireContext().getString(
-                                R.string.dog_select_prevent_message,
-                                event.dogName,
-                            ),
-                            Toast.LENGTH_SHORT,
-                        )
-                    toast?.show()
-                }
+                is DogSelectEvent.PreventSelection -> makeToast(
+                    requireContext().getString(
+                        R.string.dog_select_prevent_message,
+                        event.dogName,
+                    )
+                )
 
                 is DogSelectEvent.SelectDogs -> {
                     this.dismissNow()
                     submit(event.dogs)
                 }
+
+                DogSelectEvent.FailLoadDog -> makeToast(
+                    requireContext().getString(
+                        R.string.dog_select_prevent_message,
+                    )
+                )
             }
         }
+    }
+
+    private fun makeToast(message: String) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     private fun initViewPager() {

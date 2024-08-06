@@ -10,7 +10,6 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DogSelectViewModel(
@@ -34,59 +33,31 @@ class DogSelectViewModel(
         this.filters = filters
     }
 
-    // TODO: romove sample
-    private fun loadMyDogs() =
-        viewModelScope.launch {
-            delay(1000)
-            _dogs.value =
-                listOf(
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 1",
-                        gender = GroupFilter.GenderFilter.Female,
-                        size = GroupFilter.SizeFilter.BigDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 2",
-                        gender = GroupFilter.GenderFilter.Female,
-                        size = GroupFilter.SizeFilter.BigDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 3",
-                        gender = GroupFilter.GenderFilter.Male,
-                        size = GroupFilter.SizeFilter.MediumDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 4",
-                        gender = GroupFilter.GenderFilter.Male,
-                        size = GroupFilter.SizeFilter.SmallDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 5",
-                        gender = GroupFilter.GenderFilter.NeutralizingFemale,
-                        size = GroupFilter.SizeFilter.MediumDog,
-                    ),
-                )
-        }
+    private fun loadMyDogs() = viewModelScope.launch {
+        getPetsMineUseCase()
+            .onSuccess {
+                _dogs.value = it.map { pet ->
+                    pet.toDogSelectUiModel()
+                }
+            }
+            .onFailure {
+                _dogSelectEvent.emit(DogSelectEvent.FailLoadDog)
+            }
+    }
 
     override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
             removeDog(dogSelectUiModel)
         } else {
-            if (isValidDogFilter(dogSelectUiModel)) {
-                addDog(dogSelectUiModel)
-            } else {
-                _dogSelectEvent.emit(DogSelectEvent.PreventSelection(dogSelectUiModel.name))
-            }
+            applyValidDog(dogSelectUiModel)
+        }
+    }
+
+    private fun applyValidDog(dogSelectUiModel: DogSelectUiModel) {
+        if (isValidDogFilter(dogSelectUiModel)) {
+            addDog(dogSelectUiModel)
+        } else {
+            _dogSelectEvent.emit(DogSelectEvent.PreventSelection(dogSelectUiModel.name))
         }
     }
 

@@ -8,4 +8,6 @@ sealed interface DogSelectEvent {
     data object SelectDog : DogSelectEvent
 
     data class SelectDogs(val dogs: List<Long>) : DogSelectEvent
+
+    data object FailLoadDog: DogSelectEvent
 }
