@@ -7,12 +7,12 @@ import com.woowacourse.friendogly.auth.dto.KakaoUserResponse;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-@Service
+@Component
 @EnableConfigurationProperties(KakaoProperties.class)
-public class KakaoOauthService {
+public class KakaoOauthClient {
 
     private static final String KAKAO_REQUEST_TOKEN_URI = "https://kauth.kakao.com/oauth/token";
     //    private static final String KAKAO_REQUEST_USER_INFO_URI = "https://kapi.kakao.com/v2/user/me?secure_resource=true";
@@ -22,7 +22,7 @@ public class KakaoOauthService {
     private final KakaoProperties kakaoProperties;
     private final AuthErrorHandler errorHandler;
 
-    public KakaoOauthService(
+    public KakaoOauthClient(
             KakaoProperties kakaoProperties,
             AuthErrorHandler errorHandler
     ) {
@@ -39,7 +39,7 @@ public class KakaoOauthService {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(request.getBody())
                 .retrieve()
-                .onStatus(errorHandler)
+//                .onStatus(errorHandler)
                 .body(KakaoTokenResponse.class);
     }
 
@@ -49,7 +49,7 @@ public class KakaoOauthService {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .retrieve()
-                .onStatus(errorHandler)
+//                .onStatus(errorHandler)
                 .body(KakaoUserResponse.class);
     }
 }

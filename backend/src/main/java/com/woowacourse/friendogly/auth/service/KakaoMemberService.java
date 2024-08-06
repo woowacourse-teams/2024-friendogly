@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.auth.service;
 
-import com.woowacourse.friendogly.auth.domain.KakaoMember;
+import com.woowacourse.friendogly.auth.dto.KakaoLoginResponse;
+import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.auth.repository.KakaoMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,12 @@ public class KakaoMemberService {
         this.kakaoMemberRepository = kakaoMemberRepository;
     }
 
-    public void save(Long kakaoMemberId) {
+    public KakaoLoginResponse login(Long kakaoMemberId) {
         if (isNewMember(kakaoMemberId)) {
-            kakaoMemberRepository.save(new KakaoMember(kakaoMemberId));
+            return KakaoLoginResponse.ofNotRegistered();
         }
+        //TODO : jwt 만들면 여기 해야댐
+        return KakaoLoginResponse.ofRegistered(new TokenResponse("asdf", "ASdfadsf"));
     }
 
     private boolean isNewMember(Long kakaoMemberId) {

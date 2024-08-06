@@ -1,6 +1,6 @@
 package com.woowacourse.friendogly.auth;
 
-import com.woowacourse.friendogly.auth.service.KakaoOauthService;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +16,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class OAuthArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final KakaoOauthService kakaoOauthService;
+    private final JwtProvider jwtProvider;
 
-    public OAuthArgumentResolver(KakaoOauthService kakaoOauthService) {
-        this.kakaoOauthService = kakaoOauthService;
+    public OAuthArgumentResolver(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -41,6 +41,6 @@ public class OAuthArgumentResolver implements HandlerMethodArgumentResolver {
             throw new FriendoglyException("토큰 정보가 존재하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
-        return kakaoOauthService.getUserInfo(accessToken).id();
+        return Long.parseLong(jwtProvider.extractToken(accessToken));
     }
 }

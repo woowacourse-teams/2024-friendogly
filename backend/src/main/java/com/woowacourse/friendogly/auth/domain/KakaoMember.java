@@ -18,11 +18,8 @@ public class KakaoMember {
     @Column(name = "member_id")
     private Long memberId;
 
-    public KakaoMember(Long kakaoMemberId) {
+    public KakaoMember(Long kakaoMemberId, Long memberId) {
         this.kakaoMemberId = kakaoMemberId;
-    }
-
-    public void updateMemberId(Long memberId) {
         this.memberId = memberId;
     }
 }

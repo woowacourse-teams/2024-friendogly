@@ -1,21 +1,23 @@
 package com.woowacourse.friendogly.member.controller;
 
-import com.woowacourse.friendogly.auth.domain.KakaoMember;
-import com.woowacourse.friendogly.auth.repository.KakaoMemberRepository;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import com.woowacourse.friendogly.auth.dto.KakaoTokenResponse;
+import com.woowacourse.friendogly.auth.dto.KakaoUserResponse;
+import com.woowacourse.friendogly.auth.service.KakaoOauthClient;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.io.File;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
@@ -29,20 +31,22 @@ class MemberControllerTest {
         RestAssured.port = port;
     }
 
-    @Autowired
-    private KakaoMemberRepository kakaoMemberRepository;
+    @MockBean
+    private KakaoOauthClient kakaoOauthClient;
 
     @DisplayName("정상적으로 회원을 생성하면 201을 반환한다.")
     @Test
     void saveMember() {
-        KakaoMember savedKakaoMember = kakaoMemberRepository.save(new KakaoMember(1L));
-        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com");
+        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com", "code");
+        KakaoUserResponse kakaoUserResponse = new KakaoUserResponse(1L);
 
-        // ArgumentResolver가 테스트에서 동작하지 않아 param으로 직접 값을 넣어줌
+        when(kakaoOauthClient.getToken(any()))
+                .thenReturn(new KakaoTokenResponse("", "", 10, "", 10));
+        when(kakaoOauthClient.getUserInfo(any()))
+                .thenReturn(kakaoUserResponse);
+
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, "accessToken")
-                .param("kakaoMemberId", savedKakaoMember.getKakaoMemberId())
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/members")
@@ -53,7 +57,7 @@ class MemberControllerTest {
     @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_NameLengthOver() {
-        SaveMemberRequest request = new SaveMemberRequest("1234567890123456", "member@email.com");
+        SaveMemberRequest request = new SaveMemberRequest("1234567890123456", "member@email.com", "code");
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
@@ -66,7 +70,7 @@ class MemberControllerTest {
     @DisplayName("이메일 형식이 아닌 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_InvalidEmailFormat() {
-        SaveMemberRequest request = new SaveMemberRequest("땡이", "이메일 형식이 아닌 문자열");
+        SaveMemberRequest request = new SaveMemberRequest("땡이", "이메일 형식이 아닌 문자열", "code");
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
