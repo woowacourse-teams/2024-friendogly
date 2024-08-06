@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.happy.friendogly.R
-import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter
 import com.happy.friendogly.presentation.ui.group.add.adapter.GroupAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.utils.toSoftwareBitmap
 
@@ -61,7 +60,7 @@ fun TextView.bindValidStyle(isValid: Boolean) {
         if (isValid) {
             R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
         } else {
-             R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
+            R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
         }
     this.setTextAppearance(textStyle)
 }
