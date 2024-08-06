@@ -12,5 +12,7 @@ sealed interface GroupAddEvent {
     }
 
     data class ChangePage(val page: Int) : GroupAddEvent
+
     data object FailLoadAddress: GroupAddEvent
+    data object FailAddGroup: GroupAddEvent
 }

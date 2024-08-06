@@ -105,7 +105,7 @@ class DogSelectBottomSheet(
 
                 DogSelectEvent.FailLoadDog -> makeToast(
                     requireContext().getString(
-                        R.string.dog_select_prevent_message,
+                        R.string.dog_select_load_fail,
                     )
                 )
             }

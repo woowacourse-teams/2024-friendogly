@@ -184,6 +184,7 @@
     <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
     <string name="group_add_title_count">%d/100</string>
     <string name="group_add_content_count">%d/1000</string>
+    <string name="group_add_fail">모임 생성에 실패하였습니다..</string>
 
     <!--멍개 상세-->
     <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
@@ -205,7 +206,7 @@
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
-    <string name="dog_select_load_fail">데이터를 불러오지 못했습니다..</string>
+    <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>

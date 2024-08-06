@@ -1,11 +1,14 @@
 package com.happy.friendogly.presentation.ui.group.add
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.mapper.toGender
+import com.happy.friendogly.domain.mapper.toSizeType
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -21,6 +24,7 @@ import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.utils.addSourceList
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class GroupAddViewModel(
     private val getAddressUseCase: GetAddressUseCase,
@@ -152,9 +156,27 @@ class GroupAddViewModel(
         _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
     }
 
-    // TODO : add api
-    override fun submitAddGroup() {
-        _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
+
+    fun submitAddGroup(
+        dogs: List<Long>,
+        file: MultipartBody.Part?,
+    ) = viewModelScope.launch {
+        postClubUseCase(
+            title = groupTitle.value ?: return@launch,
+            content = groupContent.value ?: return@launch,
+            address = myAddress.value?.toSizeType() ?:return@launch,
+            allowedGender = groupFilterSelector.selectGenderFilters().toGender(),
+            allowedSize = groupFilterSelector.selectSizeFilters().toSizeType(),
+            memberCapacity = groupCounter.value?.count ?: return@launch,
+            file = file,
+            petIds = dogs,
+        )
+            .onSuccess {
+                _groupAddEvent.emit(GroupAddEvent.Navigation.NavigateToHome)
+            }
+            .onFailure {
+                _groupAddEvent.emit(GroupAddEvent.FailAddGroup)
+            }
     }
 
     override fun navigatePrevPage() {
