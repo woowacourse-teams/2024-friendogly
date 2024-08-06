@@ -62,7 +62,7 @@ fun ImageView.bindGenderDrawable(gender: Gender) {
 fun TextView.bindNeuteredTitle(gender: Gender) {
     when (gender) {
         Gender.MALE_NEUTERED, Gender.FEMALE_NEUTERED -> {
-            text = "중성화를 했어요"
+            text = context.getString(R.string.neuterd_status)
             visibility = View.VISIBLE
         }
 
@@ -74,9 +74,9 @@ fun TextView.bindNeuteredTitle(gender: Gender) {
 fun TextView.bindDogSize(sizeType: SizeType) {
     text =
         when (sizeType) {
-            SizeType.SMALL -> "소형견이에요"
-            SizeType.MEDIUM -> "중현견이에요"
-            SizeType.LARGE -> "대형견이에요"
+            SizeType.SMALL -> context.getString(R.string.small_pet_description)
+            SizeType.MEDIUM -> context.getString(R.string.medium_pet_description)
+            SizeType.LARGE -> context.getString(R.string.large_pet_description)
         }
 }
 

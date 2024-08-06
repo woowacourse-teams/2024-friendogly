@@ -9,21 +9,26 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 class GroupMenuBottomSheet(
-    private val detailViewType: DetailViewType,
+    private val groupDetailViewType: GroupDetailViewType,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetGroupMenuBinding? = null
     val binding: BottomSheetGroupMenuBinding
         get() = _binding!!
 
-    private val viewModel: GroupMenuViewModel by viewModels()
+    private val viewModel: GroupMenuViewModel by viewModels<GroupMenuViewModel> {
+        GroupMenuViewModel.factory(
+            deleteClubMemberUseCase = AppModule.getInstance().deleteClubMemberUseCase,
+        )
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
@@ -45,7 +50,7 @@ class GroupMenuBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        viewModel.initDetailViewType(detailViewType)
+        viewModel.initDetailViewType(groupDetailViewType)
         initObserver()
     }
 

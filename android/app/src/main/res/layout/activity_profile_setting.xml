@@ -25,13 +25,14 @@
             <TextView
                 android:id="@+id/tv_make_profile_title"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size24"
+                profileSettingTitle="@{vm.uiState.isFirstTimeSetup}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="@string/make_profile_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="프로필 만들기" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +49,8 @@
                     android:id="@+id/iv_user_profile_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:glideProfile1000="@{vm.uiState.profileImage}"
+                    app:imageBitmap="@{vm.uiState.profileImage}"
+                    app:imageUrl="@{vm.uiState.profileImageUrl}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +58,8 @@
                     tools:src="@drawable/img_profile_normal" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="28dp"
+                    android:layout_height="39dp"
                     android:src="@drawable/ic_user_profile_set_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
@@ -117,10 +119,10 @@
                 android:onClick="@{() -> vm.submitProfileSelection()}"
                 android:padding="18dp"
                 android:text="@string/make_profile_edit_btn_title"
-                app:editBtnBackgroundTextColor="@{vm.nickname}"
+                app:editBtnBackgroundTextColor="@{vm.isButtonActive}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:background="@color/blue" />
+                tools:background="@color/coral400" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

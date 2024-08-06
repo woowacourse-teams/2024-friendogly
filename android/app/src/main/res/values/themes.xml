@@ -16,7 +16,7 @@
     </style>
 
     <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
-        <item name="buttonTint">@color/blue</item>
+        <item name="buttonTint">@color/coral400</item>
     </style>
 
     <style name="Theme.Friendogly" parent="Base.Theme.Friendogly" />

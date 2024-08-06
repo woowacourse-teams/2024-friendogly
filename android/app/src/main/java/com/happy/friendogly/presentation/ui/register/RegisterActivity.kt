@@ -72,7 +72,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
                     startActivity(
-                        ProfileSettingActivity.getIntent(this),
+                        ProfileSettingActivity.getIntent(this, null),
                     )
             }
         }

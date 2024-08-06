@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.registerdog.bottom
+package com.happy.friendogly.presentation.ui.registerpet.bottom
 
 import android.app.Dialog
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import java.time.LocalDateTime
 
-class EditDogBirthdayBottomSheet(
+class EditPetBirthdayBottomSheet(
     private val birthdayYear: Int,
     private val birthdayMonth: Int,
     private val clickSubmit: (year: Int, month: Int) -> Unit,

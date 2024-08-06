@@ -35,10 +35,10 @@
 
         <ImageView
             android:id="@+id/iv_setting_btn"
+            onSingleClick="@{() -> vm.navigateToSetting()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            onSingleClick="@{() -> vm.navigateToSetting()}"
             android:src="@drawable/ic_setting"
             app:layout_constraintBottom_toBottomOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="@id/toolbar"
@@ -58,6 +58,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout_profile_image"
+                    onSingleClick="@{() -> vm.navigateToProfileEdit()}"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="16dp"
@@ -69,7 +70,7 @@
                         android:id="@+id/iv_user_profile_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:glideProfile1000="@{vm.uiState.profilePath}"
+                        app:glideProfile1000="@{vm.uiState.imageUrl}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +80,6 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        onSingleClick="@{() -> vm.navigateToProfileEdit()}"
                         android:src="@drawable/ic_user_profile_set_button"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent" />
@@ -196,11 +196,11 @@
                 <TextView
                     android:id="@+id/tv_logout"
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                    onSingleClick="@{() -> vm.navigateToMyParticipation()}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:padding="16dp"
-                    onSingleClick="@{() -> vm.navigateToMyParticipation()}"
                     android:text="@string/participation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -210,10 +210,10 @@
 
                 <TextView
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                    onSingleClick="@{() -> vm.navigateToMyClubManger()}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    onSingleClick="@{() -> vm.navigateToMyClubManger()}"
                     android:text="@string/club_manager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

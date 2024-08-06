@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
@@ -15,10 +16,10 @@ import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class GroupListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
+    private val searchingClubsUseCase: GetSearchingClubsUseCase,
 ) : BaseViewModel(), GroupListActionHandler {
     private val _uiState: MutableLiveData<GroupListUiState> =
         MutableLiveData(GroupListUiState.Init)
@@ -67,7 +68,7 @@ class GroupListViewModel(
     private fun loadGroups() =
         viewModelScope.launch {
             delay(1000)
-            val groupData = dummy()
+            val groupData: List<GroupListUiModel> = emptyList()
             if (groupData.isEmpty()) {
                 _uiState.value = GroupListUiState.NotData
             } else {
@@ -128,59 +129,16 @@ class GroupListViewModel(
     }
 
     companion object {
-        fun factory(getAddressUseCase: GetAddressUseCase): ViewModelProvider.Factory {
+        fun factory(
+            getAddressUseCase: GetAddressUseCase,
+            searchingClubsUseCase: GetSearchingClubsUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 GroupListViewModel(
                     getAddressUseCase = getAddressUseCase,
+                    searchingClubsUseCase = searchingClubsUseCase,
                 )
             }
-        }
-
-        // TODO: remove dummy
-        fun dummy(): List<GroupListUiModel> {
-            return List(5) {
-                listOf(
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                                GroupFilter.GenderFilter.NeutralizingMale,
-                            ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 2,
-                        groupLocation = "잠실6동",
-                        groupLeader = "벼리",
-                        groupDate = LocalDateTime.now(),
-                        groupWoofs = listOf(),
-                        groupReaderImage = "",
-                    ),
-                    GroupListUiModel(
-                        groupId = 0L,
-                        filters =
-                            listOf(
-                                GroupFilter.SizeFilter.SmallDog,
-                                GroupFilter.GenderFilter.Female,
-                            ),
-                        groupPoster = "",
-                        isParticipable = true,
-                        title = "중형견 모임해요",
-                        content = "공지 꼭 읽어주세요",
-                        maximumNumberOfPeople = 5,
-                        currentNumberOfPeople = 3,
-                        groupLocation = "잠실5동",
-                        groupLeader = "채드",
-                        groupDate = LocalDateTime.of(2024, 7, 2, 14, 12, 0),
-                        groupWoofs = listOf(),
-                        groupReaderImage = "",
-                    ),
-                )
-            }.flatten()
         }
     }
 }

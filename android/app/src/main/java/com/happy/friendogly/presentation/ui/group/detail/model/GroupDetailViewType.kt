@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.detail.model
 
-enum class DetailViewType {
+enum class GroupDetailViewType {
     RECRUITMENT,
     END_RECRUITMENT,
     PARTICIPATED,
@@ -12,7 +12,7 @@ enum class DetailViewType {
             isMine: Boolean,
             isMyParticipated: Boolean,
             isParticipable: Boolean,
-        ): DetailViewType {
+        ): GroupDetailViewType {
             return if (isMine) {
                 MINE
             } else if (isMyParticipated) {
