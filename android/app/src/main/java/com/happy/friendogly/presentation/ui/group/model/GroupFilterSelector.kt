@@ -16,6 +16,16 @@ class GroupFilterSelector {
         }
     }
 
+    fun selectGenderFilters(): List<GroupFilter.GenderFilter> {
+        val filters = currentSelectedFilters.value ?: emptyList()
+        return filters.filterIsInstance<GroupFilter.GenderFilter>()
+    }
+
+    fun selectSizeFilters(): List<GroupFilter.SizeFilter> {
+        val filters = currentSelectedFilters.value ?: emptyList()
+        return filters.filterIsInstance<GroupFilter.SizeFilter>()
+    }
+
     fun removeGroupFilter(filter: GroupFilter) {
         if (!confirmValidFilter(filter)) {
             _currentSelectedFilters.value =

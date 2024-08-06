@@ -28,3 +28,34 @@ fun SizeType.toGroupFilter(): GroupFilter.SizeFilter {
         SizeType.SMALL -> GroupFilter.SizeFilter.SmallDog
     }
 }
+
+fun List<GroupFilter.SizeFilter>.toDomain(): List<SizeType> {
+    return this.mapNotNull {
+        it.toDomain()
+    }
+}
+
+fun List<GroupFilter.GenderFilter>.toDomain(): List<Gender>{
+    return this.mapNotNull {
+        it.toDomain()
+    }
+}
+
+fun GroupFilter.GenderFilter.toDomain(): Gender? {
+    return when (this) {
+        GroupFilter.GenderFilter.Female -> Gender.FEMALE
+        GroupFilter.GenderFilter.Male -> Gender.MALE
+        GroupFilter.GenderFilter.NeutralizingFemale -> Gender.FEMALE_NEUTERED
+        GroupFilter.GenderFilter.NeutralizingMale -> Gender.MALE_NEUTERED
+        else -> null
+    }
+}
+
+fun GroupFilter.SizeFilter.toDomain(): SizeType? {
+    return when (this) {
+        GroupFilter.SizeFilter.SmallDog -> SizeType.SMALL
+        GroupFilter.SizeFilter.MediumDog -> SizeType.MEDIUM
+        GroupFilter.SizeFilter.BigDog -> SizeType.LARGE
+        else -> null
+    }
+}
