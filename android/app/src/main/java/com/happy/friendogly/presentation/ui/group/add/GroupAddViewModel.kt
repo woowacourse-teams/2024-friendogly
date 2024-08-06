@@ -5,8 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.mapper.toGender
-import com.happy.friendogly.domain.mapper.toSizeType
+import com.happy.friendogly.domain.mapper.toGenders
+import com.happy.friendogly.domain.mapper.toDomain
+import com.happy.friendogly.domain.mapper.toSizeTypes
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -162,9 +163,9 @@ class GroupAddViewModel(
         postClubUseCase(
             title = groupTitle.value ?: return@launch,
             content = groupContent.value ?: return@launch,
-            address = myAddress.value?.toSizeType() ?: return@launch,
-            allowedGender = groupFilterSelector.selectGenderFilters().toGender(),
-            allowedSize = groupFilterSelector.selectSizeFilters().toSizeType(),
+            address = myAddress.value?.toDomain() ?: return@launch,
+            allowedGender = groupFilterSelector.selectGenderFilters().toGenders(),
+            allowedSize = groupFilterSelector.selectSizeFilters().toSizeTypes(),
             memberCapacity = groupCounter.value?.count ?: return@launch,
             file = file,
             petIds = dogs,

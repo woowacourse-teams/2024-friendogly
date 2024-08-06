@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.mapper.toDomain
+import com.happy.friendogly.domain.mapper.toGenders
+import com.happy.friendogly.domain.mapper.toPresentation
+import com.happy.friendogly.domain.mapper.toSizeTypes
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
@@ -14,7 +18,6 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GroupListViewModel(
@@ -67,14 +70,23 @@ class GroupListViewModel(
 
     private fun loadGroups() =
         viewModelScope.launch {
-            delay(1000)
-            val groupData: List<GroupListUiModel> = emptyList()
-            if (groupData.isEmpty()) {
-                _uiState.value = GroupListUiState.NotData
-            } else {
-                _uiState.value = GroupListUiState.Init
-            }
-            _groups.value = groupData
+            searchingClubsUseCase(
+                filterCondition = participationFilter.value?.toDomain() ?: return@launch,
+                address = myAddress.value?.toDomain() ?: return@launch,
+                genderParams =  groupFilterSelector.selectGenderFilters().toGenders(),
+                sizeParams = groupFilterSelector.selectSizeFilters().toSizeTypes(),
+            )
+                .onSuccess {
+                    if (it.isEmpty()){
+                        _uiState.value = GroupListUiState.NotData
+                    }else{
+                        _uiState.value = GroupListUiState.Init
+                    }
+                    _groups.value = it.map { group ->
+                        group.toPresentation()
+                    }
+                }
+
         }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {

@@ -1,8 +1,19 @@
 package com.happy.friendogly.domain.mapper
 
+import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
+import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
+
+
+fun ParticipationFilter.toDomain(): ClubFilterCondition {
+    return when (this) {
+        ParticipationFilter.ENTIRE -> ClubFilterCondition.ALL
+        ParticipationFilter.RECRUITMENT -> ClubFilterCondition.OPEN
+        ParticipationFilter.POSSIBLE -> ClubFilterCondition.ABLE_TO_JOIN
+    }
+}
 
 fun List<Gender>.toGenderGroupFilters(): List<GroupFilter> {
     return this.map { it.toGroupFilter() }
@@ -29,19 +40,19 @@ fun SizeType.toGroupFilter(): GroupFilter.SizeFilter {
     }
 }
 
-fun List<GroupFilter.SizeFilter>.toSizeType(): List<SizeType> {
+fun List<GroupFilter.SizeFilter>.toSizeTypes(): List<SizeType> {
     return this.mapNotNull {
         it.toSizeType()
     }
 }
 
-fun List<GroupFilter.GenderFilter>.toGender(): List<Gender> {
+fun List<GroupFilter.GenderFilter>.toGenders(): List<Gender> {
     return this.mapNotNull {
-        it.toSizeType()
+        it.toGender()
     }
 }
 
-fun GroupFilter.GenderFilter.toSizeType(): Gender? {
+fun GroupFilter.GenderFilter.toGender(): Gender? {
     return when (this) {
         GroupFilter.GenderFilter.Female -> Gender.FEMALE
         GroupFilter.GenderFilter.Male -> Gender.MALE

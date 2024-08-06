@@ -62,7 +62,7 @@ class GroupDetailViewModel(
     }
 
     fun joinGroup(dogs: List<Long>) = viewModelScope.launch {
-        val groupDetailId = group.value?.groupId ?: FAIL_LOAD_DATA_ID
+        val groupDetailId = group.value?.groupId ?: return@launch
         postClubMemberUseCase(
             id = groupDetailId,
             participatingPetsId = dogs,

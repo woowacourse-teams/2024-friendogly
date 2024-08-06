@@ -7,7 +7,7 @@ fun ClubAddress.toPresentation(): String {
     return "$province $city $village"
 }
 
-fun UserAddress.toSizeType(): ClubAddress {
+fun UserAddress.toDomain(): ClubAddress {
     return ClubAddress(
         province = adminArea,
         city = subLocality,
