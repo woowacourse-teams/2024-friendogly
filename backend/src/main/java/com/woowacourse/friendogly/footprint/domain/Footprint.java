@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 public class Footprint {
 
     private static final int NEAR_RADIUS_AS_METER = 400_000;
+    private static final int RADIUS_AS_METER = 1000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
