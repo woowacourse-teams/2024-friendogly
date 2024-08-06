@@ -2,13 +2,18 @@ package com.woowacourse.friendogly.auth.repository;
 
 import com.woowacourse.friendogly.auth.domain.KakaoMember;
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 
 public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> {
 
-    boolean existsByKakaoMemberId(Long kakaoMemberId);
+    Optional<KakaoMember> findByKakaoMemberId(String KakaoMemberId);
 
-    default KakaoMember getById(Long kakaoMemberId) {
-        return findById(kakaoMemberId).orElseThrow(() -> new FriendoglyException("먼저 카카오 로그인이 완료되어야 합니다."));
+    Optional<KakaoMember> findByRefreshToken(String refreshToken);
+
+    default KakaoMember getByRefreshToken(String refreshToken) {
+        return findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new FriendoglyException("리프레시 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED));
     }
 }

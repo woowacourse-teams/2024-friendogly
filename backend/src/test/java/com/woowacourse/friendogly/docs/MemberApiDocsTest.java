@@ -14,8 +14,7 @@ import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.woowacourse.friendogly.auth.AuthArgumentResolver;
-import com.woowacourse.friendogly.auth.dto.KakaoUserResponse;
-import com.woowacourse.friendogly.auth.service.KakaoOauthClient;
+import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.member.controller.MemberController;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.FindMemberResponse;
@@ -46,20 +45,15 @@ public class MemberApiDocsTest extends RestDocsTest {
     @Autowired
     private AuthArgumentResolver authArgumentResolver;
 
-    @MockBean
-    private KakaoOauthClient kakaoOauthClient;
-
     @DisplayName("회원 생성 문서화")
     @Test
     void saveMember_Success() throws Exception {
-        KakaoUserResponse kakaoUserResponse = new KakaoUserResponse(1L);
-        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com", "code");
-        SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416", "member@email.com", "http://google.com");
+        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com", "idToken");
+        SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416", "member@email.com",
+                "http://google.com", new TokenResponse("access", "refresh"));
         MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
         MockMultipartFile request = new MockMultipartFile("request", "request", "application/json", objectMapper.writeValueAsBytes(requestDto));
 
-        Mockito.when(kakaoOauthClient.getUserInfo(any()))
-                .thenReturn(kakaoUserResponse);
         Mockito.when(memberCommandService.saveMember(any(), any()))
                 .thenReturn(response);
 
@@ -79,7 +73,7 @@ public class MemberApiDocsTest extends RestDocsTest {
                                 "request",
                                 fieldWithPath("name").description("회원 이름"),
                                 fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("code").description("OAuth 인증 코드")
+                                fieldWithPath("idToken").description("카카오 idToken")
                         ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Member API")
@@ -93,7 +87,9 @@ public class MemberApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("회원 이름"),
                                         fieldWithPath("data.tag").type(JsonFieldType.STRING).description("중복된 회원 이름을 식별하기 위한 고유한 문자열"),
                                         fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
-                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL")
+                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL"),
+                                        fieldWithPath("data.tokens.accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
+                                        fieldWithPath("data.tokens.refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
                                 )
                                 .requestSchema(Schema.schema("saveMemberRequest"))
                                 .responseSchema(Schema.schema("응답DTO 이름"))

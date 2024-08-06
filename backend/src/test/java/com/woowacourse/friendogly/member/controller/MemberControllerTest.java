@@ -1,11 +1,8 @@
 package com.woowacourse.friendogly.member.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import com.woowacourse.friendogly.auth.dto.KakaoTokenResponse;
-import com.woowacourse.friendogly.auth.dto.KakaoUserResponse;
-import com.woowacourse.friendogly.auth.service.KakaoOauthClient;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProperties;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
+import com.woowacourse.friendogly.auth.service.jwt.TokenPayload;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -13,8 +10,8 @@ import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,24 +23,22 @@ class MemberControllerTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @BeforeEach
     void setPort() {
         RestAssured.port = port;
     }
 
-    @MockBean
-    private KakaoOauthClient kakaoOauthClient;
-
     @DisplayName("정상적으로 회원을 생성하면 201을 반환한다.")
     @Test
     void saveMember() {
-        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com", "code");
-        KakaoUserResponse kakaoUserResponse = new KakaoUserResponse(1L);
-
-        when(kakaoOauthClient.getToken(any()))
-                .thenReturn(new KakaoTokenResponse("", "", 10, "", 10));
-        when(kakaoOauthClient.getUserInfo(any()))
-                .thenReturn(kakaoUserResponse);
+        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com",
+                jwtProvider.generateTokens(new TokenPayload(1L)).accessToken());
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)

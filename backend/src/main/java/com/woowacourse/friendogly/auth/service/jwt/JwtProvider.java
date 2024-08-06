@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.auth.service.jwt;
 
+import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -21,12 +22,16 @@ public class JwtProvider {
         this.jwtProperties = jwtProperties;
     }
 
-    public String generateAccessToken(TokenPayload payload) {
+    public TokenResponse generateTokens(TokenPayload payload) {
+        return new TokenResponse(generateAccessToken(payload), generateRefreshToken());
+    }
+
+    private String generateAccessToken(TokenPayload payload) {
         Date expirationTime = new Date(System.currentTimeMillis() + jwtProperties.accessExpirationTime());
         return generateToken(payload.memberId().toString(), expirationTime);
     }
 
-    public String generateRefreshToken() {
+    private String generateRefreshToken() {
         Date expirationTime = new Date(System.currentTimeMillis() + jwtProperties.refreshExpirationTime());
         return generateToken(UUID.randomUUID().toString(), expirationTime);
     }
@@ -39,7 +44,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String extractToken(String token) {
+    public String validateAndExtract(String token) {
         validateToken(token);
         return getPayload(token).getSubject();
     }
@@ -60,7 +65,7 @@ public class JwtProvider {
                     .parseSignedClaims(token)
                     .getPayload();
         } catch (JwtException | IllegalArgumentException e) {
-            throw new FriendoglyException("잘못된 토큰 값입니다. 다시 로그인해주세요");
+            throw new FriendoglyException("잘못된 토큰 값입니다. 다시 로그인해주세요", HttpStatus.UNAUTHORIZED);
         }
     }
 }
