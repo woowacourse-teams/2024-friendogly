@@ -9,7 +9,6 @@ import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.common.ErrorResponse;
 import com.woowacourse.friendogly.exception.FriendoglyWebSocketException;
 import java.util.Collections;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.MessageBuilder;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
 
 @Component
-@Slf4j
 public class WebSocketErrorHandler extends StompSubProtocolErrorHandler {
 
     private final ObjectMapper objectMapper;
@@ -28,7 +26,6 @@ public class WebSocketErrorHandler extends StompSubProtocolErrorHandler {
 
     @Override
     public Message<byte[]> handleClientMessageProcessingError(Message<byte[]> clientMessage, Throwable ex) {
-        log.info("------- subscribe 과정에서 예외 발생 --------");
         Throwable causeException = ex.getCause();
         if (causeException instanceof FriendoglyWebSocketException) {
             return createMessageBytes(causeException.getMessage());
