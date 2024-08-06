@@ -132,7 +132,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         FOOTPRINT_DELETED()
                 )
         );
-        System.out.println(footprintRepository.findAll().size());
+
         // when
         List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
