@@ -136,8 +136,13 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 = chatRoomQueryService.findMemberInfo(member1.getId(), chatRoom1.getId());
 
         // then
-        assertThat(response)
-                .extracting(FindChatRoomMembersInfoResponse::memberName)
-                .containsExactly("name", "name2");
+        assertAll(
+                () -> assertThat(response)
+                        .extracting(FindChatRoomMembersInfoResponse::memberName)
+                        .containsExactly("name", "name2"),
+                () -> assertThat(response)
+                        .extracting(FindChatRoomMembersInfoResponse::isOwner)
+                        .containsExactly(true, false)
+        );
     }
 }

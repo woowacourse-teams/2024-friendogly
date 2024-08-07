@@ -6,6 +6,7 @@ import com.woowacourse.friendogly.chat.dto.response.ChatRoomDetail;
 import com.woowacourse.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
 import com.woowacourse.friendogly.chat.dto.response.FindMyChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
+import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.member.domain.Member;
@@ -46,10 +47,11 @@ public class ChatRoomQueryService {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
         validateParticipation(chatRoom, member);
+        Club club = clubRepository.getByChatRoom(chatRoom);
 
         List<Member> members = chatRoom.findMembers();
         return members.stream()
-                .map(FindChatRoomMembersInfoResponse::new)
+                .map(m -> new FindChatRoomMembersInfoResponse(club.isOwner(m), m))
                 .toList();
     }
 
