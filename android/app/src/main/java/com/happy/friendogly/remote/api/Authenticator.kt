@@ -2,6 +2,7 @@ package com.happy.friendogly.remote.api
 
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.interceptor.AuthorizationInterceptor
+import com.happy.friendogly.remote.model.request.RefreshRequest
 import com.happy.friendogly.remote.model.response.JwtTokenResponse
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -11,7 +12,7 @@ import okhttp3.Response
 import okhttp3.Route
 
 class Authenticator(
-    private val refreshService: RefreshService,
+    private val authService: AuthService,
     private val tokenManager: TokenManager,
     private val authenticationListener: AuthenticationListener,
 ) : Authenticator {
@@ -43,10 +44,9 @@ class Authenticator(
         }
     }
 
-    private fun refresh(refreshToken: String): Result<JwtTokenResponse> =
+    private suspend fun refresh(refreshToken: String): Result<JwtTokenResponse> =
         runCatching {
-            // TODO 아직 리프래시 토큰이 없기 토큰이 만료되거나 서버가 재가동 되면 무조건 터트리도록 했습니다!
-            // refreshService.refresh()
-            throw IllegalArgumentException()
+            val body = RefreshRequest(refreshToken = refreshToken)
+            authService.postRefresh(body = body).data
         }
 }

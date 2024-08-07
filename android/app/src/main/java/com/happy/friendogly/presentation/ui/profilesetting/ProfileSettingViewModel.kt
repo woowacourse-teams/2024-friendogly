@@ -26,6 +26,8 @@ class ProfileSettingViewModel(
     private val postMemberUseCase: PostMemberUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
 ) : BaseViewModel() {
+    val accessToken = savedStateHandle.get<String>(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN)
+
     private val _uiState: MutableLiveData<ProfileSettingUiState> =
         MutableLiveData(ProfileSettingUiState())
     val uiState: LiveData<ProfileSettingUiState> get() = _uiState
@@ -96,11 +98,14 @@ class ProfileSettingViewModel(
         nickname: String,
         profilePath: MultipartBody.Part?,
     ) {
+        accessToken ?: return
+
         // TODO email 필드는 임시로 넣어두었습니다.
         postMemberUseCase(
             name = nickname,
             email = "test@banggapge.com",
             file = profilePath,
+            accessToken = accessToken,
         ).onSuccess { member ->
             saveJwaToken(member.id)
         }.onFailure {

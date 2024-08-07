@@ -5,6 +5,7 @@ import com.happy.friendogly.BuildConfig
 import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
+import com.happy.friendogly.data.repository.AuthRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.FootprintRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
@@ -13,6 +14,7 @@ import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
+import com.happy.friendogly.data.source.AuthDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.FootprintDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
@@ -21,6 +23,7 @@ import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.TokenDataSource
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.AddressRepository
+import com.happy.friendogly.domain.repository.AuthRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.FootprintRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
@@ -45,6 +48,7 @@ import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
+import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
@@ -57,6 +61,7 @@ import com.happy.friendogly.local.source.TokenDataSourceImpl
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.di.RemoteModule
+import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
 import com.happy.friendogly.remote.source.FootprintDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
@@ -76,6 +81,13 @@ class AppModule(context: Context) {
     private val addressModule = AddressModule(context)
 
     // service
+    private val authService =
+        RemoteModule.createAuthService(
+            baseUrl = baseUrl,
+            tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
+        )
+
     private val clubService =
         RemoteModule.createClubService(
             baseUrl = baseUrl,
@@ -110,6 +122,7 @@ class AppModule(context: Context) {
         )
 
     // data source
+    private val authDataSource: AuthDataSource = AuthDataSourceImpl(service = authService)
     private val clubDataSource: ClubDataSource = ClubDataSourceImpl(service = clubService)
     private val tokenDataSource: TokenDataSource = TokenDataSourceImpl(tokenManager = tokenManager)
     private val addressDataSource: AddressDataSource =
@@ -122,6 +135,7 @@ class AppModule(context: Context) {
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
 
     // repository
+    private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
     private val clubRepository: ClubRepository = ClubRepositoryImpl(source = clubDataSource)
     private val tokenRepository: TokenRepository = TokenRepositoryImpl(source = tokenDataSource)
     private val kakaoLoginRepository: KakaoLoginRepository =
@@ -135,6 +149,8 @@ class AppModule(context: Context) {
         AddressRepositoryImpl(addressDataSource = addressDataSource)
 
     // use case
+    val postKakaoLoginUseCase: PostKakaoLoginUseCase =
+        PostKakaoLoginUseCase(repository = authRepository)
     val kakaoLoginUseCase: KakaoLoginUseCase = KakaoLoginUseCase(repository = kakaoLoginRepository)
     val postClubUseCase: PostClubUseCase = PostClubUseCase(repository = clubRepository)
     val getSearchingClubsUseCase: GetSearchingClubsUseCase =
