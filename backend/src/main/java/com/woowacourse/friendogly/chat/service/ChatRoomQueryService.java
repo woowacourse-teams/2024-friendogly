@@ -34,13 +34,14 @@ public class ChatRoomQueryService {
     }
 
     public FindMyChatRoomResponse findMine(Long memberId) {
-        List<ChatRoomDetail> chatRoomDetails = chatRoomRepository.findMine(memberId).stream()
+        Member member = memberRepository.getById(memberId);
+        List<ChatRoomDetail> chatRoomDetails = chatRoomRepository.findMine(member.getId()).stream()
                 .map(chatRoom -> clubRepository.findByChatRoomId(chatRoom.getId())
                         .map(club -> new ChatRoomDetail(chatRoom, club.getTitle().getValue(), club.getImageUrl()))
                         .orElse(new ChatRoomDetail(chatRoom, "", ""))
                 )
                 .toList();
-        return new FindMyChatRoomResponse(memberId, chatRoomDetails);
+        return new FindMyChatRoomResponse(member.getId(), chatRoomDetails);
     }
 
     public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long memberId, Long chatRoomId) {
