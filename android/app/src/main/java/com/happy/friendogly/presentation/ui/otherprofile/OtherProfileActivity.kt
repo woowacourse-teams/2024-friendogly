@@ -22,7 +22,7 @@ class OtherProfileActivity :
     private val viewModel: OtherProfileViewModel by viewModels {
         OtherProfileViewModel.factory(
             getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-            getMemberMineUseCase = AppModule.getInstance().getMemberMineUseCase,
+            getMemberUseCase = AppModule.getInstance().getMemberUseCase,
         )
     }
 

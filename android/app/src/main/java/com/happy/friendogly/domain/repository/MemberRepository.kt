@@ -11,4 +11,6 @@ interface MemberRepository {
     ): Result<Member>
 
     suspend fun getMemberMine(): Result<Member>
+
+    suspend fun getMember(id: Long): Result<Member>
 }

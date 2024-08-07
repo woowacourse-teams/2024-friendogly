@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
+import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class OtherProfileViewModel(
     savedStateHandle: SavedStateHandle,
     private val getPetsMineUseCase: GetPetsMineUseCase,
-    private val getMemberMineUseCase: GetMemberMineUseCase,
+    private val getMemberUseCase: GetMemberUseCase,
 ) : BaseViewModel(), OtherProfileActionHandler {
     private val _uiState: MutableLiveData<OtherProfileUiState> =
         MutableLiveData(OtherProfileUiState())
@@ -33,15 +33,15 @@ class OtherProfileViewModel(
     val navigateAction: LiveData<Event<OtherProfileNavigationAction>> get() = _navigateAction
 
     init {
-        requireNotNull(savedStateHandle.get<Long>(OtherProfileActivity.PUT_EXTRA_USER_ID))
+        val id = requireNotNull(savedStateHandle.get<Long>(OtherProfileActivity.PUT_EXTRA_USER_ID))
 
-        fetchMemberMine()
+        fetchMember(id = id)
         fetchPetMine()
     }
 
-    private fun fetchMemberMine() {
+    private fun fetchMember(id: Long) {
         viewModelScope.launch {
-            getMemberMineUseCase().onSuccess { member ->
+            getMemberUseCase(id = id).onSuccess { member ->
                 _uiState.value =
                     uiState.value?.copy(
                         nickname = member.name,
@@ -107,13 +107,13 @@ class OtherProfileViewModel(
     companion object {
         fun factory(
             getPetsMineUseCase: GetPetsMineUseCase,
-            getMemberMineUseCase: GetMemberMineUseCase,
+            getMemberUseCase: GetMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 OtherProfileViewModel(
                     savedStateHandle = creator.createSavedStateHandle(),
                     getPetsMineUseCase = getPetsMineUseCase,
-                    getMemberMineUseCase = getMemberMineUseCase,
+                    getMemberUseCase = getMemberUseCase,
                 )
             }
         }

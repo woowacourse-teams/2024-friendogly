@@ -8,6 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface MemberService {
     @Multipart
@@ -19,4 +20,9 @@ interface MemberService {
 
     @GET(ApiClient.Member.GET_MEMBER_MINE)
     suspend fun getMemberMine(): BaseResponse<MemberResponse>
+
+    @GET(ApiClient.Member.GET_MEMBER)
+    suspend fun getMember(
+        @Path("id") id: Long,
+    ): BaseResponse<MemberResponse>
 }
