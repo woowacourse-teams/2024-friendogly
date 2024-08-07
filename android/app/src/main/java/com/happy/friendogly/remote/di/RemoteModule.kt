@@ -2,6 +2,7 @@ package com.happy.friendogly.remote.di
 
 import com.happy.friendogly.local.di.LocalModule
 import com.happy.friendogly.remote.api.BaseUrl
+import com.happy.friendogly.remote.api.ChatService
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.FootprintService
 import com.happy.friendogly.remote.api.MemberService
@@ -14,7 +15,10 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
+import java.time.Duration
 
 object RemoteModule {
     private val contentType = "application/json".toMediaType()
@@ -22,6 +26,10 @@ object RemoteModule {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+
+    private const val TIME_OUT_MINUTE = 1L
+    private const val PINT_OUT_SECOND = 100L
+
 
     fun createClubService(
         baseUrl: BaseUrl,
@@ -73,6 +81,16 @@ object RemoteModule {
         ).create(PetService::class.java)
     }
 
+    fun createChatService(
+        baseUrl: BaseUrl,
+        localModule: LocalModule,
+    ): ChatService {
+        return createRetrofit(
+            baseUrl,
+            localModule,
+        ).create(ChatService::class.java)
+    }
+
     private val json =
         Json {
             ignoreUnknownKeys = true
@@ -93,5 +111,17 @@ object RemoteModule {
     }
 
     private fun createOkHttpClient(interceptors: OkHttpClient.Builder.() -> Unit = { }): OkHttpClient =
-        OkHttpClient.Builder().apply(interceptors).build()
+        OkHttpClient.Builder().callTimeout(Duration.ofMinutes(TIME_OUT_MINUTE))
+            .pingInterval(Duration.ofSeconds(PINT_OUT_SECOND)).apply(interceptors).build()
+
+    fun createStumpClient(
+        localModule: LocalModule,
+    ): StompClient {
+        return createOkHttpClient {
+            addInterceptor(AuthorizationInterceptor(localModule = localModule))
+            addInterceptor(ErrorResponseInterceptor())
+            addInterceptor(logging)
+        }.let(::OkHttpWebSocketClient).let(::StompClient)
+    }
+
 }

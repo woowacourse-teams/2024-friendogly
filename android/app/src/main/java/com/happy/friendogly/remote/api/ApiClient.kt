@@ -30,4 +30,19 @@ class ApiClient {
         const val POST_CLUB_MEMBER = "$BASE_URL/{id}$MEMBER_URL"
         const val DELETE_CLUB_MEMBER = "$BASE_URL/{id}$MEMBER_URL"
     }
+
+    object Chat {
+        private const val BASE_URL = "/chat-rooms"
+        const val CHAT_LIST = "$BASE_URL/mine"
+        const val MEMBERS = "$BASE_URL/{chatRoomId}"
+    }
+
+    object WebSocket {
+        fun publishEnter(chatRoomId:Long) ="/publish/enter/${chatRoomId}"
+        fun publishMessage(chatRoomId:Long) ="/publish/chat/${chatRoomId}"
+        fun publishLeave(chatRoomId:Long) ="/publish/leave/${chatRoomId}"
+
+        fun subscribeChat(chatRoomId: Long)= "/topic/chat/${chatRoomId}"
+
+    }
 }
