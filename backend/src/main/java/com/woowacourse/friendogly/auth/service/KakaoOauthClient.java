@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClient;
 @Component
 public class KakaoOauthClient {
 
-    private static final String KAKAO_REQUEST_USER_INFO_URI = "https://kapi.kakao.com/v1/oidc/userinfo";
+    private static final String KAKAO_REQUEST_USER_INFO_URI = "https://kapi.kakao.com/v2/user/me";
     private static final String BEARER = "Bearer ";
 
     private final RestClient restClient;
