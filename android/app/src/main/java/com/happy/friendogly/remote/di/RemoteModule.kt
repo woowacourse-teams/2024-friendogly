@@ -9,7 +9,6 @@ import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.FootprintService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.PetService
-import com.happy.friendogly.remote.api.RefreshService
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.interceptor.AuthorizationInterceptor
 import com.happy.friendogly.remote.interceptor.ErrorResponseInterceptor
@@ -112,7 +111,7 @@ object RemoteModule {
     ): Retrofit {
         val authenticator =
             Authenticator(
-                refreshService = createRefreshApiService(baseUrl),
+                authService = createAuthService(baseUrl),
                 tokenManager = tokenManager,
                 authenticationListener = authenticationListener,
             )
@@ -130,12 +129,12 @@ object RemoteModule {
     private fun createOkHttpClient(interceptors: OkHttpClient.Builder.() -> Unit = { }): OkHttpClient =
         OkHttpClient.Builder().apply(interceptors).build()
 
-    private fun createRefreshApiService(baseUrl: BaseUrl): RefreshService =
+    private fun createAuthService(baseUrl: BaseUrl): AuthService =
         Retrofit.Builder().baseUrl(baseUrl.url).client(
             createOkHttpClient {
                 addInterceptor(ErrorResponseInterceptor())
                 addInterceptor(logging)
             },
         ).addConverterFactory(json.asConverterFactory(contentType)).build()
-            .create(RefreshService::class.java)
+            .create(AuthService::class.java)
 }
