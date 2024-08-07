@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
@@ -32,7 +33,11 @@ class DogSelectBottomSheet(
     private lateinit var dlg: BottomSheetDialog
     private var toast: Toast? = null
 
-    private val viewModel: DogSelectViewModel by viewModels()
+    private val viewModel: DogSelectViewModel by viewModels<DogSelectViewModel> {
+        DogSelectViewModel.factory(
+            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
+        )
+    }
 
     private val adapter: DogSelectAdapter by lazy {
         DogSelectAdapter(viewModel as DogSelectActionHandler)
@@ -86,26 +91,38 @@ class DogSelectBottomSheet(
             when (event) {
                 DogSelectEvent.CancelSelection -> this.dismissNow()
                 DogSelectEvent.SelectDog -> adapter.notifyItemChanged(binding.vpGroupSelectDogList.currentItem)
-                is DogSelectEvent.PreventSelection -> {
-                    toast?.cancel()
-                    toast =
-                        Toast.makeText(
-                            requireContext(),
-                            requireContext().getString(
-                                R.string.dog_select_prevent_message,
-                                event.dogName,
-                            ),
-                            Toast.LENGTH_SHORT,
-                        )
-                    toast?.show()
-                }
+                is DogSelectEvent.PreventSelection ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_select_prevent_message,
+                            event.dogName,
+                        ),
+                    )
 
                 is DogSelectEvent.SelectDogs -> {
                     this.dismissNow()
                     submit(event.dogs)
                 }
+
+                DogSelectEvent.FailLoadDog ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_select_load_fail,
+                        ),
+                    )
             }
         }
+    }
+
+    private fun makeToast(message: String) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     private fun initViewPager() {

@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.group.select
 
+import com.happy.friendogly.domain.mapper.toGroupFilter
+import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 
 data class DogSelectUiModel(
@@ -19,4 +21,14 @@ data class DogSelectUiModel(
     fun unSelectDog() {
         isSelected = false
     }
+}
+
+fun Pet.toDogSelectUiModel(): DogSelectUiModel {
+    return DogSelectUiModel(
+        id = id,
+        name = name,
+        profileImage = imageUrl,
+        size = sizeType.toGroupFilter(),
+        gender = gender.toGroupFilter(),
+    )
 }

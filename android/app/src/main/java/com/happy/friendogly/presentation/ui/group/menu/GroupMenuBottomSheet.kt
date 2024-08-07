@@ -5,25 +5,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetGroupMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
-import com.happy.friendogly.presentation.ui.group.detail.model.DetailViewType
+import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 class GroupMenuBottomSheet(
-    private val detailViewType: DetailViewType,
+    private val groupId: Long,
+    private val groupDetailViewType: GroupDetailViewType,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetGroupMenuBinding? = null
     val binding: BottomSheetGroupMenuBinding
         get() = _binding!!
 
-    private val viewModel: GroupMenuViewModel by viewModels()
+    private var toast: Toast? = null
+
+    private val viewModel: GroupMenuViewModel by viewModels<GroupMenuViewModel> {
+        GroupMenuViewModel.factory(
+            deleteClubMemberUseCase = AppModule.getInstance().deleteClubMemberUseCase,
+        )
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SideSheetDialog(requireContext(), R.style.group_detail_side_sheet_dialog)
@@ -45,7 +54,7 @@ class GroupMenuBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        viewModel.initDetailViewType(detailViewType)
+        viewModel.initDetailViewType(groupDetailViewType)
         initObserver()
     }
 
@@ -73,8 +82,24 @@ class GroupMenuBottomSheet(
                     (activity as GroupDetailNavigation).navigateToPrev()
                     dismissNow()
                 }
+
+                GroupMenuEvent.FailDelete ->
+                    makeToast(
+                        requireContext().getString(R.string.group_detail_delete_fail),
+                    )
             }
         }
+    }
+
+    private fun makeToast(message: String) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     private fun openDeleteDialog() {
@@ -89,7 +114,7 @@ class GroupMenuBottomSheet(
                     ),
                 clickToNegative = { },
                 clickToPositive = {
-                    viewModel.withdrawGroup()
+                    viewModel.withdrawGroup(groupId)
                 },
             )
         dialog.show(parentFragmentManager, tag)

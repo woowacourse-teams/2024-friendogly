@@ -25,13 +25,14 @@ import com.epages.restdocs.apispec.SimpleType;
 import com.woowacourse.friendogly.club.controller.ClubController;
 import com.woowacourse.friendogly.club.domain.FilterCondition;
 import com.woowacourse.friendogly.club.domain.Status;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
+import com.woowacourse.friendogly.club.dto.response.AddressDetailResponse;
 import com.woowacourse.friendogly.club.dto.response.ClubMemberDetailResponse;
 import com.woowacourse.friendogly.club.dto.response.ClubPetDetailResponse;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
@@ -63,19 +64,21 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("필터링 조건을 통해 모임 리스트를 조회한다.")
     @Test
     void findSearching_200() throws Exception {
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
                 FilterCondition.ALL.name(),
-                "서울특별시 송파구 신청동 잠실 6동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL)
+                "서울특별시",
+                "송파구",
+                "신천동",
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
-        List<FindSearchingClubResponse> responses = List.of(new FindSearchingClubResponse(
+        List<FindClubByFilterResponse> responses = List.of(new FindClubByFilterResponse(
                         1L,
                         "모임 제목1",
                         "모임 본문 내용1",
                         "브라운",
-                        "서울특별시 송파구 신정동 잠실 6동",
+                        new AddressDetailResponse("서울특별시", "송파구", "신천동"),
                         Status.OPEN,
                         LocalDateTime.now(),
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
@@ -85,12 +88,12 @@ public class ClubApiDocsTest extends RestDocsTest {
                         "https:/clubImage1.com",
                         List.of("https://petImage1.com")
                 ),
-                new FindSearchingClubResponse(
+                new FindClubByFilterResponse(
                         2L,
                         "모임 제목2",
                         "모임 본문 내용2",
                         "레아",
-                        "서울특별시 송파구 신정동 잠실 6동",
+                        new AddressDetailResponse("서울특별시", "송파구", "신천동"),
                         Status.OPEN,
                         LocalDateTime.now(),
                         Set.of(Gender.MALE, Gender.FEMALE_NEUTERED, Gender.MALE_NEUTERED),
@@ -108,9 +111,11 @@ public class ClubApiDocsTest extends RestDocsTest {
         mockMvc.perform(get("/clubs/searching")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
                         .param("filterCondition", request.filterCondition())
-                        .param("address", request.address())
-                        .param("genderParams", request.genderParams().stream().map(Enum::name).toArray(String[]::new))
-                        .param("sizeParams", request.sizeParams().stream().map(Enum::name).toArray(String[]::new)))
+                        .param("province", request.province())
+                        .param("city", request.city())
+                        .param("village", request.village())
+                        .param("genderParams", request.genderParams().toArray(String[]::new))
+                        .param("sizeParams", request.sizeParams().toArray(String[]::new)))
                 .andExpect(status().isOk())
                 .andDo(document("clubs/findSearching/200",
                         getDocumentRequest(),
@@ -123,7 +128,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .queryParameters(
                                         parameterWithName("filterCondition").description("모임의 필터 조건 (ALL, OPEN, ABLE_TO_JOIN)"),
-                                        parameterWithName("address").description("모임의 주소"),
+                                        parameterWithName("province").description("모임의 도/광역시/특별시 주소"),
+                                        parameterWithName("city").description("모임의 시/군/구 주소"),
+                                        parameterWithName("village").description("모임의 읍/면/동주소"),
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
                                         parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"))
                                 .responseFields(
@@ -132,7 +139,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("모임 제목"),
                                         fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("모임 본문"),
                                         fieldWithPath("data.[].ownerMemberName").type(JsonFieldType.STRING).description("모임 방장 이름"),
-                                        fieldWithPath("data.[].address").type(JsonFieldType.STRING).description("모임의 주소"),
+                                        fieldWithPath("data.[].address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
+                                        fieldWithPath("data.[].address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소"),
+                                        fieldWithPath("data.[].address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소"),
                                         fieldWithPath("data.[].status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
                                         fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.[].allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
@@ -154,7 +163,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "모임 제목1",
                 "모임 본문 내용1",
                 "브라운",
-                "서울특별시 송파구 신정동 잠실 6동",
+                new AddressDetailResponse("서울특별시", "송파구", "신천동"),
                 Status.OPEN,
                 LocalDateTime.now(),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
@@ -193,7 +202,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("모임 제목"),
                                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("모임 본문"),
                                         fieldWithPath("data.ownerMemberName").type(JsonFieldType.STRING).description("모임 방장 이름"),
-                                        fieldWithPath("data.address").type(JsonFieldType.STRING).description("모임의 주소"),
+                                        fieldWithPath("data.address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
+                                        fieldWithPath("data.address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소"),
+                                        fieldWithPath("data.address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소"),
                                         fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
@@ -223,9 +234,11 @@ public class ClubApiDocsTest extends RestDocsTest {
         SaveClubRequest requestDto = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
-                "서울특별시 송파구 신정동 잠실 5동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                "서울특별시",
+                "송파구",
+                "신천동",
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name()),
                 5,
                 List.of(1L)
         );
@@ -239,7 +252,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "모임 제목",
                 "모임 내용",
                 "브라운",
-                "서울특별시 송파구 신정동 잠실 5동",
+                new AddressDetailResponse("서울특별시", "송파구", "신천동"),
                 Status.OPEN,
                 LocalDateTime.of(2024, 7, 23, 11, 5),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
@@ -270,7 +283,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 "request",
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("모임 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("모임 내용"),
-                                fieldWithPath("address").type(JsonFieldType.STRING).description("모임 주소"),
+                                fieldWithPath("province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
+                                fieldWithPath("city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소"),
+                                fieldWithPath("village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소"),
                                 fieldWithPath("allowedGenders").type(JsonFieldType.ARRAY).description("참여가능한 강아지 성별"),
                                 fieldWithPath("allowedSizes").type(JsonFieldType.ARRAY).description("참여가능한 강아지 사이즈"),
                                 fieldWithPath("memberCapacity").type(JsonFieldType.NUMBER).description("모임 최대 인원"),
@@ -290,7 +305,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("모임 제목"),
                                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("모임 본문"),
                                         fieldWithPath("data.ownerMemberName").type(JsonFieldType.STRING).description("모임 방장 이름"),
-                                        fieldWithPath("data.address").type(JsonFieldType.STRING).description("모임의 주소"),
+                                        fieldWithPath("data.address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
+                                        fieldWithPath("data.address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소"),
+                                        fieldWithPath("data.address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소"),
                                         fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),

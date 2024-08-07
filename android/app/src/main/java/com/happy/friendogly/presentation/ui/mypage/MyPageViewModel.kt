@@ -10,8 +10,11 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.petdetail.PetDetail
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class MyPageViewModel(
     private val getPetsMineUseCase: GetPetsMineUseCase,
@@ -43,6 +46,7 @@ class MyPageViewModel(
                         nickname = member.name,
                         email = member.email,
                         tag = member.tag,
+                        imageUrl = member.imageUrl,
                     )
             }.onFailure {
                 // TODO 예외 처리
@@ -68,8 +72,30 @@ class MyPageViewModel(
         _currentPage.value = page
     }
 
-    override fun navigateToDogDetail(id: Long) {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToDogDetail(id = id))
+    override fun navigateToPetDetail() {
+        val state = uiState.value ?: return
+        val currentPage = currentPage.value ?: return
+
+        val petDetail =
+            state.pets.filterIsInstance<PetView>().map { petView ->
+                PetDetail(
+                    id = petView.id,
+                    name = petView.name,
+                    description = petView.description,
+                    birthDate = petView.birthDate,
+                    sizeType = petView.sizeType,
+                    gender = petView.gender,
+                    imageUrl = petView.imageUrl,
+                )
+            }
+        val petsDetail = PetsDetail(petDetail)
+
+        _navigateAction.emit(
+            MyPageNavigationAction.NavigateToPetDetail(
+                currentPage = currentPage,
+                petsDetail = petsDetail,
+            ),
+        )
     }
 
     override fun navigateToRegisterDog(id: Long) {
@@ -77,7 +103,13 @@ class MyPageViewModel(
     }
 
     override fun navigateToProfileEdit() {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit)
+        val state = uiState.value ?: return
+        val profile =
+            Profile(
+                name = state.nickname,
+                imageUrl = state.imageUrl,
+            )
+        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit(profile = profile))
     }
 
     fun navigateToSetting() {
@@ -85,7 +117,22 @@ class MyPageViewModel(
     }
 
     override fun navigateToPetEdit(id: Long) {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit)
+        val state = uiState.value ?: return
+        val currentPage = currentPage.value ?: return
+        val pet = state.pets[currentPage] as PetView
+
+        val petProfile =
+            PetProfile(
+                id = pet.id,
+                name = pet.name,
+                description = pet.description,
+                birthDate = pet.birthDate,
+                sizeType = pet.sizeType,
+                gender = pet.gender,
+                imageUrl = pet.imageUrl,
+            )
+
+        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit(petProfile))
     }
 
     fun navigateToMyParticipation() {
@@ -97,45 +144,6 @@ class MyPageViewModel(
     }
 
     companion object {
-        val dog =
-            Dog(
-                name = "땡이",
-                description = "강인해요",
-                birthDate = LocalDate.now(),
-                sizeType = "",
-                gender = "",
-                isNeutered = true,
-                image = "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
-            )
-        val dogs =
-            listOf<Dog>(
-                dog,
-                dog.copy(
-                    name = "초코",
-                    image = "https://github.com/user-attachments/assets/a344d355-8b00-4e08-a33f-08db58010b07",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-            )
-
         fun factory(
             getPetsMineUseCase: GetPetsMineUseCase,
             getMemberMineUseCase: GetMemberMineUseCase,

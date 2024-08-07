@@ -44,9 +44,11 @@ class ClubCommandServiceTest extends ClubServiceTest {
         SaveClubRequest request = new SaveClubRequest(
                 "모임 제목",
                 "모임 내용",
-                "서울특별시 송파구 신정동 잠실 5동",
-                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
-                Set.of(SizeType.SMALL),
+                "서울특별시",
+                "송파구",
+                "신천동",
+                Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
+                Set.of(SizeType.SMALL.name()),
                 5,
                 List.of(savedPet.getId())
         );
@@ -57,7 +59,9 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertAll(
                 () -> assertThat(actual.title()).isEqualTo("모임 제목"),
                 () -> assertThat(actual.content()).isEqualTo("모임 내용"),
-                () -> assertThat(actual.address()).isEqualTo("서울특별시 송파구 신정동 잠실 5동"),
+                () -> assertThat(actual.address().province()).isEqualTo("서울특별시"),
+                () -> assertThat(actual.address().city()).isEqualTo("송파구"),
+                () -> assertThat(actual.address().village()).isEqualTo("신천동"),
                 () -> assertThat(actual.allowedGender()).containsExactlyInAnyOrderElementsOf(
                         Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED))
         );

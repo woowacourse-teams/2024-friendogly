@@ -23,6 +23,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_user_profile_edit"
+            onSingleClick="@{() -> actionHandler.navigateToPetEdit(petView.id)}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +45,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                onSingleClick="@{() -> actionHandler.navigateToPetEdit(petView.id)}"
                 android:src="@drawable/ic_user_profile_set_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -135,7 +135,7 @@
 
         <TextView
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
-            onSingleClick="@{() -> actionHandler.navigateToDogDetail(petView.id)}"
+            onSingleClick="@{() -> actionHandler.navigateToPetDetail()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rect_coral400_fill_20"

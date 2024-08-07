@@ -15,6 +15,7 @@ import com.happy.friendogly.presentation.ui.otherprofile.adapter.OtherPetProfile
 import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserMore
 import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserReport
 import com.happy.friendogly.presentation.ui.otherprofile.bottom.UserMoreType
+import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
 
 class OtherProfileActivity :
     BaseActivity<ActivityOtherProfileBinding>(R.layout.activity_other_profile) {
@@ -35,7 +36,7 @@ class OtherProfileActivity :
 
     private fun initDataBinding() {
         binding.vm = viewModel
-        binding.vpDogProfile.registerOnPageChangeCallback(
+        binding.vpPetProfile.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -46,14 +47,18 @@ class OtherProfileActivity :
     }
 
     private fun initAdapter() {
-        binding.vpDogProfile.adapter = adapter
+        binding.vpPetProfile.adapter = adapter
     }
 
     private fun initObserve() {
         viewModel.navigateAction.observeEvent(this) { action ->
             when (action) {
                 is OtherProfileNavigationAction.NavigateToBack -> finish()
-                is OtherProfileNavigationAction.NavigateToDogDetail -> {}
+                is OtherProfileNavigationAction.NavigateToPetDetail ->
+                    startActivity(
+                        PetDetailActivity.getIntent(this, action.currentPage, action.petsDetail),
+                    )
+
                 is OtherProfileNavigationAction.NavigateToUserMore -> moreBottomDialog(id = action.id)
             }
         }
