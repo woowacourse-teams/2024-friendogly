@@ -34,3 +34,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### private
+/src/main/resources/firebase-friendogly-private-key.json
