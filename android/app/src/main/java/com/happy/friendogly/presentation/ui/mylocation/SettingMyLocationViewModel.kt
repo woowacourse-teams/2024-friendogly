@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -26,22 +25,23 @@ class SettingMyLocationViewModel(
 
     private val addressList: MutableSet<String?> = mutableSetOf()
 
-    fun updateAddress(address: Address) = runCatching {
-        addressList.clear()
-        val addressLine = address.getAddressLine(0)
+    fun updateAddress(address: Address) =
+        runCatching {
+            addressList.clear()
+            val addressLine = address.getAddressLine(0)
 
-        val adminArea = loadAdmin(address, addressLine)
-        val locality = loadLocality(addressLine)
-        val thoroughfare = loadThoroughfare(addressLine)
+            val adminArea = loadAdmin(address, addressLine)
+            val locality = loadLocality(addressLine)
+            val thoroughfare = loadThoroughfare(addressLine)
 
-        makeUserAddress(adminArea, locality, thoroughfare)
-    }
-        .onSuccess { newUserAddress ->
-            _userAddress.value = newUserAddress
+            makeUserAddress(adminArea, locality, thoroughfare)
         }
-        .onFailure {
-            submitInValidLocation()
-        }
+            .onSuccess { newUserAddress ->
+                _userAddress.value = newUserAddress
+            }
+            .onFailure {
+                submitInValidLocation()
+            }
 
     private fun loadAdmin(
         address: Address,
@@ -52,24 +52,22 @@ class SettingMyLocationViewModel(
         return admin
     }
 
-    private fun loadLocality(
-        addressLine: String,
-    ): String {
-        val locality = findAddressElement(
-            addressLine,
-            LOCALITY_SPLIT
-        )
+    private fun loadLocality(addressLine: String): String {
+        val locality =
+            findAddressElement(
+                addressLine,
+                LOCALITY_SPLIT,
+            )
         addressList.add(locality)
         return locality
     }
 
-    private fun loadThoroughfare(
-        addressLine: String,
-    ): String {
-        val thoroughfare = findAddressElement(
-            addressLine,
-            THOROUGH_FARE_SPLIT
-        )
+    private fun loadThoroughfare(addressLine: String): String {
+        val thoroughfare =
+            findAddressElement(
+                addressLine,
+                THOROUGH_FARE_SPLIT,
+            )
         addressList.add(thoroughfare)
         return thoroughfare
     }

@@ -5,8 +5,6 @@ import android.content.Intent
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
@@ -27,7 +25,6 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import java.util.Locale
-import kotlin.math.floor
 
 class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
