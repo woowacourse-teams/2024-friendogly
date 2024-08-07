@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.view.isVisible
@@ -293,7 +292,6 @@ class WoofFragment :
         }
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { walkStatus ->
-            Log.e("chad", "walkStatus: $walkStatus")
             if (walkStatus == null || walkStatus == WalkStatus.AFTER) {
                 timer?.cancel()
             }
@@ -630,7 +628,6 @@ class WoofFragment :
                         distanceResults,
                     )
                     val distance = distanceResults[0]
-                    Log.e("chad", "distance: ${distanceResults[0]}")
                     if (startWalking(distance) || endWalking(distance)) {
                         viewModel.updateWalkStatus(latLng)
                     }
@@ -657,6 +654,6 @@ class WoofFragment :
         private const val LOADING_DELAY_MILLIS = 2000L
         private const val ANIMATE_DURATION_MILLIS = 300L
         private const val MARKER_CLICKED_CAMERA_LATITUDE_UP = 0.0025
-        private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 3000L
+        private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
     }
 }

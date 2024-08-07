@@ -72,7 +72,7 @@ object RemoteModule {
         baseUrl: BaseUrl,
         localModule: LocalModule,
     ): Retrofit {
-        return Retrofit.Builder().baseUrl("http://10.0.2.2:8080/").client(
+        return Retrofit.Builder().baseUrl(baseUrl.url).client(
             createOkHttpClient {
                 addInterceptor(AuthorizationInterceptor(localModule = localModule))
                 addInterceptor(ErrorResponseInterceptor())
