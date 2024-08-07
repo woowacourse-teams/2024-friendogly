@@ -14,6 +14,6 @@ public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> 
 
     default KakaoMember getByRefreshToken(String refreshToken) {
         return findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new FriendoglyException("리프레시 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new FriendoglyException("유효하지 않은 리프레시 토큰입니다.", HttpStatus.UNAUTHORIZED));
     }
 }
