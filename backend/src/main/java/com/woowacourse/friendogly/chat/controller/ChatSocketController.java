@@ -11,8 +11,15 @@ import com.woowacourse.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.woowacourse.friendogly.chat.service.ChatRoomCommandService;
 import com.woowacourse.friendogly.chat.service.ChatRoomQueryService;
 import com.woowacourse.friendogly.chat.service.ChatService;
+import com.woowacourse.friendogly.common.ApiResponse;
+import com.woowacourse.friendogly.common.ErrorCode;
+import com.woowacourse.friendogly.common.ErrorResponse;
+import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -81,5 +88,15 @@ public class ChatSocketController {
         chatRoomCommandService.leave(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
+    }
+
+    @MessageExceptionHandler // TODO: 패키지 정리 과정에서 옮겨야 할 수도 있음!
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleException(FriendoglyException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ErrorCode.DEFAULT_ERROR_CODE,
+                exception.getMessage(),
+                Collections.emptyList()
+        );
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
     }
 }
