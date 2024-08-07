@@ -35,10 +35,10 @@ public class ChatRoomQueryService {
 
     public FindMyChatRoomResponse findMine(Long memberId) {
         List<ChatRoomDetail> chatRoomDetails = chatRoomRepository.findMine(memberId).stream()
-                .map(chatRoom -> {
-                    Club club = clubRepository.getByChatRoom(chatRoom);
-                    return new ChatRoomDetail(chatRoom, club);
-                })
+                .map(chatRoom -> clubRepository.findByChatRoomId(chatRoom.getId())
+                        .map(club -> new ChatRoomDetail(chatRoom, club.getTitle().getValue(), club.getImageUrl()))
+                        .orElse(new ChatRoomDetail(chatRoom, "", ""))
+                )
                 .toList();
         return new FindMyChatRoomResponse(memberId, chatRoomDetails);
     }
@@ -47,7 +47,7 @@ public class ChatRoomQueryService {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
         validateParticipation(chatRoom, member);
-        Club club = clubRepository.getByChatRoom(chatRoom);
+        Club club = clubRepository.getByChatRoomId(chatRoomId);
 
         List<Member> members = chatRoom.findMembers();
         return members.stream()

@@ -1,7 +1,6 @@
 package com.woowacourse.friendogly.chat.dto.response;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
-import com.woowacourse.friendogly.club.domain.Club;
 
 public record ChatRoomDetail(
         Long chatRoomId,
@@ -10,12 +9,12 @@ public record ChatRoomDetail(
         String clubImageUrl
 ) {
 
-    public ChatRoomDetail(ChatRoom chatRoom, Club club) {
+    public ChatRoomDetail(ChatRoom chatRoom, String clubName, String clubImageUrl) {
         this(
                 chatRoom.getId(),
                 chatRoom.countMembers(),
-                club.getTitle().getValue(),
-                club.getImageUrl()
+                clubName,
+                clubImageUrl
         );
     }
 }

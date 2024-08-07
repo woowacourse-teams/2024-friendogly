@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.club.repository;
 
-import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import java.util.List;
@@ -29,10 +28,10 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
             """)
     boolean existsBy(@Param("chatRoomId") Long chatRoomId, @Param("memberId") Long memberId);
 
-    Optional<Club> findByChatRoom(ChatRoom chatRoom);
+    Optional<Club> findByChatRoomId(Long chatRoomId);
 
-    default Club getByChatRoom(ChatRoom chatRoom) {
-        return findByChatRoom(chatRoom)
+    default Club getByChatRoomId(Long chatRoomId) {
+        return findByChatRoomId(chatRoomId)
                 .orElseThrow(() -> new FriendoglyException("해당 채팅방에 해당하는 모임이 존재하지 않습니다."));
     }
 }
