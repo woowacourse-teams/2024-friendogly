@@ -7,7 +7,6 @@ import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.auth.service.AuthService;
 import com.woowacourse.friendogly.auth.service.KakaoMemberService;
 import com.woowacourse.friendogly.common.ApiResponse;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +32,7 @@ public class AuthController {
         return ApiResponse.ofSuccess(kakaoMemberService.login(request));
     }
 
-    @GetMapping("/kakao/refresh")
+    @PostMapping("/kakao/refresh")
     public ApiResponse<TokenResponse> refreshToken(@RequestBody KakaoRefreshRequest request) {
         return ApiResponse.ofSuccess(authService.refreshToken(request.refreshToken()));
     }
