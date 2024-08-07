@@ -24,10 +24,15 @@ class SettingMyLocationViewModel(
     private val _userAddress: MutableLiveData<UserAddress> = MutableLiveData()
     val userAddress: LiveData<UserAddress> get() = _userAddress
 
+    private val addressList: MutableSet<String?> = mutableSetOf()
+
     fun updateAddress(address: Address) = runCatching {
-        val adminArea = address.adminArea ?: address.adminArea
-        val locality = address.locality ?: address.subLocality
-        val thoroughfare = address.thoroughfare ?: address.subThoroughfare
+        addressList.clear()
+        val addressLine = address.getAddressLine(0)
+
+        val adminArea = loadAdmin(address, addressLine)
+        val locality = loadLocality(addressLine)
+        val thoroughfare = loadThoroughfare(addressLine)
 
         makeUserAddress(adminArea, locality, thoroughfare)
     }
@@ -38,6 +43,37 @@ class SettingMyLocationViewModel(
             submitInValidLocation()
         }
 
+    private fun loadAdmin(
+        address: Address,
+        addressLine: String,
+    ): String {
+        val admin = address.adminArea ?: address.adminArea ?: findAdminAddress(addressLine)
+        addressList.add(admin)
+        return admin
+    }
+
+    private fun loadLocality(
+        addressLine: String,
+    ): String {
+        val locality = findAddressElement(
+            addressLine,
+            LOCALITY_SPLIT
+        )
+        addressList.add(locality)
+        return locality
+    }
+
+    private fun loadThoroughfare(
+        addressLine: String,
+    ): String {
+        val thoroughfare = findAddressElement(
+            addressLine,
+            THOROUGH_FARE_SPLIT
+        )
+        addressList.add(thoroughfare)
+        return thoroughfare
+    }
+
     private fun makeUserAddress(
         adminArea: String,
         locality: String,
@@ -45,7 +81,7 @@ class SettingMyLocationViewModel(
     ): UserAddress {
         return UserAddress(
             adminArea = adminArea,
-            subLocality = locality ,
+            subLocality = locality,
             thoroughfare = thoroughfare,
         )
     }
@@ -92,6 +128,36 @@ class SettingMyLocationViewModel(
             }
     }
 
+    private fun findAddressElement(
+        addressLine: String,
+        delimiterChar: String,
+    ): String {
+        val addressElements = addressLine.split(ADDRESS_LINE_SPLIT)
+
+        val delimiterChars = delimiterChar.toSet()
+
+        return addressElements.first { element ->
+            isValidAddressElements(delimiterChars, element)
+        }
+    }
+
+    private fun findAdminAddress(addressLine: String): String {
+        val addressElements = addressLine.split(ADDRESS_LINE_SPLIT)
+
+        val delimiterStrings = ADMIN_SPLIT.split(ADDRESS_LINE_SPLIT).toSet()
+
+        return addressElements.first { element ->
+            delimiterStrings.any { delimiter -> delimiter in element }
+        }
+    }
+
+    private fun isValidAddressElements(
+        delimiterChars: Set<Char>,
+        element: String,
+    ): Boolean {
+        return element.last() in delimiterChars && !addressList.contains(element)
+    }
+
     companion object {
         fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
@@ -100,5 +166,10 @@ class SettingMyLocationViewModel(
                 )
             }
         }
+
+        private const val ADDRESS_LINE_SPLIT = " "
+        private const val ADMIN_SPLIT = "도 특별시 자치시"
+        private const val LOCALITY_SPLIT = "시군구읍면"
+        private const val THOROUGH_FARE_SPLIT = "읍면동리로"
     }
 }
