@@ -5,9 +5,9 @@ import com.happy.friendogly.remote.model.request.WalkStatusRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.FootprintInfoResponse
 import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
-import com.happy.friendogly.remote.model.response.FootprintSaveResponse
 import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.FootprintsNearResponse
+import com.happy.friendogly.remote.model.response.MyFootprintResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -19,7 +19,7 @@ interface WoofService {
     @POST(ApiClient.Footprints.POST_FOOTPRINT)
     suspend fun postFootprint(
         @Body request: FootprintRequest,
-    ): BaseResponse<FootprintSaveResponse>
+    ): BaseResponse<MyFootprintResponse>
 
     @PATCH(ApiClient.Footprints.PATCH_FOOTPRINT_WALK_STATUS)
     suspend fun patchWalkStatus(

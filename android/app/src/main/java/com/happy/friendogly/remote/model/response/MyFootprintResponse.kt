@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FootprintSaveResponse(
+data class MyFootprintResponse(
     val id: Long,
     val latitude: Double,
     val longitude: Double,
