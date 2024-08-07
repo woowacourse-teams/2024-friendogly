@@ -30,7 +30,7 @@ public class KakaoMemberService {
     }
 
     public KakaoLoginResponse login(KakaoLoginRequest request) {
-        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).sub();
+        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).id();
 
         Optional<KakaoMember> kakaoMemberOptional = kakaoMemberRepository.findByKakaoMemberId(kakaoMemberId);
         if (kakaoMemberOptional.isPresent()) {

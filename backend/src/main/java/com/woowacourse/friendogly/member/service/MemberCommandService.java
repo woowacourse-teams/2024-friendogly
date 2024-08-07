@@ -46,7 +46,8 @@ public class MemberCommandService {
             imageUrl = fileStorageManager.uploadFile(image);
         }
 
-        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).sub();
+        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).id();
+        System.out.println("===============" + kakaoMemberId + "============");
 
         Member member = Member.builder()
                 .name(request.name())

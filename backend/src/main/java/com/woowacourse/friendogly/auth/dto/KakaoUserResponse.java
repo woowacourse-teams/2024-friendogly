@@ -1,5 +1,5 @@
 package com.woowacourse.friendogly.auth.dto;
 
-public record KakaoUserResponse(String sub) {
+public record KakaoUserResponse(String id) {
 
 }
