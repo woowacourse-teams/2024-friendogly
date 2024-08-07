@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.woof
 
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.woof.mapper.toPetDetailsPresentation
 import com.happy.friendogly.presentation.ui.woof.mapper.toWalkStatusPresentation
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoWalkStatusUiModel
@@ -36,11 +35,11 @@ class WoofViewModel(
     private val _nearFootprints: MutableLiveData<List<Footprint>> = MutableLiveData()
     val nearFootprints: LiveData<List<Footprint>> get() = _nearFootprints
 
-    private val _myFootprint: MutableLiveData<FootprintSave?> = MutableLiveData()
-    val myFootprint: LiveData<FootprintSave?> get() = _myFootprint
+    private val _myFootprint: MutableLiveData<MyFootprint?> = MutableLiveData()
+    val myFootprint: LiveData<MyFootprint?> get() = _myFootprint
 
-    private val _myWalkStatus: MutableLiveData<WalkStatus> = MutableLiveData()
-    val myWalkStatus: LiveData<WalkStatus> get() = _myWalkStatus
+    private val _myWalkStatus: MutableLiveData<WalkStatus?> = MutableLiveData()
+    val myWalkStatus: LiveData<WalkStatus?> get() = _myWalkStatus
 
     private val _footprintInfoWalkStatus: MutableLiveData<FootprintInfoWalkStatusUiModel> =
         MutableLiveData()
@@ -66,17 +65,18 @@ class WoofViewModel(
                 latLng.longitude,
             ).onSuccess { nearFootprints ->
                 val myFootprint = nearFootprints.find { footprint -> footprint.isMine }
-                _myFootprint.value =
-                    if (myFootprint != null) {
-                        FootprintSave(
+                if (myFootprint != null) {
+                    _myFootprint.value =
+                        MyFootprint(
                             footprintId = myFootprint.footprintId,
                             latitude = myFootprint.latitude,
                             longitude = myFootprint.longitude,
                             createdAt = myFootprint.createdAt,
                         )
-                    } else {
-                        null
-                    }
+                } else {
+                    _myFootprint.value = null
+                    _myWalkStatus.value = null
+                }
                 _nearFootprints.value = nearFootprints.filter { footprint -> !footprint.isMine }
             }.onFailure {
             }
@@ -108,24 +108,26 @@ class WoofViewModel(
                 _myFootprint.value = footprintSave
                 _mapActions.value = Event(WoofMapActions.RemoveNearFootprints)
                 _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
-                _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
+                _myWalkStatus.value = WalkStatus.BEFORE
+                loadNearFootprints(latLng)
             }.onFailure {
             }
         }
     }
 
-    fun resetWalkStatus() {
-        _myWalkStatus.value = WalkStatus.BEFORE
-    }
-
     fun updateWalkStatus(latLng: LatLng) {
         viewModelScope.launch {
             patchWalkStatusUseCase(latLng.latitude, latLng.longitude).onSuccess { walkStatus ->
-                Log.e("chad", "walkStatus: $walkStatus")
                 when (walkStatus) {
-                    WalkStatus.BEFORE -> return@onSuccess
+                    WalkStatus.BEFORE -> {
+                        if (myWalkStatus.value == null) {
+                            _myWalkStatus.value = WalkStatus.BEFORE
+                            _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
+                        }
+                    }
+
                     WalkStatus.ONGOING -> {
-                        if (myWalkStatus.value == WalkStatus.BEFORE) {
+                        if (myWalkStatus.value == null || myWalkStatus.value == WalkStatus.BEFORE) {
                             _myWalkStatus.value = WalkStatus.ONGOING
                             _snackbarActions.emit(
                                 WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar,

@@ -6,7 +6,7 @@ import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
-import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.remote.model.request.FootprintRequest
 import com.happy.friendogly.remote.model.request.WalkStatusRequest
@@ -15,7 +15,7 @@ class WoofRepositoryImpl(private val source: WoofDataSource) : WoofRepository {
     override suspend fun postFootprint(
         latitude: Double,
         longitude: Double,
-    ): Result<FootprintSave> {
+    ): Result<MyFootprint> {
         return source.postFootprint(
             FootprintRequest(
                 latitude = latitude,

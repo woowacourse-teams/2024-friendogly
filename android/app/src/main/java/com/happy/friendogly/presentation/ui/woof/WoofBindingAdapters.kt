@@ -139,8 +139,10 @@ fun TextView.bindWalkStatusTime(
                 }
 
                 WalkStatus.AFTER -> {
+                    val afterHour = changedWalkStatusTime.hour
+                    val afterMinute = changedWalkStatusTime.minute
                     Pair(
-                        resources.getString(R.string.woof_walk_after, hour, minute),
+                        resources.getString(R.string.woof_walk_after, afterHour, afterMinute),
                         resources.getColor(R.color.gray500),
                     )
                 }

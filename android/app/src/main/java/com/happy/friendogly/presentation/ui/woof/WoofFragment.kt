@@ -37,7 +37,7 @@ import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerR
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.FootprintSave
+import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -282,12 +282,10 @@ class WoofFragment :
             markNearFootprints(nearFootprints)
         }
 
-        viewModel.myFootprint.observe(viewLifecycleOwner) { footprintSave ->
+        viewModel.myFootprint.observe(viewLifecycleOwner) { myFootprint ->
             myMarker?.map = null
-            if (footprintSave != null) {
-                createMyMarker(footprintSave)
-                viewModel.resetWalkStatus()
-                startTimerAndUpdateWalkStatus()
+            if (myFootprint != null) {
+                createMyMarker(myFootprint)
             } else {
                 myMarker = null
                 timer?.cancel()
@@ -295,8 +293,13 @@ class WoofFragment :
         }
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { walkStatus ->
-            if (walkStatus == WalkStatus.AFTER) {
+            Log.e("chad", "walkStatus: $walkStatus")
+            if (walkStatus == null || walkStatus == WalkStatus.AFTER) {
                 timer?.cancel()
+            }
+
+            if (walkStatus != WalkStatus.AFTER) {
+                startTimerAndUpdateWalkStatus()
             }
         }
 
@@ -354,17 +357,13 @@ class WoofFragment :
                     )
                 }
 
-                is ShowMarkerRegistered ->
-                    showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
 
-                is ShowInvalidLocationSnackbar ->
-                    showSnackbar(resources.getString(R.string.woof_location_load_fail))
+                is ShowInvalidLocationSnackbar -> showSnackbar(resources.getString(R.string.woof_location_load_fail))
 
-                is ShowOnGoingWalkStatusSnackbar ->
-                    showSnackbar(resources.getString(R.string.woof_ongoing_walk_status))
+                is ShowOnGoingWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_ongoing_walk_status))
 
-                is ShowAfterWalkStatusSnackbar ->
-                    showSnackbar(resources.getString(R.string.woof_after_walk_status))
+                is ShowAfterWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_after_walk_status))
             }
         }
     }
@@ -403,7 +402,7 @@ class WoofFragment :
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
             viewModel.loadNearFootprints(latLng)
-            initMyMarker()
+            viewModel.updateWalkStatus(latLng)
             moveCameraCenterPosition(latLng)
             map.locationTrackingMode = LocationTrackingMode.Follow
             Handler(Looper.getMainLooper()).postDelayed(
@@ -427,43 +426,26 @@ class WoofFragment :
 
     private fun setUpCircleOverlay(latLng: LatLng) {
         circleOverlay.center = latLng
-        circleOverlay.radius = ONGOING_WALKING_RADIUS
+        circleOverlay.radius = WALKING_RADIUS
         circleOverlay.color = resources.getColor(R.color.map_circle, null)
         circleOverlay.map = map
     }
 
     private fun moveCameraCenterPosition(position: LatLng) {
-        val cameraUpdate =
-            CameraUpdate.scrollTo(position)
-                .animate(CameraAnimation.Easing)
+        val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
 
         map.moveCamera(cameraUpdate)
     }
 
-    private fun initMyMarker() {
-        val myFootprint =
-            viewModel.nearFootprints.value?.firstOrNull { footprint -> footprint.isMine }
-        if (myFootprint != null) {
-            createMyMarker(
-                FootprintSave(
-                    footprintId = myFootprint.footprintId,
-                    latitude = myFootprint.latitude,
-                    longitude = myFootprint.longitude,
-                    createdAt = myFootprint.createdAt,
-                ),
-            )
-        }
-    }
-
-    private fun createMyMarker(footprintSave: FootprintSave) {
+    private fun createMyMarker(myFootprint: MyFootprint) {
         val marker = Marker()
-        marker.position = LatLng(footprintSave.latitude, footprintSave.longitude)
+        marker.position = LatLng(myFootprint.latitude, myFootprint.longitude)
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
-        marker.zIndex = footprintSave.createdAt.toZIndex()
+        marker.zIndex = myFootprint.createdAt.toZIndex()
         marker.map = map
-        clickFootprint(footprintId = footprintSave.footprintId, marker = marker)
+        clickFootprint(footprintId = myFootprint.footprintId, marker = marker)
 
         myMarker = marker
         setUpCircleOverlay(marker.position)
@@ -516,24 +498,19 @@ class WoofFragment :
     private fun animateView(view: View) {
         view.apply {
             translationY = height.toFloat()
-            animate()
-                .translationY(0f)
-                .setDuration(ANIMATE_DURATION_MILLIS)
-                .setListener(
-                    object : AnimatorListenerAdapter() {
-                        override fun onAnimationStart(animation: Animator) {
-                            isVisible = true
-                            bringToFront()
-                        }
-                    },
-                )
+            animate().translationY(0f).setDuration(ANIMATE_DURATION_MILLIS).setListener(
+                object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator) {
+                        isVisible = true
+                        bringToFront()
+                    }
+                },
+            )
         }
     }
 
     private fun hideViewAnimation(view: View) {
-        view.animate()
-            .translationY(view.height.toFloat())
-            .setDuration(ANIMATE_DURATION_MILLIS)
+        view.animate().translationY(view.height.toFloat()).setDuration(ANIMATE_DURATION_MILLIS)
             .setListener(
                 object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
@@ -556,7 +533,8 @@ class WoofFragment :
 
     private fun showRegisterMarkerLayout() {
         myMarker?.map = null
-        circleOverlay.center = map.cameraPosition.target
+        setUpCircleOverlay(map.cameraPosition.target)
+
         getAddress(map.cameraPosition.target)
 
         showViewAnimation(binding.layoutWoofRegisterMarker)
@@ -573,7 +551,11 @@ class WoofFragment :
             if (marker.map == null) {
                 marker.map = map
             }
-            setUpCircleOverlay(marker.position)
+            circleOverlay.center = marker.position
+        }
+
+        if (myMarker == null) {
+            circleOverlay.map = null
         }
 
         hideViewAnimation(binding.layoutWoofRegisterMarker)
@@ -648,23 +630,24 @@ class WoofFragment :
                         distanceResults,
                     )
                     val distance = distanceResults[0]
-
+                    Log.e("chad", "distance: ${distanceResults[0]}")
                     if (startWalking(distance) || endWalking(distance)) {
-                        Log.e("chad", "distance: ${distanceResults[0]}")
                         viewModel.updateWalkStatus(latLng)
                     }
                 }
             }
     }
 
-    private fun startWalking(distance: Float): Boolean =
-        viewModel.myWalkStatus.value == WalkStatus.BEFORE && distance <= ONGOING_WALKING_RADIUS
+    private fun startWalking(distance: Float): Boolean {
+        return viewModel.myWalkStatus.value == WalkStatus.BEFORE && distance <= WALKING_RADIUS
+    }
 
-    private fun endWalking(distance: Float): Boolean = viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > AFTER_WALKING_RADIUS
+    private fun endWalking(distance: Float): Boolean {
+        return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    }
 
     companion object {
-        private const val ONGOING_WALKING_RADIUS = 1000.0
-        private const val AFTER_WALKING_RADIUS = 1500.0
+        private const val WALKING_RADIUS = 1000.0
         private const val MIN_ZOOM = 10.0
         private const val MAX_ZOOM = 20.0
         private const val MARKER_WIDTH = 72
@@ -674,6 +657,6 @@ class WoofFragment :
         private const val LOADING_DELAY_MILLIS = 2000L
         private const val ANIMATE_DURATION_MILLIS = 300L
         private const val MARKER_CLICKED_CAMERA_LATITUDE_UP = 0.0025
-        private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
+        private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 3000L
     }
 }
