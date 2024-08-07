@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter" />
+
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.group.list.GroupListViewModel" />
@@ -22,16 +24,20 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            onSingleClick="@{()->vm.addMyLocation()}"
+            android:id="@+id/linear_layout_group_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:gravity="center"
             android:orientation="horizontal"
+            app:address="@{vm.myAddress}"
             app:layout_constraintBottom_toBottomOf="@id/view_group_list_top_bar"
             app:layout_constraintStart_toStartOf="@id/view_group_list_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">
 
             <TextView
+                android:text="@{vm.myAddress.thoroughfare}"
                 style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,20 +56,90 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="15dp"
             android:src="@drawable/ic_alarm"
             app:layout_constraintBottom_toBottomOf="@id/view_group_list_top_bar"
             app:layout_constraintEnd_toEndOf="@id/view_group_list_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar" />
 
         <include
-            app:vm = "@{vm}"
-            android:id="@+id/include_group_list_filter"
-            layout="@layout/include_group_selector"
+            android:id="@+id/include_group_list_participation_filter"
+            layout="@layout/include_group_filter"
+            onSingleClick="@{()->vm.selectParticipationFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:filterName="@{vm.participationFilter.filterName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_group_list_top_bar" />
+
+        <include
+            android:id="@+id/include_group_list_size_filter"
+            layout="@layout/include_group_filter"
+            onSingleClick="@{()->vm.selectSizeFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:filterName="@{GroupFilter.SIZE_FILTER_SUBJECT}"
+            app:layout_constraintStart_toEndOf="@id/include_group_list_participation_filter"
+            app:layout_constraintTop_toBottomOf="@+id/view_group_list_top_bar" />
+
+        <include
+            android:id="@+id/include_group_list_gender_filter"
+            layout="@layout/include_group_filter"
+            onSingleClick="@{()->vm.selectGenderFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:filterName="@{GroupFilter.GENDER_FILTER_SUBJECT}"
+            app:layout_constraintStart_toEndOf="@id/include_group_list_size_filter"
+            app:layout_constraintTop_toBottomOf="@+id/view_group_list_top_bar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_group_list_filter"
             android:layout_width="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/swipe_refresh_layout_group_list"
+            app:layout_constraintTop_toBottomOf="@id/include_group_list_participation_filter"
+            tools:listitem="@layout/item_select_filter" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_group_list"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/view_group_list_top_bar" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rcv_group_list_filter">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/include_group_list"
+                    layout="@layout/include_group_list_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_group_address"
+                    layout="@layout/include_group_not_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_group_data"
+                    layout="@layout/include_group_not_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:vm="@{vm}" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ImageButton
             onSingleClick="@{()->vm.addGroup()}"

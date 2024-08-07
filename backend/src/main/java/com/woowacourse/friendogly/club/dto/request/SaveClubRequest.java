@@ -1,7 +1,5 @@
 package com.woowacourse.friendogly.club.dto.request;
 
-import com.woowacourse.friendogly.pet.domain.Gender;
-import com.woowacourse.friendogly.pet.domain.SizeType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,20 +17,26 @@ public record SaveClubRequest(
         @Size(min = 1, max = 1000, message = "본문은 1글자 1000글자 사이입니다.")
         String content,
 
-        @NotBlank(message = "주소를 읽을 수 없습니다. 다시 시도해주세요.")
-        String address,
+        @NotBlank(message = "도/광역시/특별시 정보는 필수 값입니다.")
+        String province,
 
-        @NotEmpty(message = "모임에 참여가능한 성별을 선택해주세요.")
-        Set<Gender> allowedGenders,
+        @NotBlank(message = "시/군/구 정보는 필수 값입니다.")
+        String city,
 
-        @NotEmpty(message = "모임에 참여가능한 댕댕이 사이즈를 선택해주세요.")
-        Set<SizeType> allowedSizes,
+        @NotBlank(message = "읍/면/동 정보는 필수 값입니다.")
+        String village,
+
+        @NotEmpty(message = "모임에 참여가능한 반려견 성별을 선택해주세요.")
+        Set<String> allowedGenders,
+
+        @NotEmpty(message = "모임에 참여가능한 반려견 사이즈를 선택해주세요.")
+        Set<String> allowedSizes,
 
         @Min(value = 1, message = "모임 최대 인원은 1명 이상입니다.")
         @Max(value = 5, message = "모임 최대 인원은 5명 이하입니다.")
         int memberCapacity,
 
-        @NotEmpty(message = "모임에 참여할 댕댕이를 선택해주세요.")
+        @NotEmpty(message = "모임에 참여할 반려견을 선택해주세요.")
         List<Long> participatingPetsId
 ) {
 

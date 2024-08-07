@@ -4,10 +4,12 @@ import com.woowacourse.friendogly.auth.Auth;
 import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.woowacourse.friendogly.footprint.service.FootprintCommandService;
 import com.woowacourse.friendogly.footprint.service.FootprintQueryService;
 import jakarta.validation.Valid;
@@ -15,6 +17,7 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,5 +77,14 @@ public class FootprintController {
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
+    }
+
+    @PatchMapping("/walk-status")
+    public ApiResponse<UpdateWalkStatusResponse> updateWalkStatus(
+            @Auth Long memberId,
+            @Valid @RequestBody UpdateWalkStatusRequest request
+    ) {
+        UpdateWalkStatusResponse walkStatusResponse = footprintCommandService.updateWalkStatus(memberId, request);
+        return ApiResponse.ofSuccess(walkStatusResponse);
     }
 }

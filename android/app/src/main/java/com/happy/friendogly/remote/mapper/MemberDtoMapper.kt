@@ -9,5 +9,6 @@ fun MemberResponse.toData(): MemberDto {
         name = name,
         tag = tag,
         email = email,
+        imageUrl = imageUrl,
     )
 }

@@ -2,15 +2,19 @@ package com.happy.friendogly.presentation.ui.group.select
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
+class DogSelectViewModel(
+    private val getPetsMineUseCase: GetPetsMineUseCase,
+) : BaseViewModel(), DogSelectActionHandler {
     private val _dogs: MutableLiveData<List<DogSelectUiModel>> = MutableLiveData()
     val dogs: LiveData<List<DogSelectUiModel>> get() = _dogs
 
@@ -29,59 +33,33 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
         this.filters = filters
     }
 
-    // TODO: romove sample
     private fun loadMyDogs() =
         viewModelScope.launch {
-            delay(1000)
-            _dogs.value =
-                listOf(
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 1",
-                        gender = GroupFilter.GenderFilter.Female,
-                        size = GroupFilter.SizeFilter.BigDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 2",
-                        gender = GroupFilter.GenderFilter.Female,
-                        size = GroupFilter.SizeFilter.BigDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 3",
-                        gender = GroupFilter.GenderFilter.Male,
-                        size = GroupFilter.SizeFilter.MediumDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 4",
-                        gender = GroupFilter.GenderFilter.Male,
-                        size = GroupFilter.SizeFilter.SmallDog,
-                    ),
-                    DogSelectUiModel(
-                        id = 0L,
-                        profileImage = "",
-                        name = "강아지 5",
-                        gender = GroupFilter.GenderFilter.NeutralizingFemale,
-                        size = GroupFilter.SizeFilter.MediumDog,
-                    ),
-                )
+            getPetsMineUseCase()
+                .onSuccess { pets ->
+                    _dogs.value =
+                        pets.map { pet ->
+                            pet.toDogSelectUiModel()
+                        }
+                }
+                .onFailure {
+                    _dogSelectEvent.emit(DogSelectEvent.FailLoadDog)
+                }
         }
 
     override fun selectDog(dogSelectUiModel: DogSelectUiModel) {
         if (selectedDogs.contains(dogSelectUiModel)) {
             removeDog(dogSelectUiModel)
         } else {
-            if (isValidDogFilter(dogSelectUiModel)) {
-                addDog(dogSelectUiModel)
-            } else {
-                _dogSelectEvent.emit(DogSelectEvent.PreventSelection(dogSelectUiModel.name))
-            }
+            applyValidDog(dogSelectUiModel)
+        }
+    }
+
+    private fun applyValidDog(dogSelectUiModel: DogSelectUiModel) {
+        if (isValidDogFilter(dogSelectUiModel)) {
+            addDog(dogSelectUiModel)
+        } else {
+            _dogSelectEvent.emit(DogSelectEvent.PreventSelection(dogSelectUiModel.name))
         }
     }
 
@@ -112,5 +90,15 @@ class DogSelectViewModel : BaseViewModel(), DogSelectActionHandler {
 
     override fun cancelSelection() {
         _dogSelectEvent.emit(DogSelectEvent.CancelSelection)
+    }
+
+    companion object {
+        fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                DogSelectViewModel(
+                    getPetsMineUseCase = getPetsMineUseCase,
+                )
+            }
+        }
     }
 }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="petDetail"
+            type="com.happy.friendogly.presentation.ui.petdetail.PetDetail" />
+
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/iv_dog_profile"
+            urlToImage="@{petDetail.imageUrl}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_acorm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:src="@drawable/img_acorm" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rect_black_gradient_fill"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_dog_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_dog_name"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="@{petDetail.name}"
+                android:textColor="@color/white"
+                android:textSize="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_dog_description"
+                app:layout_constraintStart_toStartOf="@+id/tv_dog_description"
+                tools:text="도토리" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_birthday"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/white"
+                app:age="@{petDetail.age}"
+                app:isAtLeastOneYearOld="@{petDetail.isAtLeastOneYearOld}"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_dog_name"
+                app:layout_constraintStart_toEndOf="@+id/tv_dog_name"
+                app:layout_constraintTop_toTopOf="@+id/tv_dog_name"
+                tools:text="(2개월)" />
+
+            <ImageView
+                android:id="@+id/iv_dog_gender"
+                genderDrawable="@{petDetail.gender}"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_dog_birthday"
+                app:layout_constraintStart_toEndOf="@+id/tv_dog_birthday"
+                app:layout_constraintTop_toTopOf="@+id/tv_dog_birthday"
+                tools:src="@drawable/img_dog_male" />
+
+
+            <TextView
+                android:id="@+id/tv_dog_description"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{petDetail.description}"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/tv_dog_size"
+                app:layout_constraintStart_toStartOf="@+id/tv_dog_size"
+                tools:text="우리 강아지는 사람을 좋아해요" />
+
+            <TextView
+                android:id="@+id/tv_dog_size"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                app:dogSize="@{petDetail.sizeType}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_dog_neutering"
+                app:layout_constraintStart_toStartOf="@+id/tv_dog_neutering"
+                tools:text="소형견이에요" />
+
+            <TextView
+                android:id="@+id/tv_dog_neutering"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="60dp"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:neuteredTitle="@{petDetail.gender}"
+                tools:text="중성화를 했어요" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

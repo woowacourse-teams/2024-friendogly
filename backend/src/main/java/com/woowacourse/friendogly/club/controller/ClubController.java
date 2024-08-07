@@ -1,11 +1,11 @@
 package com.woowacourse.friendogly.club.controller;
 
 import com.woowacourse.friendogly.auth.Auth;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.woowacourse.friendogly.club.dto.request.SaveClubRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.woowacourse.friendogly.club.dto.response.FindClubResponse;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.woowacourse.friendogly.club.dto.response.SaveClubResponse;
 import com.woowacourse.friendogly.club.service.ClubCommandService;
@@ -44,9 +44,9 @@ public class ClubController {
     }
 
     @GetMapping("/searching")
-    public ApiResponse<List<FindSearchingClubResponse>> findByFilter(
+    public ApiResponse<List<FindClubByFilterResponse>> findByFilter(
             @Auth Long memberId,
-            @Valid @ModelAttribute FindSearchingClubRequest request
+            @Valid @ModelAttribute FindClubByFilterRequest request
     ) {
         return ApiResponse.ofSuccess(clubQueryService.findFindByFilter(memberId, request));
     }

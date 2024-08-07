@@ -19,6 +19,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private val viewModel: RegisterViewModel by viewModels {
         RegisterViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase,
             getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
         )
@@ -72,7 +73,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
                     startActivity(
-                        ProfileSettingActivity.getIntent(this),
+                        ProfileSettingActivity.getIntent(this, null),
                     )
             }
         }

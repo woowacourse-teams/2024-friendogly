@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.footprint.domain;
 
-import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 
 import com.woowacourse.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Footprint {
 
+    private static final int NEAR_RADIUS_AS_METER = 400_000;
     private static final int RADIUS_AS_METER = 1000;
 
     @Id
@@ -59,11 +61,15 @@ public class Footprint {
             Member member,
             Location location
     ) {
-        this.member = member;
-        this.location = location;
-        this.walkStatus = BEFORE;
-        this.createdAt = LocalDateTime.now();
-        this.isDeleted = false;
+        this(
+                member,
+                location,
+                WalkStatus.BEFORE,
+                null,
+                null,
+                LocalDateTime.now(),
+                false
+        );
     }
 
     public Footprint(
@@ -72,7 +78,8 @@ public class Footprint {
             WalkStatus walkStatus,
             LocalDateTime startWalkTime,
             LocalDateTime endWalkTime,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean isDeleted
     ) {
         this.member = member;
         this.location = location;
@@ -80,10 +87,14 @@ public class Footprint {
         this.startWalkTime = startWalkTime;
         this.endWalkTime = endWalkTime;
         this.createdAt = createdAt;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
     }
 
     public boolean isNear(Location location) {
+        return this.location.isWithin(location, NEAR_RADIUS_AS_METER);
+    }
+
+    public boolean isInsideBoundary(Location location) {
         return this.location.isWithin(location, RADIUS_AS_METER);
     }
 
@@ -104,5 +115,24 @@ public class Footprint {
             return startWalkTime;
         }
         return endWalkTime;
+    }
+
+    public void updateWalkStatusWithCurrentLocation(Location currentLocation) {
+        if (walkStatus.isBefore() && isInsideBoundary(currentLocation)) {
+            startWalk();
+        }
+        if (walkStatus.isOngoing() && !isInsideBoundary(currentLocation)) {
+            endWalk();
+        }
+    }
+
+    private void startWalk() {
+        walkStatus = ONGOING;
+        startWalkTime = LocalDateTime.now();
+    }
+
+    private void endWalk() {
+        walkStatus = AFTER;
+        endWalkTime = LocalDateTime.now();
     }
 }

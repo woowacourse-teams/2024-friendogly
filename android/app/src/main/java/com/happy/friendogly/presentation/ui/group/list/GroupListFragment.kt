@@ -1,8 +1,10 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentGroupListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
@@ -13,7 +15,12 @@ import com.happy.friendogly.presentation.ui.group.list.adapter.group.GroupListAd
 import com.happy.friendogly.presentation.ui.group.list.adapter.selectfilter.SelectFilterAdapter
 
 class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragment_group_list) {
-    private val viewModel: GroupListViewModel by viewModels()
+    private val viewModel: GroupListViewModel by viewModels<GroupListViewModel> {
+        GroupListViewModel.factory(
+            getAddressUseCase = AppModule.getInstance().getAddressUseCase,
+            searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
+        )
+    }
 
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as GroupListActionHandler)
@@ -25,22 +32,24 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
     override fun initViewCreated() {
         initDataBinding()
         initAdapter()
+        initStateObserver()
         initObserver()
     }
 
     private fun initDataBinding() {
         binding.vm = viewModel
-        with(binding.includeGroupListFilter.swipeRefreshLayoutGroupList) {
+
+        with(binding.swipeRefreshLayoutGroupList) {
             setOnRefreshListener {
-                viewModel.loadGroups()
+                viewModel.loadGroupWithAddress()
                 isRefreshing = false
             }
         }
     }
 
     private fun initAdapter() {
-        binding.includeGroupListFilter.rcvGroupListFilter.adapter = filterAdapter
-        binding.includeGroupListFilter.rcvGroupListGroup.adapter = groupAdapter
+        binding.rcvGroupListFilter.adapter = filterAdapter
+        binding.includeGroupList.rcvGroupListGroup.adapter = groupAdapter
     }
 
     private fun initObserver() {
@@ -87,6 +96,34 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                         DialogFragment.STYLE_NORMAL,
                         R.style.RoundCornerBottomSheetDialogTheme,
                     )
+                }
+
+                GroupListEvent.Navigation.NavigateToAddress ->
+                    (activity as MainActivityActionHandler).navigateToSettingLocation()
+            }
+        }
+    }
+
+    private fun initStateObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                GroupListUiState.Init -> {
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.VISIBLE
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                }
+
+                GroupListUiState.NotAddress -> {
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility =
+                        View.VISIBLE
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
+                }
+
+                GroupListUiState.NotData -> {
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.VISIBLE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
                 }
             }
         }

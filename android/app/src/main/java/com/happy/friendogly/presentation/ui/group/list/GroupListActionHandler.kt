@@ -14,4 +14,6 @@ interface GroupListActionHandler {
     fun selectGenderFilter()
 
     fun removeFilter(groupFilter: GroupFilter)
+
+    fun addMyLocation()
 }

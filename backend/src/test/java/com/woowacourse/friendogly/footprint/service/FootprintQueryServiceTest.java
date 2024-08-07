@@ -43,7 +43,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         );
     }
 
-    @DisplayName("현재 위치 기준 1km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
+    @DisplayName("현재 위치 기준 400km 이내 발자국의 수가 1개일 때, 1개의 발자국만 조회된다.")
     @Test
     void findNear() {
         // given
@@ -66,16 +66,14 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         .build()
         );
 
-        double nearLongitude = 0.008993216;
-        double farLongitude = 0.009001209;
+        double nearLongitude = LONGITUDE_WITH_METER_FROM_ZERO(399_500);
+        double farLongitude = LONGITUDE_WITH_METER_FROM_ZERO(400_500);
 
-        // 999m 떨어진 발자국 저장
         footprintCommandService.save(
                 member.getId(),
                 new SaveFootprintRequest(0.0, nearLongitude)
         );
 
-        // 1001m 떨어진 발자국 저장
         footprintCommandService.save(
                 otherMember.getId(),
                 new SaveFootprintRequest(0.0, farLongitude)
@@ -111,12 +109,27 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                 member.getId(), new FindNearFootprintRequest(0.0, 0.0));
 
         // then
-        assertAll(
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::latitude)
-                        .containsExactly(0.00000, 0.00000),
-                () -> assertThat(nearFootprints).extracting(FindNearFootprintResponse::longitude)
-                        .containsExactly(0.00000, 0.00000)
+        assertThat(nearFootprints.size()).isEqualTo(2);
+    }
+
+    @DisplayName("주변 발자국 조회시 삭제된 발자국은 조회되지 않는다.")
+    @Test
+    void findNearExceptDeletedFootprint() {
+        // given
+        footprintRepository.saveAll(
+                List.of(
+                        FOOTPRINT(),
+                        FOOTPRINT_DELETED(),
+                        FOOTPRINT_DELETED()
+                )
         );
+
+        // when
+        List<FindNearFootprintResponse> nearFootprints = footprintQueryService.findNear(
+                member.getId(), new FindNearFootprintRequest(0.0, 0.0));
+
+        // then
+        assertThat(nearFootprints).hasSize(1);
     }
 
     @DisplayName("마지막으로 발자국을 찍은 시간을 조회할 수 있다. (발자국 O, 강아지 O)")

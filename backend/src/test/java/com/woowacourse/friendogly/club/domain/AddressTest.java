@@ -14,7 +14,7 @@ class AddressTest {
     @DisplayName("모임 위치 생성 테스트")
     @Test
     void create() {
-        assertThatCode(() -> new Address("서울특별시 송파구 신청동"))
+        assertThatCode(() -> new Address("서울특별시", "송파구", "신천동"))
                 .doesNotThrowAnyException();
     }
 
@@ -22,9 +22,8 @@ class AddressTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create_Fail_NullAndEmptyAddress(String addressInput) {
-        assertThatThrownBy(() -> new Address(addressInput))
+        assertThatThrownBy(() -> new Address(addressInput, "송파구", "신천동"))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임 주소는 필수입니다.");
     }
-
 }

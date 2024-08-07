@@ -4,7 +4,9 @@ import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
+import com.woowacourse.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
@@ -76,5 +78,15 @@ public class FootprintCommandService {
         if (exists) {
             throw new FriendoglyException(String.format("마지막 발자국을 찍은 뒤 %d초가 경과되지 않았습니다.", FOOTPRINT_COOLDOWN_SECOND));
         }
+    }
+
+    public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
+        Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
+        if (footprint.isDeleted()) {
+            throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
+        }
+
+        footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
+        return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
 }

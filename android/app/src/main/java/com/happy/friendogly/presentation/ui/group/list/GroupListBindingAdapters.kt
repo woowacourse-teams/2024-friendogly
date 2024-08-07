@@ -1,10 +1,14 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
+import com.happy.friendogly.domain.model.UserAddress
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
-import java.time.LocalDateTime
 
 @BindingAdapter("applyParticipable")
 fun TextView.bindParticipableType(isParticipable: Boolean) {
@@ -20,8 +24,8 @@ fun TextView.bindParticipableType(isParticipable: Boolean) {
 fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
     dateTime ?: return
 
-    val now = LocalDateTime.now()
-    val duration = Duration.between(dateTime, now)
+    val now = java.time.LocalDateTime.now()
+    val duration = Duration.between(dateTime.toJavaLocalDateTime(), now)
 
     val minutes = duration.toMinutes()
     val hours = duration.toHours()
@@ -36,4 +40,14 @@ fun TextView.bindGroupDateTime(dateTime: LocalDateTime?) {
         }
 
     this.text = formattedString
+}
+
+@BindingAdapter("address")
+fun LinearLayout.bindMyLocation(userAddress: UserAddress?) {
+    this.visibility =
+        if (userAddress == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }

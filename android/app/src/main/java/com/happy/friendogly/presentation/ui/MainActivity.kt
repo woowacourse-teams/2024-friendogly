@@ -10,13 +10,18 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
-import com.happy.friendogly.presentation.ui.dogdetail.DogDetailActivity
 import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
 import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
+import com.happy.friendogly.presentation.ui.mylocation.SettingMyLocationActivity
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
-import com.happy.friendogly.presentation.ui.registerdog.RegisterDogActivity
+import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
+import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
 
@@ -96,16 +101,27 @@ class MainActivity :
         startActivity(GroupAddActivity.getIntent(this))
     }
 
-    override fun navigateToRegisterDog() {
-        startActivity(RegisterDogActivity.getIntent(this))
+    override fun navigateToRegisterPet(petProfile: PetProfile?) {
+        startActivity(RegisterPetActivity.getIntent(this, petProfile))
     }
 
-    override fun navigateToDogDetail() {
-        startActivity(DogDetailActivity.getIntent(this))
+    override fun navigateToProfileSetting(profile: Profile?) {
+        startActivity(ProfileSettingActivity.getIntent(this, profile))
+    }
+
+    override fun navigateToPetDetail(
+        currentPage: Int,
+        petsDetail: PetsDetail,
+    ) {
+        startActivity(PetDetailActivity.getIntent(this, currentPage, petsDetail))
     }
 
     override fun navigateToSetting() {
         startActivity(SettingActivity.getIntent(this))
+    }
+
+    override fun navigateToSettingLocation() {
+        startActivity(SettingMyLocationActivity.getIntent(this))
     }
 
     override fun onBackPressed() {

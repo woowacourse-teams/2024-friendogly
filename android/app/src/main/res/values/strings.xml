@@ -18,7 +18,9 @@
     <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
     <string name="profile_setting_profile_pic">프로필 사진</string>
     <string name="make_profile_title">프로필 만들기</string>
+    <string name="make_profile_edit_title">프로필 수정하기</string>
     <string name="make_profile_edit_btn_title">선택 완료!</string>
+    <string name="user_name_length">%d/15</string>
 
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
@@ -43,6 +45,12 @@
     <string name="club_manager">내가 방장인 모임</string>
     <string name="pets_profile">함께하는 반려동물</string>
     <string name="tv_pet_add">강아지를 등록해주세요</string>
+
+    <!--강아지 상세 화면-->
+    <string name="neuterd_status">중성화를 했어요</string>
+    <string name="small_pet_description">소형견이에요</string>
+    <string name="medium_pet_description">중현견이에요</string>
+    <string name="large_pet_description">대형견이에요</string>
 
     <!--다른 사용자 프로필-->
     <string name="empty_other_pet">함께하는 반려동물이 없어요</string>
@@ -98,9 +106,10 @@
     <string name="dialog_negative_default">아니오</string>
 
     <!--강아지 등록-->
-    <string name="dog_name_title">댕댕이 이름</string>
-    <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
-    <string name="register_dog_name_hint">댕댕이 이름을 입력해주세요</string>
+    <string name="pet_name_title">댕댕이 이름</string>
+    <string name="register_pet_toolbar_title">댕댕이 등록하기</string>
+    <string name="patch_pet_toolbar_title">댕댕이 편집하기</string>
+    <string name="register_pet_name_hint">댕댕이 이름을 입력해주세요</string>
     <string name="description_title">한 줄 소개</string>
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
@@ -109,11 +118,12 @@
     <string name="birthday_year">년</string>
     <string name="birthday_month">%02d월</string>
     <string name="neutralized_title">중성화했어요.</string>
-    <string name="dog_size_title">댕댕이 사이즈</string>
-    <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
-    <string name="dog_gender_title">댕댕이 성별</string>
-    <string name="dog_submit_title">등록완료!</string>
-    <string name="bottom_sheet_dog_edit_birthday_title">언제 태어났나요?</string>
+    <string name="pet_size_type_title">댕댕이 사이즈</string>
+    <string name="pet_add_image_title">댕댕이 사진을 추가하세요</string>
+    <string name="pet_gender_type_title">댕댕이 성별</string>
+    <string name="pet_submit_title">선택 완료!</string>
+    <string name="bottom_sheet_pet_edit_birthday_title">언제 태어났나요?</string>
+    <string name="pet_name_length">%d/20</string>
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
@@ -143,13 +153,20 @@
     <string name="group_list_date_now">방금 전</string>
     <string name="group_counter_count">%d명</string>
     <string name="group_list_participation_filter">모집 조건 선택</string>
+    <string name="group_list_no_address_title">등록 된 주소가 없습니다</string>
+    <string name="group_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>
+    <string name="group_list_no_data_title">등록 된 모임이 없습니다.</string>
+    <string name="group_list_no_data_content">관련 모임을 등록해 보세요</string>
+    <string name="group_list_submit_text">등록하기</string>
 
     <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>
+    <string name="group_list_commit_btn">등록하기</string>
     <string name="group_list_next_btn">다음</string>
     <string name="group_list_prev_btn">이전</string>
     <string name="group_add_information_main_title">모임을 소개해주세요.</string>
-    <string name="group_add_information_main_content"> 기준으로 모임이 생성돼요.</string>
+    <string name="group_add_information_main_content">기준으로 모임이 생성돼요.</string>
+    <string name="group_add_information_fail_address">모임 생성을 위해서 주소를 등록해주세요!</string>
     <string name="group_add_dog_size_title">댕댕이 사이즈 선택</string>
     <string name="group_add_dog_gender_title">댕댕이 성별 선택</string>
     <string name="group_add_group_title">모임 제목</string>
@@ -167,6 +184,7 @@
     <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
     <string name="group_add_title_count">%d/100</string>
     <string name="group_add_content_count">%d/1000</string>
+    <string name="group_add_fail">모임 생성에 실패하였습니다..</string>
 
     <!--멍개 상세-->
     <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
@@ -179,6 +197,8 @@
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
     <string name="group_detail_delete_title">모임에서 나가겠습니까?</string>
+    <string name="group_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
+    <string name="group_detail_delete_fail">모임 삭제에 실패하였습니다.</string>
 
     <!--모임 수정 -->
     <string name="group_modify_title">모임 수정하기</string>
@@ -188,6 +208,7 @@
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
+    <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
@@ -235,4 +256,11 @@
     <string name="permission_cancel">취소</string>
     <string name="permission_go_setting">설정</string>
     <string name="permission_denied_message">권한을 거부하여 기능을 사용할 수 없습니다.</string>
+
+    <!--내 위치-->
+    <string name="my_location_title">내 동네 설정하기</string>
+    <string name="my_location_content">현재 위치</string>
+    <string name="my_location_submit">설정 완료</string>
+    <string name="my_location_load_fail">위치를 불러올 수 없습니다..</string>
+    <string name="my_location_full_address">%s %s %s</string>
 </resources>
