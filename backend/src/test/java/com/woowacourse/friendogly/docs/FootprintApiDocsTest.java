@@ -272,7 +272,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(patch("/footprints/walk-status")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("footprints/walk-status/200",
@@ -282,7 +282,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 산책 상태 변경 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
@@ -307,7 +307,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(patch("/footprints/walk-status")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("footprints/walk-status/400",
@@ -317,7 +317,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 산책 상태 변경 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),

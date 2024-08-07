@@ -281,7 +281,7 @@ class FootprintControllerTest extends ControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().patch("/footprints/walk-status")
                 .then().log().all()
@@ -311,7 +311,7 @@ class FootprintControllerTest extends ControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().patch("/footprints/walk-status")
                 .then().log().all()
