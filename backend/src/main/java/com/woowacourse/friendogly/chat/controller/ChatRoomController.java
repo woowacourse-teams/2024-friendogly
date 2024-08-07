@@ -36,7 +36,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/mine")
-    public ApiResponse<List<FindMyChatRoomResponse>> findMine(@Auth Long memberId) {
+    public ApiResponse<FindMyChatRoomResponse> findMine(@Auth Long memberId) {
         return ApiResponse.ofSuccess(chatRoomQueryService.findMine(memberId));
     }
 

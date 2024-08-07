@@ -1,15 +1,27 @@
 package com.woowacourse.friendogly.chat.service;
 
+import static com.woowacourse.friendogly.pet.domain.Gender.FEMALE;
+import static com.woowacourse.friendogly.pet.domain.Gender.FEMALE_NEUTERED;
+import static com.woowacourse.friendogly.pet.domain.Gender.MALE;
+import static com.woowacourse.friendogly.pet.domain.Gender.MALE_NEUTERED;
+import static com.woowacourse.friendogly.pet.domain.SizeType.LARGE;
+import static com.woowacourse.friendogly.pet.domain.SizeType.MEDIUM;
+import static com.woowacourse.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.dto.response.ChatRoomDetail;
 import com.woowacourse.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
 import com.woowacourse.friendogly.chat.dto.response.FindMyChatRoomResponse;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
+import com.woowacourse.friendogly.club.domain.Club;
 import com.woowacourse.friendogly.member.domain.Member;
+import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.support.ServiceTest;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,40 +45,84 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     private ChatRoom chatRoom1;
     private ChatRoom chatRoom2;
 
+    private Pet pet1;
+    private Pet pet2;
+    private Pet pet3;
+
+    private Club club1;
+    private Club club2;
+
     @BeforeEach
+    @Transactional
     void setUp() {
         member1 = memberRepository.save(new Member("name", "a", "a@a.com", "https://a.com"));
         member2 = memberRepository.save(new Member("name2", "b", "b@a.com", "https://b.com"));
         member3 = memberRepository.save(new Member("name3", "c", "c@a.com", "https://c.com"));
 
-        chatRoom1 = chatRoomRepository.save(ChatRoom.createGroup(5));
-        chatRoom2 = chatRoomRepository.save(ChatRoom.createGroup(5));
+        pet1 = petRepository.save(new Pet(member1, "땡이", "귀여워요", LocalDate.now().minusYears(1),
+                SMALL, MALE, "https://image.com/image1.jpg"));
+        pet2 = petRepository.save(new Pet(member2, "누룽지", "노래요", LocalDate.now().minusYears(1),
+                MEDIUM, FEMALE, "https://image.com/image2.jpg"));
+        pet3 = petRepository.save(new Pet(member3, "보리", "작아요", LocalDate.now().minusYears(1),
+                SMALL, MALE, "https://image.com/image3.jpg"));
+
+        club1 = Club.create(
+                "모임 제목1",
+                "신나는 모임입니다!",
+                "서울특별시",
+                "성동구",
+                "금호동",
+                5,
+                member1,
+                Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                Set.of(SMALL, MEDIUM, LARGE),
+                "https://image.com",
+                List.of(pet1)
+        );
+        club1.addClubMember(member2);
+        club1.addClubPet(List.of(pet2));
+        club1.addChatRoomMember(member2);
+        clubRepository.save(club1);
+
+        club2 = Club.create(
+                "모임 제목2",
+                "강아지 모임 해요",
+                "서울특별시",
+                "성동구",
+                "금호동",
+                5,
+                member1,
+                Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                Set.of(SMALL, MEDIUM, LARGE),
+                "https://image.com",
+                List.of(pet1)
+        );
+        club2.addClubMember(member3);
+        club2.addClubPet(List.of(pet3));
+        club2.addChatRoomMember(member3);
+        clubRepository.save(club2);
+
+        chatRoom1 = club1.getChatRoom();
+        chatRoom2 = club2.getChatRoom();
     }
 
     @DisplayName("내가 속해 있는 채팅방을 찾을 수 있다.")
     @Transactional
     @Test
     void findMine() {
-        // given
-        chatRoom1.addMember(member1);
-        chatRoom1.addMember(member2);
-
-        chatRoom2.addMember(member1);
-        chatRoom2.addMember(member3);
-
         // when
-        List<FindMyChatRoomResponse> response = chatRoomQueryService.findMine(member1.getId());
+        FindMyChatRoomResponse response = chatRoomQueryService.findMine(member1.getId());
 
         // then
         assertAll(
-                () -> assertThat(response)
-                        .extracting(FindMyChatRoomResponse::chatRoomId)
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetail::chatRoomId)
                         .containsExactly(chatRoom1.getId(), chatRoom2.getId()),
-                () -> assertThat(response)
-                        .extracting(FindMyChatRoomResponse::memberNames)
-                        .containsExactly(List.of("name", "name2"), List.of("name", "name3")),
-                () -> assertThat(response)
-                        .extracting(FindMyChatRoomResponse::memberCount)
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetail::clubName)
+                        .containsExactly("모임 제목1", "모임 제목2"),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetail::memberCount)
                         .containsExactly(2, 2)
         );
     }
@@ -75,11 +131,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     @Transactional
     @Test
     void findMemberInfo() {
-        // given
-        chatRoom1.addMember(member1);
-        chatRoom1.addMember(member2);
-        chatRoom1.addMember(member3);
-
         // when
         List<FindChatRoomMembersInfoResponse> response
                 = chatRoomQueryService.findMemberInfo(member1.getId(), chatRoom1.getId());
@@ -87,6 +138,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
         // then
         assertThat(response)
                 .extracting(FindChatRoomMembersInfoResponse::memberName)
-                .containsExactly("name", "name2", "name3");
+                .containsExactly("name", "name2");
     }
 }
