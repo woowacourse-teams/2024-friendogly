@@ -44,7 +44,6 @@ import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
-import com.happy.friendogly.domain.usecase.PostClubParticipationUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
@@ -89,13 +88,6 @@ class AppModule(context: Context) {
 
     private val clubService =
         RemoteModule.createClubService(
-            baseUrl = baseUrl,
-            localModule = localModule,
-            tokenManager = tokenManager,
-            authenticationListener = authenticationListener,
-        )
-    private val footprintService =
-        RemoteModule.createFootprintService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,

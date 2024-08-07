@@ -49,18 +49,6 @@ object RemoteModule {
         ).create(ClubService::class.java)
     }
 
-    fun createFootprintService(
-        baseUrl: BaseUrl,
-        tokenManager: TokenManager,
-        authenticationListener: AuthenticationListener,
-    ): FootprintService {
-        return createRetrofit(
-            baseUrl,
-            tokenManager,
-            authenticationListener,
-        ).create(FootprintService::class.java)
-    }
-
     fun createWoofService(
         baseUrl: BaseUrl,
         tokenManager: TokenManager,
