@@ -2,9 +2,7 @@ name: deploy
 
 on:
   push:
-    branches: ['develop']
-    paths: 
-      - 'backend/**'
+    branches: ['feature/oauth-kakao']
      
 jobs:
   build:
@@ -31,7 +29,7 @@ jobs:
         
       - name: Build project using Gradle
         working-directory: ./backend
-        run: ./gradlew build
+        run: ./gradlew build -Djwt.secret-key=${{ secrets.JWT_SECRET_KEY }} -Djwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }}  -Djwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME}}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
