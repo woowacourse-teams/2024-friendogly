@@ -7,7 +7,7 @@ import com.happy.friendogly.presentation.ui.group.list.model.GroupWoof
 fun Club.toPresentation(): GroupListUiModel {
     return GroupListUiModel(
         groupId = id,
-        groupPoster = imageUrl,
+        groupPoster = imageUrl.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,
         groupLocation = address.toPresentation(),
         groupLeader = ownerMemberName,
@@ -16,7 +16,7 @@ fun Club.toPresentation(): GroupListUiModel {
         groupDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         content = content,
-        groupWoofs = petImageUrls.map { GroupWoof(it) },
+        groupWoofs = petImageUrls.map { GroupWoof(it.ifEmpty { null }) },
         isParticipable = status.toPresentation(),
     )
 }

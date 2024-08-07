@@ -7,13 +7,13 @@ import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfil
 fun ClubMember.toPresentation(): GroupDetailProfileUiModel {
     return GroupDetailProfileUiModel(
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imageUrl.ifEmpty { null },
     )
 }
 
 fun ClubPet.toPresentation(): GroupDetailProfileUiModel {
     return GroupDetailProfileUiModel(
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imageUrl.ifEmpty { null },
     )
 }

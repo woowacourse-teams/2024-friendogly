@@ -130,6 +130,7 @@
                     layout="@layout/include_group_not_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:visibility="gone"
                     app:vm="@{vm}" />
 
                 <include
@@ -137,6 +138,7 @@
                     layout="@layout/include_group_not_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:visibility="gone"
                     app:vm="@{vm}" />
 
                 <include
@@ -144,6 +146,7 @@
                     layout="@layout/include_group_error"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:visibility="gone"
                     app:vm="@{vm}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

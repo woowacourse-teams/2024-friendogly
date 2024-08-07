@@ -25,6 +25,7 @@
             android:id="@+id/iv_group_list_poster"
             android:layout_width="110dp"
             android:layout_height="110dp"
+            app:glide="@{group.groupPoster}"
             android:src="@drawable/ic_group_normal"
             android:background="@drawable/rect_orange100_fill_12"
             app:shapeAppearanceOverlay="@style/RoundBig"
