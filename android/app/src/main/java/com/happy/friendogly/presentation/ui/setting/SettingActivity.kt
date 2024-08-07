@@ -17,7 +17,7 @@ import com.happy.friendogly.presentation.ui.register.RegisterActivity
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     val viewModel: SettingViewModel by viewModels {
         SettingViewModel.factory(
-            deleteLocalDataUseCase = AppModule.getInstance().deleteLocalDataUseCase,
+            deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
         )
     }
 
