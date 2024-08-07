@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.mylocation
 
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -23,16 +24,30 @@ class SettingMyLocationViewModel(
     private val _userAddress: MutableLiveData<UserAddress> = MutableLiveData()
     val userAddress: LiveData<UserAddress> get() = _userAddress
 
-    fun updateAddress(address: Address) {
-        val adminArea = address.adminArea
-        val locality = address.locality
-        val thoroughfare = address.thoroughfare
-        _userAddress.value =
-            UserAddress(
-                adminArea = adminArea,
-                subLocality = locality,
-                thoroughfare = thoroughfare,
-            )
+    fun updateAddress(address: Address) = runCatching {
+        val adminArea = address.adminArea ?: address.adminArea
+        val locality = address.locality ?: address.subLocality
+        val thoroughfare = address.thoroughfare ?: address.subThoroughfare
+
+        makeUserAddress(adminArea, locality, thoroughfare)
+    }
+        .onSuccess { newUserAddress ->
+            _userAddress.value = newUserAddress
+        }
+        .onFailure {
+            submitInValidLocation()
+        }
+
+    private fun makeUserAddress(
+        adminArea: String,
+        locality: String,
+        thoroughfare: String,
+    ): UserAddress {
+        return UserAddress(
+            adminArea = adminArea,
+            subLocality = locality ,
+            thoroughfare = thoroughfare,
+        )
     }
 
     override fun closeSelect() {
@@ -66,10 +81,11 @@ class SettingMyLocationViewModel(
     ) = viewModelScope.launch {
         runCatching {
             geocoder.getFromLocation(latitude, longitude, 1)
+                ?.first()
                 ?: return@launch submitInValidLocation()
         }
-            .onSuccess {
-                updateAddress(it[0])
+            .onSuccess { address ->
+                updateAddress(address)
             }
             .onFailure {
                 submitInValidLocation()

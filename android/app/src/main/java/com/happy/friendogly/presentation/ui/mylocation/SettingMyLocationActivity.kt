@@ -33,6 +33,7 @@ class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
     OnMapReadyCallback {
     private lateinit var map: NaverMap
+    private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapViewMyLocation }
     private val loadingView: LottieAnimationView by lazy { binding.lottieMyLocationLoading }
     private val locationPermission: LocationPermission = initLocationPermission()
@@ -101,16 +102,11 @@ class SettingMyLocationActivity :
     private fun activateMap() {
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
-            val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            moveCameraCenterPosition(latLng)
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    cancelAnimation()
-                    initMarker(latLng)
-                    loadAddress(latLng)
-                },
-                1000,
-            )
+            latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+            moveCameraCenterPosition()
+            cancelAnimation()
+            initMarker()
+            loadAddress()
         }
     }
 
@@ -119,13 +115,13 @@ class SettingMyLocationActivity :
         activateMap()
     }
 
-    private fun moveCameraCenterPosition(latLng: LatLng) {
+    private fun moveCameraCenterPosition() {
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
     }
 
-    private fun initMarker(latLng: LatLng) {
+    private fun initMarker() {
         val marker = Marker()
         marker.position = latLng
         marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
@@ -145,29 +141,25 @@ class SettingMyLocationActivity :
         }
     }
 
-    private fun loadAddress(latLng: LatLng) {
+    private fun loadAddress() {
         val geocoder = Geocoder(this, Locale.KOREA)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             geocoder.getFromLocation(
-                convertAddress(latLng.latitude),
-                convertAddress(latLng.longitude),
+                latLng.latitude,
+                latLng.longitude,
                 1,
             ) { addressList ->
                 runOnUiThread {
-                    viewModel.updateAddress(addressList[0])
+                    viewModel.updateAddress(addressList.first())
                 }
             }
         } else {
             viewModel.saveLowLevelSdkAddress(
                 geocoder = geocoder,
-                latitude = convertAddress(latLng.latitude),
-                longitude = convertAddress(latLng.longitude),
+                latitude = latLng.latitude,
+                longitude = latLng.longitude,
             )
         }
-    }
-
-    private fun convertAddress(latLngArg: Double): Double {
-        return floor(latLngArg * 100) / 100
     }
 
     private fun showLoadFailSnackBar() {
