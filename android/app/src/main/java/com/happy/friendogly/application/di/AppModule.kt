@@ -41,6 +41,7 @@ import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
+import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
@@ -153,6 +154,7 @@ class AppModule(context: Context) {
         GetLandMarksUseCase(repository = woofRepository)
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
+    val getPetsUseCase: GetPetsUseCase = GetPetsUseCase(repository = petRepository)
     val postPetUseCase: PostPetUseCase = PostPetUseCase(repository = petRepository)
     val getMemberMineUseCase: GetMemberMineUseCase =
         GetMemberMineUseCase(repository = memberRepository)

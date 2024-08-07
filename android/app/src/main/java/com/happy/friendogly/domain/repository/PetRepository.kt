@@ -17,4 +17,6 @@ interface PetRepository {
         gender: Gender,
         file: MultipartBody.Part?,
     ): Result<Pet>
+
+    suspend fun getPets(id: Long): Result<List<Pet>>
 }

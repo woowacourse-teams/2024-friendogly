@@ -30,4 +30,7 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
             gender = gender.toData(),
             file = file,
         ).mapCatching { result -> result.toDomain() }
+
+    override suspend fun getPets(id: Long): Result<List<Pet>> =
+        source.getPets(id = id).mapCatching { result -> result.map { petDto -> petDto.toDomain() } }
 }
