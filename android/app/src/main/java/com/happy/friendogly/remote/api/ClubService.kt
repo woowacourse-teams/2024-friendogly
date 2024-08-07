@@ -30,8 +30,8 @@ interface ClubService {
         @Query("province") province: String,
         @Query("city") city: String,
         @Query("village") village: String,
-        @Query("genderParams")  genderParams: List<String>,
-        @Query("sizeParams")  sizeParams: List<String>,
+        @Query("genderParams") genderParams: List<String>,
+        @Query("sizeParams") sizeParams: List<String>,
     ): BaseResponse<List<ClubResponse>>
 
     @GET(ApiClient.Club.GET_CLUB)

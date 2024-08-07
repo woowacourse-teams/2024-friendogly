@@ -27,7 +27,6 @@ class GroupFilterSelector {
             ?.ifEmpty {
                 GroupFilter.makeSizeFilterEntry()
             } ?: GroupFilter.makeSizeFilterEntry()
-
     }
 
     fun removeGroupFilter(filter: GroupFilter) {
