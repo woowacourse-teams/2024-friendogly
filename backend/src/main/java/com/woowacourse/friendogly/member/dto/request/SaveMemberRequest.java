@@ -13,8 +13,8 @@ public record SaveMemberRequest(
         @Email(message = "올바른 email 형식이 아닙니다.")
         String email,
 
-        @NotBlank(message = "idToken은 빈 문자열이나 null을 입력할 수 없습니다.")
-        String idToken
+        @NotBlank(message = "accessToken은 빈 문자열이나 null을 입력할 수 없습니다.")
+        String accessToken
 ) {
 
 }

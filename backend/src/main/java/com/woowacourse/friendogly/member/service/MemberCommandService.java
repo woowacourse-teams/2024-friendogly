@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.member.service;
 import com.woowacourse.friendogly.auth.domain.KakaoMember;
 import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.auth.repository.KakaoMemberRepository;
+import com.woowacourse.friendogly.auth.service.KakaoOauthClient;
 import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import com.woowacourse.friendogly.auth.service.jwt.TokenPayload;
 import com.woowacourse.friendogly.infra.FileStorageManager;
@@ -20,17 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberCommandService {
 
     private final JwtProvider jwtProvider;
+    private final KakaoOauthClient kakaoOauthClient;
     private final FileStorageManager fileStorageManager;
     private final MemberRepository memberRepository;
     private final KakaoMemberRepository kakaoMemberRepository;
 
     public MemberCommandService(
             JwtProvider jwtProvider,
+            KakaoOauthClient kakaoOauthClient,
             FileStorageManager fileStorageManager,
             MemberRepository memberRepository,
             KakaoMemberRepository kakaoMemberRepository
     ) {
         this.jwtProvider = jwtProvider;
+        this.kakaoOauthClient = kakaoOauthClient;
         this.fileStorageManager = fileStorageManager;
         this.memberRepository = memberRepository;
         this.kakaoMemberRepository = kakaoMemberRepository;
@@ -42,7 +46,7 @@ public class MemberCommandService {
             imageUrl = fileStorageManager.uploadFile(image);
         }
 
-        String kakaoMemberId = jwtProvider.validateAndExtract(request.idToken());
+        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).sub();
 
         Member member = Member.builder()
                 .name(request.name())

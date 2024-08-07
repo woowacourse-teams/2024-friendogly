@@ -1,4 +1,5 @@
-package com.woowacourse.friendogly.auth.controller;
+package com.woowacourse.friendogly.auth.dto;
 
 public record KakaoRefreshRequest(String refreshToken) {
+
 }

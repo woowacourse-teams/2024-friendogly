@@ -1,6 +1,8 @@
 package com.woowacourse.friendogly.auth;
 
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private final JwtProvider jwtProvider;
+
+    public AuthArgumentResolver(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(Auth.class);
@@ -26,15 +34,13 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) throws Exception {
-        // TODO: token에서 추출하도록 변경
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        String authorizationValue = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (authorizationValue == null) {
-            throw new FriendoglyException("로그인 후에 사용할 수 있습니다.", HttpStatus.UNAUTHORIZED);
+        if (StringUtils.isBlank(accessToken)) {
+            throw new FriendoglyException("토큰 정보가 존재하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
-        return Long.parseLong(authorizationValue);
+        return Long.parseLong(jwtProvider.validateAndExtract(accessToken));
     }
 }

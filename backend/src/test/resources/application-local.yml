@@ -1,11 +1,6 @@
 # for FakeStorageManager
 
-# for oauth
-kakao:
-  grant_type: 안녕하세요! 반갑개에 어서오세요~
-  client_id: 이 글을 읽으신 분에게 행운이 가득하길 빌어요~
-  redirect_uri: 행복한 하루 되세요!
-
+# for jwt
 jwt:
   secret-key: 행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~
   access-expiration-time: 5_184_000_000 # 24시간 (ms)

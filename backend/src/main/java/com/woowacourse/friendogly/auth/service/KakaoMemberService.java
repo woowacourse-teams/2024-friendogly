@@ -16,15 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class KakaoMemberService {
 
     private final JwtProvider jwtProvider;
+    private final KakaoOauthClient kakaoOauthClient;
     private final KakaoMemberRepository kakaoMemberRepository;
 
-    public KakaoMemberService(JwtProvider jwtProvider, KakaoMemberRepository kakaoMemberRepository) {
+    public KakaoMemberService(
+            JwtProvider jwtProvider,
+            KakaoOauthClient kakaoOauthClient,
+            KakaoMemberRepository kakaoMemberRepository
+    ) {
         this.jwtProvider = jwtProvider;
+        this.kakaoOauthClient = kakaoOauthClient;
         this.kakaoMemberRepository = kakaoMemberRepository;
     }
 
     public KakaoLoginResponse login(KakaoLoginRequest request) {
-        String kakaoMemberId = jwtProvider.validateAndExtract(request.idToken());
+        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).sub();
 
         Optional<KakaoMember> kakaoMemberOptional = kakaoMemberRepository.findByKakaoMemberId(kakaoMemberId);
         if (kakaoMemberOptional.isPresent()) {

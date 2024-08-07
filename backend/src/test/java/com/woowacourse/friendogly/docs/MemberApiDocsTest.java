@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
-import com.woowacourse.friendogly.auth.AuthArgumentResolver;
 import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.member.controller.MemberController;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
@@ -24,7 +23,6 @@ import com.woowacourse.friendogly.member.service.MemberQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -42,13 +40,11 @@ public class MemberApiDocsTest extends RestDocsTest {
     @MockBean
     private MemberQueryService memberQueryService;
 
-    @Autowired
-    private AuthArgumentResolver authArgumentResolver;
 
     @DisplayName("회원 생성 문서화")
     @Test
     void saveMember_Success() throws Exception {
-        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com", "idToken");
+        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com", "accessToken");
         SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416", "member@email.com",
                 "http://google.com", new TokenResponse("access", "refresh"));
         MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
@@ -59,8 +55,7 @@ public class MemberApiDocsTest extends RestDocsTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.multipart("/members")
                         .file(image)
-                        .file(request)
-                        .header(HttpHeaders.AUTHORIZATION, "accessTokenValue"))
+                        .file(request))
                 .andExpect(status().isCreated())
                 .andDo(MockMvcRestDocumentationWrapper.document("member-save-201",
                         getDocumentRequest(),
@@ -73,14 +68,11 @@ public class MemberApiDocsTest extends RestDocsTest {
                                 "request",
                                 fieldWithPath("name").description("회원 이름"),
                                 fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("idToken").description("카카오 idToken")
+                                fieldWithPath("accessToken").description("카카오 accessToken")
                         ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Member API")
                                 .summary("회원 생성 API")
-                                .requestHeaders(
-                                        headerWithName("Authorization").description("카카오 로그인 access token")
-                                )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 id"),
@@ -155,7 +147,7 @@ public class MemberApiDocsTest extends RestDocsTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.get("/members/mine")
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, loginMemberId.toString()))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(MockMvcRestDocumentationWrapper.document("member-findMine-200",
                         getDocumentRequest(),
@@ -164,7 +156,7 @@ public class MemberApiDocsTest extends RestDocsTest {
                                 .tag("Member API")
                                 .summary("내 회원 정보 조회 API")
                                 .requestHeaders(
-                                        headerWithName("Authorization").description("로그인한 회원 id")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),

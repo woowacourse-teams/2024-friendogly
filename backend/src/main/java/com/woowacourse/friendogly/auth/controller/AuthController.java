@@ -2,6 +2,7 @@ package com.woowacourse.friendogly.auth.controller;
 
 import com.woowacourse.friendogly.auth.dto.KakaoLoginRequest;
 import com.woowacourse.friendogly.auth.dto.KakaoLoginResponse;
+import com.woowacourse.friendogly.auth.dto.KakaoRefreshRequest;
 import com.woowacourse.friendogly.auth.dto.TokenResponse;
 import com.woowacourse.friendogly.auth.service.AuthService;
 import com.woowacourse.friendogly.auth.service.KakaoMemberService;
