@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GroupListViewModel(
@@ -49,6 +51,7 @@ class GroupListViewModel(
     }
 
     fun loadGroupWithAddress() {
+        _uiState.value = GroupListUiState.Init
         if (myAddress.value != null) {
             loadGroups()
         } else {
@@ -76,16 +79,20 @@ class GroupListViewModel(
                 genderParams = groupFilterSelector.selectGenderFilters().toGenders(),
                 sizeParams = groupFilterSelector.selectSizeFilters().toSizeTypes(),
             )
-                .onSuccess {
-                    if (it.isEmpty()) {
+                .onSuccess { groups ->
+                    if (groups.isEmpty()) {
                         _uiState.value = GroupListUiState.NotData
                     } else {
                         _uiState.value = GroupListUiState.Init
                     }
                     _groups.value =
-                        it.map { group ->
+                        groups.map { group ->
                             group.toPresentation()
                         }
+                }
+                .onFailure {
+                    Log.d("sdfljdsfl",it.message.toString())
+                    _uiState.value = GroupListUiState.NotData
                 }
         }
 

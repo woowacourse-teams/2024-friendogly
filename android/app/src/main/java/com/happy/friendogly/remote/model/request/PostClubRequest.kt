@@ -9,10 +9,8 @@ data class PostClubRequest(
     val province: String,
     val city: String,
     val village: String,
-    @Serializable
-    val allowedGender: List<GenderRequest>,
-    @Serializable
-    val allowedSize: List<SizeTypeRequest>,
+    val allowedGenders: List<String>,
+    val allowedSizes: List<String>,
     val memberCapacity: Int,
-    val petIds: List<Long>,
+    val participatingPetsId: List<Long>,
 )

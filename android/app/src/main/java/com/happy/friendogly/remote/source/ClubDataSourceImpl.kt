@@ -33,10 +33,10 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
                     province = address.province,
                     city = address.city,
                     village = address.village,
-                    allowedGender = allowedGender.map { it.toRemote() },
-                    allowedSize = allowedSize.map { it.toRemote() },
+                    allowedGenders = allowedGender.map { it.toRemote().name },
+                    allowedSizes = allowedSize.map { it.toRemote().name },
                     memberCapacity = memberCapacity,
-                    petIds = petIds,
+                    participatingPetsId = petIds,
                 )
             service.postClub(
                 body = request,
@@ -56,8 +56,8 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
                 province = address.province,
                 city = address.city,
                 village = address.village,
-                genderParams = genderParams.map { it.toRemote() },
-                sizeParams = sizeParams.map { it.toRemote() },
+                genderParams = genderParams.map { it.toRemote().name },
+                sizeParams = sizeParams.map { it.toRemote().name },
             ).data.toData()
         }
 
