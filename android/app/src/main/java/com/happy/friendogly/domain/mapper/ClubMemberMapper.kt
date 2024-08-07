@@ -7,7 +7,7 @@ import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfil
 fun ClubMember.toPresentation(): GroupDetailProfileUiModel {
     return GroupDetailProfileUiModel(
         name = name,
-        imageUrl = imageUrl.ifEmpty { null },
+        imageUrl = imageUrl,
     )
 }
 

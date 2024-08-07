@@ -138,6 +138,7 @@ class GroupListViewModel(
 
     override fun removeFilter(groupFilter: GroupFilter) {
         groupFilterSelector.removeGroupFilter(filter = groupFilter)
+        loadGroupWithAddress()
     }
 
     override fun addMyLocation() {
