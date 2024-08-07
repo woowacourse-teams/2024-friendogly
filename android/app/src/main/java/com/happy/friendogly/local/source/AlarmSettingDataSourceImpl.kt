@@ -1,12 +1,12 @@
 package com.happy.friendogly.local.source
 
-import com.happy.friendogly.data.source.SettingDataSource
+import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.local.di.AlarmModule
 import kotlinx.coroutines.flow.first
 
-class SettingDataSourceImpl(
+class AlarmSettingDataSourceImpl(
     private val alarmModule: AlarmModule,
-) : SettingDataSource {
+) : AlarmSettingDataSource {
     override suspend fun saveAlarm(isSet: Boolean): Result<Unit> =
         runCatching {
             alarmModule.saveSetting(isSet)

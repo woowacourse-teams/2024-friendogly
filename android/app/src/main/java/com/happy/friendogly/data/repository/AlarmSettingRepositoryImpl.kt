@@ -1,9 +1,9 @@
 package com.happy.friendogly.data.repository
 
-import com.happy.friendogly.data.source.SettingDataSource
-import com.happy.friendogly.domain.repository.SettingRepository
+import com.happy.friendogly.data.source.AlarmSettingDataSource
+import com.happy.friendogly.domain.repository.AlarmSettingRepository
 
-class SettingRepositoryImpl(private val source: SettingDataSource) : SettingRepository {
+class AlarmSettingRepositoryImpl(private val source: AlarmSettingDataSource) : AlarmSettingRepository {
     override suspend fun saveAlarm(isSet: Boolean): Result<Unit> = source.saveAlarm(isSet)
 
     override suspend fun getAlarm(): Result<Boolean> = source.getAlarm()

@@ -1,6 +1,6 @@
-package com.happy.friendogly.data.source
+package com.happy.friendogly.domain.repository
 
-interface SettingDataSource {
+interface AlarmSettingRepository {
     suspend fun saveAlarm(isSet: Boolean): Result<Unit>
 
     suspend fun getAlarm(): Result<Boolean>

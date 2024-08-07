@@ -40,7 +40,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (AppModule.getInstance().getAlarmUseCase.invoke().getOrDefault(false)) {
+        if (AppModule.getInstance().getAlarmSettingUseCase.invoke().getOrDefault(false)) {
             createNotificationChannel()
             deliverNotification(title, body)
         }
