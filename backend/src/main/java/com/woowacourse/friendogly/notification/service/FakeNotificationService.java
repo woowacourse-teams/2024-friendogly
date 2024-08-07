@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.notification;
+package com.woowacourse.friendogly.notification.service;
 
 import org.springframework.stereotype.Service;
 

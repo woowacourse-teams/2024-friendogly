@@ -10,6 +10,8 @@ import com.woowacourse.friendogly.footprint.dto.response.UpdateWalkStatusRespons
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.notification.repository.DeviceTokenRepository;
+import com.woowacourse.friendogly.notification.service.FcmNotificationService;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
@@ -26,15 +28,19 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final FcmNotificationService fcmNotificationService;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
-    ) {
+            PetRepository petRepository,
+            FcmNotificationService fcmNotificationService, DeviceTokenRepository deviceTokenRepository) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
+        this.fcmNotificationService = fcmNotificationService;
+        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -52,6 +58,20 @@ public class FootprintCommandService {
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
                         .build()
+        );
+
+        List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
+
+        List<String> nearDeviceTokens = footprints.stream()
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(otherFootprint.getLocation()))
+                .map(otherFootprint -> otherFootprint.getMember().getId())
+                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .toList();
+
+        fcmNotificationService.sendNotification(
+                "반갑개",
+                "나의 산책 장소에 " + member.getName() + "님도 산책온대요!",
+                nearDeviceTokens
         );
 
         return new SaveFootprintResponse(

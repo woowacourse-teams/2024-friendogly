@@ -1,4 +1,4 @@
-package com.woowacourse.friendogly.notification;
+package com.woowacourse.friendogly.notification.service;
 
 public interface NotificationService {
 
