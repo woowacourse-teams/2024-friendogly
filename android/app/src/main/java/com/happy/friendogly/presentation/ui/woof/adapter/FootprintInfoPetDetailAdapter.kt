@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.happy.friendogly.databinding.ItemPetDetailBinding
+import com.happy.friendogly.databinding.ItemFootprintInfoPetDetailBinding
 import com.happy.friendogly.presentation.ui.woof.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
 
@@ -15,7 +15,11 @@ class FootprintInfoPetDetailAdapter(private val actionHandler: WoofActionHandler
         viewType: Int,
     ): FootprintInfoPetDetailViewHolder {
         val binding =
-            ItemPetDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemFootprintInfoPetDetailBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         return FootprintInfoPetDetailViewHolder(binding)
     }
 
