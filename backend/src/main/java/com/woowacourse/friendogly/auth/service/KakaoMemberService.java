@@ -36,7 +36,7 @@ public class KakaoMemberService {
         if (kakaoMemberOptional.isPresent()) {
             KakaoMember kakaoMember = kakaoMemberOptional.get();
 
-            TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(Long.parseLong(kakaoMemberId)));
+            TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(kakaoMember.getMemberId()));
             kakaoMember.updateRefreshToken(tokens.refreshToken());
 
             return KakaoLoginResponse.ofRegistered(tokens);
