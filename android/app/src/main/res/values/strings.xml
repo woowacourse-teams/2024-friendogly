@@ -158,6 +158,8 @@
     <string name="group_list_no_data_title">등록 된 모임이 없습니다.</string>
     <string name="group_list_no_data_content">관련 모임을 등록해 보세요</string>
     <string name="group_list_submit_text">등록하기</string>
+    <string name="group_list_error_title">에러가 발생하였습니다</string>
+    <string name="group_list_error_content">잠시 후에 다시 시도해주세요..</string>
 
     <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>

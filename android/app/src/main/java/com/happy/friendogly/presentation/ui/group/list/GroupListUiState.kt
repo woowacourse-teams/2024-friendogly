@@ -6,4 +6,6 @@ sealed interface GroupListUiState {
     data object NotData : GroupListUiState
 
     data object NotAddress : GroupListUiState
+
+    data object Error: GroupListUiState
 }

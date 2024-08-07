@@ -91,17 +91,18 @@ class GroupListViewModel(
                         }
                 }
                 .onFailure {
-                    Log.d("sdfljdsfl",it.message.toString())
-                    _uiState.value = GroupListUiState.NotData
+                    _uiState.value = GroupListUiState.Error
                 }
         }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
+        loadGroupWithAddress()
     }
 
     fun updateParticipationFilter(participationFilter: ParticipationFilter) {
         _participationFilter.value = participationFilter
+        loadGroupWithAddress()
     }
 
     override fun loadGroup(groupId: Long) {

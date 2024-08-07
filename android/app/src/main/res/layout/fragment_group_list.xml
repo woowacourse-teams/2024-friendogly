@@ -138,6 +138,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_group_error"
+                    layout="@layout/include_group_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:vm="@{vm}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
