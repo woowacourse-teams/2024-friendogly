@@ -1,19 +1,20 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
+import com.happy.friendogly.domain.model.ChatRoom
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDateTime
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDummy
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatListUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun ChatDummy.toUiModel(): ChatListUiModel =
+fun ChatRoom.toUiModel(): ChatListUiModel =
     ChatListUiModel(
-        title,
-        body,
-        numberOfPeople,
-        unreadMessageCount,
-        dateTime.classifyChatDateTime(),
-        imageUrl,
+        clubName,
+        "",
+        memberCount,
+        0,
+        LocalDateTime.now().classifyChatDateTime(),
+        clubImageUrl,
     )
 
 private fun LocalDateTime.classifyChatDateTime(): ChatDateTime {
