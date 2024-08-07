@@ -6,8 +6,12 @@ import kotlinx.serialization.Serializable
 data class PostClubRequest(
     val title: String,
     val content: String,
-    val address: ClubAddressRequest,
+    val province: String,
+    val city: String,
+    val village: String,
+    @Serializable
     val allowedGender: List<GenderRequest>,
+    @Serializable
     val allowedSize: List<SizeTypeRequest>,
     val memberCapacity: Int,
     val petIds: List<Long>,

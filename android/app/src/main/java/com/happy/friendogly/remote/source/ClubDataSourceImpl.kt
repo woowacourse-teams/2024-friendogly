@@ -30,7 +30,9 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
                 PostClubRequest(
                     title = title,
                     content = content,
-                    address = address.toRemote(),
+                    province = address.province,
+                    city = address.city,
+                    village = address.village,
                     allowedGender = allowedGender.map { it.toRemote() },
                     allowedSize = allowedSize.map { it.toRemote() },
                     memberCapacity = memberCapacity,
