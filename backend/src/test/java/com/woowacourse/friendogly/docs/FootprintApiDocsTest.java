@@ -45,6 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(FootprintController.class)
 public class FootprintApiDocsTest extends RestDocsTest {
