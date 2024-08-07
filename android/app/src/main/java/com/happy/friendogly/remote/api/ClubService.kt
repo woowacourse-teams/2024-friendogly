@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.api
 
-import com.happy.friendogly.remote.model.request.ClubAddressRequest
 import com.happy.friendogly.remote.model.request.ClubFilterConditionRequest
 import com.happy.friendogly.remote.model.request.GenderRequest
 import com.happy.friendogly.remote.model.request.PostClubMemberRequest
@@ -30,7 +29,9 @@ interface ClubService {
     @GET(ApiClient.Club.GET_CLUB_SEARCHING)
     suspend fun getSearchingClubs(
         @Query("filterCondition") filterCondition: ClubFilterConditionRequest,
-        @Query("address") address: ClubAddressRequest,
+        @Query("province") province: String,
+        @Query("city") city: String,
+        @Query("village") village: String,
         @Query("genderParams") genderParams: List<GenderRequest>,
         @Query("sizeParams") sizeParams: List<SizeTypeRequest>,
     ): BaseResponse<ClubSearchingResponse>

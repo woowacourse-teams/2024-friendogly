@@ -53,7 +53,9 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
         runCatching {
             service.getSearchingClubs(
                 filterCondition = filterCondition.toRemote(),
-                address = address.toRemote(),
+                province = address.province,
+                city = address.city,
+                village = address.village,
                 genderParams = genderParams.map { it.toRemote() },
                 sizeParams = sizeParams.map { it.toRemote() },
             ).data.toData()
