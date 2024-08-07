@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.group.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,6 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GroupListViewModel(
@@ -35,7 +33,7 @@ class GroupListViewModel(
     val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
-        MutableLiveData(ParticipationFilter.POSSIBLE)
+        MutableLiveData(ParticipationFilter.ENTIRE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
     val groupFilterSelector = GroupFilterSelector()

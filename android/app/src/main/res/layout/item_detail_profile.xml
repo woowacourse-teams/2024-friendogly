@@ -16,7 +16,6 @@
             android:src="@drawable/img_profile_normal"
             glide1000="@{profile.imageUrl}"
             android:backgroundTint="@color/coral50"
-            android:background="@drawable/rect_orange100_fill_12"
             app:shapeAppearanceOverlay="@style/RoundBig"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
