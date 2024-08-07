@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/img_profile_normal"
-            glide="@{profile.imageUrl}"
+            glide1000="@{profile.imageUrl}"
             android:backgroundTint="@color/coral50"
             android:background="@drawable/rect_orange100_fill_12"
             app:shapeAppearanceOverlay="@style/RoundBig"

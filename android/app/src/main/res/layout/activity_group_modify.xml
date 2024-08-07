@@ -26,23 +26,25 @@
                 android:id="@+id/linear_layout_group_modify"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="70dp"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     onSingleClick="@{()->vm.selectGroupImage()}"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="center">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_group_add_poster"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/img_profile_normal"
+                        android:src="@drawable/ic_group_normal"
+                        app:shapeAppearanceOverlay="@style/RoundSmall"
                         app:groupPoster="@{vm.groupPoster}" />
 
                     <ImageView
+                        android:layout_margin="3dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_user_profile_set_button"

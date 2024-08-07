@@ -17,6 +17,7 @@
         app:bindingSelectBorder="@{dogUiModel}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="5dp"
         android:onClick="@{()->dogSelectActionHandler.selectDog(dogUiModel)}">
 
         <ImageView
@@ -24,7 +25,6 @@
             urlToImage="@{dogUiModel.profileImage}"
             android:scaleType="centerCrop"
             android:background="@color/white"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -21,14 +21,14 @@
         android:background="@drawable/rect_gray_fill_radius8"
         android:padding="10dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_group_list_poster"
             android:layout_width="110dp"
             android:layout_height="110dp"
             app:glide="@{group.groupPoster}"
             android:src="@drawable/ic_group_normal"
             android:background="@drawable/rect_orange100_fill_12"
-            app:shapeAppearanceOverlay="@style/RoundBig"
+            app:shapeAppearanceOverlay="@style/RoundSmall"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ll_group_list_main_content"
