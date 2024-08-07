@@ -1,6 +1,7 @@
 package com.happy.friendogly.remote.di
 
 import com.happy.friendogly.local.di.TokenManager
+import com.happy.friendogly.remote.api.AuthService
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.Authenticator
 import com.happy.friendogly.remote.api.BaseUrl
@@ -25,6 +26,18 @@ object RemoteModule {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+
+    fun createAuthService(
+        baseUrl: BaseUrl,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
+    ): AuthService {
+        return createRetrofit(
+            baseUrl,
+            tokenManager,
+            authenticationListener,
+        ).create(AuthService::class.java)
+    }
 
     fun createClubService(
         baseUrl: BaseUrl,

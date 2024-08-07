@@ -106,7 +106,7 @@ class MainActivity :
     }
 
     override fun navigateToProfileSetting(profile: Profile?) {
-        startActivity(ProfileSettingActivity.getIntent(this, profile))
+        startActivity(ProfileSettingActivity.getIntent(this, null, profile))
     }
 
     override fun navigateToPetDetail(

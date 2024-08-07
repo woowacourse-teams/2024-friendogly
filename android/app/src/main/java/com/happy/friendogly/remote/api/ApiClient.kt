@@ -1,6 +1,11 @@
 package com.happy.friendogly.remote.api
 
 class ApiClient {
+    object Auth {
+        private const val BASE_URL = "/auth"
+        const val POST_KAKAO_LOGIN = "$BASE_URL/kakao/login"
+    }
+
     object Footprints {
         private const val BASE_URL = "/footprints"
         const val POST_FOOTPRINT = BASE_URL
