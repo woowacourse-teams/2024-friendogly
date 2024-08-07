@@ -4,6 +4,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.messaging.simp.stomp.StompCommand.SUBSCRIBE;
 
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
+import com.woowacourse.friendogly.chat.repository.ChatRoomMemberRepository;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.exception.FriendoglyWebSocketException;
@@ -21,13 +22,16 @@ public class WebSocketInterceptor implements ChannelInterceptor {
 
     private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomMemberRepository chatRoomMemberRepository;
 
     public WebSocketInterceptor(
             ClubRepository clubRepository,
-            ChatRoomRepository chatRoomRepository
+            ChatRoomRepository chatRoomRepository,
+            ChatRoomMemberRepository chatRoomMemberRepository
     ) {
         this.clubRepository = clubRepository;
         this.chatRoomRepository = chatRoomRepository;
+        this.chatRoomMemberRepository = chatRoomMemberRepository;
     }
 
     @Override
@@ -98,7 +102,7 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     }
 
     private void validateChatParticipation(long chatRoomId, long memberId) {
-        if (!chatRoomRepository.existsBy(chatRoomId, memberId)) {
+        if (!chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId)) {
             throw new FriendoglyWebSocketException("채팅방에 입장할 권한이 없습니다.");
         }
     }
