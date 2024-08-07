@@ -123,7 +123,10 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                         .containsExactly("모임 제목1", "모임 제목2"),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::memberCount)
-                        .containsExactly(2, 2)
+                        .containsExactly(2, 2),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetail::clubImageUrl)
+                        .containsExactly("https://image.com", "https://image.com")
         );
     }
 

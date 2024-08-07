@@ -36,8 +36,8 @@ public class ChatRoomQueryService {
     public FindMyChatRoomResponse findMine(Long memberId) {
         List<ChatRoomDetail> chatRoomDetails = chatRoomRepository.findMine(memberId).stream()
                 .map(chatRoom -> {
-                    String clubName = clubRepository.getByChatRoom(chatRoom).getTitle().getValue();
-                    return new ChatRoomDetail(chatRoom, clubName);
+                    Club club = clubRepository.getByChatRoom(chatRoom);
+                    return new ChatRoomDetail(chatRoom, club);
                 })
                 .toList();
         return new FindMyChatRoomResponse(memberId, chatRoomDetails);
