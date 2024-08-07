@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.footprint.service;
 import com.woowacourse.friendogly.exception.FriendoglyException;
 import com.woowacourse.friendogly.footprint.domain.Footprint;
 import com.woowacourse.friendogly.footprint.domain.Location;
+import com.woowacourse.friendogly.footprint.domain.WalkStatus;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.woowacourse.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -60,17 +61,12 @@ public class FootprintCommandService {
                         .build()
         );
 
-        List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
-
-        List<String> nearDeviceTokens = footprints.stream()
-                .filter(otherFootprint -> otherFootprint.isInsideBoundary(otherFootprint.getLocation()))
-                .map(otherFootprint -> otherFootprint.getMember().getId())
-                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
-                .toList();
+        List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
+        String memberName = member.getName().getValue();
 
         fcmNotificationService.sendNotification(
                 "반갑개",
-                "나의 산책 장소에 " + member.getName() + "님도 산책온대요!",
+                "내 산책 장소에 " + memberName + "님도 산책온대요!",
                 nearDeviceTokens
         );
 
@@ -106,7 +102,31 @@ public class FootprintCommandService {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
 
+        WalkStatus beforeWalkStatus = footprint.getWalkStatus();
+
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
+
+        if(beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()){
+            List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
+            String memberName = footprint.getMember().getName().getValue();
+
+            fcmNotificationService.sendNotification("반갑개",
+                    "내 산책장소에 "+memberName+"님이 산책을 시작했어요!",
+                    nearDeviceTokens
+            );
+        }
+
+
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
+    }
+
+    private List<String> findNearDeviceTokens(Footprint standardFootprint) {
+        List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
+
+        return footprints.stream()
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation()))
+                .map(otherFootprint -> otherFootprint.getMember().getId())
+                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .toList();
     }
 }
