@@ -73,9 +73,9 @@ public class ClubCommandService {
 
         club.addClubMember(member);
         club.addClubPet(mapToPets(request.participatingPetsId(), member));
+        club.addChatRoomMember(member);
 
-        //TODO : 채팅방 ID 넘기기
-        return new SaveClubMemberResponse(1L);
+        return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());
     }
 
     private List<Pet> mapToPets(List<Long> participatingPetsId, Member member) {
@@ -96,6 +96,7 @@ public class ClubCommandService {
         Member member = memberRepository.getById(memberId);
 
         club.removeClubMember(member);
+        club.removeChatRoomMember(member);
         if (club.isEmpty()) {
             clubRepository.delete(club);
         }

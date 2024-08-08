@@ -20,4 +20,8 @@ public class MemberQueryService {
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 회원입니다."));
         return new FindMemberResponse(member);
     }
+
+    public Member getById(Long memberId) {
+        return memberRepository.getById(memberId);
+    }
 }

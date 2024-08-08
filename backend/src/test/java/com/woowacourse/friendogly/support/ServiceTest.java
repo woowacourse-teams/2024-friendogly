@@ -1,6 +1,5 @@
 package com.woowacourse.friendogly.support;
 
-import com.woowacourse.friendogly.chat.repository.PrivateChatRoomRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
@@ -26,9 +25,6 @@ public abstract class ServiceTest {
     @Autowired
     protected FootprintRepository footprintRepository;
 
-    @Autowired
-    protected PrivateChatRoomRepository privateChatRoomRepository;
-
     @BeforeAll
     static void setTimeZone() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
@@ -36,7 +32,6 @@ public abstract class ServiceTest {
 
     @BeforeEach
     void clearDB() {
-        privateChatRoomRepository.deleteAll();
         clubRepository.deleteAll();
         footprintRepository.deleteAll();
         petRepository.deleteAll();

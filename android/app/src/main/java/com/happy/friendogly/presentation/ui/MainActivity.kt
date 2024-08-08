@@ -1,12 +1,10 @@
 package com.happy.friendogly.presentation.ui
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
@@ -24,10 +22,15 @@ import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
+import com.happy.friendogly.presentation.utils.logChatListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logGroupListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
+import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
 
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
+    private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
     private var waitTime = 0L
@@ -55,6 +58,8 @@ class MainActivity :
         val fragment = supportFragmentManager.findFragmentByTag(fragmentClass.simpleName)
         val transaction = supportFragmentManager.beginTransaction()
 
+        logFragmentSwitched(fragmentClass)
+
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
@@ -74,22 +79,23 @@ class MainActivity :
         return true
     }
 
-    private fun requestLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            val permissions =
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
-            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE)
+    private fun logFragmentSwitched(fragmentClass: Class<out Fragment>) {
+        when (fragmentClass.simpleName) {
+            GroupListFragment::class.simpleName -> {
+                analyticsHelper.logGroupListFragmentSwitched()
+            }
+
+            WoofFragment::class.simpleName -> {
+                analyticsHelper.logWoofFragmentSwitched()
+            }
+
+            ChatListFragment::class.simpleName -> {
+                analyticsHelper.logChatListFragmentSwitched()
+            }
+
+            MyPageFragment::class.simpleName -> {
+                analyticsHelper.logMyPageFragmentSwitched()
+            }
         }
     }
 
