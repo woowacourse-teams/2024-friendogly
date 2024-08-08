@@ -108,6 +108,7 @@ class WoofViewModel(
                 _myFootprint.value = footprintSave
                 _mapActions.value = Event(WoofMapActions.RemoveNearFootprints)
                 _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
+                _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
                 _myWalkStatus.value = WalkStatus.BEFORE
                 loadNearFootprints(latLng)
             }.onFailure {
@@ -122,7 +123,6 @@ class WoofViewModel(
                     WalkStatus.BEFORE -> {
                         if (myWalkStatus.value == null) {
                             _myWalkStatus.value = WalkStatus.BEFORE
-                            _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
                         }
                     }
 
