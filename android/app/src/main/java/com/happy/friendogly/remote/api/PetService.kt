@@ -19,4 +19,7 @@ interface PetService {
 
     @GET(ApiClient.Pet.GET_PETS_MINE)
     suspend fun getPetsMine(): BaseResponse<List<PetResponse>>
+
+    @GET(ApiClient.Pet.GET_PETS)
+    suspend fun getPets(id: Long): BaseResponse<List<PetResponse>>
 }

@@ -37,4 +37,9 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
 
             service.postPet(body = body, file = file).data.toData()
         }
+
+    override suspend fun getPets(id: Long): Result<List<PetDto>> =
+        runCatching {
+            service.getPets(id = id).data.map { petResponse -> petResponse.toData() }
+        }
 }

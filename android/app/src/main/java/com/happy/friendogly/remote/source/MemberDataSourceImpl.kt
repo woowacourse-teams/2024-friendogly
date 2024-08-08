@@ -26,4 +26,9 @@ class MemberDataSourceImpl(
         runCatching {
             service.getMemberMine().data.toData()
         }
+
+    override suspend fun getMember(id: Long): Result<MemberDto> =
+        runCatching {
+            service.getMember(id = id).data.toData()
+        }
 }

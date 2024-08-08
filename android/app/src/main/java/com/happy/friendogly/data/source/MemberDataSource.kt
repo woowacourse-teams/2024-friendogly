@@ -13,4 +13,6 @@ interface MemberDataSource {
     ): Result<RegisterDto>
 
     suspend fun getMemberMine(): Result<MemberDto>
+
+    suspend fun getMember(id: Long): Result<MemberDto>
 }

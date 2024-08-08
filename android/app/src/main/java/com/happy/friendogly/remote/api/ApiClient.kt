@@ -19,12 +19,14 @@ class ApiClient {
         private const val BASE_URL = "/members"
         const val POST_MEMBER = BASE_URL
         const val GET_MEMBER_MINE = "$BASE_URL/mine"
+        const val GET_MEMBER = "$BASE_URL/{id}"
     }
 
     object Pet {
         private const val BASE_URL = "/pets"
         const val GET_PETS_MINE = "$BASE_URL/mine"
         const val POST_PET = BASE_URL
+        const val GET_PETS = "$BASE_URL/{id}"
     }
 
     object Club {
