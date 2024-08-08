@@ -1,6 +1,7 @@
 package com.woowacourse.friendogly.config;
 
 import com.woowacourse.friendogly.auth.WebSocketArgumentResolver;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
@@ -16,12 +17,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final WebSocketInterceptor webSocketInterceptor;
     private final WebSocketErrorHandler webSocketErrorHandler;
+    private final JwtProvider jwtProvider;
 
     public WebSocketConfig(WebSocketInterceptor webSocketInterceptor,
-            WebSocketErrorHandler webSocketErrorHandler
+            WebSocketErrorHandler webSocketErrorHandler,
+            JwtProvider jwtProvider
     ) {
         this.webSocketInterceptor = webSocketInterceptor;
         this.webSocketErrorHandler = webSocketErrorHandler;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new WebSocketArgumentResolver());
+        resolvers.add(new WebSocketArgumentResolver(jwtProvider));
     }
 
     @Override
