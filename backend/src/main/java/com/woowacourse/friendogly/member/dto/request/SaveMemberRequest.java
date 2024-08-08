@@ -14,7 +14,10 @@ public record SaveMemberRequest(
         String email,
 
         @NotBlank(message = "accessToken은 빈 문자열이나 null을 입력할 수 없습니다.")
-        String accessToken
+        String accessToken,
+
+        @NotBlank(message = "deviceToken은 빈 문자열이나 null을 입력할 수 없습니다.")
+        String deviceToken
 ) {
 
 }

@@ -11,6 +11,8 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
+import com.woowacourse.friendogly.notification.domain.DeviceToken;
+import com.woowacourse.friendogly.notification.repository.DeviceTokenRepository;
 import com.woowacourse.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,19 +27,21 @@ public class MemberCommandService {
     private final FileStorageManager fileStorageManager;
     private final MemberRepository memberRepository;
     private final KakaoMemberRepository kakaoMemberRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public MemberCommandService(
             JwtProvider jwtProvider,
             KakaoOauthClient kakaoOauthClient,
             FileStorageManager fileStorageManager,
             MemberRepository memberRepository,
-            KakaoMemberRepository kakaoMemberRepository
-    ) {
+            KakaoMemberRepository kakaoMemberRepository,
+            DeviceTokenRepository deviceTokenRepository) {
         this.jwtProvider = jwtProvider;
         this.kakaoOauthClient = kakaoOauthClient;
         this.fileStorageManager = fileStorageManager;
         this.memberRepository = memberRepository;
         this.kakaoMemberRepository = kakaoMemberRepository;
+        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     public SaveMemberResponse saveMember(SaveMemberRequest request, MultipartFile image) {
@@ -59,7 +63,7 @@ public class MemberCommandService {
 
         TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(savedMember.getId()));
         kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
-
+        deviceTokenRepository.save(new DeviceToken(member, request.deviceToken()));
         return new SaveMemberResponse(savedMember, tokens);
     }
 }
