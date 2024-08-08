@@ -53,16 +53,6 @@ class ChatViewModel(
         }
     }
 
-    fun inviteMember(chatRoomId: Long) {
-        viewModelScope.launch {
-            /*webSocketRepository.publishInvite(1)
-            webSocketRepository.publishInvite(2)
-            webSocketRepository.publishInvite(3)
-            webSocketRepository.publishInvite(4)
-            webSocketRepository.publishInvite(5)*/
-
-        }
-    }
 
     fun getChats(chatId: Long) {
         // _chats.value = dummyChats

@@ -51,8 +51,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     }
 
     private fun getChatList() {
-        val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
-        viewModel.inviteMember(chatId)
         viewModel.chats.observe(this) {
             adapter.submitList(it)
         }
