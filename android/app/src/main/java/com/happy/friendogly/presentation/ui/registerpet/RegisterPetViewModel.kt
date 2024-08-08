@@ -31,11 +31,15 @@ class RegisterPetViewModel(
     private val _profileImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val profileImage: LiveData<Bitmap?> get() = _profileImage
 
+    private var profilePath: MultipartBody.Part? = null
+    var profileImageUrl: String? = null
+
+    private var beforePetProfile: PetProfile? = null
     val petName = MutableLiveData<String>("")
     val petDescription = MutableLiveData<String>("")
-    private val petSize = MutableLiveData(PetSize.SMALL)
-    private val petGender = MutableLiveData(PetGender.MAIL)
-
+    val neutering = MutableLiveData(true)
+    val petSize = MutableLiveData(PetSize.SMALL)
+    val petGender = MutableLiveData(PetGender.MAIL)
     private val _navigateAction: MutableLiveData<Event<RegisterPetNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<RegisterPetNavigationAction>> get() = _navigateAction
@@ -48,6 +52,7 @@ class RegisterPetViewModel(
                 petSize,
                 petGender,
                 uiState,
+                neutering,
             ) {
                 isProfileUpdateNeeded()
             }
@@ -55,89 +60,89 @@ class RegisterPetViewModel(
 
     private fun isProfileUpdateNeeded(): Boolean {
         val state = uiState.value ?: return false
-        val beforePetProfile = state.beforePetProfile
         val petName = petName.value ?: return false
         val petDescription = petDescription.value ?: return false
         val petSize = petSize.value ?: return false
         val petGender = petGender.value ?: return false
+        val neutering = neutering.value ?: return true
 
         return isPetProfileDifferent(
             state,
-            beforePetProfile,
             petName,
             petDescription,
             petSize,
             petGender,
+            neutering,
         )
     }
 
     private fun isPetProfileDifferent(
         state: RegisterPetUiState,
-        beforePetProfile: PetProfile?,
         petName: String,
         petDescription: String,
         petSize: PetSize,
         petGender: PetGender,
+        neutering: Boolean,
     ): Boolean {
         return if (state.isFirstTimeSetup) {
             isFirstTimeSetupProfileDifferent(
                 state,
-                beforePetProfile,
                 petName,
                 petDescription,
                 petSize,
                 petGender,
+                neutering,
             )
         } else {
             isExistingProfileDifferent(
                 state,
-                beforePetProfile,
                 petName,
                 petDescription,
                 petSize,
                 petGender,
+                neutering,
             )
         }
     }
 
     private fun isFirstTimeSetupProfileDifferent(
         state: RegisterPetUiState,
-        beforePetProfile: PetProfile?,
         petName: String,
         petDescription: String,
         petSize: PetSize,
         petGender: PetGender,
+        neutering: Boolean,
     ): Boolean {
         return (
-            (state.profileImageUrl == null && state.profilePath != null) &&
+            (profileImageUrl == null && profilePath != null) &&
                 (petName != beforePetProfile?.name && petName.isNotBlank()) &&
                 (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) &&
                 (petSize.toSizeType() != beforePetProfile?.sizeType) &&
-                (petGender.toGender(state.neutering) != beforePetProfile?.gender) &&
+                (petGender.toGender(neutering) != beforePetProfile?.gender) &&
                 (
                     (state.petBirthdayYear != beforePetProfile?.birthDate?.year) ||
-                        (state.petBirthdayMonth != beforePetProfile.birthDate.month.value)
+                        (state.petBirthdayMonth != beforePetProfile?.birthDate?.month?.value)
                 )
         )
     }
 
     private fun isExistingProfileDifferent(
         state: RegisterPetUiState,
-        beforePetProfile: PetProfile?,
         petName: String,
         petDescription: String,
         petSize: PetSize,
         petGender: PetGender,
+        neutering: Boolean,
     ): Boolean {
         return (
-            (state.profileImageUrl == null && state.profilePath != null) ||
+            (profileImageUrl == null && profilePath != null) ||
                 (petName != beforePetProfile?.name && petName.isNotBlank()) ||
                 (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) ||
                 (petSize.toSizeType() != beforePetProfile?.sizeType) ||
-                (petGender.toGender(state.neutering) != beforePetProfile.gender) ||
+                (petGender.toGender(neutering) != beforePetProfile?.gender) ||
                 (
-                    (state.petBirthdayYear != beforePetProfile.birthDate.year) ||
-                        (state.petBirthdayMonth != beforePetProfile.birthDate.month.value)
+                    (state.petBirthdayYear != beforePetProfile?.birthDate?.year) ||
+                        (state.petBirthdayMonth != beforePetProfile?.birthDate?.month?.value)
                 )
         )
     }
@@ -160,15 +165,15 @@ class RegisterPetViewModel(
         petDescription.value = petProfile.description
         petGender.value = petProfile.gender.toPetGender()
         petSize.value = petProfile.sizeType.toPetSize()
+        neutering.value = petProfile.gender.isNeutered()
+        beforePetProfile = petProfile
+        profileImageUrl = petProfile.imageUrl
 
         _uiState.value =
             state.copy(
                 isFirstTimeSetup = false,
-                beforePetProfile = petProfile,
-                profileImageUrl = petProfile.imageUrl,
                 petBirthdayYear = petProfile.birthDate.year,
                 petBirthdayMonth = petProfile.birthDate.monthNumber,
-                neutering = petProfile.gender.isNeutered(),
             )
     }
 
@@ -196,8 +201,8 @@ class RegisterPetViewModel(
     }
 
     fun updatePetProfileFile(file: MultipartBody.Part) {
-        val state = _uiState.value ?: return
-        _uiState.value = state.copy(profilePath = file, profileImageUrl = null)
+        profilePath = file
+        profileImageUrl = null
     }
 
     fun updatePetSize(petSize: PetSize) {
@@ -209,8 +214,8 @@ class RegisterPetViewModel(
     }
 
     fun updateNeutering() {
-        val state = _uiState.value ?: return
-        _uiState.value = state.copy(neutering = !state.neutering)
+        val value = neutering.value ?: return
+        neutering.value = !value
     }
 
     fun updatePetBirthday(
@@ -228,8 +233,7 @@ class RegisterPetViewModel(
                 val name = petName.value ?: return@launch
                 val description = petDescription.value ?: return@launch
                 val birthday = LocalDate(state.petBirthdayYear, state.petBirthdayMonth, 1)
-                val neutering = state.neutering
-                val profilePath = state.profilePath
+                val neutering = neutering.value ?: return@launch
 
                 if (state.isFirstTimeSetup) {
                     postPet(name, description, birthday, neutering, profilePath)
