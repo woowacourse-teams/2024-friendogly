@@ -255,7 +255,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 1,
                 "https://clubImage.com",
                 List.of("https://pet1ImageUrl.com", "http://pet2ImageUrl"),
-                true
+                true,
+                4L
         );
 
         when(clubCommandService.save(any(), any(MultipartFile.class), any(SaveClubRequest.class)))
@@ -308,7 +309,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.currentMemberCount").type(JsonFieldType.NUMBER).description("모임 현재 인원(대부분의 경우 1)"),
                                         fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("모임 프로필 사진"),
                                         fieldWithPath("data.petImageUrls").type(JsonFieldType.ARRAY).description("모임 리스트에 참여하는 팻 프로필 url"),
-                                        fieldWithPath("data.isMine").type(JsonFieldType.BOOLEAN).description("현재 회원의 글인지 판단하는 값(대부분의 경우 true)"))
+                                        fieldWithPath("data.isMine").type(JsonFieldType.BOOLEAN).description("현재 회원의 글인지 판단하는 값(대부분의 경우 true)"),
+                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("생성된 채팅방 ID"))
                                 .requestSchema(Schema.schema("saveClubRequest"))
                                 .responseSchema(Schema.schema("saveClubResponse"))
                                 .build()))
