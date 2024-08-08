@@ -31,13 +31,14 @@
             android:layout_marginStart="16dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:background="@drawable/ripple_circle_white"
             app:address="@{vm.myAddress}"
             app:layout_constraintBottom_toBottomOf="@id/view_group_list_top_bar"
             app:layout_constraintStart_toStartOf="@id/view_group_list_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">
 
             <TextView
-                android:text="@{vm.myAddress.thoroughfare}"
+                android:text="@{vm.myAddress.subLocality}"
                 style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
