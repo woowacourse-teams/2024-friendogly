@@ -150,6 +150,27 @@ object RemoteModule {
         OkHttpClient.Builder().callTimeout(Duration.ofMinutes(TIME_OUT_MINUTE))
             .pingInterval(Duration.ofSeconds(PINT_OUT_SECOND)).apply(interceptors).build()
 
+    fun createStumpClient(
+        baseUrl: BaseUrl,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
+    ): StompClient {
+
+        val authenticator =
+            Authenticator(
+                authService = createAuthService(baseUrl),
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            )
+
+        return createOkHttpClient {
+            addInterceptor(AuthorizationInterceptor(tokenManager = tokenManager))
+            authenticator(authenticator)
+            addInterceptor(ErrorResponseInterceptor())
+            addInterceptor(logging)
+        }.let(::OkHttpWebSocketClient).let(::StompClient)
+    }
+
     private fun createAuthService(baseUrl: BaseUrl): AuthService =
         Retrofit.Builder().baseUrl(baseUrl.url).client(
             createOkHttpClient {
@@ -158,14 +179,4 @@ object RemoteModule {
             },
         ).addConverterFactory(json.asConverterFactory(contentType)).build()
             .create(AuthService::class.java)
-
-    fun createStumpClient(
-        localModule: LocalModule,
-    ): StompClient {
-        return createOkHttpClient {
-            addInterceptor(AuthorizationInterceptor(localModule = localModule))
-            addInterceptor(ErrorResponseInterceptor())
-            addInterceptor(logging)
-        }.let(::OkHttpWebSocketClient).let(::StompClient)
-    }
 }

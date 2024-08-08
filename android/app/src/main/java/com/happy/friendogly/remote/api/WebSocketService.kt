@@ -1,6 +1,6 @@
 package com.happy.friendogly.remote.api
 
-import com.happy.friendogly.local.di.LocalModule
+import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.model.request.ChatMessageRequest
 import com.happy.friendogly.remote.model.response.ChatMessageResponse
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
 class WebSocketService(
     private val client: StompClient,
     private val baseUrl: BaseUrl,
-    private val localModule: LocalModule
+    private val tokenManager: TokenManager
 ) {
 
     private suspend fun stompSession(): StompSessionWithKxSerialization =
@@ -25,7 +25,7 @@ class WebSocketService(
         stompSession().send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishEnter(chatRoomId = chatRoomId),
-                customHeaders = mapOf("Authorization" to localModule.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
             ),
             null
         )
@@ -35,7 +35,7 @@ class WebSocketService(
         stompSession().convertAndSend(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishMessage(chatRoomId),
-                customHeaders = mapOf("Authorization" to localModule.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
             ),
             ChatMessageRequest(content),
             ChatMessageRequest.serializer()
@@ -46,7 +46,7 @@ class WebSocketService(
         stompSession().send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishLeave(chatRoomId) + chatRoomId.toString(),
-                customHeaders = mapOf("Authorization" to localModule.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
             ),
             null
         )
@@ -56,7 +56,7 @@ class WebSocketService(
         return stompSession().subscribe(
             headers = StompSubscribeHeaders(
                 destination = ApiClient.WebSocket.subscribeChat(chatRoomId),
-                customHeaders = mapOf("Authorization" to localModule.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
             ),
             ChatMessageResponse.serializer()
         )

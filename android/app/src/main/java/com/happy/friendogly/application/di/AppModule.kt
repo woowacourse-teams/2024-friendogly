@@ -136,8 +136,12 @@ class AppModule(context: Context) {
         )
 
     private val webSocketService = WebSocketService(
-        client = RemoteModule.createStumpClient(localModule),
-        localModule = localModule,
+        client = RemoteModule.createStumpClient(
+            baseUrl = baseUrl,
+            tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
+        ),
+        tokenManager = tokenManager,
         baseUrl = websocketUrl
     )
 
