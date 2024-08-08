@@ -7,9 +7,14 @@
   </appender>
 
   <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>log/error/logFile.log</file>
+    <file>.logs/error-log.log</file>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>log/error/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>.logs/error-log-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <totalSizeCap>100MB</totalSizeCap>
     </rollingPolicy>
@@ -19,9 +24,14 @@
   </appender>
 
   <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>log/warn/logFile.log</file>
+    <file>.logs/warn-log.log</file>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>warn</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>log/warn/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>.logs/warn-log-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
       <totalSizeCap>100MB</totalSizeCap>
     </rollingPolicy>
