@@ -21,14 +21,12 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, String receiverToken) {
         Message message = Message.builder()
-                .setNotification(com.google.firebase.messaging.Notification.builder()
-                        .setTitle(title)
-                        .setBody(content)
-                        .build())
+                .putData("title",title)
+                .putData("body",content)
                 .setToken(receiverToken)
                 .build();
         try {
-            FirebaseMessaging.getInstance(this.firebaseApp).send(message, false);
+            FirebaseMessaging.getInstance(this.firebaseApp).send(message);
         } catch (FirebaseMessagingException e) {
             throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.");
         }
@@ -36,10 +34,8 @@ public class FcmNotificationService implements NotificationService {
 
     public void sendNotification(String title, String content, List<String> receiverTokens) {
         MulticastMessage message = MulticastMessage.builder()
-                .setNotification(com.google.firebase.messaging.Notification.builder()
-                        .setTitle(title)
-                        .setBody(content)
-                        .build())
+                .putData("title",title)
+                .putData("body",content)
                 .addAllTokens(receiverTokens)
                 .build();
         try {
