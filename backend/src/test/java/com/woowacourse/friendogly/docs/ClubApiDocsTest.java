@@ -261,7 +261,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                 1,
                 "https://clubImage.com",
                 List.of("https://pet1ImageUrl.com", "http://pet2ImageUrl"),
-                true
+                true,
+                4L
         );
 
         when(clubCommandService.save(any(), any(MultipartFile.class), any(SaveClubRequest.class)))
@@ -316,7 +317,8 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.currentMemberCount").type(JsonFieldType.NUMBER).description("모임 현재 인원(대부분의 경우 1)"),
                                         fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("모임 프로필 사진"),
                                         fieldWithPath("data.petImageUrls").type(JsonFieldType.ARRAY).description("모임 리스트에 참여하는 팻 프로필 url"),
-                                        fieldWithPath("data.isMine").type(JsonFieldType.BOOLEAN).description("현재 회원의 글인지 판단하는 값(대부분의 경우 true)"))
+                                        fieldWithPath("data.isMine").type(JsonFieldType.BOOLEAN).description("현재 회원의 글인지 판단하는 값(대부분의 경우 true)"),
+                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("생성된 채팅방 ID"))
                                 .requestSchema(Schema.schema("saveClubRequest"))
                                 .responseSchema(Schema.schema("saveClubResponse"))
                                 .build()))
@@ -327,7 +329,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @Test
     void saveClubMember_201() throws Exception {
         SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(1L));
-        SaveClubMemberResponse response = new SaveClubMemberResponse(1L);
+        SaveClubMemberResponse response = new SaveClubMemberResponse(1L, 3L);
         when(clubCommandService.joinClub(any(), any(), any()))
                 .thenReturn(response);
 
@@ -356,7 +358,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("모임-회원 연관관계 ID(추후 채팅 생기면 변경)"))
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("멤버 ID(추후 채팅 생기면 변경)"),
+                                        fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("모임 채팅방 ID")
+                                )
                                 .responseSchema(Schema.schema("SaveClubMemberResponse"))
                                 .build())
                 ));

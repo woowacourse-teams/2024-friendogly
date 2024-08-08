@@ -22,7 +22,8 @@ public record SaveClubResponse(
         int currentMemberCount,
         String imageUrl,
         List<String> petImageUrls,
-        boolean isMine
+        boolean isMine,
+        Long chatRoomId
 ) {
 
     public SaveClubResponse(Club club) {
@@ -43,7 +44,8 @@ public record SaveClubResponse(
                         .stream()
                         .map(clubPet -> clubPet.getClubPetPk().getPet().getImageUrl())
                         .toList(),
-                true
+                true,
+                club.getChatRoom().getId()
         );
     }
 }
