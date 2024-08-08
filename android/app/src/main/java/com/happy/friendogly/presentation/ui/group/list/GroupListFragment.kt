@@ -111,6 +111,7 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                     binding.includeGroupList.rcvGroupListGroup.visibility = View.VISIBLE
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
                     binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                    binding.includeGroupError.linearLayoutGroupError.visibility = View.GONE
                 }
 
                 GroupListUiState.NotAddress -> {
@@ -118,10 +119,19 @@ class GroupListFragment : BaseFragment<FragmentGroupListBinding>(R.layout.fragme
                         View.VISIBLE
                     binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
+                    binding.includeGroupError.linearLayoutGroupError.visibility = View.GONE
                 }
 
                 GroupListUiState.NotData -> {
                     binding.includeGroupData.linearLayoutGroupNotData.visibility = View.VISIBLE
+                    binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
+                    binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
+                    binding.includeGroupError.linearLayoutGroupError.visibility = View.GONE
+                }
+
+                GroupListUiState.Error -> {
+                    binding.includeGroupError.linearLayoutGroupError.visibility = View.VISIBLE
+                    binding.includeGroupData.linearLayoutGroupNotData.visibility = View.GONE
                     binding.includeGroupAddress.linearLayoutGroupNotAddress.visibility = View.GONE
                     binding.includeGroupList.rcvGroupListGroup.visibility = View.GONE
                 }

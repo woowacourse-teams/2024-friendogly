@@ -125,12 +125,15 @@ class ProfileSettingActivity :
 
     companion object {
         const val PUT_EXTRA_PROFILE = "PUT_EXTRA_PROFILE"
+        const val PUT_EXTRA_ACCESS_TOKEN = "PUT_EXTRA_ACCESS_TOKEN"
 
         fun getIntent(
             context: Context,
+            accessToken: String?,
             profile: Profile?,
         ): Intent {
             return Intent(context, ProfileSettingActivity::class.java).apply {
+                putExtra(PUT_EXTRA_ACCESS_TOKEN, accessToken)
                 profile ?: return@apply
                 putSerializable(PUT_EXTRA_PROFILE, profile, Profile.serializer())
             }

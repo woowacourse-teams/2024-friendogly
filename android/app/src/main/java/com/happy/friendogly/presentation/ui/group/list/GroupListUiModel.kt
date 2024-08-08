@@ -7,7 +7,7 @@ import kotlinx.datetime.LocalDateTime
 data class GroupListUiModel(
     val groupId: Long,
     val filters: List<GroupFilter>,
-    val groupPoster: String,
+    val groupPoster: String?,
     val isParticipable: Boolean,
     val title: String,
     val content: String,

@@ -21,8 +21,8 @@ class OtherProfileActivity :
     BaseActivity<ActivityOtherProfileBinding>(R.layout.activity_other_profile) {
     private val viewModel: OtherProfileViewModel by viewModels {
         OtherProfileViewModel.factory(
-            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-            getMemberMineUseCase = AppModule.getInstance().getMemberMineUseCase,
+            getPetsUseCase = AppModule.getInstance().getPetsUseCase,
+            getMemberUseCase = AppModule.getInstance().getMemberUseCase,
         )
     }
 

@@ -62,6 +62,7 @@ public class MemberCommandService {
 
         TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(savedMember.getId()));
         kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
+      
         return new SaveMemberResponse(savedMember, tokens);
     }
 }

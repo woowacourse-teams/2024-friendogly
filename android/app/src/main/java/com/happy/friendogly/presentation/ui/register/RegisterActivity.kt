@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.register
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -22,6 +23,8 @@ class RegisterActivity : AppCompatActivity() {
             analyticsHelper = AppModule.getInstance().analyticsHelper,
             kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase,
             getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
+            postKakaoLoginUseCase = AppModule.getInstance().postKakaoLoginUseCase,
+            saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
         )
     }
 
@@ -66,14 +69,14 @@ class RegisterActivity : AppCompatActivity() {
                     finish()
                 }
 
-                is RegisterNavigationAction.NavigateToGoogleLogin ->
-                    googleSignInLauncher.launch(
-                        SIGN_IN_REQUEST_CODE,
-                    )
+                is RegisterNavigationAction.NavigateToGoogleLogin -> {
+                    Toast.makeText(this, "현재 구글 로그인은 사용할 수 없어요", Toast.LENGTH_SHORT).show()
+//                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
+                }
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
                     startActivity(
-                        ProfileSettingActivity.getIntent(this, null),
+                        ProfileSettingActivity.getIntent(this, action.idToken, null),
                     )
             }
         }

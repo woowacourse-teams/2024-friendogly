@@ -1,6 +1,9 @@
 package com.happy.friendogly.remote.di
 
-import com.happy.friendogly.local.di.LocalModule
+import com.happy.friendogly.local.di.TokenManager
+import com.happy.friendogly.remote.api.AuthService
+import com.happy.friendogly.remote.api.AuthenticationListener
+import com.happy.friendogly.remote.api.Authenticator
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.FootprintService
@@ -23,53 +26,75 @@ object RemoteModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
+    fun createAuthService(
+        baseUrl: BaseUrl,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
+    ): AuthService {
+        return createRetrofit(
+            baseUrl,
+            tokenManager,
+            authenticationListener,
+        ).create(AuthService::class.java)
+    }
+
     fun createClubService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): ClubService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
+            authenticationListener,
         ).create(ClubService::class.java)
     }
 
     fun createFootprintService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): FootprintService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
+            authenticationListener,
         ).create(FootprintService::class.java)
     }
 
     fun createWoofService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): WoofService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
+            authenticationListener,
         ).create(WoofService::class.java)
     }
 
     fun createMemberService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): MemberService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
+            authenticationListener,
         ).create(MemberService::class.java)
     }
 
     fun createPetService(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): PetService {
         return createRetrofit(
             baseUrl,
-            localModule,
+            tokenManager,
+            authenticationListener,
         ).create(PetService::class.java)
     }
 
@@ -81,11 +106,20 @@ object RemoteModule {
 
     private fun createRetrofit(
         baseUrl: BaseUrl,
-        localModule: LocalModule,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
     ): Retrofit {
+        val authenticator =
+            Authenticator(
+                authService = createAuthService(baseUrl),
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            )
+
         return Retrofit.Builder().baseUrl(baseUrl.url).client(
             createOkHttpClient {
-                addInterceptor(AuthorizationInterceptor(localModule = localModule))
+                addInterceptor(AuthorizationInterceptor(tokenManager = tokenManager))
+                authenticator(authenticator)
                 addInterceptor(ErrorResponseInterceptor())
                 addInterceptor(logging)
             },
@@ -94,4 +128,13 @@ object RemoteModule {
 
     private fun createOkHttpClient(interceptors: OkHttpClient.Builder.() -> Unit = { }): OkHttpClient =
         OkHttpClient.Builder().apply(interceptors).build()
+
+    private fun createAuthService(baseUrl: BaseUrl): AuthService =
+        Retrofit.Builder().baseUrl(baseUrl.url).client(
+            createOkHttpClient {
+                addInterceptor(ErrorResponseInterceptor())
+                addInterceptor(logging)
+            },
+        ).addConverterFactory(json.asConverterFactory(contentType)).build()
+            .create(AuthService::class.java)
 }

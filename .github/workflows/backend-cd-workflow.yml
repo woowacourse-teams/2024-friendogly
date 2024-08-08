@@ -47,6 +47,12 @@ jobs:
       #   with:
       #     name: friendogly-be-develop-jar
       #     path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: friendogly-be-develop-jar
+          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
 
   deploy:
     needs: build

@@ -40,17 +40,19 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp" />
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             onSingleClick="@{()->actionHandler.selectGroupImage()}"
             android:layout_gravity="center"
-            android:layout_height="100dp">
-            <ImageView
+            android:layout_height="150dp">
+            <com.google.android.material.imageview.ShapeableImageView
                 app:groupPoster="@{vm.groupPoster}"
                 android:id="@+id/iv_group_add_poster"
+                app:shapeAppearanceOverlay="@style/RoundSmall"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/img_profile_normal" />
+                android:src="@drawable/ic_group_normal" />
             <ImageView
+                android:layout_margin="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/ic_user_profile_set_button"

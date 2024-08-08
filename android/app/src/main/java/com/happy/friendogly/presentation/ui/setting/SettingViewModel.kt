@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.usecase.DeleteLocalDataUseCase
+import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
@@ -12,7 +12,7 @@ import com.happy.friendogly.presentation.base.emit
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
-    private val deleteLocalDataUseCase: DeleteLocalDataUseCase,
+    private val deleteTokenUseCase: DeleteTokenUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<SettingUiState> = MutableLiveData<SettingUiState>(SettingUiState())
     val uiState: LiveData<SettingUiState> get() = _uiState
@@ -49,7 +49,7 @@ class SettingViewModel(
 
     fun navigateToLogout() {
         viewModelScope.launch {
-            deleteLocalDataUseCase().onSuccess {
+            deleteTokenUseCase().onSuccess {
                 _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
             }.onFailure {
                 // TODO 예외처리
@@ -59,7 +59,7 @@ class SettingViewModel(
 
     fun navigateToUnsubscribe() {
         viewModelScope.launch {
-            deleteLocalDataUseCase().onSuccess {
+            deleteTokenUseCase().onSuccess {
                 _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
             }.onFailure {
                 // TODO 예외처리
@@ -68,10 +68,10 @@ class SettingViewModel(
     }
 
     companion object {
-        fun factory(deleteLocalDataUseCase: DeleteLocalDataUseCase): ViewModelProvider.Factory {
+        fun factory(deleteTokenUseCase: DeleteTokenUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(
-                    deleteLocalDataUseCase = deleteLocalDataUseCase,
+                    deleteTokenUseCase = deleteTokenUseCase,
                 )
             }
         }
