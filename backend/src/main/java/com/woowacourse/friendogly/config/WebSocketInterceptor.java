@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.config;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.messaging.simp.stomp.StompCommand.SUBSCRIBE;
 
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import com.woowacourse.friendogly.chat.domain.ChatRoom;
 import com.woowacourse.friendogly.chat.repository.ChatRoomMemberRepository;
 import com.woowacourse.friendogly.chat.repository.ChatRoomRepository;
@@ -23,15 +24,18 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final JwtProvider jwtProvider;
 
     public WebSocketInterceptor(
             ClubRepository clubRepository,
             ChatRoomRepository chatRoomRepository,
-            ChatRoomMemberRepository chatRoomMemberRepository
+            ChatRoomMemberRepository chatRoomMemberRepository,
+            JwtProvider jwtProvider
     ) {
         this.clubRepository = clubRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatRoomMemberRepository = chatRoomMemberRepository;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -56,9 +60,8 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     }
 
     private void validateInviteSubscription(StompHeaderAccessor accessor, String destination) {
-        String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
-        validateLogin(rawMemberId);
-        long memberId = convertToLong(rawMemberId);
+        String accessToken = accessor.getFirstNativeHeader(AUTHORIZATION);
+        long memberId = Long.parseLong(jwtProvider.validateAndExtract(accessToken));
 
         String rawMemberIdToSubscribe = destination.substring(TOPIC_INVITE_ENDPOINT.length());
         long memberIdToSubscribe = convertToLong(rawMemberIdToSubscribe);
@@ -69,9 +72,8 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     }
 
     private void validateChatSubscription(StompHeaderAccessor accessor, String destination) {
-        String rawMemberId = accessor.getFirstNativeHeader(AUTHORIZATION);
-        validateLogin(rawMemberId);
-        long memberId = convertToLong(rawMemberId);
+        String accessToken = accessor.getFirstNativeHeader(AUTHORIZATION);
+        long memberId = Long.parseLong(jwtProvider.validateAndExtract(accessToken));
 
         String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
         long chatRoomId = convertToLong(rawChatRoomId);
