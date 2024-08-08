@@ -52,7 +52,7 @@ class GroupAddViewModel(
     private val _groupPoster: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val groupPoster: LiveData<Bitmap?> get() = _groupPoster
 
-    val isValidNextPage: MediatorLiveData<Boolean> =
+    val validNextPage: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>()
             .apply {
                 addSourceList(
@@ -66,7 +66,7 @@ class GroupAddViewModel(
                 }
             }
 
-    val isValidPrevPage:
+    val validPrevPage:
         MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>()
             .apply {
