@@ -40,22 +40,46 @@
     </encoder>
   </appender>
 
-  <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
-    <appender-ref ref="STDOUT"/>
-  </logger>
+  <springProfile name="local">
+    <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
 
-  <logger name="com.woowacourse.friendogly" additivity="false">
-    <level value = "INFO" />
-    <appender-ref ref="STDOUT" />
-  </logger>
+    <logger name="com.woowacourse.friendogly" additivity="false">
+      <level value = "INFO" />
+      <appender-ref ref="STDOUT" />
+    </logger>
 
-  <logger name="com.woowacourse.friendogly.test" additivity="false">
-    <level value = "ERROR" />
-    <appender-ref ref="FILE-ERROR" />
-  </logger>
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "ERROR" />
+      <appender-ref ref="FILE-ERROR" />
+    </logger>
 
-  <logger name="com.woowacourse.friendogly.test" additivity="false">
-    <level value = "WARN" />
-    <appender-ref ref="FILE-WARN" />
-  </logger>
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "WARN" />
+      <appender-ref ref="FILE-WARN" />
+    </logger>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.woowacourse.friendogly" additivity="false">
+      <level value = "INFO" />
+      <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "ERROR" />
+      <appender-ref ref="FILE-ERROR" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "WARN" />
+      <appender-ref ref="FILE-WARN" />
+    </logger>
+  </springProfile>
+
 </configuration>
