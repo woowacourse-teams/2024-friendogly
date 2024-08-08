@@ -31,11 +31,12 @@ class SelectFilterAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): SelectFilterViewHolder {
-        val binding = ItemSelectedFilterMenuBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        val binding =
+            ItemSelectedFilterMenuBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            )
         return SelectFilterViewHolder(binding)
     }
 

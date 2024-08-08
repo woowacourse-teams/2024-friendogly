@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -12,6 +11,7 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
+import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import kotlinx.coroutines.launch
 

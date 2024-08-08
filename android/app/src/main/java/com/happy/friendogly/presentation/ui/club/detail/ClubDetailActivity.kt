@@ -140,8 +140,8 @@ class ClubDetailActivity :
     }
 
     override fun navigateToModify() {
-        val ClubModifyUiModel = viewModel.makeClubModifyUiModel() ?: return
-        val modifyIntent = makeModifyIntent(ClubModifyUiModel)
+        val clubModifyUiModel = viewModel.makeClubModifyUiModel() ?: return
+        val modifyIntent = makeModifyIntent(clubModifyUiModel)
         clubModifyResultLauncher.launch(modifyIntent)
     }
 
@@ -169,7 +169,7 @@ class ClubDetailActivity :
     }
 
     companion object {
-        private const val KEY_CLUB_DETAIL_ID = "ClubDetailId"
+        private const val KEY_CLUB_DETAIL_ID = "clubDetailId"
         const val FAIL_LOAD_DATA_ID = -1L
 
         fun getIntent(

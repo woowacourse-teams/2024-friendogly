@@ -11,10 +11,6 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
-import com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler
-import com.happy.friendogly.presentation.ui.club.list.ClubListEvent
-import com.happy.friendogly.presentation.ui.club.list.ClubListUiState
-import com.happy.friendogly.presentation.ui.club.list.ClubListViewModel
 import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 

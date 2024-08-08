@@ -20,9 +20,7 @@ class MemberRepositoryImpl(
         source.postMember(name = name, email = email, accessToken = accessToken, file = file)
             .mapCatching { result -> result.toDomain() }
 
-    override suspend fun getMemberMine(): Result<Member> =
-        source.getMemberMine().mapCatching { result -> result.toDomain() }
+    override suspend fun getMemberMine(): Result<Member> = source.getMemberMine().mapCatching { result -> result.toDomain() }
 
-    override suspend fun getMember(id: Long): Result<Member> =
-        source.getMember(id = id).mapCatching { result -> result.toDomain() }
+    override suspend fun getMember(id: Long): Result<Member> = source.getMember(id = id).mapCatching { result -> result.toDomain() }
 }

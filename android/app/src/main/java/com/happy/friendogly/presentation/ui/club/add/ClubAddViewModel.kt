@@ -6,9 +6,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.presentation.ui.club.mapper.toDomain
-import com.happy.friendogly.presentation.ui.club.mapper.toGenders
-import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -20,6 +17,9 @@ import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Comp
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.club.add.model.ClubCounter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterItemActionHandler
+import com.happy.friendogly.presentation.ui.club.mapper.toDomain
+import com.happy.friendogly.presentation.ui.club.mapper.toGenders
+import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import com.happy.friendogly.presentation.ui.club.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.utils.addSourceList
@@ -124,7 +124,7 @@ class ClubAddViewModel(
         val clubTitleLength = clubTitle.value?.length ?: (MIN_TEXT_LENGTH - 1)
         val clubContentLength = clubContent.value?.length ?: (MIN_TEXT_LENGTH - 1)
         return clubTitleLength in MIN_TEXT_LENGTH..MAX_TITLE_LENGTH &&
-                clubContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
+            clubContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
     }
 
     private fun isValidFilterGroup(): Boolean {
