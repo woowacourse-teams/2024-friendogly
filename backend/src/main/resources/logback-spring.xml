@@ -1,0 +1,85 @@
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <withJansi>true</withJansi>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %green(%-5level) %logger{35}  %cyan(%logger{15}) -  %msg  %n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>.logs/error-log.log</file>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>.logs/error-log-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>.logs/warn-log.log</file>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>warn</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>.logs/warn-log-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <springProfile name="local">
+    <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.woowacourse.friendogly" additivity="false">
+      <level value = "INFO" />
+      <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "ERROR" />
+      <appender-ref ref="FILE-ERROR" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "WARN" />
+      <appender-ref ref="FILE-WARN" />
+    </logger>
+  </springProfile>
+
+  <springProfile name="dev">
+    <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.woowacourse.friendogly" additivity="false">
+      <level value = "INFO" />
+      <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "ERROR" />
+      <appender-ref ref="FILE-ERROR" />
+    </logger>
+
+    <logger name="com.woowacourse.friendogly.test" additivity="false">
+      <level value = "WARN" />
+      <appender-ref ref="FILE-WARN" />
+    </logger>
+  </springProfile>
+
+</configuration>
