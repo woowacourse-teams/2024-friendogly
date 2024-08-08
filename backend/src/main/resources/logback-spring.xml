@@ -3,7 +3,13 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <property name="LOG_PATH" value="./logs"/>
+    <springProfile name="local">
+        <property name="LOG_PATH" value="./logs"/>
+    </springProfile>
+
+    <springProfile name="dev | prod">
+        <property name="LOG_PATH" value="/home/ubuntu/friendogly-logs"/>
+    </springProfile>
 
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
