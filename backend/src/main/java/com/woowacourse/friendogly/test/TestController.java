@@ -28,7 +28,7 @@ public class TestController {
 
     @GetMapping("/log/warn")
     public String logWarn() {
-        log.info("--- WARN 로그 남기기 테스트 ---");
+        log.warn("--- WARN 로그 남기기 테스트 ---");
         return "warn";
     }
 }
