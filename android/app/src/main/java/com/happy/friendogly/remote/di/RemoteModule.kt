@@ -7,7 +7,6 @@ import com.happy.friendogly.remote.api.Authenticator
 import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ChatService
 import com.happy.friendogly.remote.api.ClubService
-import com.happy.friendogly.remote.api.FootprintService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.WoofService
@@ -56,18 +55,6 @@ object RemoteModule {
             tokenManager,
             authenticationListener,
         ).create(ClubService::class.java)
-    }
-
-    fun createFootprintService(
-        baseUrl: BaseUrl,
-        tokenManager: TokenManager,
-        authenticationListener: AuthenticationListener,
-    ): FootprintService {
-        return createRetrofit(
-            baseUrl,
-            tokenManager,
-            authenticationListener,
-        ).create(FootprintService::class.java)
     }
 
     fun createWoofService(

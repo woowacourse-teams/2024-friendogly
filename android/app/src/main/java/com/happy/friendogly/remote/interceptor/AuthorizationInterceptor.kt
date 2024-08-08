@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.interceptor
 
-import android.util.Log
 import com.happy.friendogly.local.di.TokenManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -16,7 +15,6 @@ class AuthorizationInterceptor(
             runBlocking {
                 tokenManager.accessToken.first()
             }
-        Log.d("ttt accessToken", accessToken.toString())
         val request = from(chain.request(), accessToken)
         return chain.proceed(request)
     }

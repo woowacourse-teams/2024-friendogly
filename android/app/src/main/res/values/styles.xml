@@ -30,7 +30,7 @@
     </style>
 
     <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rect_white_fill_20</item>
+        <item name="android:background">@drawable/rect_white_fill_30</item>
     </style>
 
     <!-- Bold -->
@@ -57,8 +57,22 @@
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">24dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/gray700</item>
@@ -101,6 +115,13 @@
 
     <style name="Theme.AppCompat.TextView.SemiBold.White.Size24" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">20dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/white</item>
@@ -373,6 +394,13 @@
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size26" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.Black.Size25" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">25dp</item>
@@ -426,6 +454,20 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
+    <style name="marker_information_bottom_sheet_dialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 
     <!-- Alert 관련 -->
     <style name="Theme.AppCompat.Alert.Padding.Radius16" parent="Theme.AppCompat">

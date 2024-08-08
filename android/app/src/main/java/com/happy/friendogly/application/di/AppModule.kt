@@ -10,7 +10,6 @@ import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
-import com.happy.friendogly.data.repository.FootprintRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
@@ -19,7 +18,6 @@ import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.AuthDataSource
 import com.happy.friendogly.data.source.ClubDataSource
-import com.happy.friendogly.data.source.FootprintDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.data.source.PetDataSource
@@ -32,7 +30,6 @@ import com.happy.friendogly.domain.repository.WebSocketRepository
 import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AuthRepository
 import com.happy.friendogly.domain.repository.ClubRepository
-import com.happy.friendogly.domain.repository.FootprintRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.PetRepository
@@ -46,7 +43,6 @@ import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
-import com.happy.friendogly.domain.usecase.GetLandMarksUseCase
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
@@ -54,6 +50,7 @@ import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
+import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
@@ -73,7 +70,6 @@ import com.happy.friendogly.remote.api.WebSocketService
 import com.happy.friendogly.remote.di.RemoteModule
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
-import com.happy.friendogly.remote.source.FootprintDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
@@ -103,12 +99,6 @@ class AppModule(context: Context) {
 
     private val clubService =
         RemoteModule.createClubService(
-            baseUrl = baseUrl,
-            tokenManager = tokenManager,
-            authenticationListener = authenticationListener,
-        )
-    private val footprintService =
-        RemoteModule.createFootprintService(
             baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
@@ -158,8 +148,6 @@ class AppModule(context: Context) {
     private val addressDataSource: AddressDataSource =
         AddressDataSourceImpl(addressModule = addressModule)
     private val kakaoLoginDataSource: KakaoLoginDataSource = KakaoLoginDataSourceImpl()
-    private val footprintDataSource: FootprintDataSource =
-        FootprintDataSourceImpl(service = footprintService)
     private val woofDataSource: WoofDataSource = WoofDataSourceImpl(service = woofService)
     private val memberDataSource: MemberDataSource = MemberDataSourceImpl(service = memberService)
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
@@ -172,8 +160,6 @@ class AppModule(context: Context) {
     private val tokenRepository: TokenRepository = TokenRepositoryImpl(source = tokenDataSource)
     private val kakaoLoginRepository: KakaoLoginRepository =
         KakaoLoginRepositoryImpl(dataSource = kakaoLoginDataSource)
-    private val footprintRepository: FootprintRepository =
-        FootprintRepositoryImpl(source = footprintDataSource)
     private val woofRepository: WoofRepository = WoofRepositoryImpl(source = woofDataSource)
     private val memberRepository: MemberRepository = MemberRepositoryImpl(source = memberDataSource)
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
@@ -202,15 +188,15 @@ class AppModule(context: Context) {
     val deleteTokenUseCase: DeleteTokenUseCase =
         DeleteTokenUseCase(repository = tokenRepository)
     val getFootprintInfoUseCase: GetFootprintInfoUseCase =
-        GetFootprintInfoUseCase(repository = footprintRepository)
+        GetFootprintInfoUseCase(repository = woofRepository)
     val postFootprintUseCase: PostFootprintUseCase =
         PostFootprintUseCase(repository = woofRepository)
+    val patchWalkStatusUseCase: PatchWalkStatusUseCase =
+        PatchWalkStatusUseCase(repository = woofRepository)
     val getNearFootprintsUseCase: GetNearFootprintsUseCase =
         GetNearFootprintsUseCase(repository = woofRepository)
     val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase =
         GetFootprintMarkBtnInfoUseCase(repository = woofRepository)
-    val getLandMarksUseCase: GetLandMarksUseCase =
-        GetLandMarksUseCase(repository = woofRepository)
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
     val getPetsUseCase: GetPetsUseCase = GetPetsUseCase(repository = petRepository)
