@@ -85,8 +85,6 @@ class AppModule(context: Context) {
     val crashlyticsHelper = CrashlyticsHelper()
 
     private val baseUrl = BaseUrl(BuildConfig.base_url)
-    private val websocketUrl = BaseUrl("ws://10.0.2.2:8080/connect")
-    private val treBase = BaseUrl("http://localhost:8080/")
 
 
     private val tokenManager = TokenManager(context)
@@ -142,7 +140,7 @@ class AppModule(context: Context) {
             authenticationListener = authenticationListener,
         ),
         tokenManager = tokenManager,
-        baseUrl = websocketUrl
+        baseUrl = baseUrl
     )
 
     private val chatService = RemoteModule.createChatService(
