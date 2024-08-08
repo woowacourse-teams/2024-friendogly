@@ -85,8 +85,7 @@ class AppModule(context: Context) {
     val crashlyticsHelper = CrashlyticsHelper()
 
     private val baseUrl = BaseUrl(BuildConfig.base_url)
-    private val websocketUrl = BaseUrl("ws://10.0.2.2:8080/connect")
-    private val treBase = BaseUrl("http://10.0.2.2:8080/")
+    private val websocketUrl = BaseUrl(BuildConfig.websocket_url)
 
 
     private val tokenManager = TokenManager(context)
@@ -97,47 +96,47 @@ class AppModule(context: Context) {
     // service
     private val authService =
         RemoteModule.createAuthService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
 
     private val clubService =
         RemoteModule.createClubService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
     private val footprintService =
         RemoteModule.createFootprintService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
     private val woofService =
         RemoteModule.createWoofService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
 
     private val memberService =
         RemoteModule.createMemberService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
 
     private val petService =
         RemoteModule.createPetService(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
 
     private val webSocketService = WebSocketService(
         client = RemoteModule.createStumpClient(
-            baseUrl = treBase,
+            baseUrl = baseUrl,
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         ),
@@ -146,7 +145,7 @@ class AppModule(context: Context) {
     )
 
     private val chatService = RemoteModule.createChatService(
-        baseUrl = treBase,
+        baseUrl = baseUrl,
         tokenManager = tokenManager,
         authenticationListener = authenticationListener,
     )
