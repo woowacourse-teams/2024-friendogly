@@ -1,5 +1,11 @@
 package com.woowacourse.friendogly.member.service;
 
+import com.woowacourse.friendogly.auth.domain.KakaoMember;
+import com.woowacourse.friendogly.auth.dto.TokenResponse;
+import com.woowacourse.friendogly.auth.repository.KakaoMemberRepository;
+import com.woowacourse.friendogly.auth.service.KakaoOauthClient;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
+import com.woowacourse.friendogly.auth.service.jwt.TokenPayload;
 import com.woowacourse.friendogly.infra.FileStorageManager;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
@@ -14,12 +20,24 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class MemberCommandService {
 
+    private final JwtProvider jwtProvider;
+    private final KakaoOauthClient kakaoOauthClient;
     private final FileStorageManager fileStorageManager;
     private final MemberRepository memberRepository;
+    private final KakaoMemberRepository kakaoMemberRepository;
 
-    public MemberCommandService(FileStorageManager fileStorageManager, MemberRepository memberRepository) {
+    public MemberCommandService(
+            JwtProvider jwtProvider,
+            KakaoOauthClient kakaoOauthClient,
+            FileStorageManager fileStorageManager,
+            MemberRepository memberRepository,
+            KakaoMemberRepository kakaoMemberRepository
+    ) {
+        this.jwtProvider = jwtProvider;
+        this.kakaoOauthClient = kakaoOauthClient;
         this.fileStorageManager = fileStorageManager;
         this.memberRepository = memberRepository;
+        this.kakaoMemberRepository = kakaoMemberRepository;
     }
 
     public SaveMemberResponse saveMember(SaveMemberRequest request, MultipartFile image) {
@@ -27,6 +45,9 @@ public class MemberCommandService {
         if (image != null && !image.isEmpty()) {
             imageUrl = fileStorageManager.uploadFile(image);
         }
+
+        String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).id();
+        System.out.println("===============" + kakaoMemberId + "============");
 
         Member member = Member.builder()
                 .name(request.name())
@@ -36,6 +57,9 @@ public class MemberCommandService {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        return new SaveMemberResponse(savedMember);
+        TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(savedMember.getId()));
+        kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
+
+        return new SaveMemberResponse(savedMember, tokens);
     }
 }

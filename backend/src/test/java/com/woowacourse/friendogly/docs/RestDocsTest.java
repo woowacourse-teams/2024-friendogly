@@ -1,5 +1,6 @@
 package com.woowacourse.friendogly.docs;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.woowacourse.friendogly.GlobalExceptionHandler;
 import com.woowacourse.friendogly.auth.AuthArgumentResolver;
+import com.woowacourse.friendogly.auth.service.jwt.JwtProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,16 +22,19 @@ import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith({RestDocumentationExtension.class, MockitoExtension.class})
+@ContextConfiguration(classes = JwtProvider.class)
 abstract class RestDocsTest {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -38,6 +43,9 @@ abstract class RestDocsTest {
     protected static ObjectMapper objectMapper;
 
     protected MockMvc mockMvc;
+
+    @Mock
+    private JwtProvider jwtProvider;
 
     @BeforeAll
     static void beforeAll() {
@@ -54,7 +62,7 @@ abstract class RestDocsTest {
     void setUp(RestDocumentationContextProvider provider) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller())
                 .setControllerAdvice(new GlobalExceptionHandler())
-                .setCustomArgumentResolvers(new AuthArgumentResolver())
+                .setCustomArgumentResolvers(new AuthArgumentResolver(jwtProvider))
                 .apply(documentationConfiguration(provider))
                 .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
                 .build();
@@ -71,6 +79,14 @@ abstract class RestDocsTest {
 
     protected OperationResponsePreprocessor getDocumentResponse() {
         return preprocessResponse(prettyPrint());
+    }
+
+    protected String getMemberToken() {
+        String accessToken = "accessToken";
+        String memberId = "1";
+        when(jwtProvider.validateAndExtract(accessToken))
+                .thenReturn(memberId);
+        return accessToken;
     }
 
     protected abstract Object controller();

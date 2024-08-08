@@ -44,6 +44,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(FootprintController.class)
@@ -68,7 +69,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(post("/footprints")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "1"))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andDo(print())
                 .andDo(document("footprints/save",
                         getDocumentRequest(),
@@ -77,7 +78,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 저장 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .requestFields(
                                         fieldWithPath("latitude").description("현재 위치의 위도"),
@@ -134,7 +135,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
 
         mockMvc
                 .perform(get("/footprints/{footprintId}", 1L)
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andDo(print())
                 .andDo(document("footprints/findOne",
                         getDocumentRequest(),
@@ -143,7 +144,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 세부정보 단건 조회 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .pathParameters(
                                         parameterWithName("footprintId").description("발자국 ID")
@@ -192,7 +193,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(get("/footprints/near")
                         .param("latitude", "37.5173316")
                         .param("longitude", "127.1011661")
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andDo(print())
                 .andDo(document("footprints/near",
                         getDocumentRequest(),
@@ -201,7 +202,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("주변 발자국 조회 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .queryParameters(
                                         parameterWithName("latitude").description("현재 위치의 위도"),
@@ -235,7 +236,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
 
         mockMvc
                 .perform(get("/footprints/mine/latest")
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andDo(print())
                 .andDo(document("footprints/findMyLatestFootprintTime",
                         getDocumentRequest(),
@@ -244,7 +245,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("자신의 마지막 발자국 시간 조회 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
@@ -271,7 +272,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(patch("/footprints/walk-status")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("footprints/walk-status/200",
@@ -281,7 +282,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 산책 상태 변경 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
@@ -306,7 +307,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .perform(patch("/footprints/walk-status")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
-                        .header(AUTHORIZATION, 1L))
+                        .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("footprints/walk-status/400",
@@ -316,7 +317,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .tag("Footprint API")
                                 .summary("발자국 산책 상태 변경 API")
                                 .requestHeaders(
-                                        headerWithName(AUTHORIZATION).description("로그인한 회원 ID")
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
