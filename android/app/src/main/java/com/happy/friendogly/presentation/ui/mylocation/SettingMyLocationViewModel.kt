@@ -23,16 +23,65 @@ class SettingMyLocationViewModel(
     private val _userAddress: MutableLiveData<UserAddress> = MutableLiveData()
     val userAddress: LiveData<UserAddress> get() = _userAddress
 
-    fun updateAddress(address: Address) {
-        val adminArea = address.adminArea
-        val locality = address.locality
-        val thoroughfare = address.thoroughfare
-        _userAddress.value =
-            UserAddress(
-                adminArea = adminArea,
-                subLocality = locality,
-                thoroughfare = thoroughfare,
+    private val addressList: MutableSet<String?> = mutableSetOf()
+
+    fun updateAddress(address: Address) =
+        runCatching {
+            addressList.clear()
+            val addressLine = address.getAddressLine(0)
+
+            val adminArea = loadAdmin(address, addressLine)
+            val locality = loadLocality(addressLine)
+            val thoroughfare = loadThoroughfare(addressLine)
+
+            makeUserAddress(adminArea, locality, thoroughfare)
+        }
+            .onSuccess { newUserAddress ->
+                _userAddress.value = newUserAddress
+            }
+            .onFailure {
+                submitInValidLocation()
+            }
+
+    private fun loadAdmin(
+        address: Address,
+        addressLine: String,
+    ): String {
+        val admin = address.adminArea ?: address.adminArea ?: findAdminAddress(addressLine)
+        addressList.add(admin)
+        return admin
+    }
+
+    private fun loadLocality(addressLine: String): String {
+        val locality =
+            findAddressElement(
+                addressLine,
+                LOCALITY_SPLIT,
             )
+        addressList.add(locality)
+        return locality
+    }
+
+    private fun loadThoroughfare(addressLine: String): String {
+        val thoroughfare =
+            findAddressElement(
+                addressLine,
+                THOROUGH_FARE_SPLIT,
+            )
+        addressList.add(thoroughfare)
+        return thoroughfare
+    }
+
+    private fun makeUserAddress(
+        adminArea: String,
+        locality: String,
+        thoroughfare: String,
+    ): UserAddress {
+        return UserAddress(
+            adminArea = adminArea,
+            subLocality = locality,
+            thoroughfare = thoroughfare,
+        )
     }
 
     override fun closeSelect() {
@@ -66,14 +115,45 @@ class SettingMyLocationViewModel(
     ) = viewModelScope.launch {
         runCatching {
             geocoder.getFromLocation(latitude, longitude, 1)
+                ?.first()
                 ?: return@launch submitInValidLocation()
         }
-            .onSuccess {
-                updateAddress(it[0])
+            .onSuccess { address ->
+                updateAddress(address)
             }
             .onFailure {
                 submitInValidLocation()
             }
+    }
+
+    private fun findAddressElement(
+        addressLine: String,
+        delimiterChar: String,
+    ): String {
+        val addressElements = addressLine.split(ADDRESS_LINE_SPLIT)
+
+        val delimiterChars = delimiterChar.toSet()
+
+        return addressElements.first { element ->
+            isValidAddressElements(delimiterChars, element)
+        }
+    }
+
+    private fun findAdminAddress(addressLine: String): String {
+        val addressElements = addressLine.split(ADDRESS_LINE_SPLIT)
+
+        val delimiterStrings = ADMIN_SPLIT.split(ADDRESS_LINE_SPLIT).toSet()
+
+        return addressElements.first { element ->
+            delimiterStrings.any { delimiter -> delimiter in element }
+        }
+    }
+
+    private fun isValidAddressElements(
+        delimiterChars: Set<Char>,
+        element: String,
+    ): Boolean {
+        return element.last() in delimiterChars && !addressList.contains(element)
     }
 
     companion object {
@@ -84,5 +164,10 @@ class SettingMyLocationViewModel(
                 )
             }
         }
+
+        private const val ADDRESS_LINE_SPLIT = " "
+        private const val ADMIN_SPLIT = "도 특별시 자치시"
+        private const val LOCALITY_SPLIT = "시군구읍면"
+        private const val THOROUGH_FARE_SPLIT = "읍면동리로"
     }
 }

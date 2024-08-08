@@ -30,11 +30,13 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
                 PostClubRequest(
                     title = title,
                     content = content,
-                    address = address.toRemote(),
-                    allowedGender = allowedGender.map { it.toRemote() },
-                    allowedSize = allowedSize.map { it.toRemote() },
+                    province = address.province,
+                    city = address.city,
+                    village = address.village,
+                    allowedGenders = allowedGender.map { it.toRemote().name },
+                    allowedSizes = allowedSize.map { it.toRemote().name },
                     memberCapacity = memberCapacity,
-                    petIds = petIds,
+                    participatingPetsId = petIds,
                 )
             service.postClub(
                 body = request,
@@ -51,9 +53,11 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
         runCatching {
             service.getSearchingClubs(
                 filterCondition = filterCondition.toRemote(),
-                address = address.toRemote(),
-                genderParams = genderParams.map { it.toRemote() },
-                sizeParams = sizeParams.map { it.toRemote() },
+                province = address.province,
+                city = address.city,
+                village = address.village,
+                genderParams = genderParams.map { it.toRemote().name },
+                sizeParams = sizeParams.map { it.toRemote().name },
             ).data.toData()
         }
 

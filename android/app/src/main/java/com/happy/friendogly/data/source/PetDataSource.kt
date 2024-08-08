@@ -17,4 +17,6 @@ interface PetDataSource {
         gender: GenderDto,
         file: MultipartBody.Part?,
     ): Result<PetDto>
+
+    suspend fun getPets(id: Long): Result<List<PetDto>>
 }

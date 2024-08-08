@@ -33,7 +33,7 @@ class GroupListViewModel(
     val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
-        MutableLiveData(ParticipationFilter.POSSIBLE)
+        MutableLiveData(ParticipationFilter.ENTIRE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
     val groupFilterSelector = GroupFilterSelector()
@@ -49,6 +49,7 @@ class GroupListViewModel(
     }
 
     fun loadGroupWithAddress() {
+        _uiState.value = GroupListUiState.Init
         if (myAddress.value != null) {
             loadGroups()
         } else {
@@ -76,25 +77,30 @@ class GroupListViewModel(
                 genderParams = groupFilterSelector.selectGenderFilters().toGenders(),
                 sizeParams = groupFilterSelector.selectSizeFilters().toSizeTypes(),
             )
-                .onSuccess {
-                    if (it.isEmpty()) {
+                .onSuccess { groups ->
+                    if (groups.isEmpty()) {
                         _uiState.value = GroupListUiState.NotData
                     } else {
                         _uiState.value = GroupListUiState.Init
                     }
                     _groups.value =
-                        it.map { group ->
+                        groups.map { group ->
                             group.toPresentation()
                         }
+                }
+                .onFailure {
+                    _uiState.value = GroupListUiState.Error
                 }
         }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
+        loadGroupWithAddress()
     }
 
     fun updateParticipationFilter(participationFilter: ParticipationFilter) {
         _participationFilter.value = participationFilter
+        loadGroupWithAddress()
     }
 
     override fun loadGroup(groupId: Long) {
@@ -132,6 +138,7 @@ class GroupListViewModel(
 
     override fun removeFilter(groupFilter: GroupFilter) {
         groupFilterSelector.removeGroupFilter(filter = groupFilter)
+        loadGroupWithAddress()
     }
 
     override fun addMyLocation() {
