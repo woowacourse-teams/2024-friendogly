@@ -2,10 +2,9 @@ package com.happy.friendogly.remote.mapper
 
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.remote.model.response.ClubResponse
-import com.happy.friendogly.remote.model.response.ClubSearchingResponse
 
-fun ClubSearchingResponse.toData(): List<ClubDto> {
-    return contents.map { it.toData() }
+fun List<ClubResponse>.toData(): List<ClubDto> {
+    return this.map { it.toData() }
 }
 
 fun ClubResponse.toData(): ClubDto {

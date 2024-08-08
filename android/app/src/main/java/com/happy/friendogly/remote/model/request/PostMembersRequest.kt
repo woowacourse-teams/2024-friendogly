@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class PostMembersRequest(
     val name: String,
     val email: String,
+    val accessToken: String,
 )

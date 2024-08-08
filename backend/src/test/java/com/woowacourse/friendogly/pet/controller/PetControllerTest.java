@@ -3,6 +3,7 @@ package com.woowacourse.friendogly.pet.controller;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
 import com.woowacourse.friendogly.pet.dto.request.SavePetRequest;
+import com.woowacourse.friendogly.support.ControllerTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.io.File;
@@ -19,7 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-class PetControllerTest {
+class PetControllerTest extends ControllerTest {
 
     @LocalServerPort
     private int port;
@@ -52,7 +53,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -74,7 +75,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -96,7 +97,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -118,7 +119,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -140,7 +141,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -162,7 +163,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -171,7 +172,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -180,7 +181,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -189,7 +190,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -198,7 +199,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")
@@ -207,7 +208,7 @@ class PetControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
                 .multiPart("request", request, "application/json")
                 .when().post("/pets")

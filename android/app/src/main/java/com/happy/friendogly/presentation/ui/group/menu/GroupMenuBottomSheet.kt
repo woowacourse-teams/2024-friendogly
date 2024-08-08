@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
@@ -18,11 +19,14 @@ import com.happy.friendogly.presentation.ui.group.detail.GroupDetailNavigation
 import com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailViewType
 
 class GroupMenuBottomSheet(
+    private val groupId: Long,
     private val groupDetailViewType: GroupDetailViewType,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetGroupMenuBinding? = null
     val binding: BottomSheetGroupMenuBinding
         get() = _binding!!
+
+    private var toast: Toast? = null
 
     private val viewModel: GroupMenuViewModel by viewModels<GroupMenuViewModel> {
         GroupMenuViewModel.factory(
@@ -78,8 +82,26 @@ class GroupMenuBottomSheet(
                     (activity as GroupDetailNavigation).navigateToPrev()
                     dismissNow()
                 }
+
+                GroupMenuEvent.FailDelete -> {
+                    makeToast(
+                        requireContext().getString(R.string.group_detail_delete_fail),
+                    )
+                    dismissNow()
+                }
             }
         }
+    }
+
+    private fun makeToast(message: String) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     private fun openDeleteDialog() {
@@ -94,7 +116,7 @@ class GroupMenuBottomSheet(
                     ),
                 clickToNegative = { },
                 clickToPositive = {
-                    viewModel.withdrawGroup()
+                    viewModel.withdrawGroup(groupId)
                 },
             )
         dialog.show(parentFragmentManager, tag)

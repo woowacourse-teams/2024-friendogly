@@ -7,7 +7,7 @@ fun ClubMemberDto.toDomain(): ClubMember {
     return ClubMember(
         id = id,
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imageUrl?.ifEmpty { null },
     )
 }
 
@@ -15,6 +15,6 @@ fun ClubMember.toData(): ClubMemberDto {
     return ClubMemberDto(
         id = id,
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imageUrl?.ifEmpty { null },
     )
 }

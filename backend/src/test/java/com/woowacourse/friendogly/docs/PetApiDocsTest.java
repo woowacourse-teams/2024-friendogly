@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
-import com.woowacourse.friendogly.auth.AuthArgumentResolver;
 import com.woowacourse.friendogly.pet.controller.PetController;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -27,7 +26,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +43,6 @@ public class PetApiDocsTest extends RestDocsTest {
     @MockBean
     private PetQueryService petQueryService;
 
-    @Autowired
-    private AuthArgumentResolver authArgumentResolver;
 
     @DisplayName("반려견 등록 문서화")
     @Test
@@ -79,7 +75,7 @@ public class PetApiDocsTest extends RestDocsTest {
         mockMvc.perform(RestDocumentationRequestBuilders.multipart("/pets")
                         .file(image)
                         .file(request)
-                        .header(HttpHeaders.AUTHORIZATION, loginMemberId.toString()))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isCreated())
                 .andDo(MockMvcRestDocumentationWrapper.document("pet-save-201",
                         getDocumentRequest(),
@@ -101,7 +97,7 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .tag("Pet API")
                                 .summary("반려견 등록 API")
                                 .requestHeaders(
-                                        headerWithName("Authorization").description("로그인한 회원 id")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
@@ -198,7 +194,7 @@ public class PetApiDocsTest extends RestDocsTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.get("/pets/mine")
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, loginMemberId.toString()))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(MockMvcRestDocumentationWrapper.document("pet-findMine-200",
                         getDocumentRequest(),
@@ -207,7 +203,7 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .tag("Pet API")
                                 .summary("내 반려견 목록 조회 API")
                                 .requestHeaders(
-                                        headerWithName("Authorization").description("로그인한 회원 id")
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),

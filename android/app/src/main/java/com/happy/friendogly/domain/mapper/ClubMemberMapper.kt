@@ -14,6 +14,6 @@ fun ClubMember.toPresentation(): GroupDetailProfileUiModel {
 fun ClubPet.toPresentation(): GroupDetailProfileUiModel {
     return GroupDetailProfileUiModel(
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imageUrl.ifEmpty { null },
     )
 }

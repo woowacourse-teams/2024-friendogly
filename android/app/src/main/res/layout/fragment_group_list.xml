@@ -31,13 +31,14 @@
             android:layout_marginStart="16dp"
             android:gravity="center"
             android:orientation="horizontal"
+            android:background="@drawable/ripple_circle_white"
             app:address="@{vm.myAddress}"
             app:layout_constraintBottom_toBottomOf="@id/view_group_list_top_bar"
             app:layout_constraintStart_toStartOf="@id/view_group_list_top_bar"
             app:layout_constraintTop_toTopOf="@id/view_group_list_top_bar">
 
             <TextView
-                android:text="@{vm.myAddress.thoroughfare}"
+                android:text="@{vm.myAddress.subLocality}"
                 style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,6 +131,7 @@
                     layout="@layout/include_group_not_address"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:visibility="gone"
                     app:vm="@{vm}" />
 
                 <include
@@ -137,6 +139,15 @@
                     layout="@layout/include_group_not_data"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:visibility="gone"
+                    app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_group_error"
+                    layout="@layout/include_group_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="gone"
                     app:vm="@{vm}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -4,10 +4,11 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-kapt")
-    id("com.google.gms.google-services")
-    kotlin("plugin.serialization") version "1.9.22"
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.firebase.crashlytics.plugin)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.google.services)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -73,6 +74,7 @@ dependencies {
 
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.android)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.google)
     implementation(libs.bundles.kakao)
     implementation(libs.bundles.naver)

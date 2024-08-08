@@ -49,7 +49,7 @@ sealed class GroupFilter(val filterName: String) {
             )
         }
 
-        fun makeSizeFilterEntry(): List<GroupFilter> {
+        fun makeSizeFilterEntry(): List<GroupFilter.SizeFilter> {
             return listOf(
                 SizeFilter.SmallDog,
                 SizeFilter.MediumDog,
@@ -57,7 +57,7 @@ sealed class GroupFilter(val filterName: String) {
             )
         }
 
-        fun makeGenderFilterEntry(): List<GroupFilter> {
+        fun makeGenderFilterEntry(): List<GroupFilter.GenderFilter> {
             return listOf(
                 GenderFilter.Male,
                 GenderFilter.Female,

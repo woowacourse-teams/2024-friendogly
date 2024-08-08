@@ -109,7 +109,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 .thenReturn(responses);
 
         mockMvc.perform(get("/clubs/searching")
-                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
                         .param("filterCondition", request.filterCondition())
                         .param("province", request.province())
                         .param("city", request.city())
@@ -123,6 +123,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 검색 조회 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .queryParameters(
                                         parameterWithName("filterCondition").description("모임의 필터 조건 (ALL, OPEN, ABLE_TO_JOIN)"),
                                         parameterWithName("province").description("모임의 도/광역시/특별시 주소"),
@@ -182,7 +185,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 .thenReturn(response);
 
         mockMvc.perform(get("/clubs/{id}",1L)
-                .header(HttpHeaders.AUTHORIZATION, 2L))
+                .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(document("clubs/findById/200",
                         getDocumentRequest(),
@@ -190,6 +193,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 상세 조회 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("모임 식별자"),
@@ -264,7 +270,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         mockMvc.perform(multipart("/clubs")
                         .file(image)
                         .file(request)
-                        .header(HttpHeaders.AUTHORIZATION, 1L))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isCreated())
                 .andDo(document("clubs/post/201",
                         getDocumentRequest(),
@@ -288,7 +294,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 생성 API")
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("로그인 중 회원 정보"))
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("생성된 모임 리소스 Location"))
                                 .responseFields(
@@ -326,7 +334,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         mockMvc.perform(post("/clubs/{clubId}/members", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(document("clubs/members/201",
@@ -335,9 +343,11 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 참여 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .pathParameters(
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER).description("로그인 중인 회원 ID"))
                                 .requestFields(
                                         fieldWithPath("participatingPetsId").type(JsonFieldType.ARRAY).description("참여하는 팻 ID 리스트")
                                 )
@@ -363,7 +373,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         mockMvc.perform(post("/clubs/{clubId}/members", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header(HttpHeaders.AUTHORIZATION, 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(document("clubs/members/400",
@@ -372,9 +382,11 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 참여 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .pathParameters(
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("참여하는 모임의 ID"))
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER).description("로그인 중인 회원 ID"))
                                 .requestFields(
                                         fieldWithPath("participatingPetsId").type(JsonFieldType.ARRAY).description("참여하는 팻 ID 리스트")
                                 )
@@ -397,7 +409,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 .deleteClubMember(any(), any());
 
         mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
-                        .header(HttpHeaders.AUTHORIZATION, 1L))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isNoContent())
                 .andDo(document("clubs/{clubId}/members/400",
                         getDocumentRequest(),
@@ -405,8 +417,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 탈퇴 API")
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
-                                        .description("로그인 중인 회원 ID"))
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .pathParameters(
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
                                 )
@@ -423,7 +436,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 .deleteClubMember(any(), any());
 
         mockMvc.perform(delete("/clubs/{clubId}/members", 1L)
-                        .header(HttpHeaders.AUTHORIZATION, 1L))
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isBadRequest())
                 .andDo(document("clubs/{clubId}/members/400",
                         getDocumentRequest(),
@@ -431,8 +444,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Club API")
                                 .summary("모임 탈퇴 API")
-                                .requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).type(SimpleType.NUMBER)
-                                        .description("로그인 중인 회원 ID"))
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
                                 .pathParameters(
                                         parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
                                 )

@@ -15,6 +15,20 @@ class GroupFilterSelector {
         }
     }
 
+    fun selectGenderFilters(): List<GroupFilter.GenderFilter> {
+        return currentSelectedFilters.value?.filterIsInstance<GroupFilter.GenderFilter>()
+            ?.ifEmpty {
+                GroupFilter.makeGenderFilterEntry()
+            } ?: GroupFilter.makeGenderFilterEntry()
+    }
+
+    fun selectSizeFilters(): List<GroupFilter.SizeFilter> {
+        return currentSelectedFilters.value?.filterIsInstance<GroupFilter.SizeFilter>()
+            ?.ifEmpty {
+                GroupFilter.makeSizeFilterEntry()
+            } ?: GroupFilter.makeSizeFilterEntry()
+    }
+
     fun removeGroupFilter(filter: GroupFilter) {
         if (!confirmValidFilter(filter)) {
             _currentSelectedFilters.value =
@@ -30,6 +44,14 @@ class GroupFilterSelector {
         return currentSelectedFilters.value?.none {
             it.filterName == filter.filterName
         } ?: true
+    }
+
+    fun isContainSizeFilter(): Boolean {
+        return currentSelectedFilters.value?.any { it is GroupFilter.SizeFilter } ?: false
+    }
+
+    fun isContainGenderFilter(): Boolean {
+        return currentSelectedFilters.value?.any { it is GroupFilter.GenderFilter } ?: false
     }
 
     fun addAllGenderFilter() {

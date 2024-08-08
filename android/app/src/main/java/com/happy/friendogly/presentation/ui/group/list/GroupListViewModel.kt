@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.mapper.toDomain
+import com.happy.friendogly.domain.mapper.toGenders
+import com.happy.friendogly.domain.mapper.toPresentation
+import com.happy.friendogly.domain.mapper.toSizeTypes
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
@@ -14,7 +18,6 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.group.model.GroupFilterSelector
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GroupListViewModel(
@@ -30,7 +33,7 @@ class GroupListViewModel(
     val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
-        MutableLiveData(ParticipationFilter.POSSIBLE)
+        MutableLiveData(ParticipationFilter.ENTIRE)
     val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
     val groupFilterSelector = GroupFilterSelector()
@@ -46,6 +49,7 @@ class GroupListViewModel(
     }
 
     fun loadGroupWithAddress() {
+        _uiState.value = GroupListUiState.Init
         if (myAddress.value != null) {
             loadGroups()
         } else {
@@ -67,22 +71,36 @@ class GroupListViewModel(
 
     private fun loadGroups() =
         viewModelScope.launch {
-            delay(1000)
-            val groupData: List<GroupListUiModel> = emptyList()
-            if (groupData.isEmpty()) {
-                _uiState.value = GroupListUiState.NotData
-            } else {
-                _uiState.value = GroupListUiState.Init
-            }
-            _groups.value = groupData
+            searchingClubsUseCase(
+                filterCondition = participationFilter.value?.toDomain() ?: return@launch,
+                address = myAddress.value?.toDomain() ?: return@launch,
+                genderParams = groupFilterSelector.selectGenderFilters().toGenders(),
+                sizeParams = groupFilterSelector.selectSizeFilters().toSizeTypes(),
+            )
+                .onSuccess { groups ->
+                    if (groups.isEmpty()) {
+                        _uiState.value = GroupListUiState.NotData
+                    } else {
+                        _uiState.value = GroupListUiState.Init
+                    }
+                    _groups.value =
+                        groups.map { group ->
+                            group.toPresentation()
+                        }
+                }
+                .onFailure {
+                    _uiState.value = GroupListUiState.Error
+                }
         }
 
     fun updateGroupFilter(filters: List<GroupFilter>) {
         groupFilterSelector.initGroupFilter(filters)
+        loadGroupWithAddress()
     }
 
     fun updateParticipationFilter(participationFilter: ParticipationFilter) {
         _participationFilter.value = participationFilter
+        loadGroupWithAddress()
     }
 
     override fun loadGroup(groupId: Long) {
@@ -99,7 +117,7 @@ class GroupListViewModel(
     }
 
     override fun selectSizeFilter() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupListEvent.emit(
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.SizeFilter.Init,
@@ -109,7 +127,7 @@ class GroupListViewModel(
     }
 
     override fun selectGenderFilter() {
-        val filters = groupFilterSelector.currentSelectedFilters.value ?: listOf()
+        val filters = groupFilterSelector.currentSelectedFilters.value ?: emptyList()
         _groupListEvent.emit(
             GroupListEvent.OpenFilterSelector(
                 groupFilterType = GroupFilter.GenderFilter.Init,
@@ -120,6 +138,7 @@ class GroupListViewModel(
 
     override fun removeFilter(groupFilter: GroupFilter) {
         groupFilterSelector.removeGroupFilter(filter = groupFilter)
+        loadGroupWithAddress()
     }
 
     override fun addMyLocation() {

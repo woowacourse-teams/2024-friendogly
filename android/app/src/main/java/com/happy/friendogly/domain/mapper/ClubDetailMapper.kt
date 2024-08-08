@@ -15,9 +15,9 @@ fun ClubDetail.toPresentation(): GroupDetailUiModel {
         groupDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         groupLeader = ownerMemberName,
-        groupLeaderImage = ownerImageUrl,
+        groupLeaderImage = ownerImageUrl.ifEmpty { null },
         groupLocation = address.toPresentation(),
-        groupPoster = imageUrl,
+        groupPoster = imageUrl.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,
         groupDetailViewType =
             GroupDetailViewType.from(

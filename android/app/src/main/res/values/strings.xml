@@ -158,13 +158,17 @@
     <string name="group_list_no_data_title">등록 된 모임이 없습니다.</string>
     <string name="group_list_no_data_content">관련 모임을 등록해 보세요</string>
     <string name="group_list_submit_text">등록하기</string>
+    <string name="group_list_error_title">에러가 발생하였습니다</string>
+    <string name="group_list_error_content">잠시 후에 다시 시도해주세요..</string>
 
     <!--멍개 생성-->
     <string name="group_list_add_title">모임 생성하기</string>
+    <string name="group_list_commit_btn">등록하기</string>
     <string name="group_list_next_btn">다음</string>
     <string name="group_list_prev_btn">이전</string>
     <string name="group_add_information_main_title">모임을 소개해주세요.</string>
-    <string name="group_add_information_main_content"> 기준으로 모임이 생성돼요.</string>
+    <string name="group_add_information_main_content">기준으로 모임이 생성돼요.</string>
+    <string name="group_add_information_fail_address">모임 생성을 위해서 주소를 등록해주세요!</string>
     <string name="group_add_dog_size_title">댕댕이 사이즈 선택</string>
     <string name="group_add_dog_gender_title">댕댕이 성별 선택</string>
     <string name="group_add_group_title">모임 제목</string>
@@ -182,6 +186,7 @@
     <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
     <string name="group_add_title_count">%d/100</string>
     <string name="group_add_content_count">%d/1000</string>
+    <string name="group_add_fail">모임 생성에 실패하였습니다..</string>
 
     <!--멍개 상세-->
     <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
@@ -194,6 +199,8 @@
     <string name="group_detail_report">신고하기</string>
     <string name="group_detail_block">차단하기</string>
     <string name="group_detail_delete_title">모임에서 나가겠습니까?</string>
+    <string name="group_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
+    <string name="group_detail_delete_fail">방 나가기에 실패하였습니다.</string>
 
     <!--모임 수정 -->
     <string name="group_modify_title">모임 수정하기</string>
@@ -203,6 +210,7 @@
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
+    <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>

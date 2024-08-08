@@ -6,8 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
-import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
+import com.happy.friendogly.domain.usecase.GetMemberUseCase
+import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
@@ -18,9 +18,11 @@ import kotlinx.coroutines.launch
 
 class OtherProfileViewModel(
     savedStateHandle: SavedStateHandle,
-    private val getPetsMineUseCase: GetPetsMineUseCase,
-    private val getMemberMineUseCase: GetMemberMineUseCase,
+    private val getPetsUseCase: GetPetsUseCase,
+    private val getMemberUseCase: GetMemberUseCase,
 ) : BaseViewModel(), OtherProfileActionHandler {
+    val id = requireNotNull(savedStateHandle.get<Long>(OtherProfileActivity.PUT_EXTRA_USER_ID))
+
     private val _uiState: MutableLiveData<OtherProfileUiState> =
         MutableLiveData(OtherProfileUiState())
     val uiState: LiveData<OtherProfileUiState> get() = _uiState
@@ -33,15 +35,13 @@ class OtherProfileViewModel(
     val navigateAction: LiveData<Event<OtherProfileNavigationAction>> get() = _navigateAction
 
     init {
-        requireNotNull(savedStateHandle.get<Long>(OtherProfileActivity.PUT_EXTRA_USER_ID))
-
-        fetchMemberMine()
+        fetchMember()
         fetchPetMine()
     }
 
-    private fun fetchMemberMine() {
+    private fun fetchMember() {
         viewModelScope.launch {
-            getMemberMineUseCase().onSuccess { member ->
+            getMemberUseCase(id = id).onSuccess { member ->
                 _uiState.value =
                     uiState.value?.copy(
                         nickname = member.name,
@@ -56,8 +56,7 @@ class OtherProfileViewModel(
 
     fun fetchPetMine() {
         viewModelScope.launch {
-            getPetsMineUseCase().onSuccess { pets ->
-
+            getPetsUseCase(id = id).onSuccess { pets ->
                 _uiState.value =
                     uiState.value?.copy(pets = pets)
             }.onFailure {
@@ -106,14 +105,14 @@ class OtherProfileViewModel(
 
     companion object {
         fun factory(
-            getPetsMineUseCase: GetPetsMineUseCase,
-            getMemberMineUseCase: GetMemberMineUseCase,
+            getPetsUseCase: GetPetsUseCase,
+            getMemberUseCase: GetMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 OtherProfileViewModel(
                     savedStateHandle = creator.createSavedStateHandle(),
-                    getPetsMineUseCase = getPetsMineUseCase,
-                    getMemberMineUseCase = getMemberMineUseCase,
+                    getPetsUseCase = getPetsUseCase,
+                    getMemberUseCase = getMemberUseCase,
                 )
             }
         }

@@ -39,12 +39,14 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:text="@{vm.myAddress.subLocality}"
                     style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="잠실 6동" />
 
                 <TextView
+                    android:layout_marginStart="3dp"
                     style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
