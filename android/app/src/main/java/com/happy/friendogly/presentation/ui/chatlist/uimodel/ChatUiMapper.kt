@@ -27,6 +27,6 @@ fun Message.Other.toUiModel() = ChatUiModel.Other(
     nickName = name,
     message = content,
     time = dateTime.toLocalTime(),
-    profileUrl = ""
+    profileUrl = profileUrl ?: ""
 )
 

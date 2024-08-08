@@ -16,7 +16,7 @@ sealed interface Message:ChatComponent {
         val name: String,
         override val content: String,
         val dateTime: LocalDateTime,
-        val profileUrl: String,
+        val profileUrl: String?,
     ) : Message
 
 }

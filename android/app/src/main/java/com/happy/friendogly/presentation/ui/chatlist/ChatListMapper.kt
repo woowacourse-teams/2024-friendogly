@@ -15,6 +15,7 @@ fun ChatRoom.toUiModel(): ChatListUiModel =
         0,
         LocalDateTime.now().classifyChatDateTime(),
         clubImageUrl,
+        chatRoomId = chatRoomId
     )
 
 private fun LocalDateTime.classifyChatDateTime(): ChatDateTime {

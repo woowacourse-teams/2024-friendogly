@@ -44,19 +44,22 @@ class ChatViewModel(
                     is Message.Mine -> it.toUiModel()
                     is Message.Other -> it.toUiModel()
                 }
-            }.first()
-            Log.d("테스트", "$newChat")
-            _chats.value = _chats.value?.plus(newChat)
+            }
+
+            newChat.collect {
+                _chats.value = (_chats.value ?: emptyList()) + listOf(it)
+            }
+
         }
     }
 
     fun inviteMember(chatRoomId: Long) {
         viewModelScope.launch {
-            webSocketRepository.publishInvite(1)
+            /*webSocketRepository.publishInvite(1)
             webSocketRepository.publishInvite(2)
             webSocketRepository.publishInvite(3)
             webSocketRepository.publishInvite(4)
-            webSocketRepository.publishInvite(5)
+            webSocketRepository.publishInvite(5)*/
 
         }
     }

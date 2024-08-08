@@ -8,5 +8,5 @@ data class MessageDto(
     val senderName: String,
     val content: String?,
     val createdAt: LocalDateTime,
-    val profilePictureUrl: String,
+    val profilePictureUrl: String?,
 )

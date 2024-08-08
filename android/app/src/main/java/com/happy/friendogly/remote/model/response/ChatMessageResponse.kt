@@ -1,6 +1,6 @@
 package com.happy.friendogly.remote.model.response
 
-import com.happy.friendogly.remote.util.LocalDateTimeSerializer
+import com.happy.friendogly.remote.util.JavaLocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
@@ -10,7 +10,7 @@ data class ChatMessageResponse(
     val senderMemberId: Long,
     val senderName: String,
     val content: String?,
-    @Serializable(with = LocalDateTimeSerializer::class)
+    @Serializable(with = JavaLocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
-    val profilePictureUrl: String,
+    val profilePictureUrl: String?,
 )
