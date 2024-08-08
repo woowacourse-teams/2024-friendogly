@@ -18,6 +18,7 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
+import com.woowacourse.friendogly.support.ControllerTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ import org.springframework.test.annotation.DirtiesContext;
 // TODO: DirtiesContext 제거
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-class FootprintControllerTest {
+class FootprintControllerTest extends ControllerTest {
 
     @LocalServerPort
     private int port;
@@ -137,7 +138,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().post("/footprints")
                 .then().log().all()
@@ -160,7 +161,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().post("/footprints")
                 .then().log().all()
@@ -180,7 +181,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .pathParam("footprintId", footprint.getId())
                 .when().get("/footprints/{footprintId}")
                 .then().log().all()
@@ -216,7 +217,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .queryParam("latitude", 37.5171728)
                 .queryParam("longitude", 127.1047797)
                 .when().get("/footprints/near")
@@ -239,7 +240,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
@@ -251,7 +252,7 @@ class FootprintControllerTest {
     void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
@@ -280,7 +281,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().patch("/footprints/walk-status")
                 .then().log().all()
@@ -310,7 +311,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().patch("/footprints/walk-status")
                 .then().log().all()

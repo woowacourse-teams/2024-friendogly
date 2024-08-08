@@ -37,3 +37,6 @@ out/
 
 ### private
 /src/main/resources/firebase-friendogly-private-key.json
+
+### secrets ###
+src/main/resources/secrets.yml
