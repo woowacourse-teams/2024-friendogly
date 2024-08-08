@@ -11,7 +11,6 @@ import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.dto.request.SaveMemberRequest;
 import com.woowacourse.friendogly.member.dto.response.SaveMemberResponse;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
-import com.woowacourse.friendogly.notification.domain.DeviceToken;
 import com.woowacourse.friendogly.notification.repository.DeviceTokenRepository;
 import com.woowacourse.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,6 @@ public class MemberCommandService {
 
         TokenResponse tokens = jwtProvider.generateTokens(new TokenPayload(savedMember.getId()));
         kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
-        deviceTokenRepository.save(new DeviceToken(member, request.deviceToken()));
         return new SaveMemberResponse(savedMember, tokens);
     }
 }

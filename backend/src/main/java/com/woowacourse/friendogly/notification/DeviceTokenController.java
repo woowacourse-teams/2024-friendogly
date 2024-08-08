@@ -20,8 +20,8 @@ public class DeviceTokenController {
         this.deviceTokenService = deviceTokenService;
     }
 
-    @PatchMapping("/walk-status")
-    public ApiResponse<UpdateDeviceTokenResponse> updateWalkStatus(
+    @PatchMapping("/device-tokens")
+    public ApiResponse<UpdateDeviceTokenResponse> updateDeviceTokens(
             @Auth Long memberId,
             @Valid @RequestBody UpdateDeviceTokenRequest request
     ) {

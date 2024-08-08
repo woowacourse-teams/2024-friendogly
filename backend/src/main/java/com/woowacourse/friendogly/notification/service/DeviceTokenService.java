@@ -29,9 +29,9 @@ public class DeviceTokenService {
         }
         DeviceToken deviceToken = deviceTokenRepository.save(
                 new DeviceToken(
-                        updateDeviceTokenRequest.deviceToken(),
-                        memberRepository.getById(memberId)
-                )
+                        memberRepository.getById(memberId),
+                        updateDeviceTokenRequest.deviceToken()
+                        )
         );
         return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
     }
