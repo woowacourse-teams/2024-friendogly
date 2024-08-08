@@ -32,4 +32,8 @@ public class DeviceToken {
         this.deviceToken = deviceToken;
         this.member = member;
     }
+
+    public void changeDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }
