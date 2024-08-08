@@ -32,8 +32,8 @@ jobs:
         run: |
           ls
           touch ./backend/src/main/resources/firebase-friendogly-private-key.json
-          echo FIREBASE_FRIENDOGLY_PRIVATE_KEY >> ./backend/src/main/resources/firebase-friendogly-private-key.json
-          # cat ../backend/src/main/resources/firebase-friendogly-private-key.json
+          echo ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }} >> ./backend/src/main/resources/firebase-friendogly-private-key.json
+          cat ./backend/src/main/resources/firebase-friendogly-private-key.json
 
       - name: Grant execute permission for gradlew
         working-directory: ./backend
