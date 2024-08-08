@@ -3,10 +3,10 @@ name: deploy
 on:
   pull_request:
     branches: [ "develop" ]
-  push:
-    branches: ["feature/be-fcm"]
-    paths:
-      - "backend/**"
+  # push:
+  #   branches: ["feature/be-fcm"]
+  #   paths:
+  #     - "backend/**"
 
 jobs:
   build:
