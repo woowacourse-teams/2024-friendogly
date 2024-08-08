@@ -1,7 +1,5 @@
 package com.happy.friendogly.remote.di
 
-import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
-import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.api.AlarmTokenService
 import com.happy.friendogly.remote.api.AuthService
