@@ -32,7 +32,6 @@ object RemoteModule {
     private const val TIME_OUT_MINUTE = 1L
     private const val PINT_OUT_SECOND = 100L
 
-
     fun createAuthService(
         baseUrl: BaseUrl,
         tokenManager: TokenManager,
@@ -142,7 +141,6 @@ object RemoteModule {
         tokenManager: TokenManager,
         authenticationListener: AuthenticationListener,
     ): StompClient {
-
         val authenticator =
             Authenticator(
                 authService = createAuthService(baseUrl),

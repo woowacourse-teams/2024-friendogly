@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.chatlist
 
 import com.happy.friendogly.domain.model.ChatRoom
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDateTime
-import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDummy
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatListUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -15,7 +14,7 @@ fun ChatRoom.toUiModel(): ChatListUiModel =
         0,
         LocalDateTime.now().classifyChatDateTime(),
         clubImageUrl,
-        chatRoomId = chatRoomId
+        chatRoomId = chatRoomId,
     )
 
 private fun LocalDateTime.classifyChatDateTime(): ChatDateTime {

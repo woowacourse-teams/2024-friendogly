@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChatRoomListResponse(
-    val myMemberId:Long,
-    val chatRooms:List<ChatRoomResponse>
+    val myMemberId: Long,
+    val chatRooms: List<ChatRoomResponse>,
 )

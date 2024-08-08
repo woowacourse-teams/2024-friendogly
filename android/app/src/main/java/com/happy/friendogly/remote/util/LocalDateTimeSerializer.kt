@@ -8,7 +8,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
@@ -31,7 +30,6 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
         encoder.encodeString(value.toString())
     }
 }
-
 
 object JavaLocalDateTimeSerializer : KSerializer<java.time.LocalDateTime> {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")

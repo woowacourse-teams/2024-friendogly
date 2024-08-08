@@ -13,7 +13,7 @@ class ChatListFragment :
     ChatListNavigationAction {
     private val viewModel: ChatListViewModel by viewModels {
         ChatListViewModel.factory(
-            AppModule.getInstance().chatRepository
+            AppModule.getInstance().chatRepository,
         )
     }
     private lateinit var adapter: ChatListAdapter

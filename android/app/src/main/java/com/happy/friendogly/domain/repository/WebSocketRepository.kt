@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 interface WebSocketRepository {
     suspend fun publishInvite(chatRoomId: Long)
 
-    suspend fun publishSend(chatRoomId: Long, content: String)
+    suspend fun publishSend(
+        chatRoomId: Long,
+        content: String,
+    )
 
     suspend fun publishLeave(chatRoomId: Long)
 

@@ -11,34 +11,34 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.json.withJsonConver
 import org.hildan.krossbow.stomp.headers.StompSendHeaders
 import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
 
-
 class WebSocketService(
     private val client: StompClient,
     private val baseUrl: BaseUrl,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
 ) {
-
-    private suspend fun stompSession(): StompSessionWithKxSerialization =
-        client.connect(baseUrl.url).withJsonConversions()
+    private suspend fun stompSession(): StompSessionWithKxSerialization = client.connect(baseUrl.url).withJsonConversions()
 
     suspend fun publishInvite(chatRoomId: Long) {
         stompSession().send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishEnter(chatRoomId = chatRoomId),
-                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
             ),
-            null
+            null,
         )
     }
 
-    suspend fun publishSend(chatRoomId: Long, content: String) {
+    suspend fun publishSend(
+        chatRoomId: Long,
+        content: String,
+    ) {
         stompSession().convertAndSend(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishMessage(chatRoomId),
-                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
             ),
             ChatMessageRequest(content),
-            ChatMessageRequest.serializer()
+            ChatMessageRequest.serializer(),
         )
     }
 
@@ -46,20 +46,20 @@ class WebSocketService(
         stompSession().send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishLeave(chatRoomId) + chatRoomId.toString(),
-                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
+                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
             ),
-            null
+            null,
         )
     }
 
     suspend fun subscribeMessage(chatRoomId: Long): Flow<ChatMessageResponse> {
         return stompSession().subscribe(
-            headers = StompSubscribeHeaders(
-                destination = ApiClient.WebSocket.subscribeChat(chatRoomId),
-                customHeaders = mapOf("Authorization" to tokenManager.accessToken.first())
-            ),
-            ChatMessageResponse.serializer()
+            headers =
+                StompSubscribeHeaders(
+                    destination = ApiClient.WebSocket.subscribeChat(chatRoomId),
+                    customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
+                ),
+            ChatMessageResponse.serializer(),
         )
     }
-
 }

@@ -47,11 +47,12 @@ class ApiClient {
     }
 
     object WebSocket {
-        fun publishEnter(chatRoomId:Long) ="/publish/enter/${chatRoomId}"
-        fun publishMessage(chatRoomId:Long) ="/publish/chat/${chatRoomId}"
-        fun publishLeave(chatRoomId:Long) ="/publish/leave/${chatRoomId}"
+        fun publishEnter(chatRoomId: Long) = "/publish/enter/$chatRoomId"
 
-        fun subscribeChat(chatRoomId: Long)= "/topic/chat/${chatRoomId}"
+        fun publishMessage(chatRoomId: Long) = "/publish/chat/$chatRoomId"
 
+        fun publishLeave(chatRoomId: Long) = "/publish/leave/$chatRoomId"
+
+        fun subscribeChat(chatRoomId: Long) = "/topic/chat/$chatRoomId"
     }
 }

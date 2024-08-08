@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class ChatListViewModel(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
 ) : BaseViewModel() {
     private val _chats: MutableLiveData<List<ChatListUiModel>> = MutableLiveData()
     val chats: LiveData<List<ChatListUiModel>> get() = _chats
@@ -23,21 +23,21 @@ class ChatListViewModel(
     fun getChats() {
         viewModelScope.launch {
             chatRepository.getChatList().onSuccess { room ->
-                _chats.value = room.chatRooms.map { it.toUiModel() } + ChatListUiModel(
-                    "", "", 2, 0, ChatDateTime.Yesterday(
-                        LocalDateTime.now()
-                    ), "", 1
-                )
+                _chats.value = room.chatRooms.map { it.toUiModel() } +
+                    ChatListUiModel(
+                        "", "", 2, 0,
+                        ChatDateTime.Yesterday(
+                            LocalDateTime.now(),
+                        ),
+                        "", 1,
+                    )
                 memberId = room.myMemberId
             }
-
         }
     }
 
     companion object {
-        fun factory(
-            chatRepository: ChatRepository,
-        ): ViewModelProvider.Factory {
+        fun factory(chatRepository: ChatRepository): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatListViewModel(
                     chatRepository,

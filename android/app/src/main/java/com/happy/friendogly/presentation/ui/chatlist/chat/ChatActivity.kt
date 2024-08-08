@@ -9,12 +9,11 @@ import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
-import org.checkerframework.common.subtyping.qual.Bottom
 
 class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
-            AppModule.getInstance().webSocketRepository
+            AppModule.getInstance().webSocketRepository,
         )
     }
     private lateinit var adapter: ChatAdapter
@@ -67,7 +66,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         fun getIntent(
             context: Context,
             chatId: Long,
-            memberId: Long
+            memberId: Long,
         ): Intent {
             return Intent(context, ChatActivity::class.java).apply {
                 putExtra(EXTRA_CHAT_ID, chatId)

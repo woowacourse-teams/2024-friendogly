@@ -2,8 +2,7 @@ package com.happy.friendogly.domain.model
 
 import java.time.LocalDateTime
 
-
-sealed interface Message:ChatComponent {
+sealed interface Message : ChatComponent {
     val content: String
 
     data class Mine(
@@ -18,5 +17,4 @@ sealed interface Message:ChatComponent {
         val dateTime: LocalDateTime,
         val profileUrl: String?,
     ) : Message
-
 }

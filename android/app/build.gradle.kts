@@ -22,7 +22,6 @@ val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
 val websocketUrl = localProperties.getProperty("websocket_url") ?: ""
 
-
 android {
     namespace = "com.happy.friendogly"
     compileSdk = 34
