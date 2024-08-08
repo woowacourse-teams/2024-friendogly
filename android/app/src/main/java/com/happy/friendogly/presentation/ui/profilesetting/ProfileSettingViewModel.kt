@@ -106,16 +106,14 @@ class ProfileSettingViewModel(
             email = "test@banggapge.com",
             file = profilePath,
             accessToken = accessToken,
-        ).onSuccess { member ->
-            saveJwaToken(member.id)
+        ).onSuccess { register ->
+            saveJwaToken(register.tokens)
         }.onFailure {
             // TODO 예외처리
         }
     }
 
-    private suspend fun saveJwaToken(memberId: Long) {
-        val jwtToken =
-            JwtToken(accessToken = memberId.toString(), refreshToken = memberId.toString())
+    private suspend fun saveJwaToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
             _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
         }.onFailure {
