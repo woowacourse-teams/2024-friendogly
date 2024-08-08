@@ -4,7 +4,6 @@ import com.woowacourse.friendogly.chat.repository.PrivateChatRoomRepository;
 import com.woowacourse.friendogly.club.repository.ClubRepository;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
-import com.woowacourse.friendogly.notification.repository.DeviceTokenRepository;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
 import java.util.TimeZone;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,9 +29,6 @@ public abstract class ServiceTest {
     @Autowired
     protected PrivateChatRoomRepository privateChatRoomRepository;
 
-    @Autowired
-    protected DeviceTokenRepository deviceTokenRepository;
-
     @BeforeAll
     static void setTimeZone() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
@@ -44,7 +40,6 @@ public abstract class ServiceTest {
         clubRepository.deleteAll();
         footprintRepository.deleteAll();
         petRepository.deleteAll();
-        deviceTokenRepository.deleteAll();
         memberRepository.deleteAll();
     }
 }

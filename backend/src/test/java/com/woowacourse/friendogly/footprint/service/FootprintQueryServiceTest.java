@@ -10,7 +10,6 @@ import com.woowacourse.friendogly.footprint.dto.response.FindMyLatestFootprintTi
 import com.woowacourse.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.woowacourse.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.notification.domain.DeviceToken;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -53,10 +52,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
                         .name("name2")
                         .email("test@test.com")
                         .build()
-        );
-
-        deviceTokenRepository.save(
-                new DeviceToken(otherMember,"token")
         );
 
         petRepository.save(

@@ -28,8 +28,8 @@ public class DeviceToken {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public DeviceToken(Member member, String deviceToken) {
-        this.member = member;
+    public DeviceToken(String deviceToken, Member member) {
         this.deviceToken = deviceToken;
+        this.member = member;
     }
 }

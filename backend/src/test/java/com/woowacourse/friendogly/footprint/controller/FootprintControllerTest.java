@@ -14,8 +14,6 @@ import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.member.repository.MemberRepository;
-import com.woowacourse.friendogly.notification.domain.DeviceToken;
-import com.woowacourse.friendogly.notification.repository.DeviceTokenRepository;
 import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
@@ -54,9 +52,6 @@ class FootprintControllerTest extends ControllerTest {
     @Autowired
     private FootprintRepository footprintRepository;
 
-    @Autowired
-    private DeviceTokenRepository deviceTokenRepository;
-
     private Member member1;
     private Member member2;
     private Member member3;
@@ -89,27 +84,6 @@ class FootprintControllerTest extends ControllerTest {
                         .tag("123123")
                         .email("test@test.com")
                         .build()
-        );
-
-        deviceTokenRepository.save(
-                new DeviceToken(
-                        member1,
-                        "deviceToken1"
-                )
-        );
-
-        deviceTokenRepository.save(
-                new DeviceToken(
-                        member2,
-                        "deviceToken2"
-                )
-        );
-
-        deviceTokenRepository.save(
-                new DeviceToken(
-                        member3,
-                        "deviceToken3"
-                )
         );
 
         pet1 = petRepository.save(
