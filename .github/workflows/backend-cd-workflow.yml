@@ -30,6 +30,7 @@ jobs:
         env:
           FIREBASE_FRIENDOGLY_PRIVATE_KEY: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
         run: |
+          ls
           touch ../backend/src/main/resources/firebase-friendogly-private-key.json
           echo FIREBASE_FRIENDOGLY_PRIVATE_KEY >> ./backend/src/main/resources/firebase-friendogly-private-key.json
           # cat ../backend/src/main/resources/firebase-friendogly-private-key.json
