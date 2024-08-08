@@ -1,0 +1,51 @@
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <withJansi>true</withJansi>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %green(%-5level) %logger{35}  %cyan(%logger{15}) -  %msg  %n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>log/error/logFile.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>log/error/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>log/warn/logFile.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>log/warn/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="org.hibernate.SQL" level="DEBUG" additive="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <logger name="com.woowacourse.friendogly" additivity="false">
+    <level value = "INFO" />
+    <appender-ref ref="STDOUT" />
+  </logger>
+
+  <logger name="com.woowacourse.friendogly.test" additivity="false">
+    <level value = "ERROR" />
+    <appender-ref ref="FILE-ERROR" />
+  </logger>
+
+  <logger name="com.woowacourse.friendogly.test" additivity="false">
+    <level value = "WARN" />
+    <appender-ref ref="FILE-WARN" />
+  </logger>
+</configuration>
