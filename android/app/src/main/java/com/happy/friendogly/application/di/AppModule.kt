@@ -159,7 +159,7 @@ class AppModule(context: Context) {
     private val woofDataSource: WoofDataSource = WoofDataSourceImpl(service = woofService)
     private val memberDataSource: MemberDataSource = MemberDataSourceImpl(service = memberService)
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
-    private val settingDataSource: SettingDataSource = SettingDataSourceImpl(alarmModule = alarmModule)
+    private val alarmSettingDataSource: AlarmSettingDataSource = AlarmSettingDataSourceImpl(alarmModule = alarmModule)
     private val alarmTokenDataSource: AlarmTokenDataSource = AlarmTokenDataSourceImpl(alarmTokenModule = alarmTokenModule)
 
 
@@ -176,7 +176,7 @@ class AppModule(context: Context) {
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
     private val addressRepository: AddressRepository =
         AddressRepositoryImpl(addressDataSource = addressDataSource)
-    private val settingRepository: SettingRepository = SettingRepositoryImpl(source = settingDataSource)
+    private val alarmSettingRepository: AlarmSettingRepository = AlarmSettingRepositoryImpl(source = alarmSettingDataSource)
     private val alarmTokenRepository:AlarmTokenRepository = AlarmTokenRepositoryImpl(source = alarmTokenDataSource)
 
 
