@@ -85,13 +85,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:adjustViewBounds="true"
-                app:petImageBitmap="@{vm.profileImage}"
-                app:petImageUrl="@{vm.uiState.profileImageUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                app:onSingleClick="@{() -> vm.selectPetProfileImage()}" />
+                app:onSingleClick="@{() -> vm.selectPetProfileImage()}"
+                app:petImageBitmap="@{vm.profileImage}"
+                app:petImageUrl="@{vm.profileImageUrl}" />
 
             <TextView
                 android:id="@+id/tv_dog_name_title"
@@ -204,7 +204,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
-                    android:checked="true"
+                    android:checked="@{vm.petSize == PetSize.SMALL}"
                     android:gravity="center"
                     android:text="@{PetSize.SMALL.title}" />
 
@@ -216,6 +216,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
+                    android:checked="@{vm.petSize == PetSize.MEDIUM}"
                     android:gravity="center"
                     android:text="@{PetSize.MEDIUM.title}" />
 
@@ -227,6 +228,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
+                    android:checked="@{vm.petSize == PetSize.LARGE}"
                     android:gravity="center"
                     android:text="@{PetSize.LARGE.title}" />
 
@@ -264,7 +266,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
-                    android:checked="true"
+                    android:checked="@{vm.petGender == PetGender.MAIL}"
                     android:gravity="center"
                     android:text="@{PetGender.MAIL.title}" />
 
@@ -277,6 +279,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/sel_regsiterdog_color_dog_option"
                     android:button="@null"
+                    android:checked="@{vm.petGender == PetGender.FEMALE}"
                     android:gravity="center"
                     android:text="@{PetGender.FEMALE.title}" />
 
@@ -288,7 +291,7 @@
                 style="@style/Widget.App.CheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{vm.uiState.neutering}"
+                android:checked="@{vm.neutering}"
                 android:onClick="@{() -> vm.updateNeutering()}"
                 android:text="@string/neutralized_title"
                 app:layout_constraintStart_toStartOf="@+id/radio_group_dog_gender"
