@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
@@ -22,10 +23,13 @@ import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoWalkStatusUiModel
+import com.happy.friendogly.presentation.utils.logFootprintMarkBtnInfo
+import com.happy.friendogly.presentation.utils.logNearFootprintSize
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
+    private val analyticsHelper: AnalyticsHelper,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val patchWalkStatusUseCase: PatchWalkStatusUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
@@ -64,6 +68,9 @@ class WoofViewModel(
                 latLng.latitude,
                 latLng.longitude,
             ).onSuccess { nearFootprints ->
+                val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
+                analyticsHelper.logNearFootprintSize(otherFootprints.size)
+
                 val myFootprint = nearFootprints.find { footprint -> footprint.isMine }
                 if (myFootprint != null) {
                     _myFootprint.value =
@@ -77,7 +84,7 @@ class WoofViewModel(
                     _myFootprint.value = null
                     _myWalkStatus.value = null
                 }
-                _nearFootprints.value = nearFootprints.filter { footprint -> !footprint.isMine }
+                _nearFootprints.value = otherFootprints
             }.onFailure {
             }
         }
@@ -86,6 +93,10 @@ class WoofViewModel(
     fun loadFootprintMarkBtnInfo() {
         viewModelScope.launch {
             getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
+                analyticsHelper.logFootprintMarkBtnInfo(
+                    footPrintMarkBtnInfo.hasPet,
+                    footPrintMarkBtnInfo.remainingTime(),
+                )
                 if (!footPrintMarkBtnInfo.hasPet) {
                     _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPetSnackbar)
                 } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
@@ -197,6 +208,7 @@ class WoofViewModel(
 
     companion object {
         fun factory(
+            analyticsHelper: AnalyticsHelper,
             postFootprintUseCase: PostFootprintUseCase,
             patchWalkStatusUseCase: PatchWalkStatusUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
@@ -205,6 +217,7 @@ class WoofViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
+                    analyticsHelper = analyticsHelper,
                     postFootprintUseCase = postFootprintUseCase,
                     patchWalkStatusUseCase = patchWalkStatusUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,

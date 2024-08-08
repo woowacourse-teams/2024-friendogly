@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
@@ -21,10 +22,15 @@ import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
+import com.happy.friendogly.presentation.utils.logChatListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logGroupListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
+import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
 
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
+    private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
     private var waitTime = 0L
@@ -52,6 +58,8 @@ class MainActivity :
         val fragment = supportFragmentManager.findFragmentByTag(fragmentClass.simpleName)
         val transaction = supportFragmentManager.beginTransaction()
 
+        logFragmentSwitched(fragmentClass)
+
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
@@ -69,6 +77,26 @@ class MainActivity :
         transaction.commit()
 
         return true
+    }
+
+    private fun logFragmentSwitched(fragmentClass: Class<out Fragment>) {
+        when (fragmentClass.simpleName) {
+            GroupListFragment::class.simpleName -> {
+                analyticsHelper.logGroupListFragmentSwitched()
+            }
+
+            WoofFragment::class.simpleName -> {
+                analyticsHelper.logWoofFragmentSwitched()
+            }
+
+            ChatListFragment::class.simpleName -> {
+                analyticsHelper.logChatListFragmentSwitched()
+            }
+
+            MyPageFragment::class.simpleName -> {
+                analyticsHelper.logMyPageFragmentSwitched()
+            }
+        }
     }
 
     override fun navigateToGroupDetailActivity(groupId: Long) {

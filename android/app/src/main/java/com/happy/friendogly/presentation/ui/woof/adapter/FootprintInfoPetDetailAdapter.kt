@@ -18,7 +18,7 @@ class FootprintInfoPetDetailAdapter(private val actionHandler: WoofActionHandler
             ItemFootprintInfoPetDetailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
         return FootprintInfoPetDetailViewHolder(binding)
     }

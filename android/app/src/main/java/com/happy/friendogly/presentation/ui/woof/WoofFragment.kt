@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.happy.friendogly.R
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
@@ -28,11 +29,25 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFol
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.*
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowAfterWalkStatusSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowBeforeWalkStatusSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowInvalidLocationSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.utils.logBackBtnClicked
+import com.happy.friendogly.presentation.utils.logCloseBtnClicked
+import com.happy.friendogly.presentation.utils.logFootprintClicked
+import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
+import com.happy.friendogly.presentation.utils.logLocationBtnClicked
+import com.happy.friendogly.presentation.utils.logMarkBtnClicked
+import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
+import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -64,6 +79,7 @@ class WoofFragment :
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
 
+    private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
     private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val locationPermission: LocationPermission = initLocationPermission()
@@ -76,6 +92,7 @@ class WoofFragment :
     private val adapter by lazy { FootprintInfoPetDetailAdapter(this) }
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
             patchWalkStatusUseCase = AppModule.getInstance().patchWalkStatusUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
@@ -152,6 +169,7 @@ class WoofFragment :
     }
 
     override fun clickMarkBtn() {
+        analyticsHelper.logMarkBtnClicked()
         if (locationPermission.hasPermissions()) {
             viewModel.loadFootprintMarkBtnInfo()
         } else {
@@ -160,6 +178,7 @@ class WoofFragment :
     }
 
     override fun clickRegisterMarkerBtn() {
+        analyticsHelper.logRegisterMarkerBtnClicked()
         if (locationPermission.hasPermissions()) {
             viewModel.markFootprint(map.cameraPosition.target)
         } else {
@@ -168,6 +187,7 @@ class WoofFragment :
     }
 
     override fun clickLocationBtn() {
+        analyticsHelper.logLocationBtnClicked()
         if (locationPermission.hasPermissions()) {
             viewModel.changeLocationTrackingMode()
         } else {
@@ -176,6 +196,7 @@ class WoofFragment :
     }
 
     override fun clickMyFootprintBtn() {
+        analyticsHelper.logMyFootprintBtnClicked()
         if (locationPermission.hasPermissions()) {
             if (myMarker == null) {
                 showSnackbar(resources.getString(R.string.woof_not_exist_my_footprint))
@@ -189,11 +210,13 @@ class WoofFragment :
     }
 
     override fun clickBackBtn() {
+        analyticsHelper.logBackBtnClicked()
         hideRegisterMarkerLayout()
         hideMarkerDetail()
     }
 
     override fun clickCloseBtn() {
+        analyticsHelper.logCloseBtnClicked()
         hideRegisterMarkerLayout()
         hideMarkerDetail()
     }
@@ -203,6 +226,7 @@ class WoofFragment :
         marker: Marker,
     ) {
         marker.setOnClickListener {
+            analyticsHelper.logFootprintClicked()
             viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
 
@@ -224,6 +248,7 @@ class WoofFragment :
     }
 
     override fun clickFootprintMemberName(memberId: Long) {
+        analyticsHelper.logFootprintMemberNameClicked()
         startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))
     }
 

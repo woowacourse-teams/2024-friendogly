@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.interceptor
 
-import android.util.Log
 import com.happy.friendogly.local.di.TokenManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
