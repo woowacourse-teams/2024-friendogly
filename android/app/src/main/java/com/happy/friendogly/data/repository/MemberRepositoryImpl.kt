@@ -2,7 +2,7 @@ package com.happy.friendogly.data.repository
 
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.MemberDataSource
-import com.happy.friendogly.domain.mapper.toDomain
+import com.happy.friendogly.presentation.ui.group.mapper.toDomain
 import com.happy.friendogly.domain.model.Member
 import com.happy.friendogly.domain.model.Register
 import com.happy.friendogly.domain.repository.MemberRepository

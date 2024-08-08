@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.ui.group.select
 
-import com.happy.friendogly.domain.mapper.toGroupFilter
+import com.happy.friendogly.presentation.ui.group.mapper.toGroupFilter
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter
 

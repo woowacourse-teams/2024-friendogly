@@ -1,4 +1,4 @@
-package com.happy.friendogly.domain.mapper
+package com.happy.friendogly.presentation.ui.group.mapper
 
 import com.happy.friendogly.domain.model.ClubDetail
 import com.happy.friendogly.presentation.ui.group.detail.GroupDetailUiModel
