@@ -38,4 +38,8 @@ class ApiClient {
         const val POST_CLUB_MEMBER = "$BASE_URL/{clubId}$MEMBER_URL"
         const val DELETE_CLUB_MEMBER = "$BASE_URL/{clubId}$MEMBER_URL"
     }
+
+    object AlarmToken {
+        const val DEVICE_TOKEN = "/device-tokens"
+    }
 }

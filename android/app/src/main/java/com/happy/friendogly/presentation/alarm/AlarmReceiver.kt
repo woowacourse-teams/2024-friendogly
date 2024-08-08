@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -19,10 +20,12 @@ class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
 
     override fun onNewToken(token: String) {
-        super.onNewToken(token)
         CoroutineScope(Dispatchers.IO).launch {
-            AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
+            if (token.isNotBlank()){
+                AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
+            }
         }
+        super.onNewToken(token)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
