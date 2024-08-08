@@ -10,7 +10,7 @@ class AnalyticsHelper(context: Context) {
 
     fun logEvent(
         type: String,
-        vararg params: Pair<String, Any>,
+        vararg params: Pair<String, Any?>,
     ) {
         val bundle =
             bundleOf(

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
+import com.happy.friendogly.R
 
 abstract class BaseActivity<T : ViewDataBinding>(
     @LayoutRes private val layoutResourceId: Int,
@@ -39,7 +40,11 @@ abstract class BaseActivity<T : ViewDataBinding>(
         action: Snackbar.() -> Unit = {},
     ) {
         snackbar?.dismiss()
-        snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply { action() }
+        snackbar =
+            Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
+                anchorView = findViewById(R.id.bottom_navi)
+                action()
+            }
         snackbar?.show()
     }
 
