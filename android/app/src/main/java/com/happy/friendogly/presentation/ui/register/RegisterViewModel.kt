@@ -73,7 +73,6 @@ class RegisterViewModel(
             }
         }.onFailure {
             // TODO 예외처리
-            Log.d("ttt onFailure", it.toString())
         }
     }
 
