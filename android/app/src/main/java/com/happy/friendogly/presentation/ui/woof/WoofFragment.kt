@@ -28,12 +28,7 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFol
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowAfterWalkStatusSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowInvalidLocationSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.*
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
@@ -358,6 +353,8 @@ class WoofFragment :
                 is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
 
                 is ShowInvalidLocationSnackbar -> showSnackbar(resources.getString(R.string.woof_location_load_fail))
+
+                is ShowBeforeWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_before_walk_status))
 
                 is ShowOnGoingWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_ongoing_walk_status))
 

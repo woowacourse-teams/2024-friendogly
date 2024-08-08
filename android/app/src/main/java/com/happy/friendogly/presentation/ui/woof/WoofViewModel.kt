@@ -123,24 +123,21 @@ class WoofViewModel(
                     WalkStatus.BEFORE -> {
                         if (myWalkStatus.value == null) {
                             _myWalkStatus.value = WalkStatus.BEFORE
+                            _snackbarActions.emit(WoofSnackbarActions.ShowBeforeWalkStatusSnackbar)
                         }
                     }
 
                     WalkStatus.ONGOING -> {
                         if (myWalkStatus.value == null || myWalkStatus.value == WalkStatus.BEFORE) {
                             _myWalkStatus.value = WalkStatus.ONGOING
-                            _snackbarActions.emit(
-                                WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar,
-                            )
+                            _snackbarActions.emit(WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar)
                         }
                     }
 
                     WalkStatus.AFTER ->
                         if (myWalkStatus.value == WalkStatus.ONGOING) {
                             _myWalkStatus.value = WalkStatus.AFTER
-                            _snackbarActions.emit(
-                                WoofSnackbarActions.ShowAfterWalkStatusSnackbar,
-                            )
+                            _snackbarActions.emit(WoofSnackbarActions.ShowAfterWalkStatusSnackbar)
                         }
                 }
             }.onFailure {
