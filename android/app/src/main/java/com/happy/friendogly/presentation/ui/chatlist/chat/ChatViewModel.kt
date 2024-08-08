@@ -54,10 +54,6 @@ class ChatViewModel(
     }
 
 
-    fun getChats(chatId: Long) {
-        // _chats.value = dummyChats
-    }
-
     fun sendMessage(chatRoomId: Long, content: String) {
         viewModelScope.launch {
             webSocketRepository.publishSend(chatRoomId, content)

@@ -9,6 +9,7 @@ import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
+import org.checkerframework.common.subtyping.qual.Bottom
 
 class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     private val viewModel: ChatViewModel by viewModels {
@@ -29,6 +30,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
 
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
+            binding.edtChatSendMessage.setText("")
         }
         viewModel.subscribeMessage(chatId)
     }
