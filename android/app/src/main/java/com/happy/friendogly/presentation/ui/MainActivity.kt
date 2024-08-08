@@ -7,10 +7,10 @@ import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityMainBinding
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
-import com.happy.friendogly.presentation.ui.group.add.GroupAddActivity
-import com.happy.friendogly.presentation.ui.group.detail.GroupDetailActivity
-import com.happy.friendogly.presentation.ui.group.list.GroupListFragment
+import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
+import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.mylocation.SettingMyLocationActivity
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
@@ -23,7 +23,7 @@ import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
 import com.happy.friendogly.presentation.utils.logChatListFragmentSwitched
-import com.happy.friendogly.presentation.utils.logGroupListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logClubListFragmentSwitched
 import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
 import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
 
@@ -41,11 +41,11 @@ class MainActivity :
     }
 
     private fun initNavController() {
-        switchFragment(GroupListFragment::class.java)
+        switchFragment(ClubListFragment::class.java)
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.groupListFragment -> switchFragment(GroupListFragment::class.java)
+                R.id.clubListFragment -> switchFragment(ClubListFragment::class.java)
                 R.id.woofFragment -> switchFragment(WoofFragment::class.java)
                 R.id.chatListFragment -> switchFragment(ChatListFragment::class.java)
                 R.id.myPageFragment -> switchFragment(MyPageFragment::class.java)
@@ -81,8 +81,8 @@ class MainActivity :
 
     private fun logFragmentSwitched(fragmentClass: Class<out Fragment>) {
         when (fragmentClass.simpleName) {
-            GroupListFragment::class.simpleName -> {
-                analyticsHelper.logGroupListFragmentSwitched()
+            ClubListFragment::class.simpleName -> {
+                analyticsHelper.logClubListFragmentSwitched()
             }
 
             WoofFragment::class.simpleName -> {
@@ -99,12 +99,12 @@ class MainActivity :
         }
     }
 
-    override fun navigateToGroupDetailActivity(groupId: Long) {
-        startActivity(GroupDetailActivity.getIntent(this, groupId))
+    override fun navigateToClubDetailActivity(clubId: Long) {
+        startActivity(ClubDetailActivity.getIntent(this, clubId))
     }
 
-    override fun navigateToGroupAddActivity() {
-        startActivity(GroupAddActivity.getIntent(this))
+    override fun navigateToClubAddActivity() {
+        startActivity(ClubAddActivity.getIntent(this))
     }
 
     override fun navigateToRegisterPet(petProfile: PetProfile?) {

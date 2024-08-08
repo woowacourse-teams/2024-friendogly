@@ -420,13 +420,13 @@
         <item name="maxLines">1</item>
     </style>
 
-    <!--ADD Group Menu Text-->
-    <style name="group_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+    <!--ADD club Menu Text-->
+    <style name="club_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="android:button">@null</item>
         <item name="android:drawablePadding">8dp</item>
-        <item name="android:drawableEnd">@drawable/sel_group_add_check_filter_menu</item>
-        <item name="android:background">@drawable/sel_group_background_filter_menu</item>
-        <item name="android:textColor">@drawable/sel_group_text_filter_menu</item>
+        <item name="android:drawableEnd">@drawable/sel_club_add_check_filter_menu</item>
+        <item name="android:background">@drawable/sel_club_background_filter_menu</item>
+        <item name="android:textColor">@drawable/sel_club_text_filter_menu</item>
         <item name="android:textSize">16sp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
@@ -435,17 +435,17 @@
         <item name="android:layout_marginEnd">0dp</item>
     </style>
 
-    <style name="group_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    <style name="club_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progressbar_linear_progress</item>
     </style>
 
-    <style name="group_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="club_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="behavior_peekHeight">0dp</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="group_detail_side_sheet_dialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+    <style name="club_detail_side_sheet_dialog" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

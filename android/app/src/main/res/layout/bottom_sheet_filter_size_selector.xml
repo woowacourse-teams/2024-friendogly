@@ -4,11 +4,11 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter" />
+        <import type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterViewModel" />
+            type="com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel" />
     </data>
 
     <LinearLayout
@@ -31,7 +31,7 @@
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/group_add_dog_size_title" />
+                android:text="@string/club_add_dog_size_title" />
 
             <Space
                 android:layout_width="5dp"
@@ -56,35 +56,35 @@
 
             <include
                 android:id="@+id/include_filter_small"
-                layout="@layout/include_add_dog_menu"
+                layout="@layout/include_pet_filter_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.SMALL_DOG_NAME}" />
+                app:filterName="@{ClubFilter.SMALL_DOG_NAME}" />
 
             <include
                 android:id="@+id/include_filter_medium"
-                layout="@layout/include_add_dog_menu"
+                layout="@layout/include_pet_filter_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.MEDIUM_DOG_NAME}" />
+                app:filterName="@{ClubFilter.MEDIUM_DOG_NAME}" />
 
             <include
                 android:id="@+id/include_filter_big"
-                layout="@layout/include_add_dog_menu"
+                layout="@layout/include_pet_filter_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 app:actionHandler="@{vm}"
-                app:filterName="@{GroupFilter.BIG_DOG_NAME}" />
+                app:filterName="@{ClubFilter.BIG_DOG_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
         <TextView
             onSingleClick="@{() -> vm.selectFilters()}"
-            android:id="@+id/tv_group_select_commit"
+            android:id="@+id/tv_club_select_commit"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -92,8 +92,8 @@
             android:background="@drawable/rect_coral04_fill_16"
             android:backgroundTint="@color/coral400"
             android:gravity="center"
-            android:text="@string/group_select_commit"
+            android:text="@string/club_select_commit"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vp_group_select_dog_list" />
+            app:layout_constraintTop_toBottomOf="@id/vp_club_select_dog_list" />
     </LinearLayout>
 </layout>

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="profile"
-            type="com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel" />
+            type="com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginEnd="10dp"

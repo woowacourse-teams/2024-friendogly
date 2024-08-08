@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.club.filter.ClubFilterItemActionHandler" />
+
+        <variable
+            name="filterName"
+            type="java.lang.String" />
+    </data>
+
+    <CheckBox
+        android:id="@+id/checkbox_club_filter"
+        style="@style/club_add_custom_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:onCheckedChanged="@{(buttonView, isChecked) -> actionHandler.selectClubFilter(filterName, isChecked)}"
+        android:text="@{filterName}"
+        tools:text="대형견" />
+</layout>

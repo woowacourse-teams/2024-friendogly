@@ -1,0 +1,184 @@
+package com.happy.friendogly.presentation.ui.club.detail
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.fragment.app.DialogFragment
+import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.databinding.ActivityClubDetailBinding
+import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
+import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
+import com.happy.friendogly.presentation.ui.club.menu.ClubMenuBottomSheet
+import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
+import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
+import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
+import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+
+class ClubDetailActivity :
+    BaseActivity<ActivityClubDetailBinding>(R.layout.activity_club_detail),
+    ClubDetailNavigation {
+    private lateinit var clubModifyResultLauncher: ActivityResultLauncher<Intent>
+
+    private val viewModel: ClubDetailViewModel by viewModels<ClubDetailViewModel> {
+        ClubDetailViewModel.factory(
+            getClubUseCase = AppModule.getInstance().getClubUseCase,
+            postClubMemberUseCase = AppModule.getInstance().postClubMemberUseCase,
+        )
+    }
+    private val filterAdapter: FilterAdapter by lazy {
+        FilterAdapter()
+    }
+    private val dogAdapter: DetailProfileAdapter by lazy {
+        DetailProfileAdapter()
+    }
+    private val userAdapter: DetailProfileAdapter by lazy {
+        DetailProfileAdapter()
+    }
+
+    override fun initCreateView() {
+        initDataBinding()
+        initAdapter()
+        initObserver()
+        initClub()
+        initClubModifyResultLauncher()
+    }
+
+    private fun initClubModifyResultLauncher() {
+        clubModifyResultLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val isModify =
+                        result.data?.getBooleanExtra(
+                            ClubModifyActivity.SUCCESS_MODIFY_STATE,
+                            false,
+                        )
+                            ?: false
+                    if (isModify) {
+                        viewModel.loadClub(receiveClubId())
+                    }
+                }
+            }
+    }
+
+    private fun initDataBinding() {
+        binding.vm = viewModel
+    }
+
+    private fun initClub() {
+        val clubId = receiveClubId()
+        if (clubId != FAIL_LOAD_DATA_ID) {
+            viewModel.loadClub(clubId)
+        } else {
+            openFailClubDetailLoad()
+        }
+    }
+
+    private fun openFailClubDetailLoad() {
+        showSnackbar(resources.getString(R.string.club_detail_fail_load)) {
+            setAction(resources.getString(R.string.club_detail_fail_button)) {
+                finish()
+            }
+        }
+    }
+
+    private fun receiveClubId(): Long {
+        return intent.getLongExtra(KEY_CLUB_DETAIL_ID, FAIL_LOAD_DATA_ID)
+    }
+
+    private fun initAdapter() {
+        binding.rcvClubDetailFilterList.adapter = filterAdapter
+        binding.rcvClubDetailDogList.adapter = dogAdapter
+        binding.rcvClubDetailUserList.adapter = userAdapter
+    }
+
+    private fun initObserver() {
+        viewModel.club.observe(this) { club ->
+            filterAdapter.submitList(club.filters)
+            dogAdapter.submitList(club.petProfiles)
+            userAdapter.submitList(club.userProfiles)
+        }
+
+        viewModel.clubDetailEvent.observeEvent(this) { event ->
+            when (event) {
+                is ClubDetailEvent.OpenDogSelector -> openDogSelector(event.filters)
+
+                // TODO: delete and go chatActivity
+                ClubDetailEvent.Navigation.NavigateToChat -> {
+                    finish()
+                }
+
+                ClubDetailEvent.Navigation.NavigateToHome -> finish()
+
+                is ClubDetailEvent.OpenDetailMenu -> {
+                    val bottomSheet =
+                        ClubMenuBottomSheet(
+                            clubId = receiveClubId(),
+                            clubDetailViewType = event.clubDetailViewType,
+                        )
+                    bottomSheet.show(supportFragmentManager, "TAG")
+                }
+
+                is ClubDetailEvent.Navigation.NavigateToProfile ->
+                    startActivity(OtherProfileActivity.getIntent(this, event.id))
+
+                ClubDetailEvent.FailLoadDetail -> openFailClubDetailLoad()
+                ClubDetailEvent.FailParticipation ->
+                    showSnackbar(
+                        getString(R.string.club_detail_participate_fail),
+                    )
+            }
+        }
+    }
+
+    override fun navigateToModify() {
+        val ClubModifyUiModel = viewModel.makeClubModifyUiModel() ?: return
+        val modifyIntent = makeModifyIntent(ClubModifyUiModel)
+        clubModifyResultLauncher.launch(modifyIntent)
+    }
+
+    private fun makeModifyIntent(modifyUiModel: ClubModifyUiModel): Intent {
+        return ClubModifyActivity.getIntent(
+            this@ClubDetailActivity,
+            modifyUiModel,
+        )
+    }
+
+    private fun openDogSelector(filters: List<ClubFilter>) {
+        val bottomSheet =
+            PetSelectBottomSheet(filters = filters) { dogs ->
+                viewModel.joinClub(dogs)
+            }
+        bottomSheet.show(supportFragmentManager, "TAG")
+        bottomSheet.setStyle(
+            DialogFragment.STYLE_NORMAL,
+            R.style.RoundCornerBottomSheetDialogTheme,
+        )
+    }
+
+    override fun navigateToPrev() {
+        finish()
+    }
+
+    companion object {
+        private const val KEY_CLUB_DETAIL_ID = "ClubDetailId"
+        const val FAIL_LOAD_DATA_ID = -1L
+
+        fun getIntent(
+            context: Context,
+            clubId: Long,
+        ): Intent {
+            return Intent(context, ClubDetailActivity::class.java).apply {
+                putExtra(KEY_CLUB_DETAIL_ID, clubId)
+            }
+        }
+    }
+}
