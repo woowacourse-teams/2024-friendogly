@@ -8,6 +8,16 @@ VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://picsum.photos/100'),
        ('채드', '114d8979', 'ched@test.com', 'https://picsum.photos/100'),
        ('에디', 'c065a053', 'edy@test.com', null);
 
+INSERT INTO device_token(member_id, device_token)
+VALUES (1,"a"),
+       (2,"a"),
+       (3,"a"),
+       (4,"a"),
+       (5,"a"),
+       (6,"a"),
+       (7,"a"),
+       (8,"a");
+
 INSERT INTO footprint(member_id, latitude, longitude, walk_status, created_at, is_deleted)
 VALUES (1, 37.5173316, 127.1011661, 'BEFORE', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
        (4, 37.5136533, 127.0983182, 'BEFORE', TIMESTAMPADD(MINUTE, -40, NOW()), FALSE);
