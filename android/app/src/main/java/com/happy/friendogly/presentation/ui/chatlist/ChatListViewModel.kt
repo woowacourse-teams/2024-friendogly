@@ -23,14 +23,7 @@ class ChatListViewModel(
     fun getChats() {
         viewModelScope.launch {
             chatRepository.getChatList().onSuccess { room ->
-                _chats.value = room.chatRooms.map { it.toUiModel() } +
-                    ChatListUiModel(
-                        "", "", 2, 0,
-                        ChatDateTime.Yesterday(
-                            LocalDateTime.now(),
-                        ),
-                        "", 1,
-                    )
+                _chats.value = room.chatRooms.map { it.toUiModel() }
                 memberId = room.myMemberId
             }
         }
