@@ -33,7 +33,7 @@ object Types {
     const val WOOF_FRAGMENT = "woof_fragment"
     const val CHAT_LIST_FRAGMENT = "chat_list_fragment"
     const val MY_PAGE_FRAGMENT = "my_page_fragment"
-    const val GROUP_LIST_FRAGMENT_SWITCHED = "group_list_fragment_switched"
+    const val CLUB_LIST_FRAGMENT_SWITCHED = "group_list_fragment_switched"
     const val WOOF_FRAGMENT_SWITCHED = "woof_fragment_switched"
     const val CHAT_LIST_FRAGMENT_SWITCHED = "chat_list_fragment_switched"
     const val MY_PAGE_FRAGMENT_SWITCHED = "my_page_fragment_switched"

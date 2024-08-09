@@ -5,9 +5,9 @@ import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 
 interface MainActivityActionHandler {
-    fun navigateToGroupDetailActivity(groupId: Long)
+    fun navigateToClubDetailActivity(clubId: Long)
 
-    fun navigateToGroupAddActivity()
+    fun navigateToClubAddActivity()
 
     fun navigateToRegisterPet(petProfile: PetProfile?)
 

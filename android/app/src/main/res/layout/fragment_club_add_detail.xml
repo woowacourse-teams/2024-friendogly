@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.club.add.ClubAddActionHandler" />
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="@string/club_add_detail_main_title" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_add_detail_main_content" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="50dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="150dp"
+            onSingleClick="@{()->actionHandler.selectClubImage()}"
+            android:layout_gravity="center"
+            android:layout_height="150dp">
+            <com.google.android.material.imageview.ShapeableImageView
+                app:clubPoster="@{vm.clubPoster}"
+                android:id="@+id/iv_club_add_poster"
+                app:shapeAppearanceOverlay="@style/RoundSmall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_club_normal" />
+            <ImageView
+                android:layout_margin="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/ic_user_profile_set_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Regular.Gray08.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="모임 사진을 추가하세요." />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_add_club_number" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{@string/club_counter_count(vm.clubCounter.count)}"
+            tools:text="5명" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="10dp" />
+
+        <SeekBar
+            android:id="@+id/seekbar_club_counter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:progressTint="@color/coral500"
+            android:thumbTint="@color/coral500"
+            android:max="5"
+            android:progress="@{vm.clubCounter.count}"/>
+    </LinearLayout>
+</layout>
