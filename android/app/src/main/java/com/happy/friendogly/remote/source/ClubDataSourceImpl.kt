@@ -80,6 +80,6 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
 
     override suspend fun deleteClubMember(clubId: Long): Result<Unit> =
         runCatching {
-            service.deleteClubMember(clubId).data
+            service.deleteClubMember(clubId)
         }
 }

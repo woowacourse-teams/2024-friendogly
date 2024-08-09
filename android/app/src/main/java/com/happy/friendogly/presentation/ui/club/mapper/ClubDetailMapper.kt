@@ -15,9 +15,9 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         clubDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         clubLeaderName = ownerMemberName,
-        clubLeaderImage = ownerImageUrl.ifEmpty { null },
+        clubLeaderImage = ownerImageUrl?.ifEmpty { null },
         clubLocation = address.toPresentation(),
-        clubPoster = imageUrl.ifEmpty { null },
+        clubPoster = imageUrl?.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,
         clubDetailViewType =
             ClubDetailViewType.from(
