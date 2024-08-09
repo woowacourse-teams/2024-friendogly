@@ -64,8 +64,8 @@ VALUES (3, 1, '2023-08-03 12:00:00'),
        (4, 4, '2023-08-03 12:00:00');
 
 INSERT INTO club (title, content, member_capacity, province,city,village, image_url, created_at, status, chat_room_id)
-VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-08-01 12:00:00', 'OPEN', 1),
-       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-07-31 01:00:00', 'OPEN', 2);
+VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울특별시', '송파구', '신천동', 'https://cdn.imweb.me/thumbnail/20240214/0b725e3e8a959.jpg', '2023-08-01 12:00:00', 'OPEN', 1),
+       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울특별시', '송파구', '신천동', 'https://images.mypetlife.co.kr/content/uploads/2023/04/18094901/xuan-nguyen-zr0beNrnvgQ-unsplash-768x512-1.jpg', '2023-07-31 01:00:00', 'OPEN', 2);
 
 INSERT INTO club_gender (club_id, allowed_gender)
 VALUES (1, 'MALE'),
