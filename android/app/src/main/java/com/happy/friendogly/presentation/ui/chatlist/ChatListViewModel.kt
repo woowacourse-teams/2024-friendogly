@@ -7,10 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
-import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDateTime
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatListUiModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class ChatListViewModel(
     private val chatRepository: ChatRepository,
