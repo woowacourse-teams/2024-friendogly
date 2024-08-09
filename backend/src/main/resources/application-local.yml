@@ -25,3 +25,8 @@ logging.level.org:
   hibernate:
     SQL: debug
     orm.jdbc.bind: trace
+
+management:
+  endpoints:
+    web:
+      base-path: /management
