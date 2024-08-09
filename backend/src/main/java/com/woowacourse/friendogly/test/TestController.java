@@ -11,18 +11,18 @@ public class TestController {
     @GetMapping("/log/info")
     public String info() {
         log.info("INFO LOG!!!");
-        return "잘 됩니다.";
+        return "info....";
     }
 
     @GetMapping("/log/warn")
     public String warn() {
         log.warn("WARN LOG!!!");
-        return "그쪽이 잘못했어요.";
+        return "warn.....";
     }
 
     @GetMapping("/log/error")
     public String error() {
         log.error("ERROR LOG!!!");
-        return "서버가 잘못했어요.";
+        return "GG...";
     }
 }
