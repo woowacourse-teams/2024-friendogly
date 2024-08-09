@@ -14,6 +14,6 @@ data class Club(
     val allowedSize: List<SizeType>,
     val memberCapacity: Int,
     val currentMemberCount: Int,
-    val imageUrl: String?=null,
+    val imageUrl: String? = null,
     val petImageUrls: List<String?>,
 )

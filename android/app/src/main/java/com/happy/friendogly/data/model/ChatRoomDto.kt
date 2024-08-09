@@ -4,5 +4,5 @@ data class ChatRoomDto(
     val chatRoomId: Long,
     val clubName: String,
     val memberCount: Int,
-    val clubImageUrl: String? =null,
+    val clubImageUrl: String? = null,
 )

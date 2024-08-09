@@ -8,7 +8,7 @@ data class ChatListUiModel(
     val numberOfPeople: Int,
     val unreadMessageCount: Int,
     val dateTime: ChatDateTime,
-    val imageUrl: String?=null,
+    val imageUrl: String? = null,
     val chatRoomId: Long = 0,
 ) {
     companion object {
