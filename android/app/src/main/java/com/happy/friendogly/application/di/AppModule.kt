@@ -6,11 +6,13 @@ import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
+import com.happy.friendogly.data.repository.ChatRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
+import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
 import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.AuthDataSource
@@ -19,14 +21,17 @@ import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.TokenDataSource
+import com.happy.friendogly.data.source.WebSocketDataSource
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AuthRepository
+import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.TokenRepository
+import com.happy.friendogly.domain.repository.WebSocketRepository
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
@@ -59,11 +64,13 @@ import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.BaseUrl
+import com.happy.friendogly.remote.api.WebSocketService
 import com.happy.friendogly.remote.di.RemoteModule
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
+import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
 import com.happy.friendogly.remote.source.WoofDataSourceImpl
 
 class AppModule(context: Context) {
@@ -72,6 +79,7 @@ class AppModule(context: Context) {
     val crashlyticsHelper = CrashlyticsHelper()
 
     private val baseUrl = BaseUrl(BuildConfig.base_url)
+    private val websocketUrl = BaseUrl(BuildConfig.websocket_url)
 
     private val tokenManager = TokenManager(context)
     private val authenticationListener: AuthenticationListener =
@@ -113,6 +121,25 @@ class AppModule(context: Context) {
             authenticationListener = authenticationListener,
         )
 
+    private val webSocketService =
+        WebSocketService(
+            client =
+                RemoteModule.createStumpClient(
+                    baseUrl = baseUrl,
+                    tokenManager = tokenManager,
+                    authenticationListener = authenticationListener,
+                ),
+            tokenManager = tokenManager,
+            baseUrl = websocketUrl,
+        )
+
+    private val chatService =
+        RemoteModule.createChatService(
+            baseUrl = baseUrl,
+            tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
+        )
+
     // data source
     private val authDataSource: AuthDataSource = AuthDataSourceImpl(service = authService)
     private val clubDataSource: ClubDataSource = ClubDataSourceImpl(service = clubService)
@@ -123,6 +150,8 @@ class AppModule(context: Context) {
     private val woofDataSource: WoofDataSource = WoofDataSourceImpl(service = woofService)
     private val memberDataSource: MemberDataSource = MemberDataSourceImpl(service = memberService)
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
+    private val webSocketDataSource: WebSocketDataSource =
+        WebSocketDataSourceImpl(service = webSocketService)
 
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
@@ -135,6 +164,9 @@ class AppModule(context: Context) {
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
     private val addressRepository: AddressRepository =
         AddressRepositoryImpl(addressDataSource = addressDataSource)
+    val webSocketRepository: WebSocketRepository =
+        WebSocketRepositoryImpl(source = webSocketDataSource)
+    val chatRepository: ChatRepository = ChatRepositoryImpl(service = chatService)
 
     // use case
     val postKakaoLoginUseCase: PostKakaoLoginUseCase =

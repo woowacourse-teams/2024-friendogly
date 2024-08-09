@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatDateTime
@@ -29,4 +30,7 @@ fun TextView.unreadMessage(count: Int) {
         } else {
             count.toString()
         }
+    if (count == 0) {
+        this.isVisible = false
+    }
 }

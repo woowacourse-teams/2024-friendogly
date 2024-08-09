@@ -9,6 +9,7 @@ data class ChatListUiModel(
     val unreadMessageCount: Int,
     val dateTime: ChatDateTime,
     val imageUrl: String,
+    val chatRoomId: Long = 0,
 ) {
     companion object {
         const val YESTERDAY = 1L

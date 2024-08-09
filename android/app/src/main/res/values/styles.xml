@@ -6,6 +6,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="RoundXSmall">
+        <item name="cornerSize">5dp</item>
+    </style>
+
     <style name="RoundSmall">
         <item name="cornerSize">16dp</item>
     </style>
