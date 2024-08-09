@@ -20,6 +20,7 @@ val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: "
 val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
 val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
+val websocketUrl = localProperties.getProperty("websocket_url") ?: ""
 
 android {
     namespace = "com.happy.friendogly"
@@ -29,8 +30,8 @@ android {
         applicationId = "com.happy.friendogly"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -39,11 +40,16 @@ android {
         resValue("string", "KAKAO_OAUTH_HOST", kakaoOauthHost)
         buildConfigField("String", "NAVER_CLIEND_ID", naverClientId)
         buildConfigField("String", "base_url", baseUrl)
+        buildConfigField("String", "websocket_url", websocketUrl)
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+        }
         release {
-            isMinifyEnabled = false
+            isDebuggable = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -82,6 +88,7 @@ dependencies {
     implementation(libs.bundles.network)
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.animation)
+    implementation(libs.bundles.stomp)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

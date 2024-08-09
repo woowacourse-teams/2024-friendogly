@@ -7,6 +7,7 @@ import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.ClubDetailResponse
 import com.happy.friendogly.remote.model.response.ClubResponse
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -48,5 +49,5 @@ interface ClubService {
     @DELETE(ApiClient.Club.DELETE_CLUB_MEMBER)
     suspend fun deleteClubMember(
         @Path("clubId") clubId: Long,
-    ): BaseResponse<Unit>
+    ): Response<Unit>
 }

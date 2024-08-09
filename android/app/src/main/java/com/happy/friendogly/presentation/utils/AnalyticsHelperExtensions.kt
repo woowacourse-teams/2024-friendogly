@@ -18,8 +18,8 @@ fun AnalyticsHelper.logGoogleLoginClicked() {
     )
 }
 
-fun AnalyticsHelper.logGroupListFragmentSwitched() {
-    logEvent(type = Types.GROUP_LIST_FRAGMENT_SWITCHED)
+fun AnalyticsHelper.logClubListFragmentSwitched() {
+    logEvent(type = Types.CLUB_LIST_FRAGMENT_SWITCHED)
 }
 
 fun AnalyticsHelper.logWoofFragmentSwitched() {

@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="groupFilter"
-            type="com.happy.friendogly.presentation.ui.group.model.groupfilter.GroupFilter" />
+            name="clubFilter"
+            type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{groupFilter.filterName}"
+            android:text="@{clubFilter.filterName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>

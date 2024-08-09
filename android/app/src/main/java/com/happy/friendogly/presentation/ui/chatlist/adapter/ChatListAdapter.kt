@@ -46,7 +46,7 @@ class ChatListAdapter(private val chatListNavigationAction: ChatListNavigationAc
             binding.dateTime = item.dateTime
             binding.unreadMessageCount = item.unreadMessageCount
             binding.root.setOnClickListener {
-                chatListNavigationAction.navigateToChat(1L) // TODO api 명세서 나오면 수정
+                chatListNavigationAction.navigateToChat(item.chatRoomId)
             }
         }
     }
