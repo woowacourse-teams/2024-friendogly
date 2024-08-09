@@ -1,11 +1,11 @@
 INSERT INTO member(name, tag, email, image_url)
-VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://picsum.photos/100'),
-       ('땡이', 'a582a275', 'jiho@test.com', 'https://picsum.photos/100'),
+VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://avatars.githubusercontent.com/u/79188587?v=4'),
+       ('땡이', 'a582a275', 'jiho@test.com', 'https://avatars.githubusercontent.com/u/110461155?v=4'),
        ('트레', '68fc8014', 'tre@test.com', null),
-       ('위브', '3dde7373', 'wiib@test.com', 'https://picsum.photos/100'),
+       ('위브', '3dde7373', 'wiib@test.com', 'https://avatars.githubusercontent.com/u/28584160?v=4'),
        ('벼리', '525ec19f', 'byeori@test.com', null),
        ('누누', '5f0f8307', 'nunu@test.com', null),
-       ('채드', '114d8979', 'ched@test.com', 'https://picsum.photos/100'),
+       ('채드', '114d8979', 'ched@test.com', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
        ('에디', 'c065a053', 'edy@test.com', null);
 
 INSERT INTO footprint(member_id, latitude, longitude, walk_status, created_at, is_deleted)
