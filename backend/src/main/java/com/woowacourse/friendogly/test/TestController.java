@@ -9,17 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/log/info")
-    public void info() {
+    public String info() {
         log.info("INFO LOG!!!");
+        return "info..";
     }
 
     @GetMapping("/log/warn")
-    public void warn() {
+    public String warn() {
         log.warn("WARN LOG!!!");
+        return "warn...";
     }
 
     @GetMapping("/log/error")
-    public void error() {
+    public String error() {
         log.error("ERROR LOG!!!");
+        return "GG...";
     }
 }
