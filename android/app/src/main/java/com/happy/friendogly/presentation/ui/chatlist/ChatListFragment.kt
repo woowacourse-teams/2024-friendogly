@@ -29,6 +29,14 @@ class ChatListFragment :
         viewModel.chats.observe(viewLifecycleOwner) { chats ->
             adapter.submitList(chats)
         }
+        swipeEvent()
+    }
+
+    private fun swipeEvent() {
+        binding.swipelayoutChatListRefresh.setOnRefreshListener {
+            viewModel.getChats()
+            binding.swipelayoutChatListRefresh.isRefreshing = false
+        }
     }
 
     override fun navigateToChat(chatId: Long) {
