@@ -14,6 +14,6 @@ data class ClubDto(
     val allowedSize: List<SizeTypeDto>,
     val memberCapacity: Int,
     val currentMemberCount: Int,
-    val imageUrl: String,
-    val petImageUrls: List<String>,
+    val imageUrl: String?=null,
+    val petImageUrls: List<String?>,
 )

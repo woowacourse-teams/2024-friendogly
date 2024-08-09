@@ -18,6 +18,6 @@ data class ClubResponse(
     val allowedSize: List<SizeTypeResponse>,
     val memberCapacity: Int,
     val currentMemberCount: Int,
-    val imageUrl: String,
-    val petImageUrls: List<String>,
+    val imageUrl: String?=null,
+    val petImageUrls: List<String?>,
 )
