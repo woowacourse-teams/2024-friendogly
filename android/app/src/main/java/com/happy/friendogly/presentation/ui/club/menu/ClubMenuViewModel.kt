@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.club.menu
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,7 @@ class ClubMenuViewModel(
                     _clubMenuEvent.emit(ClubMenuEvent.Navigation.NavigateToPrev)
                 }
                 .onFailure {
+                    Log.d("sdlfjfsdl", it.message.toString())
                     _clubMenuEvent.emit(ClubMenuEvent.FailDelete)
                 }
         }

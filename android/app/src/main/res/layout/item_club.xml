@@ -26,6 +26,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             app:glide="@{club.clubPoster}"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_club_normal"
             android:background="@drawable/rect_orange100_fill_12"
             app:shapeAppearanceOverlay="@style/RoundSmall"

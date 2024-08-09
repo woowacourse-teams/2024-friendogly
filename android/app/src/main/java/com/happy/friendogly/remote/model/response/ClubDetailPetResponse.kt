@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class ClubDetailPetResponse(
     val id: Long,
     val name: String,
-    val imageUrl: String,
+    val imageUrl: String? = null,
     val isMine: Boolean,
 )

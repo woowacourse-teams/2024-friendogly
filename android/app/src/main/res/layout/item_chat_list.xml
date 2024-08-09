@@ -22,6 +22,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/ic_club_normal"
             android:id="@+id/iv_chat_group"
             android:layout_width="44dp"
             android:layout_height="0dp"
@@ -32,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/RoundSmall"
-            tools:src="@drawable/ic_launcher_background" />
+             />
 
         <TextView
             android:id="@+id/tv_chat_title"
