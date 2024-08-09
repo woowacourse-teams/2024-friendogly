@@ -27,6 +27,11 @@ logging.level.org:
     orm.jdbc.bind: trace
 
 management:
+  server:
+    port: 3000
   endpoints:
     web:
       base-path: /management
+      exposure:
+        include: health,info,beans,conditions
+        exclude: threaddump, heapdump
