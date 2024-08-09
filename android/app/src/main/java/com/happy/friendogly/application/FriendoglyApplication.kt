@@ -1,6 +1,7 @@
 package com.happy.friendogly.application
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import com.happy.friendogly.BuildConfig
 import com.happy.friendogly.application.di.AppModule
 import com.kakao.sdk.common.KakaoSdk
@@ -13,5 +14,6 @@ class FriendoglyApplication : Application() {
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIEND_ID)
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
         AppModule.setInstance(applicationContext)
+        FirebaseApp.initializeApp(this)
     }
 }

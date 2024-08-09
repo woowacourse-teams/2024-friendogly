@@ -5,6 +5,8 @@ import com.happy.friendogly.BuildConfig
 import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
+import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
+import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
@@ -13,6 +15,8 @@ import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
+import com.happy.friendogly.data.source.AlarmSettingDataSource
+import com.happy.friendogly.data.source.AlarmTokenDataSource
 import com.happy.friendogly.data.source.AuthDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
@@ -21,6 +25,8 @@ import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.TokenDataSource
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.AddressRepository
+import com.happy.friendogly.domain.repository.AlarmSettingRepository
+import com.happy.friendogly.domain.repository.AlarmTokenRepository
 import com.happy.friendogly.domain.repository.AuthRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
@@ -29,9 +35,13 @@ import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
+import com.happy.friendogly.domain.usecase.DeleteAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.DeleteAlarmTokenUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.GetAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.GetAlarmTokenUseCase
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
@@ -51,11 +61,17 @@ import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
+import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
+import com.happy.friendogly.domain.usecase.SaveAlarmSettingUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.AddressModule
+import com.happy.friendogly.local.di.AlarmModule
+import com.happy.friendogly.local.di.AlarmTokenModule
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.local.source.AddressDataSourceImpl
+import com.happy.friendogly.local.source.AlarmSettingDataSourceImpl
+import com.happy.friendogly.local.source.AlarmTokenDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.BaseUrl
@@ -77,6 +93,8 @@ class AppModule(context: Context) {
     private val authenticationListener: AuthenticationListener =
         AuthenticationListenerImpl(context, tokenManager)
     private val addressModule = AddressModule(context)
+    private val alarmModule = AlarmModule(context)
+    private val alarmTokenModule = AlarmTokenModule(context)
 
     // service
     private val authService =
@@ -123,6 +141,8 @@ class AppModule(context: Context) {
     private val woofDataSource: WoofDataSource = WoofDataSourceImpl(service = woofService)
     private val memberDataSource: MemberDataSource = MemberDataSourceImpl(service = memberService)
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
+    private val alarmSettingDataSource: AlarmSettingDataSource = AlarmSettingDataSourceImpl(alarmModule = alarmModule)
+    private val alarmTokenDataSource: AlarmTokenDataSource = AlarmTokenDataSourceImpl(alarmTokenModule = alarmTokenModule)
 
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
@@ -135,6 +155,8 @@ class AppModule(context: Context) {
     private val petRepository: PetRepository = PetRepositoryImpl(source = petDataSource)
     private val addressRepository: AddressRepository =
         AddressRepositoryImpl(addressDataSource = addressDataSource)
+    private val alarmSettingRepository: AlarmSettingRepository = AlarmSettingRepositoryImpl(source = alarmSettingDataSource)
+    private val alarmTokenRepository: AlarmTokenRepository = AlarmTokenRepositoryImpl(source = alarmTokenDataSource)
 
     // use case
     val postKakaoLoginUseCase: PostKakaoLoginUseCase =
@@ -173,6 +195,12 @@ class AppModule(context: Context) {
     val saveAddressUseCase: SaveAddressUseCase = SaveAddressUseCase(repository = addressRepository)
     val deleteAddressUseCase: DeleteAddressUseCase =
         DeleteAddressUseCase(repository = addressRepository)
+    val deleteAlarmSettingUseCase: DeleteAlarmSettingUseCase = DeleteAlarmSettingUseCase(repository = alarmSettingRepository)
+    val saveAlarmSettingUseCase: SaveAlarmSettingUseCase = SaveAlarmSettingUseCase(repository = alarmSettingRepository)
+    val getAlarmSettingUseCase: GetAlarmSettingUseCase = GetAlarmSettingUseCase(repository = alarmSettingRepository)
+    val deleteAlarmTokenUseCase: DeleteAlarmTokenUseCase = DeleteAlarmTokenUseCase(repository = alarmTokenRepository)
+    val saveAlarmTokenUseCase: SaveAlamTokenUseCase = SaveAlamTokenUseCase(repository = alarmTokenRepository)
+    val getAlarmTokenUseCase: GetAlarmTokenUseCase = GetAlarmTokenUseCase(repository = alarmTokenRepository)
 
     companion object {
         private var instance: AppModule? = null
