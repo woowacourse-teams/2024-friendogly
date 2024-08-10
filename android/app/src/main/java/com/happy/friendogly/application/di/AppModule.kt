@@ -10,6 +10,7 @@ import com.happy.friendogly.data.repository.ChatRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
+import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
@@ -30,6 +31,7 @@ import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
+import com.happy.friendogly.domain.repository.MyClubRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WebSocketRepository
@@ -46,6 +48,8 @@ import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
+import com.happy.friendogly.domain.usecase.GetMyClubUseCase
+import com.happy.friendogly.domain.usecase.GetMyHeadClubUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
@@ -132,11 +136,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-                RemoteModule.createStumpClient(
-                    baseUrl = baseUrl,
-                    tokenManager = tokenManager,
-                    authenticationListener = authenticationListener,
-                ),
+            RemoteModule.createStumpClient(
+                baseUrl = baseUrl,
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -165,6 +169,7 @@ class AppModule(context: Context) {
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
     private val clubRepository: ClubRepository = ClubRepositoryImpl(source = clubDataSource)
+    private val myClubRepository: MyClubRepository = MyClubRepositoryImpl()
     private val tokenRepository: TokenRepository = TokenRepositoryImpl(source = tokenDataSource)
     private val kakaoLoginRepository: KakaoLoginRepository =
         KakaoLoginRepositoryImpl(dataSource = kakaoLoginDataSource)
@@ -189,6 +194,10 @@ class AppModule(context: Context) {
         PostClubMemberUseCase(repository = clubRepository)
     val deleteClubMemberUseCase: DeleteClubMemberUseCase =
         DeleteClubMemberUseCase(repository = clubRepository)
+    val getMyClubsUseCase: GetMyClubUseCase =
+        GetMyClubUseCase(repository = myClubRepository)
+    val getMyHeadClubsUseCase: GetMyHeadClubUseCase =
+        GetMyHeadClubUseCase(repository = myClubRepository)
     val getJwtTokenUseCase: GetJwtTokenUseCase = GetJwtTokenUseCase(repository = tokenRepository)
     val saveJwtTokenUseCase: SaveJwtTokenUseCase = SaveJwtTokenUseCase(repository = tokenRepository)
     val deleteTokenUseCase: DeleteTokenUseCase =
