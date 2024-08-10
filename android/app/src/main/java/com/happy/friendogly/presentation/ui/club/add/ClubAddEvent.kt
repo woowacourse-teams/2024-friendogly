@@ -6,6 +6,8 @@ sealed interface ClubAddEvent {
     sealed interface Navigation : ClubAddEvent {
         data object NavigateToHome : Navigation
 
+        data object NavigateToHomeWithAdded : Navigation
+
         data object NavigateToSelectClubPoster : Navigation
 
         data class NavigateToSelectDog(val filters: List<ClubFilter>) : Navigation

@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
@@ -99,12 +100,15 @@ class MainActivity :
         }
     }
 
-    override fun navigateToClubDetailActivity(clubId: Long) {
-        startActivity(ClubDetailActivity.getIntent(this, clubId))
+    override fun navigateToClubDetailActivity(
+        clubId: Long,
+        resultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        resultLauncher.launch(ClubDetailActivity.getIntent(this, clubId))
     }
 
-    override fun navigateToClubAddActivity() {
-        startActivity(ClubAddActivity.getIntent(this))
+    override fun navigateToClubAddActivity(resultLauncher: ActivityResultLauncher<Intent>) {
+        resultLauncher.launch(ClubAddActivity.getIntent(this))
     }
 
     override fun navigateToRegisterPet(petProfile: PetProfile?) {

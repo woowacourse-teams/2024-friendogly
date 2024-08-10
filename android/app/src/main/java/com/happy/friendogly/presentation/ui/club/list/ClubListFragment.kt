@@ -1,9 +1,11 @@
 package com.happy.friendogly.presentation.ui.club.list
 
+import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -40,6 +42,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         initAdapter()
         initStateObserver()
         initObserver()
+        initClubListResultLauncher()
     }
 
     private fun initDataBinding() {
@@ -58,6 +61,24 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
+    private fun initClubListResultLauncher(){
+        resultLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ){ result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val isChange =
+                        result.data?.getBooleanExtra(
+                            CHANGE_CLUB_LIST_STATE,
+                            false,
+                        )?:false
+                    if (isChange){
+                        viewModel.loadClubWithAddress()
+                    }
+                }
+            }
+    }
+
     private fun initObserver() {
         viewModel.clubs.observe(viewLifecycleOwner) { clubs ->
             clubAdapter.submitList(clubs)
@@ -70,10 +91,15 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         viewModel.clubListEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is ClubListEvent.OpenClub ->
-                    (activity as MainActivityActionHandler).navigateToClubDetailActivity(event.clubId)
+                    (activity as MainActivityActionHandler).navigateToClubDetailActivity(
+                        clubId = event.clubId,
+                        resultLauncher = resultLauncher,
+                    )
 
                 ClubListEvent.Navigation.NavigateToAddClub ->
-                    (activity as MainActivityActionHandler).navigateToClubAddActivity()
+                    (activity as MainActivityActionHandler).navigateToClubAddActivity(
+                        resultLauncher = resultLauncher,
+                    )
 
                 is ClubListEvent.OpenParticipationFilter -> {
                     val bottomSheet =
@@ -130,5 +156,9 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
         currentView.visibility = View.VISIBLE
+    }
+
+    companion object {
+        const val CHANGE_CLUB_LIST_STATE = "clubListChangeState"
     }
 }
