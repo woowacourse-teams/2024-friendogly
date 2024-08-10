@@ -130,8 +130,8 @@ class MainActivity :
         startActivity(SettingActivity.getIntent(this))
     }
 
-    override fun navigateToSettingLocation() {
-        startActivity(SettingMyLocationActivity.getIntent(this))
+    override fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>) {
+        resultLauncher.launch(SettingMyLocationActivity.getIntent(this))
     }
 
     override fun onBackPressed() {

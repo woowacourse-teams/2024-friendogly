@@ -131,7 +131,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 }
 
                 ClubListEvent.Navigation.NavigateToAddress ->
-                    (activity as MainActivityActionHandler).navigateToSettingLocation()
+                    (activity as MainActivityActionHandler).navigateToSettingLocation(resultLauncher)
             }
         }
     }

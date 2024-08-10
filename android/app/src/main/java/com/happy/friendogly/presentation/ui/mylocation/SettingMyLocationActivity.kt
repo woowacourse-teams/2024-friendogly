@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.mylocation
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
@@ -14,6 +15,7 @@ import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
+import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -80,8 +82,17 @@ class SettingMyLocationActivity :
             when (event) {
                 SettingMyLocationEvent.InvalidLocation -> showLoadFailSnackBar()
                 SettingMyLocationEvent.Navigation.NavigateToPrev -> finish()
+                SettingMyLocationEvent.Navigation.NavigateToPrevWithReload -> {
+                    putLoadState()
+                    finish()
+                }
             }
         }
+    }
+
+    private fun putLoadState(){
+        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE,true)
+        setResult(Activity.RESULT_OK,intent)
     }
 
     private fun initLocationPermission() =

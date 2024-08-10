@@ -27,5 +27,5 @@ interface MainActivityActionHandler {
 
     fun navigateToSetting()
 
-    fun navigateToSettingLocation()
+    fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>)
 }

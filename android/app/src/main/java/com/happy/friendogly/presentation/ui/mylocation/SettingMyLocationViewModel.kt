@@ -97,7 +97,7 @@ class SettingMyLocationViewModel(
         viewModelScope.launch {
             saveAddressUseCase.invoke(userAddress = userAddress)
                 .onSuccess {
-                    _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrev)
+                    _event.emit(SettingMyLocationEvent.Navigation.NavigateToPrevWithReload)
                 }
                 .onFailure {
                     submitInValidLocation()
