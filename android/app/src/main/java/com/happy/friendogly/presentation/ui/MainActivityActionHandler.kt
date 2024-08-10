@@ -9,12 +9,10 @@ import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 interface MainActivityActionHandler {
     fun navigateToClubDetailActivity(
         clubId: Long,
-        resultLauncher : ActivityResultLauncher<Intent>,
+        resultLauncher: ActivityResultLauncher<Intent>,
     )
 
-    fun navigateToClubAddActivity(
-        resultLauncher : ActivityResultLauncher<Intent>,
-    )
+    fun navigateToClubAddActivity(resultLauncher: ActivityResultLauncher<Intent>)
 
     fun navigateToRegisterPet(petProfile: PetProfile?)
 

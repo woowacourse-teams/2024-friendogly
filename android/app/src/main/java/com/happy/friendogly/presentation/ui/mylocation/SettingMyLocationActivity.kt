@@ -6,7 +6,6 @@ import android.content.Intent
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
@@ -91,9 +90,9 @@ class SettingMyLocationActivity :
         }
     }
 
-    private fun putLoadState(){
-        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE,true)
-        setResult(Activity.RESULT_OK,intent)
+    private fun putLoadState() {
+        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE, true)
+        setResult(Activity.RESULT_OK, intent)
     }
 
     private fun initLocationPermission() =

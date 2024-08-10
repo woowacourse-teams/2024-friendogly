@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.add
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -113,9 +112,9 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
         }
     }
 
-    private fun putLoadState(){
-        intent.putExtra(CHANGE_CLUB_LIST_STATE,true)
-        setResult(Activity.RESULT_OK,intent)
+    private fun putLoadState() {
+        intent.putExtra(CHANGE_CLUB_LIST_STATE, true)
+        setResult(Activity.RESULT_OK, intent)
     }
 
     private fun openDogSelector(filters: List<ClubFilter>) {

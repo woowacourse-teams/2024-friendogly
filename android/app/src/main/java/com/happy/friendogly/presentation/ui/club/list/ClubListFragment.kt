@@ -2,9 +2,7 @@ package com.happy.friendogly.presentation.ui.club.list
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
@@ -21,7 +19,6 @@ import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapt
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {
-
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
@@ -62,18 +59,18 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
-    private fun initClubListResultLauncher(){
+    private fun initClubListResultLauncher() {
         resultLauncher =
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult(),
-            ){ result ->
+            ) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val isChange =
                         result.data?.getBooleanExtra(
                             CHANGE_CLUB_LIST_STATE,
                             false,
-                        )?:false
-                    if (isChange){
+                        ) ?: false
+                    if (isChange) {
                         viewModel.loadClubWithAddress()
                     }
                 }
@@ -140,7 +137,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     private fun initStateObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                ClubListUiState.Init ->applyViewVisibility(binding.includeClubList.rcvClubListClub)
+                ClubListUiState.Init -> applyViewVisibility(binding.includeClubList.rcvClubListClub)
 
                 ClubListUiState.NotAddress -> applyViewVisibility(binding.includeClubAddress.linearLayoutClubNotAddress)
 

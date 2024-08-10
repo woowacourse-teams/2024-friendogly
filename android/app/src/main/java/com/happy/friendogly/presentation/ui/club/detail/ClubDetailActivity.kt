@@ -171,9 +171,9 @@ class ClubDetailActivity :
         finish()
     }
 
-    private fun putLoadState(){
-        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE,true)
-        setResult(Activity.RESULT_OK,intent)
+    private fun putLoadState() {
+        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE, true)
+        setResult(Activity.RESULT_OK, intent)
     }
 
     companion object {

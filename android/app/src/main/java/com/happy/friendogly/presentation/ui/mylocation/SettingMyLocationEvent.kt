@@ -5,6 +5,7 @@ sealed interface SettingMyLocationEvent {
 
     sealed interface Navigation : SettingMyLocationEvent {
         data object NavigateToPrev : Navigation
-        data object NavigateToPrevWithReload: Navigation
+
+        data object NavigateToPrevWithReload : Navigation
     }
 }
