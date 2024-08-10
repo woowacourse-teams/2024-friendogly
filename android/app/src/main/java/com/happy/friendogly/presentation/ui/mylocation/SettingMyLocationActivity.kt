@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
