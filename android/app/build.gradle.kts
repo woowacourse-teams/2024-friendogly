@@ -46,6 +46,7 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
+            isMinifyEnabled = false
         }
         release {
             isDebuggable = false
@@ -63,16 +64,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    dataBinding {
-        enable = true
-    }
-    viewBinding {
-        enable = true
-    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
         dataBinding = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
