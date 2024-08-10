@@ -106,12 +106,16 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 ClubAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.club_add_information_fail_address))
                 ClubAddEvent.FailAddClub -> showSnackbar(getString(R.string.club_add_fail))
                 ClubAddEvent.Navigation.NavigateToHomeWithAdded -> {
-                    intent.putExtra(CHANGE_CLUB_LIST_STATE,true)
-                    setResult(Activity.RESULT_OK,intent)
+                    putLoadState()
                     finish()
                 }
             }
         }
+    }
+
+    private fun putLoadState(){
+        intent.putExtra(CHANGE_CLUB_LIST_STATE,true)
+        setResult(Activity.RESULT_OK,intent)
     }
 
     private fun openDogSelector(filters: List<ClubFilter>) {

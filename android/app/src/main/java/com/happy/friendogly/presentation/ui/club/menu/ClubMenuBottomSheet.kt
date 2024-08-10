@@ -79,7 +79,7 @@ class ClubMenuBottomSheet(
                 }
 
                 ClubMenuEvent.Navigation.NavigateToPrev -> {
-                    (activity as ClubDetailNavigation).navigateToPrev()
+                    (activity as ClubDetailNavigation).navigateToPrevWithReload()
                     dismissNow()
                 }
 
