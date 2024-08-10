@@ -1,6 +1,9 @@
 package com.happy.friendogly.presentation.ui.club.list
 
+import android.content.Intent
 import android.view.View
+import android.widget.LinearLayout
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -15,6 +18,9 @@ import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapt
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {
+
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
         ClubListViewModel.factory(
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
@@ -107,35 +113,22 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     private fun initStateObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                ClubListUiState.Init -> {
-                    binding.includeClubList.rcvClubListClub.visibility = View.VISIBLE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.Init ->applyViewVisibility(binding.includeClubList.rcvClubListClub)
 
-                ClubListUiState.NotAddress -> {
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility =
-                        View.VISIBLE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.NotAddress -> applyViewVisibility(binding.includeClubAddress.linearLayoutClubNotAddress)
 
-                ClubListUiState.NotData -> {
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.VISIBLE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.NotData -> applyViewVisibility(binding.includeClubData.linearLayoutClubNotData)
 
-                ClubListUiState.Error -> {
-                    binding.includeClubError.linearLayoutClubError.visibility = View.VISIBLE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                }
+                ClubListUiState.Error -> applyViewVisibility(binding.includeClubError.linearLayoutClubError)
             }
         }
+    }
+
+    private fun applyViewVisibility(currentView: View) {
+        binding.includeClubError.linearLayoutClubError.visibility = View.GONE
+        binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
+        binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
+        binding.includeClubList.rcvClubListClub.visibility = View.GONE
+        currentView.visibility = View.VISIBLE
     }
 }
