@@ -11,7 +11,6 @@ import com.woowacourse.friendogly.footprint.repository.FootprintRepository;
 import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
-import io.micrometer.common.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -41,13 +40,14 @@ public class FootprintQueryService {
         Member member = footprint.getMember();
         List<Pet> pets = petRepository.findByMemberId(member.getId());
         boolean isMine = footprint.isCreatedBy(memberId);
-
-        // TODO: 대표 펫을 지정하는 기능이 없어서, 임시로 0번째 index의 pet 리턴
-        if (StringUtils.isBlank(footprint.getImageUrl())) {
-            return FindOneFootprintResponse.withMainPetImage(member, pets.get(0), footprint, isMine);
-        }
-
-        return FindOneFootprintResponse.withFootprintImage(member, pets.get(0), footprint, isMine);
+        LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
+        return FindOneFootprintResponse.of(
+                member,
+                pets,
+                footprint.getWalkStatus(),
+                changedWalkStatusTime,
+                isMine
+        );
     }
 
     public List<FindNearFootprintResponse> findNear(Long memberId, FindNearFootprintRequest request) {
@@ -57,7 +57,7 @@ public class FootprintQueryService {
         Location currentLocation = new Location(request.latitude(), request.longitude());
 
         return recentFootprints.stream()
-                .filter(footprint -> footprint.isNear(currentLocation))
+                .filter(footprint -> footprint.isNear(currentLocation) && !footprint.isDeleted())
                 .map(footprint -> new FindNearFootprintResponse(footprint, footprint.isCreatedBy(memberId)))
                 .toList();
     }

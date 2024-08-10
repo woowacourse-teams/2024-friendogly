@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter" />
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_list_participation_filter" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <RadioGroup
+            android:id="@+id/radio_club_club_participation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_club_club_entire"
+                style="@style/club_add_custom_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.ENTIRE_FILTER_NAME}"
+                tools:text="대형견" />
+
+            <RadioButton
+                android:id="@+id/radio_club_club_possible"
+                style="@style/club_add_custom_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.POSSIBLE_FILTER_NAME}"
+                tools:text="대형견" />
+
+            <RadioButton
+                android:id="@+id/radio_club_club_recruitment"
+                style="@style/club_add_custom_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:text="@{ParticipationFilter.RECRUITMENT_FILTER_NAME}"
+                tools:text="대형견" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_club_select_commit"
+            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+            onSingleClick="@{() -> vm.selectParticipationFilter()}"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginVertical="24dp"
+            android:background="@drawable/rect_coral04_fill_16"
+            android:backgroundTint="@color/coral400"
+            android:gravity="center"
+            android:text="@string/club_select_commit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_club_select_dog_list" />
+    </LinearLayout>
+</layout>

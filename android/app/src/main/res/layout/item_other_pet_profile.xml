@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="pet"
+            type="com.happy.friendogly.domain.model.Pet" />
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:background="@drawable/rect_white_fill_radius10"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_user_profile_edit"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_user_profile_edit"
+                glide1000="@{pet.imageUrl}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundBig"
+                tools:src="@drawable/img_profile_normal" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_user_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout_user_profile_edit"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout_user_profile_edit"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout_user_profile_edit">
+
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:age="@{pet.age}"
+                app:isAtLeastOneYearOld="@{pet.isAtLeastOneYearOld}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:name="@{pet.name}"
+                tools:text="땡이(9개월)" />
+
+            <TextView
+                android:id="@+id/tv_pet_description"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{pet.description}"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout_user_profile"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout_user_profile"
+                tools:text="땡이는 월드클래스입니다." />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_gender_hint"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/pet_gender_title"
+            app:layout_constraintStart_toStartOf="@+id/constraintLayout_user_profile_edit"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout_user_profile_edit" />
+
+
+        <TextView
+            android:id="@+id/tv_gender_title"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:genderTitle="@{pet.gender}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_gender_hint"
+            app:layout_constraintStart_toEndOf="@+id/tv_gender_hint"
+            app:layout_constraintTop_toTopOf="@+id/tv_gender_hint"
+            tools:text="남(중성화했어요)" />
+
+        <TextView
+            android:id="@+id/tv_size_hint"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/pet_size_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_gender_hint"
+            app:layout_constraintTop_toBottomOf="@+id/tv_gender_hint" />
+
+
+        <TextView
+            android:id="@+id/tv_size_title"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_size_hint"
+            app:layout_constraintStart_toEndOf="@+id/tv_size_hint"
+            app:layout_constraintTop_toTopOf="@+id/tv_size_hint"
+            app:petSizeTitle="@{pet.sizeType}"
+            tools:text="중형견이에요" />
+
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            onSingleClick="@{() -> actionHandler.navigateToPetDetail()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_coral400_fill_20"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="8dp"
+            android:text="@string/caliber"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_size_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_size_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

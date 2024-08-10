@@ -1,7 +1,24 @@
 package com.happy.friendogly.presentation.ui.woof
 
-interface WoofActionHandler {
-    fun markFootPrint()
+import com.naver.maps.map.overlay.Marker
 
-    fun changeLocationTrackingMode()
+interface WoofActionHandler {
+    fun clickMarkBtn()
+
+    fun clickRegisterMarkerBtn()
+
+    fun clickLocationBtn()
+
+    fun clickMyFootprintBtn()
+
+    fun clickBackBtn()
+
+    fun clickCloseBtn()
+
+    fun clickFootprint(
+        footprintId: Long,
+        marker: Marker,
+    )
+
+    fun clickFootprintMemberName(memberId: Long)
 }

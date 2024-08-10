@@ -1,52 +1,27 @@
 package com.woowacourse.friendogly.footprint.service;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.woowacourse.friendogly.exception.FriendoglyException;
+import com.woowacourse.friendogly.footprint.domain.Footprint;
+import com.woowacourse.friendogly.footprint.domain.Location;
 import com.woowacourse.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.woowacourse.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.woowacourse.friendogly.member.domain.Member;
-import com.woowacourse.friendogly.pet.domain.Gender;
-import com.woowacourse.friendogly.pet.domain.Pet;
-import com.woowacourse.friendogly.pet.domain.SizeType;
-import com.woowacourse.friendogly.support.ServiceTest;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-class FootprintCommandServiceTest extends ServiceTest {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private FootprintCommandService footprintCommandService;
+class FootprintCommandServiceTest extends FootprintServiceTest {
 
     @DisplayName("발자국 저장")
     @Test
     void save() {
-        // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
-
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("땡이")
-                        .description("귀여운 땡이")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
         // when
         footprintCommandService.save(member.getId(), new SaveFootprintRequest(30.0, 30.0));
 
@@ -58,17 +33,17 @@ class FootprintCommandServiceTest extends ServiceTest {
     @Test
     void save_Fail_NoPets() {
         // given
-        Member member = memberRepository.save(
+        Member memberWithoutPet = memberRepository.save(
                 Member.builder()
-                        .name("name")
-                        .email("test@test.com")
+                        .name("강아지없어요")
+                        .email("no_dog@test.com")
                         .build()
         );
 
         // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
-                        member.getId(),
+                        memberWithoutPet.getId(),
                         new SaveFootprintRequest(90.000, 90.000)
                 )
         ).isInstanceOf(FriendoglyException.class)
@@ -78,6 +53,7 @@ class FootprintCommandServiceTest extends ServiceTest {
     @DisplayName("발자국 저장 실패 - 존재하지 않는 Member ID")
     @Test
     void save_Fail_IllegalMemberId() {
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         -1L,
@@ -90,31 +66,10 @@ class FootprintCommandServiceTest extends ServiceTest {
     @DisplayName("발자국 저장 실패 - 30초 전에 이미 발자국을 남긴 경우")
     @Test
     void save_Fail_TooOftenSave() {
-        Member member = memberRepository.save(
-                Member.builder()
-                        .name("name")
-                        .email("test@test.com")
-                        .build()
-        );
+        // given
+        footprintRepository.save(FOOTPRINT(LocalDateTime.now().minusSeconds(29)));
 
-        petRepository.save(
-                Pet.builder()
-                        .member(member)
-                        .name("땡이")
-                        .description("귀여운 땡이")
-                        .birthDate(LocalDate.now().minusYears(1))
-                        .sizeType(SizeType.MEDIUM)
-                        .gender(Gender.MALE_NEUTERED)
-                        .imageUrl("https://picsum.photos/200")
-                        .build()
-        );
-
-        jdbcTemplate.update("""
-                INSERT INTO footprint (member_id, latitude, longitude, created_at, is_deleted)
-                VALUES
-                (?, 0.00000, 0.00000, TIMESTAMPADD(SECOND, -29, NOW()), FALSE)
-                """, member.getId());
-
+        // when - then
         assertThatThrownBy(
                 () -> footprintCommandService.save(
                         member.getId(),
@@ -122,5 +77,152 @@ class FootprintCommandServiceTest extends ServiceTest {
                 )
         ).isInstanceOf(FriendoglyException.class)
                 .hasMessage("마지막 발자국을 찍은 뒤 30초가 경과되지 않았습니다.");
+    }
+
+    @DisplayName("최근 발자국이 있는 경우 발자국 생성 시 최근 발자국은 삭제된다")
+    @Transactional
+    @Test
+    void save_With_DeleteRecentFootprint() {
+        // given
+        Footprint recentFootprint = footprintRepository.save(
+                FOOTPRINT(LocalDateTime.now().minusMinutes(10))
+        );
+
+        // when
+        footprintCommandService.save(member.getId(), new SaveFootprintRequest(40, 40));
+
+        // then
+        assertThat(recentFootprint.isDeleted()).isTrue();
+    }
+
+    @DisplayName("발자국 상태 변경 실패 - 발자국 존재하지 않음")
+    @Test
+    void updateWalkStatus_fail_nonExistFootprint() {
+        // when - then
+        assertThatThrownBy(() -> footprintCommandService.updateWalkStatus(
+                        member.getId(),
+                        new UpdateWalkStatusRequest(0, 0)
+                )
+        ).isExactlyInstanceOf(FriendoglyException.class)
+                .hasMessage("발자국이 존재하지 않습니다.");
+    }
+
+    @DisplayName("발자국 상태 변경 실패 - 가장 최근 발자국이 삭제된(logical) 발자국")
+    @Test
+    void updateWalkStatus_fail_logicalDeletedFootprint() {
+        // given
+        footprintRepository.save(FOOTPRINT_DELETED());
+
+        // when - then
+        assertThatThrownBy(() -> footprintCommandService.updateWalkStatus(
+                        member.getId(),
+                        new UpdateWalkStatusRequest(0, 0)
+                )
+        ).isExactlyInstanceOf(FriendoglyException.class)
+                .hasMessage("가장 최근 발자국이 삭제된 상태입니다.");
+    }
+
+    @DisplayName("산책 전이고 현재위치가 범위 안이면 산책 중으로 변한다")
+    @Transactional
+    @Test
+    void updateWalkStatus_beforeToOngoing() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_BEFORE(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(ONGOING);
+    }
+
+    @DisplayName("산책 전이고 현재위치가 범위 밖이면 산책 상태 변화는 없다")
+    @Transactional
+    @Test
+    void updateWalkStatus_beforeNoChange() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_BEFORE(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(BEFORE);
+    }
+
+    @DisplayName("산책 중이고 현재위치가 범위 밖이면 산책 후로 변한다")
+    @Transactional
+    @Test
+    void updateWalkStatus_ongoingToAfter() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_ONGOING(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
+    }
+
+
+    @DisplayName("산책 중이고 현재위치가 범위 안이면 산책 상태 변화는 없다")
+    @Transactional
+    @Test
+    void updateWalkStatus_ongoingNoChange() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_ONGOING(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(ONGOING);
+    }
+
+
+    @DisplayName("산책 후이고, 현재위치가 범위 안이면 산책 상태 변화는 없다")
+    @Transactional
+    @Test
+    void updateWalkStatus_ongoingNoChange_inside() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_AFTER(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(999))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
+    }
+
+    @DisplayName("산책 후이고, 현재위치가 범위 밖이면 산책 상태 변화는 없다")
+    @Transactional
+    @Test
+    void updateWalkStatus_afterNoChange_outside() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(FOOTPRINT_STATUS_AFTER(new Location(0, 0)));
+
+        // when
+        footprintCommandService.updateWalkStatus(
+                member.getId(),
+                new UpdateWalkStatusRequest(0.0, LONGITUDE_WITH_METER_FROM_ZERO(1001))
+        );
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
     }
 }

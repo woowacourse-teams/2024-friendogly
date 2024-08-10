@@ -34,3 +34,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### secrets ###
+src/main/resources/secrets.yml
+
+### logs ###
+logs/

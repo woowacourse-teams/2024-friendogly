@@ -1,14 +1,28 @@
 package com.woowacourse.friendogly.test;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 public class TestController {
 
-    @GetMapping("/hello")
-    public String hello() {
-        // TODO: 추후 삭제하기!
-        return "Hello World!";
+    @GetMapping("/log/info")
+    public String info() {
+        log.info("INFO LOG!!!");
+        return "info..";
+    }
+
+    @GetMapping("/log/warn")
+    public String warn() {
+        log.warn("WARN LOG!!!");
+        return "warn...";
+    }
+
+    @GetMapping("/log/error")
+    public String error() {
+        log.error("ERROR LOG!!!");
+        return "GG...";
     }
 }

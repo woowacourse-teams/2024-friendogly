@@ -10,8 +10,11 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.petdetail.PetDetail
+import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class MyPageViewModel(
     private val getPetsMineUseCase: GetPetsMineUseCase,
@@ -19,6 +22,9 @@ class MyPageViewModel(
 ) : BaseViewModel(), MyPageActionHandler {
     private val _uiState: MutableLiveData<MyPageUiState> = MutableLiveData(MyPageUiState())
     val uiState: LiveData<MyPageUiState> get() = _uiState
+
+    private val _currentPage: MutableLiveData<Int> = MutableLiveData(0)
+    val currentPage: LiveData<Int> get() = _currentPage
 
     private val _navigateAction: MutableLiveData<Event<MyPageNavigationAction>> =
         MutableLiveData(null)
@@ -29,12 +35,19 @@ class MyPageViewModel(
         fetchPetMine()
     }
 
-    private fun fetchMemberMine() {
+    fun fetchMemberMine() {
         viewModelScope.launch {
             getMemberMineUseCase().onSuccess { member ->
-                val state = _uiState.value ?: return@launch
+                val state = uiState.value ?: return@launch
+
                 _uiState.value =
-                    state.copy(nickname = member.name, email = member.email, tag = member.tag)
+                    state.copy(
+                        id = member.id,
+                        nickname = member.name,
+                        email = member.email,
+                        tag = member.tag,
+                        imageUrl = member.imageUrl,
+                    )
             }.onFailure {
                 // TODO 예외 처리
             }
@@ -44,62 +57,93 @@ class MyPageViewModel(
     fun fetchPetMine() {
         viewModelScope.launch {
             getPetsMineUseCase().onSuccess { pets ->
-                val state = _uiState.value ?: return@launch
-                _uiState.value = state.copy(pets = pets)
+                val petsView = pets.map { pet -> PetView.from(pet = pet) }
+
+                val state = uiState.value ?: return@launch
+
+                _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
             }.onFailure {
                 // TODO 예외 처리
             }
         }
     }
 
-    fun navigateToDogRegister() {
+    fun updateCurrentPage(page: Int) {
+        _currentPage.value = page
+    }
+
+    override fun navigateToPetDetail() {
+        val state = uiState.value ?: return
+        val currentPage = currentPage.value ?: return
+
+        val petDetail =
+            state.pets.filterIsInstance<PetView>().map { petView ->
+                PetDetail(
+                    id = petView.id,
+                    name = petView.name,
+                    description = petView.description,
+                    birthDate = petView.birthDate,
+                    sizeType = petView.sizeType,
+                    gender = petView.gender,
+                    imageUrl = petView.imageUrl,
+                )
+            }
+        val petsDetail = PetsDetail(petDetail)
+
+        _navigateAction.emit(
+            MyPageNavigationAction.NavigateToPetDetail(
+                currentPage = currentPage,
+                petsDetail = petsDetail,
+            ),
+        )
+    }
+
+    override fun navigateToRegisterDog(id: Long) {
         _navigateAction.emit(MyPageNavigationAction.NavigateToDogRegister)
     }
 
-    override fun navigateToDogDetail(id: Long) {
-        _navigateAction.emit(MyPageNavigationAction.NavigateToDogDetail(id = id))
+    override fun navigateToProfileEdit() {
+        val state = uiState.value ?: return
+        val profile =
+            Profile(
+                name = state.nickname,
+                imageUrl = state.imageUrl,
+            )
+        _navigateAction.emit(MyPageNavigationAction.NavigateToProfileEdit(profile = profile))
+    }
+
+    fun navigateToSetting() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToSetting)
+    }
+
+    override fun navigateToPetEdit(id: Long) {
+        val state = uiState.value ?: return
+        val currentPage = currentPage.value ?: return
+        val pet = state.pets[currentPage] as PetView
+
+        val petProfile =
+            PetProfile(
+                id = pet.id,
+                name = pet.name,
+                description = pet.description,
+                birthDate = pet.birthDate,
+                sizeType = pet.sizeType,
+                gender = pet.gender,
+                imageUrl = pet.imageUrl,
+            )
+
+        _navigateAction.emit(MyPageNavigationAction.NavigateToPetEdit(petProfile))
+    }
+
+    fun navigateToMyParticipation() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToMyParticipation)
+    }
+
+    fun navigateToMyClubManger() {
+        _navigateAction.emit(MyPageNavigationAction.NavigateToMyClubManger)
     }
 
     companion object {
-        val dog =
-            Dog(
-                name = "땡이",
-                description = "강인해요",
-                birthDate = LocalDate.now(),
-                sizeType = "",
-                gender = "",
-                isNeutered = true,
-                image = "https://github.com/user-attachments/assets/9329234e-e47d-4fc5-b4b5-9f2a827b60b1",
-            )
-        val dogs =
-            listOf<Dog>(
-                dog,
-                dog.copy(
-                    name = "초코",
-                    image = "https://github.com/user-attachments/assets/a344d355-8b00-4e08-a33f-08db58010b07",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-                dog.copy(
-                    name = "도토리",
-                    image = "https://petsstore.co.kr/web/product/big/202401/dc7c18de083f0ab58060b4ec82321028.jpg",
-                ),
-            )
-
         fun factory(
             getPetsMineUseCase: GetPetsMineUseCase,
             getMemberMineUseCase: GetMemberMineUseCase,

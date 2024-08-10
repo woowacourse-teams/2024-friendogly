@@ -4,12 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.woowacourse.friendogly.club.domain.Club;
-import com.woowacourse.friendogly.club.dto.request.FindSearchingClubRequest;
-import com.woowacourse.friendogly.club.dto.response.FindSearchingClubResponse;
+import com.woowacourse.friendogly.club.domain.FilterCondition;
+import com.woowacourse.friendogly.club.dto.request.FindClubByFilterRequest;
+import com.woowacourse.friendogly.club.dto.response.FindClubByFilterResponse;
+import com.woowacourse.friendogly.member.domain.Member;
 import com.woowacourse.friendogly.pet.domain.Gender;
+import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +24,41 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @Autowired
     private ClubQueryService clubQueryService;
 
+    private Member savedMember;
+    private Pet savedPet;
+
+    @BeforeEach
+    void setMemberAndPet() {
+        savedMember = createSavedMember();
+        savedPet = createSavedPet(savedMember);
+    }
+
     @DisplayName("필터링된 모임을 정보를 조회한다.")
     @Test
     void findSearching() {
-        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
-
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
-                address,
-                Set.of(Gender.FEMALE),
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
-        List<FindSearchingClubResponse> expectedResponses = List.of(
-                new FindSearchingClubResponse(club, 1, List.of(petImageUrl))
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                city,
+                village,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name())
         );
 
-        FindSearchingClubResponse actual = responses.get(0);
-        FindSearchingClubResponse expected = expectedResponses.get(0);
+        List<FindClubByFilterResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
+        List<FindClubByFilterResponse> expectedResponses = List.of(
+                new FindClubByFilterResponse(club, List.of(petImageUrl))
+        );
+
+        FindClubByFilterResponse actual = responses.get(0);
+        FindClubByFilterResponse expected = expectedResponses.get(0);
 
         assertAll(
                 () -> assertThat(actual.id()).isEqualTo(expected.id()),
@@ -57,15 +78,23 @@ class ClubQueryServiceTest extends ClubServiceTest {
     @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
     @Test
     void findSearching_Nothing() {
-        Club club = getSavedClub(Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED), Set.of(SizeType.SMALL));
-
-        FindSearchingClubRequest request = new FindSearchingClubRequest(
-                address,
-                Set.of(Gender.MALE),
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
 
-        List<FindSearchingClubResponse> responses = clubQueryService.findSearching(request);
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                city,
+                village,
+                Set.of(Gender.MALE.name()),
+                Set.of(SizeType.SMALL.name())
+        );
+
+        List<FindClubByFilterResponse> responses = clubQueryService.findFindByFilter(savedMember.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
     }

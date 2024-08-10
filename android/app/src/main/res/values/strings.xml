@@ -18,7 +18,9 @@
     <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
     <string name="profile_setting_profile_pic">프로필 사진</string>
     <string name="make_profile_title">프로필 만들기</string>
+    <string name="make_profile_edit_title">프로필 수정하기</string>
     <string name="make_profile_edit_btn_title">선택 완료!</string>
+    <string name="user_name_length">%d/15</string>
 
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
@@ -28,11 +30,86 @@
     <string name="register_dog_title">등록하기</string>
     <string name="empty_pet_description">등록하기를 통해 강아지를 추가해주세요</string>
     <string name="user_name_tag">#%s</string>
+    <string name="pet_small_size_title">소형견이에요</string>
+    <string name="pet_medium_size_title">중현견이에요</string>
+    <string name="pet_large_size_title">대형견이에요</string>
+    <string name="pet_months_format">(%d개월)</string>
+    <string name="pet_age_format">(%d살)</string>
+    <string name="pet_gender_title">성별</string>
+    <string name="pet_size_title">크기</string>
+    <string name="pet_description_title">소개</string>
+    <string name="caliber">구경하기</string>
+    <string name="mypage_title">나의 댕댕이</string>
+    <string name="my_activities">내 활동</string>
+    <string name="participation">내가 참여중인 모임</string>
+    <string name="club_manager">내가 방장인 모임</string>
+    <string name="pets_profile">함께하는 반려동물</string>
+    <string name="tv_pet_add">강아지를 등록해주세요</string>
+
+    <!--강아지 상세 화면-->
+    <string name="neuterd_status">중성화를 했어요</string>
+    <string name="small_pet_description">소형견이에요</string>
+    <string name="medium_pet_description">중현견이에요</string>
+    <string name="large_pet_description">대형견이에요</string>
+
+    <!--다른 사용자 프로필-->
+    <string name="empty_other_pet">함께하는 반려동물이 없어요</string>
+    <string name="close">취소</string>
+
+    <!--사용자 더보기 바텀 시트-->
+    <string name="report">신고하기</string>
+    <string name="user_declare">차단하기</string>
+
+    <!--차단 다이얼로그-->
+    <string name="user_block_title">이 유저를 차단할까요?</string>
+    <string name="user_block_description">앞으로 이 유저의 정보를 볼 수 없어요</string>
+    <string name="user_block_yes">차단하기</string>
+    <string name="user_block_no">닫기</string>
+    <string name="user_block_message">유저를 차단했어요</string>
+
+    <!--신고 다이얼로그-->
+    <string name="user_report_title">신고하기</string>
+    <string name="user_report_one">스팸 및 도배 내용</string>
+    <string name="user_report_two">광고 및 홍보 내용</string>
+    <string name="user_report_three">음란물 또는 성적인 내용</string>
+    <string name="user_report_fourth">개인정보 노출</string>
+    <string name="user_report_five">기타</string>
+    <string name="user_report_edit_hint">직접 작성하기</string>
+    <string name="user_report_save">신고하기</string>
+    <string name="user_report_message">유저를 신고했어요</string>
+
+    <!--설정-->
+    <string name="alarm_settings_total_push">반갑개에서 보내는 소식</string>
+    <string name="alarm_settings_total_push_description">반갑개의 유용한 정보나 이벤트 알림</string>
+    <string name="alarm_settings_chatting_push">모든 채팅 알림</string>
+    <string name="alarm_settings_chatting_push_description">모든 채팅 메시지 알림</string>
+    <string name="alarm_settings_club_push">모임 알림</string>
+    <string name="alarm_settings_club_push_description">가입한 모임의 알림</string>
+    <string name="setting">설정</string>
+    <string name="unsubscribe">탈퇴하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="app_info">앱 정보</string>
+    <string name="etc">기타</string>
+
+    <!--설정 다이얼로그-->
+    <string name="logout_title">로그아웃 하시겠어요?</string>
+    <string name="logout_description">언제든 다시 돌아올 수 있어요!</string>
+    <string name="no">아니요</string>
+
+    <string name="user_delete_title">정말 탈퇴하시겠어요?</string>
+    <string name="user_delete_description">탈퇴시 사용자 정보와\n채팅 메세지가 사라져요.</string>
+    <string name="user_delete_yes">회원 탈퇴</string>
+
+    <!--다이얼로그-->
+    <string name="dialog_positive_default">네</string>
+    <string name="dialog_negative_default">아니오</string>
 
     <!--강아지 등록-->
-    <string name="dog_name_title">댕댕이 이름</string>
-    <string name="register_dog_toolbar_title">댕댕이 등록하기</string>
-    <string name="register_dog_name_hint">댕댕이 이름을 입력해주세요</string>
+    <string name="pet_name_title">댕댕이 이름</string>
+    <string name="register_pet_toolbar_title">댕댕이 등록하기</string>
+    <string name="patch_pet_toolbar_title">댕댕이 편집하기</string>
+    <string name="register_pet_name_hint">댕댕이 이름을 입력해주세요</string>
     <string name="description_title">한 줄 소개</string>
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
@@ -41,11 +118,12 @@
     <string name="birthday_year">년</string>
     <string name="birthday_month">%02d월</string>
     <string name="neutralized_title">중성화했어요.</string>
-    <string name="dog_size_title">댕댕이 사이즈</string>
-    <string name="dog_add_image_title">댕댕이 사진을 추가하세요</string>
-    <string name="dog_gender_title">댕댕이 성별</string>
-    <string name="dog_submit_title">등록완료!</string>
-    <string name="bottom_sheet_dog_edit_birthday_title">언제 태어났나요?</string>
+    <string name="pet_size_type_title">댕댕이 사이즈</string>
+    <string name="pet_add_image_title">댕댕이 사진을 추가하세요</string>
+    <string name="pet_gender_type_title">댕댕이 성별</string>
+    <string name="pet_submit_title">선택 완료!</string>
+    <string name="bottom_sheet_pet_edit_birthday_title">언제 태어났나요?</string>
+    <string name="pet_name_length">%d/20</string>
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
@@ -65,55 +143,78 @@
     <string name="image_cropper_done">확인</string>
 
     <!--멍개-->
-    <string name="group_user_list_subject">참여 견주</string>
-    <string name="group_dog_list_subject">댕댕이들</string>
-    <string name="group_select_dog_subject">내 댕댕이 선택</string>
-    <string name="group_select_commit">선택완료</string>
-    <string name="group_list_date_days">%d일 전</string>
-    <string name="group_list_date_hours">%d시간 전</string>
-    <string name="group_list_date_minutes">%d분 전</string>
-    <string name="group_list_date_now">방금 전</string>
-    <string name="group_counter_count">%d명</string>
+    <string name="club_user_list_subject">참여 견주</string>
+    <string name="club_dog_list_subject">댕댕이들</string>
+    <string name="club_select_dog_subject">내 댕댕이 선택</string>
+    <string name="club_select_commit">선택완료</string>
+    <string name="club_list_date_days">%d일 전</string>
+    <string name="club_list_date_hours">%d시간 전</string>
+    <string name="club_list_date_minutes">%d분 전</string>
+    <string name="club_list_date_now">방금 전</string>
+    <string name="club_counter_count">%d명</string>
+    <string name="club_list_participation_filter">모집 조건 선택</string>
+    <string name="club_list_no_address_title">등록 된 주소가 없습니다</string>
+    <string name="club_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>
+    <string name="club_list_no_data_title">등록 된 모임이 없습니다.</string>
+    <string name="club_list_no_data_content">관련 모임을 등록해 보세요</string>
+    <string name="club_list_submit_text">등록하기</string>
+    <string name="club_list_error_title">에러가 발생하였습니다</string>
+    <string name="club_list_error_content">잠시 후에 다시 시도해주세요..</string>
+    <string name="club_number_of_people">%d/%d</string>
+    <string name="club_club_info">%s · %s</string>
+    <string name="club_participate_name">모집중</string>
+    <string name="club_complete_participate_name">모집완료</string>
 
     <!--멍개 생성-->
-    <string name="group_list_add_title">모임 생성하기</string>
-    <string name="group_list_next_btn">다음</string>
-    <string name="group_list_prev_btn">이전</string>
-    <string name="group_add_information_main_title">모임을 소개해주세요.</string>
-    <string name="group_add_information_main_content"> 기준으로 모임이 생성돼요.</string>
-    <string name="group_add_dog_size_title">댕댕이 사이즈 선택</string>
-    <string name="group_add_dog_gender_title">댕댕이 성별 선택</string>
-    <string name="group_add_group_title">모임 제목</string>
-    <string name="group_add_group_number">참여 가능 인원</string>
-    <string name="group_add_group_content">모임 소개</string>
-    <string name="group_add_group_my_dog">내 댕댕이</string>
-    <string name="group_add_group_add_my_dog_text">댕댕이 추가</string>
-    <string name="group_add_group">등록하기</string>
-    <string name="group_add_group_subject_hint">모임명</string>
-    <string name="group_add_content_hint">모임을 소개해주세요.</string>
-    <string name="group_add_filter_main_title">모집할 댕댕이를 설정해주세요.</string>
-    <string name="group_add_filter_main_content">사이즈와 성별을 선택할 수 있어요!</string>
-    <string name="group_add_filter_all_select">누구나 가능해요!</string>
-    <string name="group_add_detail_main_title">모임 정보를 입력해주세요</string>
-    <string name="group_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
-    <string name="group_add_title_count">%d/100</string>
-    <string name="group_add_content_count">%d/1000</string>
+    <string name="club_list_add_title">모임 생성하기</string>
+    <string name="club_list_commit_btn">등록하기</string>
+    <string name="club_list_next_btn">다음</string>
+    <string name="club_list_prev_btn">이전</string>
+    <string name="club_add_information_main_title">모임을 소개해주세요.</string>
+    <string name="club_add_information_main_content">기준으로 모임이 생성돼요.</string>
+    <string name="club_add_information_fail_address">모임 생성을 위해서 주소를 등록해주세요!</string>
+    <string name="club_add_dog_size_title">댕댕이 사이즈 선택</string>
+    <string name="club_add_dog_gender_title">댕댕이 성별 선택</string>
+    <string name="club_add_club_title">모임 제목</string>
+    <string name="club_add_club_number">참여 가능 인원</string>
+    <string name="club_add_club_content">모임 소개</string>
+    <string name="club_add_club_my_dog">내 댕댕이</string>
+    <string name="club_add_club_add_my_dog_text">댕댕이 추가</string>
+    <string name="club_add_club">등록하기</string>
+    <string name="club_add_club_subject_hint">모임명</string>
+    <string name="club_add_content_hint">모임을 소개해주세요.</string>
+    <string name="club_add_filter_main_title">모집할 댕댕이를 설정해주세요.</string>
+    <string name="club_add_filter_main_content">사이즈와 성별을 선택할 수 있어요!</string>
+    <string name="club_add_filter_all_select">누구나 가능해요!</string>
+    <string name="club_add_detail_main_title">모임 정보를 입력해주세요</string>
+    <string name="club_add_detail_main_content">모임 사진과 최대 인원을 설정해주세요 !</string>
+    <string name="club_add_title_count">%d/100</string>
+    <string name="club_add_content_count">%d/1000</string>
+    <string name="club_add_fail">모임 생성에 실패하였습니다..</string>
 
     <!--멍개 상세-->
-    <string name="group_detail_fail_load">모임을 찾지 못했습니다.</string>
-    <string name="group_detail_fail_button">뒤로가기</string>
-    <string name="group_detail_participate_text">참여하기</string>
-    <string name="group_detail_un_participate_text">모집완료</string>
-    <string name="group_detail_mine_text">모임보기</string>
-    <string name="group_detail_update">수정하기</string>
-    <string name="group_detail_delete">방나가기</string>
-    <string name="group_detail_report">신고하기</string>
-    <string name="group_detail_block">차단하기</string>
+    <string name="club_detail_fail_load">모임을 찾지 못했습니다.</string>
+    <string name="club_detail_fail_button">뒤로가기</string>
+    <string name="club_detail_participate_text">참여하기</string>
+    <string name="club_detail_un_participate_text">모집완료</string>
+    <string name="club_detail_mine_text">모임보기</string>
+    <string name="club_detail_update">수정하기</string>
+    <string name="club_detail_delete">방나가기</string>
+    <string name="club_detail_report">신고하기</string>
+    <string name="club_detail_block">차단하기</string>
+    <string name="club_detail_delete_title">모임에서 나가겠습니까?</string>
+    <string name="club_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
+    <string name="club_detail_delete_fail">방 나가기에 실패하였습니다.</string>
+
+    <!--모임 수정 -->
+    <string name="club_modify_title">모임 수정하기</string>
+    <string name="club_modify_commit">수정 완료</string>
 
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
+    <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
@@ -130,18 +231,60 @@
     <string name="chat_group_dog_gender">성별</string>
     <string name="chat_group_join_people">참여 중인 견주</string>
     <string name="chat_setting_alarm">채팅방 알림</string>
+    <string name="chat_setting_alarm_alert">알림을 거부하여 채팅 알림을 받을 수 없습니다.</string>
     <string name="chat_mine">나</string>
 
-    <string name="group_number_of_people">%d/%d</string>
-    <string name="group_group_info">%s · %s</string>
-    <string name="group_participate_name">모집중</string>
-    <string name="group_complete_participate_name">모집완료</string>
-
     <!--멍멍 짓기-->
-    <string name="woof_dog_walking">%s가 %s에 다녀갔어요!</string>
+    <string name="woof_member_name">%s\'s 댕댕이</string>
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
     <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
+    <string name="woof_marker_registered">발자국이 등록됐어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
+    <string name="woof_days_ago">%d일 전</string>
+    <string name="woof_hours_ago">%d시간 전</string>
+    <string name="woof_minutes_ago">%d분 전</string>
+    <string name="woof_just_now">방금 전</string>
+    <string name="woof_walk_before">%d분 째 산책 준비</string>
+    <string name="woof_walk_ongoing">%d분 째 산책 중</string>
+    <string name="woof_walk_after">%d시 %d분 산책 완료</string>
+    <string name="woof_age_year">%d살</string>
+    <string name="woof_age_month">%d개월</string>
+    <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
+    <string name="woof_my_footprint">MY</string>
+    <string name="woof_location_load_fail">위치를 불러올 수 없습니다..</string>
+    <string name="woof_register_walking_area">산책 영역 등록</string>
+    <string name="woof_register_footprint">이 위치에 발자국 등록</string>
+    <string name="woof_information">정보</string>
+    <string name="woof_description">소개</string>
+    <string name="woof_before_walk_status">산책하러 가는중이에요!</string>
+    <string name="woof_ongoing_walk_status">산책을 시작했어요!</string>
+    <string name="woof_after_walk_status">산책을 완료했어요!</string>
+
+    <!--프로필-->
+    <string name="male">남</string>
+    <string name="female">여</string>
+    <string name="male_enutered">남(중성화했어요)</string>
+    <string name="female_enutered">여(중성화했어요)</string>
+    <string name="see_you_later_message">다음에 또 만나요</string>
+    <string name="withdrawn_message">회원이 탈퇴 되었어요</string>
+
+
+    <!--권한-->
+    <string name="alarm_dialog_title">알람 허용 사용 설정</string>
+    <string name="alarm_dialog_body">알람을 설정하지 않으면, 채팅과 모임 알람을 받을 수 없어요!</string>
+    <string name="alarm_dialog_body_woof">알림을 거부하여 모임 알림을 받을 수 없습니다.</string>
+    <string name="location_dialog_title">위치 허용 사용 설정</string>
+    <string name="location_dialog_body">위치 설정하지 않으면, 친구를 찾을 수 없어요!</string>
+    <string name="permission_cancel">취소</string>
+    <string name="permission_go_setting">설정</string>
+    <string name="permission_denied_message">권한을 거부하여 기능을 사용할 수 없습니다.</string>
+
+    <!--내 위치-->
+    <string name="my_location_title">내 동네 설정하기</string>
+    <string name="my_location_content">현재 위치</string>
+    <string name="my_location_submit">설정 완료</string>
+    <string name="my_location_load_fail">위치를 불러올 수 없습니다..</string>
+    <string name="my_location_full_address">%s %s %s</string>
 </resources>

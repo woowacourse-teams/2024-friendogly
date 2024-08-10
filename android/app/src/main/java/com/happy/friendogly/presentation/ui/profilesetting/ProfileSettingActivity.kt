@@ -19,8 +19,10 @@ import com.happy.friendogly.presentation.base.BaseMessage
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
+import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
 import com.happy.friendogly.presentation.utils.hideKeyboard
+import com.happy.friendogly.presentation.utils.putSerializable
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
@@ -133,8 +135,19 @@ class ProfileSettingActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, ProfileSettingActivity::class.java)
+        const val PUT_EXTRA_PROFILE = "PUT_EXTRA_PROFILE"
+        const val PUT_EXTRA_ACCESS_TOKEN = "PUT_EXTRA_ACCESS_TOKEN"
+
+        fun getIntent(
+            context: Context,
+            accessToken: String?,
+            profile: Profile?,
+        ): Intent {
+            return Intent(context, ProfileSettingActivity::class.java).apply {
+                putExtra(PUT_EXTRA_ACCESS_TOKEN, accessToken)
+                profile ?: return@apply
+                putSerializable(PUT_EXTRA_PROFILE, profile, Profile.serializer())
+            }
         }
     }
 }

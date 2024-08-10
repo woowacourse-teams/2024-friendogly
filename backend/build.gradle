@@ -52,6 +52,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
@@ -83,12 +87,12 @@ tasks.withType(GenerateSwaggerUI) {
     doFirst {
         def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
 
-        def securitySchemesContent = "  securitySchemes:\n" +   \
-                                       "    APIKey:\n" +   \
-                                       "      type: apiKey\n" +   \
-                                       "      name: Authorization\n" +   \
-                                       "      in: header\n" +  \
-                                       "security:\n" +
+        def securitySchemesContent = "  securitySchemes:\n" +    \
+                                        "    APIKey:\n" +    \
+                                        "      type: apiKey\n" +    \
+                                        "      name: Authorization\n" +    \
+                                        "      in: header\n" +   \
+                                        "security:\n" +
                 "  - APIKey: []  # Apply the security scheme here"
 
         swaggerUIFile.append securitySchemesContent

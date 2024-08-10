@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.mypage
 
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentMyPageBinding
@@ -27,21 +28,40 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        binding.vpPetProfile.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.updateCurrentPage(position)
+                }
+            },
+        )
     }
 
     private fun initAdapter() {
-        binding.rvDogProfile.adapter = adapter
+        binding.vpPetProfile.adapter = adapter
     }
 
     private fun initObserve() {
-        viewModel.navigateAction.observeEvent(this) { action ->
+        viewModel.navigateAction.observeEvent(viewLifecycleOwner) { action ->
             when (action) {
-                is MyPageNavigationAction.NavigateToSetting -> TODO()
-                is MyPageNavigationAction.NavigateToDogDetail -> (activity as MainActivityActionHandler).navigateToDogDetail()
+                is MyPageNavigationAction.NavigateToSetting -> (activity as MainActivityActionHandler).navigateToSetting()
+                is MyPageNavigationAction.NavigateToPetDetail ->
+                    (activity as MainActivityActionHandler).navigateToPetDetail(
+                        currentPage = action.currentPage,
+                        petsDetail = action.petsDetail,
+                    )
 
-                is MyPageNavigationAction.NavigateToDogRegister -> (activity as MainActivityActionHandler).navigateToRegisterDog()
+                is MyPageNavigationAction.NavigateToDogRegister ->
+                    (activity as MainActivityActionHandler).navigateToRegisterPet(null)
 
-                is MyPageNavigationAction.NavigateToProfileEdit -> TODO()
+                is MyPageNavigationAction.NavigateToProfileEdit ->
+                    (activity as MainActivityActionHandler).navigateToProfileSetting(profile = action.profile)
+
+                is MyPageNavigationAction.NavigateToMyClubManger -> {}
+                is MyPageNavigationAction.NavigateToMyParticipation -> {}
+                is MyPageNavigationAction.NavigateToPetEdit ->
+                    (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
             }
         }
 
@@ -53,5 +73,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onResume() {
         super.onResume()
         viewModel.fetchPetMine()
+        viewModel.fetchMemberMine()
+        viewModel.updateCurrentPage(0)
+        binding.vpPetProfile.setCurrentItem(0, false)
     }
 }

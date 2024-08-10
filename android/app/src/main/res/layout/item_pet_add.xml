@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="petAddView"
+            type="com.happy.friendogly.presentation.ui.mypage.PetAddView" />
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.mypage.MyPageActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{() -> actionHandler.navigateToRegisterDog(petAddView.memberId)}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:background="@drawable/rect_white_fill_radius8"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_empty_pet"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_empty_pet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundBig" />
+
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/tv_pet_add"
+            app:layout_constraintEnd_toEndOf="@+id/iv_empty_pet"
+            app:layout_constraintStart_toStartOf="@+id/iv_empty_pet"
+            app:layout_constraintTop_toBottomOf="@+id/iv_empty_pet" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

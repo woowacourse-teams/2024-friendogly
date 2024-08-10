@@ -1,5 +1,8 @@
 package com.woowacourse.friendogly.footprint.controller;
 
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.BEFORE;
+import static com.woowacourse.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -15,9 +18,12 @@ import com.woowacourse.friendogly.pet.domain.Gender;
 import com.woowacourse.friendogly.pet.domain.Pet;
 import com.woowacourse.friendogly.pet.domain.SizeType;
 import com.woowacourse.friendogly.pet.repository.PetRepository;
+import com.woowacourse.friendogly.support.ControllerTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +38,7 @@ import org.springframework.test.annotation.DirtiesContext;
 // TODO: DirtiesContext 제거
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-class FootprintControllerTest {
+class FootprintControllerTest extends ControllerTest {
 
     @LocalServerPort
     private int port;
@@ -117,6 +123,11 @@ class FootprintControllerTest {
         );
     }
 
+    @AfterEach
+    void tearDown() {
+        footprintRepository.deleteAll();
+    }
+
     @DisplayName("발자국을 정상적으로 생성한다. (201)")
     @Test
     void save() {
@@ -127,7 +138,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().post("/footprints")
                 .then().log().all()
@@ -150,7 +161,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().post("/footprints")
                 .then().log().all()
@@ -170,19 +181,20 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .pathParam("footprintId", footprint.getId())
                 .when().get("/footprints/{footprintId}")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("isSuccess", is(true))
                 .body("data.memberName", is("트레"))
-                .body("data.petName", is(pet1.getName().getValue()))
-                .body("data.petDescription", is(pet1.getDescription().getValue()))
-                .body("data.petBirthDate", is(pet1.getBirthDate().getValue().toString()))
-                .body("data.petSizeType", is(pet1.getSizeType().name()))
-                .body("data.petGender", is(pet1.getGender().name()))
-                .body("data.footprintImageUrl", is(pet1.getImageUrl()))
+                .body("data.walkStatus", is("BEFORE"))
+                .body("data.pets[0].name", is(pet1.getName().getValue()))
+                .body("data.pets[0].description", is(pet1.getDescription().getValue()))
+                .body("data.pets[0].birthDate", is(pet1.getBirthDate().getValue().toString()))
+                .body("data.pets[0].sizeType", is(pet1.getSizeType().name()))
+                .body("data.pets[0].gender", is(pet1.getGender().name()))
+                .body("data.pets[0].imageUrl", is(pet1.getImageUrl()))
                 .body("data.isMine", is(footprint.isCreatedBy(member1.getId())));
     }
 
@@ -205,7 +217,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .queryParam("latitude", 37.5171728)
                 .queryParam("longitude", 127.1047797)
                 .when().get("/footprints/near")
@@ -228,7 +240,7 @@ class FootprintControllerTest {
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
@@ -240,10 +252,70 @@ class FootprintControllerTest {
     void findMyLatestFootprintTime_MyFootprintDoesNotExist() {
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, member1.getId())
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .when().get("/footprints/mine/latest")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.createdAt", nullValue());
+                .body("data.changedWalkStatusTime", nullValue());
+    }
+
+    @DisplayName("발자국 범위밖에서 안으로 들어오면 산책중으로 상태가 변한다 (200)")
+    @Test
+    void updateWalkStatus_toOngoing() {
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0,0),
+                        BEFORE,
+                        null,
+                        null,
+                        LocalDateTime.now(),
+                        false
+                        )
+        );
+
+        float latitude = 0.0F;
+        float longitude = 0.0F;
+
+        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
+                .body(request)
+                .when().patch("/footprints/walk-status")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus", is(ONGOING.toString()));
+    }
+
+    @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
+    @Test
+    void updateWalkStatus_toAfter(){
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0,0),
+                        ONGOING,
+                        LocalDateTime.now(),
+                        null,
+                        LocalDateTime.now().minusHours(1),
+                        false
+                )
+        );
+
+        float latitude = 37.0F;
+        float longitude = 127.0F;
+
+        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
+                .body(request)
+                .when().patch("/footprints/walk-status")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus",is(AFTER.toString()));
     }
 }

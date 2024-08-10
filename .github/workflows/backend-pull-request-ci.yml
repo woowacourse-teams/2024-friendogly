@@ -4,16 +4,16 @@ on:
   pull_request:
     branches: [ "develop" ]
     paths:
-     - 'backend/**'
+      - 'backend/**'
 
 defaults:
   run:
-   working-directory: ./backend
+    working-directory: ./backend
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       checks: write
 
@@ -37,10 +37,10 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.1.1
+      # - name: Setup Gradle
+      #   uses: gradle/actions/setup-gradle@v3
+      #   with:
+      #     gradle-version: 8.1.1
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -49,11 +49,13 @@ jobs:
         run: ./gradlew build
 
       - name: 테스트 결과를 PR에 코멘트로 등록합니다
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: './backend/build/test-results/test/TEST-*.xml'
-
+          files: |
+            ./backend/build/test-results/**/*.xml
+            ./backend/build/test-results/**/*.trx
+            ./backend/build/test-results/**/*.json
 
       - name: 실패 테스트결과의 원인을 Report 합니다
         uses: mikepenz/action-junit-report@v3

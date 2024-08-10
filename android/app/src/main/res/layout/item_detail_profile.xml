@@ -6,7 +6,7 @@
     <data>
         <variable
             name="profile"
-            type="com.happy.friendogly.presentation.ui.group.detail.model.GroupDetailProfileUiModel" />
+            type="com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginEnd="10dp"
@@ -14,9 +14,8 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/img_profile_normal"
-            glide="@{profile.imageUrl}"
+            glide1000="@{profile.imageUrl}"
             android:backgroundTint="@color/coral50"
-            android:background="@drawable/rect_orange100_fill_12"
             app:shapeAppearanceOverlay="@style/RoundBig"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"

@@ -4,9 +4,8 @@ import com.woowacourse.friendogly.common.ApiResponse;
 import com.woowacourse.friendogly.common.ErrorCode;
 import com.woowacourse.friendogly.common.ErrorResponse;
 import com.woowacourse.friendogly.exception.FriendoglyException;
-import java.util.Collections;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +15,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Collections;
+import java.util.List;
+
 // TODO: 적절한 로그 레벨 설정
 @Slf4j
 @RestControllerAdvice
@@ -23,7 +25,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendoglyException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception) {
-        log.warn(exception.getMessage(), exception);
+        //TODO: 커스텀 예외 내부에 우리 잘못인지 구분하는 로직 만들기 (일단은 외부api가 안되면 5xx, 사용자잘못이면 4xx)
+        if (exception.getHttpStatus().is5xxServerError()) {
+            log.error(exception.getMessage(), exception);
+        }
+        if (exception.getHttpStatus().is4xxClientError()) {
+            log.warn(exception.getMessage(), exception);
+        }
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getErrorCode(),
@@ -41,7 +49,7 @@ public class GlobalExceptionHandler {
         List<String> detail = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> fieldError.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
         ErrorResponse errorResponse = new ErrorResponse(

@@ -14,6 +14,11 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.firebase.crashlytics.plugin) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlinx.serialization) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.google.services) apply false
 }
 
 allprojects {

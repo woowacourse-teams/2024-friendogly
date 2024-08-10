@@ -13,16 +13,24 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Address {
 
-    @Column(name = "address", nullable = false)
-    private String value;
+    @Column(name = "province", nullable = false)
+    private String province;
 
-    public Address(String value) {
-        validateAddress(value);
-        this.value = value;
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "village", nullable = false)
+    private String village;
+
+    public Address(String province, String city, String village) {
+        validateAddress(province, city, village);
+        this.province = province;
+        this.city = city;
+        this.village = village;
     }
 
-    private void validateAddress(String address) {
-        if (StringUtils.isBlank(address)) {
+    private void validateAddress(String address, String city, String village) {
+        if (StringUtils.isBlank(address) || StringUtils.isBlank(city) || StringUtils.isBlank(village)) {
             throw new FriendoglyException("모임 주소는 필수입니다.");
         }
     }
