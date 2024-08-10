@@ -33,7 +33,6 @@ class ClubMenuViewModel(
                     _clubMenuEvent.emit(ClubMenuEvent.Navigation.NavigateToPrev)
                 }
                 .onFailure {
-                    Log.d("sdlfjfsdl", it.message.toString())
                     _clubMenuEvent.emit(ClubMenuEvent.FailDelete)
                 }
         }
