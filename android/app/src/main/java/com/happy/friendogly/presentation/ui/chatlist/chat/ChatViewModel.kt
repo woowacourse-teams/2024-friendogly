@@ -7,16 +7,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.Message
-import com.happy.friendogly.domain.repository.WebSocketRepository
+import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
+import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.toUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 
 class ChatViewModel(
-    private val webSocketRepository: WebSocketRepository,
+    private val subScribeMessageUseCase: SubScribeMessageUseCase,
+    private val publishSendMessageUseCase: PublishSendMessageUseCase
 ) : BaseViewModel() {
     private val _chats: MutableLiveData<List<ChatUiModel>> = MutableLiveData()
     val chats: LiveData<List<ChatUiModel>> get() = _chats
@@ -30,10 +31,10 @@ class ChatViewModel(
             }
         }
 
-    fun subscribeMessage(chatRoomId: Long, myMemberId:Long) {
+    fun subscribeMessage(chatRoomId: Long, myMemberId: Long) {
         viewModelScope.launch {
             val newChat =
-                webSocketRepository.subscribeMessage(chatRoomId, myMemberId).map {
+                subScribeMessageUseCase(chatRoomId, myMemberId).map {
                     when (it) {
                         is ChatComponent.Date -> it.toUiModel()
                         is ChatComponent.Enter -> it.toUiModel()
@@ -54,15 +55,19 @@ class ChatViewModel(
         content: String,
     ) {
         viewModelScope.launch {
-            webSocketRepository.publishSend(chatRoomId, content)
+            publishSendMessageUseCase(chatRoomId, content)
         }
     }
 
     companion object {
-        fun factory(webSocketRepository: WebSocketRepository): ViewModelProvider.Factory {
+        fun factory(
+            subScribeMessageUseCase: SubScribeMessageUseCase,
+            publishSendMessageUseCase: PublishSendMessageUseCase
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatViewModel(
-                    webSocketRepository,
+                    subScribeMessageUseCase,
+                    publishSendMessageUseCase
                 )
             }
         }

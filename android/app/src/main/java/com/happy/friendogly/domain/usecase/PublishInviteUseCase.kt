@@ -1,0 +1,10 @@
+package com.happy.friendogly.domain.usecase
+
+import com.happy.friendogly.domain.repository.WebSocketRepository
+
+class PublishInviteUseCase(
+    private val repository: WebSocketRepository
+) {
+    suspend operator fun invoke(chatRoomId: Long): Result<Unit> =
+        repository.publishInvite(chatRoomId)
+}

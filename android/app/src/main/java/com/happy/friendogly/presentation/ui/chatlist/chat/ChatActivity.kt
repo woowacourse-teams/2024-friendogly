@@ -11,10 +11,12 @@ import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 
-class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat), ChatNavigationAction {
+class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
+    ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
-            AppModule.getInstance().webSocketRepository,
+            AppModule.getInstance().subScribeMessageUseCase,
+            AppModule.getInstance().publishSendUseCase
         )
     }
     private lateinit var adapter: ChatAdapter
@@ -34,7 +36,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat), 
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
         }
-        viewModel.subscribeMessage(chatId,myMemberId)
+        viewModel.subscribeMessage(chatId, myMemberId)
     }
 
     private fun clickChatInfo(myMemberId: Long, chatRoomId: Long) {
