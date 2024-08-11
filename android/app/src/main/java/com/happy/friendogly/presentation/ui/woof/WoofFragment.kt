@@ -204,6 +204,7 @@ class WoofFragment :
             }
             val position = myMarker?.position ?: return
             moveCameraCenterPosition(position)
+            viewModel.changeTrackingModeToNoFollow()
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
@@ -264,6 +265,13 @@ class WoofFragment :
             isScaleBarEnabled = false
         }
         binding.lbvWoofLocationRegister.map = map
+
+        map.onMapClickListener = NaverMap.OnMapClickListener { _, _ ->
+            if (binding.tvWoofWalkStatus.isVisible) {
+                hideMarkerDetail()
+                changeRecentlyClickedMarkerSize()
+            }
+        }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
