@@ -1,11 +1,6 @@
 package com.happy.friendogly.presentation.ui.club.my.club
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
@@ -34,25 +29,25 @@ class MyClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_
         initObserver()
     }
 
-    private fun initDataBinding(){
+    private fun initDataBinding() {
         binding.actionHandler = viewModel
         binding.includeClubList.rcvClubListClub.adapter = adapter
     }
 
-    private fun initObserver(){
-        viewModel.myClubs.observe(viewLifecycleOwner){ clubs ->
+    private fun initObserver() {
+        viewModel.myClubs.observe(viewLifecycleOwner) { clubs ->
             adapter.submitList(clubs)
         }
 
-        viewModel.myClubEvent.observeEvent(viewLifecycleOwner){ event ->
-            when(event){
+        viewModel.myClubEvent.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
                 MyClubEvent.Navigation.NavigateToAddClub -> (activity as MyClubActivity).addClub()
                 is MyClubEvent.Navigation.NavigateToClub -> (activity as MyClubActivity).openClub(event.clubId)
             }
         }
 
-        viewModel.myClubUiState.observe(viewLifecycleOwner){ state ->
-            when(state){
+        viewModel.myClubUiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
                 MyClubUiState.Error -> applyViewState(binding.includeClubError.linearLayoutClubError)
                 MyClubUiState.Init -> applyViewState(binding.includeClubList.rcvClubListClub)
                 MyClubUiState.NotData -> applyViewState(binding.includeClubData.linearLayoutClubNotData)
@@ -60,11 +55,10 @@ class MyClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_
         }
     }
 
-    private fun applyViewState(currentView: View){
+    private fun applyViewState(currentView: View) {
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubError.linearLayoutClubError.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
-
 }

@@ -1,8 +1,8 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
-import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import kotlinx.datetime.LocalDateTime
 

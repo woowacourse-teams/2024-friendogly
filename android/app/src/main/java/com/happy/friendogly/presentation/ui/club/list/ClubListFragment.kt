@@ -14,9 +14,9 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
-import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {

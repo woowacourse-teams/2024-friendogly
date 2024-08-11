@@ -136,7 +136,7 @@ class MainActivity :
     }
 
     override fun navigateToMyClub(isMyHead: Boolean) {
-        startActivity(MyClubActivity.getIntent(this,isMyHead))
+        startActivity(MyClubActivity.getIntent(this, isMyHead))
     }
 
     override fun onBackPressed() {

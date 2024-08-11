@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.common.model
 
-import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import kotlinx.datetime.LocalDateTime
 

@@ -9,9 +9,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.databinding.BottomSheetFilterSizeSelectorBinding
 import com.happy.friendogly.databinding.BottomSheetGenderFilterSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterEvent
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel
-import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 
 class ClubFilterBottomSheet(
     private val clubFilterType: ClubFilter,

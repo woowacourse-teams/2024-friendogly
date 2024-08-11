@@ -9,9 +9,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetParticipationFilterSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterEvent
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel
-import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 class ParticipationFilterBottomSheet(
     private val currentParticipationFilter: ParticipationFilter,

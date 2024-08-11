@@ -37,21 +37,21 @@ class MyClubActivity :
         }.attach()
     }
 
-    private fun initPage(){
+    private fun initPage() {
         val isMyHead = receiveMyHead()
         updateClubFragment(isMyHead)
     }
 
-    private fun updateClubFragment(isMyHead: Boolean){
-        if (isMyHead){
-            binding.vpMyClub.setCurrentItem(1,true)
-        }else{
-            binding.vpMyClub.setCurrentItem(0,true)
+    private fun updateClubFragment(isMyHead: Boolean) {
+        if (isMyHead) {
+            binding.vpMyClub.setCurrentItem(1, true)
+        } else {
+            binding.vpMyClub.setCurrentItem(0, true)
         }
     }
 
-    private fun receiveMyHead(): Boolean{
-        return intent.getBooleanExtra(KEY_IS_MY_HEAD_CLUB,false)
+    private fun receiveMyHead(): Boolean {
+        return intent.getBooleanExtra(KEY_IS_MY_HEAD_CLUB, false)
     }
 
     private fun initViewPager() {

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetMyClubUseCase
-import com.happy.friendogly.domain.usecase.GetMyHeadClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
@@ -18,7 +17,7 @@ import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import kotlinx.coroutines.launch
 
 class MyClubViewModel(
-    private val getMyClubUseCase: GetMyClubUseCase
+    private val getMyClubUseCase: GetMyClubUseCase,
 ) : BaseViewModel(), ClubItemActionHandler {
     private val _myClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
     val myClubs: LiveData<List<ClubItemUiModel>> get() = _myClubs
@@ -33,20 +32,21 @@ class MyClubViewModel(
         loadMyClubs()
     }
 
-    private fun loadMyClubs() = viewModelScope.launch {
-        getMyClubUseCase()
-            .onSuccess { clubs ->
-                if (clubs.isEmpty()) {
-                    _myClubUiState.value = MyClubUiState.NotData
-                } else {
-                    _myClubUiState.value = MyClubUiState.Init
+    private fun loadMyClubs() =
+        viewModelScope.launch {
+            getMyClubUseCase()
+                .onSuccess { clubs ->
+                    if (clubs.isEmpty()) {
+                        _myClubUiState.value = MyClubUiState.NotData
+                    } else {
+                        _myClubUiState.value = MyClubUiState.Init
+                    }
+                    _myClubs.value = clubs.toPresentation()
                 }
-                _myClubs.value = clubs.toPresentation()
-            }
-            .onFailure {
-                _myClubUiState.value = MyClubUiState.Error
-            }
-    }
+                .onFailure {
+                    _myClubUiState.value = MyClubUiState.Error
+                }
+        }
 
     override fun loadClub(clubId: Long) {
         _myClubEvent.emit(MyClubEvent.Navigation.NavigateToClub(clubId))
@@ -57,9 +57,7 @@ class MyClubViewModel(
     }
 
     companion object {
-        fun factory(
-            getMyClubUseCase: GetMyClubUseCase,
-        ): ViewModelProvider.Factory {
+        fun factory(getMyClubUseCase: GetMyClubUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 MyClubViewModel(
                     getMyClubUseCase = getMyClubUseCase,
@@ -67,5 +65,4 @@ class MyClubViewModel(
             }
         }
     }
-
 }

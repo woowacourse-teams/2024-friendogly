@@ -42,9 +42,10 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
         viewModel.myClubEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 MyClubEvent.Navigation.NavigateToAddClub -> (activity as MyClubActivity).addClub()
-                is MyClubEvent.Navigation.NavigateToClub -> (activity as MyClubActivity).openClub(
-                    event.clubId
-                )
+                is MyClubEvent.Navigation.NavigateToClub ->
+                    (activity as MyClubActivity).openClub(
+                        event.clubId,
+                    )
             }
         }
 

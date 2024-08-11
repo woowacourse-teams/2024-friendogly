@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.domain.usecase.GetMyClubUseCase
 import com.happy.friendogly.domain.usecase.GetMyHeadClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -13,15 +12,13 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.club.my.MyClubActionHandler
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import kotlinx.coroutines.launch
 
 class MyHeadClubViewModel(
     private val getMyHeadClubUseCase: GetMyHeadClubUseCase,
-): BaseViewModel(), ClubItemActionHandler{
-
+) : BaseViewModel(), ClubItemActionHandler {
     private val _myHeadClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
     val myHeadClubs: LiveData<List<ClubItemUiModel>> get() = _myHeadClubs
 
@@ -35,20 +32,21 @@ class MyHeadClubViewModel(
         loadMyHeadClubs()
     }
 
-    private fun loadMyHeadClubs() = viewModelScope.launch{
-        getMyHeadClubUseCase()
-            .onSuccess { clubs ->
-                if (clubs.isEmpty()){
-                    _myHeadClubUiState.value = MyClubUiState.NotData
-                }else{
-                    _myHeadClubUiState.value = MyClubUiState.Init
+    private fun loadMyHeadClubs() =
+        viewModelScope.launch {
+            getMyHeadClubUseCase()
+                .onSuccess { clubs ->
+                    if (clubs.isEmpty()) {
+                        _myHeadClubUiState.value = MyClubUiState.NotData
+                    } else {
+                        _myHeadClubUiState.value = MyClubUiState.Init
+                    }
+                    _myHeadClubs.value = clubs.toPresentation()
                 }
-                _myHeadClubs.value = clubs.toPresentation()
-            }
-            .onFailure {
-                _myHeadClubUiState.value = MyClubUiState.Error
-            }
-    }
+                .onFailure {
+                    _myHeadClubUiState.value = MyClubUiState.Error
+                }
+        }
 
     override fun loadClub(clubId: Long) {
         _myClubEvent.emit(MyClubEvent.Navigation.NavigateToClub(clubId))
@@ -59,9 +57,7 @@ class MyHeadClubViewModel(
     }
 
     companion object {
-        fun factory(
-            getMyHeadClubUseCase: GetMyHeadClubUseCase,
-        ): ViewModelProvider.Factory {
+        fun factory(getMyHeadClubUseCase: GetMyHeadClubUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 MyHeadClubViewModel(
                     getMyHeadClubUseCase = getMyHeadClubUseCase,

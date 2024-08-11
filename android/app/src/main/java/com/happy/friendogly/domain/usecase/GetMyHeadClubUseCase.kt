@@ -6,6 +6,5 @@ import com.happy.friendogly.domain.repository.MyClubRepository
 class GetMyHeadClubUseCase(
     private val repository: MyClubRepository,
 ) {
-    suspend operator fun invoke(): Result<List<Club>> =
-        repository.getMyHeadClubs()
+    suspend operator fun invoke(): Result<List<Club>> = repository.getMyHeadClubs()
 }
