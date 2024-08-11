@@ -30,8 +30,8 @@ android {
         applicationId = "com.happy.friendogly"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "0.2.0"
+        versionCode = 4
+        versionName = "0.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -46,6 +46,7 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
+            isMinifyEnabled = false
         }
         release {
             isDebuggable = false
@@ -63,16 +64,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    dataBinding {
-        enable = true
-    }
-    viewBinding {
-        enable = true
-    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
         dataBinding = true
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
