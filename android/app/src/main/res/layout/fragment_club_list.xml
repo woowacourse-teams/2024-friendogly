@@ -139,15 +139,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:visibility="gone"
-                    app:vm="@{vm}" />
+                    app:actionHandler="@{vm}" />
 
                 <include
                     android:id="@+id/include_club_error"
                     layout="@layout/include_club_error"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:visibility="gone"
-                    app:vm="@{vm}" />
+                    tools:visibility="gone" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

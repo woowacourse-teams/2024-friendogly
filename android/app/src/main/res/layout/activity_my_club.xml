@@ -32,7 +32,6 @@
             app:layout_constraintTop_toTopOf="@id/view_my_club_top_bar" />
 
         <TextView
-            android:id="@+id/tv_select_dog_title"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,15 +56,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.google.android.material.tabs.TabItem
-                android:text="@string/my_head_club_subject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <com.google.android.material.tabs.TabItem
                 android:text="@string/my_club_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <com.google.android.material.tabs.TabItem
+                android:text="@string/my_head_club_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </com.google.android.material.tabs.TabLayout>
+
         <androidx.viewpager2.widget.ViewPager2
+            android:layout_marginTop="20dp"
             android:id="@+id/vp_my_club"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tl_my_club"

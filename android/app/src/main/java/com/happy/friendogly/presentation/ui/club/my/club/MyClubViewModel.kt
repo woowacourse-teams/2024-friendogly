@@ -52,6 +52,10 @@ class MyClubViewModel(
         _myClubEvent.emit(MyClubEvent.Navigation.NavigateToClub(clubId))
     }
 
+    override fun addClub() {
+        _myClubEvent.emit(MyClubEvent.Navigation.NavigateToAddClub)
+    }
+
     companion object {
         fun factory(
             getMyClubUseCase: GetMyClubUseCase,

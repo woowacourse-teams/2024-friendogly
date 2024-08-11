@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-
         <include
             android:id="@+id/include_club_data"
             layout="@layout/include_club_not_data"
