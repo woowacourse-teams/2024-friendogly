@@ -12,7 +12,7 @@ fun ChatRoom.toUiModel(): ChatListUiModel =
         "",
         memberCount,
         0,
-        LocalDateTime.of(2024, 6, 7, 13, 6).classifyChatDateTime(),
+        LocalDateTime.now().classifyChatDateTime(),
         clubImageUrl,
         chatRoomId = chatRoomId,
     )
