@@ -41,7 +41,7 @@ class MainActivity :
     }
 
     private fun initNavController() {
-        switchFragment(ClubListFragment::class.java)
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(ClubListFragment::class.java)
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {
