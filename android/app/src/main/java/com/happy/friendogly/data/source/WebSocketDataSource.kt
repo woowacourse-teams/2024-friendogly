@@ -4,7 +4,7 @@ import com.happy.friendogly.data.model.MessageDto
 import kotlinx.coroutines.flow.Flow
 
 interface WebSocketDataSource {
-    suspend fun publishInvite(memberId: Long):Result<Unit>
+    suspend fun publishEnter(memberId: Long):Result<Unit>
 
     suspend fun publishSend(
         chatRoomId: Long,

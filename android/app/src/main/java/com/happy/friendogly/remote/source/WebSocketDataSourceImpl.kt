@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WebSocketDataSourceImpl(private val service: WebSocketService) : WebSocketDataSource {
-    override suspend fun publishInvite(chatRoomId: Long): Result<Unit> = runCatching {
+    override suspend fun publishEnter(chatRoomId: Long): Result<Unit> = runCatching {
         service.publishInvite(chatRoomId)
     }
 

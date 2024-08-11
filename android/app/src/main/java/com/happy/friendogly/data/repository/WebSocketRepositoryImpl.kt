@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WebSocketRepositoryImpl(private val source: WebSocketDataSource) : WebSocketRepository {
-    override suspend fun publishInvite(memberId: Long) = source.publishInvite(memberId)
+    override suspend fun publishEnter(memberId: Long) = source.publishEnter(memberId)
 
     override suspend fun publishSend(
         chatRoomId: Long,

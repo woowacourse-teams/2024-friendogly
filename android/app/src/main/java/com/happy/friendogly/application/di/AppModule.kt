@@ -58,7 +58,7 @@ import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
-import com.happy.friendogly.domain.usecase.PublishInviteUseCase
+import com.happy.friendogly.domain.usecase.PublishEnterUseCase
 import com.happy.friendogly.domain.usecase.PublishLeaveUseCase
 import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
@@ -217,8 +217,8 @@ class AppModule(context: Context) {
     val getChatListUseCase: GetChatListUseCase = GetChatListUseCase(repository = chatRepository)
     val getChatMemberUseCase: GetChatMemberUseCase =
         GetChatMemberUseCase(repository = chatRepository)
-    val publishInviteUseCase: PublishInviteUseCase =
-        PublishInviteUseCase(repository = webSocketRepository)
+    val publishEnterUseCase: PublishEnterUseCase =
+        PublishEnterUseCase(repository = webSocketRepository)
     val publishSendUseCase: PublishSendMessageUseCase =
         PublishSendMessageUseCase(repository = webSocketRepository)
     val publishLeaveUseCase: PublishLeaveUseCase =
