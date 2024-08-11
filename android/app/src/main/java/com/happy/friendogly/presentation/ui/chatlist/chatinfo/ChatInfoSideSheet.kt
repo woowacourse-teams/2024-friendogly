@@ -12,6 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
@@ -109,7 +111,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     }
 
     private fun initAdapter() {
-        adapter = JoinPeopleAdapter()
+        adapter = JoinPeopleAdapter((requireActivity() as ChatNavigationAction))
         binding.rcvChatJoinPeople.adapter = adapter
     }
 

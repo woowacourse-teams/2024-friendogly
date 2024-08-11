@@ -13,5 +13,5 @@ interface WebSocketRepository {
 
     suspend fun publishLeave(chatRoomId: Long)
 
-    suspend fun subscribeMessage(chatRoomId: Long): Flow<ChatComponent>
+    suspend fun subscribeMessage(chatRoomId: Long, myMemberId: Long): Flow<ChatComponent>
 }

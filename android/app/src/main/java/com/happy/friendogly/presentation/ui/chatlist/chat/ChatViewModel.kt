@@ -30,10 +30,10 @@ class ChatViewModel(
             }
         }
 
-    fun subscribeMessage(chatRoomId: Long) {
+    fun subscribeMessage(chatRoomId: Long, myMemberId:Long) {
         viewModelScope.launch {
             val newChat =
-                webSocketRepository.subscribeMessage(chatRoomId).map {
+                webSocketRepository.subscribeMessage(chatRoomId, myMemberId).map {
                     when (it) {
                         is ChatComponent.Date -> it.toUiModel()
                         is ChatComponent.Enter -> it.toUiModel()
