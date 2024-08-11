@@ -26,4 +26,6 @@ interface MainActivityActionHandler {
     fun navigateToSetting()
 
     fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>)
+
+    fun navigateToMyClub(isMyHead: Boolean)
 }

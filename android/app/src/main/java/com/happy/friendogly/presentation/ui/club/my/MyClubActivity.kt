@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.my
 
+import android.content.Context
+import android.content.Intent
 import com.google.android.material.tabs.TabLayoutMediator
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMyClubBinding
@@ -18,6 +20,7 @@ class MyClubActivity :
         initDataBinding()
         initViewPager()
         initTabLayout()
+        initPage()
     }
 
     private fun initDataBinding() {
@@ -34,6 +37,23 @@ class MyClubActivity :
         }.attach()
     }
 
+    private fun initPage(){
+        val isMyHead = receiveMyHead()
+        updateClubFragment(isMyHead)
+    }
+
+    private fun updateClubFragment(isMyHead: Boolean){
+        if (isMyHead){
+            binding.vpMyClub.setCurrentItem(1,true)
+        }else{
+            binding.vpMyClub.setCurrentItem(0,true)
+        }
+    }
+
+    private fun receiveMyHead(): Boolean{
+        return intent.getBooleanExtra(KEY_IS_MY_HEAD_CLUB,false)
+    }
+
     private fun initViewPager() {
         binding.vpMyClub.adapter = adapter
     }
@@ -48,5 +68,18 @@ class MyClubActivity :
 
     override fun openClub(clubId: Long) {
         startActivity(ClubDetailActivity.getIntent(this, clubId))
+    }
+
+    companion object {
+        const val KEY_IS_MY_HEAD_CLUB = "putIsMyHead"
+
+        fun getIntent(
+            context: Context,
+            isMyHead: Boolean,
+        ): Intent {
+            return Intent(context, MyClubActivity::class.java).apply {
+                putExtra(KEY_IS_MY_HEAD_CLUB, isMyHead)
+            }
+        }
     }
 }
