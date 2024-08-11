@@ -287,4 +287,9 @@
     <string name="my_location_submit">설정 완료</string>
     <string name="my_location_load_fail">위치를 불러올 수 없습니다..</string>
     <string name="my_location_full_address">%s %s %s</string>
+
+    <!--내 모임-->
+    <string name="my_club_title">내 모임</string>
+    <string name="my_club_subject">참여 모임</string>
+    <string name="my_head_club_subject">방장인 모임</string>
 </resources>

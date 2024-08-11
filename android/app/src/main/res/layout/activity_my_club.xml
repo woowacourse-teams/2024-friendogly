@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.my.MyClubViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.club.my.MyClubActivity">
+        <View
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/view_my_club_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+
+        <ImageView
+            android:id="@+id/iv_club_select_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="@+id/view_my_club_top_bar"
+            app:layout_constraintStart_toStartOf="@+id/view_my_club_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_my_club_top_bar" />
+
+        <TextView
+            android:id="@+id/tv_select_dog_title"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/my_club_title"
+            app:layout_constraintEnd_toEndOf="@+id/view_my_club_top_bar"
+            app:layout_constraintStart_toStartOf="@+id/view_my_club_top_bar"
+            app:layout_constraintBottom_toBottomOf="@+id/view_my_club_top_bar"
+            app:layout_constraintTop_toTopOf="@+id/view_my_club_top_bar"/>
+        <com.google.android.material.tabs.TabLayout
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/view_my_club_top_bar"
+            android:id="@+id/tl_my_club"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/gray700"
+            app:tabTextAppearance="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabItem
+                android:text="@string/my_head_club_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.tabs.TabItem
+                android:text="@string/my_club_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.tabs.TabLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_my_club"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tl_my_club"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
