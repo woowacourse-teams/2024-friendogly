@@ -58,7 +58,7 @@ class RegisterViewModel(
     }
 
     fun executeKakaoLogin(context: Context) {
-        viewModelScope.launch {
+        launch {
             kakaoLoginUseCase(context = context).onSuccess { kakaAccessToken ->
                 kakaoLogin(kakaAccessToken)
             }.onFailure {
