@@ -42,18 +42,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(FootprintController.class)
 public class FootprintApiDocsTest extends RestDocsTest {
 
-    @MockBean
+    @Mock
     private FootprintQueryService footprintQueryService;
 
-    @MockBean
+    @Mock
     private FootprintCommandService footprintCommandService;
 
     @DisplayName("발자국 저장")
@@ -322,7 +320,8 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.errorCode").type(JsonFieldType.STRING).description("에러 코드"),
-                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING).description("에러메세지"),
+                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING)
+                                                .description("에러메세지"),
                                         fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
                                 )
                                 .requestSchema(Schema.schema("updateWalkStatusResponse"))
