@@ -8,7 +8,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.happy.friendogly.R
 
-
 @BindingAdapter("glide")
 fun ImageView.bindGlide(uri: String?) {
     if (uri.isNullOrBlank()) return

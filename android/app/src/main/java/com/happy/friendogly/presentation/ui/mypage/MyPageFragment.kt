@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.mypage
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
