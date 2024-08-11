@@ -1,15 +1,16 @@
-package com.happy.friendogly.presentation.ui.club.list.adapter.club
+package com.happy.friendogly.presentation.ui.club.common.adapter.club
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemClubBinding
+import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler
 import com.happy.friendogly.presentation.ui.club.list.ClubListUiModel
 
 class ClubListAdapter(
-    private val actionHandler: ClubListActionHandler,
+    private val actionHandler: ClubItemActionHandler,
 ) : ListAdapter<ClubListUiModel, ClubViewHolder>(ClubDiffCallback()) {
     class ClubDiffCallback : DiffUtil.ItemCallback<ClubListUiModel>() {
         override fun areItemsTheSame(

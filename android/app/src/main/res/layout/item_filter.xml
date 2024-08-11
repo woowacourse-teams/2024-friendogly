@@ -6,7 +6,7 @@
     <data>
         <variable
             name="clubFilter"
-            type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
+            type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

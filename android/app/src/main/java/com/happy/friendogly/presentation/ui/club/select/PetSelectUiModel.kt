@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.club.select
 
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.presentation.ui.club.mapper.toClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 
 data class PetSelectUiModel(
     val id: Long,

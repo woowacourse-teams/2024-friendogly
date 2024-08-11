@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.model.clubfilter
+package com.happy.friendogly.presentation.ui.club.common.model.clubfilter
 
 sealed class ClubFilter(val filterName: String) {
     sealed class GenderFilter(filterName: String) : ClubFilter(filterName) {
@@ -49,7 +49,7 @@ sealed class ClubFilter(val filterName: String) {
             )
         }
 
-        fun makeSizeFilterEntry(): List<ClubFilter.SizeFilter> {
+        fun makeSizeFilterEntry(): List<SizeFilter> {
             return listOf(
                 SizeFilter.SmallDog,
                 SizeFilter.MediumDog,
@@ -57,7 +57,7 @@ sealed class ClubFilter(val filterName: String) {
             )
         }
 
-        fun makeGenderFilterEntry(): List<ClubFilter.GenderFilter> {
+        fun makeGenderFilterEntry(): List<GenderFilter> {
             return listOf(
                 GenderFilter.Male,
                 GenderFilter.Female,

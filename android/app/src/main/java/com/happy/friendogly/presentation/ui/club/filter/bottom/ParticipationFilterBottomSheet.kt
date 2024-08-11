@@ -11,7 +11,7 @@ import com.happy.friendogly.databinding.BottomSheetParticipationFilterSelectorBi
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterEvent
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 class ParticipationFilterBottomSheet(
     private val currentParticipationFilter: ParticipationFilter,

@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.list
 
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 sealed interface ClubListEvent {
     data class OpenClub(val clubId: Long) : ClubListEvent

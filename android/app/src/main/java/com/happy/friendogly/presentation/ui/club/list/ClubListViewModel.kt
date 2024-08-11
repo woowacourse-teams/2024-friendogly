@@ -11,19 +11,20 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.mapper.toDomain
 import com.happy.friendogly.presentation.ui.club.mapper.toGenders
 import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
-import com.happy.friendogly.presentation.ui.club.model.ClubFilterSelector
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
     private val searchingClubsUseCase: GetSearchingClubsUseCase,
-) : BaseViewModel(), ClubListActionHandler {
+) : BaseViewModel(), ClubListActionHandler,ClubItemActionHandler {
     private val _uiState: MutableLiveData<ClubListUiState> =
         MutableLiveData(ClubListUiState.Init)
     val uiState: LiveData<ClubListUiState> get() = _uiState

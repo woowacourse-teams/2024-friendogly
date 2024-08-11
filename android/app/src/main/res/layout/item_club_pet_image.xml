@@ -5,7 +5,7 @@
     <data>
         <variable
             name="pet"
-            type="com.happy.friendogly.presentation.ui.club.model.ClubPet" />
+            type="com.happy.friendogly.presentation.ui.club.common.model.ClubPet" />
     </data>
 
     <com.google.android.material.imageview.ShapeableImageView

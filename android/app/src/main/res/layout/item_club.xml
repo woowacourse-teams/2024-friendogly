@@ -10,7 +10,7 @@
             type="com.happy.friendogly.presentation.ui.club.list.ClubListUiModel" />
         <variable
             name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler" />
+            type="com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

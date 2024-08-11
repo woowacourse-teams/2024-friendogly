@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.list
 
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import kotlinx.datetime.LocalDateTime
 
 data class ClubListUiModel(

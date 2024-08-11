@@ -18,8 +18,7 @@ import com.happy.friendogly.databinding.ActivityClubAddBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter
-import com.happy.friendogly.presentation.ui.club.list.ClubListFragment.Companion.CHANGE_CLUB_LIST_STATE
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.utils.saveBitmapToFile

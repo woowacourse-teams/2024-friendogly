@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.club.mapper
 
 import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.presentation.ui.club.list.ClubListUiModel
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
+import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 
 fun Club.toPresentation(): ClubListUiModel {
     return ClubListUiModel(
