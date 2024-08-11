@@ -12,7 +12,7 @@ import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 
 class ChatAdapter(
-    private val onMemberClick: ChatNavigationAction
+    private val onMemberClick: ChatNavigationAction,
 ) : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
     init {
         setHasStableIds(true)
@@ -65,7 +65,8 @@ class ChatAdapter(
                         inflater,
                         parent,
                         false,
-                    ), onMemberClick
+                    ),
+                    onMemberClick,
                 )
 
             else -> error("$viewType 잘못된 viewType이 들어왔습니다")

@@ -15,6 +15,6 @@ sealed interface ChatUiModel {
         val profileUrl: String?,
         val message: String,
         val time: LocalTime,
-        val memberId:Long
+        val memberId: Long,
     ) : ChatUiModel
 }

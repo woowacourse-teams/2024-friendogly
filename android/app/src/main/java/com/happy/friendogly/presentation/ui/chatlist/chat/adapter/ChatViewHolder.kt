@@ -40,7 +40,7 @@ class MineViewHolder(val binding: ItemChatMineBinding) : ChatViewHolder(binding.
     }
 }
 
-class OtherViewHolder(val binding: ItemChatOtherBinding, val onMemberClick:ChatNavigationAction) : ChatViewHolder(binding.root) {
+class OtherViewHolder(val binding: ItemChatOtherBinding, val onMemberClick: ChatNavigationAction) : ChatViewHolder(binding.root) {
     fun bind(item: ChatUiModel.Other) {
         binding.tvChatOtherMessage.text = item.message
         val timeFormatter =

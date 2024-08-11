@@ -33,5 +33,5 @@ fun Message.Other.toUiModel() =
         message = content,
         time = dateTime.toLocalTime(),
         profileUrl = profileUrl,
-        memberId = memberId
+        memberId = memberId,
     )

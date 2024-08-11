@@ -1,11 +1,9 @@
 package com.happy.friendogly.presentation.ui.chatlist.chatinfo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LOG_TAG
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -34,10 +32,11 @@ class ChatInfoViewModel(
     }
 
     fun getClubInfo() { // TODO Api 연결
-        _clubInfo.value = ChatInfoUiModel(
-            dogSize = listOf(DogSize.SMALL),
-            dogGender = listOf(DogGender.FEMALE),
-        )
+        _clubInfo.value =
+            ChatInfoUiModel(
+                dogSize = listOf(DogSize.SMALL),
+                dogGender = listOf(DogGender.FEMALE),
+            )
     }
 
     companion object {

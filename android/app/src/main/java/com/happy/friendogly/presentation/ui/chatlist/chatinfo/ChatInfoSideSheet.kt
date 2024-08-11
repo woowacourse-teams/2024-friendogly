@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
-import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 
@@ -22,15 +21,16 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         get() = requireNotNull(_binding) { "${this::class.java.simpleName} is null" }
 
     private lateinit var adapter: JoinPeopleAdapter
-    private val alarmPermission: AlarmPermission = AlarmPermission.from(this) { isPermitted ->
-        if (!isPermitted) {
-            Snackbar.make(
-                binding.root,
-                getString(R.string.chat_setting_alarm_alert),
-                Snackbar.LENGTH_SHORT,
-            ).show()
+    private val alarmPermission: AlarmPermission =
+        AlarmPermission.from(this) { isPermitted ->
+            if (!isPermitted) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.chat_setting_alarm_alert),
+                    Snackbar.LENGTH_SHORT,
+                ).show()
+            }
         }
-    }
 
     private val viewModel: ChatInfoViewModel by viewModels {
         ChatInfoViewModel.factory(AppModule.getInstance().getChatMemberUseCase)
@@ -121,12 +121,14 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
-
         private const val EXTRA_MEMBER_ID = "myMemberId"
         private const val EXTRA_CHAT_ROOM_ID = "chatRoomId"
         private const val INVALID_ID = -1L
 
-        fun getBundle(myMemberId: Long, chatRoomId: Long): Bundle {
+        fun getBundle(
+            myMemberId: Long,
+            chatRoomId: Long,
+        ): Bundle {
             return Bundle().apply {
                 putLong(EXTRA_MEMBER_ID, myMemberId)
                 putLong(EXTRA_CHAT_ROOM_ID, chatRoomId)

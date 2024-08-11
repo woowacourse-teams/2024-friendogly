@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val subScribeMessageUseCase: SubScribeMessageUseCase,
-    private val publishSendMessageUseCase: PublishSendMessageUseCase
+    private val publishSendMessageUseCase: PublishSendMessageUseCase,
 ) : BaseViewModel() {
     private val _chats: MutableLiveData<List<ChatUiModel>> = MutableLiveData()
     val chats: LiveData<List<ChatUiModel>> get() = _chats
@@ -31,7 +31,10 @@ class ChatViewModel(
             }
         }
 
-    fun subscribeMessage(chatRoomId: Long, myMemberId: Long) {
+    fun subscribeMessage(
+        chatRoomId: Long,
+        myMemberId: Long,
+    ) {
         viewModelScope.launch {
             val newChat =
                 subScribeMessageUseCase(chatRoomId, myMemberId).map {
@@ -62,12 +65,12 @@ class ChatViewModel(
     companion object {
         fun factory(
             subScribeMessageUseCase: SubScribeMessageUseCase,
-            publishSendMessageUseCase: PublishSendMessageUseCase
+            publishSendMessageUseCase: PublishSendMessageUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatViewModel(
                     subScribeMessageUseCase,
-                    publishSendMessageUseCase
+                    publishSendMessageUseCase,
                 )
             }
         }

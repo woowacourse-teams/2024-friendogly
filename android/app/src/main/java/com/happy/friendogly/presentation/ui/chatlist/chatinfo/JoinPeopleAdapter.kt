@@ -11,7 +11,7 @@ import com.happy.friendogly.databinding.ItemChatJoinPeopleBinding
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 
 class JoinPeopleAdapter(
-    private val onMemberClick: ChatNavigationAction
+    private val onMemberClick: ChatNavigationAction,
 ) :
     ListAdapter<JoinPeople, JoinPeopleAdapter.JoinPeopleViewHolder>(ChatInfoDiffCallback) {
     init {
@@ -36,7 +36,7 @@ class JoinPeopleAdapter(
 
     class JoinPeopleViewHolder(
         private val binding: ItemChatJoinPeopleBinding,
-        private val onClick: ChatNavigationAction
+        private val onClick: ChatNavigationAction,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: JoinPeople) {
             if (item.profileUrl.isNotBlank()) {

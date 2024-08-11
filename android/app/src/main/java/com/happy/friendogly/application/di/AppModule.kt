@@ -132,11 +132,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-            RemoteModule.createStumpClient(
-                baseUrl = baseUrl,
-                tokenManager = tokenManager,
-                authenticationListener = authenticationListener,
-            ),
+                RemoteModule.createStumpClient(
+                    baseUrl = baseUrl,
+                    tokenManager = tokenManager,
+                    authenticationListener = authenticationListener,
+                ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -225,7 +225,6 @@ class AppModule(context: Context) {
         PublishLeaveUseCase(repository = webSocketRepository)
     val subScribeMessageUseCase: SubScribeMessageUseCase =
         SubScribeMessageUseCase(repository = webSocketRepository)
-
 
     companion object {
         private var instance: AppModule? = null
