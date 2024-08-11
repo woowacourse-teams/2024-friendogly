@@ -17,6 +17,7 @@ import com.happy.friendogly.presentation.ui.club.mapper.toGenders
 import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import kotlinx.coroutines.launch
@@ -39,8 +40,8 @@ class ClubListViewModel(
 
     val clubFilterSelector = ClubFilterSelector()
 
-    private val _clubs: MutableLiveData<List<ClubListUiModel>> = MutableLiveData()
-    val clubs: LiveData<List<ClubListUiModel>> get() = _clubs
+    private val _clubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
+    val clubs: LiveData<List<ClubItemUiModel>> get() = _clubs
 
     private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
     val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent

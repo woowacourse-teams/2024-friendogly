@@ -6,23 +6,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemClubBinding
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
-import com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler
-import com.happy.friendogly.presentation.ui.club.list.ClubListUiModel
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 
 class ClubListAdapter(
     private val actionHandler: ClubItemActionHandler,
-) : ListAdapter<ClubListUiModel, ClubViewHolder>(ClubDiffCallback()) {
-    class ClubDiffCallback : DiffUtil.ItemCallback<ClubListUiModel>() {
+) : ListAdapter<ClubItemUiModel, ClubViewHolder>(ClubDiffCallback()) {
+    class ClubDiffCallback : DiffUtil.ItemCallback<ClubItemUiModel>() {
         override fun areItemsTheSame(
-            oldItem: ClubListUiModel,
-            newItem: ClubListUiModel,
+            oldItem: ClubItemUiModel,
+            newItem: ClubItemUiModel,
         ): Boolean {
             return oldItem.clubId == newItem.clubId
         }
 
         override fun areContentsTheSame(
-            oldItem: ClubListUiModel,
-            newItem: ClubListUiModel,
+            oldItem: ClubItemUiModel,
+            newItem: ClubItemUiModel,
         ): Boolean {
             return oldItem == newItem
         }

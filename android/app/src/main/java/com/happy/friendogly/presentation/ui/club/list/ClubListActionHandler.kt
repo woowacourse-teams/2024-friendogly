@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.club.list
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 
 interface ClubListActionHandler {
+    fun addClub()
 
     fun selectParticipationFilter()
 

@@ -7,7 +7,7 @@
 
         <variable
             name="club"
-            type="com.happy.friendogly.presentation.ui.club.list.ClubListUiModel" />
+            type="com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel" />
         <variable
             name="actionHandler"
             type="com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler" />
