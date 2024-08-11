@@ -37,7 +37,7 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="5dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/img_profile_normal"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

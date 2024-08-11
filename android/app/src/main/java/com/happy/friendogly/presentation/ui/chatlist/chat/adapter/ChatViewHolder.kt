@@ -7,6 +7,7 @@ import com.happy.friendogly.databinding.ItemChatComeOutBinding
 import com.happy.friendogly.databinding.ItemChatDateBinding
 import com.happy.friendogly.databinding.ItemChatMineBinding
 import com.happy.friendogly.databinding.ItemChatOtherBinding
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 import java.time.format.DateTimeFormatter
 
@@ -39,7 +40,7 @@ class MineViewHolder(val binding: ItemChatMineBinding) : ChatViewHolder(binding.
     }
 }
 
-class OtherViewHolder(val binding: ItemChatOtherBinding) : ChatViewHolder(binding.root) {
+class OtherViewHolder(val binding: ItemChatOtherBinding, val onMemberClick:ChatNavigationAction) : ChatViewHolder(binding.root) {
     fun bind(item: ChatUiModel.Other) {
         binding.tvChatOtherMessage.text = item.message
         val timeFormatter =
@@ -47,5 +48,8 @@ class OtherViewHolder(val binding: ItemChatOtherBinding) : ChatViewHolder(bindin
         binding.tvChatOtherTime.text = item.time.format(timeFormatter)
         binding.tvChatUserNickname.text = item.nickName
         binding.profileUrl = item.profileUrl
+        binding.ivChatUser.setOnClickListener {
+            onMemberClick.navigateToMemberProfile(item.memberId)
+        }
     }
 }

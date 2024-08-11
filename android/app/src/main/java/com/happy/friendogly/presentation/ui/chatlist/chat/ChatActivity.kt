@@ -57,7 +57,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
     }
 
     private fun initAdapter() {
-        adapter = ChatAdapter()
+        adapter = ChatAdapter(this)
         binding.rcvChatDetail.adapter = adapter
     }
 
