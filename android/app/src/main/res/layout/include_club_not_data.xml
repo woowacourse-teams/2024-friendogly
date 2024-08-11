@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="vm"
-            type="com.happy.friendogly.presentation.ui.club.list.ClubListViewModel" />
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler" />
     </data>
 
     <LinearLayout
@@ -44,7 +44,7 @@
             android:layout_height="20dp" />
 
         <TextView
-            onSingleClick="@{()->vm.addClub()}"
+            onSingleClick="@{()->actionHandler.addClub()}"
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

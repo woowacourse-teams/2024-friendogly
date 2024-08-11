@@ -123,8 +123,7 @@
                     android:id="@+id/include_club_list"
                     layout="@layout/include_club_list_content"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:vm="@{vm}" />
+                    android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/include_club_address"
