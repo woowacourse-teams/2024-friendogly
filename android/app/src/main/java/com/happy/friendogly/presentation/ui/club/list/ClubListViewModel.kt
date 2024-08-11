@@ -12,20 +12,20 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
-import com.happy.friendogly.presentation.ui.club.mapper.toDomain
-import com.happy.friendogly.presentation.ui.club.mapper.toGenders
-import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.mapper.toDomain
+import com.happy.friendogly.presentation.ui.club.mapper.toGenders
+import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
     private val searchingClubsUseCase: GetSearchingClubsUseCase,
-) : BaseViewModel(), ClubListActionHandler,ClubItemActionHandler {
+) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
     private val _uiState: MutableLiveData<ClubListUiState> =
         MutableLiveData(ClubListUiState.Init)
     val uiState: LiveData<ClubListUiState> get() = _uiState
@@ -77,10 +77,7 @@ class ClubListViewModel(
                     } else {
                         _uiState.value = ClubListUiState.Init
                     }
-                    _clubs.value =
-                        clubs.map { club ->
-                            club.toPresentation()
-                        }
+                    _clubs.value = clubs.toPresentation()
                 }
                 .onFailure {
                     _uiState.value = ClubListUiState.Error
