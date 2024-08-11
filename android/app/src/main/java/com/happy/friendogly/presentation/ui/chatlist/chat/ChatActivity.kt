@@ -24,8 +24,10 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         initAdapter()
         getChatList()
         clickBackBtn()
-        clickChatInfo()
+        val myMemberId: Long = intent.getLongExtra(EXTRA_MEMBER_ID, INVALID_ID)
         val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
+
+        clickChatInfo(myMemberId, chatId)
 
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
@@ -34,9 +36,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         viewModel.subscribeMessage(chatId)
     }
 
-    private fun clickChatInfo() {
+    private fun clickChatInfo(myMemberId: Long, chatRoomId: Long) {
         binding.ibChatSideMenu.setOnClickListener {
-            ChatInfoSideSheet().show(supportFragmentManager, "")
+            val chatInfoSideSheet = ChatInfoSideSheet()
+            chatInfoSideSheet.arguments = ChatInfoSideSheet.getBundle(
+                myMemberId = myMemberId,
+                chatRoomId = chatRoomId
+            )
+            chatInfoSideSheet.show(supportFragmentManager, "")
         }
     }
 

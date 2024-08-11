@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 
@@ -19,18 +20,19 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         get() = requireNotNull(_binding) { "${this::class.java.simpleName} is null" }
 
     private lateinit var adapter: JoinPeopleAdapter
-    private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this) { isPermitted ->
-            if (!isPermitted) {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.chat_setting_alarm_alert),
-                    Snackbar.LENGTH_SHORT,
-                ).show()
-            }
+    private val alarmPermission: AlarmPermission = AlarmPermission.from(this) { isPermitted ->
+        if (!isPermitted) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.chat_setting_alarm_alert),
+                Snackbar.LENGTH_SHORT,
+            ).show()
         }
+    }
 
-    private val viewModel: ChatInfoViewModel by viewModels()
+    private val viewModel: ChatInfoViewModel by viewModels {
+        ChatInfoViewModel.factory(AppModule.getInstance().getChatMemberUseCase)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,13 +55,22 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
 
         initAdapter()
 
-        viewModel.getChatInfo()
-        viewModel.chatInfo.observe(viewLifecycleOwner) { info ->
-            adapter.submitList(info.people)
-            setChatInfo(info)
-        }
+        initChatInfo()
 
         clickAlarmSetting()
+    }
+
+    private fun initChatInfo() {
+        val memberId = requireNotNull(arguments?.getLong(EXTRA_MEMBER_ID, INVALID_ID))
+        val chatId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))
+        viewModel.getChatMember(myMemberId = memberId, chatRoomId = chatId)
+        viewModel.getClubInfo()
+        viewModel.clubInfo.observe(viewLifecycleOwner) { info ->
+            setChatInfo(info)
+        }
+        viewModel.joiningPeople.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 
     private fun clickAlarmSetting() {
@@ -105,5 +116,19 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+
+        private const val EXTRA_MEMBER_ID = "myMemberId"
+        private const val EXTRA_CHAT_ROOM_ID = "chatRoomId"
+        private const val INVALID_ID = -1L
+
+        fun getBundle(myMemberId: Long, chatRoomId: Long): Bundle {
+            return Bundle().apply {
+                putLong(EXTRA_MEMBER_ID, myMemberId)
+                putLong(EXTRA_CHAT_ROOM_ID, chatRoomId)
+            }
+        }
     }
 }
