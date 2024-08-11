@@ -8,9 +8,9 @@
             type="com.happy.friendogly.presentation.ui.club.model.ClubPet" />
     </data>
 
-    <ImageView
-        glide1000="@{pet.imageUrl}"
-        app:shapeAppearanceOverlay="@style/RoundBig"
+    <com.google.android.material.imageview.ShapeableImageView
+        glide="@{pet.imageUrl}"
+        app:shapeAppearanceOverlay="@style/Circle"
         android:background="@drawable/shape_indicator_active"
         android:backgroundTint="@color/coral300"
         android:layout_width="24dp"

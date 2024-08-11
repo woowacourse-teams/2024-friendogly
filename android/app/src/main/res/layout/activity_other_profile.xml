@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="vm"
@@ -79,15 +79,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_user_profile_edit"
+                        glide="@{vm.uiState.profilePath}"
                         android:layout_width="wrap_content"
+                        android:src="@drawable/img_profile_normal"
                         android:layout_height="wrap_content"
-                        app:glideProfile1000="@{vm.uiState.profilePath}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/Circle"
                         tools:src="@drawable/img_profile_normal" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -203,9 +205,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:visibility="@{vm.uiState.pets.size() == 0 ? View.VISIBLE : View.GONE}"
                         android:layout_marginBottom="16dp"
                         android:text="@string/empty_other_pet"
+                        android:visibility="@{vm.uiState.pets.size() == 0 ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/iv_empty_pet"
                         app:layout_constraintStart_toStartOf="@+id/iv_empty_pet"

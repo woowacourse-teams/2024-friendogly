@@ -17,19 +17,6 @@
         android:layout_marginVertical="10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_chat_default_user"
-            android:src="@drawable/img_profile_normal"
-            android:layout_width="32dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="21dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundXSmall" />
-
-        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_chat_user"
             glide="@{profileUrl}"
             android:layout_width="32dp"
