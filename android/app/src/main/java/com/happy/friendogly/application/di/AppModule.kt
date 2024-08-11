@@ -16,6 +16,7 @@ import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
 import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.AuthDataSource
+import com.happy.friendogly.data.source.ChatDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
@@ -37,6 +38,8 @@ import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.GetChatListUseCase
+import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
@@ -67,6 +70,7 @@ import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.WebSocketService
 import com.happy.friendogly.remote.di.RemoteModule
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
+import com.happy.friendogly.remote.source.ChatDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
@@ -152,6 +156,7 @@ class AppModule(context: Context) {
     private val petDataSource: PetDataSource = PetDataSourceImpl(service = petService)
     private val webSocketDataSource: WebSocketDataSource =
         WebSocketDataSourceImpl(service = webSocketService)
+    private val chatDataSource:ChatDataSource = ChatDataSourceImpl(service = chatService)
 
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
@@ -166,7 +171,7 @@ class AppModule(context: Context) {
         AddressRepositoryImpl(addressDataSource = addressDataSource)
     val webSocketRepository: WebSocketRepository =
         WebSocketRepositoryImpl(source = webSocketDataSource)
-    val chatRepository: ChatRepository = ChatRepositoryImpl(service = chatService)
+    val chatRepository: ChatRepository = ChatRepositoryImpl(source = chatDataSource)
 
     // use case
     val postKakaoLoginUseCase: PostKakaoLoginUseCase =
@@ -205,6 +210,8 @@ class AppModule(context: Context) {
     val saveAddressUseCase: SaveAddressUseCase = SaveAddressUseCase(repository = addressRepository)
     val deleteAddressUseCase: DeleteAddressUseCase =
         DeleteAddressUseCase(repository = addressRepository)
+    val getChatListUseCase: GetChatListUseCase = GetChatListUseCase(repository = chatRepository)
+    val getChatMemberUseCase: GetChatMemberUseCase = GetChatMemberUseCase(repository = chatRepository)
 
     companion object {
         private var instance: AppModule? = null
