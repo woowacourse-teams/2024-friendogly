@@ -35,8 +35,10 @@ class JoinPeopleAdapter :
         private val binding: ItemChatJoinPeopleBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: JoinPeople) {
-            Glide.with(itemView.context).load(item.profileUrl)
-                .into(binding.ivChatJoinPeople)
+            if (item.profileUrl.isNotBlank()) {
+                Glide.with(itemView.context).load(item.profileUrl)
+                    .into(binding.ivChatJoinPeople)
+            }
             binding.tvChatJoinPeopleNickname.text = item.nickName
             binding.tvChatJoinPeopleIsMe.isVisible = item.isMe
             binding.ivChatJoinPeopleLeader.isVisible = item.isLeader
