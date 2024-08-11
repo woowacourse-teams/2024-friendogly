@@ -13,15 +13,12 @@ class ErrorResponseInterceptor : Interceptor {
         val request: Request = chain.request()
         try {
             val response = chain.proceed(request)
-            val responseBody = response.body
-
             if (response.isSuccessful) return response
 
-            val errorResponse = responseBody?.string()?.let { createErrorResponse(it) }
-            val apiExceptionResponse = createApiException(response.code, errorResponse)
-            apiExceptionResponse?.let { throw it }
+            val responseBody = response.body?.string()
+            val errorResponse = responseBody?.let { createErrorResponse(it) } ?: return response
 
-            return response
+            throw createApiException(response.code, errorResponse)
         } catch (e: Throwable) {
             when (e) {
                 is IOException,

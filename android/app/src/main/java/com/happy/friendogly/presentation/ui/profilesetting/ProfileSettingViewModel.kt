@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import com.happy.friendogly.domain.error.ApiException
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -141,14 +140,6 @@ class ProfileSettingViewModel(
     fun updateProfileFile(file: MultipartBody.Part) {
         val state = _uiState.value ?: return
         _uiState.value = state.copy(profilePath = file)
-    }
-
-    private fun handleBadRequest(exception: ApiException.BadRequest?) {
-        val error = exception?.error ?: return
-        // TODO 서버에서 내려주는 error code에 따라서 예외 처리
-        return when (error.data.errorCode) {
-            else -> sendErrorMessage(throwable = exception, type = MessageType.SNACKBAR)
-        }
     }
 
     companion object {
