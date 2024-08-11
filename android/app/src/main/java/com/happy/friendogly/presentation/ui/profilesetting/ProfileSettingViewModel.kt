@@ -13,7 +13,6 @@ import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
-import com.happy.friendogly.presentation.base.MessageType
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
@@ -116,7 +115,6 @@ class ProfileSettingViewModel(
         saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
             _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
         }.onFailure { e ->
-            sendErrorMessage(throwable = e, type = MessageType.SNACKBAR)
         }
     }
 
