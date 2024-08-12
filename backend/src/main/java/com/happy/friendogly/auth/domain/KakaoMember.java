@@ -19,10 +19,10 @@ public class KakaoMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kakao_member_id", nullable = false)
+    @Column(name = "kakao_member_id", nullable = false, unique = true)
     private String kakaoMemberId;
 
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "member_id", nullable = false, unique = true)
     private Long memberId;
 
     @Column(name = "refresh_token")
