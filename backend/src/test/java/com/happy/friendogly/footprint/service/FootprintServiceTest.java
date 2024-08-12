@@ -7,6 +7,8 @@ import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
@@ -28,9 +30,14 @@ public abstract class FootprintServiceTest extends ServiceTest {
     @Autowired
     protected FootprintCommandService footprintCommandService;
 
+    @Autowired
+    protected DeviceTokenRepository deviceTokenRepository;
+
     protected Member member;
 
     protected Pet pet;
+
+    protected DeviceToken deviceToken;
 
     @BeforeEach
     void setUp() {
@@ -51,6 +58,13 @@ public abstract class FootprintServiceTest extends ServiceTest {
                         .gender(Gender.MALE_NEUTERED)
                         .imageUrl("https://picsum.photos/200")
                         .build()
+        );
+
+        deviceToken = deviceTokenRepository.save(
+                new DeviceToken(
+                        member,
+                        "aToken"
+                )
         );
     }
 

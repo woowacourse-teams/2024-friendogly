@@ -14,6 +14,8 @@ import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
@@ -51,6 +53,9 @@ class FootprintControllerTest extends ControllerTest {
 
     @Autowired
     private FootprintRepository footprintRepository;
+
+    @Autowired
+    private DeviceTokenRepository deviceTokenRepository;
 
     private Member member1;
     private Member member2;
@@ -120,6 +125,27 @@ class FootprintControllerTest extends ControllerTest {
                         .gender(Gender.FEMALE)
                         .imageUrl("https://picsum.photos/200")
                         .build()
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member1,
+                        "deviceToken1"
+                )
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member2,
+                        "deviceToken2"
+                )
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member3,
+                        "deviceToken3"
+                )
         );
     }
 

@@ -3,6 +3,7 @@ package com.happy.friendogly.footprint.service;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
+import com.happy.friendogly.footprint.domain.WalkStatus;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -10,6 +11,8 @@ import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.notification.service.FcmNotificationService;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
@@ -26,15 +29,20 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final FcmNotificationService fcmNotificationService;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
-    ) {
+            PetRepository petRepository,
+            FcmNotificationService fcmNotificationService,
+            DeviceTokenRepository deviceTokenRepository) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
+        this.fcmNotificationService = fcmNotificationService;
+        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -52,6 +60,15 @@ public class FootprintCommandService {
                         .member(member)
                         .location(new Location(request.latitude(), request.longitude()))
                         .build()
+        );
+
+        List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
+        String memberName = member.getName().getValue();
+
+        fcmNotificationService.sendNotification(
+                "반갑개",
+                "내 산책 장소에 " + memberName + "님도 산책온대요!",
+                nearDeviceTokens
         );
 
         return new SaveFootprintResponse(
@@ -86,7 +103,32 @@ public class FootprintCommandService {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
 
+        WalkStatus beforeWalkStatus = footprint.getWalkStatus();
+
+
+        if(beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()){
+            List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
+            String memberName = footprint.getMember().getName().getValue();
+
+            fcmNotificationService.sendNotification("반갑개",
+                    "내 산책장소에 "+memberName+"님이 산책을 시작했어요!",
+                    nearDeviceTokens
+            );
+        }
+
+
+
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
+    }
+
+    private List<String> findNearDeviceTokens(Footprint standardFootprint) {
+        List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
+
+        return footprints.stream()
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation()))
+                .map(otherFootprint -> otherFootprint.getMember().getId())
+                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .toList();
     }
 }

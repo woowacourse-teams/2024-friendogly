@@ -40,3 +40,6 @@ src/main/resources/secrets.yml
 
 ### logs ###
 logs/
+
+### private
+/src/main/resources/firebase-friendogly-private-key.json

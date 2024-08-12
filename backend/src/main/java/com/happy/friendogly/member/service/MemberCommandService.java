@@ -11,6 +11,7 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.dto.request.SaveMemberRequest;
 import com.happy.friendogly.member.dto.response.SaveMemberResponse;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,19 +26,22 @@ public class MemberCommandService {
     private final FileStorageManager fileStorageManager;
     private final MemberRepository memberRepository;
     private final KakaoMemberRepository kakaoMemberRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public MemberCommandService(
             JwtProvider jwtProvider,
             KakaoOauthClient kakaoOauthClient,
             FileStorageManager fileStorageManager,
             MemberRepository memberRepository,
-            KakaoMemberRepository kakaoMemberRepository
+            KakaoMemberRepository kakaoMemberRepository,
+            DeviceTokenRepository deviceTokenRepository
     ) {
         this.jwtProvider = jwtProvider;
         this.kakaoOauthClient = kakaoOauthClient;
         this.fileStorageManager = fileStorageManager;
         this.memberRepository = memberRepository;
         this.kakaoMemberRepository = kakaoMemberRepository;
+        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     public SaveMemberResponse saveMember(SaveMemberRequest request, MultipartFile image) {
