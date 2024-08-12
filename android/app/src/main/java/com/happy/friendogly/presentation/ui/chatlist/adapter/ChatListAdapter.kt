@@ -17,6 +17,10 @@ class ChatListAdapter(private val chatListNavigationAction: ChatListNavigationAc
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).chatRoomId
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,

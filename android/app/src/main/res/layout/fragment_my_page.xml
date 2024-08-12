@@ -66,12 +66,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_user_profile_edit"
                         android:layout_width="wrap_content"
+                        android:src="@drawable/img_profile_normal"
                         android:layout_height="wrap_content"
-                        app:glideProfile1000="@{vm.uiState.imageUrl}"
+                        glide="@{vm.uiState.imageUrl}"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:shapeAppearanceOverlay="@style/Circle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -175,7 +177,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/vp_pet_profile"
-                        app:setUpIndicator="@{vm.uiState.pets.size()}" />
+                        app:setUpIndicator="@{vm.uiState.pets.size()}"  />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

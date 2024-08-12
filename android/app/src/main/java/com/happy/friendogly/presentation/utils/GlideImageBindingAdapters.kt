@@ -8,18 +8,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.happy.friendogly.R
 
-@BindingAdapter("glide1000")
-fun ImageView.bindGlide1000(uri: String?) {
-    if (uri == null) return
-    Glide.with(context)
-        .load(uri)
-        .transform(CenterCrop(), RoundedCorners(1000))
-        .into(this)
-}
-
 @BindingAdapter("glide")
 fun ImageView.bindGlide(uri: String?) {
-    if (uri == null) return
+    if (uri.isNullOrBlank()) return
     Glide.with(context)
         .load(uri)
         .into(this)
@@ -36,20 +27,6 @@ fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     Glide.with(context)
         .asBitmap()
         .load(softwareBitmap)
-        .transform(CenterCrop(), RoundedCorners(1000))
-        .into(this)
-}
-
-@BindingAdapter("glideProfile1000")
-fun ImageView.bindProfile1000(profilePath: String?) {
-    if (profilePath.isNullOrBlank()) {
-        this.setImageResource(R.drawable.img_profile_normal)
-        return
-    }
-
-    Glide.with(context)
-        .asBitmap()
-        .load(profilePath)
         .transform(CenterCrop(), RoundedCorners(1000))
         .into(this)
 }
