@@ -18,7 +18,6 @@ class ClubMemberTest {
 
     private final Member member = Member.builder()
             .name("브라운")
-            .email("woowha@gmail.com")
             .build();
 
     private final Pet pet = Pet.builder()

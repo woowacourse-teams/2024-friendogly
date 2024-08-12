@@ -21,7 +21,6 @@ public abstract class ClubServiceTest extends ServiceTest {
     protected Member createSavedMember() {
         return memberRepository.save(Member.builder()
                 .name("브라운")
-                .email("woowha@gmail.com")
                 .build());
     }
 

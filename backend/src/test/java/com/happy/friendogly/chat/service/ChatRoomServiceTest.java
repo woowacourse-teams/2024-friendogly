@@ -21,7 +21,6 @@ public abstract class ChatRoomServiceTest extends ServiceTest {
                 Member.builder()
                         .name("트레")
                         .tag("123abc")
-                        .email("tre@test.com")
                         .imageUrl("https://picsum.photos/100")
                         .build()
         );
@@ -30,7 +29,6 @@ public abstract class ChatRoomServiceTest extends ServiceTest {
                 Member.builder()
                         .name("땡이")
                         .tag("qwerty")
-                        .email("ddang2@test.com")
                         .imageUrl("https://picsum.photos/200")
                         .build()
         );

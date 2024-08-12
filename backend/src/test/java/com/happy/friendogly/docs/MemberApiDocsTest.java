@@ -42,8 +42,8 @@ public class MemberApiDocsTest extends RestDocsTest {
     @DisplayName("회원 생성 문서화")
     @Test
     void saveMember_Success() throws Exception {
-        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "member@email.com", "accessToken");
-        SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416", "member@email.com",
+        SaveMemberRequest requestDto = new SaveMemberRequest("반갑개", "accessToken");
+        SaveMemberResponse response = new SaveMemberResponse(1L, "반갑개", "4e52d416",
                 "http://google.com", new TokenResponse("access", "refresh"));
         MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(),
                 "asdf".getBytes());
@@ -67,7 +67,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                         requestPartFields(
                                 "request",
                                 fieldWithPath("name").description("회원 이름"),
-                                fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("accessToken").description("카카오 accessToken")
                         ),
                         resource(ResourceSnippetParameters.builder()
@@ -79,7 +78,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("회원 이름"),
                                         fieldWithPath("data.tag").type(JsonFieldType.STRING)
                                                 .description("중복된 회원 이름을 식별하기 위한 고유한 문자열"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
                                                 .description("회원 프로필 이미지 URL"),
                                         fieldWithPath("data.tokens.accessToken").type(JsonFieldType.STRING)
@@ -101,7 +99,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                 memberId,
                 "땡이",
                 "ugab3odb",
-                "ddang@email.com",
                 "http://google.com"
         );
 
@@ -125,7 +122,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 id"),
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("회원 이름"),
                                         fieldWithPath("data.tag").type(JsonFieldType.STRING).description("회원 고유 식별자"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
                                                 .description("회원 이미지 URL")
                                 )
@@ -143,7 +139,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                 loginMemberId,
                 "땡이",
                 "ugab3odb",
-                "ddang@email.com",
                 "http://google.com"
         );
 
@@ -168,7 +163,6 @@ public class MemberApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 id"),
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("회원 이름"),
                                         fieldWithPath("data.tag").type(JsonFieldType.STRING).description("회원 고유 식별자"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
                                         fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
                                                 .description("회원 이미지 URL")
                                 )

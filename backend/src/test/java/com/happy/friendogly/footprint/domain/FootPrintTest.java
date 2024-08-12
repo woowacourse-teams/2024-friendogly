@@ -14,7 +14,6 @@ public class FootPrintTest {
 
     private Member member = Member.builder()
             .name("땡이 주인")
-            .email("ddang@email.com")
             .build();
 
     @DisplayName("산책이전일경우,산책 상태 변경된 시간은 발자국 생성시간이 반환된다.")

@@ -12,7 +12,7 @@ public class ClubControllerTest extends ControllerTest {
 
     @BeforeEach
     void setMemberAndPet() {
-        SaveMemberRequest saveMemberRequest = new SaveMemberRequest("정지호", "member@email.com");
+        SaveMemberRequest saveMemberRequest = new SaveMemberRequest("정지호");
         member = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(saveMemberRequest)
@@ -92,7 +92,7 @@ public class ClubControllerTest extends ControllerTest {
                 .data();
 
         //새로운 회원과 팻 생성.
-        SaveMemberRequest saveMemberRequest = new SaveMemberRequest("이건상", "member1@email.com");
+        SaveMemberRequest saveMemberRequest = new SaveMemberRequest("이건상");
         SaveMemberResponse newMember = (SaveMemberResponse) RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(saveMemberRequest)
