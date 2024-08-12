@@ -45,6 +45,10 @@ public class S3StorageManager implements FileStorageManager {
 
     @Override
     public String uploadFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new FriendoglyException("이미지 파일은 비어 있을 수 없습니다.");
+        }
+
         if (file.getSize() > FILE_SIZE_LIMIT * MB) {
             throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
         }
