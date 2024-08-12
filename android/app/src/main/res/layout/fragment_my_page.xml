@@ -68,15 +68,15 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_user_profile_edit"
-                        android:layout_width="wrap_content"
-                        android:src="@drawable/img_profile_normal"
-                        android:layout_height="wrap_content"
                         glide="@{vm.uiState.imageUrl}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_profile_normal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:shapeAppearanceOverlay="@style/Circle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/Circle"
                         tools:src="@drawable/img_profile_normal" />
 
                     <ImageView
@@ -117,16 +117,6 @@
                         app:layout_constraintStart_toEndOf="@+id/tv_user_name"
                         app:layout_constraintTop_toTopOf="@+id/tv_user_name"
                         tools:text="#1234" />
-
-                    <TextView
-                        android:id="@+id/tv_user_email"
-                        style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.uiState.email}"
-                        app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
-                        tools:text="sonny@gmail.com" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -177,7 +167,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/vp_pet_profile"
-                        app:setUpIndicator="@{vm.uiState.pets.size()}"  />
+                        app:setUpIndicator="@{vm.uiState.pets.size()}" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

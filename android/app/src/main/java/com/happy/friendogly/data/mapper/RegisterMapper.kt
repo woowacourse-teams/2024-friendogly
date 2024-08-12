@@ -8,7 +8,6 @@ fun RegisterDto.toDomain(): Register {
         id = id,
         name = name,
         tag = tag,
-        email = email,
         imageUrl = imageUrl,
         tokens = tokens.toDomain(),
     )

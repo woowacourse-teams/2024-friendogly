@@ -12,11 +12,10 @@ class MemberRepositoryImpl(
 ) : MemberRepository {
     override suspend fun postMember(
         name: String,
-        email: String,
         accessToken: String,
         file: MultipartBody.Part?,
     ): Result<Register> =
-        source.postMember(name = name, email = email, accessToken = accessToken, file = file)
+        source.postMember(name = name, accessToken = accessToken, file = file)
             .mapCatching { result -> result.toDomain() }
 
     override suspend fun getMemberMine(): Result<Member> = source.getMemberMine().mapCatching { result -> result.toDomain() }

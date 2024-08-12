@@ -13,12 +13,11 @@ class MemberDataSourceImpl(
 ) : MemberDataSource {
     override suspend fun postMember(
         name: String,
-        email: String,
         accessToken: String,
         file: MultipartBody.Part?,
     ): Result<RegisterDto> =
         runCatching {
-            val body = PostMembersRequest(name = name, email = email, accessToken = accessToken)
+            val body = PostMembersRequest(name = name, accessToken = accessToken)
             service.postMember(body = body, file = file).data.toData()
         }
 
