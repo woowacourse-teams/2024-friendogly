@@ -21,7 +21,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Profile("!local")
 public class S3StorageManager implements FileStorageManager {
 
-    private static final int FILE_SIZE_LIMIT = 5;
+    private static final int FILE_SIZE_LIMIT = 1;
     private static final int MB = 1_048_576;
 
     @Value("${aws.s3.bucket-name}")
