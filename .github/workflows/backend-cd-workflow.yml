@@ -1,7 +1,7 @@
 name: deploy
 
 on:
-  push:
+  pull_request:
     branches: ["develop"]
     paths:
       - "backend/**"
@@ -25,6 +25,14 @@ jobs:
       #   with:
       #     gradle-version: 8.1.1
 
+
+      - name: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+            name: "firebase-friendogly-private-key.json"
+            json: ${{ secrets.GCP_JSON }}
+            dir: './backend/src/main/resources/'
+
       - name: Grant execute permission for gradlew
         working-directory: ./backend
         run: chmod +x gradlew
@@ -33,11 +41,11 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: friendogly-be-develop-jar
-          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
+#      - name: Upload build artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: friendogly-be-develop-jar
+#          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
 
   deploy:
     needs: build
@@ -47,11 +55,11 @@ jobs:
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: friendogly-be-develop-jar
-          path: ./backend/build/libs
+#      - name: Download build artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: friendogly-be-develop-jar
+#          path: ./backend/build/libs
 
       - name: Find Java Application PID And Kill PID
         id: find_pid
