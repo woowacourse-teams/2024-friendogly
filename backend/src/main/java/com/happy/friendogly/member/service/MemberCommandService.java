@@ -47,7 +47,6 @@ public class MemberCommandService {
         }
 
         String kakaoMemberId = kakaoOauthClient.getUserInfo(request.accessToken()).id();
-        System.out.println("===============" + kakaoMemberId + "============");
 
         Member member = Member.builder()
                 .name(request.name())
