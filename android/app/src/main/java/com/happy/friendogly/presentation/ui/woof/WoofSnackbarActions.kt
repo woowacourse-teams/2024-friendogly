@@ -9,8 +9,6 @@ sealed interface WoofSnackbarActions {
 
     data object ShowMarkerRegistered : WoofSnackbarActions
 
-    data object ShowInvalidLocationSnackbar : WoofSnackbarActions
-
     data object ShowBeforeWalkStatusSnackbar : WoofSnackbarActions
 
     data object ShowOnGoingWalkStatusSnackbar : WoofSnackbarActions

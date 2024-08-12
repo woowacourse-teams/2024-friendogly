@@ -33,7 +33,6 @@ import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowAfterWa
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowBeforeWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowInvalidLocationSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
@@ -49,6 +48,7 @@ import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
@@ -234,7 +234,8 @@ class WoofFragment :
             showMarkerDetail()
 
             val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
-            val offsetDistance = (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
+            val offsetDistance =
+                (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
 
             val adjustedLatitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
             val adjustedLongitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
@@ -259,6 +260,11 @@ class WoofFragment :
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
+        map.extent =
+            LatLngBounds(
+                LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
+                LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE)
+            )
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
@@ -389,8 +395,6 @@ class WoofFragment :
                 }
 
                 is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
-
-                is ShowInvalidLocationSnackbar -> showSnackbar(resources.getString(R.string.woof_location_load_fail))
 
                 is ShowBeforeWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_before_walk_status))
 
@@ -628,16 +632,20 @@ class WoofFragment :
                 convertLtnLng(position.longitude),
                 1,
             ) { addresses ->
+                if (addresses.isEmpty()) return@getFromLocation
+                val address = addresses[0] ?: return@getFromLocation
                 activity?.runOnUiThread {
-                    viewModel.loadAddress(addresses[0])
+                    viewModel.loadAddress(address)
                 }
             }
         } else {
-            viewModel.saveLowLevelSdkAddress(
-                geocoder = geocoder,
-                latitude = convertLtnLng(position.latitude),
-                longitude = convertLtnLng(position.longitude),
-            )
+            val addresses =
+                geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
+            if (addresses.isEmpty()) return
+            val address = addresses[0] ?: return
+            activity?.runOnUiThread {
+                viewModel.loadAddress(address)
+            }
         }
     }
 
@@ -688,7 +696,10 @@ class WoofFragment :
         private const val MARKER_CLICKED_HEIGHT = 148
         private const val LOADING_DELAY_MILLIS = 2000L
         private const val ANIMATE_DURATION_MILLIS = 300L
-        private const val MARKER_CLICKED_CAMERA_LATITUDE_UP = 0.0025
         private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
+        private const val MIN_KOREA_LATITUDE = 33.0
+        private const val MAX_KOREA_LATITUDE = 39.0
+        private const val MIN_KOREA_LONGITUDE = 125.0
+        private const val MAX_KOREA_LONGITUDE = 132.0
     }
 }
