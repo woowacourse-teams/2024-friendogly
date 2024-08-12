@@ -30,7 +30,7 @@ jobs:
         uses: jsdaniell/create-json@1.1.2
         with:
             name: "firebase-friendogly-private-key.json"
-            json: ${{ secrets.GCP_JSON }}
+            json: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
             dir: './backend/src/main/resources/'
 
       - name: Grant execute permission for gradlew
