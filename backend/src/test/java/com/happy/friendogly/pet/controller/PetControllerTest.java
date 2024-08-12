@@ -35,7 +35,6 @@ class PetControllerTest extends ControllerTest {
         RestAssured.port = port;
         member = memberRepository.save(Member.builder()
                 .name("견주")
-                .email("ddang@email.com")
                 .build());
     }
 

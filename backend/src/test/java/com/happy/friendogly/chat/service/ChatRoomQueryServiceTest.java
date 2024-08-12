@@ -55,9 +55,9 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        member1 = memberRepository.save(new Member("name", "a", "a@a.com", "https://a.com"));
-        member2 = memberRepository.save(new Member("name2", "b", "b@a.com", "https://b.com"));
-        member3 = memberRepository.save(new Member("name3", "c", "c@a.com", "https://c.com"));
+        member1 = memberRepository.save(new Member("name", "a", "https://a.com"));
+        member2 = memberRepository.save(new Member("name2", "b", "https://b.com"));
+        member3 = memberRepository.save(new Member("name3", "c", "https://c.com"));
 
         pet1 = petRepository.save(new Pet(member1, "땡이", "귀여워요", LocalDate.now().minusYears(1),
                 SMALL, MALE, "https://image.com/image1.jpg"));

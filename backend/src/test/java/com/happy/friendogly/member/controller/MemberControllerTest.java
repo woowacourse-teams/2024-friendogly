@@ -45,7 +45,7 @@ class MemberControllerTest {
     @Test
     void saveMember() {
         String kakaoAccessToken = "kakao";
-        SaveMemberRequest request = new SaveMemberRequest("땡이", "member@email.com", kakaoAccessToken);
+        SaveMemberRequest request = new SaveMemberRequest("땡이", kakaoAccessToken);
 
         when(kakaoOauthClient.getUserInfo(kakaoAccessToken))
                 .thenReturn(new KakaoUserResponse("kakaoMemberId"));
@@ -62,20 +62,7 @@ class MemberControllerTest {
     @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_NameLengthOver() {
-        SaveMemberRequest request = new SaveMemberRequest("1234567890123456", "member@email.com", "code");
-        RestAssured.given().log().all()
-                .contentType(ContentType.MULTIPART)
-                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
-                .multiPart("request", request, "application/json")
-                .when().post("/members")
-                .then().log().all()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @DisplayName("이메일 형식이 아닌 경우 400을 반환한다.")
-    @Test
-    void saveMember_Fail_InvalidEmailFormat() {
-        SaveMemberRequest request = new SaveMemberRequest("땡이", "이메일 형식이 아닌 문자열", "code");
+        SaveMemberRequest request = new SaveMemberRequest("1234567890123456",  "code");
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
