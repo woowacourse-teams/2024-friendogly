@@ -47,7 +47,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 FilterCondition.ALL.name(),
                 province,
                 city,
-                village,
+                null,
                 Set.of(Gender.FEMALE.name()),
                 Set.of(SizeType.SMALL.name())
         );
