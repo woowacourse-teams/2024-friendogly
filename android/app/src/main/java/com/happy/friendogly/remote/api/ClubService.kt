@@ -29,8 +29,8 @@ interface ClubService {
     suspend fun getSearchingClubs(
         @Query("filterCondition") filterCondition: ClubFilterConditionRequest,
         @Query("province") province: String,
-        @Query("city") city: String,
-        @Query("village") village: String,
+        @Query("city") city: String?,
+        @Query("village") village: String?,
         @Query("genderParams") genderParams: List<String>,
         @Query("sizeParams") sizeParams: List<String>,
     ): BaseResponse<List<ClubResponse>>

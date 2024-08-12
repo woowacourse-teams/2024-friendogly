@@ -5,8 +5,8 @@ import com.happy.friendogly.domain.model.UserAddress
 
 fun UserAddressDto.toDomain(): UserAddress {
     return UserAddress(
-        thoroughfare = thoroughfare,
-        subLocality = subLocality,
+        thoroughfare = thoroughfare ?: "",
+        subLocality = subLocality ?: "",
         adminArea = adminArea,
     )
 }

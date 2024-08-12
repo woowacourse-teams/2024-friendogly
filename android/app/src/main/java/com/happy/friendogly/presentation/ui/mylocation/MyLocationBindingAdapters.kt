@@ -14,7 +14,7 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
         context.getString(
             R.string.my_location_full_address,
             userAddress.adminArea,
-            userAddress.subLocality,
-            userAddress.thoroughfare,
+            userAddress.subLocality ?: "",
+            userAddress.thoroughfare ?: "",
         )
 }
