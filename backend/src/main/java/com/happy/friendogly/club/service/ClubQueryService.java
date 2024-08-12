@@ -39,7 +39,7 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindClubByFilterResponse> findFindByFilter(Long memberId, FindClubByFilterRequest request) {
+    public List<FindClubByFilterResponse> findByFilter(Long memberId, FindClubByFilterRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 

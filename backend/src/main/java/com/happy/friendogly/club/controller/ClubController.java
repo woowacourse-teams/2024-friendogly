@@ -48,7 +48,7 @@ public class ClubController {
             @Auth Long memberId,
             @Valid @ModelAttribute FindClubByFilterRequest request
     ) {
-        return ApiResponse.ofSuccess(clubQueryService.findFindByFilter(memberId, request));
+        return ApiResponse.ofSuccess(clubQueryService.findByFilter(memberId, request));
     }
 
     @PostMapping
