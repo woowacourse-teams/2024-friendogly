@@ -47,9 +47,10 @@ class SettingMyLocationViewModel(
         address: Address,
         addressLine: String,
     ): String {
-        val admin = address.adminArea
-            ?: address.adminArea
-            ?: findAdminAddress(addressLine)
+        val admin =
+            address.adminArea
+                ?: address.adminArea
+                ?: findAdminAddress(addressLine)
         addressList.add(admin)
         return admin
     }
@@ -58,12 +59,13 @@ class SettingMyLocationViewModel(
         address: Address,
         addressLine: String,
     ): String? {
-        val locality = address.locality
-            ?: address.subLocality
-            ?: findAddressElement(
-                addressLine,
-                LOCALITY_SPLIT,
-            )
+        val locality =
+            address.locality
+                ?: address.subLocality
+                ?: findAddressElement(
+                    addressLine,
+                    LOCALITY_SPLIT,
+                )
         addressList.add(locality)
         return locality
     }
@@ -72,12 +74,13 @@ class SettingMyLocationViewModel(
         address: Address,
         addressLine: String,
     ): String? {
-        val thoroughfare = address.thoroughfare
-            ?: address.subThoroughfare
-            ?: findAddressElement(
-                addressLine,
-                THOROUGH_FARE_SPLIT,
-            )
+        val thoroughfare =
+            address.thoroughfare
+                ?: address.subThoroughfare
+                ?: findAddressElement(
+                    addressLine,
+                    THOROUGH_FARE_SPLIT,
+                )
         addressList.add(thoroughfare)
         return thoroughfare
     }
