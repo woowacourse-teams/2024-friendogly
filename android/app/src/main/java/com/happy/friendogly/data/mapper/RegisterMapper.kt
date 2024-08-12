@@ -1,6 +1,5 @@
-package com.happy.friendogly.domain.mapper
+package com.happy.friendogly.data.mapper
 
-import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.model.RegisterDto
 import com.happy.friendogly.domain.model.Register
 

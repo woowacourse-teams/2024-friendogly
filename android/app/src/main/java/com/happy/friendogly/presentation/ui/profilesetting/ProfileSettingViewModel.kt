@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -18,7 +17,6 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 class ProfileSettingViewModel(
@@ -80,7 +78,7 @@ class ProfileSettingViewModel(
     }
 
     fun submitProfileSelection() {
-        viewModelScope.launch {
+        launch {
             val nickname = nickname.value ?: return@launch
             if (nickname.isBlank()) return@launch
             if (regex.matches(nickname)) return@launch
@@ -116,8 +114,7 @@ class ProfileSettingViewModel(
     private suspend fun saveJwaToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
             _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
-        }.onFailure {
-            // TODO 예외처리
+        }.onFailure { e ->
         }
     }
 

@@ -1,12 +1,7 @@
 package com.happy.friendogly.remote.interceptor
 
-import com.happy.friendogly.remote.model.error.BadRequestException
-import com.happy.friendogly.remote.model.error.ErrorResponseImpl
-import com.happy.friendogly.remote.model.error.InternalServerErrorException
-import com.happy.friendogly.remote.model.error.InvalidAccessTokenException
-import com.happy.friendogly.remote.model.error.InvalidAccessTokenExpire
-import com.happy.friendogly.remote.model.error.ServerNotFoundException
-import kotlinx.serialization.json.Json
+import com.happy.friendogly.remote.error.createApiException
+import com.happy.friendogly.remote.error.createErrorResponse
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -18,16 +13,12 @@ class ErrorResponseInterceptor : Interceptor {
         val request: Request = chain.request()
         try {
             val response = chain.proceed(request)
-            val responseBody = response.body
-
             if (response.isSuccessful) return response
 
-            val requestUrl = request.url.toString()
-            val errorResponse = responseBody?.string()?.let { createErrorResponse(it) }
-            val errorException = createErrorException(requestUrl, response.code, errorResponse)
-            errorException?.let { throw it }
+            val responseBody = response.body?.string()
+            val errorResponse = responseBody?.let { createErrorResponse(it) } ?: return response
 
-            return response
+            throw createApiException(response.code, errorResponse)
         } catch (e: Throwable) {
             when (e) {
                 is IOException,
@@ -39,24 +30,3 @@ class ErrorResponseInterceptor : Interceptor {
         }
     }
 }
-
-fun createErrorResponse(responseBodyString: String): ErrorResponseImpl? =
-    try {
-        Json.decodeFromString<ErrorResponseImpl>(responseBodyString)
-    } catch (e: Exception) {
-        null
-    }
-
-fun createErrorException(
-    url: String?,
-    httpCode: Int,
-    errorResponse: ErrorResponseImpl?,
-): Exception? =
-    when (httpCode) {
-        400 -> BadRequestException(Throwable(errorResponse?.reason), url)
-        401 -> InvalidAccessTokenExpire(Throwable(errorResponse?.reason), url)
-        403 -> InvalidAccessTokenException(Throwable(errorResponse?.reason), url)
-        404 -> ServerNotFoundException(Throwable(errorResponse?.reason), url)
-        500 -> InternalServerErrorException(Throwable(errorResponse?.reason), url)
-        else -> null
-    }
