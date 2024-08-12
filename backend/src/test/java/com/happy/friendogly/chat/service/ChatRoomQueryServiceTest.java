@@ -161,7 +161,7 @@ class ChatRoomQueryServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertThat(response.id())
+                () -> assertThat(response.clubId())
                         .isEqualTo(club1.getId()),
                 () -> assertThat(response.allowedSizeTypes())
                         .containsExactlyInAnyOrder(SMALL, MEDIUM, LARGE),
