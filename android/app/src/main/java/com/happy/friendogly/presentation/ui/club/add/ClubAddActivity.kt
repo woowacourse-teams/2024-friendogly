@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.ui.club.add
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -18,6 +18,7 @@ import com.happy.friendogly.databinding.ActivityClubAddBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter
+import com.happy.friendogly.presentation.ui.club.list.ClubListFragment.Companion.CHANGE_CLUB_LIST_STATE
 import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
@@ -45,7 +46,6 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
         initImageLaunchers()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initDataBinding() {
         binding.vm = viewModel
     }
@@ -104,8 +104,17 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
 
                 ClubAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.club_add_information_fail_address))
                 ClubAddEvent.FailAddClub -> showSnackbar(getString(R.string.club_add_fail))
+                ClubAddEvent.Navigation.NavigateToHomeWithAdded -> {
+                    putLoadState()
+                    finish()
+                }
             }
         }
+    }
+
+    private fun putLoadState() {
+        intent.putExtra(CHANGE_CLUB_LIST_STATE, true)
+        setResult(Activity.RESULT_OK, intent)
     }
 
     private fun openDogSelector(filters: List<ClubFilter>) {

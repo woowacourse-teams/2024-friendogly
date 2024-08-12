@@ -172,7 +172,7 @@ class ClubAddViewModel(
             petIds = dogs,
         )
             .onSuccess {
-                _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToHome)
+                _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToHomeWithAdded)
             }
             .onFailure {
                 _clubAddEvent.emit(ClubAddEvent.FailAddClub)

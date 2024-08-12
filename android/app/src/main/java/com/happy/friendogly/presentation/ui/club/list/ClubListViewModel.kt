@@ -48,17 +48,9 @@ class ClubListViewModel(
         loadClubWithAddress()
     }
 
-    fun loadClubWithAddress() {
-        _uiState.value = ClubListUiState.Init
-        if (myAddress.value != null) {
-            loadClubs()
-        } else {
-            loadAddress()
-        }
-    }
-
-    private fun loadAddress() =
+    fun loadClubWithAddress() =
         viewModelScope.launch {
+            _uiState.value = ClubListUiState.Init
             getAddressUseCase()
                 .onSuccess {
                     _myAddress.value = it
