@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="@id/view_club_list_top_bar">
 
             <TextView
-                android:text="@{vm.myAddress.thoroughfare}"
+                android:text="@{vm.myAddress.adminArea}"
                 style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

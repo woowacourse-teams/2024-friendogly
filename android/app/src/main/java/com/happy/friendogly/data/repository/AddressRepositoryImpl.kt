@@ -10,19 +10,13 @@ class AddressRepositoryImpl(
     private val addressDataSource: AddressDataSource,
 ) : AddressRepository {
     override suspend fun getAddress(): Result<UserAddress> =
-        addressDataSource.getAddress().mapCatching {
-            val address = it.toDomain()
-            if (isInValidAddress(address)) throw Exception()
-            address
+        addressDataSource.getAddress().mapCatching { address ->
+            address.toDomain()
         }
 
     override suspend fun saveAddress(userAddress: UserAddress): Result<Unit> =
-        addressDataSource.saveAddress(userAddressDto = userAddress.toData()).mapCatching {
-            if (isInValidAddress(userAddress)) throw Exception()
-        }
+        addressDataSource.saveAddress(userAddressDto = userAddress.toData())
 
     override suspend fun deleteAddress(): Result<Unit> = addressDataSource.deleteAddress()
 
-    private fun isInValidAddress(userAddress: UserAddress) =
-        userAddress.thoroughfare.isEmpty() || userAddress.adminArea.isEmpty() || userAddress.subLocality.isEmpty()
 }

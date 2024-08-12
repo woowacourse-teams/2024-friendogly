@@ -31,8 +31,8 @@ class SettingMyLocationViewModel(
             val addressLine = address.getAddressLine(0)
 
             val adminArea = loadAdmin(address, addressLine)
-            val locality = loadLocality(addressLine)
-            val thoroughfare = loadThoroughfare(addressLine)
+            val locality = loadLocality(address, addressLine)
+            val thoroughfare = loadThoroughfare(address, addressLine)
 
             makeUserAddress(adminArea, locality, thoroughfare)
         }
@@ -47,14 +47,20 @@ class SettingMyLocationViewModel(
         address: Address,
         addressLine: String,
     ): String {
-        val admin = address.adminArea ?: address.adminArea ?: findAdminAddress(addressLine)
+        val admin = address.adminArea
+            ?: address.adminArea
+            ?: findAdminAddress(addressLine)
         addressList.add(admin)
         return admin
     }
 
-    private fun loadLocality(addressLine: String): String {
-        val locality =
-            findAddressElement(
+    private fun loadLocality(
+        address: Address,
+        addressLine: String,
+    ): String? {
+        val locality = address.locality
+            ?: address.subLocality
+            ?: findAddressElement(
                 addressLine,
                 LOCALITY_SPLIT,
             )
@@ -62,9 +68,13 @@ class SettingMyLocationViewModel(
         return locality
     }
 
-    private fun loadThoroughfare(addressLine: String): String {
-        val thoroughfare =
-            findAddressElement(
+    private fun loadThoroughfare(
+        address: Address,
+        addressLine: String,
+    ): String? {
+        val thoroughfare = address.thoroughfare
+            ?: address.subThoroughfare
+            ?: findAddressElement(
                 addressLine,
                 THOROUGH_FARE_SPLIT,
             )
@@ -74,8 +84,8 @@ class SettingMyLocationViewModel(
 
     private fun makeUserAddress(
         adminArea: String,
-        locality: String,
-        thoroughfare: String,
+        locality: String?,
+        thoroughfare: String?,
     ): UserAddress {
         return UserAddress(
             adminArea = adminArea,
@@ -129,12 +139,12 @@ class SettingMyLocationViewModel(
     private fun findAddressElement(
         addressLine: String,
         delimiterChar: String,
-    ): String {
+    ): String? {
         val addressElements = addressLine.split(ADDRESS_LINE_SPLIT)
 
         val delimiterChars = delimiterChar.toSet()
 
-        return addressElements.first { element ->
+        return addressElements.firstOrNull { element ->
             isValidAddressElements(delimiterChars, element)
         }
     }
