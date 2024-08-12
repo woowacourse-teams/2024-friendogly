@@ -1,10 +1,9 @@
-package com.happy.friendogly.presentation.ui.club.list
+package com.happy.friendogly.presentation.ui.club.common.model
 
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import kotlinx.datetime.LocalDateTime
 
-data class ClubListUiModel(
+data class ClubItemUiModel(
     val clubId: Long,
     val filters: List<ClubFilter>,
     val clubPoster: String?,

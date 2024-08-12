@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.model.clubfilter
+package com.happy.friendogly.presentation.ui.club.common.model.clubfilter
 
 sealed class ParticipationFilter(val filterName: String) {
     data object POSSIBLE : ParticipationFilter(POSSIBLE_FILTER_NAME)

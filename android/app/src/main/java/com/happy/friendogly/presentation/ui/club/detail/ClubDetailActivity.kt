@@ -12,11 +12,11 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
 import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.club.menu.ClubMenuBottomSheet
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet

@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemSelectedFilterMenuBinding
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 
 class SelectFilterAdapter(
     private val actionHandler: ClubListActionHandler,

@@ -1,9 +1,9 @@
-package com.happy.friendogly.presentation.ui.club.list.adapter.club
+package com.happy.friendogly.presentation.ui.club.common.adapter.club
 
 import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemClubBinding
-import com.happy.friendogly.presentation.ui.club.list.ClubListActionHandler
-import com.happy.friendogly.presentation.ui.club.list.ClubListUiModel
+import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.pet.ClubPetAdapter
 
@@ -19,12 +19,12 @@ class ClubViewHolder(
     }
 
     fun bind(
-        clubListUiModel: ClubListUiModel,
-        actionHandler: ClubListActionHandler,
+        clubItemUiModel: ClubItemUiModel,
+        actionHandler: ClubItemActionHandler,
     ) {
-        binding.club = clubListUiModel
+        binding.club = clubItemUiModel
         binding.actionHandler = actionHandler
-        filterAdapter.submitList(clubListUiModel.filters)
-        woofAdapter.submitList(clubListUiModel.clubPets)
+        filterAdapter.submitList(clubItemUiModel.filters)
+        woofAdapter.submitList(clubItemUiModel.clubPets)
     }
 }

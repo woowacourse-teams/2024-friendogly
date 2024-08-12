@@ -1,11 +1,15 @@
 package com.happy.friendogly.presentation.ui.club.mapper
 
 import com.happy.friendogly.domain.model.Club
-import com.happy.friendogly.presentation.ui.club.list.ClubListUiModel
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
+import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 
-fun Club.toPresentation(): ClubListUiModel {
-    return ClubListUiModel(
+fun List<Club>.toPresentation(): List<ClubItemUiModel> {
+    return this.map { it.toPresentation() }
+}
+
+fun Club.toPresentation(): ClubItemUiModel {
+    return ClubItemUiModel(
         clubId = id,
         clubPoster = imageUrl?.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,

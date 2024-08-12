@@ -1,8 +1,8 @@
-package com.happy.friendogly.presentation.ui.club.model
+package com.happy.friendogly.presentation.ui.club.common.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 
 class ClubFilterSelector {
     private val _currentSelectedFilters: MutableLiveData<List<ClubFilter>> =
