@@ -9,8 +9,6 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.mypage.adapter.PetProfileAdapter
-import com.happy.friendogly.presentation.ui.petdetail.bindCurrentIndicator
-import com.happy.friendogly.presentation.ui.petdetail.bindSetUpIndicator
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels {
@@ -69,8 +67,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             adapter.submitList(uiState.pets)
-            binding.linearLayoutIndicator.bindSetUpIndicator(uiState.pets.size)
-            binding.linearLayoutIndicator.bindCurrentIndicator(viewModel.currentPage.value ?: 0)
         }
     }
 
@@ -78,5 +74,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         super.onResume()
         viewModel.fetchPetMine()
         viewModel.fetchMemberMine()
+        viewModel.updateCurrentPage(0)
+        binding.vpPetProfile.setCurrentItem(0, false)
     }
 }
