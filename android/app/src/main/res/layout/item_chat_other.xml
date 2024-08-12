@@ -37,21 +37,20 @@
             android:layout_marginStart="21dp"
             android:layout_marginTop="5dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/img_profile_normal"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundXSmall" />
+            app:shapeAppearanceOverlay="@style/Circle" />
 
         <TextView
             android:id="@+id/tv_chat_user_nickname"
             style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
             android:layout_width="wrap_content"
-            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             app:layout_constraintStart_toEndOf="@id/iv_chat_user"
-            app:layout_constraintTop_toTopOf="@id/iv_chat_user"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="에디" />
 
         <LinearLayout
@@ -60,7 +59,7 @@
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_chat_user"
+            app:layout_constraintStart_toStartOf="@id/tv_chat_user_nickname"
             app:layout_constraintTop_toBottomOf="@id/tv_chat_user_nickname">
 
             <TextView
@@ -69,8 +68,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingHorizontal="12dp"
-                android:paddingBottom="11dp"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="11dp"
                 android:textColor="@color/black"
                 tools:text="채드야 도토리 사진 좀 많이 올려봐봐 레퍼런스 부족하다니깐그러네" />
 

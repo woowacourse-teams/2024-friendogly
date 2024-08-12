@@ -12,8 +12,9 @@ sealed interface ChatUiModel {
 
     data class Other(
         val nickName: String,
-        val profileUrl: String,
+        val profileUrl: String?,
         val message: String,
         val time: LocalTime,
+        val memberId: Long,
     ) : ChatUiModel
 }
