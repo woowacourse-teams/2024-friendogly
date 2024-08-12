@@ -8,7 +8,6 @@ fun RegisterResponse.toData(): RegisterDto {
         id = id,
         name = name,
         tag = tag,
-        email = email,
         imageUrl = imageUrl,
         tokens = tokens.toData(),
     )

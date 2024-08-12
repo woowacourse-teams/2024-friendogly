@@ -4,7 +4,6 @@ import com.happy.friendogly.domain.model.Pet
 
 data class OtherProfileUiState(
     val nickname: String = "",
-    val email: String = "",
     val tag: String = "",
     val profilePath: String? = null,
     val pets: List<Pet> = emptyList(),

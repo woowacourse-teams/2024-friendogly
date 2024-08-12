@@ -9,8 +9,7 @@ class PostMemberUseCase(
 ) {
     suspend operator fun invoke(
         name: String,
-        email: String,
         accessToken: String,
         file: MultipartBody.Part?,
-    ): Result<Register> = repository.postMember(name = name, email = email, accessToken = accessToken, file = file)
+    ): Result<Register> = repository.postMember(name = name, accessToken = accessToken, file = file)
 }
