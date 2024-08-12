@@ -70,7 +70,9 @@ import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.timer
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.sin
 
 class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
@@ -231,11 +233,13 @@ class WoofFragment :
             viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
 
-            val position =
-                LatLng(
-                    marker.position.latitude - MARKER_CLICKED_CAMERA_LATITUDE_UP,
-                    marker.position.longitude,
-                )
+            val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
+            val offsetDistance = (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
+
+            val adjustedLatitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
+            val adjustedLongitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
+
+            val position = LatLng(adjustedLatitude, adjustedLongitude)
             moveCameraCenterPosition(position)
 
             changeRecentlyClickedMarkerSize()
@@ -258,6 +262,7 @@ class WoofFragment :
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
+
         map.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = true
