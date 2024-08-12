@@ -1,6 +1,10 @@
 package com.happy.friendogly.presentation.ui.club.list
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
@@ -9,12 +13,15 @@ import com.happy.friendogly.databinding.FragmentClubListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
+import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
-import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
         ClubListViewModel.factory(
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
@@ -26,7 +33,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         SelectFilterAdapter(viewModel as ClubListActionHandler)
     }
     private val clubAdapter: ClubListAdapter by lazy {
-        ClubListAdapter(viewModel as ClubListActionHandler)
+        ClubListAdapter(viewModel as ClubItemActionHandler)
     }
 
     override fun initViewCreated() {
@@ -34,6 +41,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         initAdapter()
         initStateObserver()
         initObserver()
+        initClubListResultLauncher()
     }
 
     private fun initDataBinding() {
@@ -52,6 +60,24 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
+    private fun initClubListResultLauncher() {
+        resultLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val isChange =
+                        result.data?.getBooleanExtra(
+                            CHANGE_CLUB_LIST_STATE,
+                            false,
+                        ) ?: false
+                    if (isChange) {
+                        viewModel.loadClubWithAddress()
+                    }
+                }
+            }
+    }
+
     private fun initObserver() {
         viewModel.clubs.observe(viewLifecycleOwner) { clubs ->
             clubAdapter.submitList(clubs)
@@ -64,10 +90,15 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         viewModel.clubListEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is ClubListEvent.OpenClub ->
-                    (activity as MainActivityActionHandler).navigateToClubDetailActivity(event.clubId)
+                    (activity as MainActivityActionHandler).navigateToClubDetailActivity(
+                        clubId = event.clubId,
+                        resultLauncher = resultLauncher,
+                    )
 
                 ClubListEvent.Navigation.NavigateToAddClub ->
-                    (activity as MainActivityActionHandler).navigateToClubAddActivity()
+                    (activity as MainActivityActionHandler).navigateToClubAddActivity(
+                        resultLauncher = resultLauncher,
+                    )
 
                 is ClubListEvent.OpenParticipationFilter -> {
                     val bottomSheet =
@@ -99,7 +130,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 }
 
                 ClubListEvent.Navigation.NavigateToAddress ->
-                    (activity as MainActivityActionHandler).navigateToSettingLocation()
+                    (activity as MainActivityActionHandler).navigateToSettingLocation(resultLauncher)
             }
         }
     }
@@ -107,35 +138,26 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     private fun initStateObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                ClubListUiState.Init -> {
-                    binding.includeClubList.rcvClubListClub.visibility = View.VISIBLE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.Init -> applyViewVisibility(binding.includeClubList.rcvClubListClub)
 
-                ClubListUiState.NotAddress -> {
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility =
-                        View.VISIBLE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.NotAddress -> applyViewVisibility(binding.includeClubAddress.linearLayoutClubNotAddress)
 
-                ClubListUiState.NotData -> {
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.VISIBLE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                    binding.includeClubError.linearLayoutClubError.visibility = View.GONE
-                }
+                ClubListUiState.NotData -> applyViewVisibility(binding.includeClubData.linearLayoutClubNotData)
 
-                ClubListUiState.Error -> {
-                    binding.includeClubError.linearLayoutClubError.visibility = View.VISIBLE
-                    binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
-                    binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
-                    binding.includeClubList.rcvClubListClub.visibility = View.GONE
-                }
+                ClubListUiState.Error -> applyViewVisibility(binding.includeClubError.linearLayoutClubError)
             }
         }
+    }
+
+    private fun applyViewVisibility(currentView: View) {
+        binding.includeClubError.linearLayoutClubError.visibility = View.GONE
+        binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
+        binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
+        binding.includeClubList.rcvClubListClub.visibility = View.GONE
+        currentView.visibility = View.VISIBLE
+    }
+
+    companion object {
+        const val CHANGE_CLUB_LIST_STATE = "clubListChangeState"
     }
 }

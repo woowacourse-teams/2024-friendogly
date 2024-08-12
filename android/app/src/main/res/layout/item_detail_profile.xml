@@ -12,11 +12,11 @@
         android:layout_marginEnd="10dp"
         android:layout_width="80dp"
         android:layout_height="wrap_content">
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:src="@drawable/img_profile_normal"
-            glide1000="@{profile.imageUrl}"
+            glide="@{profile.imageUrl}"
             android:backgroundTint="@color/coral50"
-            app:shapeAppearanceOverlay="@style/RoundBig"
+            app:shapeAppearanceOverlay="@style/Circle"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_detail_profile_text"

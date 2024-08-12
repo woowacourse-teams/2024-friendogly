@@ -3,8 +3,8 @@ package com.happy.friendogly.presentation.ui.club.mapper
 import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 fun ParticipationFilter.toDomain(): ClubFilterCondition {
     return when (this) {

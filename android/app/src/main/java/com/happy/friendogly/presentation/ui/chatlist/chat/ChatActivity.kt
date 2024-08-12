@@ -9,11 +9,15 @@ import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
+import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 
-class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
+class ChatActivity :
+    BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
+    ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
-            AppModule.getInstance().webSocketRepository,
+            AppModule.getInstance().subScribeMessageUseCase,
+            AppModule.getInstance().publishSendUseCase,
         )
     }
     private lateinit var adapter: ChatAdapter
@@ -24,19 +28,30 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         initAdapter()
         getChatList()
         clickBackBtn()
-        clickChatInfo()
+        val myMemberId: Long = intent.getLongExtra(EXTRA_MEMBER_ID, INVALID_ID)
         val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
+
+        clickChatInfo(myMemberId, chatId)
 
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
         }
-        viewModel.subscribeMessage(chatId)
+        viewModel.subscribeMessage(chatId, myMemberId)
     }
 
-    private fun clickChatInfo() {
+    private fun clickChatInfo(
+        myMemberId: Long,
+        chatRoomId: Long,
+    ) {
         binding.ibChatSideMenu.setOnClickListener {
-            ChatInfoSideSheet().show(supportFragmentManager, "")
+            val chatInfoSideSheet = ChatInfoSideSheet()
+            chatInfoSideSheet.arguments =
+                ChatInfoSideSheet.getBundle(
+                    myMemberId = myMemberId,
+                    chatRoomId = chatRoomId,
+                )
+            chatInfoSideSheet.show(supportFragmentManager, "")
         }
     }
 
@@ -47,7 +62,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
     }
 
     private fun initAdapter() {
-        adapter = ChatAdapter()
+        adapter = ChatAdapter(this)
         binding.rcvChatDetail.adapter = adapter
     }
 
@@ -57,10 +72,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
     }
 
+    override fun navigateToMemberProfile(memberId: Long) {
+        startActivity(OtherProfileActivity.getIntent(this, memberId))
+    }
+
     companion object {
         private const val INVALID_ID = -1L
-
         private const val EXTRA_CHAT_ID = "chatId"
+
         private const val EXTRA_MEMBER_ID = "memberId"
 
         fun getIntent(

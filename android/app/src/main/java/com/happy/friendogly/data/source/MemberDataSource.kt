@@ -7,7 +7,6 @@ import okhttp3.MultipartBody
 interface MemberDataSource {
     suspend fun postMember(
         name: String,
-        email: String,
         accessToken: String,
         file: MultipartBody.Part?,
     ): Result<RegisterDto>

@@ -44,7 +44,6 @@ class MyPageViewModel(
                     state.copy(
                         id = member.id,
                         nickname = member.name,
-                        email = member.email,
                         tag = member.tag,
                         imageUrl = member.imageUrl,
                     )

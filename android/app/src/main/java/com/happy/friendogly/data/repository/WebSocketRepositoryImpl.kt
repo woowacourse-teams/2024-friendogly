@@ -2,6 +2,7 @@ package com.happy.friendogly.data.repository
 
 import com.happy.friendogly.data.mapper.toEnter
 import com.happy.friendogly.data.mapper.toLeave
+import com.happy.friendogly.data.mapper.toMine
 import com.happy.friendogly.data.mapper.toOther
 import com.happy.friendogly.data.model.MessageTypeDto
 import com.happy.friendogly.data.source.WebSocketDataSource
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WebSocketRepositoryImpl(private val source: WebSocketDataSource) : WebSocketRepository {
-    override suspend fun publishInvite(memberId: Long) = source.publishInvite(memberId)
+    override suspend fun publishEnter(memberId: Long) = source.publishEnter(memberId)
 
     override suspend fun publishSend(
         chatRoomId: Long,
@@ -20,12 +21,17 @@ class WebSocketRepositoryImpl(private val source: WebSocketDataSource) : WebSock
 
     override suspend fun publishLeave(chatRoomId: Long) = source.publishLeave(chatRoomId)
 
-    override suspend fun subscribeMessage(chatRoomId: Long): Flow<ChatComponent> =
+    override suspend fun subscribeMessage(
+        chatRoomId: Long,
+        myMemberId: Long,
+    ): Flow<ChatComponent> =
         source.subscribeMessage(chatRoomId).map {
             when (it.messageType) {
                 MessageTypeDto.ENTER -> it.toEnter()
                 MessageTypeDto.LEAVE -> it.toLeave()
-                MessageTypeDto.CHAT -> it.toOther()
+                MessageTypeDto.CHAT -> {
+                    if (myMemberId == it.senderMemberId) it.toMine() else it.toOther()
+                }
             }
         }
 }

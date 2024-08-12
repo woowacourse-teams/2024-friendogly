@@ -32,5 +32,6 @@ fun Message.Other.toUiModel() =
         nickName = name,
         message = content,
         time = dateTime.toLocalTime(),
-        profileUrl = profileUrl ?: "",
+        profileUrl = profileUrl,
+        memberId = memberId,
     )

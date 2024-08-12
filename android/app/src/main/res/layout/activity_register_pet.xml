@@ -310,11 +310,15 @@
 
             <TextView
                 android:id="@+id/tv_birthday"
-                style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
                 onSingleClick="@{() -> vm.selectPetBirthday()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:maxLines="1"
+                android:layout_marginHorizontal="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
                 android:clickable="true"

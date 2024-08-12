@@ -11,19 +11,21 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import com.happy.friendogly.presentation.ui.club.mapper.toDomain
 import com.happy.friendogly.presentation.ui.club.mapper.toGenders
 import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
-import com.happy.friendogly.presentation.ui.club.model.ClubFilterSelector
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
     private val getAddressUseCase: GetAddressUseCase,
     private val searchingClubsUseCase: GetSearchingClubsUseCase,
-) : BaseViewModel(), ClubListActionHandler {
+) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
     private val _uiState: MutableLiveData<ClubListUiState> =
         MutableLiveData(ClubListUiState.Init)
     val uiState: LiveData<ClubListUiState> get() = _uiState
@@ -38,8 +40,8 @@ class ClubListViewModel(
 
     val clubFilterSelector = ClubFilterSelector()
 
-    private val _clubs: MutableLiveData<List<ClubListUiModel>> = MutableLiveData()
-    val clubs: LiveData<List<ClubListUiModel>> get() = _clubs
+    private val _clubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
+    val clubs: LiveData<List<ClubItemUiModel>> get() = _clubs
 
     private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
     val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
@@ -48,17 +50,9 @@ class ClubListViewModel(
         loadClubWithAddress()
     }
 
-    fun loadClubWithAddress() {
-        _uiState.value = ClubListUiState.Init
-        if (myAddress.value != null) {
-            loadClubs()
-        } else {
-            loadAddress()
-        }
-    }
-
-    private fun loadAddress() =
+    fun loadClubWithAddress() =
         viewModelScope.launch {
+            _uiState.value = ClubListUiState.Init
             getAddressUseCase()
                 .onSuccess {
                     _myAddress.value = it
@@ -83,10 +77,7 @@ class ClubListViewModel(
                     } else {
                         _uiState.value = ClubListUiState.Init
                     }
-                    _clubs.value =
-                        clubs.map { club ->
-                            club.toPresentation()
-                        }
+                    _clubs.value = clubs.toPresentation()
                 }
                 .onFailure {
                     _uiState.value = ClubListUiState.Error

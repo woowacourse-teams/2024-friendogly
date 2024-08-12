@@ -8,7 +8,6 @@ fun MemberResponse.toData(): MemberDto {
         id = id,
         name = name,
         tag = tag,
-        email = email,
         imageUrl = imageUrl,
     )
 }
