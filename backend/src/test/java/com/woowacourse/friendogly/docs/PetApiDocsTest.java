@@ -25,24 +25,21 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(PetController.class)
 public class PetApiDocsTest extends RestDocsTest {
 
-    @MockBean
+    @Mock
     private PetCommandService petCommandService;
 
-    @MockBean
+    @Mock
     private PetQueryService petQueryService;
-
 
     @DisplayName("반려견 등록 문서화")
     @Test
@@ -66,8 +63,10 @@ public class PetApiDocsTest extends RestDocsTest {
                 Gender.FEMALE.toString(),
                 "https://google.com"
         );
-        MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
-        MockMultipartFile request = new MockMultipartFile("request", "request", "application/json", objectMapper.writeValueAsBytes(requestDto));
+        MockMultipartFile image = new MockMultipartFile("image", "image", MediaType.MULTIPART_FORM_DATA.toString(),
+                "asdf".getBytes());
+        MockMultipartFile request = new MockMultipartFile("request", "request", "application/json",
+                objectMapper.writeValueAsBytes(requestDto));
 
         Mockito.when(petCommandService.savePet(any(), any(), any()))
                 .thenReturn(response);
@@ -88,9 +87,12 @@ public class PetApiDocsTest extends RestDocsTest {
                                 "request",
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("반려견 이름"),
                                 fieldWithPath("description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                fieldWithPath("sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                fieldWithPath("gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING)
+                                        .description("반려견 생년월일: yyyy-MM-dd"),
+                                fieldWithPath("sizeType").type(JsonFieldType.STRING)
+                                        .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING)
+                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
                                 fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
                         ),
                         resource(ResourceSnippetParameters.builder()
@@ -102,13 +104,19 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("반려견 id"),
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("반려견의 주인 id"),
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER)
+                                                .description("반려견의 주인 id"),
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("반려견 이름"),
-                                        fieldWithPath("data.description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                        fieldWithPath("data.birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                        fieldWithPath("data.sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                        fieldWithPath("data.gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                                        fieldWithPath("data.description").type(JsonFieldType.STRING)
+                                                .description("반려견 한 줄 소개"),
+                                        fieldWithPath("data.birthDate").type(JsonFieldType.STRING)
+                                                .description("반려견 생년월일: yyyy-MM-dd"),
+                                        fieldWithPath("data.sizeType").type(JsonFieldType.STRING)
+                                                .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                        fieldWithPath("data.gender").type(JsonFieldType.STRING)
+                                                .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
+                                                .description("반려견 이미지 URL")
                                 )
                                 .requestSchema(Schema.schema("SavePetRequest"))
                                 .responseSchema(Schema.schema("SavePetResponse"))
@@ -149,13 +157,19 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("반려견 id"),
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("반려견의 주인 id"),
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER)
+                                                .description("반려견의 주인 id"),
                                         fieldWithPath("data.name").type(JsonFieldType.STRING).description("반려견 이름"),
-                                        fieldWithPath("data.description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                        fieldWithPath("data.birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                        fieldWithPath("data.sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                        fieldWithPath("data.gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                                        fieldWithPath("data.description").type(JsonFieldType.STRING)
+                                                .description("반려견 한 줄 소개"),
+                                        fieldWithPath("data.birthDate").type(JsonFieldType.STRING)
+                                                .description("반려견 생년월일: yyyy-MM-dd"),
+                                        fieldWithPath("data.sizeType").type(JsonFieldType.STRING)
+                                                .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                        fieldWithPath("data.gender").type(JsonFieldType.STRING)
+                                                .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                        fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
+                                                .description("반려견 이미지 URL")
                                 )
                                 .requestSchema(Schema.schema("FindPetByIdRequest"))
                                 .responseSchema(Schema.schema("FindPetByIdResponse"))
@@ -208,13 +222,19 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("반려견 id"),
-                                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("반려견의 주인 id"),
+                                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER)
+                                                .description("반려견의 주인 id"),
                                         fieldWithPath("data.[].name").type(JsonFieldType.STRING).description("반려견 이름"),
-                                        fieldWithPath("data.[].description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                        fieldWithPath("data.[].birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                        fieldWithPath("data.[].sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                        fieldWithPath("data.[].gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                        fieldWithPath("data.[].imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                                        fieldWithPath("data.[].description").type(JsonFieldType.STRING)
+                                                .description("반려견 한 줄 소개"),
+                                        fieldWithPath("data.[].birthDate").type(JsonFieldType.STRING)
+                                                .description("반려견 생년월일: yyyy-MM-dd"),
+                                        fieldWithPath("data.[].sizeType").type(JsonFieldType.STRING)
+                                                .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                        fieldWithPath("data.[].gender").type(JsonFieldType.STRING)
+                                                .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                        fieldWithPath("data.[].imageUrl").type(JsonFieldType.STRING)
+                                                .description("반려견 이미지 URL")
                                 )
                                 .responseSchema(Schema.schema("FindPetResponse"))
                                 .build()))
@@ -266,13 +286,19 @@ public class PetApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("반려견 id"),
-                                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("반려견의 주인 id"),
+                                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER)
+                                                .description("반려견의 주인 id"),
                                         fieldWithPath("data.[].name").type(JsonFieldType.STRING).description("반려견 이름"),
-                                        fieldWithPath("data.[].description").type(JsonFieldType.STRING).description("반려견 한 줄 소개"),
-                                        fieldWithPath("data.[].birthDate").type(JsonFieldType.STRING).description("반려견 생년월일: yyyy-MM-dd"),
-                                        fieldWithPath("data.[].sizeType").type(JsonFieldType.STRING).description("반려견 크기: SMALL, MEDIUM, LARGE"),
-                                        fieldWithPath("data.[].gender").type(JsonFieldType.STRING).description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                        fieldWithPath("data.[].imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                                        fieldWithPath("data.[].description").type(JsonFieldType.STRING)
+                                                .description("반려견 한 줄 소개"),
+                                        fieldWithPath("data.[].birthDate").type(JsonFieldType.STRING)
+                                                .description("반려견 생년월일: yyyy-MM-dd"),
+                                        fieldWithPath("data.[].sizeType").type(JsonFieldType.STRING)
+                                                .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                        fieldWithPath("data.[].gender").type(JsonFieldType.STRING)
+                                                .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                        fieldWithPath("data.[].imageUrl").type(JsonFieldType.STRING)
+                                                .description("반려견 이미지 URL")
                                 )
                                 .responseSchema(Schema.schema("FindPetResponse"))
                                 .build()))
