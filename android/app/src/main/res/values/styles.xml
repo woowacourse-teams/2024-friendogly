@@ -6,6 +6,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="RoundXSmall">
+        <item name="cornerSize">5dp</item>
+    </style>
+
     <style name="RoundSmall">
         <item name="cornerSize">16dp</item>
     </style>
@@ -26,7 +30,7 @@
     </style>
 
     <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rect_white_fill_20</item>
+        <item name="android:background">@drawable/rect_white_fill_30</item>
     </style>
 
     <!-- Bold -->
@@ -53,8 +57,22 @@
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">24dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/gray700</item>
@@ -97,6 +115,13 @@
 
     <style name="Theme.AppCompat.TextView.SemiBold.White.Size24" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">20dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
         <item name="android:textColor">@color/white</item>
@@ -369,6 +394,13 @@
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size26" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.Black.Size25" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">25dp</item>
@@ -392,13 +424,13 @@
         <item name="maxLines">1</item>
     </style>
 
-    <!--ADD Group Menu Text-->
-    <style name="group_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+    <!--ADD club Menu Text-->
+    <style name="club_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="android:button">@null</item>
         <item name="android:drawablePadding">8dp</item>
-        <item name="android:drawableEnd">@drawable/sel_group_add_check_filter_menu</item>
-        <item name="android:background">@drawable/sel_group_background_filter_menu</item>
-        <item name="android:textColor">@drawable/sel_group_text_filter_menu</item>
+        <item name="android:drawableEnd">@drawable/sel_club_add_check_filter_menu</item>
+        <item name="android:background">@drawable/sel_club_background_filter_menu</item>
+        <item name="android:textColor">@drawable/sel_club_text_filter_menu</item>
         <item name="android:textSize">16sp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
@@ -407,21 +439,35 @@
         <item name="android:layout_marginEnd">0dp</item>
     </style>
 
-    <style name="group_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    <style name="club_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progressbar_linear_progress</item>
     </style>
 
-    <style name="group_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="club_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="behavior_peekHeight">0dp</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="group_detail_side_sheet_dialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+    <style name="club_detail_side_sheet_dialog" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
+    <style name="marker_information_bottom_sheet_dialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 
     <!-- Alert 관련 -->
     <style name="Theme.AppCompat.Alert.Padding.Radius16" parent="Theme.AppCompat">

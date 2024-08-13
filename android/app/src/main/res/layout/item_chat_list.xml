@@ -22,6 +22,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/ic_club_normal"
             android:id="@+id/iv_chat_group"
             android:layout_width="44dp"
             android:layout_height="0dp"
@@ -32,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/RoundSmall"
-            tools:src="@drawable/ic_launcher_background" />
+             />
 
         <TextView
             android:id="@+id/tv_chat_title"
@@ -41,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             app:layout_constraintStart_toEndOf="@id/iv_chat_group"
+            app:layout_constraintBottom_toBottomOf="@id/iv_chat_group"
             app:layout_constraintTop_toTopOf="@id/iv_chat_group"
             tools:text="방가방가" />
 
@@ -57,6 +59,7 @@
 
         <TextView
             android:id="@+id/tv_chat_body"
+            android:visibility="gone"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -69,6 +72,7 @@
             tools:text="다들 언제 모이시는게 편하세요?" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_chat_date_time"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size10"
             chatDateTime="@{dateTime}"
@@ -81,6 +85,7 @@
             tools:text="오후 2:23" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_chat_unread_count"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size10"
             unreadMessageCount="@{unreadMessageCount}"

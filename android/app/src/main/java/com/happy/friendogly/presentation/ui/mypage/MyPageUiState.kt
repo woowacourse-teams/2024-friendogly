@@ -11,7 +11,6 @@ import kotlinx.datetime.toLocalDateTime
 data class MyPageUiState(
     val id: Long = INVALID_ID,
     val nickname: String = "",
-    val email: String = "",
     val tag: String = "",
     val imageUrl: String? = null,
     val pets: List<PetViewType> = emptyList(),

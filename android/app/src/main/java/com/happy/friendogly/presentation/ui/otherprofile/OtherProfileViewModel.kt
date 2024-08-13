@@ -45,7 +45,6 @@ class OtherProfileViewModel(
                 _uiState.value =
                     uiState.value?.copy(
                         nickname = member.name,
-                        email = member.email,
                         tag = member.tag,
                     )
             }.onFailure {

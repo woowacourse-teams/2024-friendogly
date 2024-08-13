@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.group.model.groupfilter.ParticipationFilter" />
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter" />
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.group.filter.GroupFilterViewModel" />
+            type="com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel" />
     </data>
 
 
@@ -27,22 +27,22 @@
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group_list_participation_filter" />
+            android:text="@string/club_list_participation_filter" />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
         <RadioGroup
-            android:id="@+id/radio_group_group_participation"
+            android:id="@+id/radio_club_club_participation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/radio_group_group_entire"
-                style="@style/group_add_custom_checkbox"
+                android:id="@+id/radio_club_club_entire"
+                style="@style/club_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -51,8 +51,8 @@
                 tools:text="대형견" />
 
             <RadioButton
-                android:id="@+id/radio_group_group_possible"
-                style="@style/group_add_custom_checkbox"
+                android:id="@+id/radio_club_club_possible"
+                style="@style/club_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -61,8 +61,8 @@
                 tools:text="대형견" />
 
             <RadioButton
-                android:id="@+id/radio_group_group_recruitment"
-                style="@style/group_add_custom_checkbox"
+                android:id="@+id/radio_club_club_recruitment"
+                style="@style/club_add_custom_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
@@ -71,7 +71,7 @@
         </RadioGroup>
 
         <TextView
-            android:id="@+id/tv_group_select_commit"
+            android:id="@+id/tv_club_select_commit"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
             onSingleClick="@{() -> vm.selectParticipationFilter()}"
             android:layout_width="match_parent"
@@ -80,8 +80,8 @@
             android:background="@drawable/rect_coral04_fill_16"
             android:backgroundTint="@color/coral400"
             android:gravity="center"
-            android:text="@string/group_select_commit"
+            android:text="@string/club_select_commit"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vp_group_select_dog_list" />
+            app:layout_constraintTop_toBottomOf="@id/vp_club_select_dog_list" />
     </LinearLayout>
 </layout>

@@ -1,17 +1,23 @@
 package com.happy.friendogly.remote.source
 
 import com.happy.friendogly.data.model.FootprintDto
+import com.happy.friendogly.data.model.FootprintInfoDto
 import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
-import com.happy.friendogly.data.model.FootprintSaveDto
-import com.happy.friendogly.data.model.LandMarkDto
+import com.happy.friendogly.data.model.MyFootprintDto
+import com.happy.friendogly.data.model.WalkStatusDto
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.FootprintRequest
+import com.happy.friendogly.remote.model.request.WalkStatusRequest
 
 class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
-    override suspend fun postFootprint(request: FootprintRequest): Result<FootprintSaveDto> {
+    override suspend fun postFootprint(request: FootprintRequest): Result<MyFootprintDto> {
         return runCatching { service.postFootprint(request).data.toData() }
+    }
+
+    override suspend fun patchWalkStatus(request: WalkStatusRequest): Result<WalkStatusDto> {
+        return runCatching { service.patchWalkStatus(request).data.toData() }
     }
 
     override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
@@ -29,8 +35,9 @@ class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
         }
     }
 
-    override suspend fun getLandMarks(): Result<List<LandMarkDto>> {
-        return Result.success(listOf(LandMarkDto()))
-//        return woofService.data.getLandMarks()
+    override suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfoDto> {
+        return runCatching {
+            service.getFootprintInfo(footprintId).data.toData()
+        }
     }
 }

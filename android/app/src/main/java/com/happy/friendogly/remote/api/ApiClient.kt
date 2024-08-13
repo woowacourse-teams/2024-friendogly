@@ -10,6 +10,7 @@ class ApiClient {
     object Footprints {
         private const val BASE_URL = "/footprints"
         const val POST_FOOTPRINT = BASE_URL
+        const val PATCH_FOOTPRINT_WALK_STATUS = "$BASE_URL/walk-status"
         const val GET_FOOTPRINTS_NEAR = "$BASE_URL/near"
         const val GET_FOOTPRINT_INFO = "$BASE_URL/{footprintId}"
         const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
@@ -37,6 +38,22 @@ class ApiClient {
         const val GET_CLUB = "$BASE_URL/{id}"
         const val POST_CLUB_MEMBER = "$BASE_URL/{clubId}$MEMBER_URL"
         const val DELETE_CLUB_MEMBER = "$BASE_URL/{clubId}$MEMBER_URL"
+    }
+
+    object Chat {
+        private const val BASE_URL = "/chat-rooms"
+        const val CHAT_LIST = "$BASE_URL/mine"
+        const val MEMBERS = "$BASE_URL/{chatRoomId}"
+    }
+
+    object WebSocket {
+        fun publishEnter(chatRoomId: Long) = "/publish/enter/$chatRoomId"
+
+        fun publishMessage(chatRoomId: Long) = "/publish/chat/$chatRoomId"
+
+        fun publishLeave(chatRoomId: Long) = "/publish/leave/$chatRoomId"
+
+        fun subscribeChat(chatRoomId: Long) = "/topic/chat/$chatRoomId"
     }
 
     object AlarmToken {

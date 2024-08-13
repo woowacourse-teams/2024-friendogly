@@ -1,12 +1,12 @@
-INSERT INTO member(name, tag, email, image_url)
-VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://picsum.photos/100'),
-       ('땡이', 'a582a275', 'jiho@test.com', 'https://picsum.photos/100'),
-       ('트레', '68fc8014', 'tre@test.com', null),
-       ('위브', '3dde7373', 'wiib@test.com', 'https://picsum.photos/100'),
-       ('벼리', '525ec19f', 'byeori@test.com', null),
-       ('누누', '5f0f8307', 'nunu@test.com', null),
-       ('채드', '114d8979', 'ched@test.com', 'https://picsum.photos/100'),
-       ('에디', 'c065a053', 'edy@test.com', null);
+INSERT INTO member(name, tag, image_url)
+VALUES ('도도', '4e52d416', 'https://avatars.githubusercontent.com/u/79188587?v=4'),
+       ('땡이', 'a582a275', 'https://avatars.githubusercontent.com/u/110461155?v=4'),
+       ('트레', '68fc8014', null),
+       ('위브', '3dde7373', 'https://avatars.githubusercontent.com/u/28584160?v=4'),
+       ('벼리', '525ec19f', null),
+       ('누누', '5f0f8307', null),
+       ('채드', '114d8979', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
+       ('에디', 'c065a053', null);
 
 INSERT INTO footprint(member_id, latitude, longitude, walk_status, created_at, is_deleted)
 VALUES (1, 37.5173316, 127.1011661, 'BEFORE', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),
@@ -51,9 +51,21 @@ VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SM
        (8, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE',
         'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg');
 
-INSERT INTO club (title, content, member_capacity, province,city,village, image_url, created_at, status)
-VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-08-01 12:00:00', 'OPEN'),
-       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울특별시', '송파구', '신천동', 'http://example.com/image.jpg', '2023-07-31 01:00:00', 'OPEN');
+INSERT INTO chat_room (member_capacity, chat_room_type)
+VALUES (5, 'GROUP'),
+       (5, 'GROUP'),
+       (2, 'PRIVATE'), -- 개인 채팅방
+       (2, 'PRIVATE'); -- 개인 채팅방
+
+INSERT INTO chat_room_member (chat_room_id, member_id, created_at)
+VALUES (3, 1, '2023-08-03 12:00:00'),
+       (3, 2, '2023-08-03 12:00:00'),
+       (4, 3, '2023-08-03 12:00:00'),
+       (4, 4, '2023-08-03 12:00:00');
+
+INSERT INTO club (title, content, member_capacity, province,city,village, image_url, created_at, status, chat_room_id)
+VALUES ('전국구 강아지 모임', '주먹이 가장 매운 강이지 모임', 3, '서울특별시', '송파구', '신천동', 'https://cdn.imweb.me/thumbnail/20240214/0b725e3e8a959.jpg', '2023-08-01 12:00:00', 'OPEN', 1),
+       ('미녀 강아지 모임', '예쁜 강아지 모임', 5, '서울특별시', '송파구', '신천동', 'https://images.mypetlife.co.kr/content/uploads/2023/04/18094901/xuan-nguyen-zr0beNrnvgQ-unsplash-768x512-1.jpg', '2023-07-31 01:00:00', 'OPEN', 2);
 
 INSERT INTO club_gender (club_id, allowed_gender)
 VALUES (1, 'MALE'),

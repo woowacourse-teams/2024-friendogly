@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.ui.chatlist.chatinfo
 data class ChatInfoUiModel(
     val dogSize: List<DogSize>,
     val dogGender: List<DogGender>,
-    val people: List<JoinPeople>,
 )
 
 data class JoinPeople(
@@ -11,6 +10,7 @@ data class JoinPeople(
     val isMe: Boolean,
     val isLeader: Boolean,
     val profileUrl: String,
+    val memberId: Long,
 )
 
 enum class DogSize {

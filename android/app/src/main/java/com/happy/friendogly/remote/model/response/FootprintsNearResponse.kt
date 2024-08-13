@@ -9,8 +9,8 @@ data class FootprintsNearResponse(
     val footprintId: Long,
     val latitude: Double,
     val longitude: Double,
+    val walkStatus: WalkStatusResponse,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
     val isMine: Boolean,
-    val imageUrl: String?,
 )

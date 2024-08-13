@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel" />
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.club.add.ClubAddActionHandler" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="@string/club_add_information_main_title" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_add_filter_main_content" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/club_add_dog_size_title" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_alart" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+<!--        <CheckBox-->
+<!--            style="@style/club_add_custom_checkbox"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:minHeight="0dp"-->
+<!--            android:checked="true"-->
+<!--            android:text="@string/club_add_filter_all_select" />-->
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="10dp" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexWrap="wrap">
+
+            <include
+                android:id="@+id/include_add_club_smail"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.SMALL_DOG_NAME}" />
+
+            <include
+                android:id="@+id/include_add_club_medium"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.MEDIUM_DOG_NAME}" />
+
+            <include
+                android:id="@+id/include_add_club_big"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.BIG_DOG_NAME}" />
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_add_dog_gender_title" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/checkbox_club_add_all_gender"-->
+<!--            style="@style/club_add_custom_checkbox"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:checked="true"-->
+<!--            android:minHeight="0dp"-->
+<!--            android:text="@string/club_add_filter_all_select" />-->
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="10dp" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexWrap="wrap">
+
+            <include
+                android:id="@+id/include_add_club_male"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.MALE_NAME}" />
+
+            <include
+                android:id="@+id/include_add_club_neutralizing_female"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.NEUTRALIZING_FEMALE_NAME}" />
+
+            <include
+                android:id="@+id/include_add_club_female"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.FEMALE_NAME}" />
+
+            <include
+                android:id="@+id/include_add_club_neutralizing_male"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.NEUTRALIZING_MALE_NAME}" />
+        </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>
+</layout>
