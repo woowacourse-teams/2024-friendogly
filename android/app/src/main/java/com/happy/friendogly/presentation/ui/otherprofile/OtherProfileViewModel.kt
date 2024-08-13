@@ -46,6 +46,7 @@ class OtherProfileViewModel(
                     uiState.value?.copy(
                         nickname = member.name,
                         tag = member.tag,
+                        profilePath = member.imageUrl,
                     )
             }.onFailure {
                 // TODO 예외 처리
