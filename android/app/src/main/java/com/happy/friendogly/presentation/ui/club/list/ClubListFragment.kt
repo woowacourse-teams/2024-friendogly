@@ -131,6 +131,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
                 ClubListEvent.Navigation.NavigateToAddress ->
                     (activity as MainActivityActionHandler).navigateToSettingLocation(resultLauncher)
+
+                ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
             }
         }
     }

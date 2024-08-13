@@ -31,7 +31,7 @@ class ClubListViewModel(
     val uiState: LiveData<ClubListUiState> get() = _uiState
 
     private val _myAddress: MutableLiveData<UserAddress> =
-        MutableLiveData()
+        MutableLiveData(null)
     val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
@@ -99,7 +99,11 @@ class ClubListViewModel(
     }
 
     override fun addClub() {
-        _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+        if (myAddress.value == null) {
+            _clubListEvent.emit(ClubListEvent.FailLocation)
+        } else {
+            _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+        }
     }
 
     override fun selectParticipationFilter() {
