@@ -253,6 +253,10 @@ class WoofFragment :
         }
     }
 
+    override fun clickFootprintPetImage(petImageUrl: String) {
+        startActivity(PetImageActivity.getIntent(requireContext(), petImageUrl))
+    }
+
     override fun clickFootprintMemberName(memberId: Long) {
         analyticsHelper.logFootprintMemberNameClicked()
         startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))

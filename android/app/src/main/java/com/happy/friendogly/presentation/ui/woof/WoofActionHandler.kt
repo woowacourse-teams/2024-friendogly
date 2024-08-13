@@ -20,5 +20,7 @@ interface WoofActionHandler {
         marker: Marker,
     )
 
+    fun clickFootprintPetImage(petImageUrl: String)
+
     fun clickFootprintMemberName(memberId: Long)
 }

@@ -30,4 +30,5 @@ class PetImageActivity : BaseActivity<ActivityPetImageBinding>(R.layout.activity
             }
         }
     }
+<<<<<<< HEAD
 }
