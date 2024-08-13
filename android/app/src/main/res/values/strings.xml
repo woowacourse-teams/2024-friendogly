@@ -20,7 +20,7 @@
     <string name="make_profile_title">프로필 만들기</string>
     <string name="make_profile_edit_title">프로필 수정하기</string>
     <string name="make_profile_edit_btn_title">선택 완료!</string>
-    <string name="user_name_length">%d/15</string>
+    <string name="user_name_length">%d/8</string>
 
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
@@ -31,7 +31,7 @@
     <string name="empty_pet_description">등록하기를 통해 강아지를 추가해주세요</string>
     <string name="user_name_tag">#%s</string>
     <string name="pet_small_size_title">소형견이에요</string>
-    <string name="pet_medium_size_title">중현견이에요</string>
+    <string name="pet_medium_size_title">중형견이에요</string>
     <string name="pet_large_size_title">대형견이에요</string>
     <string name="pet_months_format">(%d개월)</string>
     <string name="pet_age_format">(%d살)</string>
@@ -49,7 +49,7 @@
     <!--강아지 상세 화면-->
     <string name="neuterd_status">중성화를 했어요</string>
     <string name="small_pet_description">소형견이에요</string>
-    <string name="medium_pet_description">중현견이에요</string>
+    <string name="medium_pet_description">중형견이에요</string>
     <string name="large_pet_description">대형견이에요</string>
 
     <!--다른 사용자 프로필-->
