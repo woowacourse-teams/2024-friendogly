@@ -35,6 +35,7 @@ class MainActivity :
     private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
+    private var waitTime = 0L
 
     override fun initCreateView() {
         initNavController()
@@ -42,7 +43,9 @@ class MainActivity :
     }
 
     private fun initNavController() {
-        supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(ClubListFragment::class.java)
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(
+            ClubListFragment::class.java
+        )
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {
