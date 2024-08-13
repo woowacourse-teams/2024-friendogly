@@ -18,4 +18,10 @@ public class FakeS3StorageManager implements FileStorageManager {
 
         return "http://localhost/" + file.getOriginalFilename();
     }
+
+    @Override
+    public void removeFile(String oldImageUrl) {
+        // TODO: 구현
+        System.out.println("removed file");
+    }
 }
