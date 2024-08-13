@@ -33,7 +33,7 @@ class DetailProfileAdapter(
     ): DetailProfileViewHolder {
         val binding =
             ItemDetailProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DetailProfileViewHolder(binding,navigation)
+        return DetailProfileViewHolder(binding, navigation)
     }
 
     override fun onBindViewHolder(

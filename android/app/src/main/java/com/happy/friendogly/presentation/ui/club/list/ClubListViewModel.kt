@@ -12,14 +12,14 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
-import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
-import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
-import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
 import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeTypes
+import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(

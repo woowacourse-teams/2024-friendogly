@@ -21,7 +21,10 @@ class PetImageActivity : BaseActivity<ActivityPetImageBinding>(R.layout.activity
     companion object {
         const val PUT_EXTRA_PET_IMAGE_URL = "petImageUrl"
 
-        fun getIntent(context: Context, petImageUrl: String): Intent {
+        fun getIntent(
+            context: Context,
+            petImageUrl: String,
+        ): Intent {
             return Intent(context, PetImageActivity::class.java).apply {
                 putExtra(PUT_EXTRA_PET_IMAGE_URL, petImageUrl)
             }

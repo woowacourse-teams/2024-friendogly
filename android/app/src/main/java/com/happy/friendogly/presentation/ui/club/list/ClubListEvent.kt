@@ -19,5 +19,5 @@ sealed interface ClubListEvent {
         data object NavigateToAddress : Navigation
     }
 
-    data object FailLocation: ClubListEvent
+    data object FailLocation : ClubListEvent
 }

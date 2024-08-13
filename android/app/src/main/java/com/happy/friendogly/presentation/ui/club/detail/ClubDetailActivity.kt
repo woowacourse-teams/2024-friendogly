@@ -171,22 +171,21 @@ class ClubDetailActivity :
     }
 
     override fun navigateToProfile(clubDetailProfileUiModel: ClubDetailProfileUiModel) {
-        if (clubDetailProfileUiModel.isPet){
+        if (clubDetailProfileUiModel.isPet) {
             openPetDetail(clubDetailProfileUiModel.imageUrl)
-        }else {
+        } else {
             openUserProfile(clubDetailProfileUiModel.id)
         }
     }
 
-    private fun openPetDetail(imageUrl: String?){
+    private fun openPetDetail(imageUrl: String?) {
         val petImage = imageUrl ?: return
         startActivity(PetImageActivity.getIntent(this@ClubDetailActivity, petImage))
     }
 
-    private fun openUserProfile(id: Long){
+    private fun openUserProfile(id: Long) {
         startActivity(OtherProfileActivity.getIntent(this, id))
     }
-
 
     private fun putLoadState() {
         intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE, true)
