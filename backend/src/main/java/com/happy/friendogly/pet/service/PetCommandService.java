@@ -8,7 +8,9 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
+import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
+import com.happy.friendogly.pet.dto.response.UpdatePetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +65,33 @@ public class PetCommandService {
             throw new FriendoglyException(String.format(
                     "강아지는 최대 %d 마리까지만 등록할 수 있습니다.", MAX_PET_CAPACITY));
         }
+    }
+
+    public UpdatePetResponse update(Long memberId, Long petId, UpdatePetRequest request, MultipartFile image) {
+        Member member = memberRepository.getById(memberId);
+        Pet pet = petRepository.getById(petId);
+
+        if (!pet.isOwner(member)) {
+            throw new FriendoglyException("자신이 주인인 반려견의 정보만 수정할 수 있습니다.");
+        }
+
+        String newImageUrl = request.newImageUrl();
+        if (image != null && !image.isEmpty()) {
+            newImageUrl = fileStorageManager.uploadFile(image);
+        }
+        pet.update(
+                request.name(),
+                request.description(),
+                request.birthDate(),
+                SizeType.toSizeType(request.sizeType()),
+                Gender.toGender(request.gender()),
+                newImageUrl
+        );
+
+        if (!request.oldImageUrl().equals(request.newImageUrl())) {
+            fileStorageManager.removeFile(request.oldImageUrl());
+        }
+
+        return new UpdatePetResponse(pet);
     }
 }

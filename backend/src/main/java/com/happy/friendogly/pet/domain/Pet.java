@@ -80,4 +80,20 @@ public class Pet {
     public boolean isOwner(Member member) {
         return this.member.getId().equals(member.getId());
     }
+
+    public void update(
+            String name,
+            String description,
+            LocalDate birthDate,
+            SizeType sizeType,
+            Gender gender,
+            String newImageUrl
+    ) {
+        this.name = new Name(name);
+        this.description = new Description(description);
+        this.birthDate = new BirthDate(birthDate);
+        this.sizeType = sizeType;
+        this.gender = gender;
+        this.imageUrl = newImageUrl;
+    }
 }
