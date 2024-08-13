@@ -52,7 +52,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     private Club club2;
 
     @BeforeEach
-    @Transactional
     void setUp() {
         member1 = memberRepository.save(new Member("name", "a", "https://a.com"));
         member2 = memberRepository.save(new Member("name2", "b", "https://b.com"));
@@ -106,7 +105,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     }
 
     @DisplayName("내가 속해 있는 채팅방을 찾을 수 있다.")
-    @Transactional
     @Test
     void findMine() {
         // when
@@ -130,7 +128,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     }
 
     @DisplayName("채팅방 내 멤버 세부정보를 조회할 수 있다.")
-    @Transactional
     @Test
     void findMemberInfo() {
         // when
@@ -167,7 +164,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     }
 
     @DisplayName("자신이 참여한 채팅방이 아니면 채팅방에서 모임 정보를 받아올 수 없다.")
-    @Transactional
     @Test
     void findClubDetails_Fail() {
         // when - then
