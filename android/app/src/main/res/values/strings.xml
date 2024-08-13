@@ -20,7 +20,7 @@
     <string name="make_profile_title">프로필 만들기</string>
     <string name="make_profile_edit_title">프로필 수정하기</string>
     <string name="make_profile_edit_btn_title">선택 완료!</string>
-    <string name="user_name_length">%d/15</string>
+    <string name="user_name_length">%d/8</string>
 
     <!--홈화면-->
     <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>

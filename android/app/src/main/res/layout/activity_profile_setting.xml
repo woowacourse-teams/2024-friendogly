@@ -86,7 +86,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray03_fill_16"
                 android:hint="@string/profile_setting_nickname_hint"
-                android:maxLength="15"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="8"
                 android:maxLines="1"
                 android:text="@={vm.nickname}"
                 app:layout_constraintStart_toStartOf="@+id/tv_user_name_title"
@@ -103,7 +105,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/et_user_name"
                 app:layout_constraintEnd_toEndOf="@+id/et_user_name"
                 app:layout_constraintTop_toTopOf="@+id/et_user_name"
-                tools:text="0/15" />
+                tools:text="0/8" />
 
 
             <TextView
