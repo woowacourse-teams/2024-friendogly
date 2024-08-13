@@ -12,8 +12,6 @@ sealed interface ClubDetailEvent {
         data object NavigateToChat : Navigation
 
         data object NavigateToHome : Navigation
-
-        data class NavigateToProfile(val id: Long) : Navigation
     }
 
     data object FailLoadDetail : ClubDetailEvent

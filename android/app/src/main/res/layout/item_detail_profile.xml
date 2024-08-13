@@ -7,8 +7,12 @@
         <variable
             name="profile"
             type="com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel" />
+        <variable
+            name="navigation"
+            type="com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->navigation.navigateToProfile(profile)}"
         android:layout_marginEnd="10dp"
         android:layout_width="80dp"
         android:layout_height="wrap_content">

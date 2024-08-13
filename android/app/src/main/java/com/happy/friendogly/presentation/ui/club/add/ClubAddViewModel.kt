@@ -19,9 +19,9 @@ import com.happy.friendogly.presentation.ui.club.add.model.ClubCounter
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterItemActionHandler
-import com.happy.friendogly.presentation.ui.club.mapper.toDomain
-import com.happy.friendogly.presentation.ui.club.mapper.toGenders
-import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
+import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
+import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
+import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeTypes
 import com.happy.friendogly.presentation.utils.addSourceList
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody

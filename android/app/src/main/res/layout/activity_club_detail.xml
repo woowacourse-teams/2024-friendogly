@@ -76,7 +76,6 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_club_detail_user_image"
                 glide="@{vm.club.clubLeaderImage}"
-                onSingleClick="@{() -> vm.navigateToProfile(1)}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"

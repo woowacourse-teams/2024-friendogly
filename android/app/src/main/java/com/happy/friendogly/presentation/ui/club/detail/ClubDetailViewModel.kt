@@ -11,7 +11,7 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
-import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import kotlinx.coroutines.launch
 
@@ -55,10 +55,6 @@ class ClubDetailViewModel(
     override fun openMenu() {
         val detailViewType = club.value?.clubDetailViewType ?: return
         _clubDetailEvent.emit(ClubDetailEvent.OpenDetailMenu(detailViewType))
-    }
-
-    override fun navigateToProfile(id: Long) {
-        _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToProfile(id = id))
     }
 
     fun joinClub(dogs: List<Long>) =
