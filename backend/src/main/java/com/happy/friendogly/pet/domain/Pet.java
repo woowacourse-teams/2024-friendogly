@@ -61,7 +61,7 @@ public class Pet {
             String imageUrl
     ) {
         validateMember(member);
-        
+
         this.member = member;
         this.name = new Name(name);
         this.description = new Description(description);
@@ -69,6 +69,20 @@ public class Pet {
         this.sizeType = sizeType;
         this.gender = gender;
         this.imageUrl = imageUrl;
+    }
+
+    public Pet(
+            Long id,
+            Member member,
+            String name,
+            String description,
+            LocalDate birthDate,
+            SizeType sizeType,
+            Gender gender,
+            String imageUrl
+    ) {
+        this(member, name, description, birthDate, sizeType, gender, imageUrl);
+        this.id = id;
     }
 
     private void validateMember(Member member) {
