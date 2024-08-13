@@ -22,9 +22,6 @@
     <string name="make_profile_edit_btn_title">선택 완료!</string>
     <string name="user_name_length">%d/8</string>
 
-    <!--홈화면-->
-    <string name="on_back_pressed_Message">뒤로가기 버튼을\n한번 더 누르면 종료됩니다.</string>
-
     <!--마이페이지-->
     <string name="edit_profile_title">프로필 편집</string>
     <string name="register_dog_title">등록하기</string>

@@ -2,14 +2,17 @@ package com.happy.friendogly.presentation.ui.woof
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -80,6 +83,7 @@ class WoofFragment :
     OnMapReadyCallback {
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
     private val mapView: MapView by lazy { binding.mapView }
@@ -153,6 +157,26 @@ class WoofFragment :
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.tvWoofWalkStatus.isVisible) {
+                    hideMarkerDetail()
+                    changeRecentlyClickedMarkerSize()
+                } else {
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onBackPressedCallback.remove()
     }
 
     override fun onRequestPermissionsResult(
@@ -638,7 +662,7 @@ class WoofFragment :
             ) { addresses ->
                 if (addresses.isEmpty()) return@getFromLocation
                 val address = addresses[0] ?: return@getFromLocation
-                activity?.runOnUiThread {
+                requireActivity().runOnUiThread {
                     viewModel.loadAddress(address)
                 }
             }
@@ -647,7 +671,7 @@ class WoofFragment :
                 geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
             if (addresses.isEmpty()) return
             val address = addresses[0] ?: return
-            activity?.runOnUiThread {
+            requireActivity().runOnUiThread {
                 viewModel.loadAddress(address)
             }
         }

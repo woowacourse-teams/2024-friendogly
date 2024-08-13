@@ -35,7 +35,6 @@ class MainActivity :
     private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
-    private var waitTime = 0L
 
     override fun initCreateView() {
         initNavController()
@@ -133,19 +132,6 @@ class MainActivity :
 
     override fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>) {
         resultLauncher.launch(SettingMyLocationActivity.getIntent(this))
-    }
-
-    override fun navigateToMyClub(isMyHead: Boolean) {
-        startActivity(MyClubActivity.getIntent(this, isMyHead))
-    }
-
-    override fun onBackPressed() {
-        if (System.currentTimeMillis() - waitTime >= 1500) {
-            waitTime = System.currentTimeMillis()
-            showToastMessage(getString(R.string.on_back_pressed_Message))
-        } else {
-            super.onBackPressed()
-        }
     }
 
     companion object {
