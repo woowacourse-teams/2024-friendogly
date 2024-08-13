@@ -76,7 +76,8 @@
                 android:background="@drawable/rect_gray03_fill_16"
                 android:hint="@string/club_add_club_subject_hint"
                 android:maxLength="100"
-                android:maxLines="2"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="14dp"
                 android:text="@={vm.clubTitle}" />
@@ -117,7 +118,6 @@
                 android:hint="@string/club_add_content_hint"
                 android:lines="5"
                 android:maxLength="1000"
-                android:maxLines="1"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="14dp"
                 android:text="@={vm.clubContent}" />
