@@ -12,8 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
-
-    //, "clubMembers", "clubPets"
     @EntityGraph(attributePaths = {"allowedGenders", "allowedSizes", "clubMembers", "clubPets"})
     List<Club> findAll(Specification<Club> clubSpecification);
 
@@ -46,5 +44,5 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
                 JOIN FETCH CP.clubPetPk.pet
                 WHERE M.id = :memberId
             """)
-    List<Club> findAllByParticipantMemberId(@Param("memberId") Long memberId);
+    List<Club> findAllByParticipantingMemberId(@Param("memberId") Long memberId);
 }

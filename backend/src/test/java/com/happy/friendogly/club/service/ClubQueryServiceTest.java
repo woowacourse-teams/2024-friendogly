@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
+import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubMineResponse;
+import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +27,9 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
     @Autowired
     private ClubQueryService clubQueryService;
+
+    @Autowired
+    private ClubCommandService clubCommandService;
 
     private Member savedMember;
     private Pet savedPet;
@@ -110,23 +116,25 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Set.of(SizeType.SMALL)
         );
 
+        Member savedMember2 = memberRepository.save(Member.builder()
+                .name("위브")
+                .build());
+        Pet savedPet2 = createSavedPet(savedMember2);
         Club club2 = createSavedClub(
-                savedMember,
-                savedPet,
+                savedMember2,
+                savedPet2,
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
 
+        clubCommandService.joinClub(club2.getId(), savedMember.getId(),
+                new SaveClubMemberRequest(List.of(savedPet.getId())));
+
         List<FindClubMineResponse> actual = clubQueryService.findMine(savedMember.getId());
-        List<FindClubMineResponse> expected = List.of(
-                new FindClubMineResponse(club1, List.of(petImageUrl)),
-                new FindClubMineResponse(club2, List.of(petImageUrl))
-        );
+        List<FindClubMineResponse> expected = List.of(new FindClubMineResponse(club1, List.of(petImageUrl)));
 
         FindClubMineResponse actual1 = actual.get(0);
-        FindClubMineResponse actual2 = actual.get(1);
         FindClubMineResponse expected1 = expected.get(0);
-        FindClubMineResponse expected2 = expected.get(1);
 
         assertAll(
                 () -> assertThat(actual1.id()).isEqualTo(expected1.id()),
@@ -136,8 +144,58 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 () -> assertThat(actual1.ownerMemberName()).isEqualTo(expected1.ownerMemberName()),
                 () -> assertThat(actual1.status()).isEqualTo(expected1.status()),
                 () -> assertThat(actual1.allowedSize()).containsExactlyInAnyOrderElementsOf(expected1.allowedSize()),
-                () -> assertThat(actual1.allowedGender()).containsExactlyInAnyOrderElementsOf(
-                        expected1.allowedGender()),
+                () -> assertThat(actual1.allowedGender()).containsExactlyInAnyOrderElementsOf(expected1.allowedGender()),
+                () -> assertThat(actual1.memberCapacity()).isEqualTo(expected1.memberCapacity()),
+                () -> assertThat(actual1.currentMemberCount()).isEqualTo(expected1.currentMemberCount()),
+                () -> assertThat(actual1.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected1.petImageUrls())
+        );
+    }
+
+    @DisplayName("내가 참여중인 모임을 조회한다.")
+    @Transactional
+    @Test
+    void findParticipating() {
+        Club club1 = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+
+        Member savedMember2 = memberRepository.save(Member.builder()
+                .name("위브")
+                .build());
+        Pet savedPet2 = createSavedPet(savedMember2);
+        Club club2 = createSavedClub(
+                savedMember2,
+                savedPet2,
+                Set.of(Gender.FEMALE),
+                Set.of(SizeType.SMALL)
+        );
+
+        clubCommandService.joinClub(club2.getId(), savedMember.getId(),
+                new SaveClubMemberRequest(List.of(savedPet.getId())));
+
+        List<FindClubParticipatingResponse> actual = clubQueryService.findParticipating(savedMember.getId());
+        List<FindClubParticipatingResponse> expected = List.of(
+                new FindClubParticipatingResponse(club1, List.of(petImageUrl)),
+                new FindClubParticipatingResponse(club2, List.of(petImageUrl, petImageUrl))
+        );
+
+        FindClubParticipatingResponse actual1 = actual.get(0);
+        FindClubParticipatingResponse actual2 = actual.get(1);
+        FindClubParticipatingResponse expected1 = expected.get(0);
+        FindClubParticipatingResponse expected2 = expected.get(1);
+
+        assertAll(
+                () -> assertThat(actual1.id()).isEqualTo(expected1.id()),
+                () -> assertThat(actual1.title()).isEqualTo(expected1.title()),
+                () -> assertThat(actual1.content()).isEqualTo(expected1.content()),
+                () -> assertThat(actual1.address()).isEqualTo(expected1.address()),
+                () -> assertThat(actual1.ownerMemberName()).isEqualTo(expected1.ownerMemberName()),
+                () -> assertThat(actual1.status()).isEqualTo(expected1.status()),
+                () -> assertThat(actual1.allowedSize()).containsExactlyInAnyOrderElementsOf(expected1.allowedSize()),
+                () -> assertThat(actual1.allowedGender()).containsExactlyInAnyOrderElementsOf(expected1.allowedGender()),
                 () -> assertThat(actual1.memberCapacity()).isEqualTo(expected1.memberCapacity()),
                 () -> assertThat(actual1.currentMemberCount()).isEqualTo(expected1.currentMemberCount()),
                 () -> assertThat(actual1.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected1.petImageUrls()),
@@ -148,8 +206,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 () -> assertThat(actual2.ownerMemberName()).isEqualTo(expected2.ownerMemberName()),
                 () -> assertThat(actual2.status()).isEqualTo(expected2.status()),
                 () -> assertThat(actual2.allowedSize()).containsExactlyInAnyOrderElementsOf(expected2.allowedSize()),
-                () -> assertThat(actual2.allowedGender()).containsExactlyInAnyOrderElementsOf(
-                        expected2.allowedGender()),
+                () -> assertThat(actual2.allowedGender()).containsExactlyInAnyOrderElementsOf(expected2.allowedGender()),
                 () -> assertThat(actual2.memberCapacity()).isEqualTo(expected2.memberCapacity()),
                 () -> assertThat(actual2.currentMemberCount()).isEqualTo(expected2.currentMemberCount()),
                 () -> assertThat(actual2.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected2.petImageUrls())
