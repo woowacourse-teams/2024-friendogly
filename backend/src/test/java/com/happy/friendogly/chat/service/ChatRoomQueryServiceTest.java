@@ -16,7 +16,6 @@ import com.happy.friendogly.chat.dto.response.ChatRoomDetail;
 import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
 import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
-import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
@@ -34,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class ChatRoomQueryServiceTest extends ServiceTest {
-
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private ChatRoomQueryService chatRoomQueryService;
