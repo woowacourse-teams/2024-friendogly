@@ -87,4 +87,13 @@ public class FootprintController {
         UpdateWalkStatusResponse walkStatusResponse = footprintCommandService.updateWalkStatus(memberId, request);
         return ApiResponse.ofSuccess(walkStatusResponse);
     }
+
+    @PatchMapping("/walk-status/test/{memberId}")
+    public ApiResponse<UpdateWalkStatusResponse> updateWalkStatusTest(
+            @PathVariable Long memberId,
+            @Valid @RequestBody UpdateWalkStatusRequest request
+    ) {
+        UpdateWalkStatusResponse walkStatusResponse = footprintCommandService.updateWalkStatus(memberId, request);
+        return ApiResponse.ofSuccess(walkStatusResponse);
+    }
 }

@@ -10,9 +10,11 @@ import com.happy.friendogly.notification.service.FcmNotificationService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/device-tokens")
 public class DeviceTokenController {
 
     private final DeviceTokenService deviceTokenService;
@@ -21,8 +23,8 @@ public class DeviceTokenController {
         this.deviceTokenService = deviceTokenService;
     }
 
-    @PatchMapping("/device-tokens")
-    public ApiResponse<UpdateDeviceTokenResponse> updateDeviceTokens(
+    @PatchMapping
+    public ApiResponse<UpdateDeviceTokenResponse> update(
             @Auth Long memberId,
             @Valid @RequestBody UpdateDeviceTokenRequest request
     ) {

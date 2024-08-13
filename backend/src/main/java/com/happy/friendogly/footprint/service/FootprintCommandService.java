@@ -105,7 +105,7 @@ public class FootprintCommandService {
 
         WalkStatus beforeWalkStatus = footprint.getWalkStatus();
 
-
+        footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
         if(beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()){
             List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
             String memberName = footprint.getMember().getName().getValue();
@@ -118,7 +118,7 @@ public class FootprintCommandService {
 
 
 
-        footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
+
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
 
