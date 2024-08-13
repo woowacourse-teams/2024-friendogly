@@ -1,7 +1,9 @@
 package com.happy.friendogly.infra;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +52,12 @@ public class S3StorageManager implements FileStorageManager {
         }
 
         if (file.getSize() > FILE_SIZE_LIMIT * MB) {
-            throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
+            throw new FriendoglyException(
+                    String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT),
+                    ErrorCode.FILE_SIZE_EXCEED,
+                    BAD_REQUEST
+            );
+//            throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
         }
 
         // TODO: 실제 파일명에서 확장자 가져오기
