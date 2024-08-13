@@ -88,4 +88,10 @@ public class S3StorageManager implements FileStorageManager {
             throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생", INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public void removeFile(String oldImageUrl) {
+        // TODO: 구현
+        System.out.println("removed file");
+    }
 }
