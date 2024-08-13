@@ -59,11 +59,11 @@ class PetControllerTest extends ControllerTest {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
+    @DisplayName("닉네임 길이가 8자를 초과하는 경우 400을 반환한다.")
     @Test
     void savePet_Fail_NameLengthOver() {
         SavePetRequest request = new SavePetRequest(
-                "1234567890123456",
+                "123456789",
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
@@ -80,12 +80,12 @@ class PetControllerTest extends ControllerTest {
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
-    @DisplayName("한 줄 설명의 길이가 15자를 초과하는 경우 400을 반환한다.")
+    @DisplayName("한 줄 설명의 길이가 20자를 초과하는 경우 400을 반환한다.")
     @Test
     void savePet_Fail_DescriptionLengthOver() {
         SavePetRequest request = new SavePetRequest(
                 "땡이",
-                "1234567890123456",
+                "123456789012345678901",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
                 "FEMALE_NEUTERED"

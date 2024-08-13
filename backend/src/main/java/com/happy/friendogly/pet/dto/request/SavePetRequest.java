@@ -8,11 +8,11 @@ import java.time.LocalDate;
 
 public record SavePetRequest(
         @NotBlank(message = "name은 빈 문자열이나 null을 입력할 수 없습니다.")
-        @Size(max = 15, message = "이름은 1글자 이상 15글자 이하여야 합니다.")
+        @Size(max = 8, message = "이름은 1글자 이상 8글자 이하여야 합니다.")
         String name,
 
         @NotBlank(message = "description은 빈 문자열이나 null을 입력할 수 없습니다.")
-        @Size(max = 15, message = "설명은 1글자 이상 15글자 이하여야 합니다.")
+        @Size(max = 20, message = "설명은 1글자 이상 20글자 이하여야 합니다.")
         String description,
 
         @NotNull(message = "birthDate는 빈 문자열이나 null을 입력할 수 없습니다.")
