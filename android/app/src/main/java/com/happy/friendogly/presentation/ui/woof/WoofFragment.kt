@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
@@ -460,9 +461,9 @@ class WoofFragment :
             viewModel.loadNearFootprints(latLng)
             viewModel.updateWalkStatus(latLng)
             moveCameraCenterPosition(latLng)
-            map.locationTrackingMode = LocationTrackingMode.Follow
             Handler(Looper.getMainLooper()).postDelayed(
                 {
+                    map.locationTrackingMode = LocationTrackingMode.Follow
                     hideLoadingAnimation()
                 },
                 LOADING_DELAY_MILLIS,
@@ -489,7 +490,6 @@ class WoofFragment :
 
     private fun moveCameraCenterPosition(position: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
-
         map.moveCamera(cameraUpdate)
     }
 
@@ -713,7 +713,7 @@ class WoofFragment :
         private const val MARKER_HEIGHT = 111
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
-        private const val LOADING_DELAY_MILLIS = 2000L
+        private const val LOADING_DELAY_MILLIS = 1000L
         private const val ANIMATE_DURATION_MILLIS = 300L
         private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
         private const val MIN_KOREA_LATITUDE = 33.0
