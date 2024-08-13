@@ -46,8 +46,7 @@ class PetControllerTest extends ControllerTest {
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
-                "FEMALE_NEUTERED",
-                "http://www.google.com"
+                "FEMALE_NEUTERED"
         );
 
         RestAssured.given().log().all()
@@ -68,8 +67,7 @@ class PetControllerTest extends ControllerTest {
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
-                "FEMALE_NEUTERED",
-                "http://www.google.com"
+                "FEMALE_NEUTERED"
         );
 
         RestAssured.given().log().all()
@@ -90,8 +88,7 @@ class PetControllerTest extends ControllerTest {
                 "1234567890123456",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
-                "FEMALE_NEUTERED",
-                "http://www.google.com"
+                "FEMALE_NEUTERED"
         );
 
         RestAssured.given().log().all()
@@ -112,30 +109,7 @@ class PetControllerTest extends ControllerTest {
                 "땡이입니다.",
                 LocalDate.now().plusDays(1L),
                 "SMALL",
-                "FEMALE_NEUTERED",
-                "http://www.google.com"
-        );
-
-        RestAssured.given().log().all()
-                .contentType(ContentType.MULTIPART)
-                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member.getId()))
-                .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
-                .multiPart("request", request, "application/json")
-                .when().post("/pets")
-                .then().log().all()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @DisplayName("이미지 URL이 형식에 맞지 않는 경우 400을 반환한다.")
-    @Test
-    void savePet_Fail_InvalidUrlFormat() {
-        SavePetRequest request = new SavePetRequest(
-                "땡이",
-                "땡이입니다.",
-                LocalDate.now().minusDays(1L),
-                "SMALL",
-                "FEMALE_NEUTERED",
-                "내맘대로 URL주소 지정하기~"
+                "FEMALE_NEUTERED"
         );
 
         RestAssured.given().log().all()
@@ -156,8 +130,7 @@ class PetControllerTest extends ControllerTest {
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
                 "SMALL",
-                "FEMALE_NEUTERED",
-                "http://www.google.com"
+                "FEMALE_NEUTERED"
         );
 
         RestAssured.given().log().all()

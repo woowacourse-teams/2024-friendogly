@@ -50,8 +50,7 @@ public class PetApiDocsTest extends RestDocsTest {
                 "땡이입니다.",
                 LocalDate.now().minusDays(1L),
                 SizeType.SMALL.toString(),
-                Gender.FEMALE.toString(),
-                "https://google.com"
+                Gender.FEMALE.toString()
         );
         SavePetResponse response = new SavePetResponse(
                 1L,
@@ -92,8 +91,7 @@ public class PetApiDocsTest extends RestDocsTest {
                                 fieldWithPath("sizeType").type(JsonFieldType.STRING)
                                         .description("반려견 크기: SMALL, MEDIUM, LARGE"),
                                 fieldWithPath("gender").type(JsonFieldType.STRING)
-                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
-                                fieldWithPath("imageUrl").type(JsonFieldType.STRING).description("반려견 이미지 URL")
+                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED")
                         ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Pet API")
