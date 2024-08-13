@@ -14,6 +14,7 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
+import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
 import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.club.menu.ClubMenuBottomSheet
@@ -21,6 +22,7 @@ import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.ui.woof.PetImageActivity
 
 class ClubDetailActivity :
     BaseActivity<ActivityClubDetailBinding>(R.layout.activity_club_detail),
@@ -37,10 +39,10 @@ class ClubDetailActivity :
         FilterAdapter()
     }
     private val dogAdapter: DetailProfileAdapter by lazy {
-        DetailProfileAdapter()
+        DetailProfileAdapter(this@ClubDetailActivity)
     }
     private val userAdapter: DetailProfileAdapter by lazy {
-        DetailProfileAdapter()
+        DetailProfileAdapter(this@ClubDetailActivity)
     }
 
     override fun initCreateView() {
@@ -129,9 +131,6 @@ class ClubDetailActivity :
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
 
-                is ClubDetailEvent.Navigation.NavigateToProfile ->
-                    startActivity(OtherProfileActivity.getIntent(this, event.id))
-
                 ClubDetailEvent.FailLoadDetail -> openFailClubDetailLoad()
                 ClubDetailEvent.FailParticipation ->
                     showSnackbar(
@@ -169,6 +168,23 @@ class ClubDetailActivity :
     override fun navigateToPrevWithReload() {
         putLoadState()
         finish()
+    }
+
+    override fun navigateToProfile(clubDetailProfileUiModel: ClubDetailProfileUiModel) {
+        if (clubDetailProfileUiModel.isPet) {
+            openPetDetail(clubDetailProfileUiModel.imageUrl)
+        } else {
+            openUserProfile(clubDetailProfileUiModel.id)
+        }
+    }
+
+    private fun openPetDetail(imageUrl: String?) {
+        val petImage = imageUrl ?: return
+        startActivity(PetImageActivity.getIntent(this@ClubDetailActivity, petImage))
+    }
+
+    private fun openUserProfile(id: Long) {
+        startActivity(OtherProfileActivity.getIntent(this, id))
     }
 
     private fun putLoadState() {

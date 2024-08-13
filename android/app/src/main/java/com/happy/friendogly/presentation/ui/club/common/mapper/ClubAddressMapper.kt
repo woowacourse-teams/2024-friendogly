@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.mapper
+package com.happy.friendogly.presentation.ui.club.common.mapper
 
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.UserAddress

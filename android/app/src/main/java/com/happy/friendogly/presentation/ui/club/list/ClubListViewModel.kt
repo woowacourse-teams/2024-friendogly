@@ -12,14 +12,14 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
+import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
+import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeTypes
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
-import com.happy.friendogly.presentation.ui.club.mapper.toDomain
-import com.happy.friendogly.presentation.ui.club.mapper.toGenders
-import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
@@ -31,7 +31,7 @@ class ClubListViewModel(
     val uiState: LiveData<ClubListUiState> get() = _uiState
 
     private val _myAddress: MutableLiveData<UserAddress> =
-        MutableLiveData()
+        MutableLiveData(null)
     val myAddress: LiveData<UserAddress> get() = _myAddress
 
     private val _participationFilter: MutableLiveData<ParticipationFilter> =
@@ -99,7 +99,11 @@ class ClubListViewModel(
     }
 
     override fun addClub() {
-        _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+        if (myAddress.value == null) {
+            _clubListEvent.emit(ClubListEvent.FailLocation)
+        } else {
+            _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+        }
     }
 
     override fun selectParticipationFilter() {
