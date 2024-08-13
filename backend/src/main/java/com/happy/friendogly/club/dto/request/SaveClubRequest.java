@@ -20,10 +20,10 @@ public record SaveClubRequest(
         @NotBlank(message = "도/광역시/특별시 정보는 필수 값입니다.")
         String province,
 
-        @NotBlank(message = "시/군/구 정보는 필수 값입니다.")
+//        @NotBlank(message = "시/군/구 정보는 필수 값입니다.")
         String city,
 
-        @NotBlank(message = "읍/면/동 정보는 필수 값입니다.")
+//        @NotBlank(message = "읍/면/동 정보는 필수 값입니다.")
         String village,
 
         @NotEmpty(message = "모임에 참여가능한 반려견 성별을 선택해주세요.")
