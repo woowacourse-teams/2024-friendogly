@@ -9,7 +9,9 @@ import com.happy.friendogly.auth.service.jwt.TokenPayload;
 import com.happy.friendogly.infra.FileStorageManager;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.dto.request.SaveMemberRequest;
+import com.happy.friendogly.member.dto.request.UpdateMemberRequest;
 import com.happy.friendogly.member.dto.response.SaveMemberResponse;
+import com.happy.friendogly.member.dto.response.UpdateMemberResponse;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;
@@ -59,5 +61,21 @@ public class MemberCommandService {
         kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
 
         return new SaveMemberResponse(savedMember, tokens);
+    }
+
+    public UpdateMemberResponse update(Long memberId, UpdateMemberRequest request, MultipartFile image) {
+        Member member = memberRepository.getById(memberId);
+
+        String newImageUrl = request.newImageUrl();
+        if (image != null && !image.isEmpty()) {
+            newImageUrl = fileStorageManager.uploadFile(image);
+        }
+        member.update(request.name(), newImageUrl);
+
+        if (!request.oldImageUrl().equals(request.newImageUrl())) {
+            fileStorageManager.removeFile(request.oldImageUrl());
+        }
+
+        return new UpdateMemberResponse(member);
     }
 }
