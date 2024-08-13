@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
@@ -35,7 +34,6 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMark
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
-
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint

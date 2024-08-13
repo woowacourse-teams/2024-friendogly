@@ -35,7 +35,6 @@ class MainActivity :
     private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
-    private var waitTime = 0L
 
     override fun initCreateView() {
         initNavController()
@@ -136,6 +135,11 @@ class MainActivity :
     override fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>) {
         resultLauncher.launch(SettingMyLocationActivity.getIntent(this))
     }
+
+    override fun navigateToMyClub(isMyHead: Boolean) {
+        startActivity(MyClubActivity.getIntent(this, isMyHead))
+    }
+
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
