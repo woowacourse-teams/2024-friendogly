@@ -7,6 +7,7 @@ import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
+import com.happy.friendogly.club.dto.response.FindClubMineResponse;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
@@ -97,5 +98,61 @@ class ClubQueryServiceTest extends ClubServiceTest {
         List<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
 
         assertThat(responses.isEmpty()).isTrue();
+    }
+
+    @DisplayName("내가 방장인 모임을 조회한다.")
+    @Test
+    void findMine() {
+        Club club1 = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+
+        Club club2 = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE),
+                Set.of(SizeType.SMALL)
+        );
+
+        List<FindClubMineResponse> actual = clubQueryService.findMine(savedMember.getId());
+        List<FindClubMineResponse> expected = List.of(
+                new FindClubMineResponse(club1, List.of(petImageUrl)),
+                new FindClubMineResponse(club2, List.of(petImageUrl))
+        );
+
+        FindClubMineResponse actual1 = actual.get(0);
+        FindClubMineResponse actual2 = actual.get(1);
+        FindClubMineResponse expected1 = expected.get(0);
+        FindClubMineResponse expected2 = expected.get(1);
+
+        assertAll(
+                () -> assertThat(actual1.id()).isEqualTo(expected1.id()),
+                () -> assertThat(actual1.title()).isEqualTo(expected1.title()),
+                () -> assertThat(actual1.content()).isEqualTo(expected1.content()),
+                () -> assertThat(actual1.address()).isEqualTo(expected1.address()),
+                () -> assertThat(actual1.ownerMemberName()).isEqualTo(expected1.ownerMemberName()),
+                () -> assertThat(actual1.status()).isEqualTo(expected1.status()),
+                () -> assertThat(actual1.allowedSize()).containsExactlyInAnyOrderElementsOf(expected1.allowedSize()),
+                () -> assertThat(actual1.allowedGender()).containsExactlyInAnyOrderElementsOf(
+                        expected1.allowedGender()),
+                () -> assertThat(actual1.memberCapacity()).isEqualTo(expected1.memberCapacity()),
+                () -> assertThat(actual1.currentMemberCount()).isEqualTo(expected1.currentMemberCount()),
+                () -> assertThat(actual1.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected1.petImageUrls()),
+                () -> assertThat(actual2.id()).isEqualTo(expected2.id()),
+                () -> assertThat(actual2.title()).isEqualTo(expected2.title()),
+                () -> assertThat(actual2.content()).isEqualTo(expected2.content()),
+                () -> assertThat(actual2.address()).isEqualTo(expected2.address()),
+                () -> assertThat(actual2.ownerMemberName()).isEqualTo(expected2.ownerMemberName()),
+                () -> assertThat(actual2.status()).isEqualTo(expected2.status()),
+                () -> assertThat(actual2.allowedSize()).containsExactlyInAnyOrderElementsOf(expected2.allowedSize()),
+                () -> assertThat(actual2.allowedGender()).containsExactlyInAnyOrderElementsOf(
+                        expected2.allowedGender()),
+                () -> assertThat(actual2.memberCapacity()).isEqualTo(expected2.memberCapacity()),
+                () -> assertThat(actual2.currentMemberCount()).isEqualTo(expected2.currentMemberCount()),
+                () -> assertThat(actual2.petImageUrls()).containsExactlyInAnyOrderElementsOf(expected2.petImageUrls())
+        );
     }
 }
