@@ -77,9 +77,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 "https://image.com",
                 List.of(pet1)
         );
-        club1.addClubMember(member2);
-        club1.addClubPet(List.of(pet2));
-        club1.addChatRoomMember(member2);
         clubRepository.save(club1);
 
         club2 = Club.create(
@@ -95,9 +92,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 "https://image.com",
                 List.of(pet1)
         );
-        club2.addClubMember(member3);
-        club2.addClubPet(List.of(pet3));
-        club2.addChatRoomMember(member3);
         clubRepository.save(club2);
 
         chatRoom1 = club1.getChatRoom();
@@ -120,7 +114,7 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                         .containsExactly("모임 제목1", "모임 제목2"),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::memberCount)
-                        .containsExactly(2, 2),
+                        .containsExactly(1, 1),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::clubImageUrl)
                         .containsExactly("https://image.com", "https://image.com")
@@ -128,8 +122,14 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     }
 
     @DisplayName("채팅방 내 멤버 세부정보를 조회할 수 있다.")
+    @Transactional
     @Test
     void findMemberInfo() {
+        // given
+        club1.addClubMember(member2);
+        club1.addClubPet(List.of(pet2));
+        club1.addChatRoomMember(member2);
+
         // when
         List<FindChatRoomMembersInfoResponse> response
                 = chatRoomQueryService.findMemberInfo(member1.getId(), chatRoom1.getId());
@@ -138,7 +138,7 @@ class ChatRoomQueryServiceTest extends ServiceTest {
         assertAll(
                 () -> assertThat(response)
                         .extracting(FindChatRoomMembersInfoResponse::memberName)
-                        .containsExactly("name", "name2"),
+                        .containsExactly("트레", "벼리"),
                 () -> assertThat(response)
                         .extracting(FindChatRoomMembersInfoResponse::isOwner)
                         .containsExactly(true, false)
