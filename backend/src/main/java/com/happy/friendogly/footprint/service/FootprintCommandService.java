@@ -12,7 +12,7 @@ import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
-import com.happy.friendogly.notification.service.FcmNotificationService;
+import com.happy.friendogly.notification.service.NotificationService;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
@@ -29,19 +29,19 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
-    private final FcmNotificationService fcmNotificationService;
+    private final NotificationService notificationService;
     private final DeviceTokenRepository deviceTokenRepository;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
             PetRepository petRepository,
-            FcmNotificationService fcmNotificationService,
+            NotificationService notificationService,
             DeviceTokenRepository deviceTokenRepository) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
-        this.fcmNotificationService = fcmNotificationService;
+        this.notificationService = notificationService;
         this.deviceTokenRepository = deviceTokenRepository;
     }
 
@@ -93,7 +93,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
-        fcmNotificationService.sendNotification(
+        notificationService.sendNotification(
                 "반갑개",
                 "내 산책 장소에 " + memberName + "님도 산책온대요!",
                 nearDeviceTokens
@@ -119,7 +119,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
-        fcmNotificationService.sendNotification(
+        notificationService.sendNotification(
                 "반갑개",
                 "내 산책장소에 "+startMemberName+"님이 산책을 시작했어요!",
                 nearDeviceTokens
