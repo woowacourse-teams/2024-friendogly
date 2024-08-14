@@ -43,7 +43,7 @@ public class DeviceTokenApiDocsTest extends RestDocsTest{
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, getMemberToken()))
                 .andDo(print())
-                .andDo(document("/device-tokens",
+                .andDo(document("device-tokens",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
