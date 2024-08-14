@@ -79,17 +79,13 @@ public class PetCommandService {
             newImageUrl = fileStorageManager.uploadFile(image);
         }
 
-        Pet newPet = new Pet(
-                pet.getId(),
-                member,
+        pet.update(
                 request.name(),
                 request.description(),
                 request.birthDate(),
-                SizeType.toSizeType(request.sizeType()),
-                Gender.toGender(request.gender()),
+                request.sizeType(),
+                request.gender(),
                 newImageUrl
         );
-
-        petRepository.save(newPet);
     }
 }

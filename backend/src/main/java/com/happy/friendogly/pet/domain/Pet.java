@@ -71,20 +71,6 @@ public class Pet {
         this.imageUrl = imageUrl;
     }
 
-    public Pet(
-            Long id,
-            Member member,
-            String name,
-            String description,
-            LocalDate birthDate,
-            SizeType sizeType,
-            Gender gender,
-            String imageUrl
-    ) {
-        this(member, name, description, birthDate, sizeType, gender, imageUrl);
-        this.id = id;
-    }
-
     private void validateMember(Member member) {
         if (member == null) {
             throw new FriendoglyException("member는 null일 수 없습니다.");
@@ -93,5 +79,21 @@ public class Pet {
 
     public boolean isOwner(Member member) {
         return this.member.getId().equals(member.getId());
+    }
+
+    public void update(
+            String name,
+            String description,
+            LocalDate birthDate,
+            String sizeType,
+            String gender,
+            String imageUrl
+    ) {
+        this.name = new Name(name);
+        this.description = new Description(description);
+        this.birthDate = new BirthDate(birthDate);
+        this.sizeType = SizeType.toSizeType(sizeType);
+        this.gender = Gender.toGender(gender);
+        this.imageUrl = imageUrl;
     }
 }
