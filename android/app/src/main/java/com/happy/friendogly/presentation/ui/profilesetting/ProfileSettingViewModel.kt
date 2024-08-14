@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -48,6 +50,9 @@ class ProfileSettingViewModel(
     private val _navigateAction: MutableLiveData<Event<ProfileSettingNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<ProfileSettingNavigationAction>> get() = _navigateAction
+
+    private val _message: MutableLiveData<Event<ProfileSettingMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<ProfileSettingMessage>> get() = _message
 
     init {
         fetchProfile()
@@ -102,11 +107,17 @@ class ProfileSettingViewModel(
             name = nickname,
             file = profilePath,
             accessToken = accessToken,
-        ).onSuccess { register ->
-            saveJwaToken(register.tokens)
-        }.onFailure {
-            // TODO 예외처리
-        }
+        ).fold(
+            onSuccess = { register ->
+                saveJwaToken(register.tokens)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.FILE_SIZE_EXCEED -> _message.emit(ProfileSettingMessage.FileSizeExceedMessage)
+                    else -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
+                }
+            },
+        )
     }
 
     private suspend fun saveJwaToken(jwtToken: JwtToken) {

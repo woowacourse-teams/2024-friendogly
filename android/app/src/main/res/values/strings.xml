@@ -286,4 +286,8 @@
     <string name="my_club_subject">참여 모임</string>
     <string name="my_head_club_subject">방장인 모임</string>
     <string name="club_list_my_location_default">내 동네 설정</string>
+
+    <!--에러 메시지-->
+    <string name="server_error_message">서버 에러가 발생했습니다</string>
+    <string name="file_size_eceed_message">1MB를 초과하는 이미지는 등록할 수 없어요</string>
 </resources>

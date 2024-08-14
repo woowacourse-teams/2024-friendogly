@@ -62,6 +62,13 @@ class ProfileSettingActivity :
                 }
             }
         }
+
+        viewModel.message.observeEvent(this) { message ->
+            when (message) {
+                is ProfileSettingMessage.FileSizeExceedMessage -> showToastMessage(getString(R.string.file_size_eceed_message))
+                is ProfileSettingMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+            }
+        }
     }
 
     private fun initImageLaunchers() {
