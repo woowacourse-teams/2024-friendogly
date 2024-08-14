@@ -24,8 +24,8 @@ public class ImageController {
     }
 
     @PostMapping("/test-delete")
-    public ResponseEntity<Void> deleteFile(@RequestBody DeleteImageRequest request) {
-        fileStorageManager.removeFile(request.oldImageUrl());
+    public ResponseEntity<Void> deleteFile(@RequestBody String oldImageUrl) {
+        fileStorageManager.removeFile(oldImageUrl);
         return ResponseEntity.ok().build();
     }
 }
