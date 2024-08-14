@@ -20,10 +20,8 @@ public interface FootprintRepository extends JpaRepository<Footprint, Long> {
                 .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
     }
 
-    Optional<Footprint> findByMemberIdAndIsDeletedFalse(Long memberId);
-
-    default Footprint getByMemberIdAndIsDeletedFalse(Long memberId) {
-        return findByMemberIdAndIsDeletedFalse(memberId)
+    default Footprint getById(Long id) {
+        return findById(id)
                 .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
     }
 }

@@ -1,9 +1,13 @@
 package com.happy.friendogly.footprint.service;
 
+import static com.happy.friendogly.common.ErrorCode.NOT_ALLOW_OTHER_FOOTPRINT_CHANGE;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
@@ -90,8 +94,13 @@ public class FootprintCommandService {
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
 
-    public void stopWalking(Long memberId) {
-        Footprint footprint = footprintRepository.getByMemberIdAndIsDeletedFalse(memberId);
+    public void stopWalking(Long memberId, StopWalkingRequest request) {
+        Member member = memberRepository.getById(memberId);
+        Footprint footprint = footprintRepository.getById(request.footprintId());
+        if (footprint.getMember() != member) {
+            throw new FriendoglyException("본인의 발자국만 변경 가능합니다.", NOT_ALLOW_OTHER_FOOTPRINT_CHANGE, BAD_REQUEST);
+        }
+
         footprint.stopWalking();
     }
 }

@@ -10,6 +10,7 @@ import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.member.domain.Member;
 import java.time.LocalDateTime;
@@ -235,7 +236,7 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         );
 
         // when
-        footprintCommandService.stopWalking(member.getId());
+        footprintCommandService.stopWalking(member.getId(), new StopWalkingRequest(savedFootprint.getId()));
 
         // then
         assertThat(savedFootprint.isDeleted()).isTrue();
@@ -252,9 +253,29 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         );
 
         // when
-        footprintCommandService.stopWalking(member.getId());
+        footprintCommandService.stopWalking(member.getId(), new StopWalkingRequest(savedFootprint.getId()));
 
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
+    }
+
+    @DisplayName("내 발자국이 아닌 발자국 산책종료시, 예외가 발생한다.")
+    @Test
+    void stopWalking_notMyFootprint() {
+        // given
+        Member otherMember = memberRepository.save(new Member("다른 멤버", "tag", "http://image.jpg"));
+        Footprint savedFootprint = footprintRepository.save(
+                FOOTPRINT_STATUS_ONGOING(new Location(0, 0))
+        );
+
+        // when - then
+        assertThatThrownBy(() ->
+                footprintCommandService.stopWalking(
+                        otherMember.getId(),
+                        new StopWalkingRequest(savedFootprint.getId())
+                )
+        )
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("본인의 발자국만 변경 가능합니다.");
     }
 }

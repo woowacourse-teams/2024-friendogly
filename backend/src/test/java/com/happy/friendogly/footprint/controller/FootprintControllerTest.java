@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.nullValue;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -262,13 +263,13 @@ class FootprintControllerTest extends ControllerTest {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         BEFORE,
                         null,
                         null,
                         LocalDateTime.now(),
                         false
-                        )
+                )
         );
 
         float latitude = 0.0F;
@@ -288,11 +289,11 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toAfter(){
+    void updateWalkStatus_toAfter() {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         ONGOING,
                         LocalDateTime.now(),
                         null,
@@ -313,16 +314,16 @@ class FootprintControllerTest extends ControllerTest {
                 .when().patch("/footprints/walk-status")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.walkStatus",is(AFTER.toString()));
+                .body("data.walkStatus", is(AFTER.toString()));
     }
 
     @DisplayName("산책을 종료할 수 있다. (204)")
     @Test
-    void stopWalking(){
-        footprintRepository.save(
+    void stopWalking() {
+        Footprint savedFootprint = footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         ONGOING,
                         LocalDateTime.now(),
                         null,
@@ -331,10 +332,7 @@ class FootprintControllerTest extends ControllerTest {
                 )
         );
 
-        float latitude = 0F;
-        float longitude = 0F;
-
-        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+        StopWalkingRequest request = new StopWalkingRequest(savedFootprint.getId());
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

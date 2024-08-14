@@ -4,6 +4,7 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.happy.friendogly.footprint.dto.response.FindNearFootprintResponse;
@@ -90,9 +91,10 @@ public class FootprintController {
 
     @PatchMapping("/stop-walking")
     public ResponseEntity<Void> stopWalking(
-            @Auth Long memberId
+            @Auth Long memberId,
+            @RequestBody StopWalkingRequest request
     ) {
-        footprintCommandService.stopWalking(memberId);
+        footprintCommandService.stopWalking(memberId, request);
         return ResponseEntity.noContent().build();
     }
 }

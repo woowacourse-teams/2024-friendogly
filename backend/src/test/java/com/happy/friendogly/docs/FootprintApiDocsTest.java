@@ -7,6 +7,7 @@ import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -26,6 +27,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.controller.FootprintController;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
+import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.happy.friendogly.footprint.dto.response.FindNearFootprintResponse;
@@ -325,6 +327,38 @@ public class FootprintApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
                                 )
                                 .requestSchema(Schema.schema("updateWalkStatusResponse"))
+                                .build()
+                        )
+                ));
+    }
+
+    @DisplayName("발자국 산책 종료")
+    @Test
+    void updateWalkStatus_204() throws Exception {
+        StopWalkingRequest request = new StopWalkingRequest(1L);
+
+        doNothing().when(footprintCommandService).stopWalking(any(), any());
+
+        mockMvc
+                .perform(patch("/footprints/stop-walking")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON)
+                        .header(AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("footprints/stop-walking",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Footprint API")
+                                .summary("발자국 산책 종료 API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
+                                )
+                                .requestFields(
+                                        fieldWithPath("footprintId").description("발자국 id")
+                                )
+                                .requestSchema(Schema.schema(""))
                                 .build()
                         )
                 ));
