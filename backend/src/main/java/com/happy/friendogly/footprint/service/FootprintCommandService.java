@@ -62,9 +62,9 @@ public class FootprintCommandService {
                         .build()
         );
 
-        List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
-        String memberName = member.getName().getValue();
-        sendWalkComingNotification(memberName,nearDeviceTokens);
+        List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, member);
+        String comingMemberName = member.getName().getValue();
+        sendWalkComingNotification(comingMemberName, nearDeviceTokens);
 
         return new SaveFootprintResponse(
                 footprint.getId(),
@@ -109,8 +109,9 @@ public class FootprintCommandService {
         WalkStatus beforeWalkStatus = footprint.getWalkStatus();
 
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
-        if(beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()){
-            List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
+        if (beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()) {
+            Member startWalkMember = memberRepository.getById(memberId);
+            List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, startWalkMember);
             String memberName = footprint.getMember().getName().getValue();
             sendWalkStartNotification(memberName, nearDeviceTokens);
         }
@@ -121,16 +122,17 @@ public class FootprintCommandService {
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
         notificationService.sendNotification(
                 "반갑개",
-                "내 산책장소에 "+startMemberName+"님이 산책을 시작했어요!",
+                "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
                 nearDeviceTokens
         );
     }
 
-    private List<String> findNearDeviceTokens(Footprint standardFootprint) {
+    private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
         List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
 
         return footprints.stream()
-                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation()))
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
+                        && otherFootprint.getMember() != member)
                 .map(otherFootprint -> otherFootprint.getMember().getId())
                 .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
                 .toList();
