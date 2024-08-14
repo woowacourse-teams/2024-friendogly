@@ -79,6 +79,13 @@
         <item name="android:textColor">@color/gray700</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size26" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">26dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.Gray09.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray800</item>
         <item name="android:textSize">18dp</item>
@@ -432,6 +439,27 @@
     <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size14" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/coral400</item>
         <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral500.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">22dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_semi_bold</item>
     </style>

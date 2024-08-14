@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -31,9 +31,7 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFol
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.*
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
@@ -64,6 +62,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
@@ -161,7 +160,7 @@ class WoofFragment :
         onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (binding.tvWoofWalkStatus.isVisible) {
+                    if (binding.tvWoofFootprintInfoWalkStatus.isVisible) {
                         hideMarkerDetail()
                         changeRecentlyClickedMarkerSize()
                     } else if (binding.layoutWoofRegisterMarker.isVisible) {
@@ -250,6 +249,11 @@ class WoofFragment :
         binding.btnWoofFootprintRefresh.isVisible = false
     }
 
+    override fun clickEndWalkBtn() {
+        viewModel.endWalk()
+        binding.chronometerWoofWalkTime.stop()
+    }
+
     override fun clickBackBtn() {
         analyticsHelper.logBackBtnClicked()
         hideRegisterMarkerLayout()
@@ -270,6 +274,7 @@ class WoofFragment :
             analyticsHelper.logFootprintClicked()
             viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
+            binding.btnWoofFootprintRefresh.isVisible = false
 
             val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
             val offsetDistance =
@@ -311,16 +316,17 @@ class WoofFragment :
         map.locationSource = locationSource
 
         map.uiSettings.apply {
-            isLocationButtonEnabled = true
+            isScaleBarEnabled = true
             isCompassEnabled = true
+            isLocationButtonEnabled = false
             isZoomControlEnabled = false
-            isScaleBarEnabled = false
         }
+        binding.lbvWoofLocation.map = map
         binding.lbvWoofLocationRegister.map = map
 
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
-                if (binding.tvWoofWalkStatus.isVisible) {
+                if (binding.tvWoofFootprintInfoWalkStatus.isVisible) {
                     hideMarkerDetail()
                     changeRecentlyClickedMarkerSize()
                 }
@@ -336,7 +342,7 @@ class WoofFragment :
                 binding.btnWoofFootprintRefresh.isVisible =
                     !binding.layoutWoofRegisterMarker.isVisible
 
-                if (binding.tvWoofWalkStatus.isVisible) {
+                if (binding.tvWoofFootprintInfoWalkStatus.isVisible) {
                     hideMarkerDetail()
                     changeRecentlyClickedMarkerSize()
                 }
@@ -366,7 +372,7 @@ class WoofFragment :
                 {
                     hideLoadingAnimation()
                 },
-                300,
+                LOADING_DELAY_MILLIS,
             )
         }
 
@@ -376,6 +382,7 @@ class WoofFragment :
                 createMyMarker(myFootprint)
             } else {
                 myMarker = null
+                circleOverlay.map = null
                 timer?.cancel()
             }
         }
@@ -387,6 +394,20 @@ class WoofFragment :
 
             if (walkStatus != WalkStatus.AFTER) {
                 startTimerAndUpdateWalkStatus()
+            }
+
+            if (walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING) {
+                binding.btnWoofMark.isVisible = false
+                binding.layoutWoofWalk.isVisible = true
+
+                val now = java.time.LocalDateTime.now()
+                val duration = Duration.between(now.minusMinutes(8).minusSeconds(30), now)
+                binding.chronometerWoofWalkTime.base =
+                    SystemClock.elapsedRealtime() - duration.toMillis()
+                binding.chronometerWoofWalkTime.start()
+            } else {
+                binding.btnWoofMark.isVisible = true
+                binding.layoutWoofWalk.isVisible = false
             }
         }
 
@@ -408,23 +429,15 @@ class WoofFragment :
                     map.locationTrackingMode =
                         LocationTrackingMode.Face
 
-                is RemoveNearFootprints -> {
-                    clearNearMarkers()
-                }
-
-                is ShowRegisterMarkerLayout -> {
-                    showRegisterMarkerLayout()
-                }
-
-                is HideRegisterMarkerLayout -> {
-                    hideRegisterMarkerLayout()
-                }
+                is RemoveNearFootprints -> clearNearMarkers()
+                is ShowRegisterMarkerLayout -> showRegisterMarkerLayout()
+                is HideRegisterMarkerLayout -> hideRegisterMarkerLayout()
             }
         }
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is ShowHasNotPetSnackbar -> {
+                is ShowHasNotPet -> {
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -434,8 +447,7 @@ class WoofFragment :
                     )
                 }
 
-
-                is ShowCantClickMarkBtnSnackbar -> {
+                is ShowCantClickMarkBtn -> {
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -447,6 +459,7 @@ class WoofFragment :
                 }
 
                 is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is ShowEndWalk -> showSnackbar(resources.getString(R.string.woof_stop_walk))
             }
         }
     }
@@ -487,14 +500,12 @@ class WoofFragment :
             viewModel.updateWalkStatus(latLng)
             viewModel.loadNearFootprints(latLng)
             moveCameraCenterPosition(latLng)
-
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     map.locationTrackingMode = LocationTrackingMode.Follow
                 },
-                300,
+                LOADING_DELAY_MILLIS,
             )
-
         }
     }
 
@@ -564,23 +575,8 @@ class WoofFragment :
     }
 
     private fun showViewAnimation(view: View) {
-        if (view.height == 0) {
-            view.viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        animateView(view)
-                        if (view.height > 0) view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    }
-                },
-            )
-        } else {
-            animateView(view)
-        }
-    }
-
-    private fun animateView(view: View) {
         view.apply {
-            translationY = height.toFloat()
+            translationY = if (height != 0) height.toFloat() else INVISIBLE_VIEW_HEIGHT
             animate().translationY(0f).setDuration(ANIMATE_DURATION_MILLIS).setListener(
                 object : AnimatorListenerAdapter() {
                     override fun onAnimationStart(animation: Animator) {
@@ -606,11 +602,11 @@ class WoofFragment :
 
     private fun showMarkerDetail() {
         showViewAnimation(binding.vpWoofPetDetail)
-        showViewAnimation(binding.tvWoofWalkStatus)
+        showViewAnimation(binding.tvWoofFootprintInfoWalkStatus)
     }
 
     private fun hideMarkerDetail() {
-        binding.tvWoofWalkStatus.isVisible = false
+        binding.tvWoofFootprintInfoWalkStatus.isVisible = false
         hideViewAnimation(binding.vpWoofPetDetail)
     }
 
@@ -714,18 +710,18 @@ class WoofFragment :
                         distanceResults,
                     )
                     val distance = distanceResults[0]
-                    if (startWalking(distance) || endWalking(distance)) {
+                    if (startWalk(distance) || endWalk(distance)) {
                         viewModel.updateWalkStatus(latLng)
                     }
                 }
             }
     }
 
-    private fun startWalking(distance: Float): Boolean {
+    private fun startWalk(distance: Float): Boolean {
         return viewModel.myWalkStatus.value == WalkStatus.BEFORE && distance <= WALKING_RADIUS
     }
 
-    private fun endWalking(distance: Float): Boolean {
+    private fun endWalk(distance: Float): Boolean {
         return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
     }
 
@@ -737,14 +733,13 @@ class WoofFragment :
         private const val MARKER_HEIGHT = 111
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
-        private const val LOADING_DELAY_MILLIS = 1000L
+        private const val LOADING_DELAY_MILLIS = 300L
         private const val ANIMATE_DURATION_MILLIS = 300L
         private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
         private const val MIN_KOREA_LATITUDE = 33.0
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
-
-        const val TAG = "WoofFragment"
+        private const val INVISIBLE_VIEW_HEIGHT = 900.0f
     }
 }

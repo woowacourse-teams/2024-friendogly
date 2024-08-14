@@ -97,10 +97,10 @@ class WoofViewModel(
                     footPrintMarkBtnInfo.remainingTime(),
                 )
                 if (!footPrintMarkBtnInfo.hasPet) {
-                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPetSnackbar)
+                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPet)
                 } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     _snackbarActions.emit(
-                        WoofSnackbarActions.ShowCantClickMarkBtnSnackbar(
+                        WoofSnackbarActions.ShowCantClickMarkBtn(
                             footPrintMarkBtnInfo.remainingTime(),
                         ),
                     )
@@ -180,6 +180,14 @@ class WoofViewModel(
     fun loadAddress(address: Address) {
         val addressLine = address.getAddressLine(0).replace("대한민국", "").trimStart()
         _registerAddress.value = addressLine
+    }
+
+    // API 나오면 수정
+    fun endWalk() {
+        _myFootprint.value = null
+        _myWalkStatus.value =
+            if (myWalkStatus.value == WalkStatus.ONGOING) WalkStatus.AFTER else null
+        _snackbarActions.value = Event(WoofSnackbarActions.ShowEndWalk)
     }
 
     companion object {
