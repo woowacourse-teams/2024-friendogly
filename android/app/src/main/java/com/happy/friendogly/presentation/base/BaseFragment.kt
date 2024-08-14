@@ -56,7 +56,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
         snackbar?.dismiss()
         snackbar =
             Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
-                anchorView = activity?.findViewById(R.id.bottom_navi)
+                anchorView = requireActivity().findViewById(R.id.bottom_navi)
                 action()
             }
         snackbar?.show()
