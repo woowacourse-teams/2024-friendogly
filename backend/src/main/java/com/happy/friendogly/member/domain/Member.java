@@ -24,16 +24,12 @@ public class Member {
 
     private String tag;
 
-    @Embedded
-    private Email email;
-
     private String imageUrl;
 
     @Builder
-    public Member(String name, String tag, String email, String imageUrl) {
+    public Member(String name, String tag, String imageUrl) {
         this.name = new Name(name);
         this.tag = tag;
-        this.email = new Email(email);
         this.imageUrl = imageUrl;
     }
 }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemClubPetImageBinding
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
+import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 
 class ClubPetAdapter : ListAdapter<ClubPet, ClubPetViewHolder>(ClubPetDiffCallback()) {
     class ClubPetDiffCallback : DiffUtil.ItemCallback<ClubPet>() {

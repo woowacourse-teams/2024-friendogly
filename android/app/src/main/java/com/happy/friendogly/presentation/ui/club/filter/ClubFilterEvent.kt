@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.filter
 
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 sealed interface ClubFilterEvent {
     data object CancelSelection : ClubFilterEvent

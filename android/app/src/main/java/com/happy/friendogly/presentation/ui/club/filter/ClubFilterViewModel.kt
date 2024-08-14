@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.club.model.ClubFilterSelector
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 
 class ClubFilterViewModel : BaseViewModel(), ClubFilterItemActionHandler, ClubFilterActionHandler {
     private val _clubFilterEvent: MutableLiveData<Event<ClubFilterEvent>> = MutableLiveData()

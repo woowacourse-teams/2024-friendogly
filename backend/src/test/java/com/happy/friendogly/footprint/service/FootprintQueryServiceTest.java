@@ -51,7 +51,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         Member otherMember = memberRepository.save(
                 Member.builder()
                         .name("name2")
-                        .email("test@test.com")
                         .build()
         );
 
@@ -182,7 +181,6 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         Member memberWithoutPet = memberRepository.save(
                 Member.builder()
                         .name("강아지없어요")
-                        .email("no_dog@test.com")
                         .build()
         );
 

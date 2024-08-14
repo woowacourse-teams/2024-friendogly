@@ -28,9 +28,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_user_profile_edit"
-                glide1000="@{pet.imageUrl}"
+                glide="@{pet.imageUrl}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/RoundBig"
+                app:shapeAppearanceOverlay="@style/Circle"
                 tools:src="@drawable/img_profile_normal" />
 
 

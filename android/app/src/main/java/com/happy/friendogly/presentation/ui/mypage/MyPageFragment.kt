@@ -58,8 +58,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 is MyPageNavigationAction.NavigateToProfileEdit ->
                     (activity as MainActivityActionHandler).navigateToProfileSetting(profile = action.profile)
 
-                is MyPageNavigationAction.NavigateToMyClubManger -> {}
-                is MyPageNavigationAction.NavigateToMyParticipation -> {}
+                is MyPageNavigationAction.NavigateToMyClubManger ->
+                    (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = true)
+                is MyPageNavigationAction.NavigateToMyParticipation ->
+                    (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = false)
                 is MyPageNavigationAction.NavigateToPetEdit ->
                     (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
             }

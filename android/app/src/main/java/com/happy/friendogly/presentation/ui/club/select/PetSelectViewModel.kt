@@ -9,7 +9,7 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import kotlinx.coroutines.launch
 
 class PetSelectViewModel(

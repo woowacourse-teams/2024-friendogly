@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.club.my.MyClubActivity"
+            android:exported="false"/>
+        <activity
             android:name=".presentation.ui.mylocation.SettingMyLocationActivity"
             android:exported="false" />
         <activity
@@ -39,6 +42,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.ui.petdetail.PetDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity android:name=".presentation.ui.woof.PetImageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -61,7 +67,7 @@
         <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".presentation.ui.chatlist.chat.ChatActivity"
@@ -74,6 +80,7 @@
             android:theme="@style/Theme.Friendogly.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

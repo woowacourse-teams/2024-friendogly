@@ -431,7 +431,7 @@
         <item name="android:drawableEnd">@drawable/sel_club_add_check_filter_menu</item>
         <item name="android:background">@drawable/sel_club_background_filter_menu</item>
         <item name="android:textColor">@drawable/sel_club_text_filter_menu</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
         <item name="android:paddingHorizontal">15dp</item>

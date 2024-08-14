@@ -17,6 +17,10 @@ class ChatListAdapter(private val chatListNavigationAction: ChatListNavigationAc
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).chatRoomId
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -38,8 +42,10 @@ class ChatListAdapter(private val chatListNavigationAction: ChatListNavigationAc
         private val chatListNavigationAction: ChatListNavigationAction,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatListUiModel) {
-            Glide.with(itemView.context).load(item.imageUrl).transform(CenterCrop())
-                .into(binding.ivChatGroup)
+            if (item.imageUrl?.isNotBlank() == true) {
+                Glide.with(itemView.context).load(item.imageUrl).transform(CenterCrop())
+                    .into(binding.ivChatGroup)
+            }
             binding.tvChatTitle.text = item.title
             binding.tvChatBody.text = item.body
             binding.tvChatMemberCount.text = item.numberOfPeople.toString()

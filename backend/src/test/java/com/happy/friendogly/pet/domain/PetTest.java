@@ -13,7 +13,6 @@ class PetTest {
 
     private Member member = Member.builder()
             .name("땡이 주인")
-            .email("ddang@email.com")
             .build();
 
     @DisplayName("생성 테스트")

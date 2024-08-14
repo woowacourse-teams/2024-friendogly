@@ -1,7 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.list
 
-import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
@@ -43,11 +41,7 @@ fun TextView.bindClubDateTime(dateTime: LocalDateTime?) {
 }
 
 @BindingAdapter("address")
-fun LinearLayout.bindMyLocation(userAddress: UserAddress?) {
-    this.visibility =
-        if (userAddress == null) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
+fun TextView.bindMyLocation(userAddress: UserAddress?) {
+    this.text =
+        userAddress?.adminArea ?: context.getString(R.string.club_list_my_location_default)
 }

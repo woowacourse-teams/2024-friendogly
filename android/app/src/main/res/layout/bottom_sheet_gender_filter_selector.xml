@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
 
         <variable
             name="vm"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:layout_width="match_parent"

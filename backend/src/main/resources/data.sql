@@ -1,12 +1,12 @@
-INSERT INTO member(name, tag, email, image_url)
-VALUES ('도도', '4e52d416', 'dodo@test.com', 'https://avatars.githubusercontent.com/u/79188587?v=4'),
-       ('땡이', 'a582a275', 'jiho@test.com', 'https://avatars.githubusercontent.com/u/110461155?v=4'),
-       ('트레', '68fc8014', 'tre@test.com', null),
-       ('위브', '3dde7373', 'wiib@test.com', 'https://avatars.githubusercontent.com/u/28584160?v=4'),
-       ('벼리', '525ec19f', 'byeori@test.com', null),
-       ('누누', '5f0f8307', 'nunu@test.com', null),
-       ('채드', '114d8979', 'ched@test.com', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
-       ('에디', 'c065a053', 'edy@test.com', null);
+INSERT INTO member(name, tag, image_url)
+VALUES ('도도', '4e52d416', 'https://avatars.githubusercontent.com/u/79188587?v=4'),
+       ('땡이', 'a582a275', 'https://avatars.githubusercontent.com/u/110461155?v=4'),
+       ('트레', '68fc8014', null),
+       ('위브', '3dde7373', 'https://avatars.githubusercontent.com/u/28584160?v=4'),
+       ('벼리', '525ec19f', null),
+       ('누누', '5f0f8307', null),
+       ('채드', '114d8979', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
+       ('에디', 'c065a053', null);
 
 INSERT INTO device_token(member_id, device_token)
 VALUES (1,'a'),

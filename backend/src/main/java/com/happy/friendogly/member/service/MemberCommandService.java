@@ -55,7 +55,6 @@ public class MemberCommandService {
         Member member = Member.builder()
                 .name(request.name())
                 .tag(UuidGenerator.generateUuid())
-                .email(request.email())
                 .imageUrl(imageUrl)
                 .build();
         Member savedMember = memberRepository.save(member);

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemFilterBinding
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 
 class FilterAdapter : ListAdapter<ClubFilter, FilterViewHolder>(FilterDiffCallback()) {
     class FilterDiffCallback : DiffUtil.ItemCallback<ClubFilter>() {
