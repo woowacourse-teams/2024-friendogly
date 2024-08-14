@@ -328,7 +328,8 @@ public class PetApiDocsTest extends RestDocsTest {
                 "도토리 설명",
                 LocalDate.now().minusYears(1),
                 "SMALL",
-                "MALE"
+                "MALE",
+                "UPDATE"
         );
 
         MockMultipartFile image = new MockMultipartFile(
@@ -360,7 +361,9 @@ public class PetApiDocsTest extends RestDocsTest {
                                 fieldWithPath("sizeType").type(JsonFieldType.STRING)
                                         .description("반려견 크기: SMALL, MEDIUM, LARGE"),
                                 fieldWithPath("gender").type(JsonFieldType.STRING)
-                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED")
+                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                fieldWithPath("imageUpdateType").type(JsonFieldType.STRING)
+                                        .description("이미지 업데이트 여부: UPDATE, NOT_UPDATE, DELETE")
                         ),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Pet API")
@@ -385,8 +388,10 @@ public class PetApiDocsTest extends RestDocsTest {
                                           
                                           "sizeType": "SMALL", // 변경할 강아지 크기 (SMALL, MEDIUM, LARGE)
                                           
-                                          "gender": "MALE" // 변경할 반려견 성별 (MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)
-                                                                                
+                                          "gender": "MALE", // 변경할 반려견 성별 (MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)
+                                          
+                                          "imageUpdateType": "UPDATE" // 이미지 업데이트 여부 -> UPDATE(이미지 변경), NOT_UPDATE(이미지 변경 없음), DELETE(기본 이미지로 변경)
+                                                                               
                                         }
                                         """)
                                 .requestHeaders(

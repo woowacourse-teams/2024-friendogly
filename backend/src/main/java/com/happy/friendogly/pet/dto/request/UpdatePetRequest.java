@@ -23,7 +23,10 @@ public record UpdatePetRequest(
         String sizeType,
 
         @NotBlank(message = "gender는 빈 문자열이나 null을 입력할 수 없습니다.")
-        String gender
+        String gender,
+
+        @NotBlank(message = "imageUpdateType는 빈 문자열이나 null을 입력할 수 없습니다.")
+        String imageUpdateType
 ) {
 
 }

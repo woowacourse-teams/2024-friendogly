@@ -30,7 +30,7 @@ class PetCommandServiceTest extends ServiceTest {
         member = memberRepository.save(new Member("트레", "1b32cff0", "https://image.com/image.jpg"));
     }
 
-    @DisplayName("펫 정보를 수정할 수 있다.")
+    @DisplayName("펫 정보를 수정할 수 있다 (이미지 변경)")
     @Test
     void update() {
         // given
@@ -49,7 +49,8 @@ class PetCommandServiceTest extends ServiceTest {
                 "새로운 펫이에요!",
                 LocalDate.now().minusYears(2),
                 "MEDIUM",
-                "MALE"
+                "MALE",
+                "UPDATE"
         );
 
         MockMultipartFile image = new MockMultipartFile("image", new byte[10]);
@@ -59,7 +60,6 @@ class PetCommandServiceTest extends ServiceTest {
 
         // then
         Pet newPet = petRepository.getById(pet.getId());
-
         assertAll(
                 () -> assertThat(newPet.getId()).isEqualTo(pet.getId()),
                 () -> assertThat(newPet.getMember().getId()).isEqualTo(pet.getMember().getId()),
@@ -72,9 +72,9 @@ class PetCommandServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("이미지가 null이면 기존 Image URL로 펫이 저장된다.")
+    @DisplayName("펫 정보를 수정할 수 있다 (이미지 변경 없음)")
     @Test
-    void update_ImageNull() {
+    void update_ImageNotUpdate() {
         // given
         Pet pet = petRepository.save(new Pet(
                 member,
@@ -91,7 +91,8 @@ class PetCommandServiceTest extends ServiceTest {
                 "새로운 펫이에요!",
                 LocalDate.now().minusYears(2),
                 "MEDIUM",
-                "MALE"
+                "MALE",
+                "NOT_UPDATE"
         );
 
         // when
@@ -100,6 +101,37 @@ class PetCommandServiceTest extends ServiceTest {
         // then
         Pet newPet = petRepository.getById(pet.getId());
         assertThat(newPet.getImageUrl()).isEqualTo("https://picsum.photos/100");
+    }
+
+    @DisplayName("펫 정보를 수정할 수 있다 (default 이미지로 변경)")
+    @Test
+    void update_ImageDelete() {
+        // given
+        Pet pet = petRepository.save(new Pet(
+                member,
+                "도토리",
+                "귀여운 도토리입니다!",
+                LocalDate.now().minusYears(1),
+                SizeType.SMALL,
+                Gender.MALE_NEUTERED,
+                "https://picsum.photos/100"
+        ));
+
+        UpdatePetRequest request = new UpdatePetRequest(
+                "바둑이",
+                "새로운 펫이에요!",
+                LocalDate.now().minusYears(2),
+                "MEDIUM",
+                "MALE",
+                "DELETE"
+        );
+
+        // when
+        petCommandService.update(member.getId(), pet.getId(), request, null);
+
+        // then
+        Pet newPet = petRepository.getById(pet.getId());
+        assertThat(newPet.getImageUrl()).isBlank();
     }
 
     @DisplayName("자신의 펫이 아니면 펫 정보를 수정할 수 없다.")
@@ -123,7 +155,8 @@ class PetCommandServiceTest extends ServiceTest {
                 "새로운 펫이에요!",
                 LocalDate.now().minusYears(2),
                 "MEDIUM",
-                "MALE"
+                "MALE",
+                "UPDATE"
         );
 
         // when - then

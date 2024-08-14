@@ -2,6 +2,7 @@ package com.happy.friendogly.pet.service;
 
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.infra.FileStorageManager;
+import com.happy.friendogly.infra.ImageUpdateType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Gender;
@@ -74,9 +75,23 @@ public class PetCommandService {
             throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.");
         }
 
-        String newImageUrl = pet.getImageUrl();
-        if (image != null && !image.isEmpty()) {
+        ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
+
+        String oldImageUrl = pet.getImageUrl();
+        String newImageUrl = "";
+
+        if (imageUpdateType == ImageUpdateType.UPDATE) {
+            // TODO: 기존 이미지 S3에서 삭제
             newImageUrl = fileStorageManager.uploadFile(image);
+        }
+
+        if (imageUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newImageUrl = oldImageUrl;
+        }
+
+        if (imageUpdateType == ImageUpdateType.DELETE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = "";
         }
 
         pet.update(
