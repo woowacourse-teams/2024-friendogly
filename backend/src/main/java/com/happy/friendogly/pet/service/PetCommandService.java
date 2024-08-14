@@ -82,7 +82,7 @@ public class PetCommandService {
         String newImageUrl = "";
 
         if (imageUpdateType == ImageUpdateType.UPDATE) {
-            // TODO: 기존 이미지 S3에서 삭제
+            fileStorageManager.removeFile(oldImageUrl);
             newImageUrl = fileStorageManager.uploadFile(image);
         }
 
@@ -91,7 +91,7 @@ public class PetCommandService {
         }
 
         if (imageUpdateType == ImageUpdateType.DELETE) {
-            // TODO: 기존 이미지 S3에서 삭제
+            fileStorageManager.removeFile(oldImageUrl);
             newImageUrl = "";
         }
 
