@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
+import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -23,6 +25,7 @@ import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.Partici
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
+    private val getPetsMineUseCase: GetPetsMineUseCase,
     private val getAddressUseCase: GetAddressUseCase,
     private val searchingClubsUseCase: GetSearchingClubsUseCase,
 ) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
@@ -47,6 +50,7 @@ class ClubListViewModel(
     val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
 
     init {
+        initPetState()
         loadClubWithAddress()
     }
 
@@ -62,6 +66,15 @@ class ClubListViewModel(
                     _uiState.value = ClubListUiState.NotAddress
                 }
         }
+
+    private fun initPetState() = viewModelScope.launch {
+        getPetsMineUseCase()
+            .onSuccess { pets ->
+                if (isInValidPetCount(pets)) {
+                    _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                }
+            }
+    }
 
     private fun loadClubs() =
         viewModelScope.launch {
@@ -99,11 +112,20 @@ class ClubListViewModel(
     }
 
     override fun addClub() {
-        if (myAddress.value == null) {
-            _clubListEvent.emit(ClubListEvent.FailLocation)
-        } else {
-            _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
-        }
+        applyAddClubState()
+    }
+
+    private fun applyAddClubState() = viewModelScope.launch {
+        getPetsMineUseCase()
+            .onSuccess { pets ->
+                if (isInValidPetCount(pets)) {
+                    _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                } else if (myAddress.value == null) {
+                    _clubListEvent.emit(ClubListEvent.FailLocation)
+                } else {
+                    _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+                }
+            }
     }
 
     override fun selectParticipationFilter() {
@@ -142,13 +164,17 @@ class ClubListViewModel(
         )
     }
 
+    private fun isInValidPetCount(pets: List<Pet>): Boolean = pets.isEmpty()
+
     companion object {
         fun factory(
+            getPetsMineUseCase: GetPetsMineUseCase,
             getAddressUseCase: GetAddressUseCase,
             searchingClubsUseCase: GetSearchingClubsUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubListViewModel(
+                    getPetsMineUseCase = getPetsMineUseCase,
                     getAddressUseCase = getAddressUseCase,
                     searchingClubsUseCase = searchingClubsUseCase,
                 )

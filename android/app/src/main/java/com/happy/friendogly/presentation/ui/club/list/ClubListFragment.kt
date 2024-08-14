@@ -12,6 +12,7 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentClubListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
@@ -24,6 +25,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
         ClubListViewModel.factory(
+            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
             searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
         )
@@ -133,8 +135,18 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                     (activity as MainActivityActionHandler).navigateToSettingLocation(resultLauncher)
 
                 ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
+                ClubListEvent.OpenAddPet -> openRegisterPetDialog()
             }
         }
+    }
+
+    private fun openRegisterPetDialog(){
+        PetAddAlertDialog(
+            clickToNegative = {},
+            clickToPositive = {
+                (activity as MainActivityActionHandler).navigateToRegisterPet(null)
+            }
+        ).show(parentFragmentManager, tag)
     }
 
     private fun initStateObserver() {
