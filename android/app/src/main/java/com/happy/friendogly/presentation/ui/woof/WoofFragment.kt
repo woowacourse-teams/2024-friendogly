@@ -164,6 +164,8 @@ class WoofFragment :
                     if (binding.tvWoofWalkStatus.isVisible) {
                         hideMarkerDetail()
                         changeRecentlyClickedMarkerSize()
+                    } else if (binding.layoutWoofRegisterMarker.isVisible) {
+                        hideRegisterMarkerLayout()
                     } else {
                         requireActivity().onBackPressed()
                     }
