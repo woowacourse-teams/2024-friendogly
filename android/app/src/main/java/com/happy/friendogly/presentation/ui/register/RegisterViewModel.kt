@@ -1,11 +1,16 @@
 package com.happy.friendogly.presentation.ui.register
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.analytics.AnalyticsHelper
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
@@ -74,6 +79,7 @@ class RegisterViewModel(
             onSuccess = { login ->
                 if (login.isRegistered) {
                     val tokens = login.tokens ?: return
+                    saveAlarmToken()
                     saveJwtToken(tokens)
                 } else {
                     _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.accessToken))
@@ -86,6 +92,23 @@ class RegisterViewModel(
                 }
             },
         )
+    }
+
+    private fun saveAlarmToken() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task: Task<String> ->
+                if (!task.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+                val token = task.result
+                launch {
+                    runCatching {
+                        AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
+                    }.onFailure {
+                        Log.d("테스트","$it")
+                    }
+                }
+            }
     }
 
     fun executeGoogleLogin() {
