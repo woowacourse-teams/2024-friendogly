@@ -89,4 +89,9 @@ public class FootprintCommandService {
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
     }
+
+    public void stopWalking(Long memberId) {
+        Footprint footprint = footprintRepository.getByMemberIdAndIsDeletedFalse(memberId);
+        footprint.stopWalking();
+    }
 }

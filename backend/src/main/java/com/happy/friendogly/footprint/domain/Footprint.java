@@ -126,6 +126,15 @@ public class Footprint {
         }
     }
 
+    public void stopWalking() {
+        if (walkStatus.isBefore()) {
+            isDeleted = true;
+        }
+        if (walkStatus.isOngoing()) {
+            endWalk();
+        }
+    }
+
     private void startWalk() {
         walkStatus = ONGOING;
         startWalkTime = LocalDateTime.now();

@@ -224,4 +224,37 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
     }
+
+    @DisplayName("산책 전이고, 산책 종료시, 발자국이 삭제된다,")
+    @Transactional
+    @Test
+    void stopWalking_deleteFootprint() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(
+                FOOTPRINT_STATUS_BEFORE(new Location(0, 0))
+        );
+
+        // when
+        footprintCommandService.stopWalking(member.getId());
+
+        // then
+        assertThat(savedFootprint.isDeleted()).isTrue();
+    }
+
+
+    @DisplayName("산책 중이고, 산책 종료시, 산책상태가 산책 후로 변경된다.")
+    @Transactional
+    @Test
+    void stopWalking_changeToAfter() {
+        // given
+        Footprint savedFootprint = footprintRepository.save(
+                FOOTPRINT_STATUS_ONGOING(new Location(0, 0))
+        );
+
+        // when
+        footprintCommandService.stopWalking(member.getId());
+
+        // then
+        assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
+    }
 }
