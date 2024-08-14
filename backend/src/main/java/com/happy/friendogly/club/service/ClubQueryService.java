@@ -4,7 +4,7 @@ import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
-import com.happy.friendogly.club.dto.response.FindClubMineResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.repository.ClubRepository;
@@ -76,12 +76,12 @@ public class ClubQueryService {
         return clubStream;
     }
 
-    public List<FindClubMineResponse> findMine(Long memberId) {
-        List<Club> participantClubs = clubRepository.findAllByParticipatingMemberId(memberId);
+    public List<FindClubOwningResponse> findOwning(Long memberId) {
+        List<Club> participatingClubs = clubRepository.findAllByParticipatingMemberId(memberId);
         Member member = memberRepository.getById(memberId);
-        return participantClubs.stream()
+        return participatingClubs.stream()
                 .filter(club -> club.isOwner(member))
-                .map(club -> new FindClubMineResponse(club, collectOverviewPetImages(club)))
+                .map(club -> new FindClubOwningResponse(club, collectOverviewPetImages(club)))
                 .toList();
     }
 

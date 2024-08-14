@@ -32,7 +32,7 @@ import com.happy.friendogly.club.dto.response.AddressDetailResponse;
 import com.happy.friendogly.club.dto.response.ClubMemberDetailResponse;
 import com.happy.friendogly.club.dto.response.ClubPetDetailResponse;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
-import com.happy.friendogly.club.dto.response.FindClubMineResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -161,7 +161,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("내가 방장인 모임을 조회한다.")
     @Test
     void findMine_200() throws Exception {
-        List<FindClubMineResponse> responses = List.of(new FindClubMineResponse(
+        List<FindClubOwningResponse> responses = List.of(new FindClubOwningResponse(
                 1L,
                 "모임 제목1",
                 "모임 본문 내용1",
@@ -177,7 +177,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 List.of("https://petImage1.com")
         ));
 
-        when(clubQueryService.findMine(any()))
+        when(clubQueryService.findOwning(any()))
                 .thenReturn(responses);
 
         mockMvc.perform(get("/clubs/mine")

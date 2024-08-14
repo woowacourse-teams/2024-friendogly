@@ -8,7 +8,7 @@ import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
-import com.happy.friendogly.club.dto.response.FindClubMineResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
@@ -125,18 +125,18 @@ class ClubQueryServiceTest extends ClubServiceTest {
         Pet savedPet3 = createSavedPet(savedMember2);
         Club club2 = createSavedClub(
                 savedMember2,
-                List.of(savedPet2,savedPet3),
+                List.of(savedPet2, savedPet3),
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
         club2.addClubMember(savedMember);
         club2.addClubPet(List.of(savedPet));
 
-        List<FindClubMineResponse> actual = clubQueryService.findMine(savedMember.getId());
-        List<FindClubMineResponse> expected = List.of(new FindClubMineResponse(club1, List.of(petImageUrl)));
+        List<FindClubOwningResponse> actual = clubQueryService.findOwning(savedMember.getId());
+        List<FindClubOwningResponse> expected = List.of(new FindClubOwningResponse(club1, List.of(petImageUrl)));
 
-        FindClubMineResponse actual1 = actual.get(0);
-        FindClubMineResponse expected1 = expected.get(0);
+        FindClubOwningResponse actual1 = actual.get(0);
+        FindClubOwningResponse expected1 = expected.get(0);
 
         assertAll(
                 () -> assertThat(actual1.id()).isEqualTo(expected1.id()),
@@ -171,7 +171,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
         Pet savedPet3 = createSavedPet(savedMember2);
         Club club2 = createSavedClub(
                 savedMember2,
-                List.of(savedPet2,savedPet3),
+                List.of(savedPet2, savedPet3),
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );

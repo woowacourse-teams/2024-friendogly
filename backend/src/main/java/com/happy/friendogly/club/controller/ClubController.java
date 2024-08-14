@@ -5,7 +5,7 @@ import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
-import com.happy.friendogly.club.dto.response.FindClubMineResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -53,13 +53,13 @@ public class ClubController {
         return ApiResponse.ofSuccess(clubQueryService.findByFilter(memberId, request));
     }
 
-    @GetMapping("/mine")
-    public ApiResponse<List<FindClubMineResponse>> findMine(@Auth Long memberId){
-        return ApiResponse.ofSuccess(clubQueryService.findMine(memberId));
+    @GetMapping("/owning")
+    public ApiResponse<List<FindClubOwningResponse>> findMine(@Auth Long memberId) {
+        return ApiResponse.ofSuccess(clubQueryService.findOwning(memberId));
     }
 
     @GetMapping("/participating")
-    public ApiResponse<List<FindClubParticipatingResponse>> findParticipating(@Auth Long memberId){
+    public ApiResponse<List<FindClubParticipatingResponse>> findParticipating(@Auth Long memberId) {
         return ApiResponse.ofSuccess(clubQueryService.findParticipating(memberId));
     }
 
