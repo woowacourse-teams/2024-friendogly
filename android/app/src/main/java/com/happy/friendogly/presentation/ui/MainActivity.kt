@@ -43,7 +43,7 @@ class MainActivity :
 
     private fun initNavController() {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(
-            ClubListFragment::class.java
+            ClubListFragment::class.java,
         )
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
@@ -139,7 +139,6 @@ class MainActivity :
     override fun navigateToMyClub(isMyHead: Boolean) {
         startActivity(MyClubActivity.getIntent(this, isMyHead))
     }
-
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100

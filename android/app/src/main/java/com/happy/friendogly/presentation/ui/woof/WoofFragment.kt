@@ -157,16 +157,17 @@ class WoofFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.tvWoofWalkStatus.isVisible) {
-                    hideMarkerDetail()
-                    changeRecentlyClickedMarkerSize()
-                } else {
-                    requireActivity().onBackPressed()
+        onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.tvWoofWalkStatus.isVisible) {
+                        hideMarkerDetail()
+                        changeRecentlyClickedMarkerSize()
+                    } else {
+                        requireActivity().onBackPressed()
+                    }
                 }
             }
-        }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
@@ -287,7 +288,7 @@ class WoofFragment :
         map.extent =
             LatLngBounds(
                 LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
-                LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE)
+                LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
             )
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
@@ -301,12 +302,13 @@ class WoofFragment :
         }
         binding.lbvWoofLocationRegister.map = map
 
-        map.onMapClickListener = NaverMap.OnMapClickListener { _, _ ->
-            if (binding.tvWoofWalkStatus.isVisible) {
-                hideMarkerDetail()
-                changeRecentlyClickedMarkerSize()
+        map.onMapClickListener =
+            NaverMap.OnMapClickListener { _, _ ->
+                if (binding.tvWoofWalkStatus.isVisible) {
+                    hideMarkerDetail()
+                    changeRecentlyClickedMarkerSize()
+                }
             }
-        }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
