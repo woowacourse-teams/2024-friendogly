@@ -121,7 +121,7 @@
     <string name="pet_size_type_title">댕댕이 사이즈</string>
     <string name="pet_add_image_title">댕댕이 사진을 추가하세요</string>
     <string name="pet_gender_type_title">댕댕이 성별</string>
-    <string name="pet_submit_title">선택 완료!</string>
+    <string name="pet_submit_title">등록 완료!</string>
     <string name="bottom_sheet_pet_edit_birthday_title">언제 태어났나요?</string>
     <string name="pet_name_length">%d/20</string>
 
