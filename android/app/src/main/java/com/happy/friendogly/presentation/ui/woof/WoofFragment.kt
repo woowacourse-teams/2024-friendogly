@@ -45,6 +45,7 @@ import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
 import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
+import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -195,6 +196,7 @@ class WoofFragment :
         analyticsHelper.logMarkBtnClicked()
         if (locationPermission.hasPermissions()) {
             viewModel.loadFootprintMarkBtnInfo()
+            binding.btnWoofFootprintRefresh.isVisible = false
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
@@ -203,7 +205,9 @@ class WoofFragment :
     override fun clickRegisterMarkerBtn() {
         analyticsHelper.logRegisterMarkerBtnClicked()
         if (locationPermission.hasPermissions()) {
+            showLoadingAnimation()
             viewModel.markFootprint(map.cameraPosition.target)
+            binding.btnWoofFootprintRefresh.isVisible = false
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
@@ -231,6 +235,17 @@ class WoofFragment :
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
+    }
+
+    override fun clickRefreshBtn() {
+        analyticsHelper.logRefreshBtnClicked()
+        if (locationPermission.hasPermissions()) {
+            showLoadingAnimation()
+            viewModel.loadNearFootprints(latLng)
+        } else {
+            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+        }
+        binding.btnWoofFootprintRefresh.isVisible = false
     }
 
     override fun clickBackBtn() {
@@ -269,7 +284,6 @@ class WoofFragment :
 
             marker.width = MARKER_CLICKED_WIDTH
             marker.height = MARKER_CLICKED_HEIGHT
-
             true
         }
     }
@@ -317,6 +331,8 @@ class WoofFragment :
         map.addOnCameraChangeListener { reason, _ ->
             if (reason == REASON_GESTURE) {
                 viewModel.changeTrackingModeToNoFollow()
+                binding.btnWoofFootprintRefresh.isVisible =
+                    !binding.layoutWoofRegisterMarker.isVisible
 
                 if (binding.tvWoofWalkStatus.isVisible) {
                     hideMarkerDetail()
@@ -344,6 +360,12 @@ class WoofFragment :
     private fun initObserve() {
         viewModel.nearFootprints.observe(viewLifecycleOwner) { nearFootprints ->
             markNearFootprints(nearFootprints)
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    hideLoadingAnimation()
+                },
+                300,
+            )
         }
 
         viewModel.myFootprint.observe(viewLifecycleOwner) { myFootprint ->
@@ -400,7 +422,7 @@ class WoofFragment :
 
         viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is ShowHasNotPetSnackbar ->
+                is ShowHasNotPetSnackbar -> {
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -408,6 +430,8 @@ class WoofFragment :
                             ),
                         ),
                     )
+                }
+
 
                 is ShowCantClickMarkBtnSnackbar -> {
                     showSnackbar(
@@ -458,16 +482,17 @@ class WoofFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.loadNearFootprints(latLng)
             viewModel.updateWalkStatus(latLng)
+            viewModel.loadNearFootprints(latLng)
             moveCameraCenterPosition(latLng)
+
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     map.locationTrackingMode = LocationTrackingMode.Follow
-                    hideLoadingAnimation()
                 },
-                LOADING_DELAY_MILLIS,
+                300,
             )
+
         }
     }
 
@@ -590,16 +615,14 @@ class WoofFragment :
     private fun showRegisterMarkerLayout() {
         myMarker?.map = null
         setUpCircleOverlay(map.cameraPosition.target)
-
         getAddress(map.cameraPosition.target)
-
-        showViewAnimation(binding.layoutWoofRegisterMarker)
         binding.layoutWoofLocationRegister.isVisible = true
         binding.btnWoofLocationRegister.isVisible = true
         binding.btnWoofBack.isVisible = true
         binding.btnWoofClose.isVisible = true
         binding.ivWoofRegisterMarker.isVisible = true
         changeRecentlyClickedMarkerSize()
+        showViewAnimation(binding.layoutWoofRegisterMarker)
     }
 
     private fun hideRegisterMarkerLayout() {
@@ -613,14 +636,13 @@ class WoofFragment :
         if (myMarker == null) {
             circleOverlay.map = null
         }
-
-        hideViewAnimation(binding.layoutWoofRegisterMarker)
         binding.layoutWoofLocationRegister.isVisible = false
         binding.btnWoofLocationRegister.isVisible = false
         binding.btnWoofBack.isVisible = false
         binding.btnWoofClose.isVisible = false
         binding.ivWoofRegisterMarker.isVisible = false
         changeRecentlyClickedMarkerSize()
+        hideViewAnimation(binding.layoutWoofRegisterMarker)
     }
 
     private fun changeRecentlyClickedMarkerSize() {
