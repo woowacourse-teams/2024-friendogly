@@ -15,7 +15,7 @@
 
     <!--프로필 설정-->
     <string name="profile_setting_nickname">닉네임</string>
-    <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="profile_setting_nickname_hint">사용자 닉네임을 입력해주세요</string>
     <string name="profile_setting_profile_pic">프로필 사진</string>
     <string name="make_profile_title">프로필 만들기</string>
     <string name="make_profile_edit_title">프로필 수정하기</string>
