@@ -1,13 +1,11 @@
 package com.happy.friendogly.presentation.ui.register
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.application.di.AppModule

@@ -108,10 +108,10 @@ object RemoteModule {
     fun createAlarmTokenService(
         baseUrl: BaseUrl,
         tokenManager: TokenManager,
-        authenticationListener: AuthenticationListener
+        authenticationListener: AuthenticationListener,
     ): AlarmTokenService {
         return createRetrofit(baseUrl, tokenManager, authenticationListener).create(
-            AlarmTokenService::class.java
+            AlarmTokenService::class.java,
         )
     }
 

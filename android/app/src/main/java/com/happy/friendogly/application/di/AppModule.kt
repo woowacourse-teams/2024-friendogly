@@ -47,8 +47,8 @@ import com.happy.friendogly.domain.usecase.DeleteAlarmSettingUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
-import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.domain.usecase.GetAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
@@ -168,11 +168,12 @@ class AppModule(context: Context) {
             authenticationListener = authenticationListener,
         )
 
-    private val alarmTokenService = RemoteModule.createAlarmTokenService(
-        baseUrl = baseUrl,
-        tokenManager = tokenManager,
-        authenticationListener = authenticationListener
-    )
+    private val alarmTokenService =
+        RemoteModule.createAlarmTokenService(
+            baseUrl = baseUrl,
+            tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
+        )
 
     // data source
     private val authDataSource: AuthDataSource = AuthDataSourceImpl(service = authService)
@@ -191,7 +192,6 @@ class AppModule(context: Context) {
         AlarmSettingDataSourceImpl(alarmModule = alarmModule)
     private val alarmTokenDataSource: AlarmTokenDataSource =
         AlamTokenDataSourceImpl(service = alarmTokenService)
-
 
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
@@ -212,7 +212,6 @@ class AppModule(context: Context) {
         AlarmSettingRepositoryImpl(source = alarmSettingDataSource)
     private val alarmTokenRepository: AlarmTokenRepository =
         AlarmTokenRepositoryImpl(source = alarmTokenDataSource)
-
 
     // use case
     val postKakaoLoginUseCase: PostKakaoLoginUseCase =
@@ -274,7 +273,6 @@ class AppModule(context: Context) {
         GetAlarmSettingUseCase(repository = alarmSettingRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase =
         SaveAlamTokenUseCase(repository = alarmTokenRepository)
-
 
     companion object {
         private var instance: AppModule? = null
