@@ -49,7 +49,7 @@ fun TextView.bindValidBackground(isValid: Boolean) {
                 R.color.coral400,
             )
         } else {
-            ContextCompat.getColorStateList(context, R.color.gray400)
+            ContextCompat.getColorStateList(context, R.color.gray300)
         }
     this.backgroundTintList = backgroundTint
 }
@@ -58,9 +58,9 @@ fun TextView.bindValidBackground(isValid: Boolean) {
 fun TextView.bindValidStyle(isValid: Boolean) {
     val textStyle =
         if (isValid) {
-            R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
+            R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
         } else {
-            R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
+            R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
 }

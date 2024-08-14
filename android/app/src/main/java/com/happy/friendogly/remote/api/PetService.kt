@@ -8,6 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface PetService {
     @Multipart
@@ -21,5 +22,7 @@ interface PetService {
     suspend fun getPetsMine(): BaseResponse<List<PetResponse>>
 
     @GET(ApiClient.Pet.GET_PETS)
-    suspend fun getPets(id: Long): BaseResponse<List<PetResponse>>
+    suspend fun getPets(
+        @Query("memberId") id: Long,
+    ): BaseResponse<List<PetResponse>>
 }

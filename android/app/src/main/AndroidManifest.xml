@@ -44,6 +44,9 @@
             android:name=".presentation.ui.petdetail.PetDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".presentation.ui.woof.PetImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.ui.registerpet.RegisterPetActivity"
             android:exported="false"
