@@ -315,4 +315,33 @@ class FootprintControllerTest extends ControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("data.walkStatus",is(AFTER.toString()));
     }
+
+    @DisplayName("산책을 종료할 수 있다. (204)")
+    @Test
+    void stopWalking(){
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0,0),
+                        ONGOING,
+                        LocalDateTime.now(),
+                        null,
+                        LocalDateTime.now().minusHours(1),
+                        false
+                )
+        );
+
+        float latitude = 0F;
+        float longitude = 0F;
+
+        SaveFootprintRequest request = new SaveFootprintRequest(latitude, longitude);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
+                .body(request)
+                .when().patch("/footprints/stop-walking")
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
 }

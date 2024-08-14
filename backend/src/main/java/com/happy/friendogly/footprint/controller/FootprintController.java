@@ -87,4 +87,12 @@ public class FootprintController {
         UpdateWalkStatusResponse walkStatusResponse = footprintCommandService.updateWalkStatus(memberId, request);
         return ApiResponse.ofSuccess(walkStatusResponse);
     }
+
+    @PatchMapping("/stop-walking")
+    public ResponseEntity<Void> stopWalking(
+            @Auth Long memberId
+    ) {
+        footprintCommandService.stopWalking(memberId);
+        return ResponseEntity.noContent().build();
+    }
 }
