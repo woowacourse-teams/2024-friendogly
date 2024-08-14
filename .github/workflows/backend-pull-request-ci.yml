@@ -1,7 +1,7 @@
 name: backend-ci
 
 on:
-  push:
+  pull-request:
     branches: [ "develop" ]
     paths:
       - 'backend/**'
