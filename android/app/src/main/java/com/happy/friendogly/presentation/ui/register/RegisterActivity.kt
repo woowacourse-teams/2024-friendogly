@@ -89,6 +89,8 @@ class RegisterActivity : AppCompatActivity() {
             when (message) {
                 RegisterMessage.DefaultErrorMessage -> showToastMessage("서버 에러가 발생했습니다")
                 RegisterMessage.ServerErrorMessage -> showToastMessage("알 수 없는 에러가 발생했습니다")
+                RegisterMessage.TokenNotStoredErrorMessage ->
+                    startActivity(MainActivity.getIntent(this))
             }
         }
     }

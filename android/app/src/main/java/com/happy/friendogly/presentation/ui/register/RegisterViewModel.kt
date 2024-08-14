@@ -99,11 +99,17 @@ class RegisterViewModel(
     }
 
     private suspend fun saveJwtToken(jwtToken: JwtToken) {
-        saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
-            _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
-        }.onFailure {
-            // TODO 예외처리
-        }
+        saveJwtTokenUseCase(jwtToken = jwtToken).fold(
+            onSuccess = {
+                _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Local.TOKEN_NOT_STORED -> _message.emit(RegisterMessage.TokenNotStoredErrorMessage)
+                    else -> _message.emit(RegisterMessage.DefaultErrorMessage)
+                }
+            },
+        )
     }
 
     companion object {

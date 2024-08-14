@@ -121,10 +121,17 @@ class ProfileSettingViewModel(
     }
 
     private suspend fun saveJwaToken(jwtToken: JwtToken) {
-        saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
-            _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
-        }.onFailure { e ->
-        }
+        saveJwtTokenUseCase(jwtToken = jwtToken).fold(
+            onSuccess = {
+                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Local.TOKEN_NOT_STORED -> _message.emit(ProfileSettingMessage.TokenNotStoredErrorMessage)
+                    else -> _message.emit(ProfileSettingMessage.DefaultErrorMessage)
+                }
+            },
+        )
     }
 
     private suspend fun patchMember(

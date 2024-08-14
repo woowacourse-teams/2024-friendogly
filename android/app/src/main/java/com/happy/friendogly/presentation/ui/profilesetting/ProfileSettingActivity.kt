@@ -67,6 +67,9 @@ class ProfileSettingActivity :
             when (message) {
                 is ProfileSettingMessage.FileSizeExceedMessage -> showToastMessage(getString(R.string.file_size_exceed_message))
                 is ProfileSettingMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+                is ProfileSettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                ProfileSettingMessage.TokenNotStoredErrorMessage ->
+                    startActivity(MainActivity.getIntent(this))
             }
         }
     }
