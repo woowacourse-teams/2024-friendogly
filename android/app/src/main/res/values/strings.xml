@@ -245,18 +245,24 @@
     <string name="woof_hours_ago">%d시간 전</string>
     <string name="woof_minutes_ago">%d분 전</string>
     <string name="woof_just_now">방금 전</string>
-    <string name="woof_walk_before">%d분 째 산책 준비</string>
-    <string name="woof_walk_ongoing">%d분 째 산책 중</string>
-    <string name="woof_walk_after">%d시 %d분 산책 완료</string>
+    <string name="woof_status_before">가는중</string>
+    <string name="woof_status_ongoing">산책중</string>
+    <string name="woof_status_after">산책 완료</string>
+    <string name="woof_walk_before">%d분 째 가는중</string>
+    <string name="woof_walk_ongoing">%d분 째 산책중</string>
+    <string name="woof_walk_after">%d시 %d분에 왔다감</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
-    <string name="woof_register_walking_area">산책 할래요!</string>
+    <string name="woof_register_walk_area">산책 영역 표시</string>
+    <string name="woof_register_description">발자국 반경 1km 안으로 들어오면\n산책 중으로 상태가 변경됩니다!</string>
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
-    <string name="woof_footprint_refresh">발자국 새로고침</string>
+    <string name="woof_footprint_refresh">발자국 불러오기</string>
+    <string name="woof_end_walk">산책 종료하기</string>
+    <string name="woof_stop_walk">산책을 종료했어요!</string>
 
     <!--프로필-->
     <string name="male">남</string>
@@ -265,7 +271,6 @@
     <string name="female_enutered">여(중성화했어요)</string>
     <string name="see_you_later_message">다음에 또 만나요</string>
     <string name="withdrawn_message">회원이 탈퇴 되었어요</string>
-
 
     <!--권한-->
     <string name="alarm_dialog_title">알람 허용 사용 설정</string>

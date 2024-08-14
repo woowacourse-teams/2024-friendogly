@@ -13,6 +13,8 @@ interface WoofActionHandler {
 
     fun clickRefreshBtn()
 
+    fun clickEndWalkBtn()
+
     fun clickBackBtn()
 
     fun clickCloseBtn()

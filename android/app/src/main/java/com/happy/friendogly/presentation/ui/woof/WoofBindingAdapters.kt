@@ -63,26 +63,6 @@ fun TextView.bindPetAge(petBirthDate: LocalDate?) {
     }
 }
 
-@BindingAdapter("createdAt")
-fun TextView.bindingCreatedAt(createdAt: LocalDateTime?) {
-    if (createdAt != null) {
-        val duration =
-            Duration.between(createdAt.toJavaLocalDateTime(), java.time.LocalDateTime.now())
-
-        val minutes = duration.toMinutes()
-        val hours = duration.toHours()
-        val days = duration.toDays()
-
-        text =
-            when {
-                days > 0 -> resources.getString(R.string.woof_days_ago, days)
-                hours > 0 -> resources.getString(R.string.woof_hours_ago, hours)
-                minutes > 0 -> resources.getString(R.string.woof_minutes_ago, minutes)
-                else -> resources.getString(R.string.woof_just_now)
-            }
-    }
-}
-
 @BindingAdapter("petSizeType")
 fun TextView.bindPetSizeType(petSizeType: SizeType?) {
     if (petSizeType != null) {
@@ -121,45 +101,45 @@ fun TextView.bindWalkStatusTime(
             )
 
         val minute = duration.toMinutes()
-        val (walkStatus, color) =
-            when (walkStatus) {
-                WalkStatus.BEFORE -> {
-                    Pair(
-                        resources.getString(R.string.woof_walk_before, minute),
-                        resources.getColor(R.color.coral300),
-                    )
-                }
-
-                WalkStatus.ONGOING -> {
-                    Pair(
-                        resources.getString(R.string.woof_walk_ongoing, minute),
-                        resources.getColor(R.color.coral500),
-                    )
-                }
-
-                WalkStatus.AFTER -> {
-                    val afterHour = changedWalkStatusTime.hour
-                    val afterMinute = changedWalkStatusTime.minute
-                    Pair(
-                        resources.getString(R.string.woof_walk_after, afterHour, afterMinute),
-                        resources.getColor(R.color.gray500),
-                    )
-                }
+        when (walkStatus) {
+            WalkStatus.BEFORE -> {
+                text = resources.getString(R.string.woof_walk_before, minute)
+                setTextColor(resources.getColor(R.color.coral300))
             }
 
-        val spannableString =
-            SpannableString(
-                walkStatus,
-            )
-        spannableString.apply {
-            setSpan(
-                ForegroundColorSpan(color),
-                0,
-                walkStatus.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-            )
-        }
+            WalkStatus.ONGOING -> {
+                text = resources.getString(R.string.woof_walk_ongoing, minute)
+                setTextColor(resources.getColor(R.color.coral500))
+            }
 
-        text = spannableString
+            WalkStatus.AFTER -> {
+                val afterHour = changedWalkStatusTime.hour
+                val afterMinute = changedWalkStatusTime.minute
+                text = resources.getString(R.string.woof_walk_after, afterHour, afterMinute)
+                setTextColor(resources.getColor(R.color.gray500))
+            }
+        }
+    }
+}
+
+@BindingAdapter("myWalkStatus")
+fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
+    if (walkStatus != null) {
+        when (walkStatus) {
+            WalkStatus.BEFORE -> {
+                text = resources.getString(R.string.woof_status_before)
+                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_before_clicked, null), null, null, null)
+            }
+
+            WalkStatus.ONGOING -> {
+                text = resources.getString(R.string.woof_status_ongoing)
+                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_ongoing_clicked, null), null, null, null)
+            }
+
+            WalkStatus.AFTER -> {
+                text = resources.getString(R.string.woof_status_after)
+                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_after_clicked, null), null, null, null)
+            }
+        }
     }
 }
