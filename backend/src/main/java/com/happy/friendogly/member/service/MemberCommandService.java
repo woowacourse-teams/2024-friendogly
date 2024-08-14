@@ -73,7 +73,7 @@ public class MemberCommandService {
         member.update(request.name(), newImageUrl);
 
         if (!request.oldImageUrl().equals(request.newImageUrl())) {
-            fileStorageManager.removeFile(request.oldImageUrl());
+            // TODO: 이미지 삭제
         }
 
         return new UpdateMemberResponse(member);
