@@ -12,6 +12,7 @@ import com.happy.friendogly.pet.dto.request.SavePetRequest;
 import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,7 +73,7 @@ public class PetCommandService {
         Pet pet = petRepository.getById(petId);
 
         if (!pet.isOwner(member)) {
-            throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.");
+            throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.", HttpStatus.UNAUTHORIZED);
         }
 
         ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
