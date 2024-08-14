@@ -7,12 +7,12 @@ import com.happy.friendogly.presentation.base.BaseDialog
 class PetAddAlertDialog(
     private val clickToNegative: () -> Unit,
     private val clickToPositive: () -> Unit,
-):BaseDialog<DialogPetAddAlertBinding>(layoutResourceId = R.layout.dialog_pet_add_alert) {
+) : BaseDialog<DialogPetAddAlertBinding>(layoutResourceId = R.layout.dialog_pet_add_alert) {
     override fun initViewCreated() {
         initClickListener()
     }
 
-    private fun initClickListener(){
+    private fun initClickListener() {
         binding.tvNegative.setOnClickListener {
             clickToNegative()
             dismiss()

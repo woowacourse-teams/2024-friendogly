@@ -140,12 +140,12 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         }
     }
 
-    private fun openRegisterPetDialog(){
+    private fun openRegisterPetDialog() {
         PetAddAlertDialog(
             clickToNegative = {},
             clickToPositive = {
                 (activity as MainActivityActionHandler).navigateToRegisterPet(null)
-            }
+            },
         ).show(parentFragmentManager, tag)
     }
 

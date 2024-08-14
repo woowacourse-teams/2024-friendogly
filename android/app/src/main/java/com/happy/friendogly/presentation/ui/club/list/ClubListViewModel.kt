@@ -67,14 +67,15 @@ class ClubListViewModel(
                 }
         }
 
-    private fun initPetState() = viewModelScope.launch {
-        getPetsMineUseCase()
-            .onSuccess { pets ->
-                if (isInValidPetCount(pets)) {
-                    _clubListEvent.emit(ClubListEvent.OpenAddPet)
+    private fun initPetState() =
+        viewModelScope.launch {
+            getPetsMineUseCase()
+                .onSuccess { pets ->
+                    if (isInValidPetCount(pets)) {
+                        _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                    }
                 }
-            }
-    }
+        }
 
     private fun loadClubs() =
         viewModelScope.launch {
@@ -115,18 +116,19 @@ class ClubListViewModel(
         applyAddClubState()
     }
 
-    private fun applyAddClubState() = viewModelScope.launch {
-        getPetsMineUseCase()
-            .onSuccess { pets ->
-                if (isInValidPetCount(pets)) {
-                    _clubListEvent.emit(ClubListEvent.OpenAddPet)
-                } else if (myAddress.value == null) {
-                    _clubListEvent.emit(ClubListEvent.FailLocation)
-                } else {
-                    _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+    private fun applyAddClubState() =
+        viewModelScope.launch {
+            getPetsMineUseCase()
+                .onSuccess { pets ->
+                    if (isInValidPetCount(pets)) {
+                        _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                    } else if (myAddress.value == null) {
+                        _clubListEvent.emit(ClubListEvent.FailLocation)
+                    } else {
+                        _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+                    }
                 }
-            }
-    }
+        }
 
     override fun selectParticipationFilter() {
         val participationFilter = participationFilter.value ?: return
