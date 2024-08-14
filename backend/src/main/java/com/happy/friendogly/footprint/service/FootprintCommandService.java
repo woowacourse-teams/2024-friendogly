@@ -64,12 +64,7 @@ public class FootprintCommandService {
 
         List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
         String memberName = member.getName().getValue();
-
-        fcmNotificationService.sendNotification(
-                "반갑개",
-                "내 산책 장소에 " + memberName + "님도 산책온대요!",
-                nearDeviceTokens
-        );
+        sendWalkComingNotification(memberName,nearDeviceTokens);
 
         return new SaveFootprintResponse(
                 footprint.getId(),
@@ -97,6 +92,14 @@ public class FootprintCommandService {
         }
     }
 
+    private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
+        fcmNotificationService.sendNotification(
+                "반갑개",
+                "내 산책 장소에 " + memberName + "님도 산책온대요!",
+                nearDeviceTokens
+        );
+    }
+
     public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
@@ -109,17 +112,18 @@ public class FootprintCommandService {
         if(beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()){
             List<String> nearDeviceTokens = findNearDeviceTokens(footprint);
             String memberName = footprint.getMember().getName().getValue();
-
-            fcmNotificationService.sendNotification("반갑개",
-                    "내 산책장소에 "+memberName+"님이 산책을 시작했어요!",
-                    nearDeviceTokens
-            );
+            sendWalkStartNotification(memberName, nearDeviceTokens);
         }
 
-
-
-
         return new UpdateWalkStatusResponse(footprint.getWalkStatus());
+    }
+
+    private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
+        fcmNotificationService.sendNotification(
+                "반갑개",
+                "내 산책장소에 "+startMemberName+"님이 산책을 시작했어요!",
+                nearDeviceTokens
+        );
     }
 
     private List<String> findNearDeviceTokens(Footprint standardFootprint) {
