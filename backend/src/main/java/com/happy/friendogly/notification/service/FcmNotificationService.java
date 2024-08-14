@@ -7,9 +7,11 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.exception.FriendoglyException;
 import java.util.List;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("!local")
 public class FcmNotificationService implements NotificationService {
     private final FirebaseApp firebaseApp;
 
