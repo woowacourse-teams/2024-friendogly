@@ -45,7 +45,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
     void findSearching() {
         Club club = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -83,11 +83,12 @@ class ClubQueryServiceTest extends ClubServiceTest {
     }
 
     @DisplayName("필터링된 모임을 정보가 없으면 빈 리스트를 반환한다.")
+    @Transactional
     @Test
     void findSearching_Nothing() {
         Club club = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -107,11 +108,12 @@ class ClubQueryServiceTest extends ClubServiceTest {
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")
+    @Transactional
     @Test
     void findMine() {
         Club club1 = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -120,15 +122,15 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 .name("위브")
                 .build());
         Pet savedPet2 = createSavedPet(savedMember2);
+        Pet savedPet3 = createSavedPet(savedMember2);
         Club club2 = createSavedClub(
                 savedMember2,
-                savedPet2,
+                List.of(savedPet2,savedPet3),
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
-
-        clubCommandService.joinClub(club2.getId(), savedMember.getId(),
-                new SaveClubMemberRequest(List.of(savedPet.getId())));
+        club2.addClubMember(savedMember);
+        club2.addClubPet(List.of(savedPet));
 
         List<FindClubMineResponse> actual = clubQueryService.findMine(savedMember.getId());
         List<FindClubMineResponse> expected = List.of(new FindClubMineResponse(club1, List.of(petImageUrl)));
@@ -157,7 +159,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
     void findParticipating() {
         Club club1 = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -166,20 +168,23 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 .name("위브")
                 .build());
         Pet savedPet2 = createSavedPet(savedMember2);
+        Pet savedPet3 = createSavedPet(savedMember2);
         Club club2 = createSavedClub(
                 savedMember2,
-                savedPet2,
+                List.of(savedPet2,savedPet3),
                 Set.of(Gender.FEMALE),
                 Set.of(SizeType.SMALL)
         );
-
-        clubCommandService.joinClub(club2.getId(), savedMember.getId(),
-                new SaveClubMemberRequest(List.of(savedPet.getId())));
+        clubCommandService.joinClub(
+                club2.getId(),
+                savedMember.getId(),
+                new SaveClubMemberRequest(List.of(savedPet.getId()))
+        );
 
         List<FindClubParticipatingResponse> actual = clubQueryService.findParticipating(savedMember.getId());
         List<FindClubParticipatingResponse> expected = List.of(
-                new FindClubParticipatingResponse(club1, List.of(petImageUrl)),
-                new FindClubParticipatingResponse(club2, List.of(petImageUrl, petImageUrl))
+                new FindClubParticipatingResponse(club2, List.of(petImageUrl, petImageUrl)),
+                new FindClubParticipatingResponse(club1, List.of(petImageUrl))
         );
 
         FindClubParticipatingResponse actual1 = actual.get(0);

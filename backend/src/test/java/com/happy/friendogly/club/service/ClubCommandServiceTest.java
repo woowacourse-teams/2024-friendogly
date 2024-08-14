@@ -73,7 +73,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void joinClub() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -97,7 +97,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void joinClub_FailAlreadyParticipating() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -113,7 +113,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void joinClub_FailCanNotParticipate() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -147,7 +147,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void joinClub_FailUnMatchOwner() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -182,7 +182,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void deleteClubMember() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -211,7 +211,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void deleteClubMember_WhenIsEmptyDelete() {
         Club savedClub = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );

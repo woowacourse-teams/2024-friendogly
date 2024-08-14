@@ -49,6 +49,7 @@ public class ClubQueryService {
                 .equalsProvince(request.province())
                 .hasGenders(Gender.toGenders(request.genderParams()))
                 .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
+                .orderByCreatedAtDescAndIdAsc()
                 .build();
 
         List<Club> clubs = clubRepository.findAll(spec);
@@ -76,9 +77,8 @@ public class ClubQueryService {
     }
 
     public List<FindClubMineResponse> findMine(Long memberId) {
-        List<Club> participantClubs = clubRepository.findAllByParticipantingMemberId(memberId);
+        List<Club> participantClubs = clubRepository.findAllByParticipatingMemberId(memberId);
         Member member = memberRepository.getById(memberId);
-
         return participantClubs.stream()
                 .filter(club -> club.isOwner(member))
                 .map(club -> new FindClubMineResponse(club, collectOverviewPetImages(club)))
@@ -86,7 +86,7 @@ public class ClubQueryService {
     }
 
     public List<FindClubParticipatingResponse> findParticipating(Long memberId) {
-        return clubRepository.findAllByParticipantingMemberId(memberId)
+        return clubRepository.findAllByParticipatingMemberId(memberId)
                 .stream()
                 .map(club -> new FindClubParticipatingResponse(club, collectOverviewPetImages(club)))
                 .toList();

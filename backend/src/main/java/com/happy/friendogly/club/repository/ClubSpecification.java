@@ -7,6 +7,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 import java.util.Set;
@@ -57,6 +58,17 @@ public class ClubSpecification {
             CriteriaBuilder.In<T> inClause = criteriaBuilder.in(path);
             values.forEach(inClause::value);
             return inClause;
+        });
+
+        return this;
+    }
+
+    public ClubSpecification orderByCreatedAtDescAndIdAsc() {
+        spec.and((root, query, criteriaBuilder) -> {
+            Order orderByCreatedAt = criteriaBuilder.desc(root.get("createdAt"));
+            Order orderByIdAsc = criteriaBuilder.asc(root.get("id"));
+            query.orderBy(orderByCreatedAt, orderByIdAsc);
+            return criteriaBuilder.conjunction();
         });
 
         return this;
