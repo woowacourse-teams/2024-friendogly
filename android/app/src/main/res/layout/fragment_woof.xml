@@ -25,6 +25,26 @@
             android:layout_height="match_parent"
             android:clickable="true" />
 
+        <TextView
+            android:id="@+id/btn_woof_footprint_refresh"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rect_white_fill_30"
+            android:drawableStart="@drawable/ic_refresh"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:onClick="@{() -> actionHandler.clickRefreshBtn()}"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="@string/woof_footprint_refresh"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <ImageButton
             android:id="@+id/btn_woof_back"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"

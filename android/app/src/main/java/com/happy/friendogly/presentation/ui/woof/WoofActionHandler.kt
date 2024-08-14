@@ -11,6 +11,8 @@ interface WoofActionHandler {
 
     fun clickMyFootprintBtn()
 
+    fun clickRefreshBtn()
+
     fun clickBackBtn()
 
     fun clickCloseBtn()

@@ -257,10 +257,11 @@
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
-    <string name="woof_register_walking_area">산책 영역 등록</string>
+    <string name="woof_register_walking_area">산책 할래요!</string>
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
+    <string name="woof_footprint_refresh">발자국 새로고침</string>
 
     <!--프로필-->
     <string name="male">남</string>
