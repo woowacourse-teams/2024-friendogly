@@ -4,6 +4,7 @@ import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.ChatRoomDetail;
 import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
+import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.club.domain.Club;
@@ -60,6 +61,14 @@ public class ChatRoomQueryService {
         ChatRoom chatRoom = chatRoomRepository.getById(request.chatRoomId());
         Member sender = memberRepository.getById(senderMemberId);
         validateParticipation(chatRoom, sender);
+    }
+
+    public FindClubDetailsResponse findClubDetails(Long memberId, Long chatRoomId) {
+        Member member = memberRepository.getById(memberId);
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        validateParticipation(chatRoom, member);
+        Club club = clubRepository.getByChatRoomId(chatRoomId);
+        return new FindClubDetailsResponse(club);
     }
 
     private void validateParticipation(ChatRoom chatRoom, Member member) {
