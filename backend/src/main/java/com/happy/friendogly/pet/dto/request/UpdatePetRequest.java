@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import org.hibernate.validator.constraints.URL;
 
-public record SavePetRequest(
-
+public record UpdatePetRequest(
         @NotBlank(message = "name은 빈 문자열이나 null을 입력할 수 없습니다.")
         @Size(max = 8, message = "이름은 1글자 이상 8글자 이하여야 합니다.")
         String name,
@@ -27,8 +25,8 @@ public record SavePetRequest(
         @NotBlank(message = "gender는 빈 문자열이나 null을 입력할 수 없습니다.")
         String gender,
 
-        @URL
-        String imageUrl
+        @NotBlank(message = "imageUpdateType는 빈 문자열이나 null을 입력할 수 없습니다.")
+        String imageUpdateType
 ) {
 
 }
