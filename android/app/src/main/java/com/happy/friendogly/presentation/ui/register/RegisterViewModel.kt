@@ -101,12 +101,8 @@ class RegisterViewModel(
                     return@addOnCompleteListener
                 }
                 val token = task.result
-                launch {
-                    runCatching {
-                        AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
-                    }.onFailure {
-                        Log.d("테스트","$it")
-                    }
+                launch { // TODO 에러 핸들링
+                    AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
                 }
             }
     }
