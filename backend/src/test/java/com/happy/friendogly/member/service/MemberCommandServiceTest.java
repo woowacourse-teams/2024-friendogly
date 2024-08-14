@@ -2,6 +2,7 @@ package com.happy.friendogly.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.happy.friendogly.infra.ImageUpdateType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.dto.request.UpdateMemberRequest;
 import com.happy.friendogly.support.ServiceTest;
@@ -20,7 +21,7 @@ public class MemberCommandServiceTest extends ServiceTest {
     void update_MemberName() {
         Member member = memberRepository.save(new Member("member", "tag", "imageUrl"));
         String newName = "newName";
-        UpdateMemberRequest request = new UpdateMemberRequest(newName, "imageUrl", "imageUrl");
+        UpdateMemberRequest request = new UpdateMemberRequest(newName, ImageUpdateType.NOT_UPDATE.name());
 
         memberCommandService.update(member.getId(), request, new MockMultipartFile("image", "image".getBytes()));
         Member findMember = memberRepository.getById(member.getId());

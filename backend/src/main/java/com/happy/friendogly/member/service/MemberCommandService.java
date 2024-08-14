@@ -7,6 +7,7 @@ import com.happy.friendogly.auth.service.KakaoOauthClient;
 import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import com.happy.friendogly.auth.service.jwt.TokenPayload;
 import com.happy.friendogly.infra.FileStorageManager;
+import com.happy.friendogly.infra.ImageUpdateType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.dto.request.SaveMemberRequest;
 import com.happy.friendogly.member.dto.request.UpdateMemberRequest;
@@ -65,16 +66,26 @@ public class MemberCommandService {
 
     public UpdateMemberResponse update(Long memberId, UpdateMemberRequest request, MultipartFile image) {
         Member member = memberRepository.getById(memberId);
+        ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
 
-        String newImageUrl = request.newImageUrl();
-        if (image != null && !image.isEmpty()) {
+        String oldImageUrl = member.getImageUrl();
+        String newImageUrl = "";
+
+        if (imageUpdateType == ImageUpdateType.UPDATE) {
+            // TODO: 기존 이미지 S3에서 삭제
             newImageUrl = fileStorageManager.uploadFile(image);
         }
-        member.update(request.name(), newImageUrl);
 
-        if (!request.oldImageUrl().equals(request.newImageUrl())) {
-            // TODO: 이미지 삭제
+        if (imageUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newImageUrl = oldImageUrl;
         }
+
+        if (imageUpdateType == ImageUpdateType.DELETE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = "";
+        }
+
+        member.update(request.name(), newImageUrl);
 
         return new UpdateMemberResponse(member);
     }
