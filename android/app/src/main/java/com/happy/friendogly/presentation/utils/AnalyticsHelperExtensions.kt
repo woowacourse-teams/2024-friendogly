@@ -70,6 +70,10 @@ fun AnalyticsHelper.logFootprintMemberNameClicked() {
     logEvent(type = Types.FOOTPRINT_MEMBER_NAME_CLICKED)
 }
 
+fun AnalyticsHelper.logRegisterHelpClicked() {
+    logEvent(type = Types.REGISTER_HELP_CLICKED)
+}
+
 fun AnalyticsHelper.logNearFootprintSize(size: Int) {
     logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.NEAR_FOOTPRINTS_SIZE to size)
 }

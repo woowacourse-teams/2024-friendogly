@@ -31,7 +31,10 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFol
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.*
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtn
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowEndWalk
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPet
+import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
@@ -44,6 +47,7 @@ import com.happy.friendogly.presentation.utils.logLocationBtnClicked
 import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
+import com.happy.friendogly.presentation.utils.logRegisterHelpClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -58,11 +62,14 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
@@ -302,6 +309,11 @@ class WoofFragment :
     override fun clickFootprintMemberName(memberId: Long) {
         analyticsHelper.logFootprintMemberNameClicked()
         startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))
+    }
+
+    override fun clickRegisterHelp() {
+        analyticsHelper.logRegisterHelpClicked()
+        showRegisterHelpBalloon()
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -641,6 +653,28 @@ class WoofFragment :
         binding.ivWoofRegisterMarker.isVisible = false
         changeRecentlyClickedMarkerSize()
         hideViewAnimation(binding.layoutWoofRegisterMarker)
+    }
+
+    private fun showRegisterHelpBalloon() {
+        val balloon =
+            Balloon.Builder(requireContext())
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setText(resources.getString(R.string.woof_register_description))
+                .setTextColorResource(R.color.white)
+                .setTextSize(15f)
+                .setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowSize(10)
+                .setArrowPosition(0.5f)
+                .setPadding(12)
+                .setCornerRadius(8f)
+                .setBackgroundColorResource(R.color.coral400)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                .setLifecycleOwner(viewLifecycleOwner)
+                .build()
+
+        balloon.showAlignTop(binding.btnWoofRegisterHelp)
     }
 
     private fun changeRecentlyClickedMarkerSize() {

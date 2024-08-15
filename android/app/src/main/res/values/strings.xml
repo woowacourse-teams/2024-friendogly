@@ -255,8 +255,8 @@
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
-    <string name="woof_register_walk_area">산책 영역 표시</string>
-    <string name="woof_register_description">발자국 반경 1km 안으로 들어오면\n산책 중으로 상태가 변경됩니다!</string>
+    <string name="woof_register_walk_area">발자국 등록</string>
+    <string name="woof_register_description">나의 위치가 발자국 반경 1km 이내면\n산책이 시작됩니다!</string>
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
