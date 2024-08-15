@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,7 +10,7 @@
     </data>
 
     <LinearLayout
-        android:background="@drawable/rect_coral100_fill_12"
+        android:background="@drawable/rect_coral400_fill_12"
         android:paddingHorizontal="12dp"
         android:paddingVertical="8dp"
         android:gravity="center"
@@ -28,9 +29,9 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:tint="@color/white"
             android:src="@drawable/ic_arrow_bottom"
             android:layout_width="16dp"
-            android:layout_height="16dp" />
+            android:layout_height="16dp"
+            app:tint="@color/white" />
     </LinearLayout>
 </layout>
