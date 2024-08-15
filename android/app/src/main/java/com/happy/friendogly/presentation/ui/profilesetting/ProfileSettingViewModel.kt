@@ -19,6 +19,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
+import kotlinx.coroutines.delay
 import okhttp3.MultipartBody
 
 class ProfileSettingViewModel(
@@ -54,6 +55,9 @@ class ProfileSettingViewModel(
     private val _message: MutableLiveData<Event<ProfileSettingMessage>> = MutableLiveData(null)
     val message: LiveData<Event<ProfileSettingMessage>> get() = _message
 
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    val loading: LiveData<Event<Boolean>> get() = _loading
+
     init {
         fetchProfile()
     }
@@ -84,6 +88,7 @@ class ProfileSettingViewModel(
 
     fun submitProfileSelection() {
         launch {
+            _loading.emit(true)
             val nickname = nickname.value ?: return@launch
             if (nickname.isBlank()) return@launch
             if (regex.matches(nickname)) return@launch
@@ -94,6 +99,7 @@ class ProfileSettingViewModel(
             } else {
                 patchMember(nickname, state.profilePath)
             }
+            _loading.emit(false)
         }
     }
 
@@ -139,6 +145,7 @@ class ProfileSettingViewModel(
         profilePath: MultipartBody.Part?,
     ) {
         // TODO patch use case 호출 예정
+        delay(3000)
     }
 
     fun updateProfileImage(bitmap: Bitmap) {

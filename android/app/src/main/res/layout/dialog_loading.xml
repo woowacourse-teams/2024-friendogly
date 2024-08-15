@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.ybq.android.spinkit.SpinKitView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/progressBar"
+    app:SpinKit_Style="Circle"
+    style="@style/SpinKitView.FadingCircle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:maxWidth="65dip"
+    android:maxHeight="65dip"
+    android:minWidth="65dip"
+    android:minHeight="65dip"
+    app:SpinKit_Color="@color/coral400" />
