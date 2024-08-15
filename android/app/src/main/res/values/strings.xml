@@ -250,10 +250,10 @@
     <string name="woof_hours_ago">%d시간 전</string>
     <string name="woof_minutes_ago">%d분 전</string>
     <string name="woof_just_now">방금 전</string>
-    <string name="woof_status_before">가는중</string>
+    <string name="woof_status_before">준비중</string>
     <string name="woof_status_ongoing">산책중</string>
     <string name="woof_status_after">산책 완료</string>
-    <string name="woof_walk_before">%d분 째 가는중</string>
+    <string name="woof_walk_before">%d분 째 준비중</string>
     <string name="woof_walk_ongoing">%d분 째 산책중</string>
     <string name="woof_walk_after">%d시 %d분에 왔다감</string>
     <string name="woof_age_year">%d살</string>
@@ -268,6 +268,7 @@
     <string name="woof_footprint_refresh">발자국 불러오기</string>
     <string name="woof_end_walk">산책 종료하기</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>
+    <string name="woof_status_all">전체</string>
 
     <!--프로필-->
     <string name="male">남</string>

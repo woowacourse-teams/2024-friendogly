@@ -104,7 +104,7 @@ fun TextView.bindWalkStatusTime(
         when (walkStatus) {
             WalkStatus.BEFORE -> {
                 text = resources.getString(R.string.woof_walk_before, minute)
-                setTextColor(resources.getColor(R.color.coral300))
+                setTextColor(resources.getColor(R.color.coral400))
             }
 
             WalkStatus.ONGOING -> {
@@ -116,7 +116,7 @@ fun TextView.bindWalkStatusTime(
                 val afterHour = changedWalkStatusTime.hour
                 val afterMinute = changedWalkStatusTime.minute
                 text = resources.getString(R.string.woof_walk_after, afterHour, afterMinute)
-                setTextColor(resources.getColor(R.color.gray500))
+                setTextColor(resources.getColor(R.color.gray600))
             }
         }
     }

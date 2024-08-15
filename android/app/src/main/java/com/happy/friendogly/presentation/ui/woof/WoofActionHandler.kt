@@ -11,6 +11,14 @@ interface WoofActionHandler {
 
     fun clickMyFootprintBtn()
 
+    fun clickStatusAll()
+
+    fun clickStatusBefore()
+
+    fun clickStatusOnGoing()
+
+    fun clickStatusAfter()
+
     fun clickRefreshBtn()
 
     fun clickEndWalkBtn()
