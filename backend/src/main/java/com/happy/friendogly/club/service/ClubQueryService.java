@@ -104,8 +104,8 @@ public class ClubQueryService {
                 .toList();
     }
 
-    public FindClubResponse findById(Long memberId, Long id) {
-        Club club = clubRepository.getById(id);
+    public FindClubResponse findById(Long memberId, Long clubId) {
+        Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
