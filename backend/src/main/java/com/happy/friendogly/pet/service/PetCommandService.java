@@ -2,12 +2,14 @@ package com.happy.friendogly.pet.service;
 
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.infra.FileStorageManager;
+import com.happy.friendogly.infra.ImageUpdateType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
+import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,42 @@ public class PetCommandService {
             throw new FriendoglyException(String.format(
                     "강아지는 최대 %d 마리까지만 등록할 수 있습니다.", MAX_PET_CAPACITY));
         }
+    }
+
+    public void update(Long memberId, Long petId, UpdatePetRequest request, MultipartFile image) {
+        Member member = memberRepository.getById(memberId);
+        Pet pet = petRepository.getById(petId);
+
+        if (!pet.isOwner(member)) {
+            throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.");
+        }
+
+        ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
+
+        String oldImageUrl = pet.getImageUrl();
+        String newImageUrl = "";
+
+        if (imageUpdateType == ImageUpdateType.UPDATE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = fileStorageManager.uploadFile(image);
+        }
+
+        if (imageUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newImageUrl = oldImageUrl;
+        }
+
+        if (imageUpdateType == ImageUpdateType.DELETE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = "";
+        }
+
+        pet.update(
+                request.name(),
+                request.description(),
+                request.birthDate(),
+                request.sizeType(),
+                request.gender(),
+                newImageUrl
+        );
     }
 }

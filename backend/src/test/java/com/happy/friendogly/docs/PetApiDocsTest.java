@@ -17,6 +17,7 @@ import com.happy.friendogly.pet.controller.PetController;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
+import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.service.PetCommandService;
@@ -28,10 +29,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 public class PetApiDocsTest extends RestDocsTest {
 
@@ -301,6 +304,101 @@ public class PetApiDocsTest extends RestDocsTest {
                                                 .description("반려견 이미지 URL")
                                 )
                                 .responseSchema(Schema.schema("FindPetResponse"))
+                                .build()))
+                );
+    }
+
+    @DisplayName("반려견 정보 업데이트 문서화")
+    @Test
+    void update_Success() throws Exception {
+        // MultipartFile + PATCH Method 같이 사용하기 위한 코드
+        MockMultipartHttpServletRequestBuilder patchBuilder
+                = RestDocumentationRequestBuilders.multipart("/pets/{id}", 1L);
+        patchBuilder.with(request -> {
+            request.setMethod(HttpMethod.PATCH.name());
+            return request;
+        });
+
+        Mockito.doNothing()
+                .when(petCommandService)
+                .update(any(), any(), any(), any());
+
+        UpdatePetRequest requestDto = new UpdatePetRequest(
+                "도토리",
+                "도토리 설명",
+                LocalDate.now().minusYears(1),
+                "SMALL",
+                "MALE",
+                "UPDATE"
+        );
+
+        MockMultipartFile image = new MockMultipartFile(
+                "image", "image.jpg", MediaType.MULTIPART_FORM_DATA.toString(), "asdf".getBytes());
+        MockMultipartFile request = new MockMultipartFile(
+                "request", "request", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(requestDto));
+
+        mockMvc.perform(patchBuilder
+                        .file(image)
+                        .file(request)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isOk())
+                .andDo(MockMvcRestDocumentationWrapper.document("pet-update-200",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParts(
+                                partWithName("image").description("강아지 프로필 이미지 파일"),
+                                partWithName("request").description("강아지 등록 정보")
+                        ),
+                        requestPartFields(
+                                "request",
+                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                        .description("반려견 이름"),
+                                fieldWithPath("description").type(JsonFieldType.STRING)
+                                        .description("반려견 한 줄 소개"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING)
+                                        .description("반려견 생년월일: yyyy-MM-dd"),
+                                fieldWithPath("sizeType").type(JsonFieldType.STRING)
+                                        .description("반려견 크기: SMALL, MEDIUM, LARGE"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING)
+                                        .description("반려견 성별: MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED"),
+                                fieldWithPath("imageUpdateType").type(JsonFieldType.STRING)
+                                        .description("이미지 업데이트 여부: UPDATE, NOT_UPDATE, DELETE")
+                        ),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Pet API")
+                                .summary("""
+                                        반려견 정보 수정 API
+                                                                                
+                                        요청 이미지
+                                                                                
+                                        multipart/form-data "image" (null인 경우 이미지 변경을 하지 않음)
+                                                                                
+                                        요청 데이터
+                                                                                
+                                        application/json "request"
+                                                                                
+                                        {
+                                                                                
+                                          "name": "보리", // 변경할 강아지 이름
+                                          
+                                          "description": "귀여운 보리입니다", // 변경할 강아지 설명
+                                          
+                                          "birthDate": "2011-01-01", // 강아지 생일 yyyy-MM-dd
+                                          
+                                          "sizeType": "SMALL", // 변경할 강아지 크기 (SMALL, MEDIUM, LARGE)
+                                          
+                                          "gender": "MALE", // 변경할 반려견 성별 (MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)
+                                          
+                                          "imageUpdateType": "UPDATE" // 이미지 업데이트 여부 -> UPDATE(이미지 변경), NOT_UPDATE(이미지 변경 없음), DELETE(기본 이미지로 변경)
+                                                                               
+                                        }
+                                        """)
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 accessToken")
+                                )
+                                .pathParameters(
+                                        parameterWithName("id").description("수정하려는 Pet ID"))
                                 .build()))
                 );
     }

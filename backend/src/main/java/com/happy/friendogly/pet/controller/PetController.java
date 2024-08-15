@@ -3,6 +3,7 @@ package com.happy.friendogly.pet.controller;
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
+import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.service.PetCommandService;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,5 +61,15 @@ public class PetController {
     public ApiResponse<List<FindPetResponse>> findByMemberId(@RequestParam Long memberId) {
         List<FindPetResponse> response = petQueryService.findByMemberId(memberId);
         return ApiResponse.ofSuccess(response);
+    }
+
+    @PatchMapping("/{petId}")
+    public void update(
+            @PathVariable Long petId,
+            @Auth Long memberId,
+            @RequestPart @Valid UpdatePetRequest request,
+            @RequestPart(required = false) MultipartFile image
+    ) {
+        petCommandService.update(memberId, petId, request, image);
     }
 }

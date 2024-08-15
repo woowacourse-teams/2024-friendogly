@@ -3,6 +3,7 @@ package com.happy.friendogly.chat.controller;
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
+import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chat.service.ChatRoomCommandService;
@@ -43,5 +44,11 @@ public class ChatRoomController {
     @GetMapping("/{chatRoomId}")
     public List<FindChatRoomMembersInfoResponse> findMemberInfo(@Auth Long memberId, @PathVariable Long chatRoomId) {
         return chatRoomQueryService.findMemberInfo(memberId, chatRoomId);
+    }
+
+    @GetMapping("/{chatRoomId}/club")
+    public ApiResponse<FindClubDetailsResponse> findClubDetails(@Auth Long memberId, @PathVariable Long chatRoomId) {
+        FindClubDetailsResponse response = chatRoomQueryService.findClubDetails(memberId, chatRoomId);
+        return ApiResponse.ofSuccess(response);
     }
 }

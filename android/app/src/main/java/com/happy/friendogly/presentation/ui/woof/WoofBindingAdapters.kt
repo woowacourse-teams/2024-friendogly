@@ -119,9 +119,8 @@ fun TextView.bindWalkStatusTime(
                 changedWalkStatusTime.toJavaLocalDateTime(),
                 java.time.LocalDateTime.now(),
             )
-        val hour = duration.toHours()
-        val minute = duration.toMinutes() % 60
 
+        val minute = duration.toMinutes()
         val (walkStatus, color) =
             when (walkStatus) {
                 WalkStatus.BEFORE -> {
