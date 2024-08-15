@@ -63,6 +63,9 @@ splashscreen = "1.0.1"
 # animation
 lottie = "5.0.2"
 
+# loading
+spinKit = "1.4.0"
+
 # stomp
 krossbow = "7.0.0"
 
@@ -128,11 +131,14 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 # animation
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 
+# loading
+spinKit = { group = "com.github.ybq", name = "Android-SpinKit", version.ref = "spinKit" }
+
 # stomp
 krossbow-stomp-core = { group = "org.hildan.krossbow", name = "krossbow-stomp-core", version.ref = "krossbow" }
 krossbow-websocket-oktthp = { group = "org.hildan.krossbow", name = "krossbow-websocket-okhttp", version.ref = "krossbow" }
-krossbow-kxserialization = {group = "org.hildan.krossbow", name= "krossbow-stomp-kxserialization", version.ref = "krossbow"}
-krossbow-kxserialization-json = {group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow"}
+krossbow-kxserialization = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization", version.ref = "krossbow" }
+krossbow-kxserialization-json = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow" }
 
 [bundles]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-lifecycle", "androidx-activity-ktx", "androidx-fragment-ktx", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx", "splashscreen"]
@@ -145,7 +151,8 @@ location = ["location"]
 datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 animation = ["lottie"]
-stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization","krossbow-kxserialization-json"]
+stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization", "krossbow-kxserialization-json"]
+thirdParty = ["spinKit"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
