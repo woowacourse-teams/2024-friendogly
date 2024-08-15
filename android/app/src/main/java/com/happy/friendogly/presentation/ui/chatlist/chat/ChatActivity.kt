@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.chatlist.chat
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.MotionEvent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
@@ -12,6 +13,7 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.utils.hideKeyboard
 import kotlinx.coroutines.launch
 
 class ChatActivity :
@@ -43,6 +45,12 @@ class ChatActivity :
             binding.edtChatSendMessage.setText("")
         }
         viewModel.subscribeMessage(chatId, myMemberId)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        this.currentFocus?.let { hideKeyboard() }
+        binding.edtChatSendMessage.clearFocus()
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun clickChatInfo(
