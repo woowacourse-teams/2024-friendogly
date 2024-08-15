@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.chatlist.chat
 
-import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +14,6 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.toUiModel
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,10 +40,10 @@ class ChatViewModel(
             }
         }
 
-    private val initJob: Deferred<Unit> = viewModelScope.async {
-        connectWebsocketUseCase()
-    }
-
+    private val initJob: Deferred<Unit> =
+        viewModelScope.async {
+            connectWebsocketUseCase()
+        }
 
     fun subscribeMessage(
         chatRoomId: Long,

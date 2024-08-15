@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.api
 
-import android.util.Log
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.model.request.ChatMessageRequest
 import com.happy.friendogly.remote.model.response.ChatMessageResponse
@@ -17,7 +16,6 @@ class WebSocketService(
     private val baseUrl: BaseUrl,
     private val tokenManager: TokenManager,
 ) {
-
     private lateinit var websocket: StompSessionWithKxSerialization
 
     suspend fun connect() {
