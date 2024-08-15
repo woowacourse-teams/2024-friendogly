@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.woof
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.res.ColorStateList
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -243,6 +244,22 @@ class WoofFragment :
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
+    }
+
+    override fun clickStatusAll() {
+        updateBackgroundTint(binding.tvWoofStatusAll)
+    }
+
+    override fun clickStatusBefore() {
+        updateBackgroundTint(binding.tvWoofStatusBefore)
+    }
+
+    override fun clickStatusOnGoing() {
+        updateBackgroundTint(binding.tvWoofStatusOngoing)
+    }
+
+    override fun clickStatusAfter() {
+        updateBackgroundTint(binding.tvWoofStatusAfter)
     }
 
     override fun clickRefreshBtn() {
@@ -757,6 +774,22 @@ class WoofFragment :
 
     private fun endWalk(distance: Float): Boolean {
         return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    }
+
+    fun updateBackgroundTint(selectedStatus: View) {
+        val whiteColor = resources.getColor(R.color.white, null)
+        val coralColor = resources.getColor(R.color.coral50, null)
+
+        val statuses = listOf(
+            binding.tvWoofStatusAll,
+            binding.tvWoofStatusBefore,
+            binding.tvWoofStatusOngoing,
+            binding.tvWoofStatusAfter
+        )
+        statuses.forEach { status ->
+            status.backgroundTintList =
+                ColorStateList.valueOf(if (status == selectedStatus) coralColor else whiteColor)
+        }
     }
 
     companion object {
