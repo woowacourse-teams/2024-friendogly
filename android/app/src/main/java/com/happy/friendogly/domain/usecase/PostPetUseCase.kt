@@ -1,5 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.SizeType
@@ -17,7 +19,7 @@ class PostPetUseCase(
         sizeType: SizeType,
         gender: Gender,
         file: MultipartBody.Part?,
-    ): Result<Pet> =
+    ): DomainResult<Pet, DataError.Network> =
         repository.postPet(
             name = name,
             description = description,
