@@ -18,39 +18,40 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <View
-                app:layout_constraintBottom_toTopOf="@+id/iv_club_detail_poster"
+
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/view_club_detail_top_bar"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginVertical="3dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:contentInsetStart="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/iv_club_detail_poster"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                onSingleClick="@{()->vm.closeDetail()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:background="@drawable/ripple_circle_white"
-                android:padding="2dp"
-                android:src="@drawable/ic_arrow_left"
-                app:layout_constraintStart_toStartOf="@id/view_club_detail_top_bar"
-                app:layout_constraintTop_toTopOf="@id/view_club_detail_top_bar"
-                app:layout_constraintBottom_toBottomOf="@+id/view_club_detail_top_bar"
-                app:tint="@color/black" />
+                <ImageView
+                    onSingleClick="@{()->vm.closeDetail()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:background="@drawable/ripple_circle_white"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_arrow_left"
+                    app:tint="@color/black" />
 
-            <ImageView
-                onSingleClick="@{()->vm.openMenu()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:background="@drawable/ripple_circle_white"
-                android:padding="2dp"
-                android:src="@drawable/ic_more_vertical"
-                app:layout_constraintEnd_toEndOf="@id/view_club_detail_top_bar"
-                app:layout_constraintTop_toTopOf="@id/view_club_detail_top_bar"
-                app:layout_constraintBottom_toBottomOf="@+id/view_club_detail_top_bar"
-                app:tint="@color/black" />
+
+                <ImageButton
+                    onSingleClick="@{()->vm.openMenu()}"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/ripple_circle_white"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_more_vertical"
+                    app:tint="@color/black" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
 
             <ImageView
                 android:id="@+id/iv_club_detail_poster"
@@ -63,10 +64,10 @@
                 app:glide="@{vm.club.clubPoster}"
                 app:layout_constraintBottom_toTopOf="@+id/view_club_detail_user_top_bar"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toBottomOf="@+id/view_club_detail_top_bar"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/view_club_detail_top_bar" />
+
             <View
                 android:id="@+id/view_club_detail_user_top_bar"
                 android:layout_width="match_parent"
@@ -86,12 +87,12 @@
                 app:shapeAppearanceOverlay="@style/Circle" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@+id/tv_club_detail_user_name"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{vm.club.clubLeaderName}"
