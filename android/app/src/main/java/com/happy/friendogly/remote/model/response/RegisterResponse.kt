@@ -6,8 +6,7 @@ import kotlinx.serialization.Serializable
 data class RegisterResponse(
     val id: Long,
     val name: String,
-    val tag: String = "",
-    val email: String,
+    val tag: String,
     val imageUrl: String,
     val tokens: JwtTokenResponse,
 )

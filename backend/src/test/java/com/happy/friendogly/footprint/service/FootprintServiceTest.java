@@ -37,7 +37,6 @@ public abstract class FootprintServiceTest extends ServiceTest {
         member = memberRepository.save(
                 Member.builder()
                         .name("name1")
-                        .email("test@test.com")
                         .build()
         );
 

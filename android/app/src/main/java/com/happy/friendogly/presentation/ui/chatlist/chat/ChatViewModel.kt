@@ -7,23 +7,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.Message
-import com.happy.friendogly.domain.repository.WebSocketRepository
+import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
+import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.toUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 
 class ChatViewModel(
-    private val webSocketRepository: WebSocketRepository,
+    private val subScribeMessageUseCase: SubScribeMessageUseCase,
+    private val publishSendMessageUseCase: PublishSendMessageUseCase,
 ) : BaseViewModel() {
     private val _chats: MutableLiveData<List<ChatUiModel>> = MutableLiveData()
     val chats: LiveData<List<ChatUiModel>> get() = _chats
 
     val sendMessage = MutableLiveData("")
-
-    var memberId: Long = 0L
 
     val isCanSend =
         MediatorLiveData<Boolean>().apply {
@@ -32,10 +31,13 @@ class ChatViewModel(
             }
         }
 
-    fun subscribeMessage(chatRoomId: Long) {
+    fun subscribeMessage(
+        chatRoomId: Long,
+        myMemberId: Long,
+    ) {
         viewModelScope.launch {
             val newChat =
-                webSocketRepository.subscribeMessage(chatRoomId).map {
+                subScribeMessageUseCase(chatRoomId, myMemberId).map {
                     when (it) {
                         is ChatComponent.Date -> it.toUiModel()
                         is ChatComponent.Enter -> it.toUiModel()
@@ -56,32 +58,19 @@ class ChatViewModel(
         content: String,
     ) {
         viewModelScope.launch {
-            webSocketRepository.publishSend(chatRoomId, content)
+            publishSendMessageUseCase(chatRoomId, content)
         }
     }
 
     companion object {
-        private val dummyChats =
-            listOf(
-                ChatUiModel.ComeOut("벼리", true),
-                ChatUiModel.ComeOut("누누", true),
-                ChatUiModel.Mine(
-                    "이거 잘 작동되는거 맞냐",
-                    LocalTime.now(),
-                ),
-                ChatUiModel.Other(
-                    "채드",
-                    "https://m.segye.com/content/image/2" +
-                        "021/07/29/20210729517145.jpg",
-                    "화면 보이는거 보니깐 잘 작동하는듯 \n 근데 나 긴 텍스트 필요하니깐 아무말이나 쓸게 블라블랄",
-                    LocalTime.now(),
-                ),
-            )
-
-        fun factory(webSocketRepository: WebSocketRepository): ViewModelProvider.Factory {
+        fun factory(
+            subScribeMessageUseCase: SubScribeMessageUseCase,
+            publishSendMessageUseCase: PublishSendMessageUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatViewModel(
-                    webSocketRepository,
+                    subScribeMessageUseCase,
+                    publishSendMessageUseCase,
                 )
             }
         }

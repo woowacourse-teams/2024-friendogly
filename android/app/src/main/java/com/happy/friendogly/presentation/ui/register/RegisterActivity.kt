@@ -28,6 +28,8 @@ class RegisterActivity : AppCompatActivity() {
         )
     }
 
+    private var toast: Toast? = null
+
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
             val account =
@@ -70,7 +72,8 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 is RegisterNavigationAction.NavigateToGoogleLogin -> {
-                    Toast.makeText(this, "현재 구글 로그인은 사용할 수 없어요", Toast.LENGTH_SHORT).show()
+                    // TODO 구글 로그인 x
+                    showToastMessage("현재 구글 로그인은 사용할 수 없어요")
 //                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
                 }
 
@@ -80,6 +83,20 @@ class RegisterActivity : AppCompatActivity() {
                     )
             }
         }
+
+        viewModel.message.observeEvent(this) { message ->
+            // TODO 예시 코드로 메시지는 하드 코딩 했습니다. 서버에서 내려주는 에러 코드가 완성되면 수정하겠습니다.
+            when (message) {
+                RegisterMessage.DefaultErrorMessage -> showToastMessage("서버 에러가 발생했습니다")
+                RegisterMessage.ServerErrorMessage -> showToastMessage("알 수 없는 에러가 발생했습니다")
+            }
+        }
+    }
+
+    private fun showToastMessage(message: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast?.show()
     }
 
     companion object {

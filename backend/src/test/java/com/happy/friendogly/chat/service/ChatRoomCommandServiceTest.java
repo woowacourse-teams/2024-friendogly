@@ -39,8 +39,8 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
     @BeforeEach
     void setUp() {
-        member1 = memberRepository.save(new Member("n", "t", "a@a.com", "https://a.com"));
-        member2 = memberRepository.save(new Member("a", "b", "b@b.com", "https://b.com"));
+        member1 = memberRepository.save(new Member("n", "t", "https://a.com"));
+        member2 = memberRepository.save(new Member("a", "b", "https://b.com"));
         pet = petRepository.save(
                 new Pet(member1, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
         club = clubRepository.save(

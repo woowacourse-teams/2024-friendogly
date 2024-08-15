@@ -8,7 +8,6 @@ fun MemberDto.toDomain(): Member {
         id = id,
         name = name,
         tag = tag,
-        email = email,
         imageUrl = imageUrl,
     )
 }

@@ -11,9 +11,9 @@ class AddressDataSourceImpl(
     override suspend fun getAddress(): Result<UserAddressDto> =
         runCatching {
             UserAddressDto(
-                thoroughfare = addressModule.thoroughfare.first(),
+                adminArea = addressModule.adminArea.first().ifEmpty { throw Exception() },
                 subLocality = addressModule.subLocality.first(),
-                adminArea = addressModule.adminArea.first(),
+                thoroughfare = addressModule.thoroughfare.first(),
             )
         }
 

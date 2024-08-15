@@ -18,11 +18,11 @@ class AddressTest {
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("주소 정보 없이 생성하면 예외가 발생한다.")
+    @DisplayName("주소 province 정보 없이 생성하면 예외가 발생한다.")
     @NullAndEmptySource
     @ParameterizedTest
-    void create_Fail_NullAndEmptyAddress(String addressInput) {
-        assertThatThrownBy(() -> new Address(addressInput, "송파구", "신천동"))
+    void create_Fail_NullAndEmptyAddress(String provinceInput) {
+        assertThatThrownBy(() -> new Address(provinceInput, "송파구", "신천동"))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("모임 주소는 필수입니다.");
     }

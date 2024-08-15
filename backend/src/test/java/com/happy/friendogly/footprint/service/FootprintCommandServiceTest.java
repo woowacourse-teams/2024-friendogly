@@ -36,7 +36,6 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         Member memberWithoutPet = memberRepository.save(
                 Member.builder()
                         .name("강아지없어요")
-                        .email("no_dog@test.com")
                         .build()
         );
 

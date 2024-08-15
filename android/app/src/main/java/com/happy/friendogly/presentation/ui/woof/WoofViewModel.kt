@@ -1,7 +1,6 @@
 package com.happy.friendogly.presentation.ui.woof
 
 import android.location.Address
-import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -134,21 +133,18 @@ class WoofViewModel(
                     WalkStatus.BEFORE -> {
                         if (myWalkStatus.value == null) {
                             _myWalkStatus.value = WalkStatus.BEFORE
-                            _snackbarActions.emit(WoofSnackbarActions.ShowBeforeWalkStatusSnackbar)
                         }
                     }
 
                     WalkStatus.ONGOING -> {
                         if (myWalkStatus.value == null || myWalkStatus.value == WalkStatus.BEFORE) {
                             _myWalkStatus.value = WalkStatus.ONGOING
-                            _snackbarActions.emit(WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar)
                         }
                     }
 
                     WalkStatus.AFTER ->
                         if (myWalkStatus.value == WalkStatus.ONGOING) {
                             _myWalkStatus.value = WalkStatus.AFTER
-                            _snackbarActions.emit(WoofSnackbarActions.ShowAfterWalkStatusSnackbar)
                         }
                 }
             }.onFailure {
@@ -182,28 +178,8 @@ class WoofViewModel(
     }
 
     fun loadAddress(address: Address) {
-        _registerAddress.value = address.getAddressLine(0).substring(5)
-    }
-
-    fun saveLowLevelSdkAddress(
-        geocoder: Geocoder,
-        latitude: Double,
-        longitude: Double,
-    ) = viewModelScope.launch {
-        runCatching {
-            geocoder.getFromLocation(latitude, longitude, 1)
-                ?: return@launch submitInValidLocation()
-        }
-            .onSuccess { address ->
-                loadAddress(address[0])
-            }
-            .onFailure {
-                submitInValidLocation()
-            }
-    }
-
-    private fun submitInValidLocation() {
-        _snackbarActions.emit(WoofSnackbarActions.ShowInvalidLocationSnackbar)
+        val addressLine = address.getAddressLine(0).replace("대한민국", "").trimStart()
+        _registerAddress.value = addressLine
     }
 
     companion object {

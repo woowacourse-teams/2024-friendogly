@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ParticipationFilter" />
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter" />
 
         <variable
             name="vm"
