@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
+import com.happy.friendogly.club.dto.request.UpdateClubRequest;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
+import com.happy.friendogly.club.dto.response.UpdateClubResponse;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
@@ -223,5 +225,44 @@ class ClubCommandServiceTest extends ClubServiceTest {
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("모임을 수정한다.")
+    @Test
+    void update() {
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        UpdateClubRequest request = new UpdateClubRequest("수정된 제목", "수정된 내용", "CLOSED");
+
+        UpdateClubResponse response = clubCommandService.update(club.getId(), savedMember.getId(), request);
+        Club updatedClub = clubRepository.getById(club.getId());
+
+        assertAll(
+                () -> assertThat(updatedClub.getTitle().getValue()).isEqualTo(response.title()),
+                () -> assertThat(updatedClub.getContent().getValue()).isEqualTo(response.content()),
+                () -> assertThat(updatedClub.getStatus()).isEqualTo(response.status())
+        );
+    }
+
+    @DisplayName("수정 권한이 없으면 예외가 발생한다.")
+    @Test
+    void update_FailForbidden() {
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        Member savedMember2 = createSavedMember();
+        UpdateClubRequest request = new UpdateClubRequest("수정된 제목", "수정된 내용", "CLOSED");
+
+        assertThatThrownBy(() -> clubCommandService.update(club.getId(), savedMember2.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("수정 권한이 없습니다.");
+
     }
 }

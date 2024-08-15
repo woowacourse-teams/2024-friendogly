@@ -31,8 +31,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Club {
@@ -257,5 +259,11 @@ public class Club {
         return clubMembers.stream()
                 .min(Comparator.comparing(ClubMember::getCreatedAt))
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
+    }
+
+    public void update(String title, String content, String status) {
+        this.title = new Title(title);
+        this.content = new Content(content);
+        this.status = Status.toStatus(status);
     }
 }
