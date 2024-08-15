@@ -23,6 +23,7 @@ assertj-core = "3.25.3"
 kotest-runner-junit5 = "5.8.0"
 mockk = "1.13.10"
 ktlint = "12.1.0"
+ballon = "1.6.6"
 
 # android-library
 datastore = "1.1.1"
@@ -145,6 +146,9 @@ krossbow-websocket-oktthp = { group = "org.hildan.krossbow", name = "krossbow-we
 krossbow-kxserialization = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization", version.ref = "krossbow" }
 krossbow-kxserialization-json = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow" }
 
+# ballon
+ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "ballon" }
+
 [bundles]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-lifecycle", "androidx-activity-ktx", "androidx-fragment-ktx", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx", "splashscreen"]
 kotlin = ["lifecycle-runtime-ktx", "lifecycle-extensions", "coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
@@ -157,6 +161,7 @@ datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 animation = ["lottie"]
 stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization", "krossbow-kxserialization-json"]
+ballon = ["ballon"]
 room = ["room-runtime", "room-ktx"]
 
 [plugins]
