@@ -63,9 +63,6 @@ splashscreen = "1.0.1"
 # animation
 lottie = "5.0.2"
 
-# loading
-spinKit = "1.4.0"
-
 # stomp
 krossbow = "7.0.0"
 
@@ -131,9 +128,6 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 # animation
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 
-# loading
-spinKit = { group = "com.github.ybq", name = "Android-SpinKit", version.ref = "spinKit" }
-
 # stomp
 krossbow-stomp-core = { group = "org.hildan.krossbow", name = "krossbow-stomp-core", version.ref = "krossbow" }
 krossbow-websocket-oktthp = { group = "org.hildan.krossbow", name = "krossbow-websocket-okhttp", version.ref = "krossbow" }
@@ -152,7 +146,6 @@ datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 animation = ["lottie"]
 stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization", "krossbow-kxserialization-json"]
-thirdParty = ["spinKit"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
