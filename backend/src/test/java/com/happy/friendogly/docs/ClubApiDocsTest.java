@@ -180,7 +180,7 @@ public class ClubApiDocsTest extends RestDocsTest {
         when(clubQueryService.findOwning(any()))
                 .thenReturn(responses);
 
-        mockMvc.perform(get("/clubs/mine")
+        mockMvc.perform(get("/clubs/owning")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
                 )
                 .andExpect(status().isOk())
