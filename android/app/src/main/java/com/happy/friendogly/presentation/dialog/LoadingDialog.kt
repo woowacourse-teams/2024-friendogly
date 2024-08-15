@@ -14,8 +14,8 @@ class LoadingDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.dialog_loading)
         setCanceledOnTouchOutside(false)
         setCancelable(false)
-        window!!.setBackgroundDrawable(ColorDrawable())
-        window!!.setDimAmount(0.5f)
+        window?.setBackgroundDrawable(ColorDrawable())
+        window?.setDimAmount(0.5f)
     }
 
     override fun show() {
