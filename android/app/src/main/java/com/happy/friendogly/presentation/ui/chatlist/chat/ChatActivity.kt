@@ -2,7 +2,9 @@ package com.happy.friendogly.presentation.ui.chatlist.chat
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityChatBinding
@@ -10,12 +12,15 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import kotlinx.coroutines.launch
 
 class ChatActivity :
     BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
+            AppModule.getInstance().connectWebsocketUseCase,
+            AppModule.getInstance().disconnectWebsocketUseCase,
             AppModule.getInstance().subScribeMessageUseCase,
             AppModule.getInstance().publishSendUseCase,
         )
@@ -67,8 +72,10 @@ class ChatActivity :
     }
 
     private fun getChatList() {
-        viewModel.chats.observe(this) {
-            adapter.submitList(it)
+        lifecycleScope.launch {
+            viewModel.chats.collect {
+                adapter.submitList(it)
+            }
         }
     }
 
