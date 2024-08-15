@@ -11,9 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/rect_coral100_fill_12"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_coral100_fill_12">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,4 +42,3 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
