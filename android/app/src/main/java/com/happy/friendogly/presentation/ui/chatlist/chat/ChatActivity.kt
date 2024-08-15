@@ -1,9 +1,8 @@
 package com.happy.friendogly.presentation.ui.chatlist.chat
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import android.view.MotionEvent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
@@ -45,12 +44,16 @@ class ChatActivity :
             binding.edtChatSendMessage.setText("")
         }
         viewModel.subscribeMessage(chatId, myMemberId)
+        hideMessageKeyBoard()
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        this.currentFocus?.let { hideKeyboard() }
-        binding.edtChatSendMessage.clearFocus()
-        return super.dispatchTouchEvent(ev)
+    @SuppressLint("ClickableViewAccessibility")
+    private fun hideMessageKeyBoard() {
+        binding.rcvChatDetail.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            binding.edtChatSendMessage.clearFocus()
+            false
+        }
     }
 
     private fun clickChatInfo(
