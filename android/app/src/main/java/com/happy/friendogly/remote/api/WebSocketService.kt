@@ -1,5 +1,6 @@
 package com.happy.friendogly.remote.api
 
+import android.util.Log
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.model.request.ChatMessageRequest
 import com.happy.friendogly.remote.model.response.ChatMessageResponse
@@ -16,10 +17,17 @@ class WebSocketService(
     private val baseUrl: BaseUrl,
     private val tokenManager: TokenManager,
 ) {
-    private suspend fun stompSession(): StompSessionWithKxSerialization = client.connect(baseUrl.url).withJsonConversions()
+
+    private lateinit var websocket: StompSessionWithKxSerialization
+
+    suspend fun connect() {
+        websocket = client.connect(baseUrl.url).withJsonConversions()
+    }
+
+    suspend fun disconnect() = websocket.disconnect()
 
     suspend fun publishInvite(chatRoomId: Long) {
-        stompSession().send(
+        websocket.send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishEnter(chatRoomId = chatRoomId),
                 customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
@@ -32,7 +40,7 @@ class WebSocketService(
         chatRoomId: Long,
         content: String,
     ) {
-        stompSession().convertAndSend(
+        websocket.convertAndSend(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishMessage(chatRoomId),
                 customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
@@ -43,7 +51,7 @@ class WebSocketService(
     }
 
     suspend fun publishLeave(chatRoomId: Long) {
-        stompSession().send(
+        websocket.send(
             StompSendHeaders(
                 destination = ApiClient.WebSocket.publishLeave(chatRoomId) + chatRoomId.toString(),
                 customHeaders = mapOf("Authorization" to tokenManager.accessToken.first()),
@@ -53,7 +61,7 @@ class WebSocketService(
     }
 
     suspend fun subscribeMessage(chatRoomId: Long): Flow<ChatMessageResponse> {
-        return stompSession().subscribe(
+        return websocket.subscribe(
             headers =
                 StompSubscribeHeaders(
                     destination = ApiClient.WebSocket.subscribeChat(chatRoomId),

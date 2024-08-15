@@ -4,6 +4,11 @@ import com.happy.friendogly.domain.model.ChatComponent
 import kotlinx.coroutines.flow.Flow
 
 interface WebSocketRepository {
+
+    suspend fun connect():Result<Unit>
+
+    suspend fun disconnect():Result<Unit>
+
     suspend fun publishEnter(chatRoomId: Long): Result<Unit>
 
     suspend fun publishSend(

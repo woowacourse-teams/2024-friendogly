@@ -8,6 +8,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WebSocketDataSourceImpl(private val service: WebSocketService) : WebSocketDataSource {
+    override suspend fun connect(): Result<Unit> = runCatching {
+        service.connect()
+    }
+
+    override suspend fun disconnect(): Result<Unit> = runCatching {
+        service.disconnect()
+    }
+
     override suspend fun publishEnter(chatRoomId: Long): Result<Unit> =
         runCatching {
             service.publishInvite(chatRoomId)
@@ -21,7 +29,9 @@ class WebSocketDataSourceImpl(private val service: WebSocketService) : WebSocket
             service.publishSend(chatRoomId, content)
         }
 
-    override suspend fun publishLeave(chatRoomId: Long): Result<Unit> = runCatching { service.publishLeave(chatRoomId) }
+    override suspend fun publishLeave(chatRoomId: Long): Result<Unit> =
+        runCatching { service.publishLeave(chatRoomId) }
 
-    override suspend fun subscribeMessage(chatRoomId: Long): Flow<MessageDto> = service.subscribeMessage(chatRoomId).map { it.toData() }
+    override suspend fun subscribeMessage(chatRoomId: Long): Flow<MessageDto> =
+        service.subscribeMessage(chatRoomId).map { it.toData() }
 }

@@ -42,10 +42,12 @@ import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WebSocketRepository
 import com.happy.friendogly.domain.repository.WoofRepository
+import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteAlarmSettingUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
+import com.happy.friendogly.domain.usecase.DisconnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetAlarmSettingUseCase
 import com.happy.friendogly.domain.usecase.GetChatListUseCase
@@ -152,11 +154,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-                RemoteModule.createStumpClient(
-                    baseUrl = baseUrl,
-                    tokenManager = tokenManager,
-                    authenticationListener = authenticationListener,
-                ),
+            RemoteModule.createStumpClient(
+                baseUrl = baseUrl,
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -265,6 +267,10 @@ class AppModule(context: Context) {
         PublishLeaveUseCase(repository = webSocketRepository)
     val subScribeMessageUseCase: SubScribeMessageUseCase =
         SubScribeMessageUseCase(repository = webSocketRepository)
+    val connectWebsocketUseCase: ConnectWebsocketUseCase =
+        ConnectWebsocketUseCase(repository = webSocketRepository)
+    val disconnectWebsocketUseCase: DisconnectWebsocketUseCase =
+        DisconnectWebsocketUseCase(repository = webSocketRepository)
     val deleteAlarmSettingUseCase: DeleteAlarmSettingUseCase =
         DeleteAlarmSettingUseCase(repository = alarmSettingRepository)
     val saveAlarmSettingUseCase: SaveAlarmSettingUseCase =
