@@ -95,6 +95,42 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThat(savedClub.countClubMember()).isEqualTo(2);
     }
 
+    @DisplayName("회원이 모임에 참여 후 정원이 꽉 차면 상태가 Full로 변경된다.")
+    @Transactional
+    @Test
+    void joinClub_StatusFull() {
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                province,
+                city,
+                village,
+                2,
+                savedMember,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL),
+                "https://image.com",
+                List.of(savedPet));
+        Club savedClub = clubRepository.save(club);
+
+        Member newMember = Member.builder()
+                .name("위브")
+                .email("wiib@gmail.com")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
+
+        assertAll(
+                () -> assertThat(savedClub.countClubMember()).isEqualTo(2),
+                () -> assertThat(savedClub.getStatus().isFull()).isTrue()
+        );
+    }
+
     @DisplayName("이미 참여한 모임에는 참여할 수 없다.")
     @Test
     void joinClub_FailAlreadyParticipating() {
@@ -180,7 +216,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .hasMessage("자신의 반려견만 모임에 데려갈 수 있습니다.");
     }
 
-    //영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가
     @DisplayName("참여 중인 회원을 삭제하고, 방장이면 방장을 위임한다.")
     @Transactional
     @Test
@@ -225,6 +260,43 @@ class ClubCommandServiceTest extends ClubServiceTest {
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("참여 중인 회원을 삭제하고, 만약 Full 상태면 Open으로 바꾼다.")
+    @Test
+    void deleteClubMember_WhenFull(){
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                province,
+                city,
+                village,
+                2,
+                savedMember,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL),
+                "https://image.com",
+                List.of(savedPet));
+        Club savedClub = clubRepository.save(club);
+
+        Member newMember = Member.builder()
+                .name("위브")
+                .email("wiib@gmail.com")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
+
+        clubCommandService.deleteClubMember(savedClub.getId(), savedNewMember.getId());
+
+        assertAll(
+                () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
+                () -> assertThat(savedClub.getStatus().isFull()).isFalse()
+        );
     }
 
     @DisplayName("모임을 수정한다.")

@@ -160,6 +160,9 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
+        if(memberCapacity.isCapacityReached(countClubMember())){
+            this.status = Status.FULL;
+        }
     }
 
     private void validateAlreadyExists(Member member) {
@@ -210,6 +213,9 @@ public class Club {
         clubMembers.remove(targetClubMember);
 //        targetClubMember.updateClub(null);
         removeClubPets(member);
+        if(status.isFull()){
+            this.status = Status.OPEN;
+        }
     }
 
     private ClubMember findTargetClubMember(Member member) {
@@ -240,7 +246,7 @@ public class Club {
     }
 
     public boolean isOpen() {
-        return this.status == Status.OPEN;
+        return this.status.isOpen();
     }
 
     public boolean isOwner(Member targetMember) {
