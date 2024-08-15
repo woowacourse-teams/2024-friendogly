@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
 
         <variable
             name="vm"
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:layout_width="match_parent"
@@ -85,7 +85,7 @@
         <TextView
             onSingleClick="@{() -> vm.selectFilters()}"
             android:id="@+id/tv_club_select_commit"
-            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginVertical="24dp"

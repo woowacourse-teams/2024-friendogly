@@ -13,7 +13,6 @@ class PetTest {
 
     private Member member = Member.builder()
             .name("땡이 주인")
-            .email("ddang@email.com")
             .build();
 
     @DisplayName("생성 테스트")
@@ -66,13 +65,13 @@ class PetTest {
                 .hasMessage("이름은 빈 값이나 null일 수 없습니다.");
     }
 
-    @DisplayName("이름의 길이가 16글자 이상인 경우 예외가 발생한다.")
+    @DisplayName("이름의 길이가 8글자를 초과하는 경우 예외가 발생한다.")
     @Test
     void create_Fail_IllegalNameLength() {
         assertThatThrownBy(() ->
                 Pet.builder()
                         .member(member)
-                        .name("1234567890123456")
+                        .name("123456789")
                         .description("땡이입니다.")
                         .birthDate(LocalDate.now().minusDays(1L))
                         .sizeType(SizeType.SMALL)
@@ -80,7 +79,7 @@ class PetTest {
                         .imageUrl("http://www.google.com")
                         .build())
                 .isExactlyInstanceOf(FriendoglyException.class)
-                .hasMessage("이름은 1자 이상, 15자 이하여야 합니다.");
+                .hasMessage("이름은 1자 이상, 8자 이하여야 합니다.");
     }
 
     @DisplayName("한 줄 설명이 null인 경우 예외가 발생한다.")
@@ -100,21 +99,21 @@ class PetTest {
                 .hasMessage("한 줄 설명은 빈 값이나 null일 수 없습니다.");
     }
 
-    @DisplayName("한 줄 설명의 길이가 16글자 이상인 경우 예외가 발생한다.")
+    @DisplayName("한 줄 설명의 길이가 20글자를 초과하는 경우 예외가 발생한다.")
     @Test
     void create_Fail_IllegalDescriptionLength() {
         assertThatThrownBy(() ->
                 Pet.builder()
                         .member(member)
                         .name("땡이")
-                        .description("1234567890123456")
+                        .description("123456789012345678901")
                         .birthDate(LocalDate.now().minusDays(1L))
                         .sizeType(SizeType.SMALL)
                         .gender(Gender.FEMALE_NEUTERED)
                         .imageUrl("http://www.google.com")
                         .build())
                 .isExactlyInstanceOf(FriendoglyException.class)
-                .hasMessage("한 줄 설명은 1자 이상, 15자 이하여야 합니다.");
+                .hasMessage("한 줄 설명은 1자 이상, 20자 이하여야 합니다.");
     }
 
     @DisplayName("생년월일이 현재 날짜보다 미래인 경우 예외가 발생한다.")

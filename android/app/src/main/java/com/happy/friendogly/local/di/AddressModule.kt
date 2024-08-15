@@ -55,8 +55,8 @@ class AddressModule(val context: Context) {
 
     suspend fun saveAddress(userAddressDto: UserAddressDto) {
         context.dataStore.edit { preferences ->
-            preferences[keyThoroughfare] = userAddressDto.thoroughfare
-            preferences[keyLocality] = userAddressDto.subLocality
+            preferences[keyThoroughfare] = userAddressDto.thoroughfare ?: ""
+            preferences[keyLocality] = userAddressDto.subLocality ?: ""
             preferences[keyAdmin] = userAddressDto.adminArea
         }
     }

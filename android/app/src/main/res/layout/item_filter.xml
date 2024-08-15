@@ -6,13 +6,13 @@
     <data>
         <variable
             name="clubFilter"
-            type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
+            type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/rect_orange100_fill_12"
-        android:paddingHorizontal="7dp"
-        android:paddingVertical="3dp"
+        android:background="@drawable/rect_gary03_fill_12"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="5dp"
         android:layout_marginEnd="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

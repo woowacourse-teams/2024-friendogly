@@ -66,7 +66,6 @@ class FootprintControllerTest extends ControllerTest {
                 Member.builder()
                         .name("트레")
                         .tag("123123")
-                        .email("test@test.com")
                         .build()
         );
 
@@ -74,7 +73,6 @@ class FootprintControllerTest extends ControllerTest {
                 Member.builder()
                         .name("트레")
                         .tag("123123")
-                        .email("test@test.com")
                         .build()
         );
 
@@ -82,7 +80,6 @@ class FootprintControllerTest extends ControllerTest {
                 Member.builder()
                         .name("트레")
                         .tag("123123")
-                        .email("test@test.com")
                         .build()
         );
 

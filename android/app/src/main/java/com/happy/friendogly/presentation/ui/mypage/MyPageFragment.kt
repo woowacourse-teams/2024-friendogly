@@ -58,15 +58,23 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 is MyPageNavigationAction.NavigateToProfileEdit ->
                     (activity as MainActivityActionHandler).navigateToProfileSetting(profile = action.profile)
 
-                is MyPageNavigationAction.NavigateToMyClubManger -> {}
-                is MyPageNavigationAction.NavigateToMyParticipation -> {}
+                is MyPageNavigationAction.NavigateToMyClubManger ->
+                    (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = true)
+
+                is MyPageNavigationAction.NavigateToMyParticipation ->
+                    (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = false)
+
                 is MyPageNavigationAction.NavigateToPetEdit ->
                     (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
             }
         }
 
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            adapter.submitList(uiState.pets)
+            adapter.submitList(uiState.pets) {
+                binding.vpPetProfile.post {
+                    binding.vpPetProfile.setCurrentItem(0, false)
+                }
+            }
         }
     }
 
@@ -74,7 +82,5 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         super.onResume()
         viewModel.fetchPetMine()
         viewModel.fetchMemberMine()
-        viewModel.updateCurrentPage(0)
-        binding.vpPetProfile.setCurrentItem(0, false)
     }
 }

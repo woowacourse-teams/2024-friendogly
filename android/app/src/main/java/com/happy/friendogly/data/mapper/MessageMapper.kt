@@ -8,14 +8,14 @@ fun MessageDto.toOther(): Message.Other =
     Message.Other(
         memberId = senderMemberId,
         name = senderName,
-        content = content!!,
+        content = content ?: "",
         dateTime = createdAt,
         profileUrl = profilePictureUrl,
     )
 
 fun MessageDto.toMine(): Message.Mine =
     Message.Mine(
-        content = content!!,
+        content = content ?: "",
         dateTime = createdAt,
     )
 

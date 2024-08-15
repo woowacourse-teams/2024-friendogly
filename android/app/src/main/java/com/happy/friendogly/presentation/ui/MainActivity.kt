@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
@@ -11,6 +12,7 @@ import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
+import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.mylocation.SettingMyLocationActivity
 import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
@@ -33,7 +35,6 @@ class MainActivity :
     private val analyticsHelper = AppModule.getInstance().analyticsHelper
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
-    private var waitTime = 0L
 
     override fun initCreateView() {
         initNavController()
@@ -41,7 +42,9 @@ class MainActivity :
     }
 
     private fun initNavController() {
-        switchFragment(ClubListFragment::class.java)
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(
+            ClubListFragment::class.java,
+        )
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -99,12 +102,15 @@ class MainActivity :
         }
     }
 
-    override fun navigateToClubDetailActivity(clubId: Long) {
-        startActivity(ClubDetailActivity.getIntent(this, clubId))
+    override fun navigateToClubDetailActivity(
+        clubId: Long,
+        resultLauncher: ActivityResultLauncher<Intent>,
+    ) {
+        resultLauncher.launch(ClubDetailActivity.getIntent(this, clubId))
     }
 
-    override fun navigateToClubAddActivity() {
-        startActivity(ClubAddActivity.getIntent(this))
+    override fun navigateToClubAddActivity(resultLauncher: ActivityResultLauncher<Intent>) {
+        resultLauncher.launch(ClubAddActivity.getIntent(this))
     }
 
     override fun navigateToRegisterPet(petProfile: PetProfile?) {
@@ -126,17 +132,12 @@ class MainActivity :
         startActivity(SettingActivity.getIntent(this))
     }
 
-    override fun navigateToSettingLocation() {
-        startActivity(SettingMyLocationActivity.getIntent(this))
+    override fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>) {
+        resultLauncher.launch(SettingMyLocationActivity.getIntent(this))
     }
 
-    override fun onBackPressed() {
-        if (System.currentTimeMillis() - waitTime >= 1500) {
-            waitTime = System.currentTimeMillis()
-            showToastMessage(getString(R.string.on_back_pressed_Message))
-        } else {
-            super.onBackPressed()
-        }
+    override fun navigateToMyClub(isMyHead: Boolean) {
+        startActivity(MyClubActivity.getIntent(this, isMyHead))
     }
 
     companion object {

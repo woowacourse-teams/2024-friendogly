@@ -8,9 +8,12 @@ import com.happy.friendogly.databinding.ItemChatComeOutBinding
 import com.happy.friendogly.databinding.ItemChatDateBinding
 import com.happy.friendogly.databinding.ItemChatMineBinding
 import com.happy.friendogly.databinding.ItemChatOtherBinding
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 
-class ChatAdapter : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
+class ChatAdapter(
+    private val onMemberClick: ChatNavigationAction,
+) : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -63,6 +66,7 @@ class ChatAdapter : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
                         parent,
                         false,
                     ),
+                    onMemberClick,
                 )
 
             else -> error("$viewType 잘못된 viewType이 들어왔습니다")

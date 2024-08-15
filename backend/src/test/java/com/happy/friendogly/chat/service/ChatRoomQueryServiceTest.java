@@ -8,14 +8,16 @@ import static com.happy.friendogly.pet.domain.SizeType.LARGE;
 import static com.happy.friendogly.pet.domain.SizeType.MEDIUM;
 import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.response.ChatRoomDetail;
 import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
+import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
-import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.support.ServiceTest;
@@ -26,14 +28,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 class ChatRoomQueryServiceTest extends ServiceTest {
-
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private ChatRoomQueryService chatRoomQueryService;
@@ -53,11 +50,10 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     private Club club2;
 
     @BeforeEach
-    @Transactional
     void setUp() {
-        member1 = memberRepository.save(new Member("name", "a", "a@a.com", "https://a.com"));
-        member2 = memberRepository.save(new Member("name2", "b", "b@a.com", "https://b.com"));
-        member3 = memberRepository.save(new Member("name3", "c", "c@a.com", "https://c.com"));
+        member1 = memberRepository.save(new Member("트레", "a4a82b2g", "https://img1.com/image.jpg"));
+        member2 = memberRepository.save(new Member("벼리", "fb7123cc", "https://img2.com/image.jpg"));
+        member3 = memberRepository.save(new Member("위브", "169a7fb9", "https://img3.com/image.jpg"));
 
         pet1 = petRepository.save(new Pet(member1, "땡이", "귀여워요", LocalDate.now().minusYears(1),
                 SMALL, MALE, "https://image.com/image1.jpg"));
@@ -79,9 +75,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 "https://image.com",
                 List.of(pet1)
         );
-        club1.addClubMember(member2);
-        club1.addClubPet(List.of(pet2));
-        club1.addChatRoomMember(member2);
         clubRepository.save(club1);
 
         club2 = Club.create(
@@ -97,9 +90,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 "https://image.com",
                 List.of(pet1)
         );
-        club2.addClubMember(member3);
-        club2.addClubPet(List.of(pet3));
-        club2.addChatRoomMember(member3);
         clubRepository.save(club2);
 
         chatRoom1 = club1.getChatRoom();
@@ -107,7 +97,6 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     }
 
     @DisplayName("내가 속해 있는 채팅방을 찾을 수 있다.")
-    @Transactional
     @Test
     void findMine() {
         // when
@@ -123,7 +112,7 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                         .containsExactly("모임 제목1", "모임 제목2"),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::memberCount)
-                        .containsExactly(2, 2),
+                        .containsExactly(1, 1),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::clubImageUrl)
                         .containsExactly("https://image.com", "https://image.com")
@@ -134,6 +123,11 @@ class ChatRoomQueryServiceTest extends ServiceTest {
     @Transactional
     @Test
     void findMemberInfo() {
+        // given
+        club1.addClubMember(member2);
+        club1.addClubPet(List.of(pet2));
+        club1.addChatRoomMember(member2);
+
         // when
         List<FindChatRoomMembersInfoResponse> response
                 = chatRoomQueryService.findMemberInfo(member1.getId(), chatRoom1.getId());
@@ -142,10 +136,37 @@ class ChatRoomQueryServiceTest extends ServiceTest {
         assertAll(
                 () -> assertThat(response)
                         .extracting(FindChatRoomMembersInfoResponse::memberName)
-                        .containsExactly("name", "name2"),
+                        .containsExactly("트레", "벼리"),
                 () -> assertThat(response)
                         .extracting(FindChatRoomMembersInfoResponse::isOwner)
                         .containsExactly(true, false)
         );
+    }
+
+    @DisplayName("채팅방 ID로부터 모임 ID, 허용 펫 사이즈, 허용 펫 성별을 조회할 수 있다.")
+    @Transactional
+    @Test
+    void findClubDetails() {
+        // when
+        FindClubDetailsResponse response = chatRoomQueryService.findClubDetails(member1.getId(), chatRoom1.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.clubId())
+                        .isEqualTo(club1.getId()),
+                () -> assertThat(response.allowedSizeTypes())
+                        .containsExactlyInAnyOrder(SMALL, MEDIUM, LARGE),
+                () -> assertThat(response.allowedGenders())
+                        .containsExactlyInAnyOrder(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)
+        );
+    }
+
+    @DisplayName("자신이 참여한 채팅방이 아니면 채팅방에서 모임 정보를 받아올 수 없다.")
+    @Test
+    void findClubDetails_Fail() {
+        // when - then
+        assertThatThrownBy(() -> chatRoomQueryService.findClubDetails(member3.getId(), chatRoom1.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("채팅방에 참여해 있지 않습니다.");
     }
 }

@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.club.list.adapter.pet
 
 import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemClubPetImageBinding
-import com.happy.friendogly.presentation.ui.club.model.ClubPet
+import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 
 class ClubPetViewHolder(
     private val binding: ItemClubPetImageBinding,

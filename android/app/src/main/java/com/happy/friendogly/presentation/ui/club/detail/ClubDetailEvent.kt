@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 
 sealed interface ClubDetailEvent {
     data class OpenDogSelector(val filters: List<ClubFilter>) : ClubDetailEvent
@@ -12,8 +12,6 @@ sealed interface ClubDetailEvent {
         data object NavigateToChat : Navigation
 
         data object NavigateToHome : Navigation
-
-        data class NavigateToProfile(val id: Long) : Navigation
     }
 
     data object FailLoadDetail : ClubDetailEvent

@@ -16,21 +16,21 @@ public class Address {
     @Column(name = "province", nullable = false)
     private String province;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "village", nullable = false)
+    @Column(name = "village")
     private String village;
 
     public Address(String province, String city, String village) {
-        validateAddress(province, city, village);
+        validateProvince(province);
         this.province = province;
         this.city = city;
         this.village = village;
     }
 
-    private void validateAddress(String address, String city, String village) {
-        if (StringUtils.isBlank(address) || StringUtils.isBlank(city) || StringUtils.isBlank(village)) {
+    private void validateProvince(String province) {
+        if (StringUtils.isBlank(province)) {
             throw new FriendoglyException("모임 주소는 필수입니다.");
         }
     }

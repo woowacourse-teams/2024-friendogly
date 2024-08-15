@@ -11,7 +11,7 @@
 
         <variable
             name="clubFilter"
-            type="com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter" />
+            type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,9 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:background="@drawable/rect_orange100_fill_12"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="5dp">
+        android:background="@drawable/rect_gary03_fill_12"
+        android:paddingHorizontal="13dp"
+        android:paddingVertical="6dp">
 
         <TextView
             android:id="@+id/tv_club_list_filter_name"

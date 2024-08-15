@@ -6,7 +6,6 @@ public record FindMemberResponse(
         Long id,
         String name,
         String tag,
-        String email,
         String imageUrl
 ) {
 
@@ -15,7 +14,6 @@ public record FindMemberResponse(
                 member.getId(),
                 member.getName().getValue(),
                 member.getTag(),
-                member.getEmail().getValue(),
                 member.getImageUrl()
         );
     }

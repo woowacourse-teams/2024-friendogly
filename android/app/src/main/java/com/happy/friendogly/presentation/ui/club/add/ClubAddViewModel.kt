@@ -16,12 +16,12 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.club.add.model.ClubCounter
+import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
+import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
+import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeTypes
+import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
+import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterItemActionHandler
-import com.happy.friendogly.presentation.ui.club.mapper.toDomain
-import com.happy.friendogly.presentation.ui.club.mapper.toGenders
-import com.happy.friendogly.presentation.ui.club.mapper.toSizeTypes
-import com.happy.friendogly.presentation.ui.club.model.ClubFilterSelector
-import com.happy.friendogly.presentation.ui.club.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.utils.addSourceList
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -172,7 +172,7 @@ class ClubAddViewModel(
             petIds = dogs,
         )
             .onSuccess {
-                _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToHome)
+                _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToHomeWithAdded)
             }
             .onFailure {
                 _clubAddEvent.emit(ClubAddEvent.FailAddClub)

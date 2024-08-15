@@ -17,21 +17,8 @@ class MemberTest {
     void create() {
         assertThatCode(() -> Member.builder()
                 .name("누누")
-                .email("crew@wooteco.com")
                 .build()
         ).doesNotThrowAnyException();
-    }
-
-    @DisplayName("이메일 형식이 올바르지 않은 경우 예외가 발생한다.")
-    @NullAndEmptySource
-    @ValueSource(strings = {"www@.gmail", "@gmail.com"})
-    @ParameterizedTest
-    void create_Fail_IllegalEmailFormat(String emailInput) {
-        assertThatThrownBy(() -> Member.builder()
-                .name("누누")
-                .email(emailInput)
-                .build()
-        ).isInstanceOf(FriendoglyException.class);
     }
 
     @DisplayName("이름 형식이 올바르지 않은 경우 예외가 발생한다.")
@@ -41,7 +28,6 @@ class MemberTest {
     void create_Fail_IllegalNameFormat(String nameInput) {
         assertThatThrownBy(() -> Member.builder()
                 .name(nameInput)
-                .email("crew@wooteco.com")
                 .build()
         ).isInstanceOf(FriendoglyException.class);
     }

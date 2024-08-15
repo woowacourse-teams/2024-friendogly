@@ -82,7 +82,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         Member newMember = Member.builder()
                 .name("위브")
-                .email("wiib@gmail.com")
                 .tag("tag123")
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
@@ -158,7 +157,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
         Member newMember = Member.builder()
                 .name("위브")
-                .email("wiib@gmail.com")
                 .tag("tag123")
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
@@ -193,7 +191,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
         Member newMember = Member.builder()
                 .name("위브")
-                .email("wiib@gmail.com")
                 .tag("tag123")
                 .build();
         Member savedNewMember = memberRepository.save(newMember);
@@ -229,7 +226,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
         Member newMember = Member.builder()
                 .name("위브")
-                .email("wiib@gmail.com")
                 .tag("tag123")
                 .build();
 

@@ -28,14 +28,6 @@ public class ClubSpecification {
         return equalsAddressDetail(province, "province");
     }
 
-    public ClubSpecification equalsCity(String city) {
-        return equalsAddressDetail(city, "city");
-    }
-
-    public ClubSpecification equalsVillage(String village) {
-        return equalsAddressDetail(village, "village");
-    }
-
     private ClubSpecification equalsAddressDetail(String province, String fieldName) {
         if (StringUtils.isBlank(province)) {
             return this;

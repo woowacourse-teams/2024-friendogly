@@ -30,11 +30,6 @@ class MyPageViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
-    init {
-        fetchMemberMine()
-        fetchPetMine()
-    }
-
     fun fetchMemberMine() {
         viewModelScope.launch {
             getMemberMineUseCase().onSuccess { member ->
@@ -44,7 +39,6 @@ class MyPageViewModel(
                     state.copy(
                         id = member.id,
                         nickname = member.name,
-                        email = member.email,
                         tag = member.tag,
                         imageUrl = member.imageUrl,
                     )
@@ -61,7 +55,11 @@ class MyPageViewModel(
 
                 val state = uiState.value ?: return@launch
 
-                _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
+                if (petsView.size >= MAX_PET_SIZE) {
+                    _uiState.value = state.copy(pets = petsView)
+                } else {
+                    _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
+                }
             }.onFailure {
                 // TODO 예외 처리
             }
@@ -144,6 +142,8 @@ class MyPageViewModel(
     }
 
     companion object {
+        const val MAX_PET_SIZE = 5
+
         fun factory(
             getPetsMineUseCase: GetPetsMineUseCase,
             getMemberMineUseCase: GetMemberMineUseCase,

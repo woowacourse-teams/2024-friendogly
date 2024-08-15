@@ -45,8 +45,6 @@ public class ClubQueryService {
 
         Specification<Club> spec = ClubSpecification.where()
                 .equalsProvince(request.province())
-                .equalsCity(request.city())
-                .equalsVillage(request.village())
                 .hasGenders(Gender.toGenders(request.genderParams()))
                 .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
                 .build();
