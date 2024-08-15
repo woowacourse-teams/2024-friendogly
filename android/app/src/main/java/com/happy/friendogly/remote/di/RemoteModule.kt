@@ -1,6 +1,7 @@
 package com.happy.friendogly.remote.di
 
 import com.happy.friendogly.local.di.TokenManager
+import com.happy.friendogly.remote.api.AlarmTokenService
 import com.happy.friendogly.remote.api.AuthService
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.Authenticator
@@ -102,6 +103,16 @@ object RemoteModule {
             tokenManager,
             authenticationListener,
         ).create(ChatService::class.java)
+    }
+
+    fun createAlarmTokenService(
+        baseUrl: BaseUrl,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
+    ): AlarmTokenService {
+        return createRetrofit(baseUrl, tokenManager, authenticationListener).create(
+            AlarmTokenService::class.java,
+        )
     }
 
     private val json =

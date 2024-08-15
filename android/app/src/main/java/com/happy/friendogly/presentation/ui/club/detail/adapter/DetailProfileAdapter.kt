@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemDetailProfileBinding
+import com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
 
-class DetailProfileAdapter :
-    ListAdapter<ClubDetailProfileUiModel, DetailProfileViewHolder>(DetailProfileDiffCallback()) {
+class DetailProfileAdapter(
+    private val navigation: ClubDetailNavigation,
+) : ListAdapter<ClubDetailProfileUiModel, DetailProfileViewHolder>(DetailProfileDiffCallback()) {
     class DetailProfileDiffCallback : DiffUtil.ItemCallback<ClubDetailProfileUiModel>() {
         override fun areItemsTheSame(
             oldItem: ClubDetailProfileUiModel,
@@ -31,7 +33,7 @@ class DetailProfileAdapter :
     ): DetailProfileViewHolder {
         val binding =
             ItemDetailProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DetailProfileViewHolder(binding)
+        return DetailProfileViewHolder(binding, navigation)
     }
 
     override fun onBindViewHolder(

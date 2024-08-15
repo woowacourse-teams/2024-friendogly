@@ -10,8 +10,8 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
-import com.happy.friendogly.presentation.ui.club.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import kotlinx.coroutines.launch

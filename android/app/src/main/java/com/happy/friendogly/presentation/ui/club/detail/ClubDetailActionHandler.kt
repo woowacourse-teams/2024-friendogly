@@ -6,6 +6,4 @@ interface ClubDetailActionHandler {
     fun closeDetail()
 
     fun openMenu()
-
-    fun navigateToProfile(id: Long)
 }

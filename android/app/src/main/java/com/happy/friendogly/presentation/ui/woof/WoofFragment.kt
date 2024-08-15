@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.woof
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -10,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -29,13 +31,9 @@ import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFol
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
 import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowAfterWalkStatusSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowBeforeWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowInvalidLocationSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowOnGoingWalkStatusSnackbar
 import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
@@ -49,6 +47,7 @@ import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
@@ -70,7 +69,9 @@ import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.timer
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.sin
 
 class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
@@ -78,6 +79,7 @@ class WoofFragment :
     OnMapReadyCallback {
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
     private val mapView: MapView by lazy { binding.mapView }
@@ -153,6 +155,27 @@ class WoofFragment :
         mapView.onLowMemory()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.tvWoofWalkStatus.isVisible) {
+                        hideMarkerDetail()
+                        changeRecentlyClickedMarkerSize()
+                    } else {
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onBackPressedCallback.remove()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -204,6 +227,7 @@ class WoofFragment :
             }
             val position = myMarker?.position ?: return
             moveCameraCenterPosition(position)
+            viewModel.changeTrackingModeToNoFollow()
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
@@ -230,11 +254,14 @@ class WoofFragment :
             viewModel.loadFootprintInfo(footprintId)
             showMarkerDetail()
 
-            val position =
-                LatLng(
-                    marker.position.latitude - MARKER_CLICKED_CAMERA_LATITUDE_UP,
-                    marker.position.longitude,
-                )
+            val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
+            val offsetDistance =
+                (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
+
+            val adjustedLatitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
+            val adjustedLongitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
+
+            val position = LatLng(adjustedLatitude, adjustedLongitude)
             moveCameraCenterPosition(position)
 
             changeRecentlyClickedMarkerSize()
@@ -247,6 +274,10 @@ class WoofFragment :
         }
     }
 
+    override fun clickFootprintPetImage(petImageUrl: String) {
+        startActivity(PetImageActivity.getIntent(requireContext(), petImageUrl))
+    }
+
     override fun clickFootprintMemberName(memberId: Long) {
         analyticsHelper.logFootprintMemberNameClicked()
         startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))
@@ -254,9 +285,15 @@ class WoofFragment :
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
+        map.extent =
+            LatLngBounds(
+                LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
+                LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
+            )
         map.minZoom = MIN_ZOOM
         map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
+
         map.uiSettings.apply {
             isLocationButtonEnabled = true
             isCompassEnabled = true
@@ -264,6 +301,14 @@ class WoofFragment :
             isScaleBarEnabled = false
         }
         binding.lbvWoofLocationRegister.map = map
+
+        map.onMapClickListener =
+            NaverMap.OnMapClickListener { _, _ ->
+                if (binding.tvWoofWalkStatus.isVisible) {
+                    hideMarkerDetail()
+                    changeRecentlyClickedMarkerSize()
+                }
+            }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
@@ -376,14 +421,6 @@ class WoofFragment :
                 }
 
                 is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
-
-                is ShowInvalidLocationSnackbar -> showSnackbar(resources.getString(R.string.woof_location_load_fail))
-
-                is ShowBeforeWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_before_walk_status))
-
-                is ShowOnGoingWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_ongoing_walk_status))
-
-                is ShowAfterWalkStatusSnackbar -> showSnackbar(resources.getString(R.string.woof_after_walk_status))
             }
         }
     }
@@ -424,9 +461,9 @@ class WoofFragment :
             viewModel.loadNearFootprints(latLng)
             viewModel.updateWalkStatus(latLng)
             moveCameraCenterPosition(latLng)
-            map.locationTrackingMode = LocationTrackingMode.Follow
             Handler(Looper.getMainLooper()).postDelayed(
                 {
+                    map.locationTrackingMode = LocationTrackingMode.Follow
                     hideLoadingAnimation()
                 },
                 LOADING_DELAY_MILLIS,
@@ -453,7 +490,6 @@ class WoofFragment :
 
     private fun moveCameraCenterPosition(position: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
-
         map.moveCamera(cameraUpdate)
     }
 
@@ -615,16 +651,20 @@ class WoofFragment :
                 convertLtnLng(position.longitude),
                 1,
             ) { addresses ->
-                activity?.runOnUiThread {
-                    viewModel.loadAddress(addresses[0])
+                if (addresses.isEmpty()) return@getFromLocation
+                val address = addresses[0] ?: return@getFromLocation
+                requireActivity().runOnUiThread {
+                    viewModel.loadAddress(address)
                 }
             }
         } else {
-            viewModel.saveLowLevelSdkAddress(
-                geocoder = geocoder,
-                latitude = convertLtnLng(position.latitude),
-                longitude = convertLtnLng(position.longitude),
-            )
+            val addresses =
+                geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
+            if (addresses.isEmpty()) return
+            val address = addresses[0] ?: return
+            requireActivity().runOnUiThread {
+                viewModel.loadAddress(address)
+            }
         }
     }
 
@@ -673,9 +713,12 @@ class WoofFragment :
         private const val MARKER_HEIGHT = 111
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
-        private const val LOADING_DELAY_MILLIS = 2000L
+        private const val LOADING_DELAY_MILLIS = 1000L
         private const val ANIMATE_DURATION_MILLIS = 300L
-        private const val MARKER_CLICKED_CAMERA_LATITUDE_UP = 0.0025
         private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
+        private const val MIN_KOREA_LATITUDE = 33.0
+        private const val MAX_KOREA_LATITUDE = 39.0
+        private const val MIN_KOREA_LONGITUDE = 125.0
+        private const val MAX_KOREA_LONGITUDE = 132.0
     }
 }

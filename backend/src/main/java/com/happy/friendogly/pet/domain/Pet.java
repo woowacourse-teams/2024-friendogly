@@ -61,7 +61,7 @@ public class Pet {
             String imageUrl
     ) {
         validateMember(member);
-        
+
         this.member = member;
         this.name = new Name(name);
         this.description = new Description(description);
@@ -79,5 +79,21 @@ public class Pet {
 
     public boolean isOwner(Member member) {
         return this.member.getId().equals(member.getId());
+    }
+
+    public void update(
+            String name,
+            String description,
+            LocalDate birthDate,
+            String sizeType,
+            String gender,
+            String imageUrl
+    ) {
+        this.name = new Name(name);
+        this.description = new Description(description);
+        this.birthDate = new BirthDate(birthDate);
+        this.sizeType = SizeType.toSizeType(sizeType);
+        this.gender = Gender.toGender(gender);
+        this.imageUrl = imageUrl;
     }
 }

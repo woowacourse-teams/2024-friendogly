@@ -20,7 +20,7 @@ fun TextView.bindDetailViewTypeBackground(clubDetailViewType: ClubDetailViewType
             ClubDetailViewType.END_RECRUITMENT ->
                 ContextCompat.getColorStateList(
                     context,
-                    R.color.gray400,
+                    R.color.gray300,
                 )
         }
     this.backgroundTintList = backgroundTint
@@ -46,8 +46,8 @@ fun TextView.bindDetailViewTypeStyle(clubDetailViewType: ClubDetailViewType?) {
             ClubDetailViewType.PARTICIPATED,
             ClubDetailViewType.RECRUITMENT,
             ClubDetailViewType.MINE,
-            -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size16
-            ClubDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Black_Size16
+            -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
+            ClubDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
 }
