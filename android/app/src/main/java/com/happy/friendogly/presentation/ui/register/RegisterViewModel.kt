@@ -42,6 +42,9 @@ class RegisterViewModel(
 
     val splashLoading = MutableLiveData(true)
 
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    val loading: LiveData<Event<Boolean>> get() = _loading
+
     init {
         handleTokenState()
     }
@@ -62,11 +65,14 @@ class RegisterViewModel(
 
     fun executeKakaoLogin(context: Context) {
         launch {
-            kakaoLoginUseCase(context = context).onSuccess { kakaAccessToken ->
-                kakaoLogin(kakaAccessToken)
-            }.onFailure {
-                // TODO 예외처리
-            }
+            kakaoLoginUseCase(context = context).fold(
+                onSuccess = { kakaAccessToken ->
+                    kakaoLogin(kakaAccessToken)
+                },
+                onError = {
+                    _message.emit(RegisterMessage.KakaoLoginErrorMessage)
+                },
+            )
         }
     }
 
