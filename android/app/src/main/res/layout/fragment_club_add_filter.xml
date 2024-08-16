@@ -28,7 +28,7 @@
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="15dp" />
 
         <TextView
             style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
