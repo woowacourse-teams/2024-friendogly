@@ -42,8 +42,11 @@ public class ChatRoomController {
     }
 
     @GetMapping("/{chatRoomId}")
-    public List<FindChatRoomMembersInfoResponse> findMemberInfo(@Auth Long memberId, @PathVariable Long chatRoomId) {
-        return chatRoomQueryService.findMemberInfo(memberId, chatRoomId);
+    public ApiResponse<List<FindChatRoomMembersInfoResponse>> findMemberInfo(
+            @Auth Long memberId,
+            @PathVariable Long chatRoomId
+    ) {
+        return ApiResponse.ofSuccess(chatRoomQueryService.findMemberInfo(memberId, chatRoomId));
     }
 
     @GetMapping("/{chatRoomId}/club")
