@@ -51,6 +51,7 @@ class OtherProfileViewModel(
                             nickname = member.name,
                             tag = member.tag,
                             profilePath = member.imageUrl,
+                            otherProfileSkeleton = state.otherProfileSkeleton.copy(userProfile = false),
                         )
                 },
                 onError = {
@@ -65,7 +66,11 @@ class OtherProfileViewModel(
             getPetsUseCase(id = id).fold(
                 onSuccess = { pets ->
                     val state = uiState.value ?: return@launch
-                    _uiState.value = state.copy(pets = pets)
+                    _uiState.value =
+                        state.copy(
+                            pets = pets,
+                            otherProfileSkeleton = state.otherProfileSkeleton.copy(petProfile = false),
+                        )
                 },
                 onError = {
                     _message.emit(OtherProfileMessage.DefaultErrorMessage)
