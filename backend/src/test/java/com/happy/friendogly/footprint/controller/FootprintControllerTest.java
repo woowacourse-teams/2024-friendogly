@@ -288,13 +288,13 @@ class FootprintControllerTest extends ControllerTest {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         BEFORE,
                         null,
                         null,
                         LocalDateTime.now(),
                         false
-                        )
+                )
         );
 
         float latitude = 0.0F;
@@ -314,11 +314,11 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toAfter(){
+    void updateWalkStatus_toAfter() {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         ONGOING,
                         LocalDateTime.now(),
                         null,
@@ -339,6 +339,6 @@ class FootprintControllerTest extends ControllerTest {
                 .when().patch("/footprints/walk-status")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.walkStatus",is(AFTER.toString()));
+                .body("data.walkStatus", is(AFTER.toString()));
     }
 }

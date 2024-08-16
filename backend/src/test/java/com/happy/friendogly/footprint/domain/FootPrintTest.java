@@ -18,7 +18,7 @@ public class FootPrintTest {
 
     @DisplayName("산책이전일경우,산책 상태 변경된 시간은 발자국 생성시간이 반환된다.")
     @Test
-    void findChangedWalkStatusTime_when_WalkStatusIsBefore(){
+    void findChangedWalkStatusTime_when_WalkStatusIsBefore() {
         // given
         LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(
@@ -29,7 +29,7 @@ public class FootPrintTest {
                 null,
                 expectedChangedWalkStatusTime,
                 false
-                );
+        );
 
         // when
         LocalDateTime changedWalkStatusTime = footprint.findChangedWalkStatusTime();
@@ -40,7 +40,7 @@ public class FootPrintTest {
 
     @DisplayName("산책중일경우, 산책 상태 변경된 시간은 산책 시작 시간이 반환된다.")
     @Test
-    void findChangedWalkStatusTime_when_WalkStatusIsOngoing(){
+    void findChangedWalkStatusTime_when_WalkStatusIsOngoing() {
         // given
         LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(
@@ -62,7 +62,7 @@ public class FootPrintTest {
 
     @DisplayName("산책후일경우, 산책 상태 변경된 시간은 산책 종료 시간이 반환된다.")
     @Test
-    void findChangedWalkStatusTime_when_WalkStatusIsAfter(){
+    void findChangedWalkStatusTime_when_WalkStatusIsAfter() {
         // given
         LocalDateTime expectedChangedWalkStatusTime = LocalDateTime.of(2023, 12, 12, 10, 30);
         Footprint footprint = new Footprint(

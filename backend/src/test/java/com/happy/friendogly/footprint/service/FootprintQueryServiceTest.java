@@ -55,7 +55,7 @@ class FootprintQueryServiceTest extends FootprintServiceTest {
         );
 
         deviceTokenRepository.save(
-                new DeviceToken(otherMember,"token")
+                new DeviceToken(otherMember, "token")
         );
 
         petRepository.save(
