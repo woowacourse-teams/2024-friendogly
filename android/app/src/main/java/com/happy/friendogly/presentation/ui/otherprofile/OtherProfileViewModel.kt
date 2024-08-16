@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
@@ -15,7 +14,6 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
-import kotlinx.coroutines.launch
 
 class OtherProfileViewModel(
     savedStateHandle: SavedStateHandle,
@@ -63,13 +61,16 @@ class OtherProfileViewModel(
     }
 
     fun fetchPetMine() {
-        viewModelScope.launch {
-            getPetsUseCase(id = id).onSuccess { pets ->
-                _uiState.value =
-                    uiState.value?.copy(pets = pets)
-            }.onFailure {
-                // TODO 예외 처리
-            }
+        launch {
+            getPetsUseCase(id = id).fold(
+                onSuccess = { pets ->
+                    val state = uiState.value ?: return@launch
+                    _uiState.value = state.copy(pets = pets)
+                },
+                onError = {
+                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 
