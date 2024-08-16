@@ -7,7 +7,7 @@ import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
 import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
 import com.happy.friendogly.notification.service.DeviceTokenCommandService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +22,7 @@ public class DeviceTokenController {
         this.deviceTokenCommandService = deviceTokenCommandService;
     }
 
-    @PatchMapping
+    @PutMapping
     public ApiResponse<UpdateDeviceTokenResponse> update(
             @Auth Long memberId,
             @Valid @RequestBody UpdateDeviceTokenRequest request
