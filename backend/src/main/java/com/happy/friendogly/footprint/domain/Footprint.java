@@ -126,7 +126,7 @@ public class Footprint {
         }
     }
 
-    public void stopWalking() {
+    public void finishWalking() {
         if (walkStatus.isBefore()) {
             isDeleted = true;
         }
