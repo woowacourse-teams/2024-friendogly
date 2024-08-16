@@ -129,7 +129,7 @@ public class FootprintCommandService {
     }
 
     private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
-        List<Footprint> footprints = footprintRepository.findByIsDeletedFalse();
+        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalse();
 
         return footprints.stream()
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
