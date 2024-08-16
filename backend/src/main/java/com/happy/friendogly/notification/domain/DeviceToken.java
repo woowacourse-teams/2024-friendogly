@@ -25,7 +25,7 @@ public class DeviceToken {
     private String deviceToken;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public DeviceToken(Member member, String deviceToken) {
