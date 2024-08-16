@@ -45,7 +45,7 @@ class DeviceTokenCommandServiceTest extends ServiceTest {
     @Test
     void update_createNewDeviceToken() {
         // given
-        int beforeSize = deviceTokenRepository.findAll().size();
+        long beforeSize = deviceTokenRepository.count();
 
         // when
         deviceTokenCommandService.update(
