@@ -100,6 +100,15 @@ class WoofFragment :
         )
     }
     private val adapter by lazy { FootprintInfoPetDetailAdapter(this) }
+    private val statuses by lazy {
+        listOf(
+            binding.tvWoofStatusAll,
+            binding.tvWoofStatusBefore,
+            binding.tvWoofStatusOngoing,
+            binding.tvWoofStatusAfter,
+        )
+    }
+
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
             analyticsHelper = AppModule.getInstance().analyticsHelper,
@@ -643,6 +652,7 @@ class WoofFragment :
         myMarker?.map = null
         setUpCircleOverlay(map.cameraPosition.target)
         getAddress(map.cameraPosition.target)
+        statuses.forEach { status -> status.isVisible = false }
         binding.layoutWoofLocationRegister.isVisible = true
         binding.btnWoofLocationRegister.isVisible = true
         binding.btnWoofBack.isVisible = true
@@ -663,6 +673,7 @@ class WoofFragment :
         if (myMarker == null) {
             circleOverlay.map = null
         }
+        statuses.forEach { status -> status.isVisible = true }
         binding.layoutWoofLocationRegister.isVisible = false
         binding.btnWoofLocationRegister.isVisible = false
         binding.btnWoofBack.isVisible = false
@@ -776,16 +787,10 @@ class WoofFragment :
         return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
     }
 
-    fun updateBackgroundTint(selectedStatus: View) {
+    private fun updateBackgroundTint(selectedStatus: View) {
         val whiteColor = resources.getColor(R.color.white, null)
         val coralColor = resources.getColor(R.color.coral50, null)
 
-        val statuses = listOf(
-            binding.tvWoofStatusAll,
-            binding.tvWoofStatusBefore,
-            binding.tvWoofStatusOngoing,
-            binding.tvWoofStatusAfter
-        )
         statuses.forEach { status ->
             status.backgroundTintList =
                 ColorStateList.valueOf(if (status == selectedStatus) coralColor else whiteColor)
