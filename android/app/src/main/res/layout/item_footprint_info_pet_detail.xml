@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="footprintPetDetail"
-            type="com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel" />
+            name="petDetailInfo"
+            type="com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel" />
 
         <variable
             name="actionHandler"
@@ -25,11 +25,11 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_woof_dog"
-            glide="@{footprintPetDetail.petDetail.imageUrl}"
+            glide="@{petDetailInfo.petDetail.imageUrl}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
-            android:onClick="@{() -> actionHandler.clickFootprintPetImage(footprintPetDetail.petDetail.imageUrl)}"
+            android:onClick="@{() -> actionHandler.clickFootprintPetImage(petDetailInfo.petDetail.imageUrl)}"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:text="@{footprintPetDetail.petDetail.name}"
+            android:text="@{petDetailInfo.petDetail.name}"
             app:layout_constraintBottom_toTopOf="@id/tv_woof_member_name"
             app:layout_constraintStart_toEndOf="@id/iv_woof_dog"
             app:layout_constraintTop_toTopOf="@id/iv_woof_dog"
@@ -52,11 +52,11 @@
         <TextView
             android:id="@+id/tv_woof_member_name"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
-            memberName="@{footprintPetDetail.memberName}"
+            memberName="@{petDetailInfo.memberName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:onClick="@{() -> actionHandler.clickFootprintMemberName(footprintPetDetail.memberId)}"
+            android:onClick="@{() -> actionHandler.clickFootprintMemberName(petDetailInfo.memberId)}"
             app:layout_constraintStart_toEndOf="@id/iv_woof_dog"
             app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_name"
             tools:text="누누네 댕댕이" />
@@ -76,7 +76,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_age"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petAge="@{footprintPetDetail.petDetail.birthDate}"
+            petAge="@{petDetailInfo.petDetail.birthDate}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -91,7 +91,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_size"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petSizeType="@{footprintPetDetail.petDetail.sizeType}"
+            petSizeType="@{petDetailInfo.petDetail.sizeType}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -106,7 +106,7 @@
         <TextView
             android:id="@+id/tv_woof_dog_gender"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size14"
-            petGender="@{footprintPetDetail.petDetail.gender}"
+            petGender="@{petDetailInfo.petDetail.gender}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -140,7 +140,7 @@
             android:maxLines="2"
             android:minHeight="60dp"
             android:padding="15dp"
-            android:text="@{footprintPetDetail.petDetail.description}"
+            android:text="@{petDetailInfo.petDetail.description}"
             android:textColor="@color/gray800"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/tv_woof_dog_description_title"
