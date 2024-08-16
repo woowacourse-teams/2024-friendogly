@@ -15,7 +15,7 @@
 
     <!--프로필 설정-->
     <string name="profile_setting_nickname">닉네임</string>
-    <string name="profile_setting_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="profile_setting_nickname_hint">사용자 닉네임을 입력해주세요</string>
     <string name="profile_setting_profile_pic">프로필 사진</string>
     <string name="make_profile_title">프로필 만들기</string>
     <string name="make_profile_edit_title">프로필 수정하기</string>
@@ -118,7 +118,7 @@
     <string name="pet_size_type_title">댕댕이 사이즈</string>
     <string name="pet_add_image_title">댕댕이 사진을 추가하세요</string>
     <string name="pet_gender_type_title">댕댕이 성별</string>
-    <string name="pet_submit_title">선택 완료!</string>
+    <string name="pet_submit_title">등록 완료!</string>
     <string name="bottom_sheet_pet_edit_birthday_title">언제 태어났나요?</string>
     <string name="pet_name_length">%d/20</string>
 
@@ -286,9 +286,15 @@
     <string name="my_club_subject">참여 모임</string>
     <string name="my_head_club_subject">방장인 모임</string>
     <string name="club_list_my_location_default">내 동네 설정</string>
+    <string name="pet_add_alert_title">강아지 등록</string>
+    <string name="pet_add_alert_content">서비스 이용을 위해 강아지를 등록해주세요!</string>
+    <string name="pet_add_alert_positive">등록하기</string>
+    <string name="pet_add_alert_negative">다음에 하기</string>
 
     <!--에러 메시지-->
     <string name="server_error_message">서버 에러가 발생했습니다</string>
     <string name="file_size_exceed_message">1MB를 초과하는 이미지는 등록할 수 없어요</string>
     <string name="default_error_message">알 수 없는 에러가 발생했어요</string>
+
+  
 </resources>
