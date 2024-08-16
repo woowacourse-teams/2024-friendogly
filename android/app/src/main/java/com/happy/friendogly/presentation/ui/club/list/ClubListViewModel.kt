@@ -122,9 +122,9 @@ class ClubListViewModel(
     }
 
     private fun applyAddClubState() =
-        viewModelScope.launch {
-            getPetsMineUseCase()
-                .onSuccess { pets ->
+        launch {
+            getPetsMineUseCase().fold(
+                onSuccess = { pets ->
                     if (isInValidPetCount(pets)) {
                         _clubListEvent.emit(ClubListEvent.OpenAddPet)
                     } else if (myAddress.value == null) {
@@ -132,7 +132,11 @@ class ClubListViewModel(
                     } else {
                         _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
                     }
-                }
+                },
+                onError = {
+                    // TODO 예외처리
+                },
+            )
         }
 
     override fun selectParticipationFilter() {
