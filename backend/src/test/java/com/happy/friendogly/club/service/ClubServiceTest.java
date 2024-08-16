@@ -37,7 +37,7 @@ public abstract class ClubServiceTest extends ServiceTest {
     }
 
 
-    protected Club createSavedClub(Member member, Pet pet, Set<Gender> genders, Set<SizeType> sizes) {
+    protected Club createSavedClub(Member member, List<Pet> pets, Set<Gender> genders, Set<SizeType> sizes) {
         Club club = Club.create(
                 "강아지 산책시키실 분 모아요.",
                 "매주 주말에 정기적으로 산책 모임하실분만",
@@ -49,7 +49,7 @@ public abstract class ClubServiceTest extends ServiceTest {
                 genders,
                 sizes,
                 "https://image.com",
-                List.of(pet));
+                pets);
 
         return clubRepository.save(club);
     }

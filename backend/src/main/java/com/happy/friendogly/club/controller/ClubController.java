@@ -5,6 +5,8 @@ import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
@@ -48,7 +50,17 @@ public class ClubController {
             @Auth Long memberId,
             @Valid @ModelAttribute FindClubByFilterRequest request
     ) {
-        return ApiResponse.ofSuccess(clubQueryService.findFindByFilter(memberId, request));
+        return ApiResponse.ofSuccess(clubQueryService.findByFilter(memberId, request));
+    }
+
+    @GetMapping("/owning")
+    public ApiResponse<List<FindClubOwningResponse>> findOwning(@Auth Long memberId) {
+        return ApiResponse.ofSuccess(clubQueryService.findOwning(memberId));
+    }
+
+    @GetMapping("/participating")
+    public ApiResponse<List<FindClubParticipatingResponse>> findParticipating(@Auth Long memberId) {
+        return ApiResponse.ofSuccess(clubQueryService.findParticipating(memberId));
     }
 
     @PostMapping
