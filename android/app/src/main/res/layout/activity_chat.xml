@@ -50,34 +50,41 @@
             android:id="@+id/rcv_chat_detail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:stackFromEnd="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:layout_constraintBottom_toTopOf="@id/edt_chat_send_message"
+            app:layout_constraintBottom_toTopOf="@id/cl_chat_send_message"
             app:layout_constraintTop_toBottomOf="@id/appbar_chat_main"
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="-105dp"
             tools:listitem="@layout/item_chat_other" />
 
-        <EditText
-            android:id="@+id/edt_chat_send_message"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:background="@drawable/rect_gray03_fill_16"
-            android:backgroundTint="@color/gray100"
-            android:hint="@string/chat_send_hint_message"
-            android:inputType="text"
-            android:maxLines="1"
-            android:paddingHorizontal="22dp"
-            android:paddingVertical="7dp"
-            android:text="@={vm.sendMessage}"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_chat_send_message"
+            android:layout_width="match_parent"
+            android:paddingTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ib_chat_send_message"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="ㅎㅇㅎㅇ" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_chat_send_message"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                android:layout_width="0dp"
+                android:text="@={vm.sendMessage}"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:backgroundTint="@color/gray100"
+                android:hint="@string/chat_send_hint_message"
+                android:maxLines="4"
+                android:paddingHorizontal="22dp"
+                android:paddingVertical="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ib_chat_send_message"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="ㅎㅇㅎㅇ" />
 
         <Button
             android:id="@+id/ib_chat_send_message"
@@ -91,9 +98,11 @@
             android:scaleType="fitCenter"
             app:backgroundTint="@color/sel_chat_send_btn"
             app:layout_constraintBottom_toBottomOf="@id/edt_chat_send_message"
+            app:layout_constraintTop_toTopOf="@id/edt_chat_send_message"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/edt_chat_send_message" />
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WebSocketRepositoryImpl(private val source: WebSocketDataSource) : WebSocketRepository {
+    override suspend fun connect(): Result<Unit> = source.connect()
+
+    override suspend fun disconnect(): Result<Unit> = source.disconnect()
+
     override suspend fun publishEnter(memberId: Long) = source.publishEnter(memberId)
 
     override suspend fun publishSend(
