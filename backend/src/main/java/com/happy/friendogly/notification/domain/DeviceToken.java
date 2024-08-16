@@ -22,7 +22,7 @@ public class DeviceToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "device_token", nullable = false)
     private String deviceToken;
 
     @OneToOne(fetch = FetchType.LAZY)
