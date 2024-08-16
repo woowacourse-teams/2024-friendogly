@@ -7,4 +7,7 @@ import kotlinx.serialization.Serializable
 enum class ErrorCodeResponse {
     @SerializedName("DEFAULT_ERROR_CODE")
     DEFAULT_ERROR_CODE,
+
+    @SerializedName("FILE_SIZE_EXCEED")
+    FILE_SIZE_EXCEED,
 }

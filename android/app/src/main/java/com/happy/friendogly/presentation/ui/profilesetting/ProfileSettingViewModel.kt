@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -17,6 +19,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
+import kotlinx.coroutines.delay
 import okhttp3.MultipartBody
 
 class ProfileSettingViewModel(
@@ -49,6 +52,12 @@ class ProfileSettingViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<ProfileSettingNavigationAction>> get() = _navigateAction
 
+    private val _message: MutableLiveData<Event<ProfileSettingMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<ProfileSettingMessage>> get() = _message
+
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    val loading: LiveData<Event<Boolean>> get() = _loading
+
     init {
         fetchProfile()
     }
@@ -79,6 +88,7 @@ class ProfileSettingViewModel(
 
     fun submitProfileSelection() {
         launch {
+            _loading.emit(true)
             val nickname = nickname.value ?: return@launch
             if (nickname.isBlank()) return@launch
             if (regex.matches(nickname)) return@launch
@@ -89,6 +99,7 @@ class ProfileSettingViewModel(
             } else {
                 patchMember(nickname, state.profilePath)
             }
+            _loading.emit(false)
         }
     }
 
@@ -102,18 +113,31 @@ class ProfileSettingViewModel(
             name = nickname,
             file = profilePath,
             accessToken = accessToken,
-        ).onSuccess { register ->
-            saveJwaToken(register.tokens)
-        }.onFailure {
-            // TODO 예외처리
-        }
+        ).fold(
+            onSuccess = { register ->
+                saveJwaToken(register.tokens)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.FILE_SIZE_EXCEED -> _message.emit(ProfileSettingMessage.FileSizeExceedMessage)
+                    else -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
+                }
+            },
+        )
     }
 
     private suspend fun saveJwaToken(jwtToken: JwtToken) {
-        saveJwtTokenUseCase(jwtToken = jwtToken).onSuccess {
-            _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
-        }.onFailure { e ->
-        }
+        saveJwtTokenUseCase(jwtToken = jwtToken).fold(
+            onSuccess = {
+                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Local.TOKEN_NOT_STORED -> _message.emit(ProfileSettingMessage.TokenNotStoredErrorMessage)
+                    else -> _message.emit(ProfileSettingMessage.DefaultErrorMessage)
+                }
+            },
+        )
     }
 
     private suspend fun patchMember(
@@ -121,6 +145,7 @@ class ProfileSettingViewModel(
         profilePath: MultipartBody.Part?,
     ) {
         // TODO patch use case 호출 예정
+        delay(3000)
     }
 
     fun updateProfileImage(bitmap: Bitmap) {
