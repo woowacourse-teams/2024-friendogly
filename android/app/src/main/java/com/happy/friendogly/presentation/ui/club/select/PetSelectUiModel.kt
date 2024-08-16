@@ -11,7 +11,7 @@ data class PetSelectUiModel(
     val size: ClubFilter.SizeFilter,
     val gender: ClubFilter.GenderFilter,
 ) {
-    var selectable : Boolean = false
+    var selectable: Boolean = false
         private set
 
     var isSelected = false
@@ -25,7 +25,7 @@ data class PetSelectUiModel(
         isSelected = false
     }
 
-    fun initSelectableState(filters: List<ClubFilter>){
+    fun initSelectableState(filters: List<ClubFilter>) {
         this.selectable = filters.contains(gender) && filters.contains(size)
     }
 }

@@ -116,11 +116,12 @@ class PetSelectBottomSheet(
                         ),
                     )
 
-                PetSelectEvent.PreventCommit -> makeToast(
-                    requireContext().getString(
-                        R.string.dog_selector_title,
-                    ),
-                )
+                PetSelectEvent.PreventCommit ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_selector_title,
+                        ),
+                    )
             }
         }
     }

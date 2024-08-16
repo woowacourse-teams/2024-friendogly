@@ -95,7 +95,7 @@ class PetSelectViewModel(
         )
     }
 
-    private fun preventCommit(){
+    private fun preventCommit() {
         _petSelectEvent.emit(PetSelectEvent.PreventCommit)
     }
 

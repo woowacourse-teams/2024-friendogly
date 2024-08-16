@@ -11,6 +11,5 @@ sealed interface PetSelectEvent {
 
     data object FailLoadPet : PetSelectEvent
 
-
-    data object PreventCommit: PetSelectEvent
+    data object PreventCommit : PetSelectEvent
 }

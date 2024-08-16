@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.club.select
 
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 
@@ -19,18 +18,20 @@ fun View.bindDogSelect(petSelectUiModel: PetSelectUiModel) {
 
 @BindingAdapter("bindSelectPrevent")
 fun View.bindSelectPrevent(selectable: Boolean) {
-    visibility = if (selectable) {
-        View.INVISIBLE
-    } else {
-        View.VISIBLE
-    }
+    visibility =
+        if (selectable) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
 }
 
 @BindingAdapter("bindSelectPreventContent")
 fun TextView.bindSelectPreventContent(petUiModel: PetSelectUiModel) {
-    text = if (petUiModel.selectable) {
-        context.getString(R.string.dog_select_can_select).format(petUiModel.name)
-    } else {
-        context.getString(R.string.dog_select_prevent_select).format(petUiModel.name)
-    }
+    text =
+        if (petUiModel.selectable) {
+            context.getString(R.string.dog_select_can_select).format(petUiModel.name)
+        } else {
+            context.getString(R.string.dog_select_prevent_select).format(petUiModel.name)
+        }
 }
