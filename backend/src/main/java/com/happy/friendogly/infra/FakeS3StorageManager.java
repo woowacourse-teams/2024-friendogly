@@ -18,4 +18,28 @@ public class FakeS3StorageManager implements FileStorageManager {
 
         return "http://localhost/" + file.getOriginalFilename();
     }
+
+    @Override
+    public void removeFile(String oldImageUrl) {
+
+    }
+
+    @Override
+    public String updateFile(String oldFileUrl, MultipartFile newFile, ImageUpdateType fileUpdateType) {
+        if (fileUpdateType == ImageUpdateType.UPDATE) {
+            removeFile(oldFileUrl);
+            return uploadFile(newFile);
+        }
+
+        if (fileUpdateType == ImageUpdateType.NOT_UPDATE) {
+            return oldFileUrl;
+        }
+
+        if (fileUpdateType == ImageUpdateType.DELETE) {
+            removeFile(oldFileUrl);
+            return "";
+        }
+
+        throw new FriendoglyException("ImageUpdateType이 올바르지 않습니다.");
+    }
 }
