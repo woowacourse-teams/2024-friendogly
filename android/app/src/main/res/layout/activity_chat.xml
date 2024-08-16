@@ -17,10 +17,10 @@
         android:background="@color/white">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
             android:id="@+id/appbar_chat_main"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rect_gray03_botline_bot1"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -62,7 +62,6 @@
             android:id="@+id/edt_chat_send_message"
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
             android:layout_width="0dp"
-            android:text="@={vm.sendMessage}"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="20dp"
@@ -70,9 +69,11 @@
             android:background="@drawable/rect_gray03_fill_16"
             android:backgroundTint="@color/gray100"
             android:hint="@string/chat_send_hint_message"
+            android:inputType="text"
             android:maxLines="1"
             android:paddingHorizontal="22dp"
             android:paddingVertical="7dp"
+            android:text="@={vm.sendMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ib_chat_send_message"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +91,9 @@
             android:scaleType="fitCenter"
             app:backgroundTint="@color/sel_chat_send_btn"
             app:layout_constraintBottom_toBottomOf="@id/edt_chat_send_message"
-            app:layout_constraintTop_toTopOf="@id/edt_chat_send_message"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edt_chat_send_message" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,7 +26,7 @@
             android:id="@+id/iv_empty_pet"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_empty_pet"
+            android:src="@drawable/ic_add_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
