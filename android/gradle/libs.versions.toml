@@ -25,6 +25,7 @@ flexbox = "3.0.0"
 lifecycle = "2.8.3"
 activity-ktx = "1.9.0"
 fragment-ktx = "1.8.2"
+room = "2.6.1"
 
 # coroutines
 coroutines = "1.7.3"
@@ -100,6 +101,9 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 flextbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # kakao
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
@@ -146,6 +150,7 @@ datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 animation = ["lottie"]
 stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization", "krossbow-kxserialization-json"]
+room = ["room-runtime", "room-ktx"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
