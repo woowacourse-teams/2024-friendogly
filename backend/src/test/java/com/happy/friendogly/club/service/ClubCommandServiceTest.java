@@ -257,7 +257,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
     }
 
-    @DisplayName("참여 중인 회원을 삭제하고, 만약 Full 상태면 Open으로 바꾼다.")
+    @DisplayName("Full 상태에서 회원이 모임에서 탈퇴하면 Open으로 바꾼다.")
     @Test
     void deleteClubMember_WhenFull(){
         Club club = Club.create(
@@ -329,6 +329,5 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThatThrownBy(() -> clubCommandService.update(club.getId(), savedMember2.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("수정 권한이 없습니다.");
-
     }
 }
