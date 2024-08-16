@@ -50,6 +50,7 @@ class MyPageViewModel(
                             nickname = member.name,
                             tag = member.tag,
                             imageUrl = member.imageUrl,
+                            myPageSkeleton = state.myPageSkeleton.copy(userProfile = false),
                         )
                 },
                 onError = {
@@ -67,7 +68,10 @@ class MyPageViewModel(
                     val petsView = pets.map { pet -> PetView.from(pet = pet) }
 
                     _uiState.value =
-                        state.copy(pets = petsView + PetAddView(memberId = state.id))
+                        state.copy(
+                            pets = petsView + PetAddView(memberId = state.id),
+                            myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
+                        )
                 },
                 onError = {
                     _message.emit(MyPageMessage.DefaultErrorMessage)
