@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.club.select
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -34,17 +34,18 @@ class PetSelectViewModel(
     }
 
     private fun loadMyPets() =
-        viewModelScope.launch {
-            getPetsMineUseCase()
-                .onSuccess { pets ->
+        launch {
+            getPetsMineUseCase().fold(
+                onSuccess = { pets ->
                     _pets.value =
                         pets.map { pet ->
                             pet.toPetSelectUiModel()
                         }
-                }
-                .onFailure {
+                },
+                onError = {
                     _petSelectEvent.emit(PetSelectEvent.FailLoadPet)
-                }
+                },
+            )
         }
 
     override fun selectPet(petSelectUiModel: PetSelectUiModel) {

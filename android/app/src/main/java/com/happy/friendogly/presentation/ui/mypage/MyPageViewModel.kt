@@ -60,16 +60,19 @@ class MyPageViewModel(
     }
 
     fun fetchPetMine() {
-        viewModelScope.launch {
-            getPetsMineUseCase().onSuccess { pets ->
-                val petsView = pets.map { pet -> PetView.from(pet = pet) }
+        launch {
+            getPetsMineUseCase().fold(
+                onSuccess = { pets ->
+                    val state = uiState.value ?: return@launch
+                    val petsView = pets.map { pet -> PetView.from(pet = pet) }
 
-                val state = uiState.value ?: return@launch
-
-                _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
-            }.onFailure {
-                // TODO 예외 처리
-            }
+                    _uiState.value =
+                        state.copy(pets = petsView + PetAddView(memberId = state.id))
+                },
+                onError = {
+                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 
