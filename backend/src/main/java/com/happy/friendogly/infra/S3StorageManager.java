@@ -112,4 +112,25 @@ public class S3StorageManager implements FileStorageManager {
             throw new FriendoglyException("알 수 없는 이유로 이미지 파일 삭제에 실패했습니다.", INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public String updateFile(String oldFileUrl, MultipartFile newFile, ImageUpdateType fileUpdateType) {
+        String newFileUrl = "";
+
+        if (fileUpdateType == ImageUpdateType.UPDATE) {
+            removeFile(oldFileUrl);
+            newFileUrl = uploadFile(newFile);
+        }
+
+        if (fileUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newFileUrl = oldFileUrl;
+        }
+
+        if (fileUpdateType == ImageUpdateType.DELETE) {
+            removeFile(oldFileUrl);
+            newFileUrl = "";
+        }
+
+        return newFileUrl;
+    }
 }

@@ -77,23 +77,8 @@ public class PetCommandService {
         }
 
         ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
-
         String oldImageUrl = pet.getImageUrl();
-        String newImageUrl = "";
-
-        if (imageUpdateType == ImageUpdateType.UPDATE) {
-            fileStorageManager.removeFile(oldImageUrl);
-            newImageUrl = fileStorageManager.uploadFile(image);
-        }
-
-        if (imageUpdateType == ImageUpdateType.NOT_UPDATE) {
-            newImageUrl = oldImageUrl;
-        }
-
-        if (imageUpdateType == ImageUpdateType.DELETE) {
-            fileStorageManager.removeFile(oldImageUrl);
-            newImageUrl = "";
-        }
+        String newImageUrl = fileStorageManager.updateFile(oldImageUrl, image, imageUpdateType);
 
         pet.update(
                 request.name(),

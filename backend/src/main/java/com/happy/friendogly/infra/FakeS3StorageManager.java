@@ -23,4 +23,25 @@ public class FakeS3StorageManager implements FileStorageManager {
     public void removeFile(String oldImageUrl) {
 
     }
+
+    @Override
+    public String updateFile(String oldFileUrl, MultipartFile newFile, ImageUpdateType fileUpdateType) {
+        String newFileUrl = "";
+
+        if (fileUpdateType == ImageUpdateType.UPDATE) {
+            removeFile(oldFileUrl);
+            newFileUrl = uploadFile(newFile);
+        }
+
+        if (fileUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newFileUrl = oldFileUrl;
+        }
+
+        if (fileUpdateType == ImageUpdateType.DELETE) {
+            removeFile(oldFileUrl);
+            newFileUrl = "";
+        }
+
+        return newFileUrl;
+    }
 }
