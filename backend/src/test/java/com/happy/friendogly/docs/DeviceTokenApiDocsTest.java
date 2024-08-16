@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
-public class DeviceTokenApiDocsTest extends RestDocsTest{
+public class DeviceTokenApiDocsTest extends RestDocsTest {
 
     @Mock
     private DeviceTokenCommandService deviceTokenCommandService;
@@ -34,11 +34,11 @@ public class DeviceTokenApiDocsTest extends RestDocsTest{
         UpdateDeviceTokenRequest request = new UpdateDeviceTokenRequest("deviceToken");
         UpdateDeviceTokenResponse response = new UpdateDeviceTokenResponse("deviceToken");
 
-        given(deviceTokenCommandService.update(any(),any()))
+        given(deviceTokenCommandService.update(any(), any()))
                 .willReturn(response);
 
         mockMvc
-                .perform(patch("/device-tokens")
+                .perform(put("/device-tokens")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, getMemberToken()))
