@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -34,23 +35,30 @@ class OtherProfileViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<OtherProfileNavigationAction>> get() = _navigateAction
 
+    private val _message: MutableLiveData<Event<OtherProfileMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<OtherProfileMessage>> get() = _message
+
     init {
         fetchMember()
         fetchPetMine()
     }
 
     private fun fetchMember() {
-        viewModelScope.launch {
-            getMemberUseCase(id = id).onSuccess { member ->
-                _uiState.value =
-                    uiState.value?.copy(
-                        nickname = member.name,
-                        tag = member.tag,
-                        profilePath = member.imageUrl,
-                    )
-            }.onFailure {
-                // TODO 예외 처리
-            }
+        launch {
+            getMemberUseCase(id = id).fold(
+                onSuccess = { member ->
+                    val state = uiState.value ?: return@launch
+                    _uiState.value =
+                        state.copy(
+                            nickname = member.name,
+                            tag = member.tag,
+                            profilePath = member.imageUrl,
+                        )
+                },
+                onError = {
+                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 

@@ -45,5 +45,17 @@ class MemberRepositoryImpl(
             },
         )
 
-    override suspend fun getMember(id: Long): Result<Member> = source.getMember(id = id).mapCatching { result -> result.toDomain() }
+    override suspend fun getMember(id: Long): DomainResult<Member, DataError.Network> =
+        source.getMember(id = id).fold(
+            onSuccess = { memberDto ->
+                DomainResult.Success(memberDto.toDomain())
+            },
+            onFailure = { e ->
+                if (e is ApiExceptionDto) {
+                    DomainResult.Error(e.error.data.errorCode.toDomain())
+                } else {
+                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                }
+            },
+        )
 }
