@@ -73,7 +73,7 @@ public class PetCommandService {
         Pet pet = petRepository.getById(petId);
 
         if (!pet.isOwner(member)) {
-            throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.", HttpStatus.UNAUTHORIZED);
+            throw new FriendoglyException("자신의 강아지만 수정할 수 있습니다.", HttpStatus.FORBIDDEN);
         }
 
         ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
