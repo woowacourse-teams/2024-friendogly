@@ -148,7 +148,7 @@
     <string name="club_list_date_hours">%d시간 전</string>
     <string name="club_list_date_minutes">%d분 전</string>
     <string name="club_list_date_now">방금 전</string>
-    <string name="club_counter_count">%d명</string>
+    <string name="club_counter_count">최대 %d명</string>
     <string name="club_list_participation_filter">모집 조건 선택</string>
     <string name="club_list_no_address_title">등록 된 주소가 없습니다</string>
     <string name="club_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>

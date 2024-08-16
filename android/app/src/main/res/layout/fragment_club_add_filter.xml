@@ -20,10 +20,10 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
+            style="@style/Theme.AppCompat.TextView.Medium.Black.Size22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="100dp"
             android:text="@string/club_add_information_main_title" />
 
         <Space
@@ -31,7 +31,7 @@
             android:layout_height="20dp" />
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+            style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/club_add_filter_main_content" />
@@ -47,7 +47,7 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/club_add_dog_size_title" />
@@ -118,7 +118,7 @@
             android:layout_height="30dp" />
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/club_add_dog_gender_title" />
