@@ -36,9 +36,9 @@ import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantCli
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowEndWalk
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPet
 import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
-import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
+import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
+import com.happy.friendogly.presentation.ui.woof.model.FootprintMarker
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
@@ -99,7 +99,7 @@ class WoofFragment :
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
-    private val adapter by lazy { FootprintInfoPetDetailAdapter(this) }
+    private val adapter by lazy { PetDetailInfoAdapter(this) }
     private val statuses by lazy {
         listOf(
             binding.tvWoofStatusAll,
@@ -123,7 +123,7 @@ class WoofFragment :
     private var timer: Timer? = null
     private var recentlyClickedMarker: Marker? = null
     private var myMarker: Marker? = null
-    private val nearMarkers: MutableList<Marker> = mutableListOf()
+    private val nearMarkers: MutableList<FootprintMarker> = mutableListOf()
 
     override fun onMapReady(naverMap: NaverMap) {
         initMap(naverMap)
@@ -257,24 +257,31 @@ class WoofFragment :
 
     override fun clickStatusAll() {
         updateBackgroundTint(binding.tvWoofStatusAll)
+        nearMarkers.forEach { nearMarker ->
+            nearMarker.marker.map = map
+        }
     }
 
     override fun clickStatusBefore() {
         updateBackgroundTint(binding.tvWoofStatusBefore)
+        filterMarkerStatus(WalkStatus.BEFORE)
     }
 
     override fun clickStatusOnGoing() {
         updateBackgroundTint(binding.tvWoofStatusOngoing)
+        filterMarkerStatus(WalkStatus.ONGOING)
     }
 
     override fun clickStatusAfter() {
         updateBackgroundTint(binding.tvWoofStatusAfter)
+        filterMarkerStatus(WalkStatus.AFTER)
     }
 
     override fun clickRefreshBtn() {
         analyticsHelper.logRefreshBtnClicked()
         if (locationPermission.hasPermissions()) {
             showLoadingAnimation()
+            clickStatusAll()
             viewModel.loadNearFootprints(latLng)
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
@@ -283,6 +290,7 @@ class WoofFragment :
     }
 
     override fun clickEndWalkBtn() {
+        viewModel.updateWalkStatus(LatLng(0.0, 0.0))
         viewModel.endWalk()
         binding.chronometerWoofWalkTime.stop()
     }
@@ -417,7 +425,28 @@ class WoofFragment :
         viewModel.myFootprint.observe(viewLifecycleOwner) { myFootprint ->
             myMarker?.map = null
             if (myFootprint != null) {
-                createMyMarker(myFootprint)
+                createMarker(myFootprint)
+
+                if (myFootprint.walkStatus == WalkStatus.AFTER) {
+                    timer?.cancel()
+                } else {
+                    startTimerAndUpdateWalkStatus()
+                }
+
+                if (myFootprint.walkStatus == WalkStatus.BEFORE || myFootprint.walkStatus == WalkStatus.ONGOING) {
+                    binding.btnWoofMark.isVisible = false
+                    binding.layoutWoofWalk.isVisible = true
+
+                    // 산책 시간 타이머
+                    val now = java.time.LocalDateTime.now()
+                    val duration = Duration.between(now.minusMinutes(8).minusSeconds(30), now)
+                    binding.chronometerWoofWalkTime.base =
+                        SystemClock.elapsedRealtime() - duration.toMillis()
+                    binding.chronometerWoofWalkTime.start()
+                } else {
+                    binding.btnWoofMark.isVisible = true
+                    binding.layoutWoofWalk.isVisible = false
+                }
             } else {
                 myMarker = null
                 circleOverlay.map = null
@@ -425,32 +454,8 @@ class WoofFragment :
             }
         }
 
-        viewModel.myWalkStatus.observe(viewLifecycleOwner) { walkStatus ->
-            if (walkStatus == null || walkStatus == WalkStatus.AFTER) {
-                timer?.cancel()
-            }
-
-            if (walkStatus != WalkStatus.AFTER) {
-                startTimerAndUpdateWalkStatus()
-            }
-
-            if (walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING) {
-                binding.btnWoofMark.isVisible = false
-                binding.layoutWoofWalk.isVisible = true
-
-                val now = java.time.LocalDateTime.now()
-                val duration = Duration.between(now.minusMinutes(8).minusSeconds(30), now)
-                binding.chronometerWoofWalkTime.base =
-                    SystemClock.elapsedRealtime() - duration.toMillis()
-                binding.chronometerWoofWalkTime.start()
-            } else {
-                binding.btnWoofMark.isVisible = true
-                binding.layoutWoofWalk.isVisible = false
-            }
-        }
-
-        viewModel.footprintInfoPetDetails.observe(viewLifecycleOwner) { footPrintPetDetails ->
-            adapter.submitList(footPrintPetDetails)
+        viewModel.footprintInfo.observe(viewLifecycleOwner) { footprintInfo ->
+            adapter.submitList(footprintInfo.petsDetailInfo)
         }
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
@@ -535,8 +540,10 @@ class WoofFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.updateWalkStatus(latLng)
             viewModel.loadNearFootprints(latLng)
+            if (viewModel.myFootprint.value != null) {
+                viewModel.updateWalkStatus(latLng)
+            }
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
@@ -569,38 +576,33 @@ class WoofFragment :
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMyMarker(myFootprint: MyFootprint) {
-        val marker = Marker()
-        marker.position = LatLng(myFootprint.latitude, myFootprint.longitude)
-        marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
-        marker.width = MARKER_WIDTH
-        marker.height = MARKER_HEIGHT
-        marker.zIndex = myFootprint.createdAt.toZIndex()
-        marker.map = map
-        clickFootprint(footprintId = myFootprint.footprintId, marker = marker)
-
-        myMarker = marker
-        setUpCircleOverlay(marker.position)
-    }
-
-    private fun createNearMarker(footprint: Footprint) {
+    private fun createMarker(footprint: Footprint) {
         val marker = Marker()
         marker.position = LatLng(footprint.latitude, footprint.longitude)
-        marker.icon = OverlayImage.fromResource(markerIcon(footprint.walkStatus))
+        marker.icon = OverlayImage.fromResource(markerIcon(footprint))
         marker.width = MARKER_WIDTH
         marker.height = MARKER_HEIGHT
         marker.zIndex = footprint.createdAt.toZIndex()
         marker.map = map
         clickFootprint(footprintId = footprint.footprintId, marker = marker)
 
-        nearMarkers.add(marker)
+        if (footprint.isMine) {
+            myMarker = marker
+            setUpCircleOverlay(marker.position)
+        } else {
+            nearMarkers.add(FootprintMarker(marker, footprint.walkStatus))
+        }
     }
 
-    private fun markerIcon(walkStatus: WalkStatus): Int {
-        return when (walkStatus) {
-            WalkStatus.BEFORE -> R.drawable.ic_marker_before_clicked
-            WalkStatus.ONGOING -> R.drawable.ic_marker_ongoing_clicked
-            WalkStatus.AFTER -> R.drawable.ic_marker_after_clicked
+    private fun markerIcon(footprint: Footprint): Int {
+        return if (footprint.isMine) {
+            R.drawable.ic_marker_mine_clicked
+        } else {
+            when (footprint.walkStatus) {
+                WalkStatus.BEFORE -> R.drawable.ic_marker_before_clicked
+                WalkStatus.ONGOING -> R.drawable.ic_marker_ongoing_clicked
+                WalkStatus.AFTER -> R.drawable.ic_marker_after_clicked
+            }
         }
     }
 
@@ -714,13 +716,13 @@ class WoofFragment :
 
     private fun markNearFootprints(footprints: List<Footprint>) {
         footprints.forEach { footprint ->
-            createNearMarker(footprint)
+            createMarker(footprint)
         }
     }
 
     private fun clearNearMarkers() {
-        nearMarkers.forEach { marker ->
-            marker.map = null
+        nearMarkers.forEach { nearMarker ->
+            nearMarker.marker.map = null
         }
         nearMarkers.clear()
     }
@@ -780,11 +782,13 @@ class WoofFragment :
     }
 
     private fun startWalk(distance: Float): Boolean {
-        return viewModel.myWalkStatus.value == WalkStatus.BEFORE && distance <= WALKING_RADIUS
+        val myFootprint = viewModel.myFootprint.value ?: return false
+        return myFootprint.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
     }
 
     private fun endWalk(distance: Float): Boolean {
-        return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
+        val myFootprint = viewModel.myFootprint.value ?: return false
+        return myFootprint.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
     }
 
     private fun updateBackgroundTint(selectedStatus: View) {
@@ -794,6 +798,16 @@ class WoofFragment :
         statuses.forEach { status ->
             status.backgroundTintList =
                 ColorStateList.valueOf(if (status == selectedStatus) coralColor else whiteColor)
+        }
+    }
+
+    private fun filterMarkerStatus(walkStatus: WalkStatus) {
+        nearMarkers.forEach { nearMarker ->
+            if (nearMarker.walkStatus == walkStatus) {
+                nearMarker.marker.map = map
+            } else {
+                nearMarker.marker.map = null
+            }
         }
     }
 

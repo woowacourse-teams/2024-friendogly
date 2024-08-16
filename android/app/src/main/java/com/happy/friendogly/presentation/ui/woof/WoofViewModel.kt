@@ -15,13 +15,10 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.woof.mapper.toPetDetailsPresentation
-import com.happy.friendogly.presentation.ui.woof.mapper.toWalkStatusPresentation
+import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoWalkStatusUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import com.happy.friendogly.presentation.utils.logFootprintMarkBtnInfo
 import com.happy.friendogly.presentation.utils.logNearFootprintSize
 import com.naver.maps.geometry.LatLng
@@ -38,19 +35,11 @@ class WoofViewModel(
     private val _nearFootprints: MutableLiveData<List<Footprint>> = MutableLiveData()
     val nearFootprints: LiveData<List<Footprint>> get() = _nearFootprints
 
-    private val _myFootprint: MutableLiveData<MyFootprint?> = MutableLiveData()
-    val myFootprint: LiveData<MyFootprint?> get() = _myFootprint
+    private val _myFootprint: MutableLiveData<Footprint?> = MutableLiveData()
+    val myFootprint: LiveData<Footprint?> get() = _myFootprint
 
-    private val _myWalkStatus: MutableLiveData<WalkStatus?> = MutableLiveData()
-    val myWalkStatus: LiveData<WalkStatus?> get() = _myWalkStatus
-
-    private val _footprintInfoWalkStatus: MutableLiveData<FootprintInfoWalkStatusUiModel> =
-        MutableLiveData()
-    val footprintInfoWalkStatus: LiveData<FootprintInfoWalkStatusUiModel> get() = _footprintInfoWalkStatus
-
-    private val _footprintInfoPetDetails: MutableLiveData<List<FootprintInfoPetDetailUiModel>> =
-        MutableLiveData()
-    val footprintInfoPetDetails: LiveData<List<FootprintInfoPetDetailUiModel>> get() = _footprintInfoPetDetails
+    private val _footprintInfo: MutableLiveData<FootprintInfoUiModel> = MutableLiveData()
+    val footprintInfo: LiveData<FootprintInfoUiModel> get() = _footprintInfo
 
     private val _registerAddress: MutableLiveData<String> = MutableLiveData()
     val registerAddress: LiveData<String> get() = _registerAddress
@@ -69,21 +58,10 @@ class WoofViewModel(
             ).onSuccess { nearFootprints ->
                 val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
                 analyticsHelper.logNearFootprintSize(otherFootprints.size)
-
-                val myFootprint = nearFootprints.find { footprint -> footprint.isMine }
-                if (myFootprint != null) {
-                    _myFootprint.value =
-                        MyFootprint(
-                            footprintId = myFootprint.footprintId,
-                            latitude = myFootprint.latitude,
-                            longitude = myFootprint.longitude,
-                            createdAt = myFootprint.createdAt,
-                        )
-                } else {
-                    _myFootprint.value = null
-                    _myWalkStatus.value = null
-                }
                 _nearFootprints.value = otherFootprints
+
+                val myFootprint = nearFootprints.firstOrNull { footprint -> footprint.isMine }
+                _myFootprint.value = myFootprint
             }.onFailure {
             }
         }
@@ -114,12 +92,18 @@ class WoofViewModel(
 
     fun markFootprint(latLng: LatLng) {
         viewModelScope.launch {
-            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { footprintSave ->
-                _myFootprint.value = footprintSave
+            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { myFootprint ->
+                _myFootprint.value = Footprint(
+                    footprintId = myFootprint.footprintId,
+                    latitude = latLng.latitude,
+                    longitude = latLng.longitude,
+                    walkStatus = WalkStatus.BEFORE,
+                    createdAt = myFootprint.createdAt,
+                    isMine = true,
+                )
                 _mapActions.value = Event(WoofMapActions.RemoveNearFootprints)
                 _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
                 _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
-                _myWalkStatus.value = WalkStatus.BEFORE
                 loadNearFootprints(latLng)
             }.onFailure {
             }
@@ -130,21 +114,19 @@ class WoofViewModel(
         viewModelScope.launch {
             patchWalkStatusUseCase(latLng.latitude, latLng.longitude).onSuccess { walkStatus ->
                 when (walkStatus) {
-                    WalkStatus.BEFORE -> {
-                        if (myWalkStatus.value == null) {
-                            _myWalkStatus.value = WalkStatus.BEFORE
-                        }
-                    }
+                    WalkStatus.BEFORE -> return@onSuccess
 
                     WalkStatus.ONGOING -> {
-                        if (myWalkStatus.value == null || myWalkStatus.value == WalkStatus.BEFORE) {
-                            _myWalkStatus.value = WalkStatus.ONGOING
+                        if (myFootprint.value?.walkStatus == WalkStatus.BEFORE) {
+                            _myFootprint.value =
+                                myFootprint.value?.copy(walkStatus = WalkStatus.ONGOING)
                         }
                     }
 
                     WalkStatus.AFTER ->
-                        if (myWalkStatus.value == WalkStatus.ONGOING) {
-                            _myWalkStatus.value = WalkStatus.AFTER
+                        if (myFootprint.value?.walkStatus == WalkStatus.ONGOING) {
+                            _myFootprint.value =
+                                myFootprint.value?.copy(walkStatus = WalkStatus.AFTER)
                         }
                 }
             }.onFailure {
@@ -154,9 +136,8 @@ class WoofViewModel(
 
     fun loadFootprintInfo(footprintId: Long) {
         viewModelScope.launch {
-            getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
-                _footprintInfoWalkStatus.value = footPrintInfo.toWalkStatusPresentation()
-                _footprintInfoPetDetails.value = footPrintInfo.toPetDetailsPresentation()
+            getFootprintInfoUseCase(footprintId).onSuccess { footprintInfo ->
+                _footprintInfo.value = footprintInfo.toPresentation()
             }.onFailure {
             }
         }
@@ -184,9 +165,7 @@ class WoofViewModel(
 
     // API 나오면 수정
     fun endWalk() {
-        _myFootprint.value = null
-        _myWalkStatus.value =
-            if (myWalkStatus.value == WalkStatus.ONGOING) WalkStatus.AFTER else null
+        _myFootprint.value = myFootprint.value?.copy(walkStatus = WalkStatus.AFTER)
         _snackbarActions.value = Event(WoofSnackbarActions.ShowEndWalk)
     }
 

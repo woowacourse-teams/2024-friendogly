@@ -225,7 +225,7 @@
             <TextView
                 android:id="@+id/tv_woof_walk_status"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size20"
-                myWalkStatus="@{vm.myWalkStatus}"
+                myWalkStatus="@{vm.myFootprint.walkStatus}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="10dp"
@@ -270,8 +270,7 @@
         <TextView
             android:id="@+id/tv_woof_footprint_info_walk_status"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            changedWalkStatusTime="@{vm.footprintInfoWalkStatus.changedWalkStatusTime}"
-            walkStatus="@{vm.footprintInfoWalkStatus.walkStatus}"
+            walkStatusInfo="@{vm.footprintInfo.walkStatusInfo}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"

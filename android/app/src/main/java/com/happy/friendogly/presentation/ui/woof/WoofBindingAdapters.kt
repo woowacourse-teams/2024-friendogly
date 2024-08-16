@@ -10,8 +10,8 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
@@ -88,20 +88,19 @@ fun TextView.bindPetGender(petGender: Gender?) {
     }
 }
 
-@BindingAdapter("walkStatus", "changedWalkStatusTime")
-fun TextView.bindWalkStatusTime(
-    walkStatus: WalkStatus?,
-    changedWalkStatusTime: LocalDateTime?,
+@BindingAdapter("walkStatusInfo")
+fun TextView.bindWalkStatusInfo(
+    walkStatusInfo: WalkStatusInfoUiModel?,
 ) {
-    if (walkStatus != null && changedWalkStatusTime != null) {
+    if (walkStatusInfo != null) {
         val duration =
             Duration.between(
-                changedWalkStatusTime.toJavaLocalDateTime(),
+                walkStatusInfo.changedWalkStatusTime.toJavaLocalDateTime(),
                 java.time.LocalDateTime.now(),
             )
 
         val minute = duration.toMinutes()
-        when (walkStatus) {
+        when (walkStatusInfo.walkStatus) {
             WalkStatus.BEFORE -> {
                 text = resources.getString(R.string.woof_walk_before, minute)
                 setTextColor(resources.getColor(R.color.coral400))
@@ -113,8 +112,8 @@ fun TextView.bindWalkStatusTime(
             }
 
             WalkStatus.AFTER -> {
-                val afterHour = changedWalkStatusTime.hour
-                val afterMinute = changedWalkStatusTime.minute
+                val afterHour = walkStatusInfo.changedWalkStatusTime.hour
+                val afterMinute = walkStatusInfo.changedWalkStatusTime.minute
                 text = resources.getString(R.string.woof_walk_after, afterHour, afterMinute)
                 setTextColor(resources.getColor(R.color.gray600))
             }
@@ -128,17 +127,32 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
         when (walkStatus) {
             WalkStatus.BEFORE -> {
                 text = resources.getString(R.string.woof_status_before)
-                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_before_clicked, null), null, null, null)
+                setCompoundDrawablesWithIntrinsicBounds(
+                    resources.getDrawable(
+                        R.drawable.ic_marker_before_clicked,
+                        null
+                    ), null, null, null
+                )
             }
 
             WalkStatus.ONGOING -> {
                 text = resources.getString(R.string.woof_status_ongoing)
-                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_ongoing_clicked, null), null, null, null)
+                setCompoundDrawablesWithIntrinsicBounds(
+                    resources.getDrawable(
+                        R.drawable.ic_marker_ongoing_clicked,
+                        null
+                    ), null, null, null
+                )
             }
 
             WalkStatus.AFTER -> {
                 text = resources.getString(R.string.woof_status_after)
-                setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_marker_after_clicked, null), null, null, null)
+                setCompoundDrawablesWithIntrinsicBounds(
+                    resources.getDrawable(
+                        R.drawable.ic_marker_after_clicked,
+                        null
+                    ), null, null, null
+                )
             }
         }
     }
