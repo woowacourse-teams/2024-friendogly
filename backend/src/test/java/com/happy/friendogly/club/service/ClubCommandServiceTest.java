@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
+import com.happy.friendogly.club.dto.request.UpdateClubRequest;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
+import com.happy.friendogly.club.dto.response.UpdateClubResponse;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
@@ -90,6 +92,41 @@ class ClubCommandServiceTest extends ClubServiceTest {
         clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
 
         assertThat(savedClub.countClubMember()).isEqualTo(2);
+    }
+
+    @DisplayName("회원이 모임에 참여 후 정원이 꽉 차면 상태가 Full로 변경된다.")
+    @Transactional
+    @Test
+    void joinClub_StatusFull() {
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                province,
+                city,
+                village,
+                2,
+                savedMember,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL),
+                "https://image.com",
+                List.of(savedPet));
+        Club savedClub = clubRepository.save(club);
+
+        Member newMember = Member.builder()
+                .name("위브")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
+
+        assertAll(
+                () -> assertThat(savedClub.countClubMember()).isEqualTo(2),
+                () -> assertThat(savedClub.getStatus().isFull()).isTrue()
+        );
     }
 
     @DisplayName("이미 참여한 모임에는 참여할 수 없다.")
@@ -175,7 +212,6 @@ class ClubCommandServiceTest extends ClubServiceTest {
                 .hasMessage("자신의 반려견만 모임에 데려갈 수 있습니다.");
     }
 
-    //영속성 컨텍스트를 프로덕션 코드와 통합시키기 위해 트랜잭셔널 추가
     @DisplayName("참여 중인 회원을 삭제하고, 방장이면 방장을 위임한다.")
     @Transactional
     @Test
@@ -219,5 +255,79 @@ class ClubCommandServiceTest extends ClubServiceTest {
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("Full 상태에서 회원이 모임에서 탈퇴하면 Open으로 바꾼다.")
+    @Test
+    void deleteClubMember_WhenFull(){
+        Club club = Club.create(
+                "강아지 산책시키실 분 모아요.",
+                "매주 주말에 정기적으로 산책 모임하실분만",
+                province,
+                city,
+                village,
+                2,
+                savedMember,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL),
+                "https://image.com",
+                List.of(savedPet));
+        Club savedClub = clubRepository.save(club);
+
+        Member newMember = Member.builder()
+                .name("위브")
+                .tag("tag123")
+                .build();
+        Member savedNewMember = memberRepository.save(newMember);
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+
+        clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request);
+
+        clubCommandService.deleteClubMember(savedClub.getId(), savedNewMember.getId());
+
+        assertAll(
+                () -> assertThat(savedClub.countClubMember()).isEqualTo(1),
+                () -> assertThat(savedClub.getStatus().isFull()).isFalse()
+        );
+    }
+
+    @DisplayName("모임을 수정한다.")
+    @Test
+    void update() {
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        UpdateClubRequest request = new UpdateClubRequest("수정된 제목", "수정된 내용", "CLOSED");
+
+        UpdateClubResponse response = clubCommandService.update(club.getId(), savedMember.getId(), request);
+        Club updatedClub = clubRepository.getById(club.getId());
+
+        assertAll(
+                () -> assertThat(updatedClub.getTitle().getValue()).isEqualTo(response.title()),
+                () -> assertThat(updatedClub.getContent().getValue()).isEqualTo(response.content()),
+                () -> assertThat(updatedClub.getStatus()).isEqualTo(response.status())
+        );
+    }
+
+    @DisplayName("수정 권한이 없으면 예외가 발생한다.")
+    @Test
+    void update_FailForbidden() {
+        Club club = createSavedClub(
+                savedMember,
+                savedPet,
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        Member savedMember2 = createSavedMember();
+        UpdateClubRequest request = new UpdateClubRequest("수정된 제목", "수정된 내용", "CLOSED");
+
+        assertThatThrownBy(() -> clubCommandService.update(club.getId(), savedMember2.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("수정 권한이 없습니다.");
     }
 }
