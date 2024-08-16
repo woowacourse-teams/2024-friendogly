@@ -24,7 +24,6 @@ public class FirebaseAppConfig {
 
     @Bean
     FirebaseApp firebaseApp() {
-
         InputStream firebaseCredentialsInputStream = getFirebaseCredentialsInputStream();
 
         FirebaseOptions options = null;
