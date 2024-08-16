@@ -6,6 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.exception.FriendoglyException;
+import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, String receiverToken) {
         Message message = Message.builder()
+                .putData("type", NotificationType.FOOTPRINT.toString())
                 .putData("title", title)
                 .putData("body", content)
                 .setToken(receiverToken)
@@ -38,6 +40,7 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, List<String> receiverTokens) {
         MulticastMessage message = MulticastMessage.builder()
+                .putData("type", NotificationType.FOOTPRINT.toString())
                 .putData("title", title)
                 .putData("body", content)
                 .addAllTokens(receiverTokens)
