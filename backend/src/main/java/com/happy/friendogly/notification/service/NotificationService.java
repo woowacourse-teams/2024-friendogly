@@ -6,5 +6,5 @@ public interface NotificationService {
 
     void sendNotification(String title, String content, String receiverToken);
 
-    void sendNotification(String title, String content, List<String> receiverToken);
+    void sendNotification(String title, String content, List<String> receiverTokens);
 }

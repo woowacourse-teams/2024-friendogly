@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Profile("!local")
 public class FcmNotificationService implements NotificationService {
-    private final FirebaseApp firebaseApp;
 
+    private final FirebaseApp firebaseApp;
 
     public FcmNotificationService(FirebaseApp firebaseApp) {
         this.firebaseApp = firebaseApp;
@@ -34,6 +34,7 @@ public class FcmNotificationService implements NotificationService {
         }
     }
 
+    @Override
     public void sendNotification(String title, String content, List<String> receiverTokens) {
         MulticastMessage message = MulticastMessage.builder()
                 .putData("title",title)
