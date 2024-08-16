@@ -26,9 +26,8 @@ public class DeviceTokenCommandService {
                     token.updateDeviceToken(updateDeviceTokenRequest.deviceToken());
                     return token;
                 })
-                .orElse(deviceTokenRepository.save(
-                        new DeviceToken(
-                                memberRepository.getById(memberId),
+                .orElseGet(() -> deviceTokenRepository.save(
+                        new DeviceToken(memberRepository.getById(memberId),
                                 updateDeviceTokenRequest.deviceToken()))
                 );
         return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
