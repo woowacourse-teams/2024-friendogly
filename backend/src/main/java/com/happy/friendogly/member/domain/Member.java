@@ -32,4 +32,9 @@ public class Member {
         this.tag = tag;
         this.imageUrl = imageUrl;
     }
+
+    public void update(String name, String imageUrl) {
+        this.name = new Name(name);
+        this.imageUrl = imageUrl;
+    }
 }

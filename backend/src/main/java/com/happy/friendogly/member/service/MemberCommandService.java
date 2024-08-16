@@ -7,9 +7,12 @@ import com.happy.friendogly.auth.service.KakaoOauthClient;
 import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import com.happy.friendogly.auth.service.jwt.TokenPayload;
 import com.happy.friendogly.infra.FileStorageManager;
+import com.happy.friendogly.infra.ImageUpdateType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.dto.request.SaveMemberRequest;
+import com.happy.friendogly.member.dto.request.UpdateMemberRequest;
 import com.happy.friendogly.member.dto.response.SaveMemberResponse;
+import com.happy.friendogly.member.dto.response.UpdateMemberResponse;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.utils.UuidGenerator;
@@ -63,5 +66,31 @@ public class MemberCommandService {
         kakaoMemberRepository.save(new KakaoMember(kakaoMemberId, savedMember.getId(), tokens.refreshToken()));
 
         return new SaveMemberResponse(savedMember, tokens);
+    }
+
+    public UpdateMemberResponse update(Long memberId, UpdateMemberRequest request, MultipartFile image) {
+        Member member = memberRepository.getById(memberId);
+        ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
+
+        String oldImageUrl = member.getImageUrl();
+        String newImageUrl = "";
+
+        if (imageUpdateType == ImageUpdateType.UPDATE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = fileStorageManager.uploadFile(image);
+        }
+
+        if (imageUpdateType == ImageUpdateType.NOT_UPDATE) {
+            newImageUrl = oldImageUrl;
+        }
+
+        if (imageUpdateType == ImageUpdateType.DELETE) {
+            // TODO: 기존 이미지 S3에서 삭제
+            newImageUrl = "";
+        }
+
+        member.update(request.name(), newImageUrl);
+
+        return new UpdateMemberResponse(member);
     }
 }
