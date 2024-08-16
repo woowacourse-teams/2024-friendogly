@@ -23,5 +23,13 @@ class TokenRepositoryImpl(
             },
         )
 
-    override suspend fun deleteToken(): Result<Unit> = source.deleteLocalData()
+    override suspend fun deleteToken(): DomainResult<Unit, DataError.Local> =
+        source.deleteLocalData().fold(
+            onSuccess = {
+                DomainResult.Success(Unit)
+            },
+            onFailure = {
+                DomainResult.Error(DataError.Local.TOKEN_NOT_STORED)
+            },
+        )
 }

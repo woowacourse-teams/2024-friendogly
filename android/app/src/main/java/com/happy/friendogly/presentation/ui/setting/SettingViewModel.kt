@@ -3,7 +3,8 @@ package com.happy.friendogly.presentation.ui.setting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -14,12 +15,19 @@ import kotlinx.coroutines.launch
 class SettingViewModel(
     private val deleteTokenUseCase: DeleteTokenUseCase,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<SettingUiState> = MutableLiveData<SettingUiState>(SettingUiState())
+    private val _uiState: MutableLiveData<SettingUiState> =
+        MutableLiveData<SettingUiState>(SettingUiState())
     val uiState: LiveData<SettingUiState> get() = _uiState
 
     private val _navigateAction: MutableLiveData<Event<SettingNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<SettingNavigationAction>> get() = _navigateAction
+
+    private val _message: MutableLiveData<Event<SettingMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<SettingMessage>> get() = _message
+
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    val loading: LiveData<Event<Boolean>> get() = _loading
 
     fun onTotalAlarmToggled(checked: Boolean) {}
 
@@ -48,22 +56,40 @@ class SettingViewModel(
     }
 
     fun navigateToLogout() {
-        viewModelScope.launch {
-            deleteTokenUseCase().onSuccess {
-                _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
-            }.onFailure {
-                // TODO 예외처리
-            }
+        launch {
+            _loading.emit(true)
+            deleteTokenUseCase().fold(
+                onSuccess = {
+                    _loading.emit(false)
+                    _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
+                },
+                onError = { error ->
+                    _loading.emit(false)
+                    when (error) {
+                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
+                        else -> _message.emit(SettingMessage.DefaultErrorMessage)
+                    }
+                },
+            )
         }
     }
 
     fun navigateToUnsubscribe() {
-        viewModelScope.launch {
-            deleteTokenUseCase().onSuccess {
-                _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
-            }.onFailure {
-                // TODO 예외처리
-            }
+        launch {
+            _loading.emit(true)
+            deleteTokenUseCase().fold(
+                onSuccess = {
+                    _loading.emit(false)
+                    _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
+                },
+                onError = { error ->
+                    _loading.emit(false)
+                    when (error) {
+                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
+                        else -> _message.emit(SettingMessage.DefaultErrorMessage)
+                    }
+                },
+            )
         }
     }
 
