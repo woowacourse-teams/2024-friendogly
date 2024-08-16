@@ -33,7 +33,7 @@ public class DeviceToken {
         this.deviceToken = deviceToken;
     }
 
-    public void changeDeviceToken(String deviceToken) {
+    public void updateDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
     }
 }

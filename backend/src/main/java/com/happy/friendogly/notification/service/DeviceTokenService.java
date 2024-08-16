@@ -24,7 +24,7 @@ public class DeviceTokenService {
         Optional<DeviceToken> optionalDeviceToken = deviceTokenRepository.findByMemberId(memberId);
         if (optionalDeviceToken.isPresent()) {
             DeviceToken deviceToken = optionalDeviceToken.get();
-            deviceToken.changeDeviceToken(updateDeviceTokenRequest.deviceToken());
+            deviceToken.updateDeviceToken(updateDeviceTokenRequest.deviceToken());
             return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
         }
         DeviceToken deviceToken = deviceTokenRepository.save(
