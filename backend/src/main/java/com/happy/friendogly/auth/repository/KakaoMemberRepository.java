@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 
 public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> {
 
-    Optional<KakaoMember> findByKakaoMemberId(String KakaoMemberId);
+    Optional<KakaoMember> findByMemberId(Long memberId);
+
+    Optional<KakaoMember> findByKakaoMemberId(String kakaoMemberId);
 
     Optional<KakaoMember> findByRefreshToken(String refreshToken);
 
@@ -16,4 +18,9 @@ public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> 
         return findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new FriendoglyException("유효하지 않은 리프레시 토큰입니다.", HttpStatus.UNAUTHORIZED));
     }
+
+    default KakaoMember getByMemberId(Long memberId) {
+        return findByMemberId(memberId)
+                .orElseThrow(() -> new FriendoglyException("존재하지 않는 회원입니다.", HttpStatus.UNAUTHORIZED));
+    };
 }
