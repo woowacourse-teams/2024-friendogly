@@ -49,7 +49,7 @@ public class ClubQueryService {
                 .equalsProvince(request.province())
                 .hasGenders(Gender.toGenders(request.genderParams()))
                 .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
-                .orderByCreatedAtDescAndIdAsc()
+                .orderByCreatedAtDesc()
                 .build();
 
         List<Club> clubs = clubRepository.findAll(spec);
