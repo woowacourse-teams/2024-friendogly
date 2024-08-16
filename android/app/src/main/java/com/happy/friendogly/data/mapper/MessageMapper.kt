@@ -2,29 +2,51 @@ package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.model.MessageDto
 import com.happy.friendogly.domain.model.ChatComponent
+import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 
 fun MessageDto.toOther(): Message.Other =
     Message.Other(
-        memberId = senderMemberId,
-        name = senderName,
+        member =
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         content = content ?: "",
-        dateTime = createdAt,
-        profileUrl = profilePictureUrl,
+        createdAt = createdAt,
     )
 
 fun MessageDto.toMine(): Message.Mine =
     Message.Mine(
+        member =
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         content = content ?: "",
-        dateTime = createdAt,
+        createdAt = createdAt,
     )
 
 fun MessageDto.toEnter(): ChatComponent.Enter =
     ChatComponent.Enter(
-        name = senderName,
+        member =
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
+        createdAt = createdAt,
     )
 
 fun MessageDto.toLeave(): ChatComponent.Leave =
     ChatComponent.Leave(
-        name = senderName,
+        member =
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
+        createdAt = createdAt,
     )
