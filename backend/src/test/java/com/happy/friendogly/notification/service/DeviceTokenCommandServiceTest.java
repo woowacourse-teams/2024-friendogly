@@ -55,6 +55,6 @@ class DeviceTokenCommandServiceTest extends ServiceTest {
         int afterSize = deviceTokenRepository.findAll().size();
 
         // then
-        assertThat(afterSize).isNotEqualTo(beforeSize);
+        assertThat(afterSize).isEqualTo(beforeSize + 1);
     }
 }
