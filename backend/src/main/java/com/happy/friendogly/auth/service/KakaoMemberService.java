@@ -3,6 +3,7 @@ package com.happy.friendogly.auth.service;
 import com.happy.friendogly.auth.domain.KakaoMember;
 import com.happy.friendogly.auth.dto.KakaoLoginRequest;
 import com.happy.friendogly.auth.dto.KakaoLoginResponse;
+import com.happy.friendogly.auth.dto.KakaoLogoutRequest;
 import com.happy.friendogly.auth.dto.TokenResponse;
 import com.happy.friendogly.auth.repository.KakaoMemberRepository;
 import com.happy.friendogly.auth.service.jwt.JwtProvider;
@@ -42,5 +43,13 @@ public class KakaoMemberService {
             return KakaoLoginResponse.ofRegistered(tokens);
         }
         return KakaoLoginResponse.ofNotRegistered();
+    }
+
+    public void logout(Long memberId) {
+        KakaoMember kakaoMember = kakaoMemberRepository.getByMemberId(memberId);
+        KakaoLogoutRequest kakaoLogoutRequest = new KakaoLogoutRequest(Long.parseLong(kakaoMember.getKakaoMemberId()));
+
+        kakaoOauthClient.logout(kakaoLogoutRequest);
+        kakaoMember.updateRefreshToken(null);
     }
 }
