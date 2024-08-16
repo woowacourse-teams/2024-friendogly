@@ -45,7 +45,7 @@ class DeviceTokenCommandServiceTest extends ServiceTest {
     @Test
     void update_createNewDeviceToken() {
         // given
-        int beforeSize = deviceTokenRepository.findAll().size();
+        long beforeSize = deviceTokenRepository.count();
 
         // when
         deviceTokenCommandService.update(
@@ -55,6 +55,6 @@ class DeviceTokenCommandServiceTest extends ServiceTest {
         int afterSize = deviceTokenRepository.findAll().size();
 
         // then
-        assertThat(afterSize).isNotEqualTo(beforeSize);
+        assertThat(afterSize).isEqualTo(beforeSize + 1);
     }
 }
