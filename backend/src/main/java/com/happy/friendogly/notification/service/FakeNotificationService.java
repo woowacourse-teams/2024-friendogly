@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Profile("local")
-public class FakeNotificationService implements NotificationService{
+public class FakeNotificationService implements NotificationService {
 
     @Override
     public void sendNotification(String title, String content, String receiverToken) {

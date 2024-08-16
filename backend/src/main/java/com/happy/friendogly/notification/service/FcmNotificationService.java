@@ -23,8 +23,8 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, String receiverToken) {
         Message message = Message.builder()
-                .putData("title",title)
-                .putData("body",content)
+                .putData("title", title)
+                .putData("body", content)
                 .setToken(receiverToken)
                 .build();
         try {
@@ -37,8 +37,8 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, List<String> receiverTokens) {
         MulticastMessage message = MulticastMessage.builder()
-                .putData("title",title)
-                .putData("body",content)
+                .putData("title", title)
+                .putData("body", content)
                 .addAllTokens(receiverTokens)
                 .build();
         try {

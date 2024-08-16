@@ -32,7 +32,7 @@ public class DeviceTokenCommandService {
                 new DeviceToken(
                         memberRepository.getById(memberId),
                         updateDeviceTokenRequest.deviceToken()
-                        )
+                )
         );
         return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
     }
