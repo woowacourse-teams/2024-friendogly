@@ -11,12 +11,14 @@ import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.notification.service.NotificationService;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,8 +136,9 @@ public class FootprintCommandService {
         return footprints.stream()
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
                         && otherFootprint.getMember() != member)
-                .map(otherFootprint -> otherFootprint.getMember().getId())
-                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .map(otherFootprint -> deviceTokenRepository.findByMemberId(otherFootprint.getMember().getId()))
+                .flatMap(Optional::stream)
+                .map(DeviceToken::getDeviceToken)
                 .toList();
     }
 }
