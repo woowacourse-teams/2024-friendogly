@@ -41,7 +41,7 @@ class RegisterViewModel(
 
     val splashLoading = MutableLiveData(true)
 
-    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(false))
     val loading: LiveData<Event<Boolean>> get() = _loading
 
     init {
@@ -84,6 +84,7 @@ class RegisterViewModel(
     private suspend fun kakaoLogin(kakaAccessToken: KakaoAccessToken) {
         val accessToken = kakaAccessToken.accessToken ?: return
 
+        _loading.emit(true)
         postKakaoLoginUseCase(accessToken = accessToken).fold(
             onSuccess = { login ->
                 if (login.isRegistered) {
@@ -91,6 +92,7 @@ class RegisterViewModel(
                     saveAlarmToken()
                     saveJwtToken(tokens)
                 } else {
+                    _loading.emit(false)
                     _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.accessToken))
                 }
             },
@@ -129,6 +131,7 @@ class RegisterViewModel(
     private suspend fun saveJwtToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).fold(
             onSuccess = {
+                _loading.emit(false)
                 _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
             },
             onError = { error ->

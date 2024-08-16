@@ -12,6 +12,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityRegisterBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
@@ -30,6 +31,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private var toast: Toast? = null
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
@@ -84,6 +87,14 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.loading.observeEvent(this) { loading ->
+            if (loading) {
+                showLoadingDialog()
+            } else {
+                dismissLoadingDialog()
+            }
+        }
+
         viewModel.message.observeEvent(this) { message ->
             when (message) {
                 is RegisterMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.server_error_message))
@@ -100,6 +111,16 @@ class RegisterActivity : AppCompatActivity() {
         toast?.cancel()
         toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast?.show()
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
     }
 
     companion object {
