@@ -5,7 +5,6 @@ import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
 import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +21,16 @@ public class DeviceTokenCommandService {
     }
 
     public UpdateDeviceTokenResponse update(Long memberId, UpdateDeviceTokenRequest updateDeviceTokenRequest) {
-        Optional<DeviceToken> optionalDeviceToken = deviceTokenRepository.findByMemberId(memberId);
-        if (optionalDeviceToken.isPresent()) {
-            DeviceToken deviceToken = optionalDeviceToken.get();
-            deviceToken.updateDeviceToken(updateDeviceTokenRequest.deviceToken());
-            return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
-        }
-        DeviceToken deviceToken = deviceTokenRepository.save(
-                new DeviceToken(
-                        memberRepository.getById(memberId),
-                        updateDeviceTokenRequest.deviceToken()
-                )
-        );
+        DeviceToken deviceToken = deviceTokenRepository.findByMemberId(memberId)
+                .map(token -> {
+                    token.updateDeviceToken(updateDeviceTokenRequest.deviceToken());
+                    return token;
+                })
+                .orElse(deviceTokenRepository.save(
+                        new DeviceToken(
+                                memberRepository.getById(memberId),
+                                updateDeviceTokenRequest.deviceToken()))
+                );
         return new UpdateDeviceTokenResponse(deviceToken.getDeviceToken());
     }
 }
