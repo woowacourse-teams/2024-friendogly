@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 
 data class PetDetailUiState(
     val petsDetail: PetsDetail = PetsDetail(emptyList()),
+    val startPage: Int = 0,
 )
 
 @Serializable
