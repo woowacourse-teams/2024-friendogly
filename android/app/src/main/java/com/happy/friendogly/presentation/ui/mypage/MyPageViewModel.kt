@@ -67,11 +67,19 @@ class MyPageViewModel(
                     val state = uiState.value ?: return@launch
                     val petsView = pets.map { pet -> PetView.from(pet = pet) }
 
-                    _uiState.value =
-                        state.copy(
-                            pets = petsView + PetAddView(memberId = state.id),
-                            myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
-                        )
+                    if (petsView.size >= MAX_PET_SIZE) {
+                        _uiState.value =
+                            state.copy(
+                                pets = petsView,
+                                myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
+                            )
+                    } else {
+                        _uiState.value =
+                            state.copy(
+                                pets = petsView + PetAddView(memberId = state.id),
+                                myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
+                            )
+                    }
                 },
                 onError = {
                     _message.emit(MyPageMessage.DefaultErrorMessage)
@@ -156,6 +164,8 @@ class MyPageViewModel(
     }
 
     companion object {
+        const val MAX_PET_SIZE = 5
+
         fun factory(
             getPetsMineUseCase: GetPetsMineUseCase,
             getMemberMineUseCase: GetMemberMineUseCase,

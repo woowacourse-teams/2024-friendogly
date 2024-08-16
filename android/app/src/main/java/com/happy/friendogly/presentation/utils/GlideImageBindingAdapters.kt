@@ -100,7 +100,6 @@ fun ImageView.bindUrlToImage(imageUrl: String?) {
     imageUrl?.let { url ->
         Glide.with(context)
             .load(url)
-            .centerCrop()
             .into(this)
     }
 }

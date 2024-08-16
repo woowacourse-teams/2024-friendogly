@@ -9,7 +9,8 @@
 
     <application
         android:name=".application.FriendoglyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -74,6 +75,7 @@
         <activity
             android:name=".presentation.ui.chatlist.chat.ChatActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
@@ -105,6 +107,13 @@
                     android:scheme="@string/KAKAO_OAUTH_HOST" />
             </intent-filter>
         </activity>
+        <service android:name=".presentation.alarm.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
