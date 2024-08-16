@@ -257,4 +257,33 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
         // then
         assertThat(savedFootprint.getWalkStatus()).isEqualTo(AFTER);
     }
+
+    @DisplayName("산책전의 발자국은 산책 상태를 변경할 수 없다.")
+    @Test
+    void updateWalkStatusManual_fail_before() {
+        // given
+        footprintRepository.save(
+                FOOTPRINT_STATUS_BEFORE(new Location(0, 0))
+        );
+
+        // when - then
+        assertThatThrownBy(() -> footprintCommandService.updateWalkStatusManual(member.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("산책 전에서 산책 후로의 변경만 가능합니다.");
+    }
+
+    @DisplayName("산책전의 발자국은 산책 상태를 변경할 수 없다.")
+    @Transactional
+    @Test
+    void updateWalkStatusManual_fail_after() {
+        // given
+        footprintRepository.save(
+                FOOTPRINT_STATUS_AFTER(new Location(0, 0))
+        );
+
+        // when - then
+        assertThatThrownBy(() -> footprintCommandService.updateWalkStatusManual(member.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("산책 전에서 산책 후로의 변경만 가능합니다.");
+    }
 }

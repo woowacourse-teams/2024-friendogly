@@ -258,7 +258,7 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위밖에서 안으로 들어오면 산책중으로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toOngoing() {
+    void updateWalkStatusAuto_toOngoing() {
         footprintRepository.save(
                 new Footprint(
                         member1,
@@ -288,7 +288,7 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toAfter() {
+    void updateWalkStatusAuto_toAfter() {
         footprintRepository.save(
                 new Footprint(
                         member1,
@@ -311,6 +311,30 @@ class FootprintControllerTest extends ControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
                 .when().patch("/footprints/recent/walk-status/auto")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus", is(AFTER.toString()));
+    }
+
+    @DisplayName("발자국 상태를 수동으로 산책후로 변경한다 (200)")
+    @Test
+    void updateWalkStatusManual_toAfter() {
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0, 0),
+                        ONGOING,
+                        LocalDateTime.now(),
+                        null,
+                        LocalDateTime.now().minusHours(1),
+                        false
+                )
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
+                .when().patch("/footprints/recent/walk-status/manual")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.walkStatus", is(AFTER.toString()));
