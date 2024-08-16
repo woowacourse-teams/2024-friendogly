@@ -2,6 +2,7 @@ package com.happy.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.happy.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.happy.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,6 +14,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -27,13 +29,14 @@ import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.controller.FootprintController;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
-import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusManualRequest;
 import com.happy.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.happy.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusAutoResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualResponse;
 import com.happy.friendogly.footprint.dto.response.detail.PetDetail;
 import com.happy.friendogly.footprint.service.FootprintCommandService;
 import com.happy.friendogly.footprint.service.FootprintQueryService;
@@ -259,34 +262,35 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("발자국 산책 상태 변경")
+    @DisplayName("발자국 산책 상태 변경(현재위치기반)")
     @Test
-    void updateWalkStatus_200() throws Exception {
-        UpdateWalkStatusRequest request = new UpdateWalkStatusRequest(37.5136533, 127.0983182);
-        UpdateWalkStatusResponse response = new UpdateWalkStatusResponse(ONGOING);
+    void updateWalkStatusAuto_200() throws Exception {
+        UpdateWalkStatusAutoRequest request = new UpdateWalkStatusAutoRequest(37.5136533, 127.0983182);
+        UpdateWalkStatusAutoResponse response = new UpdateWalkStatusAutoResponse(ONGOING, LocalDateTime.now());
 
-        given(footprintCommandService.updateWalkStatus(any(), any()))
+        given(footprintCommandService.updateWalkStatusAuto(any(), any()))
                 .willReturn(response);
 
         mockMvc
-                .perform(patch("/footprints/walk-status")
+                .perform(patch("/footprints/recent/walk-status/auto")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("footprints/walk-status/200",
+                .andDo(document("footprints/recent/walk-status/auto/200",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Footprint API")
-                                .summary("발자국 산책 상태 변경 API")
+                                .summary("발자국 산책 상태 변경(auto) API")
                                 .requestHeaders(
                                         headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.walkStatus").description("발자국 산책 상태")
+                                        fieldWithPath("data.walkStatus").description("발자국 산책 상태"),
+                                        fieldWithPath("data.changedWalkStatusTime").description("산책 상태 변경 시간")
                                 )
                                 .requestSchema(Schema.schema("updateWalkStatusResponse"))
                                 .build()
@@ -294,28 +298,27 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 ));
     }
 
-    @DisplayName("발자국 산책 상태 변경실패 - 발자국이 없을 경우")
+    @DisplayName("발자국 산책 상태 변경(현재위치기반) - 발자국이 없을 경우")
     @Test
-    void updateWalkStatus_400() throws Exception {
-        UpdateWalkStatusRequest request = new UpdateWalkStatusRequest(37.5136533, 127.0983182);
-        UpdateWalkStatusResponse response = new UpdateWalkStatusResponse(ONGOING);
+    void updateWalkStatusAuto_400() throws Exception {
+        UpdateWalkStatusAutoRequest request = new UpdateWalkStatusAutoRequest(37.5136533, 127.0983182);
 
-        when(footprintCommandService.updateWalkStatus(any(), any()))
+        when(footprintCommandService.updateWalkStatusAuto(any(), any()))
                 .thenThrow(new FriendoglyException("예외 메세지"));
 
         mockMvc
-                .perform(patch("/footprints/walk-status")
+                .perform(patch("/footprints/recent/walk-status/auto")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document("footprints/walk-status/400",
+                .andDo(document("footprints/recent/walk-status/auto/400",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Footprint API")
-                                .summary("발자국 산책 상태 변경 API")
+                                .summary("발자국 산책 상태 변경(auto) API")
                                 .requestHeaders(
                                         headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
@@ -332,33 +335,61 @@ public class FootprintApiDocsTest extends RestDocsTest {
                 ));
     }
 
-    @DisplayName("발자국 산책 종료")
+    @DisplayName("발자국 산책 상태 변경(수동)")
     @Test
-    void updateWalkStatus_204() throws Exception {
-        StopWalkingRequest request = new StopWalkingRequest(1L);
+    void updateWalkStatusManual_200() throws Exception {
+        UpdateWalkStatusManualRequest request = new UpdateWalkStatusManualRequest(AFTER.toString());
+        UpdateWalkStatusManualResponse response = new UpdateWalkStatusManualResponse(AFTER, LocalDateTime.now());
 
-        doNothing().when(footprintCommandService).stopWalking(any(), any());
+        given(footprintCommandService.updateWalkStatusManual(any()))
+                .willReturn(response);
 
         mockMvc
-                .perform(patch("/footprints/stop-walking")
+                .perform(patch("/footprints/recent/walk-status/manual")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
                         .header(AUTHORIZATION, getMemberToken()))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("footprints/stop-walking",
+                .andDo(document("footprints/recent/walk-status/manual/200",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Footprint API")
-                                .summary("발자국 산책 종료 API")
+                                .summary("발자국 산책 상태 변경(manual) API")
                                 .requestHeaders(
                                         headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
-                                .requestFields(
-                                        fieldWithPath("footprintId").description("발자국 id")
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.walkStatus").description("발자국 산책 상태"),
+                                        fieldWithPath("data.changedWalkStatusTime").description("산책 상태 변경 시간")
                                 )
-                                .requestSchema(Schema.schema(""))
+                                .requestSchema(Schema.schema("updateWalkStatusAutoResponse"))
+                                .build()
+                        )
+                ));
+    }
+
+    @DisplayName("발자국 삭제")
+    @Test
+    void deleteFootprint() throws Exception {
+        doNothing().when(footprintCommandService).delete(any(), any());
+
+        mockMvc
+                .perform(delete("/footprints/1")
+                        .header(AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("footprints",
+                        getDocumentRequest(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Footprint API")
+                                .summary("발자국 산책 상태 변경(manual) API")
+                                .requestHeaders(
+                                        headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
+                                )
+                                .requestSchema(Schema.schema("updateWalkStatusManualResponse"))
                                 .build()
                         )
                 ));
