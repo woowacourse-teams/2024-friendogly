@@ -4,10 +4,9 @@ import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusAutoResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -27,15 +26,21 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final NotificationService notificationService;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
+            PetRepository petRepository,
+            NotificationService notificationService,
+            DeviceTokenRepository deviceTokenRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
+        this.notificationService = notificationService;
+        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -54,6 +59,10 @@ public class FootprintCommandService {
                         .location(new Location(request.latitude(), request.longitude()))
                         .build()
         );
+
+        List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, member);
+        String comingMemberName = member.getName().getValue();
+        sendWalkComingNotification(comingMemberName, nearDeviceTokens);
 
         return new SaveFootprintResponse(
                 footprint.getId(),
@@ -81,13 +90,31 @@ public class FootprintCommandService {
         }
     }
 
+    private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
+        notificationService.sendNotification(
+                "반갑개",
+                "내 산책 장소에 " + memberName + "님도 산책온대요!",
+                nearDeviceTokens
+        );
+    }
+
     public UpdateWalkStatusAutoResponse updateWalkStatusAuto(Long memberId, UpdateWalkStatusAutoRequest request) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
 
+        WalkStatus beforeWalkStatus = footprint.getWalkStatus();
+
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
+
+        if (beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()) {
+            Member startWalkMember = memberRepository.getById(memberId);
+            List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, startWalkMember);
+            String memberName = footprint.getMember().getName().getValue();
+            sendWalkStartNotification(memberName, nearDeviceTokens);
+        }
+
         return new UpdateWalkStatusAutoResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
     }
 
@@ -103,5 +130,24 @@ public class FootprintCommandService {
             throw new FriendoglyException("본인의 발자국만 삭제 가능합니다.");
         }
         footprint.updateToDeleted();
+    }
+
+    private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
+        notificationService.sendNotification(
+                "반갑개",
+                "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
+                nearDeviceTokens
+        );
+    }
+
+    private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
+        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalse();
+
+        return footprints.stream()
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
+                        && otherFootprint.getMember() != member)
+                .map(otherFootprint -> otherFootprint.getMember().getId())
+                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .toList();
     }
 }
