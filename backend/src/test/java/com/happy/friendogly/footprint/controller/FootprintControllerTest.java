@@ -11,7 +11,6 @@ import static org.hamcrest.Matchers.nullValue;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -281,7 +280,7 @@ class FootprintControllerTest extends ControllerTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
-                .when().patch("/footprints/walk-status")
+                .when().patch("/footprints/recent/walk-status/auto")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.walkStatus", is(ONGOING.toString()));
@@ -311,35 +310,9 @@ class FootprintControllerTest extends ControllerTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
-                .when().patch("/footprints/walk-status")
+                .when().patch("/footprints/recent/walk-status/auto")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.walkStatus", is(AFTER.toString()));
-    }
-
-    @DisplayName("산책을 종료할 수 있다. (204)")
-    @Test
-    void stopWalking() {
-        Footprint savedFootprint = footprintRepository.save(
-                new Footprint(
-                        member1,
-                        new Location(0, 0),
-                        ONGOING,
-                        LocalDateTime.now(),
-                        null,
-                        LocalDateTime.now().minusHours(1),
-                        false
-                )
-        );
-
-        StopWalkingRequest request = new StopWalkingRequest(savedFootprint.getId());
-
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
-                .body(request)
-                .when().patch("/footprints/stop-walking")
-                .then().log().all()
-                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 }

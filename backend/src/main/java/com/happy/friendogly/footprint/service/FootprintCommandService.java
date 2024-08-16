@@ -1,16 +1,13 @@
 package com.happy.friendogly.footprint.service;
 
-import static com.happy.friendogly.common.ErrorCode.NOT_ALLOW_OTHER_FOOTPRINT_CHANGE;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.StopWalkingRequest;
-import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusAutoResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualResponse;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -84,23 +81,27 @@ public class FootprintCommandService {
         }
     }
 
-    public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
+    public UpdateWalkStatusAutoResponse updateWalkStatusAuto(Long memberId, UpdateWalkStatusAutoRequest request) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
         }
 
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
-        return new UpdateWalkStatusResponse(footprint.getWalkStatus());
+        return new UpdateWalkStatusAutoResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
     }
 
-    public void stopWalking(Long memberId, StopWalkingRequest request) {
-        Member member = memberRepository.getById(memberId);
-        Footprint footprint = footprintRepository.getById(request.footprintId());
-        if (footprint.getMember() != member) {
-            throw new FriendoglyException("본인의 발자국만 변경 가능합니다.", NOT_ALLOW_OTHER_FOOTPRINT_CHANGE, BAD_REQUEST);
-        }
-
+    public UpdateWalkStatusManualResponse updateWalkStatusManual(Long memberId) {
+        Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         footprint.stopWalking();
+        return new UpdateWalkStatusManualResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
+    }
+
+    public void delete(Long memberId, Long footprintId) {
+        Footprint footprint = footprintRepository.getById(footprintId);
+        if (!footprint.isCreatedBy(memberId)) {
+            throw new FriendoglyException("본인의 발자국만 삭제 가능합니다.");
+        }
+        footprint.updateToDeleted();
     }
 }
