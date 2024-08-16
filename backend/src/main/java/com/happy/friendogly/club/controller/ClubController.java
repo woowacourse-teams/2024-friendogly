@@ -54,7 +54,7 @@ public class ClubController {
     }
 
     @GetMapping("/owning")
-    public ApiResponse<List<FindClubOwningResponse>> findOwing(@Auth Long memberId) {
+    public ApiResponse<List<FindClubOwningResponse>> findOwning(@Auth Long memberId) {
         return ApiResponse.ofSuccess(clubQueryService.findOwning(memberId));
     }
 
