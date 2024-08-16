@@ -158,6 +158,9 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
+        if(memberCapacity.isCapacityReached(countClubMember())){
+            this.status = Status.FULL;
+        }
     }
 
     private void validateAlreadyExists(Member member) {
@@ -208,6 +211,9 @@ public class Club {
         clubMembers.remove(targetClubMember);
 //        targetClubMember.updateClub(null);
         removeClubPets(member);
+        if(status.isFull()){
+            this.status = Status.OPEN;
+        }
     }
 
     private ClubMember findTargetClubMember(Member member) {
@@ -238,7 +244,7 @@ public class Club {
     }
 
     public boolean isOpen() {
-        return this.status == Status.OPEN;
+        return this.status.isOpen();
     }
 
     public boolean isOwner(Member targetMember) {
@@ -257,5 +263,11 @@ public class Club {
         return clubMembers.stream()
                 .min(Comparator.comparing(ClubMember::getCreatedAt))
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
+    }
+
+    public void update(String title, String content, String status) {
+        this.title = new Title(title);
+        this.content = new Content(content);
+        this.status = Status.toStatus(status);
     }
 }

@@ -4,12 +4,14 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
+import com.happy.friendogly.club.dto.request.UpdateClubRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
+import com.happy.friendogly.club.dto.response.UpdateClubResponse;
 import com.happy.friendogly.club.service.ClubCommandService;
 import com.happy.friendogly.club.service.ClubQueryService;
 import com.happy.friendogly.common.ApiResponse;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,6 +94,16 @@ public class ClubController {
     ) {
         clubCommandService.deleteClubMember(clubId, memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{clubId}")
+    public ResponseEntity<ApiResponse<UpdateClubResponse>> update(
+            @Auth Long memberId,
+            @PathVariable Long clubId,
+            @Valid @RequestBody UpdateClubRequest request
+    ) {
+        UpdateClubResponse response = clubCommandService.update(clubId, memberId, request);
+        return ResponseEntity.ok(ApiResponse.ofSuccess(response));
     }
 
 }

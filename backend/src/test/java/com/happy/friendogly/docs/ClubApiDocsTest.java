@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
@@ -28,6 +29,7 @@ import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
+import com.happy.friendogly.club.dto.request.UpdateClubRequest;
 import com.happy.friendogly.club.dto.response.AddressDetailResponse;
 import com.happy.friendogly.club.dto.response.ClubMemberDetailResponse;
 import com.happy.friendogly.club.dto.response.ClubPetDetailResponse;
@@ -37,6 +39,7 @@ import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
+import com.happy.friendogly.club.dto.response.UpdateClubResponse;
 import com.happy.friendogly.club.service.ClubCommandService;
 import com.happy.friendogly.club.service.ClubQueryService;
 import com.happy.friendogly.exception.FriendoglyException;
@@ -49,6 +52,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -144,7 +148,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
                                         fieldWithPath("data.[].address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소, nullable"),
                                         fieldWithPath("data.[].address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소, nullable"),
-                                        fieldWithPath("data.[].status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
+                                        fieldWithPath("data.[].status").type(JsonFieldType.STRING).description("모임 상태(OPEN, CLOSED, FULL)"),
                                         fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.[].allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
                                         fieldWithPath("data.[].allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
@@ -323,7 +327,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
                                         fieldWithPath("data.address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소, nullable"),
                                         fieldWithPath("data.address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소, nullable"),
-                                        fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
+                                        fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED, FULL)"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
                                         fieldWithPath("data.allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
@@ -428,7 +432,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
                                         fieldWithPath("data.address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소, nullable"),
                                         fieldWithPath("data.address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소, nullable"),
-                                        fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN , CLOSED)"),
+                                        fieldWithPath("data.status").type(JsonFieldType.STRING).description("모임 상태(OPEN)"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
                                         fieldWithPath("data.allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
                                         fieldWithPath("data.allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
@@ -579,6 +583,92 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.errorMessage").type(JsonFieldType.STRING).description("에러메세지"),
                                         fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
                                 )
+                                .build())
+                ));
+    }
+
+    @DisplayName("모임을 수정한다.")
+    @Test
+    void update_200() throws Exception{
+        UpdateClubRequest request = new UpdateClubRequest("모집완료입니다.!", "추후에 사람이 빠지면 다시 모집하겠습니다.", "CLOSED");
+        UpdateClubResponse response = new UpdateClubResponse("모집완료입니다.!", "추후에 사람이 빠지면 다시 모집하겠습니다.", Status.CLOSED);
+
+        when(clubCommandService.update(anyLong(),anyLong(),any()))
+                .thenReturn(response);
+
+        mockMvc.perform(patch("/clubs/{clubId}",1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(document("club/update/200",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 수정 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목 수정 내용"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("내용 수정 내용"),
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("상태 수정 내용(OPEN,CLOSED)")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.title").type(JsonFieldType.STRING).description("수정 후 제목"),
+                                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("수정 후 내용"),
+                                        fieldWithPath("data.status").type(JsonFieldType.STRING).description("수정 후 상태")
+                                )
+                                .requestSchema(Schema.schema("UpdateClubRequest"))
+                                .responseSchema(Schema.schema("UpdateClubResponse"))
+                                .build())
+                        ));
+    }
+
+    @DisplayName("수정 권한이 없는 모임을 수정한다.")
+    @Test
+    void update_403() throws Exception{
+        UpdateClubRequest request = new UpdateClubRequest("모집완료입니다.!", "추후에 사람이 빠지면 다시 모집하겠습니다.", "CLOSED");
+        UpdateClubResponse response = new UpdateClubResponse("모집완료입니다.!", "추후에 사람이 빠지면 다시 모집하겠습니다.", Status.CLOSED);
+
+        when(clubCommandService.update(anyLong(),anyLong(),any()))
+                .thenThrow(new FriendoglyException("예외 메세지", HttpStatus.FORBIDDEN));
+
+        mockMvc.perform(patch("/clubs/{clubId}",1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden())
+                .andDo(document("club/update/403",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 수정 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .pathParameters(
+                                        parameterWithName("clubId").type(SimpleType.NUMBER).description("탈퇴하는 모임의 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목 수정 내용"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("내용 수정 내용"),
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("상태 수정 내용(OPEN,CLOSED)")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.errorCode").type(JsonFieldType.STRING).description("에러 코드"),
+                                        fieldWithPath("data.errorMessage").type(JsonFieldType.STRING).description("에러메세지"),
+                                        fieldWithPath("data.detail").type(JsonFieldType.ARRAY).description("에러 디테일")
+                                )
+                                .requestSchema(Schema.schema("UpdateClubRequest"))
+                                .responseSchema(Schema.schema("UpdateClubResponse"))
                                 .build())
                 ));
     }
