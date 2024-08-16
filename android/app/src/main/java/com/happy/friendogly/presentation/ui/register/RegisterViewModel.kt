@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.analytics.AnalyticsHelper
@@ -50,16 +49,22 @@ class RegisterViewModel(
     }
 
     private fun handleTokenState() {
-        viewModelScope.launch {
-            getJwtTokenUseCase().onSuccess { jwtToken ->
-                if (jwtToken?.accessToken.isNullOrBlank()) {
-                    splashLoading.value = false
-                    return@onSuccess
-                }
-                _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
-            }.onFailure {
-                // TODO 예외처리
-            }
+        launch {
+            getJwtTokenUseCase().fold(
+                onSuccess = { jwtToken ->
+                    if (jwtToken?.accessToken.isNullOrBlank()) {
+                        splashLoading.value = false
+                        return@launch
+                    }
+                    _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
+                },
+                onError = { error ->
+                    when (error) {
+                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(RegisterMessage.TokenNotStoredErrorMessage)
+                        else -> _message.emit(RegisterMessage.DefaultErrorMessage)
+                    }
+                },
+            )
         }
     }
 
