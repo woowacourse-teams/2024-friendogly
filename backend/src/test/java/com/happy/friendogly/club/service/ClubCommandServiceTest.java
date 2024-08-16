@@ -298,7 +298,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void update() {
         Club club = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
@@ -319,7 +319,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
     void update_FailForbidden() {
         Club club = createSavedClub(
                 savedMember,
-                savedPet,
+                List.of(savedPet),
                 Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
                 Set.of(SizeType.SMALL)
         );
