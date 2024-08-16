@@ -60,10 +60,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
                 is MyPageNavigationAction.NavigateToMyClubManger ->
                     (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = true)
+
                 is MyPageNavigationAction.NavigateToMyParticipation ->
                     (activity as MainActivityActionHandler).navigateToMyClub(isMyHead = false)
+
                 is MyPageNavigationAction.NavigateToPetEdit ->
                     (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
+            }
+        }
+
+        viewModel.message.observeEvent(viewLifecycleOwner) { message ->
+            when (message) {
+                is MyPageMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
             }
         }
 

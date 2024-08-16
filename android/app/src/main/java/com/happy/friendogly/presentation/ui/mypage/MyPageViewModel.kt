@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -30,26 +30,32 @@ class MyPageViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
+    private val _message: MutableLiveData<Event<MyPageMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<MyPageMessage>> get() = _message
+
     init {
         fetchMemberMine()
         fetchPetMine()
     }
 
     fun fetchMemberMine() {
-        viewModelScope.launch {
-            getMemberMineUseCase().onSuccess { member ->
-                val state = uiState.value ?: return@launch
+        launch {
+            getMemberMineUseCase().fold(
+                onSuccess = { member ->
+                    val state = uiState.value ?: return@launch
 
-                _uiState.value =
-                    state.copy(
-                        id = member.id,
-                        nickname = member.name,
-                        tag = member.tag,
-                        imageUrl = member.imageUrl,
-                    )
-            }.onFailure {
-                // TODO 예외 처리
-            }
+                    _uiState.value =
+                        state.copy(
+                            id = member.id,
+                            nickname = member.name,
+                            tag = member.tag,
+                            imageUrl = member.imageUrl,
+                        )
+                },
+                onError = {
+                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 
