@@ -17,7 +17,7 @@ import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.notification.controller.DeviceTokenController;
 import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
 import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
-import com.happy.friendogly.notification.service.DeviceTokenService;
+import com.happy.friendogly.notification.service.DeviceTokenCommandService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,7 +26,7 @@ import org.springframework.http.HttpHeaders;
 public class DeviceTokenApiDocsTest extends RestDocsTest{
 
     @Mock
-    private DeviceTokenService deviceTokenService;
+    private DeviceTokenCommandService deviceTokenCommandService;
 
     @DisplayName("디바이스 토큰 저장")
     @Test
@@ -34,7 +34,7 @@ public class DeviceTokenApiDocsTest extends RestDocsTest{
         UpdateDeviceTokenRequest request = new UpdateDeviceTokenRequest("deviceToken");
         UpdateDeviceTokenResponse response = new UpdateDeviceTokenResponse("deviceToken");
 
-        given(deviceTokenService.update(any(),any()))
+        given(deviceTokenCommandService.update(any(),any()))
                 .willReturn(response);
 
         mockMvc
@@ -69,6 +69,6 @@ public class DeviceTokenApiDocsTest extends RestDocsTest{
 
     @Override
     protected Object controller() {
-        return new DeviceTokenController(deviceTokenService);
+        return new DeviceTokenController(deviceTokenCommandService);
     }
 }

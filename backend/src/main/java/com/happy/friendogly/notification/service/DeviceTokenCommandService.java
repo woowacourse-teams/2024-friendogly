@@ -7,15 +7,16 @@ import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DeviceTokenService {
+@Transactional
+public class DeviceTokenCommandService {
 
     private final DeviceTokenRepository deviceTokenRepository;
-
     private final MemberRepository memberRepository;
 
-    public DeviceTokenService(DeviceTokenRepository deviceTokenRepository, MemberRepository memberRepository) {
+    public DeviceTokenCommandService(DeviceTokenRepository deviceTokenRepository, MemberRepository memberRepository) {
         this.deviceTokenRepository = deviceTokenRepository;
         this.memberRepository = memberRepository;
     }
