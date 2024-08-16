@@ -68,7 +68,7 @@ public class PetCommandService {
         }
     }
 
-    public void update(Long memberId, Long petId, UpdatePetRequest request, MultipartFile image) {
+    public void update(Long memberId, Long petId, UpdatePetRequest request, MultipartFile newImage) {
         Member member = memberRepository.getById(memberId);
         Pet pet = petRepository.getById(petId);
 
@@ -78,7 +78,7 @@ public class PetCommandService {
 
         ImageUpdateType imageUpdateType = ImageUpdateType.from(request.imageUpdateType());
         String oldImageUrl = pet.getImageUrl();
-        String newImageUrl = fileStorageManager.updateFile(oldImageUrl, image, imageUpdateType);
+        String newImageUrl = fileStorageManager.updateFile(oldImageUrl, newImage, imageUpdateType);
 
         pet.update(
                 request.name(),
