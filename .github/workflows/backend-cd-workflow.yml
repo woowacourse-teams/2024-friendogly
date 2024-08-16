@@ -73,5 +73,5 @@ jobs:
           cd backend/build/libs
           echo "File creation time(KR-09:00):"
           ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} &
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} &
           echo "start backend server"
