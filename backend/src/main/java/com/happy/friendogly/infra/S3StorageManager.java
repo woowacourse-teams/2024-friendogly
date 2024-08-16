@@ -115,22 +115,20 @@ public class S3StorageManager implements FileStorageManager {
 
     @Override
     public String updateFile(String oldFileUrl, MultipartFile newFile, ImageUpdateType fileUpdateType) {
-        String newFileUrl = "";
-
         if (fileUpdateType == ImageUpdateType.UPDATE) {
             removeFile(oldFileUrl);
-            newFileUrl = uploadFile(newFile);
+            return uploadFile(newFile);
         }
 
         if (fileUpdateType == ImageUpdateType.NOT_UPDATE) {
-            newFileUrl = oldFileUrl;
+            return oldFileUrl;
         }
 
         if (fileUpdateType == ImageUpdateType.DELETE) {
             removeFile(oldFileUrl);
-            newFileUrl = "";
+            return "";
         }
 
-        return newFileUrl;
+        throw new FriendoglyException("ImageUpdateType이 올바르지 않습니다.");
     }
 }
