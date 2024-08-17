@@ -7,4 +7,10 @@ data class OtherProfileUiState(
     val tag: String = "",
     val profilePath: String? = null,
     val pets: List<Pet> = emptyList(),
+    val otherProfileSkeleton: OtherProfileSkeleton = OtherProfileSkeleton(),
+)
+
+data class OtherProfileSkeleton(
+    val userProfile: Boolean = true,
+    val petProfile: Boolean = true,
 )

@@ -44,7 +44,7 @@ class PetDetailActivity : BaseActivity<ActivityPetDetailBinding>(R.layout.activi
     private fun initObserve() {
         viewModel.uiState.observe(this) { uiState ->
             adapter.submitList(uiState.petsDetail.data)
-            binding.vpPetDetail.setCurrentItem(uiState.petsDetail.data.size, false)
+            binding.vpPetDetail.setCurrentItem(uiState.startPage, false)
         }
 
         viewModel.navigateAction.observeEvent(this) { action ->

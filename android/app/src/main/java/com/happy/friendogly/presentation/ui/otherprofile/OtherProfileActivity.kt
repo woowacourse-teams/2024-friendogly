@@ -63,6 +63,12 @@ class OtherProfileActivity :
             }
         }
 
+        viewModel.message.observeEvent(this) { message ->
+            when (message) {
+                is OtherProfileMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+            }
+        }
+
         viewModel.uiState.observe(this) { uiState ->
             adapter.submitList(uiState.pets)
         }

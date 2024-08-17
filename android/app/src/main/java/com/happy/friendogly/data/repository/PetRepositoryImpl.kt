@@ -56,6 +56,17 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
             },
         )
 
-    override suspend fun getPets(id: Long): Result<List<Pet>> =
-        source.getPets(id = id).mapCatching { result -> result.map { petDto -> petDto.toDomain() } }
+    override suspend fun getPets(id: Long): DomainResult<List<Pet>, DataError.Network> =
+        source.getPets(id = id).fold(
+            onSuccess = { result ->
+                DomainResult.Success(result.map { petDto -> petDto.toDomain() })
+            },
+            onFailure = { e ->
+                if (e is ApiExceptionDto) {
+                    DomainResult.Error(e.error.data.errorCode.toDomain())
+                } else {
+                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                }
+            },
+        )
 }

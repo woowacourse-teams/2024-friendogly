@@ -20,5 +20,5 @@ interface PetRepository {
         file: MultipartBody.Part?,
     ): DomainResult<Pet, DataError.Network>
 
-    suspend fun getPets(id: Long): Result<List<Pet>>
+    suspend fun getPets(id: Long): DomainResult<List<Pet>, DataError.Network>
 }
