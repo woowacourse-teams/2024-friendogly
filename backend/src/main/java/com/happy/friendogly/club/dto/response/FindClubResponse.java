@@ -49,8 +49,8 @@ public record FindClubResponse(
                 club.findOwnerImageUrl(),
                 club.isOwner(member),
                 club.isAlreadyJoined(member),
-                myPets.isEmpty(),
                 club.isJoinable(member, myPets),
+                myPets.isEmpty(),
                 club.getClubMembers().stream()
                         .map(clubMember -> clubMember.getClubMemberPk().getMember())
                         .map(ClubMemberDetailResponse::new)
