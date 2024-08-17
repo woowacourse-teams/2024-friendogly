@@ -9,5 +9,5 @@ interface TokenRepository {
 
     suspend fun saveJwtToken(jwtToken: JwtToken): DomainResult<Unit, DataError.Local>
 
-    suspend fun deleteToken(): Result<Unit>
+    suspend fun deleteToken(): DomainResult<Unit, DataError.Local>
 }
