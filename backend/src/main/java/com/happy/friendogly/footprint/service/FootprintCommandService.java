@@ -102,7 +102,7 @@ public class FootprintCommandService {
     private void validateFinishWalking(Footprint footprint) {
         WalkStatus walkStatus = footprint.getWalkStatus();
         if (walkStatus.isBefore() || walkStatus.isAfter()) {
-            throw new FriendoglyException("산책 전에서 산책 후로의 변경만 가능합니다.");
+            throw new FriendoglyException("산책 중에서 산책 후로의 변경만 가능합니다.");
         }
     }
 
