@@ -32,7 +32,7 @@ class MyHeadClubViewModel(
         loadMyHeadClubs()
     }
 
-    private fun loadMyHeadClubs() =
+    fun loadMyHeadClubs() =
         viewModelScope.launch {
             getMyHeadClubUseCase()
                 .onSuccess { clubs ->

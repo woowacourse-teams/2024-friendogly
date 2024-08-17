@@ -9,6 +9,7 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
+import com.happy.friendogly.presentation.ui.club.my.MyClubActionHandler
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
@@ -22,6 +23,11 @@ class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fra
 
     private val adapter: ClubListAdapter by lazy {
         ClubListAdapter(viewModel as ClubItemActionHandler)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadMyClubs()
     }
 
     override fun initViewCreated() {

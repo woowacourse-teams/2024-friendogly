@@ -1,7 +1,10 @@
 package com.happy.friendogly.presentation.ui.club.my
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.happy.friendogly.R
@@ -10,14 +13,15 @@ import com.happy.friendogly.databinding.ActivityMyClubBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
-import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
+import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubAdapter
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 
 class MyClubActivity :
     BaseActivity<ActivityMyClubBinding>(R.layout.activity_my_club), MyClubActionHandler {
+
     private val viewModel: MyClubViewModel by viewModels {
         MyClubViewModel.factory(
             getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
@@ -58,7 +62,9 @@ class MyClubActivity :
     private fun initObserver() {
         viewModel.myClubEvent.observeEvent(this) { event ->
             when (event) {
-                MyClubEvent.AddPet.OpenAddClub -> startActivity(ClubAddActivity.getIntent(this))
+                MyClubEvent.AddPet.OpenAddClub ->
+                    startActivity(ClubAddActivity.getIntent(this))
+
                 MyClubEvent.AddPet.OpenAddPet -> openRegisterPetDialog()
             }
         }

@@ -32,7 +32,7 @@ class MyParticipatingClubViewModel(
         loadMyClubs()
     }
 
-    private fun loadMyClubs() =
+    fun loadMyClubs() =
         viewModelScope.launch {
             getMyClubUseCase()
                 .onSuccess { clubs ->
