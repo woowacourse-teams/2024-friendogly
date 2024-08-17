@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 class MyClubViewModel(
     private val getPetsMineUseCase: GetPetsMineUseCase,
 ) : BaseViewModel() {
-
     private val _myClubEvent: MutableLiveData<Event<MyClubEvent.AddPet>> = MutableLiveData()
     val myClubEvent: LiveData<Event<MyClubEvent.AddPet>> get() = _myClubEvent
 

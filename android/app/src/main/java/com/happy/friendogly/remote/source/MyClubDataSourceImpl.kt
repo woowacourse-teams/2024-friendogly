@@ -6,13 +6,15 @@ import com.happy.friendogly.remote.api.MyClubService
 import com.happy.friendogly.remote.mapper.toData
 
 class MyClubDataSourceImpl(
-    private val service: MyClubService
-): MyClubDataSource {
-    override suspend fun getMyOwningClubs(): Result<List<ClubDto>> = runCatching {
-        service.getMyOwningClubs().data.toData()
-    }
+    private val service: MyClubService,
+) : MyClubDataSource {
+    override suspend fun getMyOwningClubs(): Result<List<ClubDto>> =
+        runCatching {
+            service.getMyOwningClubs().data.toData()
+        }
 
-    override suspend fun getParticipatingClubs(): Result<List<ClubDto>> = runCatching {
-        service.getParticipatingClubs().data.toData()
-    }
+    override suspend fun getParticipatingClubs(): Result<List<ClubDto>> =
+        runCatching {
+            service.getParticipatingClubs().data.toData()
+        }
 }

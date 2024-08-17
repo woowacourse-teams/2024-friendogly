@@ -8,7 +8,8 @@ sealed interface MyClubEvent {
     }
 
     sealed interface AddPet : MyClubEvent {
-        data object OpenAddPet: AddPet
-        data object OpenAddClub: AddPet
+        data object OpenAddPet : AddPet
+
+        data object OpenAddClub : AddPet
     }
 }

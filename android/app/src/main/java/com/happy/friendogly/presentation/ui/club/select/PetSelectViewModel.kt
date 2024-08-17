@@ -88,7 +88,7 @@ class PetSelectViewModel(
     }
 
     override fun submitDogs() {
-        validCommit.value?.takeIf { it } ?: return preventCommit()
+        validCommit.value?.takeIf { it } ?: return preventComplete()
         _petSelectEvent.emit(
             PetSelectEvent.SelectPets(
                 pets = selectedPets.map { it.id },
@@ -96,7 +96,7 @@ class PetSelectViewModel(
         )
     }
 
-    private fun preventCommit() {
+    private fun preventComplete() {
         _petSelectEvent.emit(PetSelectEvent.PreventCommit)
     }
 

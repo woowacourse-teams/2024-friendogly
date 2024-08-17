@@ -8,9 +8,7 @@ import com.happy.friendogly.domain.repository.MyClubRepository
 class MyClubRepositoryImpl(
     private val source: MyClubDataSource,
 ) : MyClubRepository {
-    override suspend fun getMyClubs(): Result<List<Club>> =
-        source.getParticipatingClubs().mapCatching { it.toDomain() }
+    override suspend fun getMyClubs(): Result<List<Club>> = source.getParticipatingClubs().mapCatching { it.toDomain() }
 
-    override suspend fun getMyHeadClubs(): Result<List<Club>> =
-        source.getMyOwningClubs().mapCatching { it.toDomain() }
+    override suspend fun getMyHeadClubs(): Result<List<Club>> = source.getMyOwningClubs().mapCatching { it.toDomain() }
 }
