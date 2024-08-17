@@ -30,12 +30,14 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
+    private final NotificationService notificationService;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
-            PetRepository petRepository
-    ) {
+            PetRepository petRepository,
+            NotificationService notificationService, DeviceTokenRepository deviceTokenRepository) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
