@@ -4,6 +4,8 @@ import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
+import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.club.repository.ClubSpecification;
@@ -39,7 +41,7 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public List<FindClubByFilterResponse> findFindByFilter(Long memberId, FindClubByFilterRequest request) {
+    public List<FindClubByFilterResponse> findByFilter(Long memberId, FindClubByFilterRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
@@ -47,6 +49,7 @@ public class ClubQueryService {
                 .equalsProvince(request.province())
                 .hasGenders(Gender.toGenders(request.genderParams()))
                 .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
+                .orderByCreatedAtDesc()
                 .build();
 
         List<Club> clubs = clubRepository.findAll(spec);
@@ -73,12 +76,21 @@ public class ClubQueryService {
         return clubStream;
     }
 
-    public FindClubResponse findById(Long memberId, Long id) {
-        Club club = clubRepository.getById(id);
+    public List<FindClubOwningResponse> findOwning(Long memberId) {
+        List<Club> participatingClubs = clubRepository.findAllByParticipatingMemberId(memberId);
         Member member = memberRepository.getById(memberId);
-        List<Pet> pets = petRepository.findByMemberId(memberId);
+        return participatingClubs.stream()
+                .filter(club -> club.isOwner(member))
+                .map(club -> new FindClubOwningResponse(club, collectOverviewPetImages(club)))
+                .toList();
+    }
 
-        return new FindClubResponse(club, member, pets);
+    public List<FindClubParticipatingResponse> findParticipating(Long memberId) {
+        return clubRepository.findAllByParticipatingMemberId(memberId)
+                .stream()
+                .map(club -> new FindClubParticipatingResponse(club, collectOverviewPetImages(club)))
+                .toList();
+
     }
 
     private List<String> collectOverviewPetImages(Club club) {
@@ -90,5 +102,13 @@ public class ClubQueryService {
         return groupPetsByMemberId.values().stream()
                 .map(petList -> petList.get(0).getImageUrl())
                 .toList();
+    }
+
+    public FindClubResponse findById(Long memberId, Long clubId) {
+        Club club = clubRepository.getById(clubId);
+        Member member = memberRepository.getById(memberId);
+        List<Pet> pets = petRepository.findByMemberId(memberId);
+
+        return new FindClubResponse(club, member, pets);
     }
 }

@@ -16,6 +16,7 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityProfileSettingBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
@@ -34,6 +35,8 @@ class ProfileSettingActivity :
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
         )
     }
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>
@@ -60,6 +63,24 @@ class ProfileSettingActivity :
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }
+            }
+        }
+
+        viewModel.message.observeEvent(this) { message ->
+            when (message) {
+                is ProfileSettingMessage.FileSizeExceedMessage -> showToastMessage(getString(R.string.file_size_exceed_message))
+                is ProfileSettingMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+                is ProfileSettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                ProfileSettingMessage.TokenNotStoredErrorMessage ->
+                    startActivity(MainActivity.getIntent(this))
+            }
+        }
+
+        viewModel.loading.observeEvent(this) { loading ->
+            if (loading) {
+                showLoadingDialog()
+            } else {
+                dismissLoadingDialog()
             }
         }
     }
@@ -121,6 +142,16 @@ class ProfileSettingActivity :
             )
 
         dialog.show(supportFragmentManager, "TAG")
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
     }
 
     companion object {

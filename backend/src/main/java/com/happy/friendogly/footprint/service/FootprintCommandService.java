@@ -111,7 +111,7 @@ public class FootprintCommandService {
         WalkStatus beforeWalkStatus = footprint.getWalkStatus();
 
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
-
+      
         if (beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()) {
             Member startWalkMember = memberRepository.getById(memberId);
             List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, startWalkMember);
@@ -134,6 +134,25 @@ public class FootprintCommandService {
             throw new FriendoglyException("본인의 발자국만 삭제 가능합니다.");
         }
         footprint.updateToDeleted();
+    }
+
+    private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
+        notificationService.sendNotification(
+                "반갑개",
+                "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
+                nearDeviceTokens
+        );
+    }
+
+    private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
+        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalse();
+
+        return footprints.stream()
+                .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
+                        && otherFootprint.getMember() != member)
+                .map(otherFootprint -> otherFootprint.getMember().getId())
+                .map(otherMemberId -> deviceTokenRepository.findByMemberId(otherMemberId).get().getDeviceToken())
+                .toList();
     }
 
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {

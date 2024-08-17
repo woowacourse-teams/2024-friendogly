@@ -14,6 +14,7 @@ data class MyPageUiState(
     val tag: String = "",
     val imageUrl: String? = null,
     val pets: List<PetViewType> = emptyList(),
+    val myPageSkeleton: MyPageSkeleton = MyPageSkeleton(),
 ) {
     companion object {
         private const val INVALID_ID = -1L
@@ -77,3 +78,8 @@ data class PetAddView(
         private const val INVALID_ID = -1L
     }
 }
+
+data class MyPageSkeleton(
+    val userProfile: Boolean = true,
+    val petProfile: Boolean = true,
+)

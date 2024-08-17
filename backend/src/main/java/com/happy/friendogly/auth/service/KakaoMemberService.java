@@ -43,4 +43,10 @@ public class KakaoMemberService {
         }
         return KakaoLoginResponse.ofNotRegistered();
     }
+
+    public void logout(Long memberId) {
+        KakaoMember kakaoMember = kakaoMemberRepository.getByMemberId(memberId);
+//        kakaoOauthClient.logout(kakaoMember.getKakaoMemberId());
+        kakaoMember.updateRefreshToken(null);
+    }
 }

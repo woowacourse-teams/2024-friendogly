@@ -363,6 +363,6 @@ class FootprintControllerTest extends ControllerTest {
                 .when().patch("/footprints/recent/walk-status/manual")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.walkStatus",is(AFTER.toString()));
+                .body("data.walkStatus", is(AFTER.toString()));
     }
 }
