@@ -5,7 +5,7 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
 
 interface TokenRepository {
-    suspend fun getJwtToken(): Result<JwtToken?>
+    suspend fun getJwtToken(): DomainResult<JwtToken?, DataError.Local>
 
     suspend fun saveJwtToken(jwtToken: JwtToken): DomainResult<Unit, DataError.Local>
 

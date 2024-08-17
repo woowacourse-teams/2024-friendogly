@@ -8,9 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.gms.common.api.ApiException
+import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityRegisterBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 
@@ -29,6 +31,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private var toast: Toast? = null
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     private val googleSignInLauncher =
         registerForActivityResult(GoogleSignInContract()) { task ->
@@ -73,8 +77,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 is RegisterNavigationAction.NavigateToGoogleLogin -> {
                     // TODO 구글 로그인 x
-                    showToastMessage("현재 구글 로그인은 사용할 수 없어요")
-//                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
+                    googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
                 }
 
                 is RegisterNavigationAction.NavigateToProfileSetting ->
@@ -84,13 +87,22 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.loading.observeEvent(this) { loading ->
+            if (loading) {
+                showLoadingDialog()
+            } else {
+                dismissLoadingDialog()
+            }
+        }
+
         viewModel.message.observeEvent(this) { message ->
-            // TODO 예시 코드로 메시지는 하드 코딩 했습니다. 서버에서 내려주는 에러 코드가 완성되면 수정하겠습니다.
             when (message) {
-                RegisterMessage.DefaultErrorMessage -> showToastMessage("서버 에러가 발생했습니다")
-                RegisterMessage.ServerErrorMessage -> showToastMessage("알 수 없는 에러가 발생했습니다")
-                RegisterMessage.TokenNotStoredErrorMessage ->
+                is RegisterMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+                is RegisterMessage.ServerErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                is RegisterMessage.TokenNotStoredErrorMessage ->
                     startActivity(MainActivity.getIntent(this))
+
+                is RegisterMessage.KakaoLoginErrorMessage -> showToastMessage(getString(R.string.kakao_login_error_message))
             }
         }
     }
@@ -99,6 +111,16 @@ class RegisterActivity : AppCompatActivity() {
         toast?.cancel()
         toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast?.show()
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
     }
 
     companion object {
