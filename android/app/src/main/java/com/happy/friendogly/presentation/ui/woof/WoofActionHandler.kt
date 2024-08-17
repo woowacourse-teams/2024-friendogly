@@ -27,7 +27,7 @@ interface WoofActionHandler {
 
     fun clickCloseBtn()
 
-    fun clickFootprint(
+    fun clickFootprintMarker(
         footprintId: Long,
         marker: Marker,
     )
