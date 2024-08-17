@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="actionHandler"
             type="com.happy.friendogly.presentation.ui.club.my.MyClubActionHandler" />
@@ -14,38 +15,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".presentation.ui.club.my.MyClubActivity">
-        <View
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/view_my_club_top_bar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_my_club_top_bar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"/>
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            onSingleClick="@{()->actionHandler.closeMyClub()}"
-            android:id="@+id/iv_club_select_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:src="@drawable/ic_arrow_left"
-            app:layout_constraintBottom_toBottomOf="@+id/view_my_club_top_bar"
-            app:layout_constraintStart_toStartOf="@+id/view_my_club_top_bar"
-            app:layout_constraintTop_toTopOf="@id/view_my_club_top_bar" />
+            <ImageButton
+                android:id="@+id/iv_club_select_back_button"
+                onSingleClick="@{()->actionHandler.closeMyClub()}"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:background="@drawable/ripple_circle_white"
+                android:src="@drawable/ic_arrow_left"
+                app:tint="@color/black" />
 
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/my_club_title"
-            app:layout_constraintEnd_toEndOf="@+id/view_my_club_top_bar"
-            app:layout_constraintStart_toStartOf="@+id/view_my_club_top_bar"
-            app:layout_constraintBottom_toBottomOf="@+id/view_my_club_top_bar"
-            app:layout_constraintTop_toTopOf="@+id/view_my_club_top_bar"/>
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/my_club_title" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+
         <com.google.android.material.tabs.TabLayout
             android:layout_marginTop="10dp"
             android:background="@color/white"
             app:tabIndicatorColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/view_my_club_top_bar"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_my_club_top_bar"
             android:id="@+id/tl_my_club"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"

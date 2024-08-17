@@ -23,8 +23,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -76,10 +76,10 @@ public class Club {
     private Status status;
 
     @OneToMany(mappedBy = "clubMemberPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ClubMember> clubMembers = new ArrayList<>();
+    private Set<ClubMember> clubMembers = new HashSet<>();
 
     @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ClubPet> clubPets = new ArrayList<>();
+    private Set<ClubPet> clubPets = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private ChatRoom chatRoom;
@@ -158,6 +158,9 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
+        if(memberCapacity.isCapacityReached(countClubMember())){
+            this.status = Status.FULL;
+        }
     }
 
     private void validateAlreadyExists(Member member) {
@@ -208,6 +211,9 @@ public class Club {
         clubMembers.remove(targetClubMember);
 //        targetClubMember.updateClub(null);
         removeClubPets(member);
+        if(status.isFull()){
+            this.status = Status.OPEN;
+        }
     }
 
     private ClubMember findTargetClubMember(Member member) {
@@ -238,7 +244,7 @@ public class Club {
     }
 
     public boolean isOpen() {
-        return this.status == Status.OPEN;
+        return this.status.isOpen();
     }
 
     public boolean isOwner(Member targetMember) {
@@ -257,5 +263,11 @@ public class Club {
         return clubMembers.stream()
                 .min(Comparator.comparing(ClubMember::getCreatedAt))
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 모임입니다."));
+    }
+
+    public void update(String title, String content, String status) {
+        this.title = new Title(title);
+        this.content = new Content(content);
+        this.status = Status.toStatus(status);
     }
 }

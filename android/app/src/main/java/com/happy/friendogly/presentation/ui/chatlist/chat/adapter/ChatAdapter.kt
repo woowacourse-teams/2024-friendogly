@@ -14,10 +14,6 @@ import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 class ChatAdapter(
     private val onMemberClick: ChatNavigationAction,
 ) : ListAdapter<ChatUiModel, ChatViewHolder>(ChatDiffCallback) {
-    init {
-        setHasStableIds(true)
-    }
-
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is ChatUiModel.Date -> ChatType.DATE.value

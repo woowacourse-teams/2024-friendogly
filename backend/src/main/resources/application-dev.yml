@@ -9,6 +9,9 @@ jwt:
   access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
   refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
 
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
 management:
   endpoint:
     metrics:
@@ -23,3 +26,7 @@ management:
 
   server:
     port: 8081
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json

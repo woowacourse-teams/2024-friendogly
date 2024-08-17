@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">friendogly</string>
+    <string name="app_name">반갑개</string>
 
     <string name="dog_small">소형견</string>
     <string name="dog_medium">중형견</string>
@@ -148,7 +148,7 @@
     <string name="club_list_date_hours">%d시간 전</string>
     <string name="club_list_date_minutes">%d분 전</string>
     <string name="club_list_date_now">방금 전</string>
-    <string name="club_counter_count">%d명</string>
+    <string name="club_counter_count">최대 %d명</string>
     <string name="club_list_participation_filter">모집 조건 선택</string>
     <string name="club_list_no_address_title">등록 된 주소가 없습니다</string>
     <string name="club_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>
@@ -212,6 +212,8 @@
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
     <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
+    <string name="dog_select_prevent_select">%s는 모임에 데려갈 수 없어요..</string>
+    <string name="dog_select_can_select">%s는 모임에 데려갈 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
@@ -295,6 +297,4 @@
     <string name="server_error_message">서버 에러가 발생했습니다</string>
     <string name="file_size_exceed_message">1MB를 초과하는 이미지는 등록할 수 없어요</string>
     <string name="default_error_message">알 수 없는 에러가 발생했어요</string>
-
-  
 </resources>

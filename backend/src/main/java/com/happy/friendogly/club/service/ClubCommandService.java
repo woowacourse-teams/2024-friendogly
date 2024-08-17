@@ -4,8 +4,10 @@ package com.happy.friendogly.club.service;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
+import com.happy.friendogly.club.dto.request.UpdateClubRequest;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
 import com.happy.friendogly.club.dto.response.SaveClubResponse;
+import com.happy.friendogly.club.dto.response.UpdateClubResponse;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.infra.FileStorageManager;
@@ -16,6 +18,7 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -100,5 +103,15 @@ public class ClubCommandService {
         if (club.isEmpty()) {
             clubRepository.delete(club);
         }
+    }
+
+    public UpdateClubResponse update(Long clubId, Long memberId, UpdateClubRequest request) {
+        Club club = clubRepository.getById(clubId);
+        Member member = memberRepository.getById(memberId);
+        if (club.isOwner(member)) {
+            club.update(request.title(), request.content(), request.status());
+            return new UpdateClubResponse(club);
+        }
+        throw new FriendoglyException("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
     }
 }

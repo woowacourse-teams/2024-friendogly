@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
+import io.micrometer.common.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
@@ -87,5 +89,46 @@ public class S3StorageManager implements FileStorageManager {
         } catch (IllegalStateException | IOException e) {
             throw new FriendoglyException("MultipartFile의 임시 파일 생성 중 에러 발생", INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void removeFile(String oldImageUrl) {
+        if (StringUtils.isBlank(oldImageUrl)) {
+            throw new FriendoglyException("삭제할 이미지의 URL을 입력해 주세요.");
+        }
+
+        if (!oldImageUrl.startsWith(S3_ENDPOINT)) {
+            throw new FriendoglyException(String.format("(%s)은 삭제할 수 없는 이미지 URL입니다.", oldImageUrl));
+        }
+
+        String fileName = oldImageUrl.substring(oldImageUrl.lastIndexOf("/") + 1);
+
+        try {
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .key(KEY_PREFIX + fileName)
+                    .build());
+        } catch (SdkException e) {
+            throw new FriendoglyException("알 수 없는 이유로 이미지 파일 삭제에 실패했습니다.", INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public String updateFile(String oldFileUrl, MultipartFile newFile, ImageUpdateType fileUpdateType) {
+        if (fileUpdateType == ImageUpdateType.UPDATE) {
+            removeFile(oldFileUrl);
+            return uploadFile(newFile);
+        }
+
+        if (fileUpdateType == ImageUpdateType.NOT_UPDATE) {
+            return oldFileUrl;
+        }
+
+        if (fileUpdateType == ImageUpdateType.DELETE) {
+            removeFile(oldFileUrl);
+            return "";
+        }
+
+        throw new FriendoglyException("ImageUpdateType이 올바르지 않습니다.");
     }
 }

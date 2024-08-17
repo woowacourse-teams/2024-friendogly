@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -30,39 +30,61 @@ class MyPageViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<MyPageNavigationAction>> get() = _navigateAction
 
-    fun fetchMemberMine() {
-        viewModelScope.launch {
-            getMemberMineUseCase().onSuccess { member ->
-                val state = uiState.value ?: return@launch
+    private val _message: MutableLiveData<Event<MyPageMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<MyPageMessage>> get() = _message
 
-                _uiState.value =
-                    state.copy(
-                        id = member.id,
-                        nickname = member.name,
-                        tag = member.tag,
-                        imageUrl = member.imageUrl,
-                    )
-            }.onFailure {
-                // TODO 예외 처리
-            }
+    init {
+        fetchMemberMine()
+        fetchPetMine()
+    }
+
+    fun fetchMemberMine() {
+        launch {
+            getMemberMineUseCase().fold(
+                onSuccess = { member ->
+                    val state = uiState.value ?: return@launch
+
+                    _uiState.value =
+                        state.copy(
+                            id = member.id,
+                            nickname = member.name,
+                            tag = member.tag,
+                            imageUrl = member.imageUrl,
+                            myPageSkeleton = state.myPageSkeleton.copy(userProfile = false),
+                        )
+                },
+                onError = {
+                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 
     fun fetchPetMine() {
-        viewModelScope.launch {
-            getPetsMineUseCase().onSuccess { pets ->
-                val petsView = pets.map { pet -> PetView.from(pet = pet) }
+        launch {
+            getPetsMineUseCase().fold(
+                onSuccess = { pets ->
+                    val state = uiState.value ?: return@launch
+                    val petsView = pets.map { pet -> PetView.from(pet = pet) }
 
-                val state = uiState.value ?: return@launch
-
-                if (petsView.size >= MAX_PET_SIZE) {
-                    _uiState.value = state.copy(pets = petsView)
-                } else {
-                    _uiState.value = state.copy(pets = petsView + PetAddView(memberId = state.id))
-                }
-            }.onFailure {
-                // TODO 예외 처리
-            }
+                    if (petsView.size >= MAX_PET_SIZE) {
+                        _uiState.value =
+                            state.copy(
+                                pets = petsView,
+                                myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
+                            )
+                    } else {
+                        _uiState.value =
+                            state.copy(
+                                pets = petsView + PetAddView(memberId = state.id),
+                                myPageSkeleton = state.myPageSkeleton.copy(petProfile = false),
+                            )
+                    }
+                },
+                onError = {
+                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 

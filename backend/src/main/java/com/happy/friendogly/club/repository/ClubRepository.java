@@ -12,8 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
-
-    @EntityGraph(attributePaths = {"allowedGenders", "allowedSizes"})
+    @EntityGraph(attributePaths = {"allowedGenders", "allowedSizes", "clubMembers", "clubPets"})
     List<Club> findAll(Specification<Club> clubSpecification);
 
     default Club getById(Long id) {
@@ -34,4 +33,17 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
         return findByChatRoomId(chatRoomId)
                 .orElseThrow(() -> new FriendoglyException("해당 채팅방에 해당하는 모임이 존재하지 않습니다."));
     }
+
+    @EntityGraph(attributePaths = {"allowedGenders", "allowedSizes"})
+    @Query(value = """
+                SELECT C
+                FROM Club AS C
+                JOIN FETCH C.clubMembers AS CM
+                JOIN FETCH CM.clubMemberPk.member AS M
+                JOIN FETCH C.clubPets AS CP
+                JOIN FETCH CP.clubPetPk.pet
+                WHERE M.id = :memberId
+                ORDER BY C.createdAt DESC
+            """)
+    List<Club> findAllByParticipatingMemberId(@Param("memberId") Long memberId);
 }
