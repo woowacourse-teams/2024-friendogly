@@ -377,11 +377,11 @@ public class FootprintApiDocsTest extends RestDocsTest {
         doNothing().when(footprintCommandService).delete(any(), any());
 
         mockMvc
-                .perform(delete("/footprints/{footprintId}")
+                .perform(delete("/footprints/{footprintId}", 1)
                         .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isNoContent())
                 .andDo(print())
-                .andDo(document("footprints",
+                .andDo(document("footprints/delete",
                         getDocumentRequest(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Footprint API")
