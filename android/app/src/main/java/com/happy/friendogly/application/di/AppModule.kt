@@ -25,6 +25,7 @@ import com.happy.friendogly.data.source.ChatDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
+import com.happy.friendogly.data.source.MyClubDataSource
 import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.TokenDataSource
 import com.happy.friendogly.data.source.WebSocketDataSource
@@ -97,6 +98,7 @@ import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ChatDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
+import com.happy.friendogly.remote.source.MyClubDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
 import com.happy.friendogly.remote.source.WoofDataSourceImpl
@@ -130,6 +132,14 @@ class AppModule(context: Context) {
             tokenManager = tokenManager,
             authenticationListener = authenticationListener,
         )
+
+    private val myClubService =
+        RemoteModule.createMyClubService(
+            baseUrl = baseUrl,
+            tokenManager = tokenManager,
+            authenticationListener = authenticationListener,
+        )
+
     private val woofService =
         RemoteModule.createWoofService(
             baseUrl = baseUrl,
@@ -154,11 +164,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-                RemoteModule.createStumpClient(
-                    baseUrl = baseUrl,
-                    tokenManager = tokenManager,
-                    authenticationListener = authenticationListener,
-                ),
+            RemoteModule.createStumpClient(
+                baseUrl = baseUrl,
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -180,6 +190,7 @@ class AppModule(context: Context) {
     // data source
     private val authDataSource: AuthDataSource = AuthDataSourceImpl(service = authService)
     private val clubDataSource: ClubDataSource = ClubDataSourceImpl(service = clubService)
+    private val myClubDataSource: MyClubDataSource = MyClubDataSourceImpl(service = myClubService)
     private val tokenDataSource: TokenDataSource = TokenDataSourceImpl(tokenManager = tokenManager)
     private val addressDataSource: AddressDataSource =
         AddressDataSourceImpl(addressModule = addressModule)
@@ -198,7 +209,7 @@ class AppModule(context: Context) {
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
     private val clubRepository: ClubRepository = ClubRepositoryImpl(source = clubDataSource)
-    private val myClubRepository: MyClubRepository = MyClubRepositoryImpl()
+    private val myClubRepository: MyClubRepository = MyClubRepositoryImpl(source = myClubDataSource)
     private val tokenRepository: TokenRepository = TokenRepositoryImpl(source = tokenDataSource)
     private val kakaoLoginRepository: KakaoLoginRepository =
         KakaoLoginRepositoryImpl(dataSource = kakaoLoginDataSource)
