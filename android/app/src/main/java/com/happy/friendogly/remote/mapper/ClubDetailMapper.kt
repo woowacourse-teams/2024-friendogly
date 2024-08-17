@@ -24,6 +24,7 @@ fun ClubDetailResponse.toData(): ClubDetailDto {
         ownerImageUrl = ownerImageUrl,
         isMine = isMine,
         alreadyParticipate = alreadyParticipate,
+        isMyPetsEmpty = isMyPetsEmpty,
         canParticipate = canParticipate,
         memberDetails = memberDetails.map { it.toData() },
         petDetails = petDetails.map { it.toData() },
