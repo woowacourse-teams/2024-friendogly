@@ -1,8 +1,5 @@
 package com.happy.friendogly.notification.service;
 
-import static com.happy.friendogly.notification.domain.NotificationType.CHAT;
-import static com.happy.friendogly.notification.domain.NotificationType.FOOTPRINT;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -10,7 +7,6 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
 import com.happy.friendogly.exception.FriendoglyException;
-import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
@@ -41,7 +37,7 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, String receiverToken) {
         Message message = Message.builder()
-                .putData("type", FOOTPRINT.toString())
+                .putData("type", NotificationType.FOOTPRINT.toString())
                 .putData("title", title)
                 .putData("body", content)
                 .setToken(receiverToken)
@@ -56,7 +52,7 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotification(String title, String content, List<String> receiverTokens) {
         MulticastMessage message = MulticastMessage.builder()
-                .putData("type", FOOTPRINT.toString())
+                .putData("type", NotificationType.FOOTPRINT.toString())
                 .putData("title", title)
                 .putData("body", content)
                 .addAllTokens(receiverTokens)
@@ -101,6 +97,6 @@ public class FcmNotificationService implements NotificationService {
                 "profilePictureUrl", response.profilePictureUrl()
         );
 
-        sendNotificationWithType(CHAT, data, receiverTokens);
+        sendNotificationWithType(NotificationType.CHAT, data, receiverTokens);
     }
 }
