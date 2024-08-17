@@ -25,36 +25,34 @@
             android:layout_height="0dp"
             android:background="@color/white">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:onSingleClick="@{() -> vm.executeBackAction()}"
+                    app:srcCompat="@drawable/ic_arrow_left" />
 
 
-            <TextView
-                android:id="@+id/tv_register_dog_title"
-                style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="24dp"
-                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:registerPetTitle="@{vm.uiState.isFirstTimeSetup}"
-                tools:text="댕댕이 등록하기" />
-
-            <ImageView
-                android:id="@+id/iv_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:onSingleClick="@{() -> vm.executeBackAction()}"
-                app:srcCompat="@drawable/ic_arrow_left" />
+                <TextView
+                    android:id="@+id/tv_register_dog_title"
+                    style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:registerPetTitle="@{vm.uiState.isFirstTimeSetup}"
+                    tools:text="댕댕이 등록하기" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
 
             <ImageView
@@ -114,7 +112,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
                 android:hint="@string/register_pet_name_hint"
-                android:maxLength="15"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="8"
                 android:maxLines="1"
                 android:text="@={vm.petName}"
                 app:layout_constraintStart_toStartOf="@+id/tv_dog_name_title"
@@ -131,7 +131,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/et_user_name"
                 app:layout_constraintEnd_toEndOf="@+id/et_user_name"
                 app:layout_constraintTop_toTopOf="@+id/et_user_name"
-                tools:text="0/15" />
+                tools:text="0/8" />
 
 
             <TextView
@@ -154,8 +154,10 @@
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
                 android:hint="@string/description_hint"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:maxLength="20"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:text="@={vm.petDescription}"
                 app:layout_constraintStart_toStartOf="@+id/tv_description"
                 app:layout_constraintTop_toBottomOf="@+id/tv_description" />
@@ -314,14 +316,14 @@
                 onSingleClick="@{() -> vm.selectPetBirthday()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="14dp"
-                android:maxLines="1"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_gray50_fill_12"
                 android:clickable="true"
+                android:maxLines="1"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
                 android:text="@{@string/birthday(vm.uiState.petBirthdayYear, vm.uiState.petBirthdayMonth)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -335,7 +337,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="100dp"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:includeFontPadding="false"

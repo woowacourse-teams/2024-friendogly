@@ -131,8 +131,8 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 # stomp
 krossbow-stomp-core = { group = "org.hildan.krossbow", name = "krossbow-stomp-core", version.ref = "krossbow" }
 krossbow-websocket-oktthp = { group = "org.hildan.krossbow", name = "krossbow-websocket-okhttp", version.ref = "krossbow" }
-krossbow-kxserialization = {group = "org.hildan.krossbow", name= "krossbow-stomp-kxserialization", version.ref = "krossbow"}
-krossbow-kxserialization-json = {group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow"}
+krossbow-kxserialization = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization", version.ref = "krossbow" }
+krossbow-kxserialization-json = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow" }
 
 [bundles]
 android = ["androidx-constraintlayout", "androidx-activity", "androidx-lifecycle", "androidx-activity-ktx", "androidx-fragment-ktx", "androidx-appcompat", "androidx-core-ktx", "material", "image-cropper", "glide", "flextbox", "paging-runtime-ktx", "splashscreen"]
@@ -145,7 +145,7 @@ location = ["location"]
 datastore = ["datastore", "datastore-core"]
 test = ["junit", "junit-jupiter", "assertj", "kotest", "mockk"]
 animation = ["lottie"]
-stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization","krossbow-kxserialization-json"]
+stomp = ["krossbow-stomp-core", "krossbow-websocket-oktthp", "krossbow-kxserialization", "krossbow-kxserialization-json"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

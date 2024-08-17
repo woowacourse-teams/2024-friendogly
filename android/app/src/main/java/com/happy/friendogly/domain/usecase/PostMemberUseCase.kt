@@ -1,5 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Register
 import com.happy.friendogly.domain.repository.MemberRepository
 import okhttp3.MultipartBody
@@ -11,5 +13,5 @@ class PostMemberUseCase(
         name: String,
         accessToken: String,
         file: MultipartBody.Part?,
-    ): Result<Register> = repository.postMember(name = name, accessToken = accessToken, file = file)
+    ): DomainResult<Register, DataError.Network> = repository.postMember(name = name, accessToken = accessToken, file = file)
 }

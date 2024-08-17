@@ -71,6 +71,7 @@
         <item name="android:textColor">@color/gray700</item>
     </style>
 
+
     <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size24" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">24dp</item>
         <item name="android:includeFontPadding">false</item>
@@ -232,6 +233,13 @@
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Medium.White.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.Medium.Black.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16dp</item>
@@ -253,6 +261,19 @@
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Medium.Black.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Orange.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
 
     <!-- Regular -->
     <style name="Theme.AppCompat.TextView.Regular.Black.Size14" parent="@style/Widget.AppCompat.TextView">
@@ -484,9 +505,9 @@
     </style>
 
     <style name="Theme.AppCompat.coral.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
-        <item name="android:background">@drawable/sel_dialog_coral400_fill_16</item>
+        <item name="android:background">@drawable/sel_dialog_coral300_fill_16</item>
         <item name="android:textSize">16dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
     </style>
 

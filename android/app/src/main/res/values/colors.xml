@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="transparent">#00000000</color>
-
+    <color name="transparent_gray">#66000000</color>
     <color name="red">#CD3838</color>
 
     <color name="gray900">#212121</color>

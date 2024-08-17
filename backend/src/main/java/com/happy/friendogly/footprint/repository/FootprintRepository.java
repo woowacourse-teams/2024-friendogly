@@ -24,6 +24,6 @@ public interface FootprintRepository extends JpaRepository<Footprint, Long> {
         return findById(id)
                 .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
     }
-
+  
     List<Footprint> findAllByIsDeletedFalse();
 }

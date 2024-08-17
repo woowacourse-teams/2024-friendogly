@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -40,9 +41,17 @@ class RegisterPetViewModel(
     val neutering = MutableLiveData(true)
     val petSize = MutableLiveData(PetSize.SMALL)
     val petGender = MutableLiveData(PetGender.MAIL)
+
     private val _navigateAction: MutableLiveData<Event<RegisterPetNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<RegisterPetNavigationAction>> get() = _navigateAction
+
+    private val _message: MutableLiveData<Event<RegisterPetMessage>> =
+        MutableLiveData(null)
+    val message: LiveData<Event<RegisterPetMessage>> get() = _message
+
+    private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
+    val loading: LiveData<Event<Boolean>> get() = _loading
 
     val isProfileComplete =
         MediatorLiveData<Boolean>().apply {
@@ -228,7 +237,8 @@ class RegisterPetViewModel(
 
     fun registerPet() {
         if (this.isProfileComplete.value == true) {
-            viewModelScope.launch {
+            launch {
+                _loading.emit(true)
                 val state = uiState.value ?: return@launch
                 val name = petName.value ?: return@launch
                 val description = petDescription.value ?: return@launch
@@ -240,6 +250,7 @@ class RegisterPetViewModel(
                 } else {
                     patchPet(name, description, birthday, neutering, profilePath)
                 }
+                _loading.emit(false)
             }
         }
     }
@@ -258,11 +269,17 @@ class RegisterPetViewModel(
             sizeType = petSize.value!!.toSizeType(),
             gender = petGender.value!!.toGender(neutering),
             file = profilePath,
-        ).onSuccess {
-            _navigateAction.emit(RegisterPetNavigationAction.NavigateToMyPage)
-        }.onFailure {
-            // TODO 예외 처리
-        }
+        ).fold(
+            onSuccess = {
+                _navigateAction.emit(RegisterPetNavigationAction.NavigateToMyPage)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.FILE_SIZE_EXCEED -> _message.emit(RegisterPetMessage.FileSizeExceedMessage)
+                    else -> _message.emit(RegisterPetMessage.ServerErrorMessage)
+                }
+            },
+        )
     }
 
     private suspend fun patchPet(

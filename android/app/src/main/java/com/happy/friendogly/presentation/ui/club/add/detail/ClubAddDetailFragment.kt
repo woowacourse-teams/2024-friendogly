@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.add.detail
 
-import android.widget.SeekBar
 import androidx.fragment.app.activityViewModels
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubAddDetailBinding
@@ -23,25 +22,14 @@ class ClubAddDetailFragment :
     }
 
     private fun initSeekBar() {
-        binding.seekbarClubCounter.setOnSeekBarChangeListener(
-            object :
-                SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean,
-                ) {
-                    if (progress >= ClubCounter.MIN_COUNT) {
-                        viewModel.settingClubCounter(progress)
-                    } else {
-                        binding.seekbarClubCounter.setProgress(ClubCounter.MIN_COUNT, true)
-                    }
+        binding.numberPickerClubAddCounter.apply {
+            minValue = ClubCounter.MIN_COUNT
+            maxValue = ClubCounter.MAX_COUNT
+            setOnValueChangedListener { _, _, newVal ->
+                if (newVal >= ClubCounter.MIN_COUNT && newVal <= ClubCounter.MAX_COUNT) {
+                    viewModel.settingClubCounter(newVal)
                 }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            },
-        )
+            }
+        }
     }
 }
