@@ -377,7 +377,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
         doNothing().when(footprintCommandService).delete(any(), any());
 
         mockMvc
-                .perform(delete("/footprints/1")
+                .perform(delete("/footprints/{footprintId}")
                         .header(AUTHORIZATION, getMemberToken()))
                 .andExpect(status().isNoContent())
                 .andDo(print())
@@ -385,7 +385,7 @@ public class FootprintApiDocsTest extends RestDocsTest {
                         getDocumentRequest(),
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Footprint API")
-                                .summary("발자국 산책 상태 변경(manual) API")
+                                .summary("발자국 삭제 API")
                                 .requestHeaders(
                                         headerWithName(AUTHORIZATION).description("로그인한 회원의 accessToken")
                                 )
