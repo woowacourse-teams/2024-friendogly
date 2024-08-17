@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> {
 
@@ -13,9 +14,8 @@ public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> 
     @Query("""
             SELECT dt.deviceToken
             FROM DeviceToken dt
-            WHERE dt.member.id IN (SELECT chatRoomMember.member.id
-            FROM ChatRoomMember chatRoomMember
-            WHERE chatRoomMember.chatRoom.id = :chatRoomId)
+            INNER JOIN ChatRoomMember chatRoomMember ON dt.member.id = chatRoomMember.member.id
+            WHERE chatRoomMember.chatRoom.id = :chatRoomId
             """)
-    List<String> findAllByChatRoomId(Long chatRoomId);
+    List<String> findAllByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 }
