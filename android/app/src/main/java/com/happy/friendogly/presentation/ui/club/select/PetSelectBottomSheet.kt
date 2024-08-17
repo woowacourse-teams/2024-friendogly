@@ -43,6 +43,11 @@ class PetSelectBottomSheet(
         PetSelectAdapter(viewModel as PetSelectActionHandler)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateValidation()
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dlg = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dlg.setOnShowListener {
@@ -108,6 +113,13 @@ class PetSelectBottomSheet(
                     makeToast(
                         requireContext().getString(
                             R.string.dog_select_load_fail,
+                        ),
+                    )
+
+                PetSelectEvent.PreventCommit ->
+                    makeToast(
+                        requireContext().getString(
+                            R.string.dog_selector_title,
                         ),
                     )
             }
