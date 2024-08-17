@@ -18,7 +18,7 @@ interface PetRepository {
         sizeType: SizeType,
         gender: Gender,
         file: MultipartBody.Part?,
-    ): Result<Pet>
+    ): DomainResult<Pet, DataError.Network>
 
     suspend fun getPets(id: Long): DomainResult<List<Pet>, DataError.Network>
 }

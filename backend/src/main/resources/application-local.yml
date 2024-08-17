@@ -25,3 +25,8 @@ logging.level.org:
   hibernate:
     SQL: debug
     orm.jdbc.bind: trace
+
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json

@@ -35,7 +35,7 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
         sizeType: SizeType,
         gender: Gender,
         file: MultipartBody.Part?,
-    ): Result<Pet> =
+    ): DomainResult<Pet, DataError.Network> =
         source.postPet(
             name = name,
             description = description,
@@ -43,7 +43,18 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
             sizeType = sizeType.toData(),
             gender = gender.toData(),
             file = file,
-        ).mapCatching { result -> result.toDomain() }
+        ).fold(
+            onSuccess = { petDto ->
+                DomainResult.Success(petDto.toDomain())
+            },
+            onFailure = { e ->
+                if (e is ApiExceptionDto) {
+                    DomainResult.Error(e.error.data.errorCode.toDomain())
+                } else {
+                    DomainResult.Error(DataError.Network.SERVER_ERROR)
+                }
+            },
+        )
 
     override suspend fun getPets(id: Long): DomainResult<List<Pet>, DataError.Network> =
         source.getPets(id = id).fold(

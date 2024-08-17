@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Description {
 
     private static final int MIN_DESCRIPTION_LENGTH = 1;
-    private static final int MAX_DESCRIPTION_LENGTH = 15;
+    private static final int MAX_DESCRIPTION_LENGTH = 20;
 
     @Column(name = "description", nullable = false)
     private String value;

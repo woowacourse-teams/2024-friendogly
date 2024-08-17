@@ -13,6 +13,8 @@ sealed interface ClubListEvent {
         val clubFilters: List<ClubFilter>,
     ) : ClubListEvent
 
+    data object OpenAddPet : ClubListEvent
+
     sealed interface Navigation : ClubListEvent {
         data object NavigateToAddClub : Navigation
 

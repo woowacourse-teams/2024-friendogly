@@ -27,6 +27,7 @@ public record FindClubResponse(
         boolean isMine,
         boolean alreadyParticipate,
         boolean canParticipate,
+        boolean isMyPetsEmpty,
         List<ClubMemberDetailResponse> memberDetails,
         List<ClubPetDetailResponse> petDetails
 ) {
@@ -48,6 +49,7 @@ public record FindClubResponse(
                 club.findOwnerImageUrl(),
                 club.isOwner(member),
                 club.isAlreadyJoined(member),
+                myPets.isEmpty(),
                 club.isJoinable(member, myPets),
                 club.getClubMembers().stream()
                         .map(clubMember -> clubMember.getClubMemberPk().getMember())

@@ -55,4 +55,8 @@ class ApiClient {
 
         fun subscribeChat(chatRoomId: Long) = "/topic/chat/$chatRoomId"
     }
+
+    object AlarmToken {
+        const val DEVICE_TOKEN = "/device-tokens"
+    }
 }

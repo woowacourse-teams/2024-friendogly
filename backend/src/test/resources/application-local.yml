@@ -5,3 +5,6 @@ jwt:
   secret-key: 행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~행복하세요~
   access-expiration-time: 5_184_000_000 # 24시간 (ms)
   refresh-expiration-time: 36_288_000_000 # 7일 (ms)
+
+kakao:
+  admin-key: sdfsdfsdfdsfsdfsdf

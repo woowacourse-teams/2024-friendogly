@@ -18,6 +18,7 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityRegisterPetBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.registerpet.bottom.EditPetBirthdayBottomSheet
 import com.happy.friendogly.presentation.ui.registerpet.bottom.EditPetProfileImageBottomSheet
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
@@ -41,6 +42,8 @@ class RegisterPetActivity :
     private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
     private lateinit var cropImageOptions: CropImageOptions
     private var cameraUri: Uri? = null
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     override fun initCreateView() {
         initDataBinding()
@@ -82,6 +85,21 @@ class RegisterPetActivity :
                 is RegisterPetNavigationAction.NavigateToSetProfileImage -> editProfileImageBottomSheet()
                 is RegisterPetNavigationAction.NavigateToSetBirthday ->
                     editBirthdayBottomSheet(action.year, action.month)
+            }
+        }
+
+        viewModel.message.observeEvent(this) { message ->
+            when (message) {
+                is RegisterPetMessage.FileSizeExceedMessage -> showToastMessage(getString(R.string.file_size_exceed_message))
+                is RegisterPetMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+            }
+        }
+
+        viewModel.loading.observeEvent(this) { loading ->
+            if (loading) {
+                showLoadingDialog()
+            } else {
+                dismissLoadingDialog()
             }
         }
     }
@@ -186,6 +204,16 @@ class RegisterPetActivity :
             )
 
         dialog.show(supportFragmentManager, "tag")
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
     }
 
     companion object {
