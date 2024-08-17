@@ -4,9 +4,11 @@ import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
+import com.naver.maps.map.overlay.Marker
 
-fun FootprintInfo.toPresentation(): FootprintInfoUiModel {
+fun FootprintInfo.toPresentation(marker: Marker): FootprintInfoUiModel {
     return FootprintInfoUiModel(
+        marker = marker,
         walkStatusInfo = toWalkStatusPresentation(),
         petsDetailInfo = toPetDetailsPresentation(),
     )

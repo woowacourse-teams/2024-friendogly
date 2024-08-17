@@ -89,9 +89,7 @@ fun TextView.bindPetGender(petGender: Gender?) {
 }
 
 @BindingAdapter("walkStatusInfo")
-fun TextView.bindWalkStatusInfo(
-    walkStatusInfo: WalkStatusInfoUiModel?,
-) {
+fun TextView.bindWalkStatusInfo(walkStatusInfo: WalkStatusInfoUiModel?) {
     if (walkStatusInfo != null) {
         val duration =
             Duration.between(
@@ -130,8 +128,11 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
                 setCompoundDrawablesWithIntrinsicBounds(
                     resources.getDrawable(
                         R.drawable.ic_marker_before_clicked,
-                        null
-                    ), null, null, null
+                        null,
+                    ),
+                    null,
+                    null,
+                    null,
                 )
             }
 
@@ -140,8 +141,11 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
                 setCompoundDrawablesWithIntrinsicBounds(
                     resources.getDrawable(
                         R.drawable.ic_marker_ongoing_clicked,
-                        null
-                    ), null, null, null
+                        null,
+                    ),
+                    null,
+                    null,
+                    null,
                 )
             }
 
@@ -150,8 +154,11 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
                 setCompoundDrawablesWithIntrinsicBounds(
                     resources.getDrawable(
                         R.drawable.ic_marker_after_clicked,
-                        null
-                    ), null, null, null
+                        null,
+                    ),
+                    null,
+                    null,
+                    null,
                 )
             }
         }
