@@ -6,4 +6,9 @@ sealed interface MyClubEvent {
 
         data object NavigateToAddClub : Navigation
     }
+
+    sealed interface AddPet : MyClubEvent {
+        data object OpenAddPet: AddPet
+        data object OpenAddClub: AddPet
+    }
 }

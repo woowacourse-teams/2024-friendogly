@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.my.club
+package com.happy.friendogly.presentation.ui.club.my.participating
 
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -13,9 +13,9 @@ import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 
-class MyClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
-    private val viewModel: MyClubViewModel by viewModels {
-        MyClubViewModel.factory(
+class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
+    private val viewModel: MyParticipatingClubViewModel by viewModels {
+        MyParticipatingClubViewModel.factory(
             getMyClubUseCase = AppModule.getInstance().getMyClubsUseCase,
         )
     }

@@ -25,8 +25,8 @@ class MyHeadClubViewModel(
     private val _myHeadClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData()
     val myHeadClubUiState: LiveData<MyClubUiState> get() = _myHeadClubUiState
 
-    private val _myClubEvent: MutableLiveData<Event<MyClubEvent>> = MutableLiveData()
-    val myClubEvent: LiveData<Event<MyClubEvent>> get() = _myClubEvent
+    private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
+    val myClubEvent: LiveData<Event<MyClubEvent.Navigation>> get() = _myClubEvent
 
     init {
         loadMyHeadClubs()

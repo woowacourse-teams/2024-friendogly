@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.my.club
+package com.happy.friendogly.presentation.ui.club.my.participating
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import kotlinx.coroutines.launch
 
-class MyClubViewModel(
+class MyParticipatingClubViewModel(
     private val getMyClubUseCase: GetMyClubUseCase,
 ) : BaseViewModel(), ClubItemActionHandler {
     private val _myClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
@@ -25,8 +25,8 @@ class MyClubViewModel(
     private val _myClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData()
     val myClubUiState: LiveData<MyClubUiState> get() = _myClubUiState
 
-    private val _myClubEvent: MutableLiveData<Event<MyClubEvent>> = MutableLiveData()
-    val myClubEvent: LiveData<Event<MyClubEvent>> get() = _myClubEvent
+    private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
+    val myClubEvent: LiveData<Event<MyClubEvent.Navigation>> get() = _myClubEvent
 
     init {
         loadMyClubs()
@@ -59,7 +59,7 @@ class MyClubViewModel(
     companion object {
         fun factory(getMyClubUseCase: GetMyClubUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
-                MyClubViewModel(
+                MyParticipatingClubViewModel(
                     getMyClubUseCase = getMyClubUseCase,
                 )
             }
