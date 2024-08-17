@@ -12,6 +12,8 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
+import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
@@ -22,6 +24,7 @@ import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.ui.woof.PetImageActivity
 
 class ClubDetailActivity :
@@ -43,6 +46,11 @@ class ClubDetailActivity :
     }
     private val userAdapter: DetailProfileAdapter by lazy {
         DetailProfileAdapter(this@ClubDetailActivity)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadClub(receiveClubId())
     }
 
     override fun initCreateView() {
@@ -136,6 +144,8 @@ class ClubDetailActivity :
                     showSnackbar(
                         getString(R.string.club_detail_participate_fail),
                     )
+
+                ClubDetailEvent.Navigation.NavigateToRegisterPet -> openRegisterPetDialog()
             }
         }
     }
@@ -168,6 +178,15 @@ class ClubDetailActivity :
     override fun navigateToPrevWithReload() {
         putLoadState()
         finish()
+    }
+
+    private fun openRegisterPetDialog() {
+        PetAddAlertDialog(
+            clickToNegative = {},
+            clickToPositive = {
+                startActivity(RegisterPetActivity.getIntent(this@ClubDetailActivity,null))
+            },
+        ).show(supportFragmentManager, "TAG")
     }
 
     override fun navigateToProfile(clubDetailProfileUiModel: ClubDetailProfileUiModel) {

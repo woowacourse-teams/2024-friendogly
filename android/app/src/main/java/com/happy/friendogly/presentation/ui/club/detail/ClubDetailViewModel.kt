@@ -39,6 +39,7 @@ class ClubDetailViewModel(
     override fun confirmParticipation() {
         when (club.value?.clubDetailViewType) {
             ClubDetailViewType.RECRUITMENT -> {
+                if (club.value?.isUserPetEmpty != false) return requireRegisterUserPet()
                 val filters = club.value?.filters ?: listOf()
                 _clubDetailEvent.emit(ClubDetailEvent.OpenDogSelector(filters))
             }
@@ -71,6 +72,10 @@ class ClubDetailViewModel(
                     _clubDetailEvent.emit(ClubDetailEvent.FailParticipation)
                 }
         }
+
+    private fun requireRegisterUserPet() {
+        _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToRegisterPet)
+    }
 
     fun makeClubModifyUiModel(): ClubModifyUiModel? {
         return club.value?.toClubModifyUiModel()

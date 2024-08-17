@@ -19,6 +19,7 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         clubLocation = address.toPresentation(),
         clubPoster = imageUrl?.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,
+        isUserPetEmpty = isMyPetsEmpty,
         clubDetailViewType =
             ClubDetailViewType.from(
                 isMine = isMine,
