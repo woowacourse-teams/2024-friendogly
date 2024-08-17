@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -20,13 +21,18 @@ class MyClubViewModel(
     fun loadPetState() =
         viewModelScope.launch {
             getPetsMineUseCase()
-                .onSuccess { pets ->
-                    if (pets.isEmpty()) {
-                        _myClubEvent.emit(MyClubEvent.AddPet.OpenAddPet)
-                    } else {
-                        _myClubEvent.emit(MyClubEvent.AddPet.OpenAddClub)
-                    }
-                }
+                .fold(
+                    onSuccess = { pets ->
+                        if (pets.isEmpty()) {
+                            _myClubEvent.emit(MyClubEvent.AddPet.OpenAddPet)
+                        } else {
+                            _myClubEvent.emit(MyClubEvent.AddPet.OpenAddClub)
+                        }
+                    },
+                    onError = {
+                        // TODO 예외처리
+                    },
+                )
         }
 
     companion object {
