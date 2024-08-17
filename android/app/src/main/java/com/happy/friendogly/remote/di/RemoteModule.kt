@@ -9,6 +9,7 @@ import com.happy.friendogly.remote.api.BaseUrl
 import com.happy.friendogly.remote.api.ChatService
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.MemberService
+import com.happy.friendogly.remote.api.MyClubService
 import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.interceptor.AuthorizationInterceptor
@@ -21,6 +22,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
+import retrofit2.create
 import java.time.Duration
 
 object RemoteModule {
@@ -55,6 +57,18 @@ object RemoteModule {
             tokenManager,
             authenticationListener,
         ).create(ClubService::class.java)
+    }
+
+    fun createMyClubService(
+        baseUrl: BaseUrl,
+        tokenManager: TokenManager,
+        authenticationListener: AuthenticationListener,
+    ): MyClubService {
+        return createRetrofit(
+            baseUrl,
+            tokenManager,
+            authenticationListener,
+        ).create(MyClubService::class.java)
     }
 
     fun createWoofService(
