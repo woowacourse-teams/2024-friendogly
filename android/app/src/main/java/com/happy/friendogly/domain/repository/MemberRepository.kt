@@ -13,7 +13,7 @@ interface MemberRepository {
         file: MultipartBody.Part?,
     ): DomainResult<Register, DataError.Network>
 
-    suspend fun getMemberMine(): Result<Member>
+    suspend fun getMemberMine(): DomainResult<Member, DataError.Network>
 
     suspend fun getMember(id: Long): Result<Member>
 }

@@ -1,12 +1,22 @@
 INSERT INTO member(name, tag, image_url)
 VALUES ('도도', '4e52d416', 'https://avatars.githubusercontent.com/u/79188587?v=4'),
        ('땡이', 'a582a275', 'https://avatars.githubusercontent.com/u/110461155?v=4'),
-       ('트레', '68fc8014', null),
+       ('트레', '68fc8014', ''),
        ('위브', '3dde7373', 'https://avatars.githubusercontent.com/u/28584160?v=4'),
-       ('벼리', '525ec19f', null),
-       ('누누', '5f0f8307', null),
+       ('벼리', '525ec19f', ''),
+       ('누누', '5f0f8307', ''),
        ('채드', '114d8979', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
-       ('에디', 'c065a053', null);
+       ('에디', 'c065a053', '');
+
+INSERT INTO device_token(member_id, device_token)
+VALUES (1,'a'),
+       (2,'a'),
+       (3,'a'),
+       (4,'a'),
+       (5,'a'),
+       (6,'a'),
+       (7,'a'),
+       (8,'a');
 
 INSERT INTO footprint(member_id, latitude, longitude, walk_status, created_at, is_deleted)
 VALUES (1, 37.5173316, 127.1011661, 'BEFORE', TIMESTAMPADD(MINUTE, -10, NOW()), FALSE),

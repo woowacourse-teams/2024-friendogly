@@ -3,7 +3,7 @@ package com.happy.friendogly.presentation.ui.club.select
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -25,6 +25,9 @@ class PetSelectViewModel(
     private val _petSelectEvent: MutableLiveData<Event<PetSelectEvent>> = MutableLiveData()
     val petSelectEvent: LiveData<Event<PetSelectEvent>> get() = _petSelectEvent
 
+    private val _validCommit: MutableLiveData<Boolean> = MutableLiveData()
+    val validCommit: LiveData<Boolean> get() = _validCommit
+
     init {
         loadMyPets()
     }
@@ -34,17 +37,20 @@ class PetSelectViewModel(
     }
 
     private fun loadMyPets() =
-        viewModelScope.launch {
-            getPetsMineUseCase()
-                .onSuccess { pets ->
+        launch {
+            getPetsMineUseCase().fold(
+                onSuccess = { pets ->
                     _pets.value =
                         pets.map { pet ->
-                            pet.toPetSelectUiModel()
+                            pet.toPetSelectUiModel().apply {
+                                initSelectableState(filters)
+                            }
                         }
-                }
-                .onFailure {
+                },
+                onError = {
                     _petSelectEvent.emit(PetSelectEvent.FailLoadPet)
-                }
+                },
+            )
         }
 
     override fun selectPet(petSelectUiModel: PetSelectUiModel) {
@@ -56,36 +62,42 @@ class PetSelectViewModel(
     }
 
     private fun applyValidDog(petSelectUiModel: PetSelectUiModel) {
-        if (isValidDogFilter(petSelectUiModel)) {
+        if (petSelectUiModel.selectable) {
             addDog(petSelectUiModel)
         } else {
             _petSelectEvent.emit(PetSelectEvent.PreventSelection(petSelectUiModel.name))
         }
     }
 
-    private fun isValidDogFilter(petSelectUiModel: PetSelectUiModel): Boolean {
-        return filters.contains(petSelectUiModel.gender) && filters.contains(petSelectUiModel.size)
-    }
-
     private fun removeDog(petSelectUiModel: PetSelectUiModel) {
         petSelectUiModel.unSelectDog()
         selectedPets.remove(petSelectUiModel)
         _petSelectEvent.emit(PetSelectEvent.SelectPet)
+        updateValidation()
     }
 
     private fun addDog(petSelectUiModel: PetSelectUiModel) {
         petSelectUiModel.selectDog()
         selectedPets.add(petSelectUiModel)
         _petSelectEvent.emit(PetSelectEvent.SelectPet)
+        updateValidation()
+    }
+
+    fun updateValidation() {
+        _validCommit.value = selectedPets.isNotEmpty()
     }
 
     override fun submitDogs() {
-        if (selectedPets.size == 0) return
+        validCommit.value?.takeIf { it } ?: return preventCommit()
         _petSelectEvent.emit(
             PetSelectEvent.SelectPets(
                 pets = selectedPets.map { it.id },
             ),
         )
+    }
+
+    private fun preventCommit() {
+        _petSelectEvent.emit(PetSelectEvent.PreventCommit)
     }
 
     override fun cancelSelection() {

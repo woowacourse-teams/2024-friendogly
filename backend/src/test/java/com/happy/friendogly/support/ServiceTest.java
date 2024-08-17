@@ -3,6 +3,7 @@ package com.happy.friendogly.support;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.util.TimeZone;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +26,9 @@ public abstract class ServiceTest {
     @Autowired
     protected FootprintRepository footprintRepository;
 
+    @Autowired
+    protected DeviceTokenRepository deviceTokenRepository;
+
     @BeforeAll
     static void setTimeZone() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
@@ -35,6 +39,7 @@ public abstract class ServiceTest {
         clubRepository.deleteAll();
         footprintRepository.deleteAll();
         petRepository.deleteAll();
+        deviceTokenRepository.deleteAll();
         memberRepository.deleteAll();
     }
 }

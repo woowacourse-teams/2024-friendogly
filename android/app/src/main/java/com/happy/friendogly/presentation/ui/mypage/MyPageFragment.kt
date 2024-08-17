@@ -69,6 +69,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             }
         }
 
+        viewModel.message.observeEvent(viewLifecycleOwner) { message ->
+            when (message) {
+                is MyPageMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+            }
+        }
+
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             adapter.submitList(uiState.pets) {
                 binding.vpPetProfile.post {

@@ -20,18 +20,18 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
+            style="@style/Theme.AppCompat.TextView.Medium.Black.Size22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="100dp"
             android:text="@string/club_add_detail_main_title" />
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="20dp" />
+            android:layout_height="15dp" />
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+            style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/club_add_detail_main_content" />
@@ -75,36 +75,49 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp" />
 
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/club_add_club_number" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/club_add_club_number" />
+
+            <TextView
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/club_counter_count(vm.clubCounter.count)}"
+                tools:text="최대 5명" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:background="@color/gray300"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@{@string/club_counter_count(vm.clubCounter.count)}"
-            tools:text="5명" />
+            <NumberPicker
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/number_picker_club_add_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:value="@{vm.clubCounter.count}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="10dp" />
 
-        <SeekBar
-            android:id="@+id/seekbar_club_counter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:progressTint="@color/coral500"
-            android:thumbTint="@color/coral500"
-            android:max="5"
-            android:progress="@{vm.clubCounter.count}"/>
     </LinearLayout>
 </layout>
