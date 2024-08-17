@@ -3,6 +3,7 @@ package com.happy.friendogly.footprint.domain;
 import static com.happy.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
 
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -126,13 +127,11 @@ public class Footprint {
         }
     }
 
-    public void finishWalking() {
-        if (walkStatus.isBefore()) {
-            isDeleted = true;
+    public void finishWalkingManual() {
+        if (walkStatus.isBefore() || walkStatus.isAfter()) {
+            throw new FriendoglyException("산책 중에서 산책 후로의 변경만 가능합니다.");
         }
-        if (walkStatus.isOngoing()) {
-            endWalk();
-        }
+        endWalk();
     }
 
     private void startWalk() {

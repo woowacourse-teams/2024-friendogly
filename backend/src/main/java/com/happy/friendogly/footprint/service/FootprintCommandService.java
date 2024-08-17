@@ -3,7 +3,6 @@ package com.happy.friendogly.footprint.service;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
-import com.happy.friendogly.footprint.domain.WalkStatus;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
@@ -94,16 +93,8 @@ public class FootprintCommandService {
 
     public UpdateWalkStatusManualResponse updateWalkStatusManual(Long memberId) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
-        validateFinishWalking(footprint);
-        footprint.finishWalking();
+        footprint.finishWalkingManual();
         return new UpdateWalkStatusManualResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
-    }
-
-    private void validateFinishWalking(Footprint footprint) {
-        WalkStatus walkStatus = footprint.getWalkStatus();
-        if (walkStatus.isBefore() || walkStatus.isAfter()) {
-            throw new FriendoglyException("산책 중에서 산책 후로의 변경만 가능합니다.");
-        }
     }
 
     public void delete(Long memberId, Long footprintId) {
