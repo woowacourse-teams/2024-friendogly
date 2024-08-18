@@ -452,16 +452,17 @@ class WoofFragment :
 
         viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is AlertHasNotPetDialog -> openRegisterPetDialog()
+                is AlertHasNotPetDialog -> showRegisterPetDialog()
 
-                is AlertCantClickMarkBtnSnackbar -> showSnackbar(
-                    String.format(
-                        resources.getString(
-                            R.string.woof_cant_mark,
-                            event.remainingTime,
-                        )
+                is AlertCantClickMarkBtnSnackbar ->
+                    showSnackbar(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_cant_mark,
+                                event.remainingTime,
+                            ),
+                        ),
                     )
-                )
 
                 is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
@@ -750,7 +751,7 @@ class WoofFragment :
         binding.chronometerWoofWalkTime.start()
     }
 
-    private fun openRegisterPetDialog() {
+    private fun showRegisterPetDialog() {
         PetAddAlertDialog(
             clickToNegative = {},
             clickToPositive = {
