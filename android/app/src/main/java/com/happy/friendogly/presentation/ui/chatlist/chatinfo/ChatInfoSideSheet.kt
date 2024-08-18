@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,7 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
+import kotlinx.coroutines.launch
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private var _binding: LayoutChatDrawerBinding? = null
@@ -80,6 +82,9 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             if (isChecked) {
                 requestNotificationPermission()
             }
+            lifecycleScope.launch {
+                AppModule.getInstance().saveChatAlarmUseCase(isChecked)
+            }
         }
     }
 
@@ -106,6 +111,10 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
                     DogGender.MALE_NEUTERED -> chbChatDogMaleNeutered.isChecked = true
                     DogGender.FEMALE_NEUTERED -> chbChatDogFemaleNeutered.isChecked = true
                 }
+            }
+            lifecycleScope.launch {
+                switchChatSettingAlarm.isChecked =
+                    AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
             }
         }
     }

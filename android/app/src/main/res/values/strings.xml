@@ -82,6 +82,8 @@
     <string name="alarm_settings_chatting_push_description">모든 채팅 메시지 알림</string>
     <string name="alarm_settings_club_push">모임 알림</string>
     <string name="alarm_settings_club_push_description">가입한 모임의 알림</string>
+    <string name="alarm_settings_woof_push">산책 알림</string>
+    <string name="alarm_settings_woof_push_description">다른 강아지의 산책 여부 알림</string>
     <string name="setting">설정</string>
     <string name="unsubscribe">탈퇴하기</string>
     <string name="logout">로그아웃</string>

@@ -150,13 +150,44 @@
             app:trackTint="@color/sel_switch_track"
             tools:checked="true" />
 
+        <include
+            android:id="@+id/alarm_settings_woof_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_woof_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_woof_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alarm_settings_club_push"
+            app:title="@{String.format(@string/alarm_settings_woof_push)}" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarm_settings_woof_push_switch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="@{vm.uiState.woofAlarmPushPermitted}"
+            android:onCheckedChanged="@{(view, checked) -> vm.onWoofAlarmToggled(checked)}"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_woof_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_woof_push"
+            app:thumbTint="@color/sel_switch_thumb"
+            app:trackDecoration="@null"
+            app:trackTint="@color/sel_switch_track"
+            tools:checked="true" />
+
         <View
             android:id="@+id/view_divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="16dp"
             android:background="@color/gray300"
-            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_club_push"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_woof_push"
             tools:layout_editor_absoluteX="-16dp" />
 
         <TextView
