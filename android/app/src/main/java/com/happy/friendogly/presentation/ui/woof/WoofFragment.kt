@@ -20,7 +20,9 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertCantClickMarkBtnSnackbar
@@ -450,27 +452,16 @@ class WoofFragment :
 
         viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is AlertHasNotPetDialog -> {
-                    // 수정 예정
-                    showSnackbar(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_has_not_pet,
-                            ),
-                        ),
-                    )
-                }
+                is AlertHasNotPetDialog -> openRegisterPetDialog()
 
-                is AlertCantClickMarkBtnSnackbar -> {
-                    showSnackbar(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_cant_mark,
-                                event.remainingTime,
-                            ),
-                        ),
+                is AlertCantClickMarkBtnSnackbar -> showSnackbar(
+                    String.format(
+                        resources.getString(
+                            R.string.woof_cant_mark,
+                            event.remainingTime,
+                        )
                     )
-                }
+                )
 
                 is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
@@ -757,6 +748,15 @@ class WoofFragment :
         binding.chronometerWoofWalkTime.base =
             SystemClock.elapsedRealtime() - duration.toMillis()
         binding.chronometerWoofWalkTime.start()
+    }
+
+    private fun openRegisterPetDialog() {
+        PetAddAlertDialog(
+            clickToNegative = {},
+            clickToPositive = {
+                (activity as MainActivityActionHandler).navigateToRegisterPet(null)
+            },
+        ).show(parentFragmentManager, tag)
     }
 
     companion object {
