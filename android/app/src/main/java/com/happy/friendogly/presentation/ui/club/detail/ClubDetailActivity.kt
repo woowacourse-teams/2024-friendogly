@@ -10,10 +10,11 @@ import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
+import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
-import com.happy.friendogly.presentation.ui.MainActivityActionHandler
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
@@ -123,9 +124,9 @@ class ClubDetailActivity :
             when (event) {
                 is ClubDetailEvent.OpenDogSelector -> openDogSelector(event.filters)
 
-                // TODO: delete and go chatActivity
-                ClubDetailEvent.Navigation.NavigateToChat -> {
-                    finish()
+                is ClubDetailEvent.Navigation.NavigateToChat -> {
+                    val clubParticipation = event.clubParticipation ?: return@observeEvent
+                    openChatRoom(clubParticipation)
                 }
 
                 ClubDetailEvent.Navigation.NavigateToHome -> finish()
@@ -163,6 +164,16 @@ class ClubDetailActivity :
         )
     }
 
+    private fun openChatRoom(clubParticipation: ClubParticipation){
+        startActivity(
+            ChatActivity.getIntent(
+                context = this@ClubDetailActivity,
+                chatId = clubParticipation.chatRoomId,
+                memberId = clubParticipation.memberId
+            )
+        )
+    }
+
     private fun openDogSelector(filters: List<ClubFilter>) {
         val bottomSheet =
             PetSelectBottomSheet(filters = filters) { dogs ->
@@ -184,7 +195,7 @@ class ClubDetailActivity :
         PetAddAlertDialog(
             clickToNegative = {},
             clickToPositive = {
-                startActivity(RegisterPetActivity.getIntent(this@ClubDetailActivity,null))
+                startActivity(RegisterPetActivity.getIntent(this@ClubDetailActivity, null))
             },
         ).show(supportFragmentManager, "TAG")
     }
