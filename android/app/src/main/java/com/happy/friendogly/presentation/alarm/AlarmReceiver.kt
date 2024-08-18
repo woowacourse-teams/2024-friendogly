@@ -9,12 +9,15 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.domain.model.ChatMember
+import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
@@ -30,20 +33,43 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        if (message.notification != null) {
-            onReceive(message.notification?.title, message.notification?.body)
-        } else if (message.data.isNotEmpty() && ChatLifecycleObserver.getInstance().isBackground) {
-            onReceive(message.data[ALARM_TITLE], message.data[ALARM_BODY])
+
+        if (message.data[ALARM_TYPE] == "CHAT") {
+            saveMessage(message)
+            showChatAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
     }
 
-    private fun onReceive(
+    private fun saveMessage(message: RemoteMessage) = CoroutineScope(Dispatchers.IO).launch {
+        val memberId = message.data["senderMemberId"]!!.toLong()
+        val name = message.data["senderName"]
+        val content = message.data["content"]
+        val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
+        val profileUrl = message.data["profilePictureUrl"]
+
+        if (message.data["messageType"] == "CHAT") {
+            // TODO 서버에서 dto 받으면 수정
+            AppModule.getInstance().saveChatMessageUseCase(
+                5, Message.Other(
+                    createdAt = createdAt,
+                    member = ChatMember(
+                        id = memberId,
+                        name = name!!,
+                        profileImageUrl = profileUrl!!
+                    ),
+                    content = content!!
+                )
+            )
+        }
+    }
+
+    private fun showChatAlarm(
         title: String?,
         body: String?,
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (AppModule.getInstance().getAlarmSettingUseCase.invoke().getOrDefault(false)) {
+        if (AppModule.getInstance().getAlarmSettingUseCase.invoke().getOrDefault(false) && ChatLifecycleObserver.getInstance().isBackground) {
             createNotificationChannel()
             deliverNotification(title, body)
         }
@@ -95,6 +121,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         private const val CHANNEL_NAME = "alam"
         private const val ALARM_TITLE = "title"
         private const val ALARM_BODY = "body"
+        private const val ALARM_TYPE = "type"
 
         const val NOTIFICATION_ID = 0
         const val DEFAULT_INTENT_ID = 1
