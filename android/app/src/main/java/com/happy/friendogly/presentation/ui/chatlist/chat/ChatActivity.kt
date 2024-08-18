@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
@@ -30,7 +31,7 @@ class ChatActivity :
 
     override fun initCreateView() {
         binding.vm = viewModel
-
+        lifecycle.addObserver(ChatLifecycleObserver.getInstance())
         initAdapter()
         getChatList()
         clickBackBtn()
@@ -95,6 +96,11 @@ class ChatActivity :
 
     override fun navigateToMemberProfile(memberId: Long) {
         startActivity(OtherProfileActivity.getIntent(this, memberId))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(ChatLifecycleObserver.getInstance())
     }
 
     companion object {

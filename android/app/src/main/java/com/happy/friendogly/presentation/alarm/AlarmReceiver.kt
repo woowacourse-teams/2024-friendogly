@@ -10,6 +10,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.presentation.ui.MainActivity
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         super.onMessageReceived(message)
         if (message.notification != null) {
             onReceive(message.notification?.title, message.notification?.body)
-        } else if (message.data.isNotEmpty()) {
+        } else if (message.data.isNotEmpty() && ChatLifecycleObserver.getInstance().isBackground) {
             onReceive(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
     }
