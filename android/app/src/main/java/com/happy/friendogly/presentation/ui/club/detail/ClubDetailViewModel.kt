@@ -43,7 +43,7 @@ class ClubDetailViewModel(
                 val filters = club.value?.filters ?: listOf()
                 _clubDetailEvent.emit(ClubDetailEvent.OpenDogSelector(filters))
             }
-            //TODO 서버 api 수정에 따라 리팩토링 필요
+            // TODO 서버 api 수정에 따라 리팩토링 필요
             ClubDetailViewType.MINE -> _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToChat(null))
             else -> return
         }

@@ -164,13 +164,13 @@ class ClubDetailActivity :
         )
     }
 
-    private fun openChatRoom(clubParticipation: ClubParticipation){
+    private fun openChatRoom(clubParticipation: ClubParticipation) {
         startActivity(
             ChatActivity.getIntent(
                 context = this@ClubDetailActivity,
                 chatId = clubParticipation.chatRoomId,
-                memberId = clubParticipation.memberId
-            )
+                memberId = clubParticipation.memberId,
+            ),
         )
     }
 
