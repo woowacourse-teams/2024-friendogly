@@ -6,7 +6,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ChatMessagesConverter {
-
     @TypeConverter
     fun fromChatMessageEntityList(messages: List<ChatMessageEntity>): String {
         return Json.encodeToString(messages)

@@ -10,7 +10,6 @@ import com.happy.friendogly.local.model.ChatRoomEntity
 
 @Dao
 interface ChatRoomDao {
-
     @Query("SELECT * FROM chat_room WHERE id = :id")
     suspend fun getChatRoomById(id: Long): ChatRoomEntity?
 
@@ -21,12 +20,16 @@ interface ChatRoomDao {
     suspend fun insert(chatRoom: ChatRoomEntity)
 
     @Transaction
-    suspend fun addMessageToChatRoom(chatRoomId: Long, newMessage: ChatMessageEntity) {
+    suspend fun addMessageToChatRoom(
+        chatRoomId: Long,
+        newMessage: ChatMessageEntity,
+    ) {
         val chatRoom = getChatRoomById(chatRoomId)
         if (chatRoom != null) {
-            val updatedMessages = chatRoom.messages.toMutableList().apply {
-                add(newMessage)
-            }
+            val updatedMessages =
+                chatRoom.messages.toMutableList().apply {
+                    add(newMessage)
+                }
             val updatedChatRoom = chatRoom.copy(messages = updatedMessages)
             updateChatRoom(updatedChatRoom)
         } else {

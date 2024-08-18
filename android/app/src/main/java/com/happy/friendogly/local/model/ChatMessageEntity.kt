@@ -6,9 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.happy.friendogly.local.room.MessageTypeEntity
 import com.happy.friendogly.remote.util.JavaLocalDateTimeSerializer
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import java.time.LocalDateTime
 
 @Entity(tableName = "chat_message")
