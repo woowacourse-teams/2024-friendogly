@@ -7,4 +7,5 @@ public record UpdateWalkStatusManualResponse(
         WalkStatus walkStatus,
         LocalDateTime changedWalkStatusTime
 ) {
+    
 }
