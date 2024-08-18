@@ -272,7 +272,7 @@ class FootprintCommandServiceTest extends FootprintServiceTest {
                 .hasMessage("산책 중에서 산책 후로의 변경만 가능합니다.");
     }
 
-    @DisplayName("산책전의 발자국은 산책 상태를 변경할 수 없다.")
+    @DisplayName("산책후의 발자국은 산책 상태를 변경할 수 없다.")
     @Transactional
     @Test
     void updateWalkStatusManual_fail_after() {
