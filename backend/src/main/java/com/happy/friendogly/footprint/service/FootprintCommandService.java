@@ -5,9 +5,10 @@ import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.footprint.domain.WalkStatus;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusAutoResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualResponse;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -103,7 +104,7 @@ public class FootprintCommandService {
         );
     }
 
-    public UpdateWalkStatusResponse updateWalkStatus(Long memberId, UpdateWalkStatusRequest request) {
+    public UpdateWalkStatusAutoResponse updateWalkStatusAuto(Long memberId, UpdateWalkStatusAutoRequest request) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
             throw new FriendoglyException("가장 최근 발자국이 삭제된 상태입니다.");
@@ -112,6 +113,7 @@ public class FootprintCommandService {
         WalkStatus beforeWalkStatus = footprint.getWalkStatus();
 
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
+
         if (beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()) {
             Member startWalkMember = memberRepository.getById(memberId);
             List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, startWalkMember);
@@ -119,7 +121,7 @@ public class FootprintCommandService {
             sendWalkStartNotification(memberName, nearDeviceTokens);
         }
 
-        return new UpdateWalkStatusResponse(footprint.getWalkStatus());
+        return new UpdateWalkStatusAutoResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
     }
 
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
@@ -128,6 +130,20 @@ public class FootprintCommandService {
                 "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
                 nearDeviceTokens
         );
+    }
+
+    public UpdateWalkStatusManualResponse updateWalkStatusManual(Long memberId) {
+        Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
+        footprint.finishWalkingManual();
+        return new UpdateWalkStatusManualResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
+    }
+
+    public void delete(Long memberId, Long footprintId) {
+        Footprint footprint = footprintRepository.getById(footprintId);
+        if (!footprint.isCreatedBy(memberId)) {
+            throw new FriendoglyException("본인의 발자국만 삭제 가능합니다.");
+        }
+        footprint.updateToDeleted();
     }
 
     private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {

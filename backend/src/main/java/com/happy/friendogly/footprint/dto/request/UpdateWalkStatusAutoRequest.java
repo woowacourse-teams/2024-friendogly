@@ -4,7 +4,7 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
-public record UpdateWalkStatusRequest(
+public record UpdateWalkStatusAutoRequest(
 
         @NotNull
         @DecimalMin(value = "-90.0", message = "위도는 -90도 이상 90도 이하로 입력해 주세요.")
