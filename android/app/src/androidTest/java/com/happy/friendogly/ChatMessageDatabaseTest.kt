@@ -60,12 +60,12 @@ class ChatMessageDatabaseTest {
         // when
         runBlocking {
             chatRoomDao.addMessageToChatRoom(2, DUMMY_MY_MESSAGE)
-            chatRoomDao.addMessageToChatRoom(2, DUMMY_OTHER_MESSAGE)
+            chatRoomDao.addMessageToChatRoom(2, DUMMY_CHAT_MESSAGE)
         }
 
         runBlocking {
             val messages = chatRoomDao.getMessagesByRoomId(2)
-            assertThat(messages).contains(DUMMY_MY_MESSAGE, DUMMY_OTHER_MESSAGE)
+            assertThat(messages).contains(DUMMY_MY_MESSAGE, DUMMY_CHAT_MESSAGE)
         }
     }
 
@@ -80,11 +80,11 @@ class ChatMessageDatabaseTest {
                         "",
                     ),
                 content = "",
-                type = MessageTypeEntity.MINE,
+                type = MessageTypeEntity.CHAT,
                 id = 1,
             )
 
-        private val DUMMY_OTHER_MESSAGE =
+        private val DUMMY_CHAT_MESSAGE =
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 6, 12, 14, 2),
                 member =
@@ -94,7 +94,7 @@ class ChatMessageDatabaseTest {
                         "",
                     ),
                 content = "ZZZZZZZZ",
-                type = MessageTypeEntity.OTHER,
+                type = MessageTypeEntity.CHAT,
                 id = 2,
             )
     }

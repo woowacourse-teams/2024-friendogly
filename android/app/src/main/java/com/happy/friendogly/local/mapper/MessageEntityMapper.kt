@@ -19,11 +19,11 @@ fun ChatComponent.Leave.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-            ChatMemberEntity(
-                id = member.id,
-                name = member.name,
-                profileUrl = member.profileImageUrl,
-            ),
+        ChatMemberEntity(
+            id = member.id,
+            name = member.name,
+            profileUrl = member.profileImageUrl,
+        ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.LEAVE,
     )
@@ -32,11 +32,11 @@ fun ChatComponent.Enter.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-            ChatMemberEntity(
-                id = member.id,
-                name = member.name,
-                profileUrl = member.profileImageUrl,
-            ),
+        ChatMemberEntity(
+            id = member.id,
+            name = member.name,
+            profileUrl = member.profileImageUrl,
+        ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.ENTER,
     )
@@ -45,26 +45,26 @@ fun Message.Mine.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-            ChatMemberEntity(
-                id = member.id,
-                name = member.name,
-                profileUrl = member.profileImageUrl,
-            ),
+        ChatMemberEntity(
+            id = member.id,
+            name = member.name,
+            profileUrl = member.profileImageUrl,
+        ),
         content = content,
-        type = MessageTypeEntity.MINE,
+        type = MessageTypeEntity.CHAT,
     )
 
 fun Message.Other.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-            ChatMemberEntity(
-                id = member.id,
-                name = member.name,
-                profileUrl = member.profileImageUrl,
-            ),
+        ChatMemberEntity(
+            id = member.id,
+            name = member.name,
+            profileUrl = member.profileImageUrl,
+        ),
         content = content,
-        type = MessageTypeEntity.OTHER,
+        type = MessageTypeEntity.CHAT,
     )
 
 fun ChatMemberEntity.toDomain(): ChatMember =
@@ -74,22 +74,25 @@ fun ChatMemberEntity.toDomain(): ChatMember =
         profileImageUrl = profileUrl,
     )
 
-fun ChatMessageEntity.toDomain(): ChatComponent =
+fun ChatMessageEntity.toDomain(myMemberId: Long): ChatComponent =
     when (this.type) {
         MessageTypeEntity.DATE -> ChatComponent.Date(createdAt = createdAt)
-        MessageTypeEntity.MINE ->
-            Message.Mine(
-                content = content,
-                member = member.toDomain(),
-                createdAt = createdAt,
-            )
+        MessageTypeEntity.CHAT -> {
+            if (myMemberId == member.id) {
+                Message.Mine(
+                    content = content,
+                    member = member.toDomain(),
+                    createdAt = createdAt,
+                )
+            } else {
+                Message.Other(
+                    content = content,
+                    member = member.toDomain(),
+                    createdAt = createdAt,
+                )
 
-        MessageTypeEntity.OTHER ->
-            Message.Other(
-                content = content,
-                member = member.toDomain(),
-                createdAt = createdAt,
-            )
+            }
+        }
 
         MessageTypeEntity.LEAVE ->
             ChatComponent.Leave(

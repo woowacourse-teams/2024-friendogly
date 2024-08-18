@@ -14,5 +14,5 @@ interface ChatRepository {
         chat: ChatComponent,
     ): Result<Unit>
 
-    suspend fun getChatMessages(chatRoomId: Long): Result<List<ChatComponent>>
+    suspend fun getChatMessages(chatRoomId: Long, myMemberId:Long): Result<List<ChatComponent>>
 }

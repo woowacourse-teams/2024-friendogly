@@ -6,5 +6,6 @@ import com.happy.friendogly.domain.repository.ChatRepository
 class GetChatMessagesUseCase(
     private val repository: ChatRepository,
 ) {
-    suspend operator fun invoke(chatRoomId:Long): Result<List<ChatComponent>> = repository.getChatMessages(chatRoomId)
+    suspend operator fun invoke(chatRoomId: Long, myMemberId: Long): Result<List<ChatComponent>> =
+        repository.getChatMessages(chatRoomId, myMemberId)
 }

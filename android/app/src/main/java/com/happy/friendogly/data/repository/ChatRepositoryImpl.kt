@@ -38,8 +38,11 @@ class ChatRepositoryImpl(
             chatRoomDao.addMessageToChatRoom(chatRoomId, message)
         }
 
-    override suspend fun getChatMessages(chatRoomId: Long): Result<List<ChatComponent>> =
+    override suspend fun getChatMessages(
+        chatRoomId: Long,
+        myMemberId: Long
+    ): Result<List<ChatComponent>> =
         runCatching {
-            chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain() }
+            chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }
         }
 }
