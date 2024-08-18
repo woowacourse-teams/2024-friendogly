@@ -1,24 +1,38 @@
 package com.happy.friendogly.local.source
 
 import com.happy.friendogly.data.source.AlarmSettingDataSource
-import com.happy.friendogly.local.di.AlarmModule
+import com.happy.friendogly.local.di.ChatAlarmModule
+import com.happy.friendogly.local.di.WoofAlarmModule
 import kotlinx.coroutines.flow.first
 
 class AlarmSettingDataSourceImpl(
-    private val alarmModule: AlarmModule,
+    private val chatAlarmModule: ChatAlarmModule,
+    private val woofAlarmModule: WoofAlarmModule
 ) : AlarmSettingDataSource {
-    override suspend fun saveAlarm(isSet: Boolean): Result<Unit> =
+    override suspend fun saveChatSetting(isSet: Boolean): Result<Unit> =
         runCatching {
-            alarmModule.saveSetting(isSet)
+            chatAlarmModule.saveSetting(isSet)
         }
 
-    override suspend fun getAlarm(): Result<Boolean> =
+    override suspend fun getChatSetting(): Result<Boolean> =
         runCatching {
-            alarmModule.isSet.first()
+            chatAlarmModule.isSet.first()
         }
 
-    override suspend fun deleteAlarm(): Result<Unit> =
+    override suspend fun deleteChatSetting(): Result<Unit> =
         runCatching {
-            alarmModule.deleteSetting()
+            chatAlarmModule.deleteSetting()
         }
+
+    override suspend fun saveWoofSetting(isSet: Boolean): Result<Unit> = runCatching {
+        woofAlarmModule.saveSetting(isSet)
+    }
+
+    override suspend fun getWoofSetting(): Result<Boolean> = runCatching {
+        woofAlarmModule.isSet.first()
+    }
+
+    override suspend fun deleteWoofSetting(): Result<Unit> = runCatching {
+        woofAlarmModule.deleteSetting()
+    }
 }

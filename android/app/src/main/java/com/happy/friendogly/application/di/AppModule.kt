@@ -45,12 +45,13 @@ import com.happy.friendogly.domain.repository.WebSocketRepository
 import com.happy.friendogly.domain.repository.WoofRepository
 import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
-import com.happy.friendogly.domain.usecase.DeleteAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.DeleteChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
+import com.happy.friendogly.domain.usecase.DeleteWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.DisconnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
-import com.happy.friendogly.domain.usecase.GetAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatMessagesUseCase
@@ -66,6 +67,7 @@ import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
+import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
@@ -79,15 +81,17 @@ import com.happy.friendogly.domain.usecase.PublishLeaveUseCase
 import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
-import com.happy.friendogly.domain.usecase.SaveAlarmSettingUseCase
+import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.SaveChatMessageUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
+import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.AddressModule
-import com.happy.friendogly.local.di.AlarmModule
+import com.happy.friendogly.local.di.ChatAlarmModule
 import com.happy.friendogly.local.di.AlarmTokenModule
 import com.happy.friendogly.local.di.TokenManager
+import com.happy.friendogly.local.di.WoofAlarmModule
 import com.happy.friendogly.local.room.ChatMessageDatabase
 import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.AlarmSettingDataSourceImpl
@@ -117,7 +121,8 @@ class AppModule(context: Context) {
     private val authenticationListener: AuthenticationListener =
         AuthenticationListenerImpl(context, tokenManager)
     private val addressModule = AddressModule(context)
-    private val alarmModule = AlarmModule(context)
+    private val chatAlarmModule = ChatAlarmModule(context)
+    private val woofAlarmModule = WoofAlarmModule(context)
     private val alarmTokenModule = AlarmTokenModule(context)
     private val chatDataBase =
         Room.databaseBuilder(context, ChatMessageDatabase::class.java, "chat").build()
@@ -198,7 +203,7 @@ class AppModule(context: Context) {
         WebSocketDataSourceImpl(service = webSocketService)
     private val chatDataSource: ChatDataSource = ChatDataSourceImpl(service = chatService)
     private val alarmSettingDataSource: AlarmSettingDataSource =
-        AlarmSettingDataSourceImpl(alarmModule = alarmModule)
+        AlarmSettingDataSourceImpl(chatAlarmModule = chatAlarmModule, woofAlarmModule = woofAlarmModule)
     private val alarmTokenDataSource: AlarmTokenDataSource =
         AlamTokenDataSourceImpl(service = alarmTokenService)
 
@@ -283,12 +288,15 @@ class AppModule(context: Context) {
         ConnectWebsocketUseCase(repository = webSocketRepository)
     val disconnectWebsocketUseCase: DisconnectWebsocketUseCase =
         DisconnectWebsocketUseCase(repository = webSocketRepository)
-    val deleteAlarmSettingUseCase: DeleteAlarmSettingUseCase =
-        DeleteAlarmSettingUseCase(repository = alarmSettingRepository)
-    val saveAlarmSettingUseCase: SaveAlarmSettingUseCase =
-        SaveAlarmSettingUseCase(repository = alarmSettingRepository)
-    val getAlarmSettingUseCase: GetAlarmSettingUseCase =
-        GetAlarmSettingUseCase(repository = alarmSettingRepository)
+    val deleteChatAlarmUseCase: DeleteChatAlarmUseCase =
+        DeleteChatAlarmUseCase(repository = alarmSettingRepository)
+    val saveChatAlarmUseCase: SaveChatAlarmUseCase =
+        SaveChatAlarmUseCase(repository = alarmSettingRepository)
+    val saveWoofAlarmUseCase: SaveWoofAlarmUseCase = SaveWoofAlarmUseCase(repository = alarmSettingRepository)
+    val getWoofAlarmUseCase:GetWoofAlarmUseCase = GetWoofAlarmUseCase(repository = alarmSettingRepository)
+    val deleteWoofAlarmUseCase:DeleteWoofAlarmUseCase = DeleteWoofAlarmUseCase(repository = alarmSettingRepository)
+    val getChatAlarmUseCase: GetChatAlarmUseCase =
+        GetChatAlarmUseCase(repository = alarmSettingRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase =
         SaveAlamTokenUseCase(repository = alarmTokenRepository)
 

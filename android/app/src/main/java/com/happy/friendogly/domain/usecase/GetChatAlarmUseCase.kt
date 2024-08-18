@@ -2,8 +2,8 @@ package com.happy.friendogly.domain.usecase
 
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 
-class SaveAlarmSettingUseCase(
+class GetChatAlarmUseCase(
     private val repository: AlarmSettingRepository,
 ) {
-    suspend operator fun invoke(isSet: Boolean): Result<Unit> = repository.saveAlarm(isSet)
+    suspend operator fun invoke(): Result<Boolean> = repository.getChatSetting()
 }
