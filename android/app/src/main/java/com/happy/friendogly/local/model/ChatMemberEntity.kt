@@ -11,4 +11,13 @@ data class ChatMemberEntity(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "profile_url") val profileUrl: String,
-)
+) {
+    companion object {
+        fun noChatMember() =
+            ChatMemberEntity(
+                -1,
+                "",
+                "",
+            )
+    }
+}

@@ -9,8 +9,8 @@ import com.happy.friendogly.local.model.ChatMessageEntity
 @Dao
 interface ChatMessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(chatMessageEntity: ChatMessageEntity)
+    suspend fun insert(chatMessageEntity: ChatMessageEntity)
 
     @Query("SELECT * FROM chat_message")
-    fun getAll(): List<ChatMessageEntity>
+    suspend fun getAll(): List<ChatMessageEntity>
 }
