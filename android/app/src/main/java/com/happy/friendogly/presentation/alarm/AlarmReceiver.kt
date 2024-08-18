@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.presentation.ui.MainActivity
@@ -37,30 +38,50 @@ class AlarmReceiver : FirebaseMessagingService() {
         if (message.data[ALARM_TYPE] == "CHAT") {
             saveMessage(message)
             showChatAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
+        } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
+            showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
+
     }
 
     private fun saveMessage(message: RemoteMessage) = CoroutineScope(Dispatchers.IO).launch {
         val memberId = message.data["senderMemberId"]!!.toLong()
-        val name = message.data["senderName"]
-        val content = message.data["content"]
+        val name = message.data["senderName"] ?: ""
+        val content = message.data["content"] ?: ""
         val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
-        val profileUrl = message.data["profilePictureUrl"]
-
-        if (message.data["messageType"] == "CHAT") {
-            // TODO 서버에서 dto 받으면 수정
-            AppModule.getInstance().saveChatMessageUseCase(
-                5, Message.Other(
-                    createdAt = createdAt,
-                    member = ChatMember(
-                        id = memberId,
-                        name = name!!,
-                        profileImageUrl = profileUrl!!
-                    ),
-                    content = content!!
+        val profileUrl = message.data["profilePictureUrl"] ?: ""
+        val message:ChatComponent = when(message.data["messageType"]) {
+            "CHAT" -> Message.Other(
+                createdAt = createdAt,
+                member = ChatMember(
+                    id = memberId,
+                    name = name,
+                    profileImageUrl = profileUrl
+                ),
+                content = content
+            )
+            "LEAVE" -> ChatComponent.Leave(
+                createdAt = createdAt,
+                member = ChatMember(
+                    id = memberId,
+                    name = name,
+                    profileImageUrl = profileUrl
                 )
             )
+
+            "ENTER" -> ChatComponent.Enter(
+                createdAt = createdAt,
+                member = ChatMember(
+                    id = memberId,
+                    name = name,
+                    profileImageUrl = profileUrl
+                )
+            )
+            else -> error("잘못된 타입이 들어왔습니다.")
         }
+
+        AppModule.getInstance().saveChatMessageUseCase(5, message)
+
     }
 
     private fun showChatAlarm(
@@ -69,7 +90,21 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (AppModule.getInstance().getAlarmSettingUseCase.invoke().getOrDefault(false) && ChatLifecycleObserver.getInstance().isBackground) {
+        if (AppModule.getInstance().getChatAlarmUseCase.invoke()
+                .getOrDefault(true) && ChatLifecycleObserver.getInstance().isBackground
+        ) {
+            createNotificationChannel()
+            deliverNotification(title, body)
+        }
+    }
+
+    private fun showWoofAlarm(
+        title: String?,
+        body: String?,
+    ) = CoroutineScope(Dispatchers.IO).launch {
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (AppModule.getInstance().getWoofAlarmUseCase.invoke().getOrDefault(true)) {
             createNotificationChannel()
             deliverNotification(title, body)
         }
