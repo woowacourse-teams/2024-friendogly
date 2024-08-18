@@ -71,6 +71,12 @@ jobs:
         run: |
           echo "KEYSTORE_PROPERTIES" > keystore.properties
 
+      - name: Create release-keystore
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+          echo "$RELEASE_KEYSTORE" | base64 -d > release.keystore
+
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
