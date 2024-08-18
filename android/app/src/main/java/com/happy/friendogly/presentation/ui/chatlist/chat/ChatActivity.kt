@@ -20,6 +20,7 @@ class ChatActivity :
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
+            AppModule.getInstance().getChatMessagesUseCase,
             AppModule.getInstance().connectWebsocketUseCase,
             AppModule.getInstance().disconnectWebsocketUseCase,
             AppModule.getInstance().subScribeMessageUseCase,

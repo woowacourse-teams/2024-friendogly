@@ -8,6 +8,7 @@ import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DisconnectWebsocketUseCase
+import com.happy.friendogly.domain.usecase.GetChatMessagesUseCase
 import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -20,9 +21,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
+    private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val connectWebsocketUseCase: ConnectWebsocketUseCase,
     private val disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
     private val subScribeMessageUseCase: SubScribeMessageUseCase,
@@ -40,18 +43,17 @@ class ChatViewModel(
             }
         }
 
-    private val initJob: Deferred<Unit> =
-        viewModelScope.async {
-            connectWebsocketUseCase()
-        }
-
     fun subscribeMessage(
         chatRoomId: Long,
         myMemberId: Long,
     ) {
-        viewModelScope.launch {
-            initJob.await()
-            val newChat =
+        launch {
+            val connect = connect()
+            val chats = initChats(chatRoomId, myMemberId)
+
+            launch {
+                connect.await()
+                _chats.value = chats.await()
                 subScribeMessageUseCase(chatRoomId, myMemberId).distinctUntilChanged().map {
                     when (it) {
                         is ChatComponent.Date -> it.toUiModel()
@@ -60,13 +62,30 @@ class ChatViewModel(
                         is Message.Mine -> it.toUiModel()
                         is Message.Other -> it.toUiModel()
                     }
+                }.collect { newChat ->
+                    _chats.update { it.plus(newChat) }
                 }
-
-            newChat.collect {
-                _chats.value += listOf(it)
             }
         }
     }
+
+    private fun connect(): Deferred<Unit> =
+        viewModelScope.async {
+            connectWebsocketUseCase()
+        }
+
+    private fun initChats(chatRoomId: Long, myMemberId: Long): Deferred<List<ChatUiModel>> =
+        viewModelScope.async {
+            getChatMessagesUseCase(chatRoomId, myMemberId).getOrDefault(emptyList()).map {
+                when (it) {
+                    is ChatComponent.Date -> it.toUiModel()
+                    is ChatComponent.Enter -> it.toUiModel()
+                    is ChatComponent.Leave -> it.toUiModel()
+                    is Message.Mine -> it.toUiModel()
+                    is Message.Other -> it.toUiModel()
+                }
+            }
+        }
 
     fun sendMessage(
         chatRoomId: Long,
@@ -86,6 +105,7 @@ class ChatViewModel(
 
     companion object {
         fun factory(
+            getChatMessagesUseCase: GetChatMessagesUseCase,
             connectWebsocketUseCase: ConnectWebsocketUseCase,
             disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
             subScribeMessageUseCase: SubScribeMessageUseCase,
@@ -93,6 +113,7 @@ class ChatViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatViewModel(
+                    getChatMessagesUseCase,
                     connectWebsocketUseCase,
                     disconnectWebsocketUseCase,
                     subScribeMessageUseCase,
