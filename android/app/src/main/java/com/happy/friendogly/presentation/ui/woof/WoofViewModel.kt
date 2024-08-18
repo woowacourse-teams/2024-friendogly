@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,7 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintMarkerUiModel
@@ -33,6 +36,12 @@ class WoofViewModel(
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
     private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
 ) : BaseViewModel() {
+    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
+    val uiState: LiveData<WoofUiState> get() = _uiState
+
+    private val _filterState: MutableLiveData<FilterState> = MutableLiveData()
+    val filterState: LiveData<FilterState> get() = _filterState
+
     private val _myFootprintMarker: MutableLiveData<FootprintMarkerUiModel?> = MutableLiveData()
     val myFootprintMarker: LiveData<FootprintMarkerUiModel?> get() = _myFootprintMarker
 
@@ -46,11 +55,11 @@ class WoofViewModel(
     private val _addressLine: MutableLiveData<String> = MutableLiveData()
     val addressLine: LiveData<String> get() = _addressLine
 
-    private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
-    val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
+    private val _uiActions: MutableLiveData<Event<WoofUiActions>> = MutableLiveData()
+    val uiActions: LiveData<Event<WoofUiActions>> get() = _uiActions
 
-    private val _snackbarActions: MutableLiveData<Event<WoofSnackbarActions>> = MutableLiveData()
-    val snackbarActions: LiveData<Event<WoofSnackbarActions>> get() = _snackbarActions
+    private val _alertActions: MutableLiveData<Event<WoofAlertActions>> = MutableLiveData()
+    val alertActions: LiveData<Event<WoofAlertActions>> get() = _alertActions
 
     fun loadFootprintMarkBtnInfo() {
         viewModelScope.launch {
@@ -60,28 +69,28 @@ class WoofViewModel(
                     footPrintMarkBtnInfo.remainingTime(),
                 )
                 if (!footPrintMarkBtnInfo.hasPet) {
-                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPet)
+                    _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
                 } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
-                    _snackbarActions.emit(
-                        WoofSnackbarActions.ShowCantClickMarkBtn(
+                    _alertActions.emit(
+                        WoofAlertActions.AlertCantClickMarkBtnSnackbar(
                             footPrintMarkBtnInfo.remainingTime(),
                         ),
                     )
                 } else {
-                    _mapActions.emit(WoofMapActions.ShowRegisterMarkerLayout)
+                    _uiState.value = WoofUiState.RegisteringFootprint
                 }
             }.onFailure {
             }
         }
     }
 
-    fun markFootprint(latLng: LatLng) {
+    fun registerFootprint(latLng: LatLng) {
         viewModelScope.launch {
             postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { myFootprint ->
-                _mapActions.value =
-                    Event(WoofMapActions.MyFootprintLoaded(myFootprint = myFootprint.toFootprint()))
-                _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
-                _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
+                _uiActions.value =
+                    Event(WoofUiActions.MyFootprintLoaded(myFootprint = myFootprint.toFootprint()))
+                _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
+                _uiState.value = WoofUiState.FindingFriends()
                 loadNearFootprints(latLng)
             }.onFailure {
             }
@@ -92,7 +101,7 @@ class WoofViewModel(
         _myFootprintMarker.value = myFootprintMarker
     }
 
-    fun loadNearFootprints(latLng: LatLng) {
+    fun initFootprints(latLng: LatLng) {
         viewModelScope.launch {
             getNearFootprintsUseCase(
                 latLng.latitude,
@@ -100,11 +109,26 @@ class WoofViewModel(
             ).onSuccess { nearFootprints ->
                 val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
                 analyticsHelper.logNearFootprintSize(otherFootprints.size)
-                _mapActions.value = Event(WoofMapActions.NearFootprintsLoaded(otherFootprints))
+                _uiActions.value = Event(WoofUiActions.NearFootprintsLoaded(otherFootprints))
 
                 val myFootprint = nearFootprints.firstOrNull { footprint -> footprint.isMine }
-                _mapActions.value =
-                    Event(WoofMapActions.MyFootprintLoaded(myFootprint = myFootprint))
+                _uiActions.value = Event(WoofUiActions.MyFootprintLoaded(myFootprint = myFootprint))
+                _filterState.value = FilterState.ALL
+            }.onFailure {
+            }
+        }
+    }
+
+    fun loadNearFootprints(latLng: LatLng) {
+        _uiState.value = WoofUiState.Loading
+        viewModelScope.launch {
+            getNearFootprintsUseCase(
+                latLng.latitude,
+                latLng.longitude,
+            ).onSuccess { nearFootprints ->
+                val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
+                analyticsHelper.logNearFootprintSize(otherFootprints.size)
+                _uiActions.value = Event(WoofUiActions.NearFootprintsLoaded(otherFootprints))
             }.onFailure {
             }
         }
@@ -112,6 +136,12 @@ class WoofViewModel(
 
     fun loadNearFootprintMarkers(nearFootprintMarkers: List<FootprintMarkerUiModel>) {
         _nearFootprintMarkers.value = nearFootprintMarkers
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                _uiState.value = WoofUiState.FindingFriends()
+            },
+            ANIMATE_DURATION_MILLIS,
+        )
     }
 
     fun loadFootprintInfo(
@@ -124,6 +154,14 @@ class WoofViewModel(
             }.onFailure {
             }
         }
+    }
+
+    fun updateUiState(uiState: WoofUiState) {
+        _uiState.value = uiState
+    }
+
+    fun updateFilterState(filterState: FilterState) {
+        _filterState.value = filterState
     }
 
     fun updateWalkStatus(latLng: LatLng) {
@@ -150,19 +188,23 @@ class WoofViewModel(
         }
     }
 
+    fun changeRefreshBtnVisibility(visible: Boolean) {
+        _uiState.value = WoofUiState.FindingFriends(refreshBtnVisible = visible)
+    }
+
     fun changeLocationTrackingMode() {
-        val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
-        _mapActions.emit(
-            if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
-                WoofMapActions.ChangeMapToFaceTrackingMode
+        val mapAction = uiActions.value?.value ?: WoofUiActions.ChangeToFollowTrackingMode
+        _uiActions.emit(
+            if (mapAction is WoofUiActions.ChangeToFollowTrackingMode) {
+                WoofUiActions.ChangeToFaceTrackingMode
             } else {
-                WoofMapActions.ChangeMapToFollowTrackingMode
+                WoofUiActions.ChangeToFollowTrackingMode
             },
         )
     }
 
     fun changeTrackingModeToNoFollow() {
-        _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
+        _uiActions.emit(WoofUiActions.ChangeToNoFollowTrackingMode)
     }
 
     fun loadAddressLine(addressLine: String) {
@@ -172,7 +214,7 @@ class WoofViewModel(
     // API 나오면 수정
     fun endWalk() {
         _myFootprintMarker.value = myFootprintMarker.value?.copy(walkStatus = WalkStatus.AFTER)
-        _snackbarActions.value = Event(WoofSnackbarActions.ShowEndWalk)
+        _alertActions.emit(WoofAlertActions.AlertEndWalkSnackbar)
     }
 
     companion object {

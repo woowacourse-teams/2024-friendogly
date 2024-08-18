@@ -47,4 +47,5 @@ object Types {
     const val FOOTPRINT_CLICKED = "footprint_clicked"
     const val FOOTPRINT_MEMBER_NAME_CLICKED = "footprint_member_name_clicked"
     const val REGISTER_HELP_CLICKED = "register_help_clicked"
+    const val FOOTPRINT_PET_IMAGE_CLICKED = "footprint_pet_image_clicked"
 }
