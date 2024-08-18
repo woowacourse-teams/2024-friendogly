@@ -74,6 +74,10 @@ fun AnalyticsHelper.logRegisterHelpClicked() {
     logEvent(type = Types.REGISTER_HELP_CLICKED)
 }
 
+fun AnalyticsHelper.logFootprintPetImageClicked() {
+    logEvent(type = Types.FOOTPRINT_PET_IMAGE_CLICKED)
+}
+
 fun AnalyticsHelper.logNearFootprintSize(size: Int) {
     logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.NEAR_FOOTPRINTS_SIZE to size)
 }

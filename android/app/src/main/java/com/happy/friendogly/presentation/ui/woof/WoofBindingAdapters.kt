@@ -1,14 +1,19 @@
 package com.happy.friendogly.presentation.ui.woof
 
+import android.content.res.ColorStateList
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.view.View
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import com.airbnb.lottie.LottieAnimationView
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
+import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
@@ -163,4 +168,90 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
             }
         }
     }
+}
+
+@BindingAdapter("registeringVisibility")
+fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
+    if (uiState != null) {
+        isVisible = (uiState == WoofUiState.RegisteringFootprint)
+    }
+}
+
+@BindingAdapter("registeringVisibilityAnimation")
+fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
+    if (uiState == WoofUiState.RegisteringFootprint) {
+        showViewAnimation(this)
+    } else {
+        hideViewAnimation(this)
+    }
+}
+
+@BindingAdapter("viewingVisibilityAnimation")
+fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
+    if (uiState == WoofUiState.ViewingFootprintInfo) {
+        showViewAnimation(this)
+    } else {
+        hideViewAnimation(this)
+    }
+}
+
+@BindingAdapter("loadingVisibility")
+fun View.bindLoadingVisibility(uiState: WoofUiState?) {
+    if (uiState != null) {
+        isVisible = (uiState == WoofUiState.Loading)
+    }
+}
+
+@BindingAdapter("loadingAnimation")
+fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
+    if (uiState == WoofUiState.Loading) {
+        showLoadingAnimation(this)
+    } else {
+        hideLoadingAnimation(this)
+    }
+}
+
+@BindingAdapter("stateVisibility")
+fun View.bindStateVisibility(uiState: WoofUiState?) {
+    if (uiState != null) {
+        isVisible = (uiState != WoofUiState.RegisteringFootprint)
+    }
+}
+
+@BindingAdapter("layoutWalkVisibility")
+fun View.bindLayoutWalkVisibility(walkStatus: WalkStatus?) {
+    if (walkStatus != null) {
+        isVisible = walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING
+    }
+}
+
+@BindingAdapter("markBtnVisibility")
+fun View.bindMarkBtnVisibility(walkStatus: WalkStatus?) {
+    if (walkStatus != null) {
+        isVisible = !(walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING)
+    }
+}
+
+@BindingAdapter("filterState", "btnState")
+fun TextView.bindStateBtnBackgroundTint(
+    filterState: FilterState?,
+    btnState: FilterState?,
+) {
+    if (filterState != null && btnState != null) {
+        val whiteColor = resources.getColor(R.color.white, null)
+        val coralColor = resources.getColor(R.color.coral50, null)
+
+        backgroundTintList =
+            ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
+    }
+}
+
+@BindingAdapter("refreshBtnVisibility")
+fun View.bindRefreshBtnVisibility(uiState: WoofUiState?) {
+    isVisible =
+        if (uiState is WoofUiState.FindingFriends) {
+            uiState.refreshBtnVisible
+        } else {
+            false
+        }
 }

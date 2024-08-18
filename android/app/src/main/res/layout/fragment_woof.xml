@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.happy.friendogly.presentation.ui.woof.model.FilterState" />
+
         <variable
             name="actionHandler"
             type="com.happy.friendogly.presentation.ui.woof.WoofActionHandler" />
@@ -30,6 +32,7 @@
             <ImageButton
                 android:id="@+id/btn_woof_back"
                 style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
+                registeringVisibility="@{vm.uiState}"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
                 android:layout_marginStart="12dp"
@@ -43,8 +46,11 @@
         </com.naver.maps.map.MapView>
 
         <TextView
-            android:id="@+id/tv_woof_status_all"
+            android:id="@+id/btn_woof_status_all"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            btnState="@{FilterState.ALL}"
+            filterState="@{vm.filterState}"
+            stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -61,8 +67,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_woof_status_before"
+            android:id="@+id/btn_woof_status_before"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
+            btnState="@{FilterState.BEFORE}"
+            filterState="@{vm.filterState}"
+            stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -76,12 +85,15 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_before"
             app:drawableStartCompat="@drawable/ic_marker_before"
-            app:layout_constraintStart_toEndOf="@id/tv_woof_status_all"
+            app:layout_constraintStart_toEndOf="@id/btn_woof_status_all"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_woof_status_ongoing"
+            android:id="@+id/btn_woof_status_ongoing"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral500.Size14"
+            btnState="@{FilterState.ONGOING}"
+            filterState="@{vm.filterState}"
+            stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -95,12 +107,15 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_ongoing"
             app:drawableStartCompat="@drawable/ic_marker_ongoing"
-            app:layout_constraintStart_toEndOf="@id/tv_woof_status_before"
+            app:layout_constraintStart_toEndOf="@id/btn_woof_status_before"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_woof_status_after"
+            android:id="@+id/btn_woof_status_after"
             style="@style/Theme.AppCompat.TextView.SemiBold.Gray06.Size14"
+            btnState="@{FilterState.AFTER}"
+            filterState="@{vm.filterState}"
+            stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -114,12 +129,13 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_after"
             app:drawableStartCompat="@drawable/ic_marker_after"
-            app:layout_constraintStart_toEndOf="@id/tv_woof_status_ongoing"
+            app:layout_constraintStart_toEndOf="@id/btn_woof_status_ongoing"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/btn_woof_footprint_refresh"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
+            refreshBtnVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -135,11 +151,12 @@
             app:drawableStartCompat="@drawable/ic_refresh"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_woof_status_before" />
+            app:layout_constraintTop_toBottomOf="@id/btn_woof_status_before" />
 
         <ImageButton
             android:id="@+id/btn_woof_close"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
+            registeringVisibility="@{vm.uiState}"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_marginTop="20dp"
@@ -197,6 +214,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_walk"
+            layoutWalkVisibility="@{vm.myFootprintMarker.walkStatus}"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginHorizontal="12dp"
@@ -252,6 +270,7 @@
 
         <ImageButton
             android:id="@+id/btn_woof_mark"
+            markBtnVisibility="@{vm.myFootprintMarker.walkStatus}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="12dp"
@@ -270,6 +289,7 @@
         <TextView
             android:id="@+id/tv_woof_footprint_info_walk_status"
             style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            viewingVisibilityAnimation="@{vm.uiState}"
             walkStatusInfo="@{vm.footprintInfo.walkStatusInfo}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -287,6 +307,7 @@
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_woof_pet_detail"
+            viewingVisibilityAnimation="@{vm.uiState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -301,6 +322,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_location_register"
+            registeringVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -319,6 +341,7 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location_register"
+            registeringVisibility="@{vm.uiState}"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_marginEnd="12dp"
@@ -330,6 +353,7 @@
 
         <ImageView
             android:id="@+id/iv_woof_register_marker"
+            registeringVisibility="@{vm.uiState}"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginBottom="46dp"
@@ -342,6 +366,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_register_marker"
+            registeringVisibilityAnimation="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:layout_margin="12dp"
@@ -407,6 +432,7 @@
 
         <FrameLayout
             android:id="@+id/layout_woof_loading"
+            loadingVisibility="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/lottie_layout"
@@ -421,6 +447,7 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_woof_loading"
+                loadingAnimation="@{vm.uiState}"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
