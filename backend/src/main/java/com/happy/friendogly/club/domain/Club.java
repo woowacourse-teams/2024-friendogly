@@ -279,6 +279,13 @@ public class Club {
     public void update(String title, String content, String status) {
         this.title = new Title(title);
         this.content = new Content(content);
+        updateStatus(status);
+    }
+
+    private void updateStatus(String status) {
+        if (this.status.isFull()) {
+            return;
+        }
         this.status = Status.toStatus(status);
     }
 }
