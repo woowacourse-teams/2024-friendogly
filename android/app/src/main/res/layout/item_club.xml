@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                app:applyCanParticipation="@{club.canParticipate}"
+                android:text="@{club.clubState.clubStateName}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_club_list_filter_list"
                 tools:text="모집중" />

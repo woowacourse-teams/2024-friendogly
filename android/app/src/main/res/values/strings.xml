@@ -206,6 +206,8 @@
     <!--모임 수정 -->
     <string name="club_modify_title">모임 수정하기</string>
     <string name="club_modify_commit">수정 완료</string>
+    <string name="club_modify_recruitment">모집 여부</string>
+    <string name="club_modify_fail">모임 수정에 실패하였습니다..</string>
 
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
