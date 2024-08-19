@@ -1,63 +1,27 @@
-name: Android Pull Request CI
+name: Android CD
 
 on:
   push:
-    branches: [ develop ]
-    paths:
-      - 'android/**'
-  pull_request:
-    branches: [ develop ]
-    paths:
-      - 'android/**'
+    tags:
+      - "v*.*.*"
 
 defaults:
   run:
     working-directory: ./android
 
 jobs:
-  verify:
+  build:
     runs-on: ubuntu-latest
 
-    permissions:
-      checks: write
-
-      # needed unless run with comment_mode: off
-      pull-requests: write
-
-      # only needed for private repository
-      contents: read
-
-      # only needed for private repository
-      issues: read
-
-      # required by download step to access artifacts API
-      actions: read
-
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Gradle cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
           java-version: '17'
-
-      - name: set up Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
 
       - name: Create local.properties
         env:
@@ -84,7 +48,7 @@ jobs:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         run: |
           touch ../android/app/keystore/friendogly.jks
-          echo RELEASE_KEYSTORE >> ../android/app/keystore/friendogly.jks
+          echo "$RELEASE_KEYSTORE" | base64 -d > ../android/app/keystore/friendogly.jks
           cat ../android/app/keystore/friendogly.jks
 
       - name: Create google-services.json
@@ -95,15 +59,6 @@ jobs:
           echo GOOGLE_SERVICES_JSON >> ../android/app/google-services.json
           cat ../android/app/google-services.json
 
-      - name: Lint Check
-        run: ./gradlew ktlintCheck
-
-      - name: Upload Event File
-        uses: actions/upload-artifact@v3
-        with:
-          name: Event File
-          path: ${{ github.event_path }}
-
       - name: Create file
         run: cat /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json | base64
 
@@ -112,12 +67,20 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA > /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json
 
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Build Release APK
+        run: |
+          ./gradlew :app:assembleRelease
 
-      - name: Upload Test Results
-        if: always()
+      - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Test Results
-          path: "**/test-results/**/*.xml"
+          name: release-artifacts
+          path: android/app/build/outputs/apk/release/
+          if-no-files-found: error
+
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
