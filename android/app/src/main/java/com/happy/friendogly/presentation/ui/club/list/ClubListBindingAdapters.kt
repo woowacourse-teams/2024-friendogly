@@ -8,16 +8,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 
-@BindingAdapter("applyCanParticipation")
-fun TextView.bindCanParticipationType(canParticipation: Boolean) {
-    this.text =
-        if (canParticipation) {
-            context.getString(R.string.club_participate_name)
-        } else {
-            context.getString(R.string.club_complete_participate_name)
-        }
-}
-
 @BindingAdapter("clubDateTime")
 fun TextView.bindClubDateTime(dateTime: LocalDateTime?) {
     dateTime ?: return
