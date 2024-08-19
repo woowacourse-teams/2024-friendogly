@@ -14,6 +14,8 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     boolean existsByMemberId(Long memberId);
 
+    void deleteAllByMemberId(Long memberId);
+
     default Pet getById(Long id) {
         return findById(id).orElseThrow(() -> new FriendoglyException("강아지 정보를 찾지 못했습니다."));
     }

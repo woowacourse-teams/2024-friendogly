@@ -14,6 +14,8 @@ public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> 
 
     Optional<KakaoMember> findByRefreshToken(String refreshToken);
 
+    void deleteByMemberId(Long memberId);
+
     default KakaoMember getByRefreshToken(String refreshToken) {
         return findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new FriendoglyException("유효하지 않은 리프레시 토큰입니다.", HttpStatus.UNAUTHORIZED));
@@ -22,5 +24,5 @@ public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> 
     default KakaoMember getByMemberId(Long memberId) {
         return findByMemberId(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 회원입니다.", HttpStatus.UNAUTHORIZED));
-    };
+    }
 }
