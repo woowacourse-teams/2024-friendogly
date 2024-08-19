@@ -5,5 +5,5 @@ interface ClubModifyActionHandler {
 
     fun submitModify()
 
-    fun selectClubImage()
+    fun openSelectState()
 }
