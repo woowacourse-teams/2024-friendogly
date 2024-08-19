@@ -88,13 +88,6 @@ jobs:
       - name: Build release Bundle
         run: ./gradlew bundleRelease
 
-      - name: Upload a Build AAB Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: app-release.aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
-          if-no-files-found: error
-
       - name: Upload artifact to Google Play Store
         uses: r0adkll/upload-google-play@v1
         with:
