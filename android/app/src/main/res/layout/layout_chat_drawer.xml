@@ -5,44 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingStart="12dp"
+    android:paddingHorizontal="12dp"
     app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior"
     tools:openDrawer="end">
-
-
-    <TextView
-        android:id="@+id/tv_chat_setting_title"
-        style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/chat_setting"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_chat_setting_alarm"
-        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/chat_setting_alarm"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_chat_setting_title" />
-
-    <com.google.android.material.materialswitch.MaterialSwitch
-        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
-        android:id="@+id/switch_chat_setting_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@id/tv_chat_setting_alarm"
-        app:layout_constraintStart_toEndOf="@id/tv_chat_setting_alarm"
-        app:layout_constraintTop_toTopOf="@id/tv_chat_setting_alarm"
-        app:thumbTint="@color/sel_switch_thumb"
-        app:trackDecoration="@null"
-        app:trackTint="@color/sel_switch_track" />
 
     <View
         android:id="@+id/view_chat_setting_line"
@@ -60,78 +25,107 @@
         android:layout_marginTop="18dp"
         android:text="@string/chat_group_info"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_chat_setting_line" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/Theme.AppCompat.TextView.SemiBold.Gray07.Size14"
+        android:id="@+id/btn_chat_club"
+        android:text="@string/chat_go_club_detail"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_gray100_fill_8"
+        app:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/tv_chat_group_info" />
 
     <TextView
         android:id="@+id/tv_chat_dog_size"
         style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/chat_group_dog_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_chat_group_info" />
+        app:layout_constraintTop_toBottomOf="@id/btn_chat_club" />
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/layout_chat_dog_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         app:alignContent="stretch"
         app:alignItems="stretch"
         app:flexWrap="wrap"
         app:layout_constraintTop_toBottomOf="@id/tv_chat_dog_size">
 
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_small"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_chat_dog_small"
+            style="@style/Theme.AppCompat.TextView.Regular.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/rect_coral30_fill_8"
+            android:button="@null"
+            android:checked="false"
+            android:clickable="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
+            android:text="@string/dog_small"
+            android:textColor="@color/coral500"
+            app:backgroundTint="@null"
+            app:icon="@drawable/ic_hashtag"
+            app:iconGravity="start"
+            app:iconPadding="5dp"
+            app:iconTint="@color/coral400" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_chat_dog_medium"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
+            android:background="@drawable/rect_coral30_fill_8"
             android:button="@null"
             android:checked="false"
+            android:layout_marginTop="12dp"
             android:clickable="false"
-            android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_small"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
+            android:text="@string/dog_medium"
+            android:textColor="@color/coral500"
+            app:backgroundTint="@null"
+            app:icon="@drawable/ic_hashtag"
+            app:iconGravity="start"
+            app:iconPadding="5dp"
+            app:iconTint="@color/coral400" />
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_medium"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_chat_dog_large"
             style="@style/Theme.AppCompat.TextView.Regular.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
+            android:background="@drawable/rect_coral30_fill_8"
             android:button="@null"
+            android:layout_marginTop="12dp"
             android:checked="false"
             android:clickable="false"
-            android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_small"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
-
-        <CheckBox
-            android:id="@+id/chb_chat_dog_large"
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="false"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_small"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
+            android:text="@string/dog_large"
+            android:textColor="@color/coral500"
+            app:backgroundTint="@null"
+            app:icon="@drawable/ic_hashtag"
+            app:iconGravity="start"
+            app:iconPadding="5dp"
+            app:iconTint="@color/coral400" />
 
 
     </com.google.android.flexbox.FlexboxLayout>
@@ -158,83 +152,107 @@
         app:showDividerHorizontal="middle">
 
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_female"
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="false"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_gender_female"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            android:layout_marginTop="12dp">
 
-        <CheckBox
-            android:id="@+id/chb_chat_dog_male"
-            style="@style/Theme.AppCompat.TextView.Regular.Size12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/sel_chat_dog_size_checkbox"
-            android:button="@null"
-            android:checked="false"
-            android:clickable="false"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="@string/dog_gender_male"
-            android:textColor="@color/sel_chat_dog_info_checkbox" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_chat_dog_female"
+                style="@style/Theme.AppCompat.TextView.Regular.Size12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rect_coral30_fill_8"
+                android:button="@null"
+                android:checked="false"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
+                android:text="@string/dog_gender_female"
+                android:textColor="@color/coral500"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_hashtag"
+                app:iconGravity="start"
+                app:iconPadding="5dp"
+                app:iconTint="@color/coral400" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_chat_dog_male"
+                style="@style/Theme.AppCompat.TextView.Regular.Size12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rect_coral30_fill_8"
+                android:button="@null"
+                android:checked="false"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
+                android:text="@string/dog_gender_male"
+                android:textColor="@color/coral500"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_hashtag"
+                app:iconGravity="start"
+                app:iconPadding="5dp"
+                app:iconTint="@color/coral400" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
 
-            <CheckBox
-                android:id="@+id/chb_chat_dog_female_neutered"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_chat_dog_female_neutered"
                 style="@style/Theme.AppCompat.TextView.Regular.Size12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/sel_chat_dog_size_checkbox"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rect_coral30_fill_8"
                 android:button="@null"
                 android:checked="false"
                 android:clickable="false"
-                android:gravity="center"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:padding="10dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
                 android:text="@string/dog_gender_female_neutered"
-                android:textColor="@color/sel_chat_dog_info_checkbox" />
+                android:textColor="@color/coral500"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_hashtag"
+                app:iconGravity="start"
+                app:iconPadding="5dp"
+                app:iconTint="@color/coral400" />
 
-            <CheckBox
-                android:id="@+id/chb_chat_dog_male_neutered"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_chat_dog_male_neutered"
                 style="@style/Theme.AppCompat.TextView.Regular.Size12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/sel_chat_dog_size_checkbox"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rect_coral30_fill_8"
                 android:button="@null"
                 android:checked="false"
                 android:clickable="false"
-                android:gravity="center"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:padding="10dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp"
                 android:text="@string/dog_gender_male_neutered"
-                android:textColor="@color/sel_chat_dog_info_checkbox" />
+                android:textColor="@color/coral500"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_hashtag"
+                app:iconGravity="start"
+                app:iconPadding="5dp"
+                app:iconTint="@color/coral400" />
         </LinearLayout>
 
     </com.google.android.flexbox.FlexboxLayout>
-
 
     <View
         android:id="@+id/view_chat_dog_info_line"
@@ -245,6 +263,40 @@
         app:layout_constraintTop_toBottomOf="@id/layout_chat_dog_gender" />
 
     <TextView
+        android:id="@+id/tv_chat_setting_title"
+        style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/chat_setting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_chat_dog_info_line" />
+
+    <TextView
+        android:id="@+id/tv_chat_setting_alarm"
+        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/chat_setting_alarm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_chat_setting_title" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switch_chat_setting_alarm"
+        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@id/tv_chat_setting_alarm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_chat_setting_alarm"
+        app:thumbTint="@color/sel_switch_thumb"
+        app:trackDecoration="@null"
+        app:trackTint="@color/sel_switch_track" />
+
+    <TextView
         android:id="@+id/tv_chat_join_people"
         style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
         android:layout_width="wrap_content"
@@ -252,7 +304,7 @@
         android:layout_marginTop="18dp"
         android:text="@string/chat_group_join_people"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_chat_dog_info_line" />
+        app:layout_constraintTop_toBottomOf="@id/view_chat_setting_line" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_chat_join_people"
