@@ -41,8 +41,8 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
 @BindingAdapter("clubStateTextStyle")
 fun TextView.bindClubStateTextStyle(clubState: ClubState){
     val textStyle = when(clubState){
-        ClubState.OPEN -> R.style.Theme_AppCompat_TextView_SemiBold_Orange_Size14
-        ClubState.CLOSE,ClubState.FULL -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
+        ClubState.OPEN -> context.getColor(R.color.coral500)
+        ClubState.CLOSE,ClubState.FULL -> context.getColor(R.color.gray700)
     }
-    this.setTextAppearance(textStyle)
+    this.setTextColor(textStyle)
 }

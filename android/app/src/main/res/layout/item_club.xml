@@ -8,6 +8,7 @@
         <variable
             name="club"
             type="com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel" />
+
         <variable
             name="actionHandler"
             type="com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler" />
@@ -25,16 +26,16 @@
             android:id="@+id/iv_club_list_poster"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            app:glide="@{club.clubPoster}"
+            android:background="@drawable/rect_gary03_fill_12"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_club_normal"
-            android:background="@drawable/rect_gary03_fill_12"
-            app:shapeAppearanceOverlay="@style/RoundSmall"
-            app:layout_constraintDimensionRatio="1:1"
+            app:glide="@{club.clubPoster}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/ll_club_list_main_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundSmall" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_club_list_main_content"
@@ -61,15 +62,16 @@
 
             <TextView
                 android:id="@+id/tv_club_list_club_state"
-                tools:style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size14"
-                app:clubStateTextStyle = "@{club.clubState}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="@{club.clubState.clubStateName}"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size14"
+                app:clubStateTextStyle="@{club.clubState}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rcv_club_list_filter_list"
+                tools:style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size14"
                 tools:text="모집중" />
 
             <TextView
@@ -157,13 +159,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:maxLines="1"
+                android:layout_marginEnd="20dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{@string/club_club_info(club.clubLeaderName,club.clubLocation)}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_club_list_club_date"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_club_list_user_list_icon"
                 tools:text="벼리 · 잠실6동222222222222222222222222" />
 
