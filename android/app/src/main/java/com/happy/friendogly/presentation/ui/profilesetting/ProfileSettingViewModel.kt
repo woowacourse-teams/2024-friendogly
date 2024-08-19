@@ -7,10 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
+import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -23,6 +26,7 @@ import kotlinx.coroutines.delay
 import okhttp3.MultipartBody
 
 class ProfileSettingViewModel(
+    private val saveAlarmTokenUseCase: SaveAlamTokenUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val postMemberUseCase: PostMemberUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
@@ -116,6 +120,7 @@ class ProfileSettingViewModel(
         ).fold(
             onSuccess = { register ->
                 saveJwaToken(register.tokens)
+                saveAlarmToken()
             },
             onError = { error ->
                 when (error) {
@@ -139,6 +144,20 @@ class ProfileSettingViewModel(
             },
         )
     }
+
+    private fun saveAlarmToken() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task: Task<String> ->
+                if (!task.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+                val token = task.result
+                launch { // TODO 에러 핸들링
+                    saveAlarmTokenUseCase(token)
+                }
+            }
+    }
+
 
     private suspend fun patchMember(
         nickname: String,
@@ -167,11 +186,13 @@ class ProfileSettingViewModel(
         private val regex = "^[ㄱ-ㅎㅏ-ㅣ]+$".toRegex()
 
         fun factory(
+            saveAlarmTokenUseCase: SaveAlamTokenUseCase,
             postMemberUseCase: PostMemberUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 ProfileSettingViewModel(
+                    saveAlarmTokenUseCase = saveAlarmTokenUseCase,
                     savedStateHandle = creator.createSavedStateHandle(),
                     postMemberUseCase = postMemberUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,

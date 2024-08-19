@@ -15,6 +15,7 @@ import com.happy.friendogly.domain.model.KakaoAccessToken
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
+import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -30,7 +31,8 @@ class RegisterViewModel(
     private val getJwtTokenUseCase: GetJwtTokenUseCase,
     private val postKakaoLoginUseCase: PostKakaoLoginUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
-) : BaseViewModel() {
+    private val saveAlarmTokenUseCase:SaveAlamTokenUseCase,
+    ) : BaseViewModel() {
     private val _navigateAction: MutableLiveData<Event<RegisterNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<RegisterNavigationAction>> get() = _navigateAction
@@ -150,6 +152,7 @@ class RegisterViewModel(
             getJwtTokenUseCase: GetJwtTokenUseCase,
             postKakaoLoginUseCase: PostKakaoLoginUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
+            saveAlarmTokenUseCase:SaveAlamTokenUseCase
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 RegisterViewModel(
@@ -158,6 +161,7 @@ class RegisterViewModel(
                     getJwtTokenUseCase = getJwtTokenUseCase,
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
+                    saveAlarmTokenUseCase = saveAlarmTokenUseCase
                 )
             }
         }
