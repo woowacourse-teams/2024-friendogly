@@ -30,3 +30,14 @@ management:
 file:
   firebase:
     path: firebase-friendogly-private-key.json
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:database
+    username: ${H2_CONSOLE_USERNAME}
+    password: ${H2_CONSOLE_PASSWORD}
+  h2:
+    console:
+      enabled: true
+      path: ${H2_CONSOLE_ENDPOINT}

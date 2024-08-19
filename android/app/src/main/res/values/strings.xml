@@ -195,7 +195,7 @@
     <string name="club_detail_fail_load">모임을 찾지 못했습니다.</string>
     <string name="club_detail_fail_button">뒤로가기</string>
     <string name="club_detail_participate_text">참여하기</string>
-    <string name="club_detail_un_participate_text">참여불가</string>
+    <string name="club_detail_un_participate_text">모집종료</string>
     <string name="club_detail_mine_text">모임보기</string>
     <string name="club_detail_update">수정하기</string>
     <string name="club_detail_delete">방나가기</string>

@@ -7,9 +7,9 @@ public record ClubPetDetailResponse(
         String name,
         String imageUrl,
         boolean isMine
-){
+) {
 
     public ClubPetDetailResponse(Pet pet, boolean isMine) {
-        this(pet.getId(),pet.getName().getValue(), pet.getImageUrl(), isMine);
+        this(pet.getId(), pet.getName().getValue(), pet.getImageUrl(), isMine);
     }
 }

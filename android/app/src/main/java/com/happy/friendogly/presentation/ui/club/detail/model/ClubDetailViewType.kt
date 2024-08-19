@@ -12,12 +12,13 @@ enum class ClubDetailViewType {
             isMine: Boolean,
             isMyParticipated: Boolean,
             canParticipation: Boolean,
+            isUserPetEmpty: Boolean,
         ): ClubDetailViewType {
             return if (isMine) {
                 MINE
             } else if (isMyParticipated) {
                 PARTICIPATED
-            } else if (canParticipation) {
+            } else if (canParticipation or isUserPetEmpty) {
                 RECRUITMENT
             } else {
                 END_RECRUITMENT

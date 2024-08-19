@@ -7,6 +7,7 @@ import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
 import com.happy.friendogly.domain.model.ClubFilterCondition
+import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.ClubRepository
@@ -54,11 +55,11 @@ class ClubRepositoryImpl(
     override suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
-    ): Result<Unit> =
+    ): Result<ClubParticipation> =
         source.postClubMember(
             clubId = clubId,
             participatingPetsId = participatingPetsId,
-        )
+        ).mapCatching { it.toDomain() }
 
     override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
 }

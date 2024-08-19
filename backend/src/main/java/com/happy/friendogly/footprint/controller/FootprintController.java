@@ -4,18 +4,20 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
-import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusRequest;
+import com.happy.friendogly.footprint.dto.request.UpdateWalkStatusAutoRequest;
 import com.happy.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndPetExistenceResponse;
 import com.happy.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.SaveFootprintResponse;
-import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusAutoResponse;
+import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualResponse;
 import com.happy.friendogly.footprint.service.FootprintCommandService;
 import com.happy.friendogly.footprint.service.FootprintQueryService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +56,6 @@ public class FootprintController {
             @Auth Long memberId,
             @PathVariable Long footprintId
     ) {
-        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         FindOneFootprintResponse response = footprintQueryService.findOne(memberId, footprintId);
         return ApiResponse.ofSuccess(response);
     }
@@ -64,7 +65,6 @@ public class FootprintController {
             @Auth Long memberId,
             @Valid FindNearFootprintRequest request
     ) {
-        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         List<FindNearFootprintResponse> response = footprintQueryService.findNear(memberId, request);
         return ApiResponse.ofSuccess(response);
     }
@@ -73,18 +73,34 @@ public class FootprintController {
     public ApiResponse<FindMyLatestFootprintTimeAndPetExistenceResponse> findMyLatestFootprintTimeAndPetExistence(
             @Auth Long memberId
     ) {
-        // TODO: 추후 토큰에서 memberId를 가져오도록 변경
         FindMyLatestFootprintTimeAndPetExistenceResponse response
                 = footprintQueryService.findMyLatestFootprintTimeAndPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
     }
 
-    @PatchMapping("/walk-status")
-    public ApiResponse<UpdateWalkStatusResponse> updateWalkStatus(
+    @PatchMapping("/recent/walk-status/auto")
+    public ApiResponse<UpdateWalkStatusAutoResponse> updateWalkStatusAuto(
             @Auth Long memberId,
-            @Valid @RequestBody UpdateWalkStatusRequest request
+            @Valid @RequestBody UpdateWalkStatusAutoRequest request
     ) {
-        UpdateWalkStatusResponse walkStatusResponse = footprintCommandService.updateWalkStatus(memberId, request);
-        return ApiResponse.ofSuccess(walkStatusResponse);
+        UpdateWalkStatusAutoResponse response = footprintCommandService.updateWalkStatusAuto(memberId, request);
+        return ApiResponse.ofSuccess(response);
+    }
+
+    @PatchMapping("/recent/walk-status/manual")
+    public ApiResponse<UpdateWalkStatusManualResponse> updateWalkStatusManual(
+            @Auth Long memberId
+    ) {
+        UpdateWalkStatusManualResponse response = footprintCommandService.updateWalkStatusManual(memberId);
+        return ApiResponse.ofSuccess(response);
+    }
+
+    @DeleteMapping("/{footprintId}")
+    public ResponseEntity<Void> delete(
+            @Auth Long memberId,
+            @PathVariable Long footprintId
+    ) {
+        footprintCommandService.delete(memberId, footprintId);
+        return ResponseEntity.noContent().build();
     }
 }

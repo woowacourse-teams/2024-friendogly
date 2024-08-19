@@ -5,6 +5,7 @@ import com.happy.friendogly.remote.model.request.PostClubMemberRequest
 import com.happy.friendogly.remote.model.request.PostClubRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.ClubDetailResponse
+import com.happy.friendogly.remote.model.response.ClubParticipationResponse
 import com.happy.friendogly.remote.model.response.ClubResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -44,7 +45,7 @@ interface ClubService {
     suspend fun postClubMember(
         @Path("clubId") clubId: Long,
         @Body request: PostClubMemberRequest,
-    ): BaseResponse<Unit>
+    ): BaseResponse<ClubParticipationResponse>
 
     @DELETE(ApiClient.Club.DELETE_CLUB_MEMBER)
     suspend fun deleteClubMember(

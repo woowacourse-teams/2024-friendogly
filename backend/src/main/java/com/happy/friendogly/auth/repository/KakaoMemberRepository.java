@@ -22,5 +22,5 @@ public interface KakaoMemberRepository extends JpaRepository<KakaoMember, Long> 
     default KakaoMember getByMemberId(Long memberId) {
         return findByMemberId(memberId)
                 .orElseThrow(() -> new FriendoglyException("존재하지 않는 회원입니다.", HttpStatus.UNAUTHORIZED));
-    };
+    }
 }

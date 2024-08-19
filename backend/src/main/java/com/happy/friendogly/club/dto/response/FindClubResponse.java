@@ -29,7 +29,8 @@ public record FindClubResponse(
         boolean canParticipate,
         boolean isMyPetsEmpty,
         List<ClubMemberDetailResponse> memberDetails,
-        List<ClubPetDetailResponse> petDetails
+        List<ClubPetDetailResponse> petDetails,
+        Long chatRoomId
 ) {
 
     public FindClubResponse(Club club, Member member, List<Pet> myPets) {
@@ -52,13 +53,14 @@ public record FindClubResponse(
                 club.isJoinable(member, myPets),
                 myPets.isEmpty(),
                 club.getClubMembers().stream()
-                        .map(clubMember -> clubMember.getClubMemberPk().getMember())
+                        .map(clubMember -> clubMember.getClubMemberId().getMember())
                         .map(ClubMemberDetailResponse::new)
                         .toList(),
                 club.getClubPets().stream()
-                        .map(clubPet -> clubPet.getClubPetPk().getPet())
+                        .map(clubPet -> clubPet.getClubPetId().getPet())
                         .map(pet -> new ClubPetDetailResponse(pet, pet.isOwner(member)))
-                        .toList()
+                        .toList(),
+                club.getChatRoom().getId()
         );
     }
 }

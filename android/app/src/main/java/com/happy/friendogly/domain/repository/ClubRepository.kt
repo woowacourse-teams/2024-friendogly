@@ -4,6 +4,7 @@ import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
 import com.happy.friendogly.domain.model.ClubFilterCondition
+import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import okhttp3.MultipartBody
@@ -32,7 +33,7 @@ interface ClubRepository {
     suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
-    ): Result<Unit>
+    ): Result<ClubParticipation>
 
     suspend fun deleteClubMember(clubId: Long): Result<Unit>
 }
