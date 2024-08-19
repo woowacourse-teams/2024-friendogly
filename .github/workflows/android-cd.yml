@@ -23,15 +23,17 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Create Properties Files
+      - name: Create Files
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
           KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
           LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
           echo "RELEASE_KEYSTORE" | base64 -d > release.keystore
           echo "$KEYSTORE_PROPERTIES" > keystore.properties
           echo "$LOCAL_PROPERTIES" > local.properties
+          echo "$GOOGLE_SERVICES_JSON" > google-services.json
 
       - name: Build Release APK
         run: |
