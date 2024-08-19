@@ -63,7 +63,23 @@ public class FcmNotificationService implements NotificationService {
     }
 
     @Override
-    public void sendNotificationWithType(
+    public void sendChat(Long chatRoomId, ChatMessageResponse response) {
+        List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomId(chatRoomId);
+
+        Map<String, String> data = Map.of(
+                "chatRoomId", chatRoomId.toString(),
+                "messageType", response.messageType().toString(),
+                "senderMemberId", response.senderMemberId().toString(),
+                "senderName", response.senderName(),
+                "content", response.content(),
+                "createdAt", response.createdAt().toString(),
+                "profilePictureUrl", response.profilePictureUrl()
+        );
+
+        sendNotificationWithType(NotificationType.CHAT, "채팅", data, receiverTokens);
+    }
+
+    private void sendNotificationWithType(
             NotificationType notificationType,
             String title,
             Map<String, String> data,
@@ -81,22 +97,5 @@ public class FcmNotificationService implements NotificationService {
         } catch (FirebaseMessagingException e) {
             throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @Override
-    public void sendChat(Long chatRoomId, ChatMessageResponse response) {
-        List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomId(chatRoomId);
-
-        Map<String, String> data = Map.of(
-                "chatRoomId", chatRoomId.toString(),
-                "messageType", response.messageType().toString(),
-                "senderMemberId", response.senderMemberId().toString(),
-                "senderName", response.senderName(),
-                "content", response.content(),
-                "createdAt", response.createdAt().toString(),
-                "profilePictureUrl", response.profilePictureUrl()
-        );
-
-        sendNotificationWithType(NotificationType.CHAT, "채팅", data, receiverTokens);
     }
 }
