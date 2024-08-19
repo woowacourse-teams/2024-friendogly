@@ -15,6 +15,7 @@ import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
+import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +33,20 @@ public class ChatSocketController {
     private final ChatRoomCommandService chatRoomCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
     private final SimpMessagingTemplate template;
+    private final NotificationService notificationService;
 
     public ChatSocketController(
             ChatService chatService,
             ChatRoomCommandService chatRoomCommandService,
             ChatRoomQueryService chatRoomQueryService,
-            SimpMessagingTemplate template
+            SimpMessagingTemplate template,
+            NotificationService notificationService
     ) {
         this.chatService = chatService;
         this.chatRoomCommandService = chatRoomCommandService;
         this.chatRoomQueryService = chatRoomQueryService;
         this.template = template;
+        this.notificationService = notificationService;
     }
 
     @MessageMapping("/invite")
@@ -65,6 +69,8 @@ public class ChatSocketController {
         LocalDateTime createdAt = LocalDateTime.now();
         chatRoomCommandService.enter(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
+
+        notificationService.sendChat(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
@@ -76,6 +82,9 @@ public class ChatSocketController {
     ) {
         LocalDateTime createdAt = LocalDateTime.now();
         ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
+
+        // TODO: 하나의 service method에서 처리하도록 리팩토링 필요
+        notificationService.sendChat(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
@@ -87,6 +96,8 @@ public class ChatSocketController {
         LocalDateTime createdAt = LocalDateTime.now();
         chatRoomCommandService.leave(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, createdAt);
+
+        notificationService.sendChat(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
