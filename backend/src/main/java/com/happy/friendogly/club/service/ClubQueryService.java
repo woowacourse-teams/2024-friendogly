@@ -96,7 +96,7 @@ public class ClubQueryService {
     private List<String> collectOverviewPetImages(Club club) {
         Map<Long, List<Pet>> groupPetsByMemberId = club.getClubPets()
                 .stream()
-                .map(clubPet -> clubPet.getClubPetPk().getPet())
+                .map(clubPet -> clubPet.getClubPetId().getPet())
                 .collect(Collectors.groupingBy(pet -> pet.getMember().getId()));
 
         return groupPetsByMemberId.values().stream()

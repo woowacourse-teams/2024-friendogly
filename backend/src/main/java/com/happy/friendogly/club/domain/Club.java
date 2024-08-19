@@ -20,6 +20,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -33,6 +35,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@NamedEntityGraph(
+        name = "graph.Club",
+        attributeNodes = {
+                @NamedAttributeNode("clubMembers"),
+                @NamedAttributeNode("clubPets"),
+                @NamedAttributeNode("allowedSizes"),
+                @NamedAttributeNode("allowedGenders"),
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Club {
@@ -75,10 +86,10 @@ public class Club {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "clubMemberPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubMemberId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ClubMember> clubMembers = new HashSet<>();
 
-    @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubPetId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ClubPet> clubPets = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
@@ -158,7 +169,7 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
-        if(memberCapacity.isCapacityReached(countClubMember())){
+        if (memberCapacity.isCapacityReached(countClubMember())) {
             this.status = Status.FULL;
         }
     }
@@ -211,7 +222,7 @@ public class Club {
         clubMembers.remove(targetClubMember);
 //        targetClubMember.updateClub(null);
         removeClubPets(member);
-        if(status.isFull()){
+        if (status.isFull()) {
             this.status = Status.OPEN;
         }
     }
@@ -252,11 +263,11 @@ public class Club {
     }
 
     public Name findOwnerName() {
-        return findOwner().getClubMemberPk().getMember().getName();
+        return findOwner().getClubMemberId().getMember().getName();
     }
 
     public String findOwnerImageUrl() {
-        return findOwner().getClubMemberPk().getMember().getImageUrl();
+        return findOwner().getClubMemberId().getMember().getImageUrl();
     }
 
     private ClubMember findOwner() {
@@ -268,6 +279,13 @@ public class Club {
     public void update(String title, String content, String status) {
         this.title = new Title(title);
         this.content = new Content(content);
+        updateStatus(status);
+    }
+
+    private void updateStatus(String status) {
+        if (this.status.isFull()) {
+            return;
+        }
         this.status = Status.toStatus(status);
     }
 }

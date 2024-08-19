@@ -42,7 +42,7 @@ public record SaveClubResponse(
                 club.getImageUrl(),
                 club.getClubPets()
                         .stream()
-                        .map(clubPet -> clubPet.getClubPetPk().getPet().getImageUrl())
+                        .map(clubPet -> clubPet.getClubPetId().getPet().getImageUrl())
                         .toList(),
                 true,
                 club.getChatRoom().getId()
