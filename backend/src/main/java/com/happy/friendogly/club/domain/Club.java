@@ -20,6 +20,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -33,6 +35,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@NamedEntityGraph(
+        name = "graph.Club",
+        attributeNodes = {
+                @NamedAttributeNode("clubMembers"),
+                @NamedAttributeNode("clubPets"),
+                @NamedAttributeNode("allowedSizes"),
+                @NamedAttributeNode("allowedGenders"),
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Club {
@@ -158,7 +169,7 @@ public class Club {
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
-        if(memberCapacity.isCapacityReached(countClubMember())){
+        if (memberCapacity.isCapacityReached(countClubMember())) {
             this.status = Status.FULL;
         }
     }
@@ -211,7 +222,7 @@ public class Club {
         clubMembers.remove(targetClubMember);
 //        targetClubMember.updateClub(null);
         removeClubPets(member);
-        if(status.isFull()){
+        if (status.isFull()) {
             this.status = Status.OPEN;
         }
     }
