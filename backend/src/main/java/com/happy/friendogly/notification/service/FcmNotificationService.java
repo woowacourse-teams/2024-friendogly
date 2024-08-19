@@ -21,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Profile("!local")
 public class FcmNotificationService implements NotificationService {
 
-    private static final String DEFAULT_TITLE = "반갑개";
-
     private final FirebaseApp firebaseApp;
     private final DeviceTokenRepository deviceTokenRepository;
 
@@ -67,13 +65,14 @@ public class FcmNotificationService implements NotificationService {
     @Override
     public void sendNotificationWithType(
             NotificationType notificationType,
+            String title,
             Map<String, String> data,
             List<String> receiverTokens
     ) {
         MulticastMessage message = MulticastMessage.builder()
                 .putAllData(data)
                 .putData("type", notificationType.toString())
-                .putData("title", DEFAULT_TITLE)
+                .putData("title", title)
                 .addAllTokens(receiverTokens)
                 .build();
 
@@ -89,6 +88,7 @@ public class FcmNotificationService implements NotificationService {
         List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomId(chatRoomId);
 
         Map<String, String> data = Map.of(
+                "chatRoomId", chatRoomId.toString(),
                 "messageType", response.messageType().toString(),
                 "senderMemberId", response.senderMemberId().toString(),
                 "senderName", response.senderName(),
@@ -97,6 +97,6 @@ public class FcmNotificationService implements NotificationService {
                 "profilePictureUrl", response.profilePictureUrl()
         );
 
-        sendNotificationWithType(NotificationType.CHAT, data, receiverTokens);
+        sendNotificationWithType(NotificationType.CHAT, "채팅", data, receiverTokens);
     }
 }

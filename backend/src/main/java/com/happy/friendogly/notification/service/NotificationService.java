@@ -13,6 +13,7 @@ public interface NotificationService {
 
     void sendNotificationWithType(
             NotificationType notificationType,
+            String title,
             Map<String, String> data,
             List<String> receiverTokens
     );

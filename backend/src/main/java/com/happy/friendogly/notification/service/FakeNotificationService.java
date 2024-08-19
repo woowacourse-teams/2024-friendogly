@@ -24,6 +24,7 @@ public class FakeNotificationService implements NotificationService {
     @Override
     public void sendNotificationWithType(
             NotificationType notificationType,
+            String title,
             Map<String, String> data,
             List<String> receiverTokens
     ) {
