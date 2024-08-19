@@ -158,7 +158,6 @@ class ProfileSettingViewModel(
             }
     }
 
-
     private suspend fun patchMember(
         nickname: String,
         profilePath: MultipartBody.Part?,

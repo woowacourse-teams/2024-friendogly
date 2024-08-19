@@ -41,49 +41,55 @@ class AlarmReceiver : FirebaseMessagingService() {
         } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
             showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
-
     }
 
-    private fun saveMessage(message: RemoteMessage) = CoroutineScope(Dispatchers.IO).launch {
-        val memberId = message.data["senderMemberId"]!!.toLong()
-        val name = message.data["senderName"] ?: ""
-        val content = message.data["content"] ?: ""
-        val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
-        val profileUrl = message.data["profilePictureUrl"] ?: ""
-        val chatRoomId:Long = message.data["chatRoomId"]?.toLong() ?: -1L
-        val message: ChatComponent = when (message.data["messageType"]) {
-            "CHAT" -> Message.Other(
-                createdAt = createdAt,
-                member = ChatMember(
-                    id = memberId,
-                    name = name,
-                    profileImageUrl = profileUrl
-                ),
-                content = content
-            )
-            "LEAVE" -> ChatComponent.Leave(
-                createdAt = createdAt,
-                member = ChatMember(
-                    id = memberId,
-                    name = name,
-                    profileImageUrl = profileUrl
-                )
-            )
+    private fun saveMessage(message: RemoteMessage) =
+        CoroutineScope(Dispatchers.IO).launch {
+            val memberId = message.data["senderMemberId"]!!.toLong()
+            val name = message.data["senderName"] ?: ""
+            val content = message.data["content"] ?: ""
+            val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
+            val profileUrl = message.data["profilePictureUrl"] ?: ""
+            val chatRoomId: Long = message.data["chatRoomId"]?.toLong() ?: -1L
+            val message: ChatComponent =
+                when (message.data["messageType"]) {
+                    "CHAT" ->
+                        Message.Other(
+                            createdAt = createdAt,
+                            member =
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
+                            content = content,
+                        )
+                    "LEAVE" ->
+                        ChatComponent.Leave(
+                            createdAt = createdAt,
+                            member =
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
+                        )
 
-            "ENTER" -> ChatComponent.Enter(
-                createdAt = createdAt,
-                member = ChatMember(
-                    id = memberId,
-                    name = name,
-                    profileImageUrl = profileUrl
-                )
-            )
-            else -> error("잘못된 타입이 들어왔습니다.")
+                    "ENTER" ->
+                        ChatComponent.Enter(
+                            createdAt = createdAt,
+                            member =
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
+                        )
+                    else -> error("잘못된 타입이 들어왔습니다.")
+                }
+
+            AppModule.getInstance().saveChatMessageUseCase(chatRoomId, message)
         }
-
-        AppModule.getInstance().saveChatMessageUseCase(chatRoomId, message)
-
-    }
 
     private fun showChatAlarm(
         title: String?,

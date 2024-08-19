@@ -3,7 +3,6 @@ package com.happy.friendogly.remote.api
 import com.happy.friendogly.remote.model.request.DeviceTokenRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import retrofit2.http.Body
-import retrofit2.http.PATCH
 import retrofit2.http.PUT
 
 interface AlarmTokenService {

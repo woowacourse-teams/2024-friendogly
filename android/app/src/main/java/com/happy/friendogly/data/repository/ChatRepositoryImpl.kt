@@ -41,7 +41,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getChatMessages(
         chatRoomId: Long,
-        myMemberId: Long
+        myMemberId: Long,
     ): Result<List<ChatComponent>> =
         runCatching {
             chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }

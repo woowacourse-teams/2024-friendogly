@@ -18,6 +18,6 @@ interface ChatService {
 
     @GET(ApiClient.Chat.CLUB)
     suspend fun getChatClub(
-        @Path("chatRoomId") chatRoomId: Long
+        @Path("chatRoomId") chatRoomId: Long,
     ): BaseResponse<ChatRoomClubResponse>
 }

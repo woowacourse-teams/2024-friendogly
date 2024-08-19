@@ -42,7 +42,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private val viewModel: ChatInfoViewModel by viewModels {
         ChatInfoViewModel.factory(
             AppModule.getInstance().getChatRoomClubUseCase,
-            AppModule.getInstance().getChatMemberUseCase
+            AppModule.getInstance().getChatMemberUseCase,
         )
     }
 
@@ -131,7 +131,6 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
                     Gender.FEMALE_NEUTERED -> btnChatDogFemaleNeutered.isVisible = true
                 }
             }
-
         }
     }
 

@@ -167,11 +167,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-            RemoteModule.createStumpClient(
-                baseUrl = baseUrl,
-                tokenManager = tokenManager,
-                authenticationListener = authenticationListener,
-            ),
+                RemoteModule.createStumpClient(
+                    baseUrl = baseUrl,
+                    tokenManager = tokenManager,
+                    authenticationListener = authenticationListener,
+                ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -206,7 +206,7 @@ class AppModule(context: Context) {
     private val alarmSettingDataSource: AlarmSettingDataSource =
         AlarmSettingDataSourceImpl(
             chatAlarmModule = chatAlarmModule,
-            woofAlarmModule = woofAlarmModule
+            woofAlarmModule = woofAlarmModule,
         )
     private val alarmTokenDataSource: AlarmTokenDataSource =
         AlamTokenDataSourceImpl(service = alarmTokenService)

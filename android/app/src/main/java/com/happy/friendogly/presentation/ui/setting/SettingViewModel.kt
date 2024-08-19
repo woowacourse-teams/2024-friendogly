@@ -110,7 +110,7 @@ class SettingViewModel(
         fun factory(
             saveChatAlarmUseCase: SaveChatAlarmUseCase,
             saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
-            deleteTokenUseCase: DeleteTokenUseCase
+            deleteTokenUseCase: DeleteTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(

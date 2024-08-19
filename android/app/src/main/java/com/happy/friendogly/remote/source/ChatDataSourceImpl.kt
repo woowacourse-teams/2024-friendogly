@@ -18,7 +18,8 @@ class ChatDataSourceImpl(private val service: ChatService) : ChatDataSource {
             service.getChatMembers(chatRoomId).body()?.map { it.toData() } ?: emptyList()
         }
 
-    override suspend fun getClubs(chatRoomId: Long): Result<ChatRoomClubDto> = runCatching {
-        service.getChatClub(chatRoomId).data.toData()
-    }
+    override suspend fun getClubs(chatRoomId: Long): Result<ChatRoomClubDto> =
+        runCatching {
+            service.getChatClub(chatRoomId).data.toData()
+        }
 }

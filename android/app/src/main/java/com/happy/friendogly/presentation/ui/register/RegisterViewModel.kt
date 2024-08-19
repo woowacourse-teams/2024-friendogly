@@ -31,8 +31,8 @@ class RegisterViewModel(
     private val getJwtTokenUseCase: GetJwtTokenUseCase,
     private val postKakaoLoginUseCase: PostKakaoLoginUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
-    private val saveAlarmTokenUseCase:SaveAlamTokenUseCase,
-    ) : BaseViewModel() {
+    private val saveAlarmTokenUseCase: SaveAlamTokenUseCase,
+) : BaseViewModel() {
     private val _navigateAction: MutableLiveData<Event<RegisterNavigationAction>> =
         MutableLiveData(null)
     val navigateAction: LiveData<Event<RegisterNavigationAction>> get() = _navigateAction
@@ -152,7 +152,7 @@ class RegisterViewModel(
             getJwtTokenUseCase: GetJwtTokenUseCase,
             postKakaoLoginUseCase: PostKakaoLoginUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
-            saveAlarmTokenUseCase:SaveAlamTokenUseCase
+            saveAlarmTokenUseCase: SaveAlamTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 RegisterViewModel(
@@ -161,7 +161,7 @@ class RegisterViewModel(
                     getJwtTokenUseCase = getJwtTokenUseCase,
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
-                    saveAlarmTokenUseCase = saveAlarmTokenUseCase
+                    saveAlarmTokenUseCase = saveAlarmTokenUseCase,
                 )
             }
         }

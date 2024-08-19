@@ -74,7 +74,10 @@ class ChatViewModel(
             connectWebsocketUseCase()
         }
 
-    private fun initChats(chatRoomId: Long, myMemberId: Long): Deferred<List<ChatUiModel>> =
+    private fun initChats(
+        chatRoomId: Long,
+        myMemberId: Long,
+    ): Deferred<List<ChatUiModel>> =
         viewModelScope.async {
             getChatMessagesUseCase(chatRoomId, myMemberId).getOrDefault(emptyList()).map {
                 when (it) {

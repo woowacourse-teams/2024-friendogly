@@ -20,11 +20,12 @@ class ChatListViewModel(
     var memberId: Long = 0L
         private set
 
-    val isChatEmpty = MediatorLiveData<Boolean>().apply {
-        addSource(_chats) {
-            value = it.isEmpty()
+    val isChatEmpty =
+        MediatorLiveData<Boolean>().apply {
+            addSource(_chats) {
+                value = it.isEmpty()
+            }
         }
-    }
 
     fun getChats() {
         viewModelScope.launch {

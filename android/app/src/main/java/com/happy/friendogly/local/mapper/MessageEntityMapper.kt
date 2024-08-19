@@ -19,11 +19,11 @@ fun ChatComponent.Leave.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.LEAVE,
     )
@@ -32,11 +32,11 @@ fun ChatComponent.Enter.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.ENTER,
     )
@@ -45,11 +45,11 @@ fun Message.Mine.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = content,
         type = MessageTypeEntity.CHAT,
     )
@@ -58,11 +58,11 @@ fun Message.Other.toData(): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = content,
         type = MessageTypeEntity.CHAT,
     )
@@ -90,7 +90,6 @@ fun ChatMessageEntity.toDomain(myMemberId: Long): ChatComponent =
                     member = member.toDomain(),
                     createdAt = createdAt,
                 )
-
             }
         }
 

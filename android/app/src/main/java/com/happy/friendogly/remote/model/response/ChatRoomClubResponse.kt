@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ChatRoomClubResponse(
     val clubId: Long,
     val allowedSizeTypes: List<SizeTypeResponse>,
-    val allowedGenders: List<GenderResponse>
+    val allowedGenders: List<GenderResponse>,
 )

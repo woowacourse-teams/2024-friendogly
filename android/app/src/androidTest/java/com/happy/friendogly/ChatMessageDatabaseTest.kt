@@ -56,7 +56,7 @@ class ChatMessageDatabaseTest {
     }
 
     @Test
-    fun `can_update_chatRoom_message`()  {
+    fun `can_update_chatRoom_message`() {
         // when
         runBlocking {
             chatRoomDao.addMessageToChatRoom(2, DUMMY_MY_MESSAGE)

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 
 class AlarmSettingDataSourceImpl(
     private val chatAlarmModule: ChatAlarmModule,
-    private val woofAlarmModule: WoofAlarmModule
+    private val woofAlarmModule: WoofAlarmModule,
 ) : AlarmSettingDataSource {
     override suspend fun saveChatSetting(isSet: Boolean): Result<Unit> =
         runCatching {
@@ -24,15 +24,18 @@ class AlarmSettingDataSourceImpl(
             chatAlarmModule.deleteSetting()
         }
 
-    override suspend fun saveWoofSetting(isSet: Boolean): Result<Unit> = runCatching {
-        woofAlarmModule.saveSetting(isSet)
-    }
+    override suspend fun saveWoofSetting(isSet: Boolean): Result<Unit> =
+        runCatching {
+            woofAlarmModule.saveSetting(isSet)
+        }
 
-    override suspend fun getWoofSetting(): Result<Boolean> = runCatching {
-        woofAlarmModule.isSet.first()
-    }
+    override suspend fun getWoofSetting(): Result<Boolean> =
+        runCatching {
+            woofAlarmModule.isSet.first()
+        }
 
-    override suspend fun deleteWoofSetting(): Result<Unit> = runCatching {
-        woofAlarmModule.deleteSetting()
-    }
+    override suspend fun deleteWoofSetting(): Result<Unit> =
+        runCatching {
+            woofAlarmModule.deleteSetting()
+        }
 }

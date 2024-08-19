@@ -4,7 +4,7 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 
 data class ChatInfoUiModel(
-    val clubId:Long,
+    val clubId: Long,
     val dogSize: List<SizeType>,
     val dogGender: List<Gender>,
 )

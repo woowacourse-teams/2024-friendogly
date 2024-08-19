@@ -36,11 +36,12 @@ class ChatInfoViewModel(
     fun getClubInfo(chatRoomId: Long) {
         launch {
             getChatRoomClubUseCase(chatRoomId).onSuccess {
-                _clubInfo.value = ChatInfoUiModel(
-                    clubId = it.clubId,
-                    dogSize = it.allowedSize,
-                    dogGender = it.allowedGender
-                )
+                _clubInfo.value =
+                    ChatInfoUiModel(
+                        clubId = it.clubId,
+                        dogSize = it.allowedSize,
+                        dogGender = it.allowedGender,
+                    )
             }.onFailure {
                 // TODO 에러 처리
             }
@@ -50,7 +51,7 @@ class ChatInfoViewModel(
     companion object {
         fun factory(
             getChatRoomClubUseCase: GetChatRoomClubUseCase,
-            getChatMemberUseCase: GetChatMemberUseCase
+            getChatMemberUseCase: GetChatMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatInfoViewModel(
