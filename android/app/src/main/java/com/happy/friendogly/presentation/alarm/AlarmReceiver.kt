@@ -50,7 +50,8 @@ class AlarmReceiver : FirebaseMessagingService() {
         val content = message.data["content"] ?: ""
         val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
         val profileUrl = message.data["profilePictureUrl"] ?: ""
-        val message:ChatComponent = when(message.data["messageType"]) {
+        val chatRoomId:Long = message.data["chatRoomId"]?.toLong() ?: -1L
+        val message: ChatComponent = when (message.data["messageType"]) {
             "CHAT" -> Message.Other(
                 createdAt = createdAt,
                 member = ChatMember(
@@ -80,7 +81,7 @@ class AlarmReceiver : FirebaseMessagingService() {
             else -> error("잘못된 타입이 들어왔습니다.")
         }
 
-        AppModule.getInstance().saveChatMessageUseCase(5, message)
+        AppModule.getInstance().saveChatMessageUseCase(chatRoomId, message)
 
     }
 
