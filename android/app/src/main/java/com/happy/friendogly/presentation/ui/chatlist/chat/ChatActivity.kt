@@ -11,6 +11,7 @@ import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
+import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import kotlinx.coroutines.launch
@@ -96,6 +97,10 @@ class ChatActivity :
 
     override fun navigateToMemberProfile(memberId: Long) {
         startActivity(OtherProfileActivity.getIntent(this, memberId))
+    }
+
+    override fun navigateToClub(clubId: Long) {
+        startActivity(ClubDetailActivity.getIntent(this, clubId))
     }
 
     override fun onDestroy() {
