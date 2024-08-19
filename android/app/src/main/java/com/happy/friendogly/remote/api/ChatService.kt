@@ -14,7 +14,7 @@ interface ChatService {
     @GET(ApiClient.Chat.MEMBERS)
     suspend fun getChatMembers(
         @Path("chatRoomId") chatRoomId: Long,
-    ): retrofit2.Response<List<ChatClubMemberResponse>>
+    ): BaseResponse<List<ChatClubMemberResponse>>
 
     @GET(ApiClient.Chat.CLUB)
     suspend fun getChatClub(
