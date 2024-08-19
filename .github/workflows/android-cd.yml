@@ -23,17 +23,49 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Create Files
+      - name: Create local.properties
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+        run: |
+          echo "$LOCAL_PROPERTIES" > local.properties
+
+      - name: Create keystore.properties
+        env:
+          KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_PROPERTIES" > keystore.properties
+
+      - name: Create keystore directory
+        run: mkdir -p /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore
+
+      - name: Putting data
+        env:
+          DATA: ${{ secrets.RELEASE_KEYSTORE }}
+        run: echo $DATA > base64 -d > /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore/friendogly.jks
+
+      - name: Create release-keystore
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-          KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
-          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+        run: |
+          touch ../android/app/keystore/friendogly.jks
+          echo RELEASE_KEYSTORE >> ../android/app/keystore/friendogly.jks
+          cat ../android/app/keystore/friendogly.jks
+
+      - name: Create google-services.json
+        env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo "RELEASE_KEYSTORE" | base64 -d > release.keystore
-          echo "$KEYSTORE_PROPERTIES" > keystore.properties
-          echo "$LOCAL_PROPERTIES" > local.properties
-          echo "$GOOGLE_SERVICES_JSON" > google-services.json
+          touch ../android/app/google-services.json
+          echo GOOGLE_SERVICES_JSON >> ../android/app/google-services.json
+          cat ../android/app/google-services.json
+
+      - name: Create file
+        run: cat /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json | base64
+
+      - name: Putting data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json
 
       - name: Build Release APK
         run: |
