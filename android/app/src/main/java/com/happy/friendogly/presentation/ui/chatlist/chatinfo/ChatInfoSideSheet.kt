@@ -35,6 +35,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
                     getString(R.string.chat_setting_alarm_alert),
                     Snackbar.LENGTH_SHORT,
                 ).show()
+                binding.switchChatSettingAlarm.isChecked = false
             }
         }
 
@@ -91,7 +92,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         }
         lifecycleScope.launch {
             binding.switchChatSettingAlarm.isChecked =
-                AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
+                alarmPermission.hasPermissions() && AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
         }
     }
 
