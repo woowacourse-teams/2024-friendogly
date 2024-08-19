@@ -23,6 +23,7 @@ data class ClubDetailResponse(
     val isMine: Boolean,
     val alreadyParticipate: Boolean,
     val canParticipate: Boolean,
+    val isMyPetsEmpty: Boolean,
     val memberDetails: List<ClubDetailMemberResponse>,
     val petDetails: List<ClubDetailPetResponse>,
 )

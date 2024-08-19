@@ -11,6 +11,7 @@ data class ClubDetailUiModel(
     val filters: List<ClubFilter>,
     val clubPoster: String? = null,
     val clubDetailViewType: ClubDetailViewType,
+    val isUserPetEmpty: Boolean,
     val title: String,
     val content: String,
     val maximumNumberOfPeople: Int,

@@ -4,6 +4,7 @@ import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.data.model.ClubFilterConditionDto
+import com.happy.friendogly.data.model.ClubParticipationDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.data.source.ClubDataSource
@@ -69,13 +70,13 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
     override suspend fun postClubMember(
         clubId: Long,
         participatingPetsId: List<Long>,
-    ): Result<Unit> =
+    ): Result<ClubParticipationDto> =
         runCatching {
             val request = PostClubMemberRequest(participatingPetsId = participatingPetsId)
             service.postClubMember(
                 clubId = clubId,
                 request = request,
-            ).data
+            ).data.toData()
         }
 
     override suspend fun deleteClubMember(clubId: Long): Result<Unit> =
