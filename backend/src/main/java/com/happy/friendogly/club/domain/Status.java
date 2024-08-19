@@ -12,7 +12,7 @@ public enum Status {
         if (OPEN.name().equals(status) || CLOSED.name().equals(status)) {
             return valueOf(status);
         }
-        throw new FriendoglyException("존재하지 않는 모임상태 입니다.");
+        throw new FriendoglyException("유효하지 않는 모임상태 입니다.");
     }
 
     public boolean isOpen() {
