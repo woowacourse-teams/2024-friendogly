@@ -8,12 +8,13 @@ fun ClubStateResponse.toData(): ClubStateDto {
     return when (this) {
         ClubStateResponse.OPEN -> ClubStateDto.OPEN
         ClubStateResponse.CLOSE -> ClubStateDto.CLOSE
+        ClubStateResponse.FULL -> ClubStateDto.FULL
     }
 }
 
 fun ClubStateDto.toRemote(): ClubStateRequest {
     return when (this) {
         ClubStateDto.OPEN -> ClubStateRequest.OPEN
-        ClubStateDto.CLOSE -> ClubStateRequest.CLOSE
+        ClubStateDto.CLOSE,ClubStateDto.FULL -> ClubStateRequest.CLOSE
     }
 }

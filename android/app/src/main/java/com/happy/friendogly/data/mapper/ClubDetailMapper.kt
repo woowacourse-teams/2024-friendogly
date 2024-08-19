@@ -7,7 +7,7 @@ fun ClubDetailDto.toDomain(): ClubDetail {
     return ClubDetail(
         id = id,
         title = title,
-        content = title,
+        content = content,
         allowedGender = allowedGender.map { it.toDomain() },
         allowedSize = allowedSize.map { it.toDomain() },
         ownerMemberName = ownerMemberName,
