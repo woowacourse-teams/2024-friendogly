@@ -48,7 +48,7 @@ jobs:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         run: |
           touch ../android/app/keystore/friendogly.jks
-          echo RELEASE_KEYSTORE >> ../android/app/keystore/friendogly.jks
+          echo "$RELEASE_KEYSTORE" | base64 -d > ../android/app/keystore/friendogly.jks
           cat ../android/app/keystore/friendogly.jks
 
       - name: Create google-services.json
