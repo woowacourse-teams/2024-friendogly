@@ -37,7 +37,7 @@ class AlarmReceiver : FirebaseMessagingService() {
 
         if (message.data[ALARM_TYPE] == "CHAT") {
             saveMessage(message)
-            showChatAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
+            showChatAlarm(message.data["senderName"], message.data["content"])
         } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
             showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
