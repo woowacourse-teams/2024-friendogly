@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,12 @@ class ChatListViewModel(
 
     var memberId: Long = 0L
         private set
+
+    val isChatEmpty = MediatorLiveData<Boolean>().apply {
+        addSource(_chats) {
+            value = it.isEmpty()
+        }
+    }
 
     fun getChats() {
         viewModelScope.launch {
