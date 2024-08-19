@@ -71,8 +71,8 @@ jobs:
         run: |
           echo "KEYSTORE_PROPERTIES" > keystore.properties
 
-      - name: Create file
-        run: cat /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore/friendogly.jks | base64
+      - name: Create keystore directory
+        run: mkdir -p /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore
 
       - name: Putting data
         env:
