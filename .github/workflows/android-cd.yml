@@ -98,6 +98,6 @@ jobs:
       - name: Upload artifact to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceCredentialsFileContent: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.happy.friendogly
           releaseFiles: android/app/build/outputs/apk/release/app-release.aab
