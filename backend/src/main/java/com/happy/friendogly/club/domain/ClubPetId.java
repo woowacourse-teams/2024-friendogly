@@ -1,6 +1,6 @@
 package com.happy.friendogly.club.domain;
 
-import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Pet;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -15,19 +15,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
-public class ClubMemberPk implements Serializable {
+public class ClubPetId implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "pet_id", nullable = false)
+    private Pet pet;
 
-    public ClubMemberPk(Club club, Member member) {
+    public ClubPetId(Club club, Pet pet) {
         this.club = club;
-        this.member = member;
+        this.pet = pet;
     }
 
     public void updateClub(Club club) {

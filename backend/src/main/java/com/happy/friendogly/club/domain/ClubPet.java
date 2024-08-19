@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 public class ClubPet {
 
     @EmbeddedId
-    private ClubPetPk clubPetPk;
+    private ClubPetId clubPetId;
 
     @Builder
     public ClubPet(Club club, Pet pet) {
         validateClub(club);
         validatePet(pet);
-        this.clubPetPk = new ClubPetPk(club, pet);
+        this.clubPetId = new ClubPetId(club, pet);
     }
 
     private void validateClub(Club club) {
@@ -38,10 +38,10 @@ public class ClubPet {
     }
 
     public void updateClub(Club club) {
-        this.clubPetPk.updateClub(club);
+        this.clubPetId.updateClub(club);
     }
 
     public boolean isSameMember(Member member) {
-        return this.clubPetPk.getPet().getMember().getId().equals(member.getId());
+        return this.clubPetId.getPet().getMember().getId().equals(member.getId());
     }
 }

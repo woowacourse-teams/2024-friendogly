@@ -75,10 +75,10 @@ public class Club {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "clubMemberPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubMemberId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ClubMember> clubMembers = new HashSet<>();
 
-    @OneToMany(mappedBy = "clubPetPk.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clubPetId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ClubPet> clubPets = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
@@ -252,11 +252,11 @@ public class Club {
     }
 
     public Name findOwnerName() {
-        return findOwner().getClubMemberPk().getMember().getName();
+        return findOwner().getClubMemberId().getMember().getName();
     }
 
     public String findOwnerImageUrl() {
-        return findOwner().getClubMemberPk().getMember().getImageUrl();
+        return findOwner().getClubMemberId().getMember().getImageUrl();
     }
 
     private ClubMember findOwner() {
