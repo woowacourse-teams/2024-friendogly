@@ -3,6 +3,7 @@ package com.happy.friendogly.domain.repository
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
+import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 
@@ -12,10 +13,12 @@ interface WoofRepository {
         longitude: Double,
     ): Result<MyFootprint>
 
-    suspend fun patchWalkStatus(
+    suspend fun patchFootprintRecentWalkStatusAuto(
         latitude: Double,
         longitude: Double,
-    ): Result<WalkStatus>
+    ): Result<FootprintRecentWalkStatus>
+
+    suspend fun patchFootprintRecentWalkStatusManual(walkStatus: WalkStatus): Result<FootprintRecentWalkStatus>
 
     suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfo>
 
@@ -25,4 +28,6 @@ interface WoofRepository {
     ): Result<List<Footprint>>
 
     suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfo>
+
+    suspend fun deleteFootprint(footprintId: Long): Result<Unit>
 }

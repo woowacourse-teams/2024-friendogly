@@ -9,5 +9,7 @@ sealed interface WoofAlertActions {
 
     data object AlertMarkerRegisteredSnackbar : WoofAlertActions
 
+    data object AlertDeleteMyFootprintMarkerSnackbar : WoofAlertActions
+
     data object AlertEndWalkSnackbar : WoofAlertActions
 }

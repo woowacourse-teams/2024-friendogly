@@ -37,7 +37,7 @@ class PetDetailInfoAdapter(private val actionHandler: WoofActionHandler) :
                     oldItem: PetDetailInfoUiModel,
                     newItem: PetDetailInfoUiModel,
                 ): Boolean {
-                    return oldItem.petDetail.name == newItem.petDetail.name
+                    return oldItem.memberId == newItem.memberId
                 }
 
                 override fun areContentsTheSame(

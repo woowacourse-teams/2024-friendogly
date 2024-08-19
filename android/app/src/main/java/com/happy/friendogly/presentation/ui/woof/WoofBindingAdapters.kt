@@ -221,7 +221,7 @@ fun View.bindStateVisibility(uiState: WoofUiState?) {
 @BindingAdapter("layoutWalkVisibility")
 fun View.bindLayoutWalkVisibility(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
-        isVisible = walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING
+        isVisible = (walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING)
     }
 }
 

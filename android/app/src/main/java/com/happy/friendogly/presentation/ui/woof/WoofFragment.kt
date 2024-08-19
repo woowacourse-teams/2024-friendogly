@@ -29,16 +29,15 @@ import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertCantClick
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertEndWalkSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkerRegisteredSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofUiActions.ChangeToFaceTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofUiActions.ChangeToFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofUiActions.ChangeToNoFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofUiActions.MyFootprintLoaded
-import com.happy.friendogly.presentation.ui.woof.WoofUiActions.NearFootprintsLoaded
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToNoFollowTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeMyFootprintMarker
+import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeNearFootprintMarkers
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintMarkerUiModel
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
 import com.happy.friendogly.presentation.utils.logFootprintClicked
@@ -107,10 +106,12 @@ class WoofFragment :
         WoofViewModel.factory(
             analyticsHelper = analyticsHelper,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
-            patchWalkStatusUseCase = AppModule.getInstance().patchWalkStatusUseCase,
+            patchFootprintRecentWalkStatusAutoUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusAutoUseCase,
+            patchFootprintRecentWalkStatusManualUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusManualUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
             getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
+            deleteFootprintUseCase = AppModule.getInstance().deleteFootprintUseCase,
         )
     }
 
@@ -254,12 +255,16 @@ class WoofFragment :
         analyticsHelper.logRefreshBtnClicked()
         viewModel.changeRefreshBtnVisibility(false)
         runIfLocationPermissionGranted {
-            viewModel.loadNearFootprints(latLng)
+            viewModel.scanNearFootprints(latLng)
         }
     }
 
+    override fun clickDeleteMyFootprintMarkerBtn() {
+        viewModel.deleteMyFootprintMarker()
+        binding.chronometerWoofWalkTime.stop()
+    }
+
     override fun clickEndWalkBtn() {
-        viewModel.updateWalkStatus(LatLng(0.0, 0.0))
         viewModel.endWalk()
         binding.chronometerWoofWalkTime.stop()
     }
@@ -379,20 +384,27 @@ class WoofFragment :
             markFootprintMarkers(filterState)
         }
 
+        viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
+            if (myWalkStatus == null) {
+                return@observe
+            }
+
+            if (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING) {
+                startWalkStatusTimer(myWalkStatus.changedWalkStatusTime)
+            }
+
+            if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
+                timer?.cancel()
+            } else {
+                startTimerAndUpdateWalkStatus()
+            }
+        }
+
         viewModel.myFootprintMarker.observe(viewLifecycleOwner) { myFootprintMarker ->
             if (myFootprintMarker != null) {
                 myFootprintMarker.marker.map = map
                 setUpCircleOverlay(myFootprintMarker.marker.position)
-
-                if (myFootprintMarker.walkStatus == WalkStatus.AFTER) {
-                    timer?.cancel()
-                } else {
-                    startTimerAndUpdateWalkStatus()
-                }
-
-                if (myFootprintMarker.walkStatus == WalkStatus.BEFORE || myFootprintMarker.walkStatus == WalkStatus.ONGOING) {
-                    startWalkStatusTimer()
-                }
+                viewModel.updateFootprintRecentWalkStatus(latLng)
             }
         }
 
@@ -406,9 +418,9 @@ class WoofFragment :
             adapter.submitList(footprintInfo.petsDetailInfo)
         }
 
-        viewModel.uiActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.makeMarkerActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is MyFootprintLoaded -> {
+                is MakeMyFootprintMarker -> {
                     val previousMyFootprintMarker = viewModel.myFootprintMarker.value
                     if (previousMyFootprintMarker != null) {
                         previousMyFootprintMarker.marker.map = null
@@ -416,29 +428,27 @@ class WoofFragment :
 
                     if (event.myFootprint != null) {
                         val myMarker = createMarker(footprint = event.myFootprint)
-                        val myFootprintMarker =
-                            FootprintMarkerUiModel(
-                                myMarker,
-                                event.myFootprint.walkStatus,
-                            )
-                        viewModel.loadMyFootprintMarker(myFootprintMarker)
+                        viewModel.loadMyFootprintMarker(myMarker)
                     } else {
                         circleOverlay.map = null
                         timer?.cancel()
                     }
                 }
 
-                is NearFootprintsLoaded -> {
+                is MakeNearFootprintMarkers -> {
                     val nearFootprintMarkers =
                         event.nearFootprints.map { footprint ->
                             val marker = createMarker(footprint = footprint)
-
-                            FootprintMarkerUiModel(marker, footprint.walkStatus)
+                            marker
                         }
                     clearNearFootprintMarkers()
                     viewModel.loadNearFootprintMarkers(nearFootprintMarkers)
                 }
+            }
+        }
 
+        viewModel.changeTrackingModeActions.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
                 is ChangeToNoFollowTrackingMode ->
                     map.locationTrackingMode = LocationTrackingMode.NoFollow
 
@@ -465,6 +475,13 @@ class WoofFragment :
                     )
 
                 is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_delete_my_footprint_marker,
+                        ),
+                    )
+
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
             }
         }
@@ -503,9 +520,9 @@ class WoofFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.initFootprints(latLng)
+            viewModel.initFootprintMarkers(latLng)
             if (viewModel.myFootprintMarker.value != null) {
-                viewModel.updateWalkStatus(latLng)
+                viewModel.updateFootprintRecentWalkStatus(latLng)
             }
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
@@ -690,20 +707,28 @@ class WoofFragment :
                     )
                     val distance = distanceResults[0]
                     if (startWalk(distance) || endWalk(distance)) {
-                        viewModel.updateWalkStatus(latLng)
+                        viewModel.updateFootprintRecentWalkStatus(latLng)
                     }
                 }
             }
     }
 
     private fun startWalk(distance: Float): Boolean {
-        val myFootprintMarker = viewModel.myFootprintMarker.value ?: return false
-        return myFootprintMarker.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
+        return myWalkStatus.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
     }
 
     private fun endWalk(distance: Float): Boolean {
-        val myFootprintMarker = viewModel.myFootprintMarker.value ?: return false
-        return myFootprintMarker.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
+        return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    }
+
+    private fun startWalkStatusTimer(changedWalkStatusTime: LocalDateTime) {
+        val now = java.time.LocalDateTime.now()
+        val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
+        binding.chronometerWoofWalkTime.base =
+            SystemClock.elapsedRealtime() - duration.toMillis()
+        binding.chronometerWoofWalkTime.start()
     }
 
     private fun markFootprintMarkers(filterState: FilterState) {
@@ -739,16 +764,6 @@ class WoofFragment :
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
-    }
-
-    // 산책 시간 타이머
-    private fun startWalkStatusTimer() {
-        val now = java.time.LocalDateTime.now()
-        val duration =
-            Duration.between(now.minusMinutes(8).minusSeconds(30), now)
-        binding.chronometerWoofWalkTime.base =
-            SystemClock.elapsedRealtime() - duration.toMillis()
-        binding.chronometerWoofWalkTime.start()
     }
 
     private fun showRegisterPetDialog() {

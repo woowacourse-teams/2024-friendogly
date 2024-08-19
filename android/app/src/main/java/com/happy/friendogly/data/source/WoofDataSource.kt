@@ -3,15 +3,18 @@ package com.happy.friendogly.data.source
 import com.happy.friendogly.data.model.FootprintDto
 import com.happy.friendogly.data.model.FootprintInfoDto
 import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
+import com.happy.friendogly.data.model.FootprintRecentWalkStatusDto
 import com.happy.friendogly.data.model.MyFootprintDto
-import com.happy.friendogly.data.model.WalkStatusDto
+import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
+import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
 import com.happy.friendogly.remote.model.request.FootprintRequest
-import com.happy.friendogly.remote.model.request.WalkStatusRequest
 
 interface WoofDataSource {
     suspend fun postFootprint(request: FootprintRequest): Result<MyFootprintDto>
 
-    suspend fun patchWalkStatus(request: WalkStatusRequest): Result<WalkStatusDto>
+    suspend fun patchFootprintRecentWalkStatusAuto(request: FootprintRecentWalkStatusAutoRequest): Result<FootprintRecentWalkStatusDto>
+
+    suspend fun patchFootprintRecentWalkStatusManual(request: FootprintRecentWalkStatusManualRequest): Result<FootprintRecentWalkStatusDto>
 
     suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto>
 
@@ -21,4 +24,6 @@ interface WoofDataSource {
     ): Result<List<FootprintDto>>
 
     suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfoDto>
+
+    suspend fun deleteFootprint(footprintId: Long): Result<Unit>
 }

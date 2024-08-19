@@ -11,10 +11,12 @@ class ApiClient {
     object Footprints {
         private const val BASE_URL = "/api/footprints"
         const val POST_FOOTPRINT = BASE_URL
-        const val PATCH_FOOTPRINT_WALK_STATUS = "$BASE_URL/walk-status"
+        const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO = "$BASE_URL/recent/walk-status/auto"
+        const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_MANUAL = "$BASE_URL/recent/walk-status/manual"
         const val GET_FOOTPRINTS_NEAR = "$BASE_URL/near"
         const val GET_FOOTPRINT_INFO = "$BASE_URL/{footprintId}"
         const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
+        const val DELETE_FOOTPRINT = "$BASE_URL/{footprintId}"
     }
 
     object Member {
