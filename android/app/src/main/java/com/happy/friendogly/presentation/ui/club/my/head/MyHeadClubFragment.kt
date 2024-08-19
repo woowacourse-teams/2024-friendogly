@@ -24,14 +24,14 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
         ClubListAdapter(viewModel as ClubItemActionHandler)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadMyHeadClubs()
-    }
-
     override fun initViewCreated() {
         initDataBinding()
         initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadMyHeadClubs()
     }
 
     private fun initDataBinding() {
