@@ -14,6 +14,6 @@ fun ClubStateDto.toDomain(): ClubState {
 fun ClubState.toData(): ClubStateDto {
     return when (this) {
         ClubState.OPEN -> ClubStateDto.OPEN
-        ClubState.CLOSE,ClubState.FULL -> ClubStateDto.CLOSE
+        ClubState.CLOSE, ClubState.FULL -> ClubStateDto.CLOSE
     }
 }

@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.club.modify
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter

@@ -1,7 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.modify
 
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +7,6 @@ import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel
 import com.happy.friendogly.presentation.utils.addSourceList
 
 class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
@@ -30,20 +27,18 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
                     clubContent,
                     clubTitle,
                     clubState,
-                ){
+                ) {
                     isValidEditGroup()
                 }
             }
 
-    fun initUiModel(
-        clubModifyUiModel: ClubModifyUiModel,
-    ) {
+    fun initUiModel(clubModifyUiModel: ClubModifyUiModel) {
         clubTitle.value = clubModifyUiModel.title
         clubContent.value = clubModifyUiModel.content
         updateClubState(clubModifyUiModel.clubState)
     }
 
-    fun updateClubState(state: ClubState){
+    fun updateClubState(state: ClubState) {
         _clubState.value = state
     }
 
@@ -51,10 +46,10 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
         val clubTitleLength = clubTitle.value?.length ?: (MIN_TEXT_LENGTH - 1)
         val clubContentLength = clubContent.value?.length ?: (MIN_TEXT_LENGTH - 1)
         return clubTitleLength in MIN_TEXT_LENGTH..MAX_TITLE_LENGTH &&
-                clubContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
+            clubContentLength in MIN_TEXT_LENGTH..MAX_CONTENT_LENGTH
     }
 
-    private fun isValidModifyState(): Boolean{
+    private fun isValidModifyState(): Boolean {
         val currentState = clubState.value ?: ClubState.FULL
         return currentState != ClubState.FULL
     }
@@ -69,12 +64,12 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
     }
 
     override fun openSelectState() {
-        if(isValidModifyState()) {
+        if (isValidModifyState()) {
             _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSelectState)
         }
     }
 
-    companion object{
+    companion object {
         private const val MIN_TEXT_LENGTH = 1
         private const val MAX_TITLE_LENGTH = 100
         private const val MAX_CONTENT_LENGTH = 1000

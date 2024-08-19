@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.source
 
-import android.util.Log
 import com.happy.friendogly.data.model.LoginDto
 import com.happy.friendogly.data.source.AuthDataSource
 import com.happy.friendogly.remote.api.AuthService

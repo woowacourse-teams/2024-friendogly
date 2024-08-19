@@ -5,7 +5,6 @@ import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.UserAddress
-import com.happy.friendogly.presentation.ui.club.add.bindValidStyle
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
@@ -39,10 +38,11 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
 }
 
 @BindingAdapter("clubStateTextStyle")
-fun TextView.bindClubStateTextStyle(clubState: ClubState){
-    val textStyle = when(clubState){
-        ClubState.OPEN -> context.getColor(R.color.coral500)
-        ClubState.CLOSE,ClubState.FULL -> context.getColor(R.color.gray700)
-    }
+fun TextView.bindClubStateTextStyle(clubState: ClubState) {
+    val textStyle =
+        when (clubState) {
+            ClubState.OPEN -> context.getColor(R.color.coral500)
+            ClubState.CLOSE, ClubState.FULL -> context.getColor(R.color.gray700)
+        }
     this.setTextColor(textStyle)
 }

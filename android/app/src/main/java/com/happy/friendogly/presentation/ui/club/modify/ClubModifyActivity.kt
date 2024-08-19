@@ -1,31 +1,18 @@
 package com.happy.friendogly.presentation.ui.club.modify
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.net.toUri
-import androidx.fragment.app.DialogFragment
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityClubModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.modify.bottom.ClubRecruitmentBottomSheet
-import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.intentSerializable
 import com.happy.friendogly.presentation.utils.putSerializable
-import com.happy.friendogly.presentation.utils.toBitmap
 
 class ClubModifyActivity :
     BaseActivity<ActivityClubModifyBinding>(R.layout.activity_club_modify) {
@@ -81,10 +68,9 @@ class ClubModifyActivity :
         }
     }
 
-    private fun openSelectState(){
+    private fun openSelectState() {
         val bottomSheet =
-            ClubRecruitmentBottomSheet(
-            ) { state ->
+            ClubRecruitmentBottomSheet { state ->
                 viewModel.updateClubState(state)
             }
         bottomSheet.show(supportFragmentManager, "TAG")
