@@ -25,6 +25,7 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
                 isMine = isMine,
                 isMyParticipated = alreadyParticipate,
                 canParticipation = canParticipate,
+                isUserPetEmpty = isMyPetsEmpty,
             ),
     )
 }
