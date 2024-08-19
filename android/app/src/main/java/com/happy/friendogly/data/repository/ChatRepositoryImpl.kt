@@ -4,6 +4,7 @@ import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.ChatDataSource
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
+import com.happy.friendogly.domain.model.ChatRoomClub
 import com.happy.friendogly.domain.model.ChatRooms
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.repository.ChatRepository
@@ -45,4 +46,6 @@ class ChatRepositoryImpl(
         runCatching {
             chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }
         }
+
+    override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> = source.getClubs(chatRoomId).mapCatching { it.toDomain() }
 }

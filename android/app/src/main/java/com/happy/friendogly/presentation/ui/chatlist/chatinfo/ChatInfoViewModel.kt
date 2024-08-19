@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
+import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import kotlinx.coroutines.launch
 
 class ChatInfoViewModel(
+    private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
     private val getChatMemberUseCase: GetChatMemberUseCase,
 ) : BaseViewModel() {
     private val _clubInfo: MutableLiveData<ChatInfoUiModel> = MutableLiveData()
@@ -31,18 +33,28 @@ class ChatInfoViewModel(
         }
     }
 
-    fun getClubInfo() { // TODO Api 연결
-        _clubInfo.value =
-            ChatInfoUiModel(
-                dogSize = listOf(DogSize.SMALL),
-                dogGender = listOf(DogGender.FEMALE),
-            )
+    fun getClubInfo(chatRoomId: Long) {
+        launch {
+            getChatRoomClubUseCase(chatRoomId).onSuccess {
+                _clubInfo.value = ChatInfoUiModel(
+                    clubId = it.clubId,
+                    dogSize = it.allowedSize,
+                    dogGender = it.allowedGender
+                )
+            }.onFailure {
+                // TODO 에러 처리
+            }
+        }
     }
 
     companion object {
-        fun factory(getChatMemberUseCase: GetChatMemberUseCase): ViewModelProvider.Factory {
+        fun factory(
+            getChatRoomClubUseCase: GetChatRoomClubUseCase,
+            getChatMemberUseCase: GetChatMemberUseCase
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatInfoViewModel(
+                    getChatRoomClubUseCase,
                     getChatMemberUseCase,
                 )
             }

@@ -55,6 +55,7 @@ import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatMessagesUseCase
+import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
@@ -88,8 +89,8 @@ import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.AddressModule
-import com.happy.friendogly.local.di.ChatAlarmModule
 import com.happy.friendogly.local.di.AlarmTokenModule
+import com.happy.friendogly.local.di.ChatAlarmModule
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.local.di.WoofAlarmModule
 import com.happy.friendogly.local.room.ChatMessageDatabase
@@ -166,11 +167,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-                RemoteModule.createStumpClient(
-                    baseUrl = baseUrl,
-                    tokenManager = tokenManager,
-                    authenticationListener = authenticationListener,
-                ),
+            RemoteModule.createStumpClient(
+                baseUrl = baseUrl,
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
@@ -203,7 +204,10 @@ class AppModule(context: Context) {
         WebSocketDataSourceImpl(service = webSocketService)
     private val chatDataSource: ChatDataSource = ChatDataSourceImpl(service = chatService)
     private val alarmSettingDataSource: AlarmSettingDataSource =
-        AlarmSettingDataSourceImpl(chatAlarmModule = chatAlarmModule, woofAlarmModule = woofAlarmModule)
+        AlarmSettingDataSourceImpl(
+            chatAlarmModule = chatAlarmModule,
+            woofAlarmModule = woofAlarmModule
+        )
     private val alarmTokenDataSource: AlarmTokenDataSource =
         AlamTokenDataSourceImpl(service = alarmTokenService)
 
@@ -276,6 +280,8 @@ class AppModule(context: Context) {
         SaveChatMessageUseCase(repository = chatRepository)
     val getChatMessagesUseCase: GetChatMessagesUseCase =
         GetChatMessagesUseCase(repository = chatRepository)
+    val getChatRoomClubUseCase: GetChatRoomClubUseCase =
+        GetChatRoomClubUseCase(repository = chatRepository)
     val publishEnterUseCase: PublishEnterUseCase =
         PublishEnterUseCase(repository = webSocketRepository)
     val publishSendUseCase: PublishSendMessageUseCase =
@@ -292,9 +298,12 @@ class AppModule(context: Context) {
         DeleteChatAlarmUseCase(repository = alarmSettingRepository)
     val saveChatAlarmUseCase: SaveChatAlarmUseCase =
         SaveChatAlarmUseCase(repository = alarmSettingRepository)
-    val saveWoofAlarmUseCase: SaveWoofAlarmUseCase = SaveWoofAlarmUseCase(repository = alarmSettingRepository)
-    val getWoofAlarmUseCase:GetWoofAlarmUseCase = GetWoofAlarmUseCase(repository = alarmSettingRepository)
-    val deleteWoofAlarmUseCase:DeleteWoofAlarmUseCase = DeleteWoofAlarmUseCase(repository = alarmSettingRepository)
+    val saveWoofAlarmUseCase: SaveWoofAlarmUseCase =
+        SaveWoofAlarmUseCase(repository = alarmSettingRepository)
+    val getWoofAlarmUseCase: GetWoofAlarmUseCase =
+        GetWoofAlarmUseCase(repository = alarmSettingRepository)
+    val deleteWoofAlarmUseCase: DeleteWoofAlarmUseCase =
+        DeleteWoofAlarmUseCase(repository = alarmSettingRepository)
     val getChatAlarmUseCase: GetChatAlarmUseCase =
         GetChatAlarmUseCase(repository = alarmSettingRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase =
