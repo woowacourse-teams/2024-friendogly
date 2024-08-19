@@ -61,7 +61,8 @@
 
             <TextView
                 android:id="@+id/tv_club_list_club_state"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size14"
+                tools:style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size14"
+                app:clubStateTextStyle = "@{club.clubState}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"

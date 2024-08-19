@@ -3,7 +3,9 @@ package com.happy.friendogly.presentation.ui.club.list
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.UserAddress
+import com.happy.friendogly.presentation.ui.club.add.bindValidStyle
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
@@ -34,4 +36,13 @@ fun TextView.bindClubDateTime(dateTime: LocalDateTime?) {
 fun TextView.bindMyLocation(userAddress: UserAddress?) {
     this.text =
         userAddress?.adminArea ?: context.getString(R.string.club_list_my_location_default)
+}
+
+@BindingAdapter("clubStateTextStyle")
+fun TextView.bindClubStateTextStyle(clubState: ClubState){
+    val textStyle = when(clubState){
+        ClubState.OPEN -> R.style.Theme_AppCompat_TextView_SemiBold_Orange_Size14
+        ClubState.CLOSE,ClubState.FULL -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
+    }
+    this.setTextAppearance(textStyle)
 }
