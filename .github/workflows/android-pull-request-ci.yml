@@ -75,7 +75,17 @@ jobs:
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         run: |
-          echo "$RELEASE_KEYSTORE" | base64 -d > release.keystore
+          touch ../android/app/keystore/friendogly.jks
+          echo RELEASE_KEYSTORE >> ../android/app/keystore/friendogly.jks
+          cat ../android/app/keystore/friendogly.jks
+
+      - name: Create file
+        run: cat /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore/friendogly.jks | base64
+
+      - name: Putting data
+        env:
+          DATA: ${{ secrets.RELEASE_KEYSTORE }}
+        run: echo $DATA > /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore/friendogly.jks
 
       - name: Create google-services.json
         env:
