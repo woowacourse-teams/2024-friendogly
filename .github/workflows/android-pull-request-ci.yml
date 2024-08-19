@@ -69,7 +69,7 @@ jobs:
         env:
           KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
         run: |
-          echo "KEYSTORE_PROPERTIES" > keystore.properties
+          echo "$KEYSTORE_PROPERTIES" > keystore.properties
 
       - name: Create keystore directory
         run: mkdir -p /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore
