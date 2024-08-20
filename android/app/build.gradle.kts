@@ -32,15 +32,15 @@ val releaseStoreFile = keystoreProperties.getProperty("release.storeFile") ?: ""
 val releaseStorePassword = keystoreProperties.getProperty("release.storePassword") ?: ""
 
 android {
-    namespace = "com.happy.friendogly"
-    compileSdk = 34
+    namespace = libs.versions.applicationId.get()
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.happy.friendogly"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 7
-        versionName = "0.2.2"
+        applicationId = libs.versions.applicationId.get()
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
