@@ -5,12 +5,14 @@ import com.happy.friendogly.data.model.ClubDetailDto
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.ClubParticipationDto
+import com.happy.friendogly.data.model.ClubStateDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.mapper.toRemote
+import com.happy.friendogly.remote.model.request.ClubModifyRequest
 import com.happy.friendogly.remote.model.request.PostClubMemberRequest
 import com.happy.friendogly.remote.model.request.PostClubRequest
 import okhttp3.MultipartBody
@@ -83,4 +85,23 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
         runCatching {
             service.deleteClubMember(clubId)
         }
+
+    override suspend fun patchClub(
+        clubId: Long,
+        title: String,
+        content: String,
+        state: ClubStateDto
+    ): Result<Unit> =
+        runCatching {
+            val request = ClubModifyRequest(
+                title = title,
+                content = content,
+                status = state.toRemote(),
+            )
+            service.patchClub(
+                clubId = clubId,
+                request = request,
+            )
+        }
+
 }
