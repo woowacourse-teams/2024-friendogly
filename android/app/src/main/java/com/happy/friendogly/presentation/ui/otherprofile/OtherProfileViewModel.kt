@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -14,7 +14,6 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
-import kotlinx.coroutines.launch
 
 class OtherProfileViewModel(
     savedStateHandle: SavedStateHandle,
@@ -34,34 +33,49 @@ class OtherProfileViewModel(
         MutableLiveData(null)
     val navigateAction: LiveData<Event<OtherProfileNavigationAction>> get() = _navigateAction
 
+    private val _message: MutableLiveData<Event<OtherProfileMessage>> = MutableLiveData(null)
+    val message: LiveData<Event<OtherProfileMessage>> get() = _message
+
     init {
         fetchMember()
         fetchPetMine()
     }
 
     private fun fetchMember() {
-        viewModelScope.launch {
-            getMemberUseCase(id = id).onSuccess { member ->
-                _uiState.value =
-                    uiState.value?.copy(
-                        nickname = member.name,
-                        tag = member.tag,
-                        profilePath = member.imageUrl,
-                    )
-            }.onFailure {
-                // TODO 예외 처리
-            }
+        launch {
+            getMemberUseCase(id = id).fold(
+                onSuccess = { member ->
+                    val state = uiState.value ?: return@launch
+                    _uiState.value =
+                        state.copy(
+                            nickname = member.name,
+                            tag = member.tag,
+                            profilePath = member.imageUrl,
+                            otherProfileSkeleton = state.otherProfileSkeleton.copy(userProfile = false),
+                        )
+                },
+                onError = {
+                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 
     fun fetchPetMine() {
-        viewModelScope.launch {
-            getPetsUseCase(id = id).onSuccess { pets ->
-                _uiState.value =
-                    uiState.value?.copy(pets = pets)
-            }.onFailure {
-                // TODO 예외 처리
-            }
+        launch {
+            getPetsUseCase(id = id).fold(
+                onSuccess = { pets ->
+                    val state = uiState.value ?: return@launch
+                    _uiState.value =
+                        state.copy(
+                            pets = pets,
+                            otherProfileSkeleton = state.otherProfileSkeleton.copy(petProfile = false),
+                        )
+                },
+                onError = {
+                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                },
+            )
         }
     }
 

@@ -20,6 +20,7 @@ class ChatListFragment :
 
     override fun initViewCreated() {
         initAdapter()
+        binding.vm = viewModel
     }
 
     private fun initAdapter() {

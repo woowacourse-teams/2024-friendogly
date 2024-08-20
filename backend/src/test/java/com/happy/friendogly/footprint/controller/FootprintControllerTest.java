@@ -14,6 +14,8 @@ import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
@@ -51,6 +53,9 @@ class FootprintControllerTest extends ControllerTest {
 
     @Autowired
     private FootprintRepository footprintRepository;
+
+    @Autowired
+    private DeviceTokenRepository deviceTokenRepository;
 
     private Member member1;
     private Member member2;
@@ -117,6 +122,27 @@ class FootprintControllerTest extends ControllerTest {
                         .gender(Gender.FEMALE)
                         .imageUrl("https://picsum.photos/200")
                         .build()
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member1,
+                        "deviceToken1"
+                )
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member2,
+                        "deviceToken2"
+                )
+        );
+
+        deviceTokenRepository.save(
+                new DeviceToken(
+                        member3,
+                        "deviceToken3"
+                )
         );
     }
 
@@ -258,17 +284,17 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위밖에서 안으로 들어오면 산책중으로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toOngoing() {
+    void updateWalkStatusAuto_toOngoing() {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         BEFORE,
                         null,
                         null,
                         LocalDateTime.now(),
                         false
-                        )
+                )
         );
 
         float latitude = 0.0F;
@@ -280,7 +306,7 @@ class FootprintControllerTest extends ControllerTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
-                .when().patch("/footprints/walk-status")
+                .when().patch("/footprints/recent/walk-status/auto")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data.walkStatus", is(ONGOING.toString()));
@@ -288,11 +314,11 @@ class FootprintControllerTest extends ControllerTest {
 
     @DisplayName("발자국 범위안에서 밖으로 나가면 산책후로 상태가 변한다 (200)")
     @Test
-    void updateWalkStatus_toAfter(){
+    void updateWalkStatusAuto_toAfter() {
         footprintRepository.save(
                 new Footprint(
                         member1,
-                        new Location(0,0),
+                        new Location(0, 0),
                         ONGOING,
                         LocalDateTime.now(),
                         null,
@@ -310,9 +336,33 @@ class FootprintControllerTest extends ControllerTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
                 .body(request)
-                .when().patch("/footprints/walk-status")
+                .when().patch("/footprints/recent/walk-status/auto")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .body("data.walkStatus",is(AFTER.toString()));
+                .body("data.walkStatus", is(AFTER.toString()));
+    }
+
+    @DisplayName("발자국 상태를 수동으로 산책후로 변경한다 (200)")
+    @Test
+    void updateWalkStatusManual_toAfter() {
+        footprintRepository.save(
+                new Footprint(
+                        member1,
+                        new Location(0, 0),
+                        ONGOING,
+                        LocalDateTime.now(),
+                        null,
+                        LocalDateTime.now().minusHours(1),
+                        false
+                )
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, getMemberAccessToken(member1.getId()))
+                .when().patch("/footprints/recent/walk-status/manual")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.walkStatus", is(AFTER.toString()));
     }
 }

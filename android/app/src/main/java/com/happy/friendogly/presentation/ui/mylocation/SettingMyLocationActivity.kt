@@ -15,7 +15,7 @@ import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
-import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
+import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -91,7 +91,7 @@ class SettingMyLocationActivity :
     }
 
     private fun putLoadState() {
-        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE, true)
+        intent.putExtra(ClubChangeStateIntent.CHANGE_CLUB_STATE, true)
         setResult(Activity.RESULT_OK, intent)
     }
 

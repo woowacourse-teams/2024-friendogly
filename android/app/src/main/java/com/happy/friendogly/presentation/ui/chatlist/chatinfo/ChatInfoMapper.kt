@@ -4,9 +4,9 @@ import com.happy.friendogly.domain.model.ChatMember
 
 fun ChatMember.toUiModel(myMemberId: Long): JoinPeople =
     JoinPeople(
-        nickName = this.memberName,
-        isMe = myMemberId == memberId,
+        nickName = this.name,
+        isMe = myMemberId == id,
         isLeader = isOwner,
-        profileUrl = memberProfileImageUrl,
-        memberId = memberId,
+        profileUrl = profileImageUrl,
+        memberId = id,
     )

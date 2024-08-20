@@ -1,21 +1,29 @@
 package com.happy.friendogly.presentation.ui.chatlist.chat
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
+import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.utils.hideKeyboard
+import kotlinx.coroutines.launch
 
 class ChatActivity :
     BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
+            AppModule.getInstance().getChatMessagesUseCase,
+            AppModule.getInstance().connectWebsocketUseCase,
+            AppModule.getInstance().disconnectWebsocketUseCase,
             AppModule.getInstance().subScribeMessageUseCase,
             AppModule.getInstance().publishSendUseCase,
         )
@@ -24,7 +32,7 @@ class ChatActivity :
 
     override fun initCreateView() {
         binding.vm = viewModel
-
+        lifecycle.addObserver(ChatLifecycleObserver.getInstance())
         initAdapter()
         getChatList()
         clickBackBtn()
@@ -38,6 +46,16 @@ class ChatActivity :
             binding.edtChatSendMessage.setText("")
         }
         viewModel.subscribeMessage(chatId, myMemberId)
+        hideMessageKeyBoard()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun hideMessageKeyBoard() {
+        binding.rcvChatDetail.setOnTouchListener { _, _ ->
+            hideKeyboard()
+            binding.edtChatSendMessage.clearFocus()
+            false
+        }
     }
 
     private fun clickChatInfo(
@@ -67,13 +85,27 @@ class ChatActivity :
     }
 
     private fun getChatList() {
-        viewModel.chats.observe(this) {
-            adapter.submitList(it)
+        lifecycleScope.launch {
+            viewModel.chats.collect {
+                adapter.submitList(it)
+                binding.rcvChatDetail.post {
+                    binding.rcvChatDetail.scrollToPosition(adapter.currentList.size - 1)
+                }
+            }
         }
     }
 
     override fun navigateToMemberProfile(memberId: Long) {
         startActivity(OtherProfileActivity.getIntent(this, memberId))
+    }
+
+    override fun navigateToClub(clubId: Long) {
+        startActivity(ClubDetailActivity.getIntent(this, clubId))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(ChatLifecycleObserver.getInstance())
     }
 
     companion object {

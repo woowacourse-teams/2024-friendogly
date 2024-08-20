@@ -29,6 +29,11 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
         initObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadMyHeadClubs()
+    }
+
     private fun initDataBinding() {
         binding.actionHandler = viewModel
         binding.includeClubList.rcvClubListClub.adapter = adapter

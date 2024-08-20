@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">friendogly</string>
+    <string name="app_name">반갑개</string>
 
     <string name="dog_small">소형견</string>
     <string name="dog_medium">중형견</string>
@@ -82,6 +82,8 @@
     <string name="alarm_settings_chatting_push_description">모든 채팅 메시지 알림</string>
     <string name="alarm_settings_club_push">모임 알림</string>
     <string name="alarm_settings_club_push_description">가입한 모임의 알림</string>
+    <string name="alarm_settings_woof_push">산책 알림</string>
+    <string name="alarm_settings_woof_push_description">다른 강아지의 산책 여부 알림</string>
     <string name="setting">설정</string>
     <string name="unsubscribe">탈퇴하기</string>
     <string name="logout">로그아웃</string>
@@ -148,7 +150,7 @@
     <string name="club_list_date_hours">%d시간 전</string>
     <string name="club_list_date_minutes">%d분 전</string>
     <string name="club_list_date_now">방금 전</string>
-    <string name="club_counter_count">%d명</string>
+    <string name="club_counter_count">최대 %d명</string>
     <string name="club_list_participation_filter">모집 조건 선택</string>
     <string name="club_list_no_address_title">등록 된 주소가 없습니다</string>
     <string name="club_list_no_address_content">주소를 등록해야 모임을 볼 수 있어요</string>
@@ -193,7 +195,7 @@
     <string name="club_detail_fail_load">모임을 찾지 못했습니다.</string>
     <string name="club_detail_fail_button">뒤로가기</string>
     <string name="club_detail_participate_text">참여하기</string>
-    <string name="club_detail_un_participate_text">참여불가</string>
+    <string name="club_detail_un_participate_text">모집종료</string>
     <string name="club_detail_mine_text">모임보기</string>
     <string name="club_detail_update">수정하기</string>
     <string name="club_detail_delete">방나가기</string>
@@ -206,12 +208,16 @@
     <!--모임 수정 -->
     <string name="club_modify_title">모임 수정하기</string>
     <string name="club_modify_commit">수정 완료</string>
+    <string name="club_modify_recruitment">모집 여부</string>
+    <string name="club_modify_fail">모임 수정에 실패하였습니다..</string>
 
     <!--댕댕이 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
     <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
+    <string name="dog_select_prevent_select">%s는 모임에 데려갈 수 없어요..</string>
+    <string name="dog_select_can_select">%s는 모임에 데려갈 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
@@ -286,4 +292,15 @@
     <string name="my_club_subject">참여 모임</string>
     <string name="my_head_club_subject">방장인 모임</string>
     <string name="club_list_my_location_default">내 동네 설정</string>
+    <string name="pet_add_alert_title">강아지 등록</string>
+    <string name="pet_add_alert_content">서비스 이용을 위해 강아지를 등록해주세요!</string>
+    <string name="pet_add_alert_positive">등록하기</string>
+    <string name="pet_add_alert_negative">다음에 하기</string>
+
+    <!--에러 메시지-->
+    <string name="server_error_message">서버 에러가 발생했습니다</string>
+    <string name="file_size_exceed_message">1MB를 초과하는 이미지는 등록할 수 없어요</string>
+    <string name="default_error_message">알 수 없는 에러가 발생했어요</string>
+    <string name="kakao_login_error_message">카카오 로그인을 실패했어요</string>
+    <string name="chat_go_club_detail">모임 상세 바로가기</string>
 </resources>

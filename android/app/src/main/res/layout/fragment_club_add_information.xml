@@ -22,16 +22,16 @@
             tools:context=".presentation.ui.club.add.information.ClubAddInformationFragment">
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size25"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="100dp"
                 android:text="@string/club_add_information_main_title"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="20dp" />
+                android:layout_height="15dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -40,14 +40,14 @@
 
                 <TextView
                     android:text="@{vm.myAddress.adminArea}"
-                    style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size16"
+                    style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="잠실 6동" />
 
                 <TextView
                     android:layout_marginStart="3dp"
-                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Gray07.Size14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/club_add_information_main_content" />
@@ -58,7 +58,7 @@
                 android:layout_height="30dp" />
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/club_add_club_title" />
@@ -97,7 +97,7 @@
                 android:layout_height="30dp" />
 
             <TextView
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/club_add_club_content" />

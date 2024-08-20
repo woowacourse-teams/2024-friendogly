@@ -21,6 +21,6 @@ fun Club.toPresentation(): ClubItemUiModel {
         currentNumberOfPeople = currentMemberCount,
         content = content,
         clubPets = petImageUrls.map { ClubPet(it?.ifEmpty { null }) },
-        canParticipate = status.toPresentation(),
+        clubState = status,
     )
 }

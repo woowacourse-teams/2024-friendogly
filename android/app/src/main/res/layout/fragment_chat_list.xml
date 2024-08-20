@@ -4,25 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.chatlist.ChatListViewModel" />
 
     </data>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipelayout_chat_list_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar_chat_list_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rect_gray03_botline_bot1">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     app:title="@string/chat_list_title"
                     app:titleMarginStart="20dp"
                     app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18">
@@ -33,12 +42,37 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_chat_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_constraintTop_toBottomOf="@id/appbar_chat_list_main"
                 tools:listitem="@layout/item_chat_list" />
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <ImageView
+                android:id="@+id/tv_chat_list_dog"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:visibility="@{vm.isChatEmpty() ? View.VISIBLE : View.GONE}"
+                android:layout_margin="100dp"
+                android:src="@drawable/ic_no_chat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:visibility="@{vm.isChatEmpty() ? View.VISIBLE : View.GONE}"
+                style="@style/Theme.AppCompat.TextView.Medium.Gray08.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="현재 잠여한 모임이 없어요"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_chat_list_dog" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

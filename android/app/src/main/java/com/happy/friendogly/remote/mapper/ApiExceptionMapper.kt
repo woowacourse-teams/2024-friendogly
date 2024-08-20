@@ -36,5 +36,6 @@ fun ErrorDataResponse.toData(): ErrorDataDto {
 fun ErrorCodeResponse.toData(): ErrorCodeDto {
     return when (this) {
         ErrorCodeResponse.DEFAULT_ERROR_CODE -> ErrorCodeDto.DEFAULT_ERROR_CODE
+        ErrorCodeResponse.FILE_SIZE_EXCEED -> ErrorCodeDto.DEFAULT_ERROR_CODE
     }
 }

@@ -22,6 +22,15 @@ val naverClientId = localProperties.getProperty("NAVER_CLIEND_ID") ?: ""
 val baseUrl = localProperties.getProperty("base_url") ?: ""
 val websocketUrl = localProperties.getProperty("websocket_url") ?: ""
 
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+val releaseKeyAlias = keystoreProperties.getProperty("release.keyAlias") ?: ""
+val releaseKeyPassword = keystoreProperties.getProperty("release.keyPassword") ?: ""
+val releaseStoreFile = keystoreProperties.getProperty("release.storeFile") ?: ""
+val releaseStorePassword = keystoreProperties.getProperty("release.storePassword") ?: ""
+
 android {
     namespace = "com.happy.friendogly"
     compileSdk = 34
@@ -30,7 +39,7 @@ android {
         applicationId = "com.happy.friendogly"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
+        versionCode = 7
         versionName = "0.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -43,6 +52,15 @@ android {
         buildConfigField("String", "websocket_url", websocketUrl)
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
+            storeFile = file(releaseStoreFile)
+            storePassword = releaseStorePassword
+        }
+    }
+
     buildTypes {
         debug {
             isDebuggable = true
@@ -51,6 +69,7 @@ android {
         release {
             isDebuggable = false
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -91,7 +110,11 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.animation)
     implementation(libs.bundles.stomp)
+    implementation(libs.bundles.room)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.assertj)
     androidTestImplementation(libs.androidx.espresso.core)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
 }

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class ClubMember {
 
     @EmbeddedId
-    private ClubMemberPk clubMemberPk;
+    private ClubMemberId clubMemberId;
 
     private LocalDateTime createdAt;
 
@@ -25,7 +25,7 @@ public class ClubMember {
         validateClub(club);
         validateMember(member);
         validateCreatedAt(createdAt);
-        this.clubMemberPk = new ClubMemberPk(club, member);
+        this.clubMemberId = new ClubMemberId(club, member);
         this.createdAt = createdAt;
     }
 
@@ -56,10 +56,10 @@ public class ClubMember {
     }
 
     public void updateClub(Club club) {
-        this.clubMemberPk.updateClub(club);
+        this.clubMemberId.updateClub(club);
     }
 
     public boolean isSameMember(Member member) {
-        return this.clubMemberPk.getMember().getId().equals(member.getId());
+        return this.clubMemberId.getMember().getId().equals(member.getId());
     }
 }

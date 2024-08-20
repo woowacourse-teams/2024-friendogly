@@ -1,14 +1,14 @@
 package com.happy.friendogly.member.domain;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.happy.friendogly.exception.FriendoglyException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
 
@@ -23,7 +23,7 @@ class MemberTest {
 
     @DisplayName("이름 형식이 올바르지 않은 경우 예외가 발생한다.")
     @NullAndEmptySource
-    @ValueSource(strings = {"1234567890123456"})
+    @ValueSource(strings = {"123456789"})
     @ParameterizedTest
     void create_Fail_IllegalNameFormat(String nameInput) {
         assertThatThrownBy(() -> Member.builder()

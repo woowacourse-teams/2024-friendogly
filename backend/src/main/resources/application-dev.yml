@@ -9,6 +9,9 @@ jwt:
   access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
   refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
 
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
 management:
   endpoint:
     metrics:
@@ -23,3 +26,18 @@ management:
 
   server:
     port: 8081
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:database
+    username: ${H2_CONSOLE_USERNAME}
+    password: ${H2_CONSOLE_PASSWORD}
+  h2:
+    console:
+      enabled: true
+      path: ${H2_CONSOLE_ENDPOINT}

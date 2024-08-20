@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemPetDetailBinding
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 
-class PetDetailAdapter : ListAdapter<PetDetail, PetDetailAdapter.ViewHolder>(PetDetailItemDiffCallback) {
+class PetDetailAdapter :
+    ListAdapter<PetDetail, PetDetailAdapter.ViewHolder>(PetDetailItemDiffCallback) {
     init {
         setHasStableIds(true)
     }
@@ -22,13 +23,11 @@ class PetDetailAdapter : ListAdapter<PetDetail, PetDetailAdapter.ViewHolder>(Pet
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = Int.MAX_VALUE
-
     override fun onBindViewHolder(
         holder: ViewHolder,
         position: Int,
     ) {
-        holder.bind(getItem(position % currentList.size))
+        holder.bind(getItem(position))
     }
 
     class ViewHolder(private val binding: ItemPetDetailBinding) :

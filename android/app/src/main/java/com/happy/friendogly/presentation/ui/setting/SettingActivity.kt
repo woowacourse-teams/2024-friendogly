@@ -12,14 +12,20 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.dialog.DefaultRedAlertDialog
+import com.happy.friendogly.presentation.dialog.LoadingDialog
+import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.register.RegisterActivity
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     val viewModel: SettingViewModel by viewModels {
         SettingViewModel.factory(
+            saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
+            saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
         )
     }
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     override fun initCreateView() {
         initDataBinding()
@@ -44,6 +50,23 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                     startActivity(RegisterActivity.getIntent(this))
                     finish()
                 }
+            }
+        }
+
+        viewModel.message.observeEvent(this) { message ->
+            when (message) {
+                is SettingMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+                is SettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                is SettingMessage.TokenNotStoredErrorMessage ->
+                    startActivity(MainActivity.getIntent(this))
+            }
+        }
+
+        viewModel.loading.observeEvent(this) { loading ->
+            if (loading) {
+                showLoadingDialog()
+            } else {
+                dismissLoadingDialog()
             }
         }
     }
@@ -87,6 +110,16 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 clickToNegative = {},
             )
         dialog.show(supportFragmentManager, "TAG")
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
     }
 
     companion object {

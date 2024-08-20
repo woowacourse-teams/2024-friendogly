@@ -41,8 +41,8 @@ class PetDetailViewModel(
             requireNotNull(savedStateHandle.get<Int>(PetDetailActivity.PUT_EXTRA_CURRENT_PAGE))
 
         val state = _uiState.value ?: return
-        _uiState.value = state.copy(petsDetail = petsDetail)
-        _currentPage.value = (MIDDLE_PAGE - (MIDDLE_PAGE) % petsDetail.data.size) + currentPage
+        _uiState.value = state.copy(petsDetail = petsDetail, startPage = currentPage)
+        _currentPage.value = currentPage
     }
 
     fun updateCurrentPage(page: Int) {

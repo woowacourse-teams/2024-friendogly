@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="dogSelectActionHandler"
             type="com.happy.friendogly.presentation.ui.club.select.PetSelectActionHandler" />
@@ -14,44 +15,54 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        app:bindingSelectBorder="@{dogUiModel}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{()->dogSelectActionHandler.selectPet(dogUiModel)}">
+        android:onClick="@{()->dogSelectActionHandler.selectPet(dogUiModel)}"
+        app:bindingSelectBorder="@{dogUiModel}">
 
-        <ImageView
-            tools:src="@drawable/img_acorm"
-            urlToImage="@{dogUiModel.profileImage}"
-            android:scaleType="centerCrop"
-            android:background="@color/white"
-            android:layout_margin="5dp"
+        <com.google.android.material.imageview.ShapeableImageView
+            glide="@{dogUiModel.profileImage}"
+            app:shapeAppearanceOverlay="@style/RoundSmall"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/white"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/img_acorm" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintlayout_dog_select_gradient"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rect_black_gradient_fill"
-        android:orientation="vertical"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintStart_toStartOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintlayout_dog_select_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/rect_black_gradient_fill_16"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@drawable/rect_transparent_gray_fill_radius16"
+            app:bindSelectPrevent="@{dogUiModel.selectable}"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="5dp" />
 
         <TextView
-            android:text="@{dogUiModel.name}"
-            style="@style/Theme.AppCompat.TextView.Medium.White.Size18"
+            style="@style/Theme.AppCompat.TextView.Medium.White.Size16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="@+id/constraintlayout_dog_select_gradient"
+            app:bindSelectPreventContent="@{dogUiModel}"
             app:layout_constraintBottom_toBottomOf="@+id/constraintlayout_dog_select_gradient"
-            app:layout_constraintStart_toStartOf="@+id/constraintlayout_dog_select_gradient"
             app:layout_constraintEnd_toEndOf="@+id/constraintlayout_dog_select_gradient"
+            app:layout_constraintStart_toStartOf="@+id/constraintlayout_dog_select_gradient"
+            app:layout_constraintTop_toTopOf="@+id/constraintlayout_dog_select_gradient"
             tools:text="땡이 준비 갈 완료" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

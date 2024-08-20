@@ -15,15 +15,18 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         clubDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         clubLeaderName = ownerMemberName,
+        clubState = status,
         clubLeaderImage = ownerImageUrl?.ifEmpty { null },
         clubLocation = address.toPresentation(),
         clubPoster = imageUrl?.ifEmpty { null },
         maximumNumberOfPeople = memberCapacity,
+        isUserPetEmpty = isMyPetsEmpty,
         clubDetailViewType =
             ClubDetailViewType.from(
                 isMine = isMine,
                 isMyParticipated = alreadyParticipate,
                 canParticipation = canParticipate,
+                isUserPetEmpty = isMyPetsEmpty,
             ),
     )
 }

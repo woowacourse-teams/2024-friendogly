@@ -5,15 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
+import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.SizeType
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
+import kotlinx.coroutines.launch
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private var _binding: LayoutChatDrawerBinding? = null
@@ -29,11 +35,15 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
                     getString(R.string.chat_setting_alarm_alert),
                     Snackbar.LENGTH_SHORT,
                 ).show()
+                binding.switchChatSettingAlarm.isChecked = false
             }
         }
 
     private val viewModel: ChatInfoViewModel by viewModels {
-        ChatInfoViewModel.factory(AppModule.getInstance().getChatMemberUseCase)
+        ChatInfoViewModel.factory(
+            AppModule.getInstance().getChatRoomClubUseCase,
+            AppModule.getInstance().getChatMemberUseCase,
+        )
     }
 
     override fun onCreateView(
@@ -66,12 +76,23 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         val memberId = requireNotNull(arguments?.getLong(EXTRA_MEMBER_ID, INVALID_ID))
         val chatId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))
         viewModel.getChatMember(myMemberId = memberId, chatRoomId = chatId)
-        viewModel.getClubInfo()
+        viewModel.getClubInfo(chatId)
+        observeData()
+    }
+
+    private fun observeData() {
         viewModel.clubInfo.observe(viewLifecycleOwner) { info ->
             setChatInfo(info)
+            binding.btnChatClub.setOnClickListener {
+                (requireActivity() as ChatActivity).navigateToClub(info.clubId)
+            }
         }
         viewModel.joiningPeople.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+        lifecycleScope.launch {
+            binding.switchChatSettingAlarm.isChecked =
+                alarmPermission.hasPermissions() && AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
         }
     }
 
@@ -79,6 +100,9 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         binding.switchChatSettingAlarm.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestNotificationPermission()
+            }
+            lifecycleScope.launch {
+                AppModule.getInstance().saveChatAlarmUseCase(isChecked)
             }
         }
     }
@@ -93,18 +117,18 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         with(binding) {
             info.dogSize.forEach {
                 when (it) {
-                    DogSize.SMALL -> chbChatDogSmall.isChecked = true
-                    DogSize.MEDIUM -> chbChatDogMedium.isChecked = true
-                    DogSize.LARGE -> chbChatDogLarge.isChecked = true
+                    SizeType.SMALL -> btnChatDogSmall.isVisible = true
+                    SizeType.MEDIUM -> btnChatDogMedium.isVisible = true
+                    SizeType.LARGE -> btnChatDogLarge.isVisible = true
                 }
             }
 
             info.dogGender.forEach {
                 when (it) {
-                    DogGender.MALE -> chbChatDogMale.isChecked = true
-                    DogGender.FEMALE -> chbChatDogFemale.isChecked = true
-                    DogGender.MALE_NEUTERED -> chbChatDogMaleNeutered.isChecked = true
-                    DogGender.FEMALE_NEUTERED -> chbChatDogFemaleNeutered.isChecked = true
+                    Gender.MALE -> btnChatDogMale.isVisible = true
+                    Gender.FEMALE -> btnChatDogFemale.isVisible = true
+                    Gender.MALE_NEUTERED -> btnChatDogMaleNeutered.isVisible = true
+                    Gender.FEMALE_NEUTERED -> btnChatDogFemaleNeutered.isVisible = true
                 }
             }
         }

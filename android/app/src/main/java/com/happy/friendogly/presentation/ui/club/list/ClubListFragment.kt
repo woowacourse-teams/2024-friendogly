@@ -12,7 +12,9 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentClubListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
+import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
@@ -24,6 +26,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
         ClubListViewModel.factory(
+            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
             searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
         )
@@ -68,7 +71,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 if (result.resultCode == Activity.RESULT_OK) {
                     val isChange =
                         result.data?.getBooleanExtra(
-                            CHANGE_CLUB_LIST_STATE,
+                            ClubChangeStateIntent.CHANGE_CLUB_STATE,
                             false,
                         ) ?: false
                     if (isChange) {
@@ -133,8 +136,18 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                     (activity as MainActivityActionHandler).navigateToSettingLocation(resultLauncher)
 
                 ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
+                ClubListEvent.OpenAddPet -> openRegisterPetDialog()
             }
         }
+    }
+
+    private fun openRegisterPetDialog() {
+        PetAddAlertDialog(
+            clickToNegative = {},
+            clickToPositive = {
+                (activity as MainActivityActionHandler).navigateToRegisterPet(null)
+            },
+        ).show(parentFragmentManager, tag)
     }
 
     private fun initStateObserver() {
@@ -157,9 +170,5 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
         currentView.visibility = View.VISIBLE
-    }
-
-    companion object {
-        const val CHANGE_CLUB_LIST_STATE = "clubListChangeState"
     }
 }

@@ -1,7 +1,5 @@
 package com.happy.friendogly.member.controller;
 
-import static org.mockito.Mockito.when;
-
 import com.happy.friendogly.auth.dto.KakaoUserResponse;
 import com.happy.friendogly.auth.service.KakaoOauthClient;
 import com.happy.friendogly.auth.service.jwt.JwtProperties;
@@ -9,7 +7,6 @@ import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import com.happy.friendogly.member.dto.request.SaveMemberRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +16,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+
+import java.io.File;
+
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
@@ -59,10 +60,10 @@ class MemberControllerTest {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    @DisplayName("닉네임 길이가 15자를 초과하는 경우 400을 반환한다.")
+    @DisplayName("닉네임 길이가 8자를 초과하는 경우 400을 반환한다.")
     @Test
     void saveMember_Fail_NameLengthOver() {
-        SaveMemberRequest request = new SaveMemberRequest("1234567890123456",  "code");
+        SaveMemberRequest request = new SaveMemberRequest("123456789", "code");
         RestAssured.given().log().all()
                 .contentType(ContentType.MULTIPART)
                 .multiPart("image", new File("./src/test/resources/real_ddang.jpg"))
