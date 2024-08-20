@@ -71,6 +71,7 @@ import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
+import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -255,6 +256,8 @@ class AppModule(context: Context) {
         PostClubMemberUseCase(repository = clubRepository)
     val deleteClubMemberUseCase: DeleteClubMemberUseCase =
         DeleteClubMemberUseCase(repository = clubRepository)
+    val patchClubUseCase: PatchClubUseCase =
+        PatchClubUseCase(repository = clubRepository)
     val getMyClubsUseCase: GetMyClubUseCase =
         GetMyClubUseCase(repository = myClubRepository)
     val getMyHeadClubsUseCase: GetMyHeadClubUseCase =

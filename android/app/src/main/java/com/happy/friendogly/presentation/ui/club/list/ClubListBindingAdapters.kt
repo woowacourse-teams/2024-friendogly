@@ -42,7 +42,17 @@ fun TextView.bindClubStateTextStyle(clubState: ClubState) {
     val textStyle =
         when (clubState) {
             ClubState.OPEN -> context.getColor(R.color.coral500)
-            ClubState.CLOSE, ClubState.FULL -> context.getColor(R.color.gray700)
+            ClubState.CLOSED, ClubState.FULL -> context.getColor(R.color.gray700)
         }
     this.setTextColor(textStyle)
+}
+
+@BindingAdapter("clubStateText")
+fun TextView.bindClubStateText(clubState: ClubState) {
+    this.text =
+        when (clubState) {
+            ClubState.OPEN -> context.getString(R.string.club_state_open)
+            ClubState.CLOSED -> context.getString(R.string.club_state_closed)
+            ClubState.FULL -> context.getString(R.string.club_state_full)
+        }
 }

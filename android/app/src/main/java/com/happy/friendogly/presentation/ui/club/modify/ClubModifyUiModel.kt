@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClubModifyUiModel(
+    val clubId: Long,
     val title: String,
     val content: String,
     val clubState: ClubState,

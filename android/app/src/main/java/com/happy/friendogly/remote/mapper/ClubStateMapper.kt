@@ -7,7 +7,7 @@ import com.happy.friendogly.remote.model.response.ClubStateResponse
 fun ClubStateResponse.toData(): ClubStateDto {
     return when (this) {
         ClubStateResponse.OPEN -> ClubStateDto.OPEN
-        ClubStateResponse.CLOSE -> ClubStateDto.CLOSE
+        ClubStateResponse.CLOSED -> ClubStateDto.CLOSED
         ClubStateResponse.FULL -> ClubStateDto.FULL
     }
 }
@@ -15,6 +15,7 @@ fun ClubStateResponse.toData(): ClubStateDto {
 fun ClubStateDto.toRemote(): ClubStateRequest {
     return when (this) {
         ClubStateDto.OPEN -> ClubStateRequest.OPEN
-        ClubStateDto.CLOSE, ClubStateDto.FULL -> ClubStateRequest.CLOSE
+        ClubStateDto.CLOSED -> ClubStateRequest.CLOSED
+        ClubStateDto.FULL -> ClubStateRequest.FULL
     }
 }

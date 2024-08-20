@@ -53,7 +53,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{vm.clubState.clubStateName}"
+                        app:clubStateText="@{vm.clubState}"
                         app:selectModifyStateTypeStyle="@{vm.clubState}"
                         tools:style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
                         tools:text="모집중" />

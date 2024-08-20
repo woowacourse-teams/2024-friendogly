@@ -161,8 +161,9 @@
     <string name="club_list_error_content">잠시 후에 다시 시도해주세요..</string>
     <string name="club_number_of_people">%d/%d</string>
     <string name="club_club_info">%s · %s</string>
-    <string name="club_participate_name">모집중</string>
-    <string name="club_complete_participate_name">모집완료</string>
+    <string name="club_state_open">모집중</string>
+    <string name="club_state_closed">모집종료</string>
+    <string name="club_state_full">모집완료</string>
 
     <!--멍개 생성-->
     <string name="club_list_add_title">모임 생성하기</string>

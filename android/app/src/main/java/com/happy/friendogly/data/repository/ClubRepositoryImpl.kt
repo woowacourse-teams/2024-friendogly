@@ -8,6 +8,7 @@ import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
 import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.ClubParticipation
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.ClubRepository
@@ -62,4 +63,17 @@ class ClubRepositoryImpl(
         ).mapCatching { it.toDomain() }
 
     override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
+
+    override suspend fun patchClub(
+        clubId: Long,
+        title: String,
+        content: String,
+        state: ClubState,
+    ): Result<Unit> =
+        source.patchClub(
+            clubId = clubId,
+            title = title,
+            content = content,
+            state = state.toData(),
+        )
 }

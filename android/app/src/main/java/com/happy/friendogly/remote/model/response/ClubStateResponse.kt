@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class ClubStateResponse {
     OPEN,
-    CLOSE,
+    CLOSED,
     FULL,
 }

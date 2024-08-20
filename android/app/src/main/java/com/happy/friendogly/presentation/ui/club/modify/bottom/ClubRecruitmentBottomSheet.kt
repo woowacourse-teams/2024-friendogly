@@ -39,7 +39,7 @@ class ClubRecruitmentBottomSheet(
 
     private fun initClickListener() {
         binding.btnClubClose.setOnClickListener {
-            clickSubmit(ClubState.CLOSE)
+            clickSubmit(ClubState.CLOSED)
             dismiss()
         }
 

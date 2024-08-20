@@ -27,6 +27,7 @@ data class ClubDetailUiModel(
 ) {
     fun toClubModifyUiModel(): ClubModifyUiModel {
         return ClubModifyUiModel(
+            clubId = clubId,
             title = title,
             content = content,
             clubState = clubState,
