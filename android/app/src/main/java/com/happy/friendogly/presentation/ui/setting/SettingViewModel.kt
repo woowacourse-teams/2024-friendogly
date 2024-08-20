@@ -43,9 +43,10 @@ class SettingViewModel(
     private fun setAlarmSetting() {
         launch {
             getChatAlarmUseCase().onSuccess {
-                _uiState.value = _uiState.value?.copy(
-                    chattingAlarmPushPermitted = it
-                )
+                _uiState.value =
+                    _uiState.value?.copy(
+                        chattingAlarmPushPermitted = it,
+                    )
             }.onFailure {
                 // TODO 에러핸들링
             }
@@ -53,21 +54,22 @@ class SettingViewModel(
 
         launch {
             getWoofAlarmUseCase().onSuccess {
-                _uiState.value = _uiState.value?.copy(
-                    woofAlarmPushPermitted = it
-                )
+                _uiState.value =
+                    _uiState.value?.copy(
+                        woofAlarmPushPermitted = it,
+                    )
             }.onFailure {
                 // TODO 에러핸들링
             }
         }
     }
 
-
     fun saveChattingAlarmSetting(checked: Boolean) {
         launch {
             saveChatAlarmUseCase(checked)
         }
     }
+
     fun saveWoofAlarmSetting(checked: Boolean) {
         launch {
             saveWoofAlarmUseCase(checked)

@@ -37,7 +37,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                     getString(R.string.chat_setting_alarm_alert),
                     Snackbar.LENGTH_SHORT,
                 ).show()
-                with(binding){
+                with(binding) {
                     alarmSettingsChattingPushSwitch.isChecked = false
                     alarmSettingsWoofPushSwitch.isChecked = false
                 }
@@ -75,7 +75,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                     requestNotificationPermission()
                 }
                 viewModel.saveWoofAlarmSetting(isChecked)
-
             }
         }
     }
