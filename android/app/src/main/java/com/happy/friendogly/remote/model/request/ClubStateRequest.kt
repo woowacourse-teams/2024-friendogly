@@ -10,4 +10,7 @@ enum class ClubStateRequest {
 
     @SerializedName("CLOSE")
     CLOSE,
+
+    @SerializedName("FULL")
+    FULL,
 }

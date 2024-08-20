@@ -15,6 +15,7 @@ fun ClubStateResponse.toData(): ClubStateDto {
 fun ClubStateDto.toRemote(): ClubStateRequest {
     return when (this) {
         ClubStateDto.OPEN -> ClubStateRequest.OPEN
-        ClubStateDto.CLOSE, ClubStateDto.FULL -> ClubStateRequest.CLOSE
+        ClubStateDto.CLOSE -> ClubStateRequest.CLOSE
+        ClubStateDto.FULL -> ClubStateRequest.FULL
     }
 }
