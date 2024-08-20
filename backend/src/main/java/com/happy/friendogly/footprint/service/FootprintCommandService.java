@@ -97,7 +97,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
-        notificationService.sendNotification(
+        notificationService.sendFootprintNotification(
                 "반갑개",
                 "내 산책 장소에 " + memberName + "님도 산책온대요!",
                 nearDeviceTokens
@@ -125,7 +125,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
-        notificationService.sendNotification(
+        notificationService.sendFootprintNotification(
                 "반갑개",
                 "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
                 nearDeviceTokens

@@ -70,7 +70,7 @@ public class ChatSocketController {
         chatRoomCommandService.enter(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
 
-        notificationService.sendChat(chatRoomId, response);
+        notificationService.sendChatNotification(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
@@ -84,7 +84,7 @@ public class ChatSocketController {
         ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
 
         // TODO: 하나의 service method에서 처리하도록 리팩토링 필요
-        notificationService.sendChat(chatRoomId, response);
+        notificationService.sendChatNotification(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
@@ -97,7 +97,7 @@ public class ChatSocketController {
         chatRoomCommandService.leave(memberId, chatRoomId);
         ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, createdAt);
 
-        notificationService.sendChat(chatRoomId, response);
+        notificationService.sendChatNotification(chatRoomId, response);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
