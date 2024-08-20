@@ -7,11 +7,12 @@ import java.util.Set;
 
 public record FindClubDetailsResponse(
         Long clubId,
+        Long myMemberId,
         Set<SizeType> allowedSizeTypes,
         Set<Gender> allowedGenders
 ) {
 
-    public FindClubDetailsResponse(Club club) {
-        this(club.getId(), club.getAllowedSizes(), club.getAllowedGenders());
+    public FindClubDetailsResponse(Long myMemberId, Club club) {
+        this(club.getId(), myMemberId, club.getAllowedSizes(), club.getAllowedGenders());
     }
 }

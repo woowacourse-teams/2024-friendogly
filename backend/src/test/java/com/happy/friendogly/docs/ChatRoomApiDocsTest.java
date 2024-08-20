@@ -169,7 +169,7 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
     @Test
     void findClubDetails() throws Exception {
         FindClubDetailsResponse response
-                = new FindClubDetailsResponse(5L, Set.of(SMALL, MEDIUM), Set.of(FEMALE_NEUTERED, MALE));
+                = new FindClubDetailsResponse(5L, 2L, Set.of(SMALL, MEDIUM), Set.of(FEMALE_NEUTERED, MALE));
 
         given(chatRoomQueryService.findClubDetails(any(), any()))
                 .willReturn(response);
@@ -193,6 +193,7 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.clubId").description("채팅방 ID"),
+                                        fieldWithPath("data.myMemberId").description("채팅방 ID"),
                                         fieldWithPath("data.allowedSizeTypes")
                                                 .description("채팅방 현재 인원 (SMALL, MEDIUM, LARGE)"),
                                         fieldWithPath("data.allowedGenders")
