@@ -43,8 +43,12 @@ class ClubDetailViewModel(
                 val filters = club.value?.filters ?: listOf()
                 _clubDetailEvent.emit(ClubDetailEvent.OpenDogSelector(filters))
             }
-            // TODO 서버 api 수정에 따라 리팩토링 필요
-            ClubDetailViewType.MINE -> _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToChat(null))
+            ClubDetailViewType.MINE -> {
+                val chatRoomId = club.value?.chatRoomId ?: return
+                _clubDetailEvent.emit(
+                    ClubDetailEvent.Navigation.NavigateToChat(chatRoomId)
+                )
+            }
             else -> return
         }
     }
@@ -66,7 +70,7 @@ class ClubDetailViewModel(
                 participatingPetsId = dogs,
             )
                 .onSuccess { clubParticipation ->
-                    _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToChat(clubParticipation))
+                    _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToChat(clubParticipation.chatRoomId))
                 }
                 .onFailure {
                     _clubDetailEvent.emit(ClubDetailEvent.FailParticipation)

@@ -28,6 +28,7 @@ fun ClubDetailResponse.toData(): ClubDetailDto {
         canParticipate = canParticipate,
         memberDetails = memberDetails.map { it.toData() },
         petDetails = petDetails.map { it.toData() },
+        chatRoomId = chatRoomId,
     )
 }
 

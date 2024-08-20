@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.common.mapper
 
 import com.happy.friendogly.domain.model.ClubDetail
+import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 
@@ -28,5 +29,6 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
                 canParticipation = canParticipate,
                 isUserPetEmpty = isMyPetsEmpty,
             ),
+        chatRoomId = chatRoomId,
     )
 }

@@ -124,10 +124,7 @@ class ClubDetailActivity :
             when (event) {
                 is ClubDetailEvent.OpenDogSelector -> openDogSelector(event.filters)
 
-                is ClubDetailEvent.Navigation.NavigateToChat -> {
-                    val clubParticipation = event.clubParticipation ?: return@observeEvent
-                    openChatRoom(clubParticipation)
-                }
+                is ClubDetailEvent.Navigation.NavigateToChat -> openChatRoom(event.chatRoomId)
 
                 ClubDetailEvent.Navigation.NavigateToHome -> finish()
 
@@ -164,12 +161,13 @@ class ClubDetailActivity :
         )
     }
 
-    private fun openChatRoom(clubParticipation: ClubParticipation) {
+    private fun openChatRoom(chatRoomId: Long) {
+        // TODO : memberId 지우기
         startActivity(
             ChatActivity.getIntent(
                 context = this@ClubDetailActivity,
-                chatId = clubParticipation.chatRoomId,
-                memberId = clubParticipation.memberId,
+                chatId = chatRoomId,
+                memberId = 1,
             ),
         )
     }

@@ -24,6 +24,7 @@ data class ClubDetailUiModel(
     val clubDate: LocalDateTime,
     val userProfiles: List<ClubDetailProfileUiModel>,
     val petProfiles: List<ClubDetailProfileUiModel>,
+    val chatRoomId: Long? = null,
 ) {
     fun toClubModifyUiModel(): ClubModifyUiModel {
         return ClubModifyUiModel(
