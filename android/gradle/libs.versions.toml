@@ -1,4 +1,11 @@
 [versions]
+applicationId = "com.happy.friendogly"
+compileSdk = "34"
+minSdk = "26"
+targetSdk = "34"
+versionCode = "9"
+versionName = "0.3.4"
+
 agp = "8.3.0"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
