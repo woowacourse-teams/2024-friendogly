@@ -63,12 +63,13 @@ class ClubRepositoryImpl(
         ).mapCatching { it.toDomain() }
 
     override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
+
     override suspend fun patchClub(
         clubId: Long,
         title: String,
         content: String,
-        state: ClubState
-    ): Result<Unit>  =
+        state: ClubState,
+    ): Result<Unit> =
         source.patchClub(
             clubId = clubId,
             title = title,

@@ -90,18 +90,18 @@ class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
         clubId: Long,
         title: String,
         content: String,
-        state: ClubStateDto
+        state: ClubStateDto,
     ): Result<Unit> =
         runCatching {
-            val request = ClubModifyRequest(
-                title = title,
-                content = content,
-                status = state.toRemote(),
-            )
+            val request =
+                ClubModifyRequest(
+                    title = title,
+                    content = content,
+                    status = state.toRemote(),
+                )
             service.patchClub(
                 clubId = clubId,
                 request = request,
             )
         }
-
 }

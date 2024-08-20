@@ -48,10 +48,11 @@ fun TextView.bindClubStateTextStyle(clubState: ClubState) {
 }
 
 @BindingAdapter("clubStateText")
-fun TextView.bindClubStateText(clubState: ClubState){
-    this.text = when(clubState){
-        ClubState.OPEN -> context.getString(R.string.club_state_open)
-        ClubState.CLOSED -> context.getString(R.string.club_state_closed)
-        ClubState.FULL -> context.getString(R.string.club_state_full)
-    }
+fun TextView.bindClubStateText(clubState: ClubState) {
+    this.text =
+        when (clubState) {
+            ClubState.OPEN -> context.getString(R.string.club_state_open)
+            ClubState.CLOSED -> context.getString(R.string.club_state_closed)
+            ClubState.FULL -> context.getString(R.string.club_state_full)
+        }
 }

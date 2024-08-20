@@ -40,7 +40,7 @@ interface ClubDataSource {
 
     suspend fun patchClub(
         clubId: Long,
-        title : String,
+        title: String,
         content: String,
         state: ClubStateDto,
     ): Result<Unit>

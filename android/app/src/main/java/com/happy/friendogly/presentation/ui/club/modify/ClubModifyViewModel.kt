@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.modify
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,17 +11,16 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.club.menu.ClubMenuViewModel
 import com.happy.friendogly.presentation.utils.addSourceList
 import kotlinx.coroutines.launch
 
 class ClubModifyViewModel(
     private val patchClubUseCase: PatchClubUseCase,
-): BaseViewModel(), ClubModifyActionHandler {
+) : BaseViewModel(), ClubModifyActionHandler {
     private val _modifyEvent: MutableLiveData<Event<ClubModifyEvent>> = MutableLiveData()
     val modifyEvent: LiveData<Event<ClubModifyEvent>> get() = _modifyEvent
 
-    private var clubId: Long ?= null
+    private var clubId: Long? = null
 
     private val _clubState: MutableLiveData<ClubState> = MutableLiveData(null)
     val clubState: LiveData<ClubState> get() = _clubState
@@ -74,20 +72,21 @@ class ClubModifyViewModel(
         submitClubModify()
     }
 
-    private fun submitClubModify() = viewModelScope.launch{
-        patchClubUseCase(
-            clubId = clubId ?: return@launch,
-            title =  clubTitle.value ?: return@launch,
-            content = clubContent.value ?: return@launch,
-            state = clubState.value ?: return@launch,
-        )
-            .onSuccess {
-                _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSubmit)
-            }
-            .onFailure {
-                _modifyEvent.emit(ClubModifyEvent.FailModify)
-            }
-    }
+    private fun submitClubModify() =
+        viewModelScope.launch {
+            patchClubUseCase(
+                clubId = clubId ?: return@launch,
+                title = clubTitle.value ?: return@launch,
+                content = clubContent.value ?: return@launch,
+                state = clubState.value ?: return@launch,
+            )
+                .onSuccess {
+                    _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSubmit)
+                }
+                .onFailure {
+                    _modifyEvent.emit(ClubModifyEvent.FailModify)
+                }
+        }
 
     override fun openSelectState() {
         if (isValidModifyState()) {
@@ -103,7 +102,7 @@ class ClubModifyViewModel(
         fun factory(patchClubUseCase: PatchClubUseCase): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubModifyViewModel(
-                    patchClubUseCase= patchClubUseCase,
+                    patchClubUseCase = patchClubUseCase,
                 )
             }
         }

@@ -9,10 +9,11 @@ class PatchClubUseCase(private val repository: ClubRepository) {
         title: String,
         content: String,
         state: ClubState,
-    ): Result<Unit> = repository.patchClub(
-        clubId = clubId,
-        title = title,
-        content = content,
-        state = state,
-    )
+    ): Result<Unit> =
+        repository.patchClub(
+            clubId = clubId,
+            title = title,
+            content = content,
+            state = state,
+        )
 }
