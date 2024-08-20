@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FootprintCommandService {
 
+    private static final int FOOTPRINT_DURATION_HOURS = 24;
     private static final int FOOTPRINT_COOLDOWN_SECOND = 30;
 
     private final FootprintRepository footprintRepository;
@@ -147,7 +148,8 @@ public class FootprintCommandService {
     }
 
     private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
-        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalse();
+        LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
+        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalseAndCreatedAtAfter(startTime);
 
         return footprints.stream()
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())

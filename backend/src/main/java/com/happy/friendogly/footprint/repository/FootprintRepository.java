@@ -20,7 +20,7 @@ public interface FootprintRepository extends JpaRepository<Footprint, Long> {
                 .orElseThrow(() -> new FriendoglyException("발자국이 존재하지 않습니다."));
     }
 
-    List<Footprint> findAllByIsDeletedFalse();
+    List<Footprint> findAllByIsDeletedFalseAndCreatedAtAfter(LocalDateTime createdAt);
 
     default Footprint getById(Long id) {
         return findById(id)
