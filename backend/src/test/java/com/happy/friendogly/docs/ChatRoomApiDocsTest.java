@@ -152,10 +152,11 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                         parameterWithName("chatRoomId").description("채팅방 ID")
                                 )
                                 .responseFields(
-                                        fieldWithPath("[].isOwner").description("채팅방 ID"),
-                                        fieldWithPath("[].memberId").description("채팅방 현재 인원"),
-                                        fieldWithPath("[].memberName").description("모임 이름"),
-                                        fieldWithPath("[].memberProfileImageUrl").description("모임 이미지 URL")
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.[].isOwner").description("채팅방 ID"),
+                                        fieldWithPath("data.[].memberId").description("채팅방 현재 인원"),
+                                        fieldWithPath("data.[].memberName").description("모임 이름"),
+                                        fieldWithPath("data.[].memberProfileImageUrl").description("모임 이미지 URL")
                                 )
                                 .responseSchema(Schema.schema("FindChatRoomMembersInfoResponse"))
                                 .build()
