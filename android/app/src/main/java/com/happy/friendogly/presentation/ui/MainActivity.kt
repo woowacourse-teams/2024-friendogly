@@ -44,21 +44,41 @@ class MainActivity :
     private fun initNavController() {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(
             ClubListFragment::class.java,
+            ClubListFragment.TAG,
         )
         binding.bottomNavi.setOnItemReselectedListener {}
         binding.bottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.clubListFragment -> switchFragment(ClubListFragment::class.java)
-                R.id.woofFragment -> switchFragment(WoofFragment::class.java)
-                R.id.chatListFragment -> switchFragment(ChatListFragment::class.java)
-                R.id.myPageFragment -> switchFragment(MyPageFragment::class.java)
+                R.id.clubListFragment ->
+                    switchFragment(
+                        ClubListFragment::class.java,
+                        ClubListFragment.TAG,
+                    )
+
+                R.id.woofFragment -> switchFragment(WoofFragment::class.java, WoofFragment.TAG)
+
+                R.id.chatListFragment ->
+                    switchFragment(
+                        ChatListFragment::class.java,
+                        ChatListFragment.TAG,
+                    )
+
+                R.id.myPageFragment ->
+                    switchFragment(
+                        MyPageFragment::class.java,
+                        MyPageFragment.TAG,
+                    )
+
                 else -> false
             }
         }
     }
 
-    private fun switchFragment(fragmentClass: Class<out Fragment>): Boolean {
-        val fragment = supportFragmentManager.findFragmentByTag(fragmentClass.simpleName)
+    private fun switchFragment(
+        fragmentClass: Class<out Fragment>,
+        tag: String,
+    ): Boolean {
+        val fragment = supportFragmentManager.findFragmentByTag(tag)
         val transaction = supportFragmentManager.beginTransaction()
 
         logFragmentSwitched(fragmentClass)
@@ -71,7 +91,7 @@ class MainActivity :
             transaction.add(
                 R.id.nav_host_fragment_container,
                 fragmentClass.getDeclaredConstructor().newInstance(),
-                fragmentClass.simpleName,
+                tag,
             )
         } else {
             transaction.show(fragment)

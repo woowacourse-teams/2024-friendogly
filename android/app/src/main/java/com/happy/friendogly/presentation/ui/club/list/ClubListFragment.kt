@@ -171,4 +171,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
+
+    companion object {
+        const val TAG = "ClubListFragment"
+    }
 }

@@ -43,4 +43,8 @@ class ChatListFragment :
     override fun navigateToChat(chatId: Long) {
         startActivity(ChatActivity.getIntent(requireContext(), chatId, viewModel.memberId))
     }
+
+    companion object {
+        const val TAG = "ChatListFragment"
+    }
 }

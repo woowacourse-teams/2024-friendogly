@@ -89,4 +89,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.fetchPetMine()
         viewModel.fetchMemberMine()
     }
+
+    companion object {
+        const val TAG = "MyPageFragment"
+    }
 }
