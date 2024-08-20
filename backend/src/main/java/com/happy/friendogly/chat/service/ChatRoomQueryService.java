@@ -68,7 +68,7 @@ public class ChatRoomQueryService {
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
         validateParticipation(chatRoom, member);
         Club club = clubRepository.getByChatRoomId(chatRoomId);
-        return new FindClubDetailsResponse(club);
+        return new FindClubDetailsResponse(memberId, club);
     }
 
     private void validateParticipation(ChatRoom chatRoom, Member member) {
