@@ -27,6 +27,7 @@ class RegisterActivity : AppCompatActivity() {
             getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
             postKakaoLoginUseCase = AppModule.getInstance().postKakaoLoginUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
+            saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
         )
     }
 

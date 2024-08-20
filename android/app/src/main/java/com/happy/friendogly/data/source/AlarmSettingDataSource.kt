@@ -1,9 +1,15 @@
 package com.happy.friendogly.data.source
 
 interface AlarmSettingDataSource {
-    suspend fun saveAlarm(isSet: Boolean): Result<Unit>
+    suspend fun saveChatSetting(isSet: Boolean): Result<Unit>
 
-    suspend fun getAlarm(): Result<Boolean>
+    suspend fun getChatSetting(): Result<Boolean>
 
-    suspend fun deleteAlarm(): Result<Unit>
+    suspend fun deleteChatSetting(): Result<Unit>
+
+    suspend fun saveWoofSetting(isSet: Boolean): Result<Unit>
+
+    suspend fun getWoofSetting(): Result<Boolean>
+
+    suspend fun deleteWoofSetting(): Result<Unit>
 }

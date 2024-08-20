@@ -110,7 +110,11 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.animation)
     implementation(libs.bundles.stomp)
+    implementation(libs.bundles.room)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.assertj)
     androidTestImplementation(libs.androidx.espresso.core)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
 }

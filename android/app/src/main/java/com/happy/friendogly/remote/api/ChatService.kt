@@ -2,8 +2,8 @@ package com.happy.friendogly.remote.api
 
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.ChatClubMemberResponse
+import com.happy.friendogly.remote.model.response.ChatRoomClubResponse
 import com.happy.friendogly.remote.model.response.ChatRoomListResponse
-import okhttp3.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -14,5 +14,10 @@ interface ChatService {
     @GET(ApiClient.Chat.MEMBERS)
     suspend fun getChatMembers(
         @Path("chatRoomId") chatRoomId: Long,
-    ): retrofit2.Response<List<ChatClubMemberResponse>>
+    ): BaseResponse<List<ChatClubMemberResponse>>
+
+    @GET(ApiClient.Chat.CLUB)
+    suspend fun getChatClub(
+        @Path("chatRoomId") chatRoomId: Long,
+    ): BaseResponse<ChatRoomClubResponse>
 }

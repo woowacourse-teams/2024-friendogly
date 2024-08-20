@@ -11,6 +11,7 @@ import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
+import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class ChatActivity :
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
+            AppModule.getInstance().getChatMessagesUseCase,
             AppModule.getInstance().connectWebsocketUseCase,
             AppModule.getInstance().disconnectWebsocketUseCase,
             AppModule.getInstance().subScribeMessageUseCase,
@@ -30,7 +32,7 @@ class ChatActivity :
 
     override fun initCreateView() {
         binding.vm = viewModel
-
+        lifecycle.addObserver(ChatLifecycleObserver.getInstance())
         initAdapter()
         getChatList()
         clickBackBtn()
@@ -95,6 +97,15 @@ class ChatActivity :
 
     override fun navigateToMemberProfile(memberId: Long) {
         startActivity(OtherProfileActivity.getIntent(this, memberId))
+    }
+
+    override fun navigateToClub(clubId: Long) {
+        startActivity(ClubDetailActivity.getIntent(this, clubId))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(ChatLifecycleObserver.getInstance())
     }
 
     companion object {

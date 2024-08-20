@@ -9,9 +9,9 @@ import com.happy.friendogly.domain.model.ChatRooms
 fun ChatMemberDto.toDomain(): ChatMember =
     ChatMember(
         isOwner = isOwner,
-        memberId = memberId,
-        memberName = memberName,
-        memberProfileImageUrl = memberProfileImageUrl,
+        id = memberId,
+        name = memberName,
+        profileImageUrl = memberProfileImageUrl,
     )
 
 fun ChatRoomListDto.toDomain(): ChatRooms =

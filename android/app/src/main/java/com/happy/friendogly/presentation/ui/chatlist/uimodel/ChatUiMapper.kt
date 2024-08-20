@@ -6,32 +6,32 @@ import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 
 fun ChatComponent.Date.toUiModel() =
     ChatUiModel.Date(
-        date = created,
+        date = createdAt.toLocalDate(),
     )
 
 fun ChatComponent.Leave.toUiModel() =
     ChatUiModel.ComeOut(
-        nickName = name,
+        nickName = member.name,
         isCome = false,
     )
 
 fun ChatComponent.Enter.toUiModel() =
     ChatUiModel.ComeOut(
-        nickName = name,
+        nickName = member.name,
         isCome = true,
     )
 
 fun Message.Mine.toUiModel() =
     ChatUiModel.Mine(
         message = content,
-        time = dateTime.toLocalTime(),
+        time = createdAt.toLocalTime(),
     )
 
 fun Message.Other.toUiModel() =
     ChatUiModel.Other(
-        nickName = name,
+        nickName = member.name,
         message = content,
-        time = dateTime.toLocalTime(),
-        profileUrl = profileUrl,
-        memberId = memberId,
+        time = createdAt.toLocalTime(),
+        profileUrl = member.profileImageUrl,
+        memberId = member.id,
     )

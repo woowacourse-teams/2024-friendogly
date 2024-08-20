@@ -1,11 +1,13 @@
 package com.happy.friendogly.domain.model
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 sealed interface ChatComponent {
-    data class Date(val created: LocalDate) : ChatComponent
+    val createdAt: LocalDateTime
 
-    data class Enter(val name: String) : ChatComponent
+    data class Date(override val createdAt: LocalDateTime) : ChatComponent
 
-    data class Leave(val name: String) : ChatComponent
+    data class Enter(val member: ChatMember, override val createdAt: LocalDateTime) : ChatComponent
+
+    data class Leave(val member: ChatMember, override val createdAt: LocalDateTime) : ChatComponent
 }

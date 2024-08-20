@@ -7,14 +7,13 @@ sealed interface Message : ChatComponent {
 
     data class Mine(
         override val content: String,
-        val dateTime: LocalDateTime,
+        val member: ChatMember,
+        override val createdAt: LocalDateTime,
     ) : Message
 
     data class Other(
-        val memberId: Long,
-        val name: String,
+        val member: ChatMember,
         override val content: String,
-        val dateTime: LocalDateTime,
-        val profileUrl: String?,
+        override val createdAt: LocalDateTime,
     ) : Message
 }

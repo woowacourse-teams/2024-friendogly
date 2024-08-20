@@ -19,6 +19,8 @@ import com.happy.friendogly.presentation.ui.register.RegisterActivity
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     val viewModel: SettingViewModel by viewModels {
         SettingViewModel.factory(
+            saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
+            saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
         )
     }

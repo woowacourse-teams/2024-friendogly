@@ -1,8 +1,12 @@
 package com.happy.friendogly.presentation.ui.chatlist.chatinfo
 
+import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.SizeType
+
 data class ChatInfoUiModel(
-    val dogSize: List<DogSize>,
-    val dogGender: List<DogGender>,
+    val clubId: Long,
+    val dogSize: List<SizeType>,
+    val dogGender: List<Gender>,
 )
 
 data class JoinPeople(
@@ -12,16 +16,3 @@ data class JoinPeople(
     val profileUrl: String,
     val memberId: Long,
 )
-
-enum class DogSize {
-    SMALL,
-    MEDIUM,
-    LARGE,
-}
-
-enum class DogGender {
-    MALE,
-    FEMALE,
-    MALE_NEUTERED,
-    FEMALE_NEUTERED,
-}

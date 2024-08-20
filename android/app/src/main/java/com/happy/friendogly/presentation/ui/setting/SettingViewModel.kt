@@ -6,14 +6,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
+import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
+import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import kotlinx.coroutines.launch
 
 class SettingViewModel(
     private val deleteTokenUseCase: DeleteTokenUseCase,
+    private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
+    private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<SettingUiState> =
         MutableLiveData<SettingUiState>(SettingUiState())
@@ -31,9 +34,19 @@ class SettingViewModel(
 
     fun onTotalAlarmToggled(checked: Boolean) {}
 
-    fun onChattingAlarmToggled(checked: Boolean) {}
+    fun onChattingAlarmToggled(checked: Boolean) {
+        launch {
+            saveChatAlarmUseCase(checked)
+        }
+    }
 
     fun onClubAlarmToggled(checked: Boolean) {}
+
+    fun onWoofAlarmToggled(checked: Boolean) {
+        launch {
+            saveWoofAlarmUseCase(checked)
+        }
+    }
 
     fun navigateToBack() {
         _navigateAction.emit(SettingNavigationAction.NavigateToBack)
@@ -94,9 +107,15 @@ class SettingViewModel(
     }
 
     companion object {
-        fun factory(deleteTokenUseCase: DeleteTokenUseCase): ViewModelProvider.Factory {
+        fun factory(
+            saveChatAlarmUseCase: SaveChatAlarmUseCase,
+            saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
+            deleteTokenUseCase: DeleteTokenUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(
+                    saveChatAlarmUseCase = saveChatAlarmUseCase,
+                    saveWoofAlarmUseCase = saveWoofAlarmUseCase,
                     deleteTokenUseCase = deleteTokenUseCase,
                 )
             }

@@ -4,7 +4,7 @@ class ApiClient {
     object Auth {
         private const val BASE_URL = "/auth"
         const val POST_KAKAO_LOGIN = "$BASE_URL/kakao/login"
-        const val POST_REFRESH = "/$BASE_URL/kakao/refresh"
+        const val POST_REFRESH = "$BASE_URL/kakao/refresh"
     }
 
     object Footprints {
@@ -50,6 +50,7 @@ class ApiClient {
         private const val BASE_URL = "/chat-rooms"
         const val CHAT_LIST = "$BASE_URL/mine"
         const val MEMBERS = "$BASE_URL/{chatRoomId}"
+        const val CLUB = "$BASE_URL/{chatRoomId}/club"
     }
 
     object WebSocket {

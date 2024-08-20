@@ -31,6 +31,7 @@ class ProfileSettingActivity :
     BaseActivity<ActivityProfileSettingBinding>(R.layout.activity_profile_setting) {
     private val viewModel: ProfileSettingViewModel by viewModels {
         ProfileSettingViewModel.factory(
+            saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
             postMemberUseCase = AppModule.getInstance().postMemberUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
         )

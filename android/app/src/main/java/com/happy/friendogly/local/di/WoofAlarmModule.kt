@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class AlarmModule(val context: Context) {
+class WoofAlarmModule(val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
     private val key = booleanPreferencesKey(ALARM_SETTING)
@@ -41,7 +41,7 @@ class AlarmModule(val context: Context) {
     }
 
     companion object {
-        private const val ALARM_SETTING = "ALARM_SETTING"
-        private const val DATA_STORE_NAME = "alarmDataStore"
+        private const val ALARM_SETTING = "WOOF_ALARM_SETTING"
+        private const val DATA_STORE_NAME = "woofAlarmDataStore"
     }
 }
