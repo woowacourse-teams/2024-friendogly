@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -16,7 +17,11 @@ import com.happy.friendogly.presentation.utils.putSerializable
 
 class ClubModifyActivity :
     BaseActivity<ActivityClubModifyBinding>(R.layout.activity_club_modify) {
-    private val viewModel: ClubModifyViewModel by viewModels()
+    private val viewModel: ClubModifyViewModel by viewModels<ClubModifyViewModel> {
+        ClubModifyViewModel.factory(
+            patchClubUseCase = AppModule.getInstance().patchClubUseCase,
+        )
+    }
 
     override fun initCreateView() {
         initDataBinding()

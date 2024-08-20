@@ -1,17 +1,28 @@
 package com.happy.friendogly.presentation.ui.club.modify
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.ClubState
+import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.menu.ClubMenuViewModel
 import com.happy.friendogly.presentation.utils.addSourceList
+import kotlinx.coroutines.launch
 
-class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
+class ClubModifyViewModel(
+    private val patchClubUseCase: PatchClubUseCase,
+): BaseViewModel(), ClubModifyActionHandler {
     private val _modifyEvent: MutableLiveData<Event<ClubModifyEvent>> = MutableLiveData()
     val modifyEvent: LiveData<Event<ClubModifyEvent>> get() = _modifyEvent
+
+    private var clubId: Long ?= null
 
     private val _clubState: MutableLiveData<ClubState> = MutableLiveData(null)
     val clubState: LiveData<ClubState> get() = _clubState
@@ -33,6 +44,7 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
             }
 
     fun initUiModel(clubModifyUiModel: ClubModifyUiModel) {
+        clubId = clubModifyUiModel.clubId
         clubTitle.value = clubModifyUiModel.title
         clubContent.value = clubModifyUiModel.content
         updateClubState(clubModifyUiModel.clubState)
@@ -59,8 +71,22 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
     }
 
     override fun submitModify() {
-        // TODO: submit api
-        _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSubmit)
+        submitClubModify()
+    }
+
+    private fun submitClubModify() = viewModelScope.launch{
+        patchClubUseCase(
+            clubId = clubId ?: return@launch,
+            title =  clubTitle.value ?: return@launch,
+            content = clubContent.value ?: return@launch,
+            state = clubState.value ?: return@launch,
+        )
+            .onSuccess {
+                _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSubmit)
+            }
+            .onFailure {
+                _modifyEvent.emit(ClubModifyEvent.FailModify)
+            }
     }
 
     override fun openSelectState() {
@@ -73,5 +99,13 @@ class ClubModifyViewModel : BaseViewModel(), ClubModifyActionHandler {
         private const val MIN_TEXT_LENGTH = 1
         private const val MAX_TITLE_LENGTH = 100
         private const val MAX_CONTENT_LENGTH = 1000
+
+        fun factory(patchClubUseCase: PatchClubUseCase): ViewModelProvider.Factory {
+            return BaseViewModelFactory {
+                ClubModifyViewModel(
+                    patchClubUseCase= patchClubUseCase,
+                )
+            }
+        }
     }
 }

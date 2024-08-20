@@ -54,7 +54,7 @@ interface ClubService {
         @Path("clubId") clubId: Long,
     ): Response<Unit>
 
-    @PATCH
+    @PATCH(ApiClient.Club.PATCH_CLUB)
     suspend fun patchClub(
         @Path("clubId") clubId: Long,
         @Body request: ClubModifyRequest,

@@ -8,8 +8,8 @@ enum class ClubStateRequest {
     @SerializedName("OPEN")
     OPEN,
 
-    @SerializedName("CLOSE")
-    CLOSE,
+    @SerializedName("CLOSED")
+    CLOSED,
 
     @SerializedName("FULL")
     FULL,

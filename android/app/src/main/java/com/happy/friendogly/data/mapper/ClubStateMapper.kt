@@ -6,7 +6,7 @@ import com.happy.friendogly.domain.model.ClubState
 fun ClubStateDto.toDomain(): ClubState {
     return when (this) {
         ClubStateDto.OPEN -> ClubState.OPEN
-        ClubStateDto.CLOSE -> ClubState.CLOSE
+        ClubStateDto.CLOSED -> ClubState.CLOSED
         ClubStateDto.FULL -> ClubState.FULL
     }
 }
@@ -14,7 +14,7 @@ fun ClubStateDto.toDomain(): ClubState {
 fun ClubState.toData(): ClubStateDto {
     return when (this) {
         ClubState.OPEN -> ClubStateDto.OPEN
-        ClubState.CLOSE -> ClubStateDto.CLOSE
+        ClubState.CLOSED -> ClubStateDto.CLOSED
         ClubState.FULL -> ClubStateDto.FULL
     }
 }

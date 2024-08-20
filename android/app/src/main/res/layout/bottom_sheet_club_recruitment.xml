@@ -2,14 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="clubState"
-            type="com.happy.friendogly.domain.model.ClubState" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +18,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
-            android:text="@{clubState.OPEN.clubStateName}"
+            android:text="@string/club_state_open"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="모집중" />
 
@@ -44,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
-            android:text="@{clubState.CLOSE.clubStateName}"
+            android:text="@string/club_state_closed"
             app:layout_constraintTop_toBottomOf="@id/line"
             tools:layout_editor_absoluteX="0dp"
             tools:text="모집 종료" />
