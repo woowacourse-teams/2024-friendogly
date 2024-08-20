@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
@@ -16,6 +17,7 @@ data class ClubDetailUiModel(
     val content: String,
     val maximumNumberOfPeople: Int,
     val currentNumberOfPeople: Int,
+    val clubState: ClubState,
     val clubLocation: String,
     val clubLeaderName: String,
     val clubLeaderImage: String? = null,
@@ -27,7 +29,7 @@ data class ClubDetailUiModel(
         return ClubModifyUiModel(
             title = title,
             content = content,
-            clubPoster = clubPoster,
+            clubState = clubState,
         )
     }
 }

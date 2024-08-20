@@ -3,20 +3,11 @@ package com.happy.friendogly.presentation.ui.club.list
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.UserAddress
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
-
-@BindingAdapter("applyCanParticipation")
-fun TextView.bindCanParticipationType(canParticipation: Boolean) {
-    this.text =
-        if (canParticipation) {
-            context.getString(R.string.club_participate_name)
-        } else {
-            context.getString(R.string.club_complete_participate_name)
-        }
-}
 
 @BindingAdapter("clubDateTime")
 fun TextView.bindClubDateTime(dateTime: LocalDateTime?) {
@@ -44,4 +35,14 @@ fun TextView.bindClubDateTime(dateTime: LocalDateTime?) {
 fun TextView.bindMyLocation(userAddress: UserAddress?) {
     this.text =
         userAddress?.adminArea ?: context.getString(R.string.club_list_my_location_default)
+}
+
+@BindingAdapter("clubStateTextStyle")
+fun TextView.bindClubStateTextStyle(clubState: ClubState) {
+    val textStyle =
+        when (clubState) {
+            ClubState.OPEN -> context.getColor(R.color.coral500)
+            ClubState.CLOSE, ClubState.FULL -> context.getColor(R.color.gray700)
+        }
+    this.setTextColor(textStyle)
 }
