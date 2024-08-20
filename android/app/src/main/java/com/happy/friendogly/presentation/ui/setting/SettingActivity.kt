@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingBinding
@@ -14,26 +15,75 @@ import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.dialog.DefaultRedAlertDialog
 import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
+import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.register.RegisterActivity
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     val viewModel: SettingViewModel by viewModels {
         SettingViewModel.factory(
+            getWoofAlarmUseCase = AppModule.getInstance().getWoofAlarmUseCase,
+            getChatAlarmUseCase = AppModule.getInstance().getChatAlarmUseCase,
             saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
             saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
         )
     }
 
+    private val alarmPermission: AlarmPermission =
+        AlarmPermission.from(this) { isPermitted ->
+            if (!isPermitted) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.chat_setting_alarm_alert),
+                    Snackbar.LENGTH_SHORT,
+                ).show()
+                with(binding){
+                    alarmSettingsChattingPushSwitch.isChecked = false
+                    alarmSettingsWoofPushSwitch.isChecked = false
+                }
+            }
+        }
+
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     override fun initCreateView() {
         initDataBinding()
         initObserve()
+        setSwitchCheckListener()
     }
 
     private fun initDataBinding() {
         binding.vm = viewModel
+        viewModel.uiState.observe(this) { uiState ->
+            with(binding) {
+                alarmSettingsChattingPushSwitch.isChecked = uiState.chattingAlarmPushPermitted && alarmPermission.hasPermissions()
+                alarmSettingsWoofPushSwitch.isChecked = uiState.woofAlarmPushPermitted && alarmPermission.hasPermissions()
+            }
+        }
+    }
+
+    private fun setSwitchCheckListener() {
+        with(binding) {
+            alarmSettingsChattingPushSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    requestNotificationPermission()
+                }
+                viewModel.saveWoofAlarmSetting(isChecked)
+            }
+            alarmSettingsWoofPushSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    requestNotificationPermission()
+                }
+                viewModel.saveWoofAlarmSetting(isChecked)
+
+            }
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (AlarmPermission.isValidPermissionSDK() && !alarmPermission.hasPermissions()) {
+            alarmPermission.createAlarmDialog().show(supportFragmentManager, "TAG")
+        }
     }
 
     private fun initObserve() {
