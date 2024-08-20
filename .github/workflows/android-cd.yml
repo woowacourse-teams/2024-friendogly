@@ -84,3 +84,14 @@ jobs:
           generate_release_notes: true
           files: |
             android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Build release Bundle
+        run: ./gradlew bundleRelease
+
+      - name: Upload artifact to Google Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.happy.friendogly
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: [prefix]:Beta-version
