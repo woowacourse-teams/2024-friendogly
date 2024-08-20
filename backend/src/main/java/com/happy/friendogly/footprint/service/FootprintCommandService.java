@@ -151,7 +151,8 @@ public class FootprintCommandService {
 
         return footprints.stream()
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
-                        && otherFootprint.getMember() != member)
+                        && otherFootprint.getMember() != member
+                        && !otherFootprint.getWalkStatus().isAfter())
                 .map(otherFootprint -> deviceTokenRepository.findByMemberId(otherFootprint.getMember().getId()))
                 .flatMap(Optional::stream)
                 .map(DeviceToken::getDeviceToken)
