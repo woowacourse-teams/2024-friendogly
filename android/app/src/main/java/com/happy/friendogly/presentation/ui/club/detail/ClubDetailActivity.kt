@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
-import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog

@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
-import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 

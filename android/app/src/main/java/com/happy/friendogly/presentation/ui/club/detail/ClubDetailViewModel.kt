@@ -46,7 +46,7 @@ class ClubDetailViewModel(
             ClubDetailViewType.MINE -> {
                 val chatRoomId = club.value?.chatRoomId ?: return
                 _clubDetailEvent.emit(
-                    ClubDetailEvent.Navigation.NavigateToChat(chatRoomId)
+                    ClubDetailEvent.Navigation.NavigateToChat(chatRoomId),
                 )
             }
             else -> return
