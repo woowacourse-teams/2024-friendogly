@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.club.my.club.MyClubFragment">
+        tools:context=".presentation.ui.club.my.participating.MyParticipatingFragment">
         <include
             android:id="@+id/include_club_list"
             layout="@layout/include_club_list_content"

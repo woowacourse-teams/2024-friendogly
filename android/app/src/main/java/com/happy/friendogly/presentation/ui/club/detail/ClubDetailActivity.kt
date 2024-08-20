@@ -15,10 +15,10 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
+import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
-import com.happy.friendogly.presentation.ui.club.list.ClubListFragment
 import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.club.menu.ClubMenuBottomSheet
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
@@ -49,17 +49,17 @@ class ClubDetailActivity :
         DetailProfileAdapter(this@ClubDetailActivity)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadClub(receiveClubId())
-    }
-
     override fun initCreateView() {
         initDataBinding()
         initAdapter()
         initObserver()
         initClub()
         initClubModifyResultLauncher()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadClub(receiveClubId())
     }
 
     private fun initClubModifyResultLauncher() {
@@ -218,7 +218,7 @@ class ClubDetailActivity :
     }
 
     private fun putLoadState() {
-        intent.putExtra(ClubListFragment.CHANGE_CLUB_LIST_STATE, true)
+        intent.putExtra(ClubChangeStateIntent.CHANGE_CLUB_STATE, true)
         setResult(Activity.RESULT_OK, intent)
     }
 

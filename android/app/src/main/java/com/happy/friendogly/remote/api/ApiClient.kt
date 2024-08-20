@@ -40,6 +40,12 @@ class ApiClient {
         const val DELETE_CLUB_MEMBER = "$BASE_URL/{clubId}$MEMBER_URL"
     }
 
+    object MyClub {
+        private const val BASE_URL = "/clubs"
+        const val OWNING = "$BASE_URL/owning"
+        const val PARTICIPATING = "$BASE_URL/participating"
+    }
+
     object Chat {
         private const val BASE_URL = "/chat-rooms"
         const val CHAT_LIST = "$BASE_URL/mine"
