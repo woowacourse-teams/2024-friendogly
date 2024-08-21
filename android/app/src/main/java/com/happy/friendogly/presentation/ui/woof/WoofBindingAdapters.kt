@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.woof
 
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -8,6 +9,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView
@@ -36,7 +38,7 @@ fun TextView.bindMemberName(memberName: String) {
     val memberNameLength = memberName.length
     spannableString.apply {
         setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.coral500)),
+            ForegroundColorSpan(ContextCompat.getColor(context, R.color.coral500)),
             0,
             memberNameLength,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
@@ -100,19 +102,19 @@ fun TextView.bindWalkStatusInfo(walkStatusInfo: WalkStatusInfoUiModel?) {
         when (walkStatusInfo.walkStatus) {
             WalkStatus.BEFORE -> {
                 text = resources.getString(R.string.woof_walk_before, minute)
-                setTextColor(resources.getColor(R.color.coral400))
+                setTextColor(ContextCompat.getColor(context, R.color.coral400))
             }
 
             WalkStatus.ONGOING -> {
                 text = resources.getString(R.string.woof_walk_ongoing, minute)
-                setTextColor(resources.getColor(R.color.coral500))
+                setTextColor(ContextCompat.getColor(context, R.color.coral500))
             }
 
             WalkStatus.AFTER -> {
                 val afterHour = walkStatusInfo.changedWalkStatusTime.hour
                 val afterMinute = walkStatusInfo.changedWalkStatusTime.minute
                 text = resources.getString(R.string.woof_walk_after, afterHour, afterMinute)
-                setTextColor(resources.getColor(R.color.gray600))
+                setTextColor(ContextCompat.getColor(context, R.color.gray600))
             }
         }
     }
@@ -121,48 +123,31 @@ fun TextView.bindWalkStatusInfo(walkStatusInfo: WalkStatusInfoUiModel?) {
 @BindingAdapter("myWalkStatus")
 fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
-        when (walkStatus) {
-            WalkStatus.BEFORE -> {
-                text = resources.getString(R.string.woof_status_before)
-                setCompoundDrawablesWithIntrinsicBounds(
-                    resources.getDrawable(
-                        R.drawable.ic_marker_before_clicked,
-                        null,
-                    ),
-                    null,
-                    null,
-                    null,
-                )
-            }
+        val drawable: Drawable? = when (walkStatus) {
+            WalkStatus.BEFORE -> ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_marker_before_clicked
+            )
 
-            WalkStatus.ONGOING -> {
-                text = resources.getString(R.string.woof_status_ongoing)
-                setCompoundDrawablesWithIntrinsicBounds(
-                    resources.getDrawable(
-                        R.drawable.ic_marker_ongoing_clicked,
-                        null,
-                    ),
-                    null,
-                    null,
-                    null,
-                )
-            }
+            WalkStatus.ONGOING -> ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_marker_ongoing_clicked
+            )
 
-            WalkStatus.AFTER -> {
-                text = resources.getString(R.string.woof_status_after)
-                setCompoundDrawablesWithIntrinsicBounds(
-                    resources.getDrawable(
-                        R.drawable.ic_marker_after_clicked,
-                        null,
-                    ),
-                    null,
-                    null,
-                    null,
-                )
-            }
+            WalkStatus.AFTER -> ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_marker_after_clicked
+            )
         }
+        text = when (walkStatus) {
+            WalkStatus.BEFORE -> context.getString(R.string.woof_status_before)
+            WalkStatus.ONGOING -> context.getString(R.string.woof_status_ongoing)
+            WalkStatus.AFTER -> context.getString(R.string.woof_status_after)
+        }
+        setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
 }
+
 
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: WoofUiState) {
