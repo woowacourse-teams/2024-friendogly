@@ -104,6 +104,7 @@ class RegisterActivity : AppCompatActivity() {
                     startActivity(MainActivity.getIntent(this))
 
                 is RegisterMessage.KakaoLoginErrorMessage -> showToastMessage(getString(R.string.kakao_login_error_message))
+                is RegisterMessage.NoInternetMessage -> showToastMessage(getString(R.string.no_internet_message))
             }
         }
     }

@@ -100,6 +100,7 @@ class RegisterViewModel(
             },
             onError = { error ->
                 when (error) {
+                    DataError.Network.NO_INTERNET -> _message.emit(RegisterMessage.NoInternetMessage)
                     DataError.Network.SERVER_ERROR -> _message.emit(RegisterMessage.ServerErrorMessage)
                     else -> _message.emit(RegisterMessage.DefaultErrorMessage)
                 }
