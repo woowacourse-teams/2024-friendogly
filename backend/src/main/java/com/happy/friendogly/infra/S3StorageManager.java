@@ -9,6 +9,7 @@ import io.micrometer.common.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+@Slf4j
 @Component
 @Profile("!local")
 public class S3StorageManager implements FileStorageManager {
@@ -59,7 +61,6 @@ public class S3StorageManager implements FileStorageManager {
                     ErrorCode.FILE_SIZE_EXCEED,
                     BAD_REQUEST
             );
-//            throw new FriendoglyException(String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT));
         }
 
         // TODO: 실제 파일명에서 확장자 가져오기
@@ -93,23 +94,18 @@ public class S3StorageManager implements FileStorageManager {
 
     @Override
     public void removeFile(String oldImageUrl) {
-        if (StringUtils.isBlank(oldImageUrl)) {
-            throw new FriendoglyException("삭제할 이미지의 URL을 입력해 주세요.");
-        }
-
-        if (!oldImageUrl.startsWith(S3_ENDPOINT)) {
-            throw new FriendoglyException(String.format("(%s)은 삭제할 수 없는 이미지 URL입니다.", oldImageUrl));
+        if (StringUtils.isBlank(oldImageUrl) || !oldImageUrl.startsWith(S3_ENDPOINT)) {
+            return;
         }
 
         String fileName = oldImageUrl.substring(oldImageUrl.lastIndexOf("/") + 1);
-
         try {
             s3Client.deleteObject(DeleteObjectRequest.builder()
                     .bucket(BUCKET_NAME)
                     .key(KEY_PREFIX + fileName)
                     .build());
-        } catch (SdkException e) {
-            throw new FriendoglyException("알 수 없는 이유로 이미지 파일 삭제에 실패했습니다.", INTERNAL_SERVER_ERROR);
+        } catch (SdkException exception) {
+            log.error(exception.getMessage(), exception);
         }
     }
 

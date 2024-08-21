@@ -85,4 +85,19 @@ class MemberRepositoryImpl(
                 }
             },
         )
+
+    override suspend fun deleteMember(): DomainResult<Unit, DataError.Network> =
+        source.deleteMember().fold(
+            onSuccess = {
+                DomainResult.Success(Unit)
+            },
+            onFailure = { e ->
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                }
+            },
+        )
 }

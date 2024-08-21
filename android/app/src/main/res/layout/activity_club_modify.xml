@@ -40,35 +40,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="10dp" />
 
-                <LinearLayout
-                    onSingleClick="@{()->vm.openSelectState()}"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
                     android:background="@drawable/rect_coral300_fill_20"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingHorizontal="15dp"
-                    app:selectModifyStateBackground="@{vm.clubState}">
+                    android:layout_height="48dp">
+                    <LinearLayout
+                        android:background="@drawable/ripple_rect_fill20_white"
+                        onSingleClick="@{()->vm.openSelectState()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="15dp"
+                        app:selectModifyStateBackground="@{vm.clubState}">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:clubStateText="@{vm.clubState}"
-                        app:selectModifyStateTypeStyle="@{vm.clubState}"
-                        tools:style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
-                        tools:text="모집중" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:clubStateText="@{vm.clubState}"
+                            app:selectModifyStateTypeStyle="@{vm.clubState}"
+                            tools:style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+                            tools:text="모집중" />
 
-                    <Space
-                        android:layout_width="5dp"
-                        android:layout_height="wrap_content" />
+                        <Space
+                            android:layout_width="5dp"
+                            android:layout_height="wrap_content" />
 
-                    <ImageView
-                        app:selectModifyStateImageTint="@{vm.clubState}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_arrow_bottom"
-                        tools:tint="@color/white" />
-                </LinearLayout>
+                        <ImageView
+                            app:selectModifyStateImageTint="@{vm.clubState}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_bottom"
+                            tools:tint="@color/white" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Space
                     android:layout_width="wrap_content"

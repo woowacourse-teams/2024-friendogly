@@ -26,6 +26,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
             saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
             saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
+            deleteMemberUseCase = AppModule.getInstance().deleteMemberUseCase,
             postLogoutUseCase = AppModule.getInstance().postLogoutUseCase,
         )
     }

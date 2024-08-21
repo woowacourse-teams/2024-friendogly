@@ -55,4 +55,14 @@ class MemberDataSourceImpl(
             else -> Result.failure(exception)
         }
     }
+
+    override suspend fun deleteMember(): Result<Unit> {
+        val result = runCatching { service.deleteMember() }
+
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> Result.failure(exception)
+        }
+    }
 }

@@ -43,14 +43,19 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-        <TextView
-            onSingleClick="@{()->actionHandler.addClub()}"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:background="@drawable/rect_gray01_line_gray03_16"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="8dp"
-            android:text="@string/club_list_submit_text" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                onSingleClick="@{()->actionHandler.addClub()}"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_rect_fill16_white"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:text="@string/club_list_submit_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

@@ -32,7 +32,7 @@
                 android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:background="@drawable/ripple_circle_white">
+                android:background="@drawable/ripple_rect_white">
 
                 <TextView
                     app:address="@{vm.myAddress}"

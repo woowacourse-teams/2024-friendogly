@@ -21,4 +21,6 @@ interface MemberDataSource {
         imageUpdateType: ImageUpdateTypeDto,
         file: MultipartBody.Part?,
     ): Result<MemberDto>
+
+    suspend fun deleteMember(): Result<Unit>
 }

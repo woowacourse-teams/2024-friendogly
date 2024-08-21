@@ -16,7 +16,7 @@ class DetailProfileAdapter(
             oldItem: ClubDetailProfileUiModel,
             newItem: ClubDetailProfileUiModel,
         ): Boolean {
-            return oldItem.imageUrl == newItem.imageUrl
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(

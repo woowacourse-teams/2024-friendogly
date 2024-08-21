@@ -66,7 +66,7 @@
                 style="@style/Theme.AppCompat.TextView.Medium.Gray08.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="현재 잠여한 모임이 없어요"
+                android:text="@string/chat_no_chat_description"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.club.list.ClubListViewModel" />
@@ -9,10 +10,10 @@
 
     <LinearLayout
         android:id="@+id/linear_layout_club_not_address"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="200dp"
@@ -43,14 +44,20 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-        <TextView
-            onSingleClick="@{()->vm.addMyLocation()}"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rect_gray01_line_gray03_16"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="8dp"
-            android:text="@string/club_list_submit_text" />
+            android:background="@drawable/rect_gray01_line_gray03_16">
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                onSingleClick="@{()->vm.addMyLocation()}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_rect_fill16_white"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:text="@string/club_list_submit_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

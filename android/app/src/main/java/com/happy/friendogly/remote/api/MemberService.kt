@@ -6,6 +6,7 @@ import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.MemberResponse
 import com.happy.friendogly.remote.model.response.RegisterResponse
 import okhttp3.MultipartBody
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -35,4 +36,7 @@ interface MemberService {
         @Part("request") body: PatchMemberRequest,
         @Part file: MultipartBody.Part?,
     ): BaseResponse<MemberResponse>
+
+    @DELETE(ApiClient.Member.DELETE_MEMBER)
+    suspend fun deleteMember(): Unit
 }

@@ -23,4 +23,6 @@ interface MemberRepository {
         imageUpdateType: ImageUpdateType,
         file: MultipartBody.Part?,
     ): DomainResult<Member, DataError.Network>
+
+    suspend fun deleteMember(): DomainResult<Unit, DataError.Network>
 }
