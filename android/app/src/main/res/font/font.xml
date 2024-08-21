@@ -3,21 +3,21 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/noto_sans_kr_bold"/>
+        android:font="@font/pretendard_bold"/>
 
     <font android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/noto_sans_kr_semi_bold"/>
+        android:font="@font/pretendard_semi_bold"/>
 
     <font android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/noto_sans_kr_medium"/>
+        android:font="@font/pretendard_medium"/>
 
     <font android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/noto_sans_kr_regular"/>
+        android:font="@font/pretendard_regular"/>
 
     <font android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/noto_sans_kr_light"/>
+        android:font="@font/pretendard_light"/>
 </font-family>
