@@ -5,5 +5,7 @@ sealed interface SettingMessage {
 
     data object ServerErrorMessage : SettingMessage
 
+    data object NoInternetMessage : SettingMessage
+
     data object TokenNotStoredErrorMessage : SettingMessage
 }

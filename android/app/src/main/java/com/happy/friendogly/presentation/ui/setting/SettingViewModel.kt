@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
+import com.happy.friendogly.domain.usecase.PostLogoutUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -17,6 +18,7 @@ class SettingViewModel(
     private val deleteTokenUseCase: DeleteTokenUseCase,
     private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
     private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
+    private val postLogoutUseCase: PostLogoutUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<SettingUiState> =
         MutableLiveData<SettingUiState>(SettingUiState())
@@ -71,20 +73,37 @@ class SettingViewModel(
     fun navigateToLogout() {
         launch {
             _loading.emit(true)
-            deleteTokenUseCase().fold(
-                onSuccess = {
-                    _loading.emit(false)
-                    _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
-                },
-                onError = { error ->
-                    _loading.emit(false)
-                    when (error) {
-                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
-                        else -> _message.emit(SettingMessage.DefaultErrorMessage)
-                    }
-                },
-            )
+            logout()
+            _loading.emit(false)
         }
+    }
+
+    private suspend fun logout() {
+        postLogoutUseCase().fold(
+            onSuccess = {
+                deleteToken()
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.NO_INTERNET -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
+                    else -> _message.emit(SettingMessage.DefaultErrorMessage)
+                }
+            },
+        )
+    }
+
+    private suspend fun deleteToken() {
+        deleteTokenUseCase().fold(
+            onSuccess = {
+                _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
+                    else -> _message.emit(SettingMessage.DefaultErrorMessage)
+                }
+            },
+        )
     }
 
     fun navigateToUnsubscribe() {
@@ -111,12 +130,14 @@ class SettingViewModel(
             saveChatAlarmUseCase: SaveChatAlarmUseCase,
             saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
             deleteTokenUseCase: DeleteTokenUseCase,
+            postLogoutUseCase: PostLogoutUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(
                     saveChatAlarmUseCase = saveChatAlarmUseCase,
                     saveWoofAlarmUseCase = saveWoofAlarmUseCase,
                     deleteTokenUseCase = deleteTokenUseCase,
+                    postLogoutUseCase = postLogoutUseCase,
                 )
             }
         }
