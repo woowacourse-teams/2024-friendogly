@@ -122,6 +122,28 @@ class SettingViewModel(
         )
     }
 
+    fun navigateToUnsubscribe() {
+        launch {
+            _loading.emit(true)
+            unsubscribe()
+            _loading.emit(false)
+        }
+    }
+
+    private suspend fun unsubscribe() {
+        deleteMemberUseCase().fold(
+            onSuccess = {
+                deleteToken()
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.NO_INTERNET -> _message.emit(SettingMessage.NoInternetMessage)
+                    else -> _message.emit(SettingMessage.ServerErrorMessage)
+                }
+            },
+        )
+    }
+
     private suspend fun deleteToken() {
         deleteTokenUseCase().fold(
             onSuccess = {
@@ -134,25 +156,6 @@ class SettingViewModel(
                 }
             },
         )
-    }
-
-    fun navigateToUnsubscribe() {
-        launch {
-            _loading.emit(true)
-            deleteTokenUseCase().fold(
-                onSuccess = {
-                    _loading.emit(false)
-                    _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
-                },
-                onError = { error ->
-                    _loading.emit(false)
-                    when (error) {
-                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
-                        else -> _message.emit(SettingMessage.DefaultErrorMessage)
-                    }
-                },
-            )
-        }
     }
 
     companion object {
