@@ -96,7 +96,11 @@ class ChatActivity :
     }
 
     override fun navigateToClub(clubId: Long) {
-        startActivity(ClubDetailActivity.getIntent(this, clubId))
+        startActivity(
+            ClubDetailActivity.getIntent(this, clubId)
+                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
+        )
+        finish()
     }
 
     override fun onDestroy() {
