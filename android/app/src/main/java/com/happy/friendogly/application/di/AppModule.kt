@@ -48,6 +48,7 @@ import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
+import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.DeleteWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.DisconnectWebsocketUseCase
@@ -324,6 +325,8 @@ class AppModule(context: Context) {
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase =
         SaveAlamTokenUseCase(repository = alarmTokenRepository)
     val patchPetUseCase: PatchPetUseCase = PatchPetUseCase(repository = petRepository)
+    val deleteMemberUseCase: DeleteMemberUseCase =
+        DeleteMemberUseCase(repository = memberRepository)
 
     companion object {
         private var instance: AppModule? = null

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
@@ -21,6 +22,7 @@ class SettingViewModel(
     private val getWoofAlarmUseCase: GetWoofAlarmUseCase,
     private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
     private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
+    private val deleteMemberUseCase: DeleteMemberUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<SettingUiState> =
         MutableLiveData<SettingUiState>(SettingUiState())
@@ -141,6 +143,7 @@ class SettingViewModel(
             saveChatAlarmUseCase: SaveChatAlarmUseCase,
             saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
             deleteTokenUseCase: DeleteTokenUseCase,
+            deleteMemberUseCase: DeleteMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(
@@ -149,6 +152,7 @@ class SettingViewModel(
                     saveChatAlarmUseCase = saveChatAlarmUseCase,
                     saveWoofAlarmUseCase = saveWoofAlarmUseCase,
                     deleteTokenUseCase = deleteTokenUseCase,
+                    deleteMemberUseCase = deleteMemberUseCase,
                 )
             }
         }

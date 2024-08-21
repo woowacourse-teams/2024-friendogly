@@ -21,6 +21,7 @@ class ApiClient {
         const val POST_MEMBER = BASE_URL
         const val GET_MEMBER_MINE = "$BASE_URL/mine"
         const val GET_MEMBER = "$BASE_URL/{id}"
+        const val DELETE_MEMBER = BASE_URL
     }
 
     object Pet {

@@ -9,6 +9,7 @@ import com.happy.friendogly.domain.model.Member
 import com.happy.friendogly.domain.model.Register
 import com.happy.friendogly.domain.repository.MemberRepository
 import okhttp3.MultipartBody
+import java.io.IOException
 
 class MemberRepositoryImpl(
     private val source: MemberDataSource,
@@ -55,6 +56,20 @@ class MemberRepositoryImpl(
                     DomainResult.Error(e.error.data.errorCode.toDomain())
                 } else {
                     DomainResult.Error(DataError.Network.NO_INTERNET)
+                }
+            },
+        )
+
+    override suspend fun deleteMember(): DomainResult<Unit, DataError.Network> =
+        source.deleteMember().fold(
+            onSuccess = {
+                DomainResult.Success(Unit)
+            },
+            onFailure = { e ->
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is IOException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
