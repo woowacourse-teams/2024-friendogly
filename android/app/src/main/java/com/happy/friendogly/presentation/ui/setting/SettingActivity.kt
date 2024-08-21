@@ -26,6 +26,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
             saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
             saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
+            postLogoutUseCase = AppModule.getInstance().postLogoutUseCase,
         )
     }
 
@@ -56,8 +57,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
         binding.vm = viewModel
         viewModel.uiState.observe(this) { uiState ->
             with(binding) {
-                alarmSettingsChattingPushSwitch.isChecked = uiState.chattingAlarmPushPermitted && alarmPermission.hasPermissions()
-                alarmSettingsWoofPushSwitch.isChecked = uiState.woofAlarmPushPermitted && alarmPermission.hasPermissions()
+                alarmSettingsChattingPushSwitch.isChecked =
+                    uiState.chattingAlarmPushPermitted && alarmPermission.hasPermissions()
+                alarmSettingsWoofPushSwitch.isChecked =
+                    uiState.woofAlarmPushPermitted && alarmPermission.hasPermissions()
             }
         }
     }
@@ -108,6 +111,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 is SettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
                 is SettingMessage.TokenNotStoredErrorMessage ->
                     startActivity(MainActivity.getIntent(this))
+
+                is SettingMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 

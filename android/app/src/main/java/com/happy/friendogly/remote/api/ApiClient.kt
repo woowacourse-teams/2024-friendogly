@@ -5,6 +5,7 @@ class ApiClient {
         private const val BASE_URL = "/auth"
         const val POST_KAKAO_LOGIN = "$BASE_URL/kakao/login"
         const val POST_REFRESH = "$BASE_URL/kakao/refresh"
+        const val POST_LOGOUT = "$BASE_URL/kakao/logout"
     }
 
     object Footprints {
