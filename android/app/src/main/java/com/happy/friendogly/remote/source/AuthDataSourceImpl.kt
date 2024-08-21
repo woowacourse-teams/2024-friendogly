@@ -20,4 +20,15 @@ class AuthDataSourceImpl(
             else -> throw exception
         }
     }
+
+    override suspend fun postLogout(): Result<Unit> =
+        runCatching {
+            val result = runCatching { service.postLogout() }
+
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> Result.failure(exception.toData())
+                else -> throw exception
+            }
+        }
 }

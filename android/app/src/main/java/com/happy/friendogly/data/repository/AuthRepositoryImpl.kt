@@ -7,6 +7,7 @@ import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Login
 import com.happy.friendogly.domain.repository.AuthRepository
+import java.io.IOException
 
 class AuthRepositoryImpl(
     private val source: AuthDataSource,
@@ -21,6 +22,21 @@ class AuthRepositoryImpl(
                     DomainResult.Error(e.error.data.errorCode.toDomain())
                 } else {
                     DomainResult.Error(DataError.Network.NO_INTERNET)
+                }
+            },
+        )
+    }
+
+    override suspend fun postLogout(): DomainResult<Unit, DataError.Network> {
+        return source.postLogout().fold(
+            onSuccess = {
+                DomainResult.Success(Unit)
+            },
+            onFailure = { e ->
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is IOException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )

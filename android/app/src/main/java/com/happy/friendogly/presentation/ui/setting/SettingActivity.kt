@@ -27,6 +27,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
             saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
             deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
             deleteMemberUseCase = AppModule.getInstance().deleteMemberUseCase,
+            postLogoutUseCase = AppModule.getInstance().postLogoutUseCase,
         )
     }
 
@@ -111,6 +112,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 is SettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
                 is SettingMessage.TokenNotStoredErrorMessage ->
                     startActivity(MainActivity.getIntent(this))
+
+                is SettingMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 
