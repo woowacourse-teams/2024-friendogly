@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
+import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
@@ -66,7 +67,7 @@ class ClubFilterViewModel(
 
     companion object {
         fun factory(analyticsHelper: AnalyticsHelper): ViewModelProvider.Factory {
-            return viewModelFactory {
+            return BaseViewModelFactory  {
                 ClubFilterViewModel(
                     analyticsHelper = analyticsHelper,
                 )
