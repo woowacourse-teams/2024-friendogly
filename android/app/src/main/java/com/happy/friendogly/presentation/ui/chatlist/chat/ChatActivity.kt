@@ -85,7 +85,7 @@ class ChatActivity :
             viewModel.chats.collect {
                 adapter.submitList(it)
                 binding.rcvChatDetail.post {
-                    binding.rcvChatDetail.smoothScrollToPosition(adapter.currentList.size )
+                    binding.rcvChatDetail.smoothScrollToPosition(it.size)
                 }
             }
         }
