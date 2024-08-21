@@ -1,6 +1,7 @@
 package com.happy.friendogly.data.source
 
 import com.happy.friendogly.data.model.GenderDto
+import com.happy.friendogly.data.model.ImageUpdateTypeDto
 import com.happy.friendogly.data.model.PetDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import kotlinx.datetime.LocalDate
@@ -19,4 +20,15 @@ interface PetDataSource {
     ): Result<PetDto>
 
     suspend fun getPets(id: Long): Result<List<PetDto>>
+
+    suspend fun patchPet(
+        petId: Long,
+        name: String,
+        description: String,
+        birthDate: LocalDate,
+        sizeType: SizeTypeDto,
+        gender: GenderDto,
+        file: MultipartBody.Part?,
+        imageUpdateType: ImageUpdateTypeDto,
+    ): Result<Unit>
 }
