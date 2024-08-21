@@ -2,6 +2,7 @@ package com.happy.friendogly.presentation.ui.woof
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -237,10 +238,13 @@ class WoofViewModel(
         viewModelScope.launch {
             val myFootprintMarker = myFootprintMarker.value ?: return@launch
             deleteFootprintUseCase(footprintId = myFootprintMarker.footprintId).onSuccess {
+                Log.e("chad", "deleteMyFootprintMarker")
                 _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
                 _myWalkStatus.value = null
                 _myFootprintMarker.value = null
-            }.onFailure { }
+            }.onFailure {
+                Log.e("chad", it.toString())
+            }
         }
     }
 

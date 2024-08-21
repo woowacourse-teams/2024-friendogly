@@ -9,6 +9,7 @@ import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
 import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.FootprintsNearResponse
 import com.happy.friendogly.remote.model.response.MyFootprintResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -50,5 +51,5 @@ interface WoofService {
     @DELETE(ApiClient.Footprints.DELETE_FOOTPRINT)
     suspend fun deleteFootprint(
         @Path("footprintId") footprintId: Long,
-    ): BaseResponse<Unit>
+    ): Response<Unit>
 }

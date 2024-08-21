@@ -286,7 +286,7 @@
 
         <ImageButton
             android:id="@+id/btn_woof_mark"
-            markBtnVisibility="@{vm.myWalkStatus.walkStatus}"
+            markBtnVisibility="@{vm.myWalkStatus}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="12dp"

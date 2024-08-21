@@ -5,7 +5,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -26,74 +25,66 @@ import java.time.Duration
 import java.time.Period
 
 @BindingAdapter("memberName")
-fun TextView.bindMemberName(memberName: String?) {
-    if (memberName != null) {
-        val spannableString =
-            SpannableString(
-                String.format(
-                    resources.getString(R.string.woof_member_name),
-                    memberName,
-                ),
-            )
-        val memberNameLength = memberName.length
-        spannableString.apply {
-            setSpan(
-                ForegroundColorSpan(resources.getColor(R.color.coral500)),
-                0,
-                memberNameLength,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-            )
-            setSpan(
-                UnderlineSpan(),
-                0,
-                memberNameLength,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-            )
-        }
-
-        text = spannableString
+fun TextView.bindMemberName(memberName: String) {
+    val spannableString =
+        SpannableString(
+            String.format(
+                resources.getString(R.string.woof_member_name),
+                memberName,
+            ),
+        )
+    val memberNameLength = memberName.length
+    spannableString.apply {
+        setSpan(
+            ForegroundColorSpan(resources.getColor(R.color.coral500)),
+            0,
+            memberNameLength,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        setSpan(
+            UnderlineSpan(),
+            0,
+            memberNameLength,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
     }
+
+    text = spannableString
 }
 
 @BindingAdapter("petAge")
-fun TextView.bindPetAge(petBirthDate: LocalDate?) {
-    if (petBirthDate != null) {
-        val period = Period.between(petBirthDate.toJavaLocalDate(), java.time.LocalDate.now())
-        val years = period.years
-        val months = period.months
+fun TextView.bindPetAge(petBirthDate: LocalDate) {
+    val period = Period.between(petBirthDate.toJavaLocalDate(), java.time.LocalDate.now())
+    val years = period.years
+    val months = period.months
 
-        text =
-            if (years < 1) {
-                resources.getString(R.string.woof_age_month, months)
-            } else {
-                resources.getString(R.string.woof_age_year, years)
-            }
-    }
+    text =
+        if (years < 1) {
+            resources.getString(R.string.woof_age_month, months)
+        } else {
+            resources.getString(R.string.woof_age_year, years)
+        }
 }
 
 @BindingAdapter("petSizeType")
-fun TextView.bindPetSizeType(petSizeType: SizeType?) {
-    if (petSizeType != null) {
-        text =
-            when (petSizeType) {
-                SizeType.SMALL -> resources.getString(R.string.dog_small)
-                SizeType.MEDIUM -> resources.getString(R.string.dog_medium)
-                SizeType.LARGE -> resources.getString(R.string.dog_large)
-            }
-    }
+fun TextView.bindPetSizeType(petSizeType: SizeType) {
+    text =
+        when (petSizeType) {
+            SizeType.SMALL -> resources.getString(R.string.dog_small)
+            SizeType.MEDIUM -> resources.getString(R.string.dog_medium)
+            SizeType.LARGE -> resources.getString(R.string.dog_large)
+        }
 }
 
 @BindingAdapter("petGender")
-fun TextView.bindPetGender(petGender: Gender?) {
-    if (petGender != null) {
-        text =
-            when (petGender) {
-                Gender.MALE -> resources.getString(R.string.dog_gender_male)
-                Gender.FEMALE -> resources.getString(R.string.dog_gender_female)
-                Gender.MALE_NEUTERED -> resources.getString(R.string.dog_gender_male_neutered)
-                Gender.FEMALE_NEUTERED -> resources.getString(R.string.dog_gender_female_neutered)
-            }
-    }
+fun TextView.bindPetGender(petGender: Gender) {
+    text =
+        when (petGender) {
+            Gender.MALE -> resources.getString(R.string.dog_gender_male)
+            Gender.FEMALE -> resources.getString(R.string.dog_gender_female)
+            Gender.MALE_NEUTERED -> resources.getString(R.string.dog_gender_male_neutered)
+            Gender.FEMALE_NEUTERED -> resources.getString(R.string.dog_gender_female_neutered)
+        }
 }
 
 @BindingAdapter("walkStatusInfo")
@@ -174,14 +165,12 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
 }
 
 @BindingAdapter("registeringVisibility")
-fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
-    if (uiState != null) {
-        isVisible = (uiState == WoofUiState.RegisteringFootprint)
-    }
+fun View.bindRegisteringVisibility(uiState: WoofUiState) {
+    isVisible = (uiState == WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("registeringVisibilityAnimation")
-fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
+fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.RegisteringFootprint) {
         showViewAnimation(this)
     } else {
@@ -190,7 +179,7 @@ fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
 }
 
 @BindingAdapter("viewingVisibilityAnimation")
-fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
+fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.ViewingFootprintInfo) {
         showViewAnimation(this)
     } else {
@@ -199,14 +188,12 @@ fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
 }
 
 @BindingAdapter("loadingVisibility")
-fun View.bindLoadingVisibility(uiState: WoofUiState?) {
-    if (uiState != null) {
-        isVisible = (uiState == WoofUiState.Loading)
-    }
+fun View.bindLoadingVisibility(uiState: WoofUiState) {
+    isVisible = (uiState == WoofUiState.Loading)
 }
 
 @BindingAdapter("loadingAnimation")
-fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
+fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.Loading) {
         showLoadingAnimation(this)
     } else {
@@ -215,45 +202,44 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
 }
 
 @BindingAdapter("stateVisibility")
-fun View.bindStateVisibility(uiState: WoofUiState?) {
-    if (uiState != null) {
-        isVisible = (uiState != WoofUiState.RegisteringFootprint)
-    }
+fun View.bindStateVisibility(uiState: WoofUiState) {
+    isVisible = (uiState != WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("myWalkStatusVisibility")
-fun View.bindLayoutWalkVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
-    isVisible = if (myWalkStatus != null) {
-        (myWalkStatus.walkStatus != WalkStatus.AFTER)
-    } else {
-        false
-    }
+fun View.bindMyWalkStatusVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+    isVisible =
+        if (myWalkStatus != null) {
+            (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING)
+        } else {
+            false
+        }
 }
 
 @BindingAdapter("markBtnVisibility")
-fun View.bindMarkBtnVisibility(walkStatus: WalkStatus?) {
-    Log.e("chad",walkStatus.toString())
-    if (walkStatus != null) {
-        isVisible = !(walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING)
-    }
+fun View.bindMarkBtnVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+    isVisible =
+        if (myWalkStatus != null) {
+            !(myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING)
+        } else {
+            true
+        }
 }
 
 @BindingAdapter("filterState", "btnState")
-fun TextView.bindStateBtnBackgroundTint(
-    filterState: FilterState?,
-    btnState: FilterState?,
+fun TextView.bindFilterStateBtnBackgroundTint(
+    filterState: FilterState,
+    btnState: FilterState,
 ) {
-    if (filterState != null && btnState != null) {
-        val whiteColor = resources.getColor(R.color.white, null)
-        val coralColor = resources.getColor(R.color.coral50, null)
+    val whiteColor = resources.getColor(R.color.white, null)
+    val coralColor = resources.getColor(R.color.coral50, null)
 
-        backgroundTintList =
-            ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
-    }
+    backgroundTintList =
+        ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
 }
 
 @BindingAdapter("refreshBtnVisibility")
-fun View.bindRefreshBtnVisibility(uiState: WoofUiState?) {
+fun View.bindRefreshBtnVisibility(uiState: WoofUiState) {
     isVisible =
         if (uiState is WoofUiState.FindingFriends) {
             uiState.refreshBtnVisible
@@ -267,7 +253,6 @@ fun ImageButton.bindDeleteMyFootprintBtnVisibility(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
         isVisible = (walkStatus == WalkStatus.BEFORE)
     }
-
 }
 
 @BindingAdapter("endWalkBtnVisibility")

@@ -171,7 +171,7 @@ class WoofFragment :
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (viewModel.uiState.value is WoofUiState.FindingFriends) {
-                        requireActivity().onBackPressed()
+                        requireActivity().finish()
                     } else {
                         viewModel.updateUiState(WoofUiState.FindingFriends())
                     }
@@ -386,6 +386,9 @@ class WoofFragment :
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
             if (myWalkStatus == null) {
+                val myFootprintMarker = viewModel.myFootprintMarker.value ?: return@observe
+                myFootprintMarker.marker.map = null
+                circleOverlay.map = null
                 return@observe
             }
 
@@ -396,7 +399,7 @@ class WoofFragment :
             if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
                 timer?.cancel()
             } else {
-                startTimerAndUpdateWalkStatus()
+                monitorDistanceAndManageWalkStatus()
             }
         }
 
@@ -655,18 +658,22 @@ class WoofFragment :
 
     private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(
-                convertLtnLng(position.latitude),
-                convertLtnLng(position.longitude),
-                1,
-            ) { addresses ->
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                geocoder.getFromLocation(
+                    convertLtnLng(position.latitude),
+                    convertLtnLng(position.longitude),
+                    1,
+                ) { addresses ->
+                    showAddress(addresses)
+                }
+            } else {
+                val addresses =
+                    geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
                 showAddress(addresses)
             }
-        } else {
-            val addresses =
-                geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
-            showAddress(addresses)
+        } catch (e: Exception) {
+            getAddress(position)
         }
     }
 
@@ -687,7 +694,7 @@ class WoofFragment :
         return floor(latLngArg * 100) / 100
     }
 
-    private fun startTimerAndUpdateWalkStatus() {
+    private fun monitorDistanceAndManageWalkStatus() {
         if (timer != null) {
             timer?.cancel()
         }
@@ -706,19 +713,19 @@ class WoofFragment :
                         distanceResults,
                     )
                     val distance = distanceResults[0]
-                    if (startWalk(distance) || endWalk(distance)) {
+                    if (startWalkIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
                         viewModel.updateFootprintRecentWalkStatus(latLng)
                     }
                 }
             }
     }
 
-    private fun startWalk(distance: Float): Boolean {
+    private fun startWalkIfWithinRange(distance: Float): Boolean {
         val myWalkStatus = viewModel.myWalkStatus.value ?: return false
         return myWalkStatus.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
     }
 
-    private fun endWalk(distance: Float): Boolean {
+    private fun endWalkIfOutOfRange(distance: Float): Boolean {
         val myWalkStatus = viewModel.myWalkStatus.value ?: return false
         return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
     }
