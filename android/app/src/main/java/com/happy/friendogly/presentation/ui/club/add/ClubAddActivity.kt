@@ -30,6 +30,7 @@ import okhttp3.MultipartBody
 class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_club_add) {
     private val viewModel: ClubAddViewModel by viewModels<ClubAddViewModel> {
         ClubAddViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
             postClubUseCase = AppModule.getInstance().postClubUseCase,
         )

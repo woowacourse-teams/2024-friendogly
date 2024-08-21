@@ -30,6 +30,7 @@ class ClubMenuBottomSheet(
 
     private val viewModel: ClubMenuViewModel by viewModels<ClubMenuViewModel> {
         ClubMenuViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             deleteClubMemberUseCase = AppModule.getInstance().deleteClubMemberUseCase,
         )
     }

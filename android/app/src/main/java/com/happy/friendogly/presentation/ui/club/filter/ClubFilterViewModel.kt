@@ -2,14 +2,21 @@ package com.happy.friendogly.presentation.ui.club.filter
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.utils.logSelectClubFilter
+import com.happy.friendogly.presentation.utils.logSelectParticipationFilter
 
-class ClubFilterViewModel : BaseViewModel(), ClubFilterItemActionHandler, ClubFilterActionHandler {
+class ClubFilterViewModel(
+    private val analyticsHelper: AnalyticsHelper,
+) : BaseViewModel(), ClubFilterItemActionHandler, ClubFilterActionHandler {
     private val _clubFilterEvent: MutableLiveData<Event<ClubFilterEvent>> = MutableLiveData()
     val clubFilterEvent: LiveData<Event<ClubFilterEvent>> get() = _clubFilterEvent
 
@@ -18,6 +25,7 @@ class ClubFilterViewModel : BaseViewModel(), ClubFilterItemActionHandler, ClubFi
     private val clubFilterSelector = ClubFilterSelector()
 
     fun updateParticipationFilter(participationFilter: ParticipationFilter) {
+        analyticsHelper.logSelectParticipationFilter(participationFilter.filterName)
         this.participationFilter = participationFilter
     }
 
@@ -49,9 +57,20 @@ class ClubFilterViewModel : BaseViewModel(), ClubFilterItemActionHandler, ClubFi
     ) {
         val clubFilter = ClubFilter.findClubFilter(filterName) ?: return
         if (isSelected) {
+            analyticsHelper.logSelectClubFilter(filterName)
             clubFilterSelector.addClubFilter(clubFilter)
         } else {
             clubFilterSelector.removeClubFilter(clubFilter)
+        }
+    }
+
+    companion object{
+        fun factory(analyticsHelper: AnalyticsHelper): ViewModelProvider.Factory{
+            return viewModelFactory {
+                ClubFilterViewModel(
+                    analyticsHelper = analyticsHelper,
+                )
+            }
         }
     }
 }

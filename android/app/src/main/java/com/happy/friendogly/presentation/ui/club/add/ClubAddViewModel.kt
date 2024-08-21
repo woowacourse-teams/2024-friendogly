@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -23,10 +24,14 @@ import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterItemActionHandler
 import com.happy.friendogly.presentation.utils.addSourceList
+import com.happy.friendogly.presentation.utils.logAddClubClick
+import com.happy.friendogly.presentation.utils.logSelectClubMemberCount
+import com.happy.friendogly.presentation.utils.logUnSelectAddClubFilter
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 class ClubAddViewModel(
+    private val analyticsHelper: AnalyticsHelper,
     private val getAddressUseCase: GetAddressUseCase,
     private val postClubUseCase: PostClubUseCase,
 ) : BaseViewModel(), ClubAddActionHandler, ClubFilterItemActionHandler {
@@ -81,6 +86,7 @@ class ClubAddViewModel(
     }
 
     fun settingClubCounter(count: Int) {
+        analyticsHelper.logSelectClubMemberCount(count)
         _clubCounter.value = ClubCounter(count)
     }
 
@@ -149,6 +155,7 @@ class ClubAddViewModel(
         if (isSelected) {
             clubFilterSelector.addClubFilter(clubFilter)
         } else {
+            analyticsHelper.logUnSelectAddClubFilter(filterName)
             clubFilterSelector.removeClubFilter(clubFilter)
         }
     }
@@ -161,6 +168,7 @@ class ClubAddViewModel(
         dogs: List<Long>,
         file: MultipartBody.Part?,
     ) = viewModelScope.launch {
+        analyticsHelper.logAddClubClick()
         postClubUseCase(
             title = clubTitle.value ?: return@launch,
             content = clubContent.value ?: return@launch,
@@ -214,11 +222,13 @@ class ClubAddViewModel(
         private const val MAX_CONTENT_LENGTH = 1000
 
         fun factory(
+            analyticsHelper: AnalyticsHelper,
             getAddressUseCase: GetAddressUseCase,
             postClubUseCase: PostClubUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubAddViewModel(
+                    analyticsHelper = analyticsHelper,
                     getAddressUseCase = getAddressUseCase,
                     postClubUseCase = postClubUseCase,
                 )
