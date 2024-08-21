@@ -393,7 +393,7 @@ class WoofFragment :
             }
 
             if (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING) {
-                startWalkStatusTimer(myWalkStatus.changedWalkStatusTime)
+                startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
             }
 
             if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
@@ -730,7 +730,7 @@ class WoofFragment :
         return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
     }
 
-    private fun startWalkStatusTimer(changedWalkStatusTime: LocalDateTime) {
+    private fun startWalkStatusChronometer(changedWalkStatusTime: LocalDateTime) {
         val now = java.time.LocalDateTime.now()
         val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
         binding.chronometerWoofWalkTime.base =

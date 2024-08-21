@@ -1,12 +1,16 @@
 package com.happy.friendogly.presentation.ui.woof
 
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -245,4 +249,24 @@ fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
         isVisible = (walkStatus == WalkStatus.ONGOING)
     }
+}
+
+
+@BindingAdapter("locationBtnMarginBottom")
+fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
+    fun Int.dp(): Int {
+        val metrics = Resources.getSystem().displayMetrics
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
+            .toInt()
+    }
+
+    val marginBottom = if (myWalkStatus != null) {
+        if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+    } else {
+        36
+    }
+
+    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.bottomMargin = marginBottom.dp()
+    this.layoutParams = layoutParams
 }
