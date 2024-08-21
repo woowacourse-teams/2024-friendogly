@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface NotificationService {
 
-    void sendNotification(String title, String content, String receiverToken);
+    void sendFootprintNotification(String title, String content, String receiverToken);
 
-    void sendNotification(String title, String content, List<String> receiverTokens);
+    void sendFootprintNotification(String title, String content, List<String> receiverTokens);
 
-    void sendChat(Long chatRoomId, ChatMessageResponse response);
+    void sendChatNotification(Long chatRoomId, ChatMessageResponse response);
 }

@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 public class FakeNotificationService implements NotificationService {
 
     @Override
-    public void sendNotification(String title, String content, String receiverToken) {
+    public void sendFootprintNotification(String title, String content, String receiverToken) {
 
     }
 
     @Override
-    public void sendNotification(String title, String content, List<String> receiverTokens) {
+    public void sendFootprintNotification(String title, String content, List<String> receiverTokens) {
 
     }
 
     @Override
-    public void sendChat(Long chatRoomId, ChatMessageResponse response) {
+    public void sendChatNotification(Long chatRoomId, ChatMessageResponse response) {
 
     }
 }

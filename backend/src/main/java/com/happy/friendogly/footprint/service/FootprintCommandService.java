@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FootprintCommandService {
 
+    private static final int FOOTPRINT_DURATION_HOURS = 24;
     private static final int FOOTPRINT_COOLDOWN_SECOND = 30;
 
     private final FootprintRepository footprintRepository;
@@ -97,7 +98,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
-        notificationService.sendNotification(
+        notificationService.sendFootprintNotification(
                 "반갑개",
                 "내 산책 장소에 " + memberName + "님도 산책온대요!",
                 nearDeviceTokens
@@ -125,7 +126,7 @@ public class FootprintCommandService {
     }
 
     private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
-        notificationService.sendNotification(
+        notificationService.sendFootprintNotification(
                 "반갑개",
                 "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
                 nearDeviceTokens
@@ -147,11 +148,13 @@ public class FootprintCommandService {
     }
 
     private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
-        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalse();
+        LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
+        List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalseAndCreatedAtAfter(startTime);
 
         return footprints.stream()
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
-                        && otherFootprint.getMember() != member)
+                        && otherFootprint.getMember() != member
+                        && !otherFootprint.getWalkStatus().isAfter())
                 .map(otherFootprint -> deviceTokenRepository.findByMemberId(otherFootprint.getMember().getId()))
                 .flatMap(Optional::stream)
                 .map(DeviceToken::getDeviceToken)
