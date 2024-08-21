@@ -29,6 +29,7 @@ class ApiClient {
         const val GET_PETS_MINE = "$BASE_URL/mine"
         const val POST_PET = BASE_URL
         const val GET_PETS = BASE_URL
+        const val PATCH_PETS = "${BASE_URL}/{id}"
     }
 
     object Club {

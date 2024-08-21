@@ -34,7 +34,10 @@ import java.util.Date
 class RegisterPetActivity :
     BaseActivity<ActivityRegisterPetBinding>(R.layout.activity_register_pet) {
     private val viewModel: RegisterPetViewModel by viewModels {
-        RegisterPetViewModel.factory(postPetUseCase = AppModule.getInstance().postPetUseCase)
+        RegisterPetViewModel.factory(
+            postPetUseCase = AppModule.getInstance().postPetUseCase,
+            patchPetUseCase = AppModule.getInstance().patchPetUseCase,
+        )
     }
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
@@ -92,6 +95,7 @@ class RegisterPetActivity :
             when (message) {
                 is RegisterPetMessage.FileSizeExceedMessage -> showToastMessage(getString(R.string.file_size_exceed_message))
                 is RegisterPetMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
+                is RegisterPetMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 

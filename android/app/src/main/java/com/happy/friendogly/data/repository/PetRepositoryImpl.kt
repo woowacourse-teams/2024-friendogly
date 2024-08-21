@@ -7,11 +7,13 @@ import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Gender
+import com.happy.friendogly.domain.model.ImageUpdateType
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.PetRepository
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
+import java.io.IOException
 
 class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
     override suspend fun getPetsMine(): DomainResult<List<Pet>, DataError.Network> =
@@ -66,6 +68,38 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
                     DomainResult.Error(e.error.data.errorCode.toDomain())
                 } else {
                     DomainResult.Error(DataError.Network.NO_INTERNET)
+                }
+            },
+        )
+
+    override suspend fun patchPet(
+        petId: Long,
+        name: String,
+        description: String,
+        birthDate: LocalDate,
+        sizeType: SizeType,
+        gender: Gender,
+        file: MultipartBody.Part?,
+        imageUpdateType: ImageUpdateType,
+    ): DomainResult<Unit, DataError.Network> =
+        source.patchPet(
+            petId = petId,
+            name = name,
+            description = description,
+            birthDate = birthDate,
+            sizeType = sizeType.toData(),
+            gender = gender.toData(),
+            file = file,
+            imageUpdateType = imageUpdateType.toData(),
+        ).fold(
+            onSuccess = {
+                DomainResult.Success(Unit)
+            },
+            onFailure = { e ->
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is IOException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
