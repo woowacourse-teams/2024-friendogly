@@ -23,6 +23,11 @@ class ChatListFragment :
         binding.vm = viewModel
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getChats()
+    }
+
     private fun initAdapter() {
         adapter = ChatListAdapter(this)
         binding.rcvChatList.adapter = adapter
