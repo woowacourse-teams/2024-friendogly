@@ -8,4 +8,6 @@ sealed interface ProfileSettingMessage {
     data object ServerErrorMessage : ProfileSettingMessage
 
     data object TokenNotStoredErrorMessage : ProfileSettingMessage
+
+    data object NoInternetMessage : ProfileSettingMessage
 }

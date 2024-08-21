@@ -34,6 +34,7 @@ class ProfileSettingActivity :
             saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
             postMemberUseCase = AppModule.getInstance().postMemberUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
+            patchMemberUseCase = AppModule.getInstance().patchMemberUseCase,
         )
     }
 
@@ -64,6 +65,8 @@ class ProfileSettingActivity :
                     startActivity(MainActivity.getIntent(this))
                     finish()
                 }
+
+                is ProfileSettingNavigationAction.NavigateToMyPage -> finish()
             }
         }
 
@@ -74,6 +77,8 @@ class ProfileSettingActivity :
                 is ProfileSettingMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
                 ProfileSettingMessage.TokenNotStoredErrorMessage ->
                     startActivity(MainActivity.getIntent(this))
+
+                is ProfileSettingMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 

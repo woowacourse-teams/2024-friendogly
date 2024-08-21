@@ -72,6 +72,7 @@ import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PatchClubUseCase
+import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PatchPetUseCase
 import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
@@ -326,6 +327,7 @@ class AppModule(context: Context) {
         SaveAlamTokenUseCase(repository = alarmTokenRepository)
     val postLogoutUseCase: PostLogoutUseCase = PostLogoutUseCase(repository = authRepository)
     val patchPetUseCase: PatchPetUseCase = PatchPetUseCase(repository = petRepository)
+    val patchMemberUseCase: PatchMemberUseCase = PatchMemberUseCase(repository = memberRepository)
 
     companion object {
         private var instance: AppModule? = null
