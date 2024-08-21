@@ -56,7 +56,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rect_white_fill_30"
-            android:backgroundTint="@color/coral50"
             android:elevation="4dp"
             android:gravity="center"
             android:onClick="@{() -> actionHandler.clickStatusAll()}"

@@ -73,12 +73,11 @@ import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
+import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualUseCase
-import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PatchPetUseCase
-import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
@@ -185,11 +184,11 @@ class AppModule(context: Context) {
     private val webSocketService =
         WebSocketService(
             client =
-                RemoteModule.createStumpClient(
-                    baseUrl = baseUrl,
-                    tokenManager = tokenManager,
-                    authenticationListener = authenticationListener,
-                ),
+            RemoteModule.createStumpClient(
+                baseUrl = baseUrl,
+                tokenManager = tokenManager,
+                authenticationListener = authenticationListener,
+            ),
             tokenManager = tokenManager,
             baseUrl = websocketUrl,
         )
