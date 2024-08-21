@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                        style="@style/Theme.AppCompat.TextView.Regular.Red.Size14"
                         android:text="@string/club_detail_report"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"

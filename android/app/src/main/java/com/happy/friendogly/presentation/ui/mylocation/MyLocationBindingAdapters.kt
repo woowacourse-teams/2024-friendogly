@@ -1,6 +1,8 @@
 package com.happy.friendogly.presentation.ui.mylocation
 
 import android.annotation.SuppressLint
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.happy.friendogly.R
@@ -17,4 +19,14 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
             userAddress.subLocality ?: "",
             userAddress.thoroughfare ?: "",
         )
+}
+
+@BindingAdapter("myLocationIcon")
+fun ImageView.bindMyLocationIcon(userAddress: UserAddress?) {
+    this.visibility =
+        if (userAddress == null) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
 }

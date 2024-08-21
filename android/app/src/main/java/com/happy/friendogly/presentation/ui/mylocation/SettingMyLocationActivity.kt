@@ -23,8 +23,6 @@ import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import java.util.Locale
 
@@ -113,7 +111,6 @@ class SettingMyLocationActivity :
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
             moveCameraCenterPosition()
             cancelAnimation()
-            initMarker()
             loadAddress()
         }
     }
@@ -127,15 +124,6 @@ class SettingMyLocationActivity :
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, DEFAULT_ZOOM)
         map.moveCamera(cameraUpdate)
         map.locationTrackingMode = LocationTrackingMode.Follow
-    }
-
-    private fun initMarker() {
-        val marker = Marker()
-        marker.position = latLng
-        marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
-        marker.width = MARKER_WIDTH
-        marker.height = MARKER_HEIGHT
-        marker.map = map
     }
 
     private fun initMap(map: NaverMap) {
@@ -211,8 +199,6 @@ class SettingMyLocationActivity :
 
     companion object {
         private const val DEFAULT_ZOOM = 13.5
-        private const val MARKER_WIDTH = 24
-        private const val MARKER_HEIGHT = 37
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingMyLocationActivity::class.java)
