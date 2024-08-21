@@ -6,6 +6,7 @@ import com.happy.friendogly.data.model.PetDto
 import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.remote.api.PetService
+import com.happy.friendogly.remote.error.ApiExceptionResponse
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.mapper.toRemote
 import com.happy.friendogly.remote.model.request.PatchPetRequest
@@ -54,18 +55,26 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
         gender: GenderDto,
         file: MultipartBody.Part?,
         imageUpdateType: ImageUpdateTypeDto,
-    ): Result<Unit> =
-        runCatching {
-            val body =
-                PatchPetRequest(
-                    name = name,
-                    description = description,
-                    birthDate = birthDate,
-                    sizeType = sizeType.toRemote(),
-                    gender = gender.toRemote(),
-                    imageUpdateType = imageUpdateType.toRemote(),
-                )
+    ): Result<Unit> {
+        val result =
+            runCatching {
+                val body =
+                    PatchPetRequest(
+                        name = name,
+                        description = description,
+                        birthDate = birthDate,
+                        sizeType = sizeType.toRemote(),
+                        gender = gender.toRemote(),
+                        imageUpdateType = imageUpdateType.toRemote(),
+                    )
 
-            service.patchPet(petId = petId, body = body, file = file)
+                service.patchPet(petId = petId, body = body, file = file)
+            }
+
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> throw exception
         }
+    }
 }
