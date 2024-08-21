@@ -69,6 +69,6 @@ class ApiClient {
     }
 
     object AlarmToken {
-        const val DEVICE_TOKEN = "/device-tokens"
+        const val DEVICE_TOKEN = "/api/device-tokens"
     }
 }
