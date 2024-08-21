@@ -72,7 +72,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 if (isChecked) {
                     requestNotificationPermission()
                 }
-                viewModel.saveWoofAlarmSetting(isChecked)
+                viewModel.saveChattingAlarmSetting(isChecked)
             }
             alarmSettingsWoofPushSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
