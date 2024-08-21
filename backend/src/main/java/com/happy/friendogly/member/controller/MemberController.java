@@ -12,6 +12,7 @@ import com.happy.friendogly.member.service.MemberQueryService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,5 +64,11 @@ public class MemberController {
     ) {
         UpdateMemberResponse response = memberCommandService.update(memberId, request, image);
         return ResponseEntity.ok(ApiResponse.ofSuccess(response));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@Auth Long memberId) {
+        memberCommandService.delete(memberId);
+        return ResponseEntity.noContent().build();
     }
 }

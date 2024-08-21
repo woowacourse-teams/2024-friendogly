@@ -18,4 +18,6 @@ public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> 
             WHERE chatRoomMember.chatRoom.id = :chatRoomId
             """)
     List<String> findAllByChatRoomId(@Param("chatRoomId") Long chatRoomId);
+
+    void deleteByMemberId(Long memberId);
 }
