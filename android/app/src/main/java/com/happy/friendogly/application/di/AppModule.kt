@@ -77,6 +77,7 @@ import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
+import com.happy.friendogly.domain.usecase.PostLogoutUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.domain.usecase.PublishEnterUseCase
@@ -322,6 +323,7 @@ class AppModule(context: Context) {
         GetChatAlarmUseCase(repository = alarmSettingRepository)
     val saveAlarmTokenUseCase: SaveAlamTokenUseCase =
         SaveAlamTokenUseCase(repository = alarmTokenRepository)
+    val postLogoutUseCase: PostLogoutUseCase = PostLogoutUseCase(repository = authRepository)
 
     companion object {
         private var instance: AppModule? = null

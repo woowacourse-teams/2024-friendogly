@@ -18,4 +18,7 @@ interface AuthService {
     suspend fun postRefresh(
         @Body body: RefreshRequest,
     ): BaseResponse<JwtTokenResponse>
+
+    @POST(ApiClient.Auth.POST_LOGOUT)
+    suspend fun postLogout(): Unit
 }
