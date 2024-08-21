@@ -306,5 +306,6 @@
     <string name="chat_go_club_detail">모임 상세 바로가기</string>
     <string name="no_internet_message">네트워크 상태가 좋지 않아요\n연결 상태를 확인하고 다시 시도해주세요</string>
     <string name="chat_no_chat_description">현재 참여한 모임이 없어요</string>
+    <string name="register_friendogly_description">내 반려견의 행복을 위한\n친구 찾기 서비스</string>
 
 </resources>
