@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
@@ -22,6 +23,7 @@ class SettingViewModel(
     private val getWoofAlarmUseCase: GetWoofAlarmUseCase,
     private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
     private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
+    private val deleteMemberUseCase: DeleteMemberUseCase,
     private val postLogoutUseCase: PostLogoutUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<SettingUiState> =
@@ -120,6 +122,28 @@ class SettingViewModel(
         )
     }
 
+    fun navigateToUnsubscribe() {
+        launch {
+            _loading.emit(true)
+            unsubscribe()
+            _loading.emit(false)
+        }
+    }
+
+    private suspend fun unsubscribe() {
+        deleteMemberUseCase().fold(
+            onSuccess = {
+                deleteToken()
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.NO_INTERNET -> _message.emit(SettingMessage.NoInternetMessage)
+                    else -> _message.emit(SettingMessage.ServerErrorMessage)
+                }
+            },
+        )
+    }
+
     private suspend fun deleteToken() {
         deleteTokenUseCase().fold(
             onSuccess = {
@@ -134,25 +158,6 @@ class SettingViewModel(
         )
     }
 
-    fun navigateToUnsubscribe() {
-        launch {
-            _loading.emit(true)
-            deleteTokenUseCase().fold(
-                onSuccess = {
-                    _loading.emit(false)
-                    _navigateAction.emit(SettingNavigationAction.NavigateToRegister)
-                },
-                onError = { error ->
-                    _loading.emit(false)
-                    when (error) {
-                        DataError.Local.TOKEN_NOT_STORED -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
-                        else -> _message.emit(SettingMessage.DefaultErrorMessage)
-                    }
-                },
-            )
-        }
-    }
-
     companion object {
         fun factory(
             getChatAlarmUseCase: GetChatAlarmUseCase,
@@ -160,6 +165,7 @@ class SettingViewModel(
             saveChatAlarmUseCase: SaveChatAlarmUseCase,
             saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
             deleteTokenUseCase: DeleteTokenUseCase,
+            deleteMemberUseCase: DeleteMemberUseCase,
             postLogoutUseCase: PostLogoutUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
@@ -169,6 +175,7 @@ class SettingViewModel(
                     saveChatAlarmUseCase = saveChatAlarmUseCase,
                     saveWoofAlarmUseCase = saveWoofAlarmUseCase,
                     deleteTokenUseCase = deleteTokenUseCase,
+                    deleteMemberUseCase = deleteMemberUseCase,
                     postLogoutUseCase = postLogoutUseCase,
                 )
             }

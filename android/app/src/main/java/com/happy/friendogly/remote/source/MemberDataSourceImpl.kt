@@ -4,6 +4,7 @@ import com.happy.friendogly.data.model.MemberDto
 import com.happy.friendogly.data.model.RegisterDto
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.remote.api.MemberService
+import com.happy.friendogly.remote.error.ApiExceptionResponse
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.PostMembersRequest
 import okhttp3.MultipartBody
@@ -30,4 +31,14 @@ class MemberDataSourceImpl(
         runCatching {
             service.getMember(id = id).data.toData()
         }
+
+    override suspend fun deleteMember(): Result<Unit> {
+        val result = runCatching { service.deleteMember() }
+
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> throw exception
+        }
+    }
 }

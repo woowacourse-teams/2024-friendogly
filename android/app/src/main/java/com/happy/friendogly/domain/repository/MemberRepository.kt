@@ -16,4 +16,6 @@ interface MemberRepository {
     suspend fun getMemberMine(): DomainResult<Member, DataError.Network>
 
     suspend fun getMember(id: Long): DomainResult<Member, DataError.Network>
+
+    suspend fun deleteMember(): DomainResult<Unit, DataError.Network>
 }
