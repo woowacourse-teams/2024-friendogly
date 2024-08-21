@@ -166,7 +166,6 @@ class ClubDetailActivity :
             ChatActivity.getIntent(
                 context = this@ClubDetailActivity,
                 chatId = chatRoomId,
-                memberId = 1,
             ),
         )
     }

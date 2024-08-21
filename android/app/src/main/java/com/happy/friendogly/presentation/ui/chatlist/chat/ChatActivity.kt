@@ -21,6 +21,7 @@ class ChatActivity :
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels {
         ChatViewModel.factory(
+            AppModule.getInstance().getChatRoomClubUseCase,
             AppModule.getInstance().getChatMessagesUseCase,
             AppModule.getInstance().connectWebsocketUseCase,
             AppModule.getInstance().disconnectWebsocketUseCase,
@@ -36,16 +37,15 @@ class ChatActivity :
         initAdapter()
         getChatList()
         clickBackBtn()
-        val myMemberId: Long = intent.getLongExtra(EXTRA_MEMBER_ID, INVALID_ID)
         val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
 
-        clickChatInfo(myMemberId, chatId)
+        clickChatInfo(chatId)
 
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
         }
-        viewModel.subscribeMessage(chatId, myMemberId)
+        viewModel.subscribeMessage(chatId)
         hideMessageKeyBoard()
     }
 
@@ -58,15 +58,11 @@ class ChatActivity :
         }
     }
 
-    private fun clickChatInfo(
-        myMemberId: Long,
-        chatRoomId: Long,
-    ) {
+    private fun clickChatInfo(chatRoomId: Long) {
         binding.ibChatSideMenu.setOnClickListener {
             val chatInfoSideSheet = ChatInfoSideSheet()
             chatInfoSideSheet.arguments =
                 ChatInfoSideSheet.getBundle(
-                    myMemberId = myMemberId,
                     chatRoomId = chatRoomId,
                 )
             chatInfoSideSheet.show(supportFragmentManager, "")
@@ -100,7 +96,11 @@ class ChatActivity :
     }
 
     override fun navigateToClub(clubId: Long) {
-        startActivity(ClubDetailActivity.getIntent(this, clubId))
+        startActivity(
+            ClubDetailActivity.getIntent(this, clubId)
+                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
+        )
+        finish()
     }
 
     override fun onDestroy() {
@@ -117,11 +117,9 @@ class ChatActivity :
         fun getIntent(
             context: Context,
             chatId: Long,
-            memberId: Long,
         ): Intent {
             return Intent(context, ChatActivity::class.java).apply {
                 putExtra(EXTRA_CHAT_ID, chatId)
-                putExtra(EXTRA_MEMBER_ID, memberId)
             }
         }
     }
