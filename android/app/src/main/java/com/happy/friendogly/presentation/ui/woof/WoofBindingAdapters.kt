@@ -5,7 +5,9 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -14,6 +16,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
+import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
@@ -218,15 +221,18 @@ fun View.bindStateVisibility(uiState: WoofUiState?) {
     }
 }
 
-@BindingAdapter("layoutWalkVisibility")
-fun View.bindLayoutWalkVisibility(walkStatus: WalkStatus?) {
-    if (walkStatus != null) {
-        isVisible = (walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING)
+@BindingAdapter("myWalkStatusVisibility")
+fun View.bindLayoutWalkVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+    isVisible = if (myWalkStatus != null) {
+        (myWalkStatus.walkStatus != WalkStatus.AFTER)
+    } else {
+        false
     }
 }
 
 @BindingAdapter("markBtnVisibility")
 fun View.bindMarkBtnVisibility(walkStatus: WalkStatus?) {
+    Log.e("chad",walkStatus.toString())
     if (walkStatus != null) {
         isVisible = !(walkStatus == WalkStatus.BEFORE || walkStatus == WalkStatus.ONGOING)
     }
@@ -254,4 +260,19 @@ fun View.bindRefreshBtnVisibility(uiState: WoofUiState?) {
         } else {
             false
         }
+}
+
+@BindingAdapter("deleteMyFootprintBtnVisibility")
+fun ImageButton.bindDeleteMyFootprintBtnVisibility(walkStatus: WalkStatus?) {
+    if (walkStatus != null) {
+        isVisible = (walkStatus == WalkStatus.BEFORE)
+    }
+
+}
+
+@BindingAdapter("endWalkBtnVisibility")
+fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
+    if (walkStatus != null) {
+        isVisible = (walkStatus == WalkStatus.ONGOING)
+    }
 }

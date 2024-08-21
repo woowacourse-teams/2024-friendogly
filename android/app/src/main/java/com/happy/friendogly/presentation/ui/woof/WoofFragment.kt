@@ -323,7 +323,7 @@ class WoofFragment :
 
         map.uiSettings.apply {
             isScaleBarEnabled = true
-            isCompassEnabled = true
+            isCompassEnabled = false
             isLocationButtonEnabled = false
             isZoomControlEnabled = false
         }

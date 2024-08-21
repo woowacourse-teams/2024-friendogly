@@ -214,7 +214,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_walk"
-            layoutWalkVisibility="@{vm.myWalkStatus.walkStatus}"
+            myWalkStatusVisibility="@{vm.myWalkStatus}"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginHorizontal="12dp"
@@ -226,7 +226,24 @@
             tools:visibility="visible">
 
             <ImageButton
+                android:id="@+id/btn_woof_delete_my_footprint"
+                deleteMyFootprintBtnVisibility="@{vm.myWalkStatus.walkStatus}"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rect_coral500_fill_30"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:onClick="@{() -> actionHandler.clickDeleteMyFootprintMarkerBtn()}"
+                android:src="@drawable/ic_close_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
                 android:id="@+id/btn_woof_end_walk"
+                endWalkBtnVisibility="@{vm.myWalkStatus.walkStatus}"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/rect_coral500_fill_30"
@@ -375,7 +392,7 @@
             android:paddingHorizontal="6dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_woof_register_walk_area"

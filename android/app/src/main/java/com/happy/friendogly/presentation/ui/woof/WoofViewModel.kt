@@ -42,10 +42,10 @@ class WoofViewModel(
     private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
     private val deleteFootprintUseCase: DeleteFootprintUseCase,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
+    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData(WoofUiState.Loading)
     val uiState: LiveData<WoofUiState> get() = _uiState
 
-    private val _filterState: MutableLiveData<FilterState> = MutableLiveData()
+    private val _filterState: MutableLiveData<FilterState> = MutableLiveData(FilterState.ALL)
     val filterState: LiveData<FilterState> get() = _filterState
 
     private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
@@ -111,7 +111,6 @@ class WoofViewModel(
                 val myFootprint = nearFootprints.firstOrNull { footprint -> footprint.isMine }
                 _makeMarkerActions.value =
                     Event(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint))
-                _filterState.value = FilterState.ALL
             }.onFailure {}
         }
     }
@@ -211,7 +210,7 @@ class WoofViewModel(
                     }
 
                     WalkStatus.ONGOING -> {
-                        if (myWalkStatus.value?.walkStatus != WalkStatus.BEFORE) {
+                        if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.BEFORE) {
                             _myWalkStatus.value = footprintRecentWalkStatus
                         }
                     }
@@ -238,7 +237,9 @@ class WoofViewModel(
         viewModelScope.launch {
             val myFootprintMarker = myFootprintMarker.value ?: return@launch
             deleteFootprintUseCase(footprintId = myFootprintMarker.footprintId).onSuccess {
-                _alertActions.emit(WoofAlertActions.AlertEndWalkSnackbar)
+                _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
+                _myWalkStatus.value = null
+                _myFootprintMarker.value = null
             }.onFailure { }
         }
     }
