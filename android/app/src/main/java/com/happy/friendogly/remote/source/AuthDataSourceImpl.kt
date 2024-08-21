@@ -17,7 +17,7 @@ class AuthDataSourceImpl(
         return when (val exception = result.exceptionOrNull()) {
             null -> result
             is ApiExceptionResponse -> Result.failure(exception.toData())
-            else -> throw exception
+            else -> Result.failure(exception)
         }
     }
 
@@ -28,7 +28,7 @@ class AuthDataSourceImpl(
             return when (val exception = result.exceptionOrNull()) {
                 null -> result
                 is ApiExceptionResponse -> Result.failure(exception.toData())
-                else -> throw exception
+                else -> Result.failure(exception)
             }
         }
 }
