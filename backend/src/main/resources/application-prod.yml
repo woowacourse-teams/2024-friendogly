@@ -1,0 +1,42 @@
+aws:
+  s3:
+    bucket-name: techcourse-project-2024
+    server:
+      endpoint: https://d3obq7hxojfffa.cloudfront.net/
+      key-prefix: friendogly/
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
+  refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
+
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  server:
+    port: 8081
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
