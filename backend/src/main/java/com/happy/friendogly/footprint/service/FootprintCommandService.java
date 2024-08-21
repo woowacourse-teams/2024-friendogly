@@ -41,7 +41,6 @@ public class FootprintCommandService {
             MemberRepository memberRepository,
             PetRepository petRepository,
             FootprintNotificationService footprintNotificationService,
-            DeviceTokenRepository deviceTokenRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
