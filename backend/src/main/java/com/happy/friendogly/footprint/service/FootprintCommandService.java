@@ -1,5 +1,8 @@
 package com.happy.friendogly.footprint.service;
 
+import static com.happy.friendogly.footprint.domain.WalkStatus.AFTER;
+import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
+
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
@@ -12,14 +15,12 @@ import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualRespons
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
-import com.happy.friendogly.notification.service.NotificationService;
+import com.happy.friendogly.notification.service.FootprintNotificationService;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,21 +34,19 @@ public class FootprintCommandService {
     private final FootprintRepository footprintRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
-    private final NotificationService notificationService;
-    private final DeviceTokenRepository deviceTokenRepository;
+    private final FootprintNotificationService footprintNotificationService;
 
     public FootprintCommandService(
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
             PetRepository petRepository,
-            NotificationService notificationService,
+            FootprintNotificationService footprintNotificationService,
             DeviceTokenRepository deviceTokenRepository
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
-        this.notificationService = notificationService;
-        this.deviceTokenRepository = deviceTokenRepository;
+        this.footprintNotificationService = footprintNotificationService;
     }
 
     public SaveFootprintResponse save(Long memberId, SaveFootprintRequest request) {
@@ -67,9 +66,9 @@ public class FootprintCommandService {
                         .build()
         );
 
-        List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, member);
+        List<Footprint> nearFootprints = findNearFootprintsWithoutMine(footprint, member);
         String comingMemberName = member.getName().getValue();
-        sendWalkComingNotification(comingMemberName, nearDeviceTokens);
+        footprintNotificationService.sendWalkComingNotification(comingMemberName, nearFootprints);
 
         return new SaveFootprintResponse(
                 footprint.getId(),
@@ -97,14 +96,6 @@ public class FootprintCommandService {
         }
     }
 
-    private void sendWalkComingNotification(String memberName, List<String> nearDeviceTokens) {
-        notificationService.sendFootprintNotification(
-                "반갑개",
-                "내 산책 장소에 " + memberName + "님도 산책온대요!",
-                nearDeviceTokens
-        );
-    }
-
     public UpdateWalkStatusAutoResponse updateWalkStatusAuto(Long memberId, UpdateWalkStatusAutoRequest request) {
         Footprint footprint = footprintRepository.getTopOneByMemberIdOrderByCreatedAtDesc(memberId);
         if (footprint.isDeleted()) {
@@ -115,22 +106,25 @@ public class FootprintCommandService {
 
         footprint.updateWalkStatusWithCurrentLocation(new Location(request.latitude(), request.longitude()));
 
+        Member walkStartMember = memberRepository.getById(memberId);
         if (beforeWalkStatus.isBefore() && footprint.getWalkStatus().isOngoing()) {
-            Member startWalkMember = memberRepository.getById(memberId);
-            List<String> nearDeviceTokens = findNearDeviceTokensWithoutMine(footprint, startWalkMember);
-            String memberName = footprint.getMember().getName().getValue();
-            sendWalkStartNotification(memberName, nearDeviceTokens);
+            List<Footprint> nearFootprints = findNearFootprintsWithoutMine(footprint, walkStartMember);
+            String memberName = walkStartMember.getName().getValue();
+            footprintNotificationService.sendWalkStartNotificationToNear(memberName, nearFootprints);
+            footprintNotificationService.sendWalkNotificationToMe(
+                    memberId,
+                    ONGOING
+            );
+        }
+
+        if (beforeWalkStatus.isOngoing() && footprint.getWalkStatus().isAfter()) {
+            footprintNotificationService.sendWalkNotificationToMe(
+                    memberId,
+                    AFTER
+            );
         }
 
         return new UpdateWalkStatusAutoResponse(footprint.getWalkStatus(), footprint.findChangedWalkStatusTime());
-    }
-
-    private void sendWalkStartNotification(String startMemberName, List<String> nearDeviceTokens) {
-        notificationService.sendFootprintNotification(
-                "반갑개",
-                "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
-                nearDeviceTokens
-        );
     }
 
     public UpdateWalkStatusManualResponse updateWalkStatusManual(Long memberId) {
@@ -147,7 +141,7 @@ public class FootprintCommandService {
         footprint.updateToDeleted();
     }
 
-    private List<String> findNearDeviceTokensWithoutMine(Footprint standardFootprint, Member member) {
+    private List<Footprint> findNearFootprintsWithoutMine(Footprint standardFootprint, Member member) {
         LocalDateTime startTime = LocalDateTime.now().minusHours(FOOTPRINT_DURATION_HOURS);
         List<Footprint> footprints = footprintRepository.findAllByIsDeletedFalseAndCreatedAtAfter(startTime);
 
@@ -155,9 +149,6 @@ public class FootprintCommandService {
                 .filter(otherFootprint -> otherFootprint.isInsideBoundary(standardFootprint.getLocation())
                         && otherFootprint.getMember() != member
                         && !otherFootprint.getWalkStatus().isAfter())
-                .map(otherFootprint -> deviceTokenRepository.findByMemberId(otherFootprint.getMember().getId()))
-                .flatMap(Optional::stream)
-                .map(DeviceToken::getDeviceToken)
                 .toList();
     }
 }
