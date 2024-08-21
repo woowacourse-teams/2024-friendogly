@@ -1,8 +1,8 @@
 package com.happy.friendogly.presentation.ui.setting
 
 data class SettingUiState(
-    val totalAlarmPushPermitted: Boolean = false,
-    val chattingAlarmPushPermitted: Boolean = false,
-    val clubAlarmPushPermitted: Boolean = false,
-    val woofAlarmPushPermitted: Boolean = false,
+    val totalAlarmPushPermitted: Boolean = true,
+    val chattingAlarmPushPermitted: Boolean = true,
+    val clubAlarmPushPermitted: Boolean = true,
+    val woofAlarmPushPermitted: Boolean = true,
 )

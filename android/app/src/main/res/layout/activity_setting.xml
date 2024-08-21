@@ -16,11 +16,11 @@
         android:background="@color/white">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
             android:id="@+id/container_header"
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
             android:background="@color/transparent"
+            app:contentInsetStart="0dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -28,16 +28,16 @@
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/setting"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:text="@string/setting" />
 
             <ImageView
                 android:id="@+id/iv_close"
                 onSingleClick="@{() -> vm.navigateToBack()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:layout_gravity="start"
+                android:padding="16dp"
                 app:srcCompat="@drawable/ic_arrow_left" />
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -63,6 +63,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
+            android:visibility="gone"
             app:description="@{String.format(@string/alarm_settings_total_push_description)}"
             app:layout_constraintEnd_toStartOf="@id/alarm_settings_total_push_switch"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,8 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:checked="@{vm.uiState.totalAlarmPushPermitted}"
-            android:onCheckedChanged="@{(view, checked) -> vm.onTotalAlarmToggled(checked)}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/alarm_settings_total_push"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/alarm_settings_total_push"
@@ -108,8 +108,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:checked="@{vm.uiState.chattingAlarmPushPermitted}"
-            android:onCheckedChanged="@{(view, checked) -> vm.onChattingAlarmToggled(checked)}"
             app:layout_constraintBottom_toBottomOf="@id/alarm_settings_chatting_push"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/alarm_settings_chatting_push"
@@ -127,6 +125,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+
+            android:visibility="gone"
             app:description="@{String.format(@string/alarm_settings_club_push_description)}"
             app:layout_constraintEnd_toStartOf="@id/alarm_settings_club_push_switch"
             app:layout_constraintHorizontal_bias="0.0"
@@ -140,8 +140,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:checked="@{vm.uiState.clubAlarmPushPermitted}"
-            android:onCheckedChanged="@{(view, checked) -> vm.onClubAlarmToggled(checked)}"
+            android:visibility="gone"
+
             app:layout_constraintBottom_toBottomOf="@id/alarm_settings_club_push"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/alarm_settings_club_push"
@@ -171,8 +171,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:checked="@{vm.uiState.woofAlarmPushPermitted}"
-            android:onCheckedChanged="@{(view, checked) -> vm.onWoofAlarmToggled(checked)}"
             app:layout_constraintBottom_toBottomOf="@id/alarm_settings_woof_push"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/alarm_settings_woof_push"

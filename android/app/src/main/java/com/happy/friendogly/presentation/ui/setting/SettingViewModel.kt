@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
+import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
+import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -15,6 +17,8 @@ import com.happy.friendogly.presentation.base.emit
 
 class SettingViewModel(
     private val deleteTokenUseCase: DeleteTokenUseCase,
+    private val getChatAlarmUseCase: GetChatAlarmUseCase,
+    private val getWoofAlarmUseCase: GetWoofAlarmUseCase,
     private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
     private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
 ) : BaseViewModel() {
@@ -32,17 +36,41 @@ class SettingViewModel(
     private val _loading: MutableLiveData<Event<Boolean>> = MutableLiveData(null)
     val loading: LiveData<Event<Boolean>> get() = _loading
 
-    fun onTotalAlarmToggled(checked: Boolean) {}
+    init {
+        setAlarmSetting()
+    }
 
-    fun onChattingAlarmToggled(checked: Boolean) {
+    private fun setAlarmSetting() {
+        launch {
+            getChatAlarmUseCase().onSuccess {
+                _uiState.value =
+                    _uiState.value?.copy(
+                        chattingAlarmPushPermitted = it,
+                    )
+            }.onFailure {
+                // TODO 에러핸들링
+            }
+        }
+
+        launch {
+            getWoofAlarmUseCase().onSuccess {
+                _uiState.value =
+                    _uiState.value?.copy(
+                        woofAlarmPushPermitted = it,
+                    )
+            }.onFailure {
+                // TODO 에러핸들링
+            }
+        }
+    }
+
+    fun saveChattingAlarmSetting(checked: Boolean) {
         launch {
             saveChatAlarmUseCase(checked)
         }
     }
 
-    fun onClubAlarmToggled(checked: Boolean) {}
-
-    fun onWoofAlarmToggled(checked: Boolean) {
+    fun saveWoofAlarmSetting(checked: Boolean) {
         launch {
             saveWoofAlarmUseCase(checked)
         }
@@ -108,12 +136,16 @@ class SettingViewModel(
 
     companion object {
         fun factory(
+            getChatAlarmUseCase: GetChatAlarmUseCase,
+            getWoofAlarmUseCase: GetWoofAlarmUseCase,
             saveChatAlarmUseCase: SaveChatAlarmUseCase,
             saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
             deleteTokenUseCase: DeleteTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 SettingViewModel(
+                    getChatAlarmUseCase = getChatAlarmUseCase,
+                    getWoofAlarmUseCase = getWoofAlarmUseCase,
                     saveChatAlarmUseCase = saveChatAlarmUseCase,
                     saveWoofAlarmUseCase = saveWoofAlarmUseCase,
                     deleteTokenUseCase = deleteTokenUseCase,
