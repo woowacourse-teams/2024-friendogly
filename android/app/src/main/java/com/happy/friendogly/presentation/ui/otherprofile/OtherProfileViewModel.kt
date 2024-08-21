@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
@@ -54,8 +55,12 @@ class OtherProfileViewModel(
                             otherProfileSkeleton = state.otherProfileSkeleton.copy(userProfile = false),
                         )
                 },
-                onError = {
-                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                onError = { error ->
+                    when (error) {
+                        DataError.Network.NO_INTERNET -> _message.emit(OtherProfileMessage.NoInternetMessage)
+                        DataError.Network.SERVER_ERROR -> _message.emit(OtherProfileMessage.ServerErrorMessage)
+                        else -> _message.emit(OtherProfileMessage.ServerErrorMessage)
+                    }
                 },
             )
         }
@@ -72,8 +77,12 @@ class OtherProfileViewModel(
                             otherProfileSkeleton = state.otherProfileSkeleton.copy(petProfile = false),
                         )
                 },
-                onError = {
-                    _message.emit(OtherProfileMessage.DefaultErrorMessage)
+                onError = { error ->
+                    when (error) {
+                        DataError.Network.NO_INTERNET -> _message.emit(OtherProfileMessage.NoInternetMessage)
+                        DataError.Network.SERVER_ERROR -> _message.emit(OtherProfileMessage.ServerErrorMessage)
+                        else -> _message.emit(OtherProfileMessage.ServerErrorMessage)
+                    }
                 },
             )
         }
