@@ -91,7 +91,13 @@ class WoofViewModel(
                         ),
                     )
                 } else {
-                    _uiState.value = WoofUiState.RegisteringFootprint
+                    _uiState.value = WoofUiState.Loading
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            _uiState.value = WoofUiState.RegisteringFootprint
+                        },
+                        ANIMATE_DURATION_MILLIS,
+                    )
                 }
             }.onFailure {}
         }

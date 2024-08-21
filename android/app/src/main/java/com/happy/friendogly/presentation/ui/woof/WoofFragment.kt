@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.view.View
+import android.widget.Chronometer
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -49,6 +50,7 @@ import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterHelpClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
+import com.happy.friendogly.presentation.utils.logWalkHelpClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
@@ -92,7 +94,6 @@ class WoofFragment :
     private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
-    private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
@@ -101,6 +102,8 @@ class WoofFragment :
         )
     }
     private val adapter by lazy { PetDetailInfoAdapter(this) }
+    private val mapView: MapView by lazy { binding.mapView }
+    private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
 
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
@@ -261,12 +264,12 @@ class WoofFragment :
 
     override fun clickDeleteMyFootprintMarkerBtn() {
         viewModel.deleteMyFootprintMarker()
-        binding.chronometerWoofWalkTime.stop()
+        walkTimeChronometer.stop()
     }
 
     override fun clickEndWalkBtn() {
         viewModel.endWalk()
-        binding.chronometerWoofWalkTime.stop()
+        walkTimeChronometer.stop()
     }
 
     override fun clickBackBtn() {
@@ -307,7 +310,21 @@ class WoofFragment :
 
     override fun clickRegisterHelp() {
         analyticsHelper.logRegisterHelpClicked()
-        showRegisterHelpBalloon()
+        val balloon = createBalloon(resources.getString(R.string.woof_register_help))
+        balloon.showAlignTop(binding.btnWoofRegisterHelp)
+    }
+
+    override fun clickWalkHelp() {
+        analyticsHelper.logWalkHelpClicked()
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return
+        val text =
+            if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
+                resources.getString(R.string.woof_walk_before_help)
+            } else {
+                resources.getString(R.string.woof_walk_ongoing_help)
+            }
+        val balloon = createBalloon(text)
+        balloon.showAlignTop(binding.btnWoofWalkHelp)
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -605,28 +622,6 @@ class WoofFragment :
         changePreviousClickedMarkerSize()
     }
 
-    private fun showRegisterHelpBalloon() {
-        val balloon =
-            Balloon.Builder(requireContext())
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setText(resources.getString(R.string.woof_register_description))
-                .setTextColorResource(R.color.white)
-                .setTextSize(15f)
-                .setMarginBottom(10)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-                .setArrowSize(10)
-                .setArrowPosition(0.5f)
-                .setPadding(12)
-                .setCornerRadius(8f)
-                .setBackgroundColorResource(R.color.coral400)
-                .setBalloonAnimation(BalloonAnimation.ELASTIC)
-                .setLifecycleOwner(viewLifecycleOwner)
-                .build()
-
-        balloon.showAlignTop(binding.btnWoofRegisterHelp)
-    }
-
     private fun changePreviousClickedMarkerSize() {
         val footprintInfo = viewModel.footprintInfo.value ?: return
         footprintInfo.marker.width = MARKER_DEFAULT_WIDTH
@@ -658,22 +653,20 @@ class WoofFragment :
 
     private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(
-                    convertLtnLng(position.latitude),
-                    convertLtnLng(position.longitude),
-                    1,
-                ) { addresses ->
-                    showAddress(addresses)
-                }
-            } else {
-                val addresses =
-                    geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
+        val addressLatLng = convertLtnLng(position)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geocoder.getFromLocation(
+                addressLatLng.latitude,
+                addressLatLng.longitude,
+                1,
+            ) { addresses ->
                 showAddress(addresses)
             }
-        } catch (e: Exception) {
-            getAddress(position)
+        } else {
+            val addresses =
+                geocoder.getFromLocation(addressLatLng.latitude, addressLatLng.longitude, 1)
+                    ?: return
+            showAddress(addresses)
         }
     }
 
@@ -690,8 +683,8 @@ class WoofFragment :
         }
     }
 
-    private fun convertLtnLng(latLngArg: Double): Double {
-        return floor(latLngArg * 100) / 100
+    private fun convertLtnLng(latLng: LatLng): LatLng {
+        return LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
     }
 
     private fun monitorDistanceAndManageWalkStatus() {
@@ -733,9 +726,9 @@ class WoofFragment :
     private fun startWalkStatusChronometer(changedWalkStatusTime: LocalDateTime) {
         val now = java.time.LocalDateTime.now()
         val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
-        binding.chronometerWoofWalkTime.base =
+        walkTimeChronometer.base =
             SystemClock.elapsedRealtime() - duration.toMillis()
-        binding.chronometerWoofWalkTime.start()
+        walkTimeChronometer.start()
     }
 
     private fun markFootprintMarkers(filterState: FilterState) {
@@ -780,6 +773,25 @@ class WoofFragment :
                 (activity as MainActivityActionHandler).navigateToRegisterPet(null)
             },
         ).show(parentFragmentManager, tag)
+    }
+
+    private fun createBalloon(text: String): Balloon {
+        return Balloon.Builder(requireContext())
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText(text)
+            .setTextColorResource(R.color.white)
+            .setTextSize(14f)
+            .setMarginBottom(10)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.coral400)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
     }
 
     companion object {

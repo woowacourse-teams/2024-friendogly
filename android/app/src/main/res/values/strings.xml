@@ -261,7 +261,10 @@
     <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
     <string name="woof_register_walk_area">발자국 등록</string>
-    <string name="woof_register_description">위치가 발자국 반경 1km 이내면 산책이 시작됩니다!\n 발자국은 30초마다 새로 등록할 수 있으며,\n기존 발자국은 삭제됩니다!</string>
+    <string name="woof_register_help">발자국은 30초마다 새로 등록할 수 있으며\n기존 발자국은 삭제됩니다!</string>
+    <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
+    <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
+
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>

@@ -7,7 +7,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -127,31 +126,35 @@ fun TextView.bindWalkStatusInfo(walkStatusInfo: WalkStatusInfoUiModel?) {
 @BindingAdapter("myWalkStatus")
 fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
-        val drawable: Drawable? = when (walkStatus) {
-            WalkStatus.BEFORE -> ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_marker_before_clicked
-            )
+        val drawable: Drawable? =
+            when (walkStatus) {
+                WalkStatus.BEFORE ->
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_marker_before_clicked,
+                    )
 
-            WalkStatus.ONGOING -> ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_marker_ongoing_clicked
-            )
+                WalkStatus.ONGOING ->
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_marker_ongoing_clicked,
+                    )
 
-            WalkStatus.AFTER -> ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_marker_after_clicked
-            )
-        }
-        text = when (walkStatus) {
-            WalkStatus.BEFORE -> context.getString(R.string.woof_status_before)
-            WalkStatus.ONGOING -> context.getString(R.string.woof_status_ongoing)
-            WalkStatus.AFTER -> context.getString(R.string.woof_status_after)
-        }
+                WalkStatus.AFTER ->
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.ic_marker_after_clicked,
+                    )
+            }
+        text =
+            when (walkStatus) {
+                WalkStatus.BEFORE -> context.getString(R.string.woof_status_before)
+                WalkStatus.ONGOING -> context.getString(R.string.woof_status_ongoing)
+                WalkStatus.AFTER -> context.getString(R.string.woof_status_after)
+            }
         setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
 }
-
 
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: WoofUiState) {
@@ -161,18 +164,18 @@ fun View.bindRegisteringVisibility(uiState: WoofUiState) {
 @BindingAdapter("registeringVisibilityAnimation")
 fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.RegisteringFootprint) {
-        showViewAnimation(this)
+        showViewAnimation()
     } else {
-        hideViewAnimation(this)
+        hideViewAnimation()
     }
 }
 
 @BindingAdapter("viewingVisibilityAnimation")
 fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.ViewingFootprintInfo) {
-        showViewAnimation(this)
+        showViewAnimation()
     } else {
-        hideViewAnimation(this)
+        hideViewAnimation()
     }
 }
 
@@ -184,9 +187,9 @@ fun View.bindLoadingVisibility(uiState: WoofUiState) {
 @BindingAdapter("loadingAnimation")
 fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
     if (uiState == WoofUiState.Loading) {
-        showLoadingAnimation(this)
+        playAnimation()
     } else {
-        hideLoadingAnimation(this)
+        pauseAnimation()
     }
 }
 
@@ -251,7 +254,6 @@ fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
     }
 }
 
-
 @BindingAdapter("locationBtnMarginBottom")
 fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
     fun Int.dp(): Int {
@@ -260,11 +262,12 @@ fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
             .toInt()
     }
 
-    val marginBottom = if (myWalkStatus != null) {
-        if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
-    } else {
-        36
-    }
+    val marginBottom =
+        if (myWalkStatus != null) {
+            if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+        } else {
+            36
+        }
 
     val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
     layoutParams.bottomMargin = marginBottom.dp()
