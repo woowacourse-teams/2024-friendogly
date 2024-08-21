@@ -86,7 +86,7 @@ class WoofViewModel(
                     _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
                 } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
                     _alertActions.emit(
-                        WoofAlertActions.AlertCantClickMarkBtnSnackbar(
+                        WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar(
                             footPrintMarkBtnInfo.remainingTime(),
                         ),
                     )
@@ -99,7 +99,9 @@ class WoofViewModel(
                         ANIMATE_DURATION_MILLIS,
                     )
                 }
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar)
+            }
         }
     }
 
@@ -117,19 +119,22 @@ class WoofViewModel(
                 val myFootprint = nearFootprints.firstOrNull { footprint -> footprint.isMine }
                 _makeMarkerActions.value =
                     Event(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint))
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar)
+            }
         }
     }
 
     fun registerFootprint(latLng: LatLng) {
         viewModelScope.launch {
             postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { myFootprint ->
-                _makeMarkerActions.value =
-                    Event(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint.toFootprint()))
+                _makeMarkerActions.emit(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint.toFootprint()))
                 _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
                 _uiState.value = WoofUiState.FindingFriends()
                 scanNearFootprints(latLng)
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToRegisterFootprintSnackbar)
+            }
         }
     }
 
@@ -155,9 +160,14 @@ class WoofViewModel(
             ).onSuccess { nearFootprints ->
                 val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
                 analyticsHelper.logNearFootprintSize(otherFootprints.size)
-                _makeMarkerActions.value =
-                    Event(WoofMakeMarkerActions.MakeNearFootprintMarkers(nearFootprints = otherFootprints))
-            }.onFailure {}
+                _makeMarkerActions.emit(
+                    WoofMakeMarkerActions.MakeNearFootprintMarkers(
+                        nearFootprints = otherFootprints,
+                    ),
+                )
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar)
+            }
         }
     }
 
@@ -190,7 +200,9 @@ class WoofViewModel(
         viewModelScope.launch {
             getFootprintInfoUseCase(footprintId).onSuccess { footprintInfo ->
                 _footprintInfo.value = footprintInfo.toPresentation(marker)
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar)
+            }
         }
     }
 
@@ -226,7 +238,9 @@ class WoofViewModel(
                             _myWalkStatus.value = footprintRecentWalkStatus
                         }
                 }
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar)
+            }
         }
     }
 
@@ -235,7 +249,9 @@ class WoofViewModel(
             patchFootprintRecentWalkStatusManualUseCase(walkStatus = WalkStatus.AFTER).onSuccess { footprintRecentWalkStatus ->
                 _alertActions.emit(WoofAlertActions.AlertEndWalkSnackbar)
                 _myWalkStatus.value = footprintRecentWalkStatus
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToEndWalkSnackbar)
+            }
         }
     }
 
@@ -246,7 +262,9 @@ class WoofViewModel(
                 _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
                 _myWalkStatus.value = null
                 _myFootprintMarker.value = null
-            }.onFailure {}
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
+            }
         }
     }
 

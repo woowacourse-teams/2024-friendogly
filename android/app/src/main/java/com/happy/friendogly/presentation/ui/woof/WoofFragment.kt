@@ -26,9 +26,9 @@ import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERM
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertCantClickMarkBtnSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertEndWalkSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertHasNotPetDialog
+import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkerRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
 import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
@@ -483,8 +483,7 @@ class WoofFragment :
         viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
-
-                is AlertCantClickMarkBtnSnackbar ->
+                is AlertMarkBtnClickBeforeTimeoutSnackbar ->
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -503,6 +502,42 @@ class WoofFragment :
                     )
 
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
+                is WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar ->
+                    showSnackbar(resources.getString(R.string.woof_fail_to_load_footprint_mark_btn_info))
+
+                is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_near_footprints,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToRegisterFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_register_footprint,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_footprint_info,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar ->
+                    showSnackbar(
+                        resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
+                    )
+
+                is WoofAlertActions.AlertFailToEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_fail_to_end_walk))
+                is WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_delete_my_footprint,
+                        ),
+                    )
             }
         }
     }

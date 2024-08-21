@@ -264,6 +264,13 @@
     <string name="woof_register_help">발자국은 30초마다 새로 등록할 수 있으며\n기존 발자국은 삭제됩니다!</string>
     <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
     <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
+    <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_load_near_footprints">주변 발자국을 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
+    <string name="woof_fail_to_load_footprint_info">발자국 정보를 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
+    <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
+    <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
 
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
