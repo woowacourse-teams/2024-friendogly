@@ -91,14 +91,14 @@ fun AnalyticsHelper.logSelectParticipationFilter(filterName: String) {
 fun AnalyticsHelper.logSelectClubFilter(filterName: String) {
     logEvent(
         type = Types.CLUB_SELECT_CLUB_FILTER,
-        ParamKeys.CLUB_CLUB_FILTER to filterName
+        ParamKeys.CLUB_CLUB_FILTER to filterName,
     )
 }
 
 fun AnalyticsHelper.logUnSelectAddClubFilter(filterName: String) {
     logEvent(
         type = Types.CLUB_ADD_UN_SELECT_FILTER,
-        ParamKeys.CLUB_ADD_UN_SELECT_FILTER to filterName
+        ParamKeys.CLUB_ADD_UN_SELECT_FILTER to filterName,
     )
 }
 
@@ -111,13 +111,13 @@ fun AnalyticsHelper.logAddClubClick() {
 fun AnalyticsHelper.logSelectClubMemberCount(count: Int) {
     logEvent(
         type = Types.CLUB_ADD_MEMBER_COUNT,
-        ParamKeys.CLUB_MEMBER_COUNT to count
+        ParamKeys.CLUB_MEMBER_COUNT to count,
     )
 }
 
 fun AnalyticsHelper.logDeleteMemberClick() {
     logEvent(
-        type = Types.CLUB_DELETE_CLICKED
+        type = Types.CLUB_DELETE_CLICKED,
     )
 }
 
@@ -129,7 +129,7 @@ fun AnalyticsHelper.logParticipateClick() {
 
 fun AnalyticsHelper.logUpdateClubClick() {
     logEvent(
-        type = Types.CLUB_UPDATE_CLICKED
+        type = Types.CLUB_UPDATE_CLICKED,
     )
 }
 
@@ -139,26 +139,26 @@ fun AnalyticsHelper.logUpdateUserLocation() {
     )
 }
 
-fun AnalyticsHelper.logClubDetailClick(){
+fun AnalyticsHelper.logClubDetailClick() {
     logEvent(
         type = Types.CLUB_CLUB_DETAIL_CLICKED,
     )
 }
 
-fun AnalyticsHelper.logMyClubClick(){
+fun AnalyticsHelper.logMyClubClick() {
     logEvent(
         type = Types.CLUB_MY_CLICKED,
     )
 }
 
-fun AnalyticsHelper.logMyAddClubClick(){
+fun AnalyticsHelper.logMyAddClubClick() {
     logEvent(
         type = Types.CLUB_MY_ADD_BTN_CLICKED,
     )
 }
 
-fun AnalyticsHelper.logListAddClubClick(){
+fun AnalyticsHelper.logListAddClubClick() {
     logEvent(
-        type = Types.CLUB_LIST_ADD_BTN_CLICKED
+        type = Types.CLUB_LIST_ADD_BTN_CLICKED,
     )
 }

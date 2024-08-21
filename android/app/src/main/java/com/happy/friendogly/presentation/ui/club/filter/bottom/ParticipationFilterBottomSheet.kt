@@ -22,7 +22,7 @@ class ParticipationFilterBottomSheet(
     val binding: BottomSheetParticipationFilterSelectorBinding
         get() = _binding!!
 
-    private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel>{
+    private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel> {
         ClubFilterViewModel.factory(
             analyticsHelper = AppModule.getInstance().analyticsHelper,
         )

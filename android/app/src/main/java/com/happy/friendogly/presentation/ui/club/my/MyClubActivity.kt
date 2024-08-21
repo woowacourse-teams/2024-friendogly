@@ -19,7 +19,6 @@ import com.happy.friendogly.presentation.utils.logMyAddClubClick
 
 class MyClubActivity :
     BaseActivity<ActivityMyClubBinding>(R.layout.activity_my_club), MyClubActionHandler {
-
     private val analyticsHelper = AppModule.getInstance().analyticsHelper
 
     private val viewModel: MyClubViewModel by viewModels {

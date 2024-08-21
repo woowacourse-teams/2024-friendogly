@@ -27,7 +27,7 @@ class ClubFilterBottomSheet(
     private val genderBinding: BottomSheetGenderFilterSelectorBinding
         get() = _genderBinding!!
 
-    private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel>{
+    private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel> {
         ClubFilterViewModel.factory(
             analyticsHelper = AppModule.getInstance().analyticsHelper,
         )

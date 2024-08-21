@@ -64,8 +64,8 @@ class ClubFilterViewModel(
         }
     }
 
-    companion object{
-        fun factory(analyticsHelper: AnalyticsHelper): ViewModelProvider.Factory{
+    companion object {
+        fun factory(analyticsHelper: AnalyticsHelper): ViewModelProvider.Factory {
             return viewModelFactory {
                 ClubFilterViewModel(
                     analyticsHelper = analyticsHelper,
