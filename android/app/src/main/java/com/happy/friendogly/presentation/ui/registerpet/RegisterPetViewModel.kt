@@ -245,7 +245,6 @@ class RegisterPetViewModel(
     fun registerPet() {
         if (this.isProfileComplete.value == true) {
             launch {
-//                _loading.emit(true)
                 val state = uiState.value ?: return@launch
                 val name = petName.value ?: return@launch
                 val description = petDescription.value ?: return@launch
@@ -254,6 +253,7 @@ class RegisterPetViewModel(
                 val sizeType = petSize.value?.toSizeType() ?: return@launch
                 val gender = petGender.value?.toGender(neutering) ?: return@launch
 
+                _loading.emit(true)
                 if (state.isFirstTimeSetup) {
                     postPet(name, description, birthday, sizeType, gender)
                 } else {
@@ -287,6 +287,8 @@ class RegisterPetViewModel(
             onError = { error ->
                 when (error) {
                     DataError.Network.FILE_SIZE_EXCEED -> _message.emit(RegisterPetMessage.FileSizeExceedMessage)
+                    DataError.Network.NO_INTERNET -> _message.emit(RegisterPetMessage.NoInternetMessage)
+                    DataError.Network.SERVER_ERROR -> _message.emit(RegisterPetMessage.ServerErrorMessage)
                     else -> _message.emit(RegisterPetMessage.ServerErrorMessage)
                 }
             },
@@ -325,6 +327,7 @@ class RegisterPetViewModel(
             onError = { error ->
                 when (error) {
                     DataError.Network.FILE_SIZE_EXCEED -> _message.emit(RegisterPetMessage.FileSizeExceedMessage)
+                    DataError.Network.NO_INTERNET -> _message.emit(RegisterPetMessage.NoInternetMessage)
                     DataError.Network.SERVER_ERROR -> _message.emit(RegisterPetMessage.ServerErrorMessage)
                     else -> _message.emit(RegisterPetMessage.ServerErrorMessage)
                 }

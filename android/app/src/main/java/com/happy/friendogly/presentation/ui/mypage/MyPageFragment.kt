@@ -71,7 +71,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         viewModel.message.observeEvent(viewLifecycleOwner) { message ->
             when (message) {
+                is MyPageMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
                 is MyPageMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                is MyPageMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 

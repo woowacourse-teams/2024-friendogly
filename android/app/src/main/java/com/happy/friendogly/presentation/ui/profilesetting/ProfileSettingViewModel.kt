@@ -132,6 +132,8 @@ class ProfileSettingViewModel(
             onError = { error ->
                 when (error) {
                     DataError.Network.FILE_SIZE_EXCEED -> _message.emit(ProfileSettingMessage.FileSizeExceedMessage)
+                    DataError.Network.NO_INTERNET -> _message.emit(ProfileSettingMessage.NoInternetMessage)
+                    DataError.Network.SERVER_ERROR -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
                     else -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
                 }
             },
@@ -189,6 +191,7 @@ class ProfileSettingViewModel(
                 when (error) {
                     DataError.Network.FILE_SIZE_EXCEED -> _message.emit(ProfileSettingMessage.FileSizeExceedMessage)
                     DataError.Network.NO_INTERNET -> _message.emit(ProfileSettingMessage.NoInternetMessage)
+                    DataError.Network.SERVER_ERROR -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
                     else -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
                 }
             },

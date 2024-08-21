@@ -20,21 +20,43 @@ class MemberDataSourceImpl(
         name: String,
         accessToken: String,
         file: MultipartBody.Part?,
-    ): Result<RegisterDto> =
-        runCatching {
-            val body = PostMembersRequest(name = name, accessToken = accessToken)
-            service.postMember(body = body, file = file).data.toData()
+    ): Result<RegisterDto> {
+        val result =
+            runCatching {
+                val body = PostMembersRequest(name = name, accessToken = accessToken)
+                service.postMember(body = body, file = file).data.toData()
+            }
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            is IllegalStateException -> Result.failure(FileSizeExceedExceptionDto)
+            else -> Result.failure(exception)
         }
+    }
 
-    override suspend fun getMemberMine(): Result<MemberDto> =
-        runCatching {
-            service.getMemberMine().data.toData()
+    override suspend fun getMemberMine(): Result<MemberDto> {
+        val result =
+            runCatching {
+                service.getMemberMine().data.toData()
+            }
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> Result.failure(exception)
         }
+    }
 
-    override suspend fun getMember(id: Long): Result<MemberDto> =
-        runCatching {
-            service.getMember(id = id).data.toData()
+    override suspend fun getMember(id: Long): Result<MemberDto> {
+        val result =
+            runCatching {
+                service.getMember(id = id).data.toData()
+            }
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> Result.failure(exception)
         }
+    }
 
     override suspend fun patchMember(
         name: String,

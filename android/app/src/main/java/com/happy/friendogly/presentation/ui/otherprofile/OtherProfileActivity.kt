@@ -65,7 +65,9 @@ class OtherProfileActivity :
 
         viewModel.message.observeEvent(this) { message ->
             when (message) {
+                is OtherProfileMessage.ServerErrorMessage -> showToastMessage(getString(R.string.server_error_message))
                 is OtherProfileMessage.DefaultErrorMessage -> showToastMessage(getString(R.string.default_error_message))
+                is OtherProfileMessage.NoInternetMessage -> showSnackbar(getString(R.string.no_internet_message))
             }
         }
 

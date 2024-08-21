@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
@@ -53,8 +54,12 @@ class MyPageViewModel(
                             myPageSkeleton = state.myPageSkeleton.copy(userProfile = false),
                         )
                 },
-                onError = {
-                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                onError = { error ->
+                    when (error) {
+                        DataError.Network.NO_INTERNET -> _message.emit(MyPageMessage.NoInternetMessage)
+                        DataError.Network.SERVER_ERROR -> _message.emit(MyPageMessage.ServerErrorMessage)
+                        else -> _message.emit(MyPageMessage.ServerErrorMessage)
+                    }
                 },
             )
         }
@@ -81,8 +86,12 @@ class MyPageViewModel(
                             )
                     }
                 },
-                onError = {
-                    _message.emit(MyPageMessage.DefaultErrorMessage)
+                onError = { error ->
+                    when (error) {
+                        DataError.Network.NO_INTERNET -> _message.emit(MyPageMessage.NoInternetMessage)
+                        DataError.Network.SERVER_ERROR -> _message.emit(MyPageMessage.ServerErrorMessage)
+                        else -> _message.emit(MyPageMessage.ServerErrorMessage)
+                    }
                 },
             )
         }
