@@ -32,6 +32,9 @@ file:
     path: firebase-friendogly-private-key.json
 
 spring:
+  sql:
+    init:
+      data-locations:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_URL}
