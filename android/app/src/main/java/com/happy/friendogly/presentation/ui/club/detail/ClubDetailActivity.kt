@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
-import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
@@ -124,10 +123,7 @@ class ClubDetailActivity :
             when (event) {
                 is ClubDetailEvent.OpenDogSelector -> openDogSelector(event.filters)
 
-                is ClubDetailEvent.Navigation.NavigateToChat -> {
-                    val clubParticipation = event.clubParticipation ?: return@observeEvent
-                    openChatRoom(clubParticipation)
-                }
+                is ClubDetailEvent.Navigation.NavigateToChat -> openChatRoom(event.chatRoomId)
 
                 ClubDetailEvent.Navigation.NavigateToHome -> finish()
 
@@ -164,12 +160,13 @@ class ClubDetailActivity :
         )
     }
 
-    private fun openChatRoom(clubParticipation: ClubParticipation) {
+    private fun openChatRoom(chatRoomId: Long) {
+        // TODO : memberId 지우기
         startActivity(
             ChatActivity.getIntent(
                 context = this@ClubDetailActivity,
-                chatId = clubParticipation.chatRoomId,
-                memberId = clubParticipation.memberId,
+                chatId = chatRoomId,
+                memberId = 1,
             ),
         )
     }

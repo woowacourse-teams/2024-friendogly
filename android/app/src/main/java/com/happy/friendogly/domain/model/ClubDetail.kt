@@ -22,4 +22,5 @@ data class ClubDetail(
     val isMyPetsEmpty: Boolean,
     val memberDetails: List<ClubMember>,
     val petDetails: List<ClubPet>,
+    val chatRoomId: Long? = null,
 )

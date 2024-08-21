@@ -24,6 +24,7 @@ fun ClubDetailDto.toDomain(): ClubDetail {
         imageUrl = imageUrl,
         memberCapacity = memberCapacity,
         status = status.toDomain(),
+        chatRoomId = chatRoomId,
     )
 }
 
