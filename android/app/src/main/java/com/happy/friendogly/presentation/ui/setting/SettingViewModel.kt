@@ -113,8 +113,8 @@ class SettingViewModel(
             },
             onError = { error ->
                 when (error) {
-                    DataError.Network.NO_INTERNET -> _message.emit(SettingMessage.TokenNotStoredErrorMessage)
-                    else -> _message.emit(SettingMessage.DefaultErrorMessage)
+                    DataError.Network.NO_INTERNET -> _message.emit(SettingMessage.NoInternetMessage)
+                    else -> _message.emit(SettingMessage.ServerErrorMessage)
                 }
             },
         )
