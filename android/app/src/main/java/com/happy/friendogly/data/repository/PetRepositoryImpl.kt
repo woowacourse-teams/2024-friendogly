@@ -13,7 +13,8 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.PetRepository
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
-import java.io.IOException
+import java.net.ConnectException
+import java.net.UnknownHostException
 
 class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
     override suspend fun getPetsMine(): DomainResult<List<Pet>, DataError.Network> =
@@ -22,10 +23,11 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
                 DomainResult.Success(result.map { petDto -> petDto.toDomain() })
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
@@ -50,10 +52,11 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
                 DomainResult.Success(petDto.toDomain())
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.SERVER_ERROR)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
@@ -64,10 +67,11 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
                 DomainResult.Success(result.map { petDto -> petDto.toDomain() })
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
@@ -98,7 +102,8 @@ class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
             onFailure = { e ->
                 when (e) {
                     is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
-                    is IOException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                     else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },

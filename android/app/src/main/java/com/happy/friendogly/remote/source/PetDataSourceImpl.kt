@@ -1,5 +1,6 @@
 package com.happy.friendogly.remote.source
 
+import com.happy.friendogly.data.error.ApiExceptionDto
 import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.ImageUpdateTypeDto
 import com.happy.friendogly.data.model.PetDto
@@ -15,10 +16,18 @@ import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
 
 class PetDataSourceImpl(private val service: PetService) : PetDataSource {
-    override suspend fun getPetsMine(): Result<List<PetDto>> =
-        runCatching {
-            service.getPetsMine().data.map { petResponse -> petResponse.toData() }
+    override suspend fun getPetsMine(): Result<List<PetDto>> {
+        val result =
+            runCatching {
+                service.getPetsMine().data.map { petResponse -> petResponse.toData() }
+            }
+
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> Result.failure(exception)
         }
+    }
 
     override suspend fun postPet(
         name: String,
@@ -27,24 +36,41 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
         sizeType: SizeTypeDto,
         gender: GenderDto,
         file: MultipartBody.Part?,
-    ): Result<PetDto> =
-        runCatching {
-            val body =
-                PostPetRequest(
-                    name = name,
-                    description = description,
-                    birthDate = birthday,
-                    sizeType = sizeType.toRemote(),
-                    gender = gender.toRemote(),
-                )
+    ): Result<PetDto> {
+        val result =
+            runCatching {
+                val body =
+                    PostPetRequest(
+                        name = name,
+                        description = description,
+                        birthDate = birthday,
+                        sizeType = sizeType.toRemote(),
+                        gender = gender.toRemote(),
+                    )
 
-            service.postPet(body = body, file = file).data.toData()
-        }
+                service.postPet(body = body, file = file).data.toData()
+            }
 
-    override suspend fun getPets(id: Long): Result<List<PetDto>> =
-        runCatching {
-            service.getPets(id = id).data.map { petResponse -> petResponse.toData() }
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            is IllegalStateException -> Result.failure(ApiExceptionDto.FileSizeExceedExceptionDto)
+            else -> Result.failure(exception)
         }
+    }
+
+    override suspend fun getPets(id: Long): Result<List<PetDto>> {
+        val result =
+            runCatching {
+                service.getPets(id = id).data.map { petResponse -> petResponse.toData() }
+            }
+
+        return when (val exception = result.exceptionOrNull()) {
+            null -> result
+            is ApiExceptionResponse -> Result.failure(exception.toData())
+            else -> Result.failure(exception)
+        }
+    }
 
     override suspend fun patchPet(
         petId: Long,
@@ -74,7 +100,8 @@ class PetDataSourceImpl(private val service: PetService) : PetDataSource {
         return when (val exception = result.exceptionOrNull()) {
             null -> result
             is ApiExceptionResponse -> Result.failure(exception.toData())
-            else -> throw exception
+            is IllegalStateException -> Result.failure(ApiExceptionDto.FileSizeExceedExceptionDto)
+            else -> Result.failure(exception)
         }
     }
 }
