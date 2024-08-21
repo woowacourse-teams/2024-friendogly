@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="filterName"
             type="java.lang.String" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@drawable/rect_coral100_fill_12"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
-        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
-            android:text="@{filterName}"
-            tools:text="참여 가능"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_rect_fill12_white"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
+            <TextView
+                style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{filterName}"
+                tools:text="참여 가능" />
 
-        <ImageView
-            android:tint="@color/white"
-            android:src="@drawable/ic_arrow_bottom"
-            android:layout_width="16dp"
-            android:layout_height="16dp" />
-    </LinearLayout>
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_arrow_bottom"
+                app:tint="@color/white" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+
