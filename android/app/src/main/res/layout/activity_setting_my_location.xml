@@ -103,5 +103,15 @@
             app:layout_constraintTop_toBottomOf="@+id/view_my_location_top_bar"
             app:lottie_fileName="animation_loading.json"
             app:lottie_loop="true" />
+        <ImageView
+            app:myLocationIcon = "@{vm.userAddress}"
+            android:src="@drawable/ic_marker_mine_clicked"
+            app:layout_constraintBottom_toTopOf="@+id/linear_layout_my_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_my_location_top_bar"
+            android:layout_marginTop="60dp"
+            android:layout_width="50dp"
+            android:layout_height="100dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
