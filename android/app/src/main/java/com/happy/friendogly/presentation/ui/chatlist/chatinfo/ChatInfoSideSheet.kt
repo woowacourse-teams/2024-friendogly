@@ -73,9 +73,8 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     }
 
     private fun initChatInfo() {
-        val memberId = requireNotNull(arguments?.getLong(EXTRA_MEMBER_ID, INVALID_ID))
         val chatId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))
-        viewModel.getChatMember(myMemberId = memberId, chatRoomId = chatId)
+        viewModel.getChatMember(chatRoomId = chatId)
         viewModel.getClubInfo(chatId)
         observeData()
     }
@@ -145,16 +144,13 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val EXTRA_MEMBER_ID = "myMemberId"
         private const val EXTRA_CHAT_ROOM_ID = "chatRoomId"
         private const val INVALID_ID = -1L
 
         fun getBundle(
-            myMemberId: Long,
             chatRoomId: Long,
         ): Bundle {
             return Bundle().apply {
-                putLong(EXTRA_MEMBER_ID, myMemberId)
                 putLong(EXTRA_CHAT_ROOM_ID, chatRoomId)
             }
         }

@@ -8,6 +8,8 @@ import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ChatInfoViewModel(
@@ -20,28 +22,25 @@ class ChatInfoViewModel(
     private val _joiningPeople: MutableLiveData<List<JoinPeople>> = MutableLiveData()
     val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
 
+    fun getClubInfo(chatRoomId: Long):Deferred<Long> =
+        viewModelScope.async {
+            val clubInfo = getChatRoomClubUseCase(chatRoomId).getOrThrow()
+            _clubInfo.value =
+                ChatInfoUiModel(
+                    clubId = clubInfo.clubId,
+                    dogSize = clubInfo.allowedSize,
+                    dogGender = clubInfo.allowedGender,
+                )
+            return@async clubInfo.clubId
+        }
+
+
     fun getChatMember(
         chatRoomId: Long,
-        myMemberId: Long,
     ) {
-        viewModelScope.launch {
-            getChatMemberUseCase.invoke(chatRoomId).onSuccess { members ->
-                _joiningPeople.value = members.map { it.toUiModel(myMemberId) }
-            }.onFailure {
-                // TODO 에러 처리
-            }
-        }
-    }
-
-    fun getClubInfo(chatRoomId: Long) {
         launch {
-            getChatRoomClubUseCase(chatRoomId).onSuccess {
-                _clubInfo.value =
-                    ChatInfoUiModel(
-                        clubId = it.clubId,
-                        dogSize = it.allowedSize,
-                        dogGender = it.allowedGender,
-                    )
+            getChatMemberUseCase.invoke(chatRoomId).onSuccess { members ->
+                _joiningPeople.value = members.map { it.toUiModel(getClubInfo(chatRoomId).await()) }
             }.onFailure {
                 // TODO 에러 처리
             }

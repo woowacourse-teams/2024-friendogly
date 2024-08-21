@@ -9,6 +9,7 @@ import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DisconnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.GetChatMessagesUseCase
+import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
+    private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val connectWebsocketUseCase: ConnectWebsocketUseCase,
     private val disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
@@ -43,30 +45,33 @@ class ChatViewModel(
             }
         }
 
+
     fun subscribeMessage(
         chatRoomId: Long,
-        myMemberId: Long,
     ) {
-        launch {
-            val connect = connect()
+        viewModelScope.launch {
+
+            val myMemberId = myMemberId(chatRoomId).await()
             val chats = initChats(chatRoomId, myMemberId)
 
-            launch {
-                connect.await()
-                _chats.value = chats.await()
-                subScribeMessageUseCase(chatRoomId, myMemberId).distinctUntilChanged().map {
-                    when (it) {
-                        is ChatComponent.Date -> it.toUiModel()
-                        is ChatComponent.Enter -> it.toUiModel()
-                        is ChatComponent.Leave -> it.toUiModel()
-                        is Message.Mine -> it.toUiModel()
-                        is Message.Other -> it.toUiModel()
-                    }
-                }.collect { newChat ->
-                    _chats.update { it.plus(newChat) }
+            connect().await()
+            _chats.value = chats.await()
+            subScribeMessageUseCase(chatRoomId, myMemberId).distinctUntilChanged().map {
+                when (it) {
+                    is ChatComponent.Date -> it.toUiModel()
+                    is ChatComponent.Enter -> it.toUiModel()
+                    is ChatComponent.Leave -> it.toUiModel()
+                    is Message.Mine -> it.toUiModel()
+                    is Message.Other -> it.toUiModel()
                 }
+            }.collect { newChat ->
+                _chats.update { it.plus(newChat) }
             }
         }
+    }
+
+    private fun myMemberId(chatRoomId: Long): Deferred<Long> = viewModelScope.async {
+        getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
     }
 
     private fun connect(): Deferred<Unit> =
@@ -108,6 +113,7 @@ class ChatViewModel(
 
     companion object {
         fun factory(
+            getChatRoomClubUseCase: GetChatRoomClubUseCase,
             getChatMessagesUseCase: GetChatMessagesUseCase,
             connectWebsocketUseCase: ConnectWebsocketUseCase,
             disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
@@ -116,6 +122,7 @@ class ChatViewModel(
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatViewModel(
+                    getChatRoomClubUseCase,
                     getChatMessagesUseCase,
                     connectWebsocketUseCase,
                     disconnectWebsocketUseCase,

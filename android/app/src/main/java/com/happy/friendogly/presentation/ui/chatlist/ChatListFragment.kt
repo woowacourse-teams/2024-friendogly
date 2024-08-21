@@ -41,7 +41,7 @@ class ChatListFragment :
     }
 
     override fun navigateToChat(chatId: Long) {
-        startActivity(ChatActivity.getIntent(requireContext(), chatId, viewModel.memberId))
+        startActivity(ChatActivity.getIntent(requireContext(), chatId))
     }
 
     companion object {

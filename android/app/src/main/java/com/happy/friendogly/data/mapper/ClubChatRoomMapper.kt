@@ -6,6 +6,7 @@ import com.happy.friendogly.domain.model.ChatRoomClub
 fun ChatRoomClubDto.toDomain(): ChatRoomClub =
     ChatRoomClub(
         clubId = clubId,
+        myMemberId = myMemberId,
         allowedGender = allowedGender.map { it.toDomain() },
         allowedSize = allowedSize.map { it.toDomain() },
     )
