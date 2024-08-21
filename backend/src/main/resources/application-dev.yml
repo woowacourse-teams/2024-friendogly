@@ -41,3 +41,6 @@ spring:
     console:
       enabled: true
       path: ${H2_CONSOLE_ENDPOINT}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
