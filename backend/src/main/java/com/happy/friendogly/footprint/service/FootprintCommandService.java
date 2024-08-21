@@ -15,7 +15,6 @@ import com.happy.friendogly.footprint.dto.response.UpdateWalkStatusManualRespons
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.notification.service.FootprintNotificationService;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
@@ -40,7 +39,7 @@ public class FootprintCommandService {
             FootprintRepository footprintRepository,
             MemberRepository memberRepository,
             PetRepository petRepository,
-            FootprintNotificationService footprintNotificationService,
+            FootprintNotificationService footprintNotificationService
     ) {
         this.footprintRepository = footprintRepository;
         this.memberRepository = memberRepository;
