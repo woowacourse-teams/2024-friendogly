@@ -27,10 +27,11 @@ class MemberRepositoryImpl(
                 DomainResult.Success(registerDto.toDomain())
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
@@ -41,10 +42,11 @@ class MemberRepositoryImpl(
                 DomainResult.Success(memberDto.toDomain())
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
@@ -55,10 +57,11 @@ class MemberRepositoryImpl(
                 DomainResult.Success(memberDto.toDomain())
             },
             onFailure = { e ->
-                if (e is ApiExceptionDto) {
-                    DomainResult.Error(e.error.data.errorCode.toDomain())
-                } else {
-                    DomainResult.Error(DataError.Network.NO_INTERNET)
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },
         )
