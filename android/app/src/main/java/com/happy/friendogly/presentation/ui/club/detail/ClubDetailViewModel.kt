@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -13,9 +14,11 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
+import com.happy.friendogly.presentation.utils.logParticipateClick
 import kotlinx.coroutines.launch
 
 class ClubDetailViewModel(
+    private val analyticsHelper: AnalyticsHelper,
     private val getClubUseCase: GetClubUseCase,
     private val postClubMemberUseCase: PostClubMemberUseCase,
 ) : BaseViewModel(), ClubDetailActionHandler {
@@ -64,6 +67,7 @@ class ClubDetailViewModel(
 
     fun joinClub(dogs: List<Long>) =
         viewModelScope.launch {
+            analyticsHelper.logParticipateClick()
             val clubDetailId = club.value?.clubId ?: return@launch
             postClubMemberUseCase(
                 id = clubDetailId,
@@ -87,11 +91,13 @@ class ClubDetailViewModel(
 
     companion object {
         fun factory(
+            analyticsHelper: AnalyticsHelper,
             getClubUseCase: GetClubUseCase,
             postClubMemberUseCase: PostClubMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubDetailViewModel(
+                    analyticsHelper = analyticsHelper,
                     getClubUseCase = getClubUseCase,
                     postClubMemberUseCase = postClubMemberUseCase,
                 )

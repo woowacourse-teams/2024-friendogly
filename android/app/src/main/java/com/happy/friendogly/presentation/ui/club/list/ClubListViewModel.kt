@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.UserAddress
@@ -23,9 +24,13 @@ import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
+import com.happy.friendogly.presentation.utils.logClubDetailClick
+import com.happy.friendogly.presentation.utils.logListAddClubClick
+import com.happy.friendogly.presentation.utils.logUpdateUserLocation
 import kotlinx.coroutines.launch
 
 class ClubListViewModel(
+    private val analyticsHelper: AnalyticsHelper,
     private val getPetsMineUseCase: GetPetsMineUseCase,
     private val getAddressUseCase: GetAddressUseCase,
     private val searchingClubsUseCase: GetSearchingClubsUseCase,
@@ -114,10 +119,12 @@ class ClubListViewModel(
     }
 
     override fun loadClub(clubId: Long) {
+        analyticsHelper.logClubDetailClick()
         _clubListEvent.emit(ClubListEvent.OpenClub(clubId))
     }
 
     override fun addClub() {
+        analyticsHelper.logListAddClubClick()
         applyAddClubState()
     }
 
@@ -170,6 +177,7 @@ class ClubListViewModel(
     }
 
     override fun addMyLocation() {
+        analyticsHelper.logUpdateUserLocation()
         _clubListEvent.emit(
             ClubListEvent.Navigation.NavigateToAddress,
         )
@@ -179,12 +187,14 @@ class ClubListViewModel(
 
     companion object {
         fun factory(
+            analyticsHelper: AnalyticsHelper,
             getPetsMineUseCase: GetPetsMineUseCase,
             getAddressUseCase: GetAddressUseCase,
             searchingClubsUseCase: GetSearchingClubsUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubListViewModel(
+                    analyticsHelper = analyticsHelper,
                     getPetsMineUseCase = getPetsMineUseCase,
                     getAddressUseCase = getAddressUseCase,
                     searchingClubsUseCase = searchingClubsUseCase,

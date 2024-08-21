@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetParticipationFilterSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
@@ -21,7 +22,11 @@ class ParticipationFilterBottomSheet(
     val binding: BottomSheetParticipationFilterSelectorBinding
         get() = _binding!!
 
-    private val viewModel: ClubFilterViewModel by viewModels()
+    private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel> {
+        ClubFilterViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

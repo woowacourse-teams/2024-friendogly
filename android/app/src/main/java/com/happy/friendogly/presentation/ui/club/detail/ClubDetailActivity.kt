@@ -34,6 +34,7 @@ class ClubDetailActivity :
 
     private val viewModel: ClubDetailViewModel by viewModels<ClubDetailViewModel> {
         ClubDetailViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             getClubUseCase = AppModule.getInstance().getClubUseCase,
             postClubMemberUseCase = AppModule.getInstance().postClubMemberUseCase,
         )

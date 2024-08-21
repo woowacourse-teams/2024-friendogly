@@ -14,9 +14,13 @@ import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubAdapter
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
+import com.happy.friendogly.presentation.utils.logClubDetailClick
+import com.happy.friendogly.presentation.utils.logMyAddClubClick
 
 class MyClubActivity :
     BaseActivity<ActivityMyClubBinding>(R.layout.activity_my_club), MyClubActionHandler {
+    private val analyticsHelper = AppModule.getInstance().analyticsHelper
+
     private val viewModel: MyClubViewModel by viewModels {
         MyClubViewModel.factory(
             getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
@@ -57,8 +61,7 @@ class MyClubActivity :
     private fun initObserver() {
         viewModel.myClubEvent.observeEvent(this) { event ->
             when (event) {
-                MyClubEvent.AddPet.OpenAddClub ->
-                    startActivity(ClubAddActivity.getIntent(this))
+                MyClubEvent.AddPet.OpenAddClub -> startActivity(ClubAddActivity.getIntent(this))
 
                 MyClubEvent.AddPet.OpenAddPet -> openRegisterPetDialog()
             }
@@ -95,10 +98,12 @@ class MyClubActivity :
     }
 
     override fun addClub() {
+        analyticsHelper.logMyAddClubClick()
         viewModel.loadPetState()
     }
 
     override fun openClub(clubId: Long) {
+        analyticsHelper.logClubDetailClick()
         startActivity(ClubDetailActivity.getIntent(this, clubId))
     }
 

@@ -26,6 +26,7 @@ import com.happy.friendogly.presentation.ui.setting.SettingActivity
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
 import com.happy.friendogly.presentation.utils.logChatListFragmentSwitched
 import com.happy.friendogly.presentation.utils.logClubListFragmentSwitched
+import com.happy.friendogly.presentation.utils.logMyClubClick
 import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
 import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
 
@@ -157,6 +158,7 @@ class MainActivity :
     }
 
     override fun navigateToMyClub(isMyHead: Boolean) {
+        analyticsHelper.logMyClubClick()
         startActivity(MyClubActivity.getIntent(this, isMyHead))
     }
 

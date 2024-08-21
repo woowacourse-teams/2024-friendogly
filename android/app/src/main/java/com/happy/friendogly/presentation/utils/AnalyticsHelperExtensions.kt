@@ -80,3 +80,85 @@ fun AnalyticsHelper.logFootprintMarkBtnInfo(
         ParamKeys.FOOTPRINT_MARK_BTN_REMAINING_TIME to remainingTime,
     )
 }
+
+fun AnalyticsHelper.logSelectParticipationFilter(filterName: String) {
+    logEvent(
+        type = Types.CLUB_SELECT_PARTICIPATION_FILTER,
+        ParamKeys.CLUB_PARTICIPATION_FILTER to filterName,
+    )
+}
+
+fun AnalyticsHelper.logSelectClubFilter(filterName: String) {
+    logEvent(
+        type = Types.CLUB_SELECT_CLUB_FILTER,
+        ParamKeys.CLUB_CLUB_FILTER to filterName,
+    )
+}
+
+fun AnalyticsHelper.logUnSelectAddClubFilter(filterName: String) {
+    logEvent(
+        type = Types.CLUB_ADD_UN_SELECT_FILTER,
+        ParamKeys.CLUB_ADD_UN_SELECT_FILTER to filterName,
+    )
+}
+
+fun AnalyticsHelper.logAddClubClick() {
+    logEvent(
+        type = Types.CLUB_ADD_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logSelectClubMemberCount(count: Int) {
+    logEvent(
+        type = Types.CLUB_ADD_MEMBER_COUNT,
+        ParamKeys.CLUB_MEMBER_COUNT to count,
+    )
+}
+
+fun AnalyticsHelper.logDeleteMemberClick() {
+    logEvent(
+        type = Types.CLUB_DELETE_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logParticipateClick() {
+    logEvent(
+        type = Types.CLUB_PARTICIPATE_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logUpdateClubClick() {
+    logEvent(
+        type = Types.CLUB_UPDATE_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logUpdateUserLocation() {
+    logEvent(
+        type = Types.CLUB_UPDATE_LOCATION_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logClubDetailClick() {
+    logEvent(
+        type = Types.CLUB_CLUB_DETAIL_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logMyClubClick() {
+    logEvent(
+        type = Types.CLUB_MY_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logMyAddClubClick() {
+    logEvent(
+        type = Types.CLUB_MY_ADD_BTN_CLICKED,
+    )
+}
+
+fun AnalyticsHelper.logListAddClubClick() {
+    logEvent(
+        type = Types.CLUB_LIST_ADD_BTN_CLICKED,
+    )
+}

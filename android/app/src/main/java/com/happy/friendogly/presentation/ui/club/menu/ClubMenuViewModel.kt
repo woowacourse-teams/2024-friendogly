@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
+import com.happy.friendogly.presentation.utils.logDeleteMemberClick
+import com.happy.friendogly.presentation.utils.logUpdateClubClick
 import kotlinx.coroutines.launch
 
 class ClubMenuViewModel(
+    private val analyticsHelper: AnalyticsHelper,
     private val deleteClubMemberUseCase: DeleteClubMemberUseCase,
 ) : BaseViewModel(), ClubMenuActionHandler {
     private val _clubMenuEvent: MutableLiveData<Event<ClubMenuEvent>> = MutableLiveData()
@@ -42,10 +46,12 @@ class ClubMenuViewModel(
     }
 
     override fun selectModify() {
+        analyticsHelper.logUpdateClubClick()
         _clubMenuEvent.emit(ClubMenuEvent.Modify)
     }
 
     override fun selectDelete() {
+        analyticsHelper.logDeleteMemberClick()
         _clubMenuEvent.emit(ClubMenuEvent.Delete)
     }
 
@@ -58,9 +64,13 @@ class ClubMenuViewModel(
     }
 
     companion object {
-        fun factory(deleteClubMemberUseCase: DeleteClubMemberUseCase): ViewModelProvider.Factory {
+        fun factory(
+            analyticsHelper: AnalyticsHelper,
+            deleteClubMemberUseCase: DeleteClubMemberUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 ClubMenuViewModel(
+                    analyticsHelper = analyticsHelper,
                     deleteClubMemberUseCase = deleteClubMemberUseCase,
                 )
             }

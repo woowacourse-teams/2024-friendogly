@@ -26,6 +26,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
         ClubListViewModel.factory(
+            analyticsHelper = AppModule.getInstance().analyticsHelper,
             getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
             getAddressUseCase = AppModule.getInstance().getAddressUseCase,
             searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
