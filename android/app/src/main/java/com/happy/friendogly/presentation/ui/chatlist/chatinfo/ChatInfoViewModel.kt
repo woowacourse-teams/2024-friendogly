@@ -22,7 +22,7 @@ class ChatInfoViewModel(
     private val _joiningPeople: MutableLiveData<List<JoinPeople>> = MutableLiveData()
     val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
 
-    fun getClubInfo(chatRoomId: Long):Deferred<Long> =
+    fun getClubInfo(chatRoomId: Long): Deferred<Long> =
         viewModelScope.async {
             val clubInfo = getChatRoomClubUseCase(chatRoomId).getOrThrow()
             _clubInfo.value =
@@ -34,10 +34,7 @@ class ChatInfoViewModel(
             return@async clubInfo.clubId
         }
 
-
-    fun getChatMember(
-        chatRoomId: Long,
-    ) {
+    fun getChatMember(chatRoomId: Long) {
         launch {
             getChatMemberUseCase.invoke(chatRoomId).onSuccess { members ->
                 _joiningPeople.value = members.map { it.toUiModel(getClubInfo(chatRoomId).await()) }

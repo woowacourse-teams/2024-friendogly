@@ -45,12 +45,8 @@ class ChatViewModel(
             }
         }
 
-
-    fun subscribeMessage(
-        chatRoomId: Long,
-    ) {
+    fun subscribeMessage(chatRoomId: Long) {
         viewModelScope.launch {
-
             val myMemberId = myMemberId(chatRoomId).await()
             val chats = initChats(chatRoomId, myMemberId)
 
@@ -70,9 +66,10 @@ class ChatViewModel(
         }
     }
 
-    private fun myMemberId(chatRoomId: Long): Deferred<Long> = viewModelScope.async {
-        getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
-    }
+    private fun myMemberId(chatRoomId: Long): Deferred<Long> =
+        viewModelScope.async {
+            getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
+        }
 
     private fun connect(): Deferred<Unit> =
         viewModelScope.async {

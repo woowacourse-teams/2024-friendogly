@@ -58,9 +58,7 @@ class ChatActivity :
         }
     }
 
-    private fun clickChatInfo(
-        chatRoomId: Long,
-    ) {
+    private fun clickChatInfo(chatRoomId: Long) {
         binding.ibChatSideMenu.setOnClickListener {
             val chatInfoSideSheet = ChatInfoSideSheet()
             chatInfoSideSheet.arguments =

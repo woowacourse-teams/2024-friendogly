@@ -147,9 +147,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         private const val EXTRA_CHAT_ROOM_ID = "chatRoomId"
         private const val INVALID_ID = -1L
 
-        fun getBundle(
-            chatRoomId: Long,
-        ): Bundle {
+        fun getBundle(chatRoomId: Long): Bundle {
             return Bundle().apply {
                 putLong(EXTRA_CHAT_ROOM_ID, chatRoomId)
             }
