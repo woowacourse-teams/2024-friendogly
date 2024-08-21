@@ -22,11 +22,11 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
 }
 
 @BindingAdapter("myLocationIcon")
-fun ImageView.bindMyLocationIcon(userAddress: UserAddress?){
+fun ImageView.bindMyLocationIcon(userAddress: UserAddress?) {
     this.visibility =
-        if (userAddress == null){
+        if (userAddress == null) {
             View.GONE
-        } else{
+        } else {
             View.VISIBLE
         }
 }
