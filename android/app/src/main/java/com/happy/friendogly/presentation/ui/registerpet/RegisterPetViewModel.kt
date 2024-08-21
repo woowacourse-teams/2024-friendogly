@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.ImageUpdateType
+import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.usecase.PatchPetUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -243,18 +245,19 @@ class RegisterPetViewModel(
     fun registerPet() {
         if (this.isProfileComplete.value == true) {
             launch {
-                _loading.emit(true)
+//                _loading.emit(true)
                 val state = uiState.value ?: return@launch
                 val name = petName.value ?: return@launch
                 val description = petDescription.value ?: return@launch
                 val birthday = LocalDate(state.petBirthdayYear, state.petBirthdayMonth, 1)
                 val neutering = neutering.value ?: return@launch
-                val profilePath = profilePath.value ?: return@launch
+                val sizeType = petSize.value?.toSizeType() ?: return@launch
+                val gender = petGender.value?.toGender(neutering) ?: return@launch
 
                 if (state.isFirstTimeSetup) {
-                    postPet(name, description, birthday, neutering, profilePath)
+                    postPet(name, description, birthday, sizeType, gender)
                 } else {
-                    patchPet(name, description, birthday, neutering, profilePath)
+                    patchPet(name, description, birthday, sizeType, gender)
                 }
                 _loading.emit(false)
             }
@@ -265,15 +268,17 @@ class RegisterPetViewModel(
         name: String,
         description: String,
         birthday: LocalDate,
-        neutering: Boolean,
-        profilePath: MultipartBody.Part?,
+        sizeType: SizeType,
+        gender: Gender,
     ) {
+        val profilePath = profilePath.value ?: return
+
         postPetUseCase(
             name = name,
             description = description,
             birthday = birthday,
-            sizeType = petSize.value!!.toSizeType(),
-            gender = petGender.value!!.toGender(neutering),
+            sizeType = sizeType,
+            gender = gender,
             file = profilePath,
         ).fold(
             onSuccess = {
@@ -292,13 +297,13 @@ class RegisterPetViewModel(
         name: String,
         description: String,
         birthday: LocalDate,
-        neutering: Boolean,
-        profilePath: MultipartBody.Part?,
+        sizeType: SizeType,
+        gender: Gender,
     ) {
         val state = _uiState.value ?: return
 
         val imageUpdateType =
-            if (profilePath != null) {
+            if (profilePath.value != null) {
                 ImageUpdateType.UPDATE
             } else {
                 ImageUpdateType.NOT_UPDATE
@@ -309,9 +314,9 @@ class RegisterPetViewModel(
             name = name,
             description = description,
             birthDate = birthday,
-            sizeType = petSize.value!!.toSizeType(),
-            gender = petGender.value!!.toGender(neutering),
-            file = profilePath,
+            sizeType = sizeType,
+            gender = gender,
+            file = profilePath.value,
             imageUpdateType = imageUpdateType,
         ).fold(
             onSuccess = {
