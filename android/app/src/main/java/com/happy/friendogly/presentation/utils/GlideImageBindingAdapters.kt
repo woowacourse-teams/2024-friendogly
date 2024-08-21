@@ -10,7 +10,10 @@ import com.happy.friendogly.R
 
 @BindingAdapter("glide")
 fun ImageView.bindGlide(uri: String?) {
-    if (uri.isNullOrBlank()) return
+    if (uri.isNullOrBlank()) {
+        this.setImageResource(R.drawable.img_profile_normal)
+        return
+    }
     Glide.with(context)
         .load(uri)
         .into(this)

@@ -1,15 +1,18 @@
 package com.happy.friendogly.data.repository
 
 import com.happy.friendogly.data.error.ApiExceptionDto
+import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.model.ImageUpdateType
 import com.happy.friendogly.domain.model.Member
 import com.happy.friendogly.domain.model.Register
 import com.happy.friendogly.domain.repository.MemberRepository
 import okhttp3.MultipartBody
-import java.io.IOException
+import java.net.ConnectException
+import java.net.UnknownHostException
 
 class MemberRepositoryImpl(
     private val source: MemberDataSource,
@@ -60,6 +63,29 @@ class MemberRepositoryImpl(
             },
         )
 
+    override suspend fun patchMember(
+        name: String,
+        imageUpdateType: ImageUpdateType,
+        file: MultipartBody.Part?,
+    ): DomainResult<Member, DataError.Network> =
+        source.patchMember(
+            name = name,
+            imageUpdateType = imageUpdateType.toData(),
+            file = file,
+        ).fold(
+            onSuccess = { memberDto ->
+                DomainResult.Success(memberDto.toDomain())
+            },
+            onFailure = { e ->
+                when (e) {
+                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                }
+            },
+        )
+
     override suspend fun deleteMember(): DomainResult<Unit, DataError.Network> =
         source.deleteMember().fold(
             onSuccess = {
@@ -68,7 +94,8 @@ class MemberRepositoryImpl(
             onFailure = { e ->
                 when (e) {
                     is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
-                    is IOException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                     else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                 }
             },

@@ -11,7 +11,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.model.ImageUpdateType
 import com.happy.friendogly.domain.model.JwtToken
+import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -22,7 +24,6 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
-import kotlinx.coroutines.delay
 import okhttp3.MultipartBody
 
 class ProfileSettingViewModel(
@@ -30,6 +31,7 @@ class ProfileSettingViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val postMemberUseCase: PostMemberUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
+    private val patchMemberUseCase: PatchMemberUseCase,
 ) : BaseViewModel() {
     val accessToken = savedStateHandle.get<String>(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN)
 
@@ -48,7 +50,10 @@ class ProfileSettingViewModel(
                 val state = uiState.value ?: return@addSourceList false
                 val nickname = nickname.value ?: return@addSourceList false
 
-                !((nickname == state.beforeName || nickname.isBlank()) && state.profileImageUrl == state.beforeProfileImageUrl)
+                !(
+                    (nickname == state.beforeName || nickname.isBlank()) &&
+                        (state.profileImageUrl == state.beforeProfileImageUrl && state.profilePath == null)
+                )
             }
         }
 
@@ -75,14 +80,15 @@ class ProfileSettingViewModel(
         profile ?: return
 
         val state = uiState.value ?: return
+        val imageUrl = if (profile.imageUrl.isNullOrBlank()) null else profile.imageUrl
 
         nickname.value = profile.name
         _uiState.value =
             state.copy(
                 isFirstTimeSetup = false,
                 beforeName = profile.name,
-                profileImageUrl = profile.imageUrl,
-                beforeProfileImageUrl = profile.imageUrl,
+                profileImageUrl = imageUrl,
+                beforeProfileImageUrl = imageUrl,
             )
     }
 
@@ -92,12 +98,13 @@ class ProfileSettingViewModel(
 
     fun submitProfileSelection() {
         launch {
-            _loading.emit(true)
+            if (isButtonActive.value == false) return@launch
             val nickname = nickname.value ?: return@launch
             if (nickname.isBlank()) return@launch
             if (regex.matches(nickname)) return@launch
             val state = uiState.value ?: return@launch
 
+            _loading.emit(true)
             if (state.isFirstTimeSetup) {
                 postMember(nickname, state.profilePath)
             } else {
@@ -146,24 +153,46 @@ class ProfileSettingViewModel(
     }
 
     private fun saveAlarmToken() {
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task: Task<String> ->
-                if (!task.isSuccessful) {
-                    return@addOnCompleteListener
-                }
-                val token = task.result
-                launch { // TODO 에러 핸들링
-                    saveAlarmTokenUseCase(token)
-                }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task: Task<String> ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
             }
+            val token = task.result
+            launch { // TODO 에러 핸들링
+                saveAlarmTokenUseCase(token)
+            }
+        }
     }
 
     private suspend fun patchMember(
         nickname: String,
         profilePath: MultipartBody.Part?,
     ) {
-        // TODO patch use case 호출 예정
-        delay(3000)
+        val state = uiState.value ?: return
+
+        val imageUpdateType =
+            when {
+                state.profilePath != null -> ImageUpdateType.UPDATE
+                state.profileImageUrl == state.beforeProfileImageUrl -> ImageUpdateType.NOT_UPDATE
+                else -> ImageUpdateType.DELETE
+            }
+
+        patchMemberUseCase(
+            name = nickname,
+            imageUpdateType = imageUpdateType,
+            file = profilePath,
+        ).fold(
+            onSuccess = {
+                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToMyPage)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.FILE_SIZE_EXCEED -> _message.emit(ProfileSettingMessage.FileSizeExceedMessage)
+                    DataError.Network.NO_INTERNET -> _message.emit(ProfileSettingMessage.NoInternetMessage)
+                    else -> _message.emit(ProfileSettingMessage.ServerErrorMessage)
+                }
+            },
+        )
     }
 
     fun updateProfileImage(bitmap: Bitmap) {
@@ -173,7 +202,7 @@ class ProfileSettingViewModel(
 
     fun resetProfileImage() {
         val state = _uiState.value ?: return
-        _uiState.value = state.copy(profileImage = null, profileImageUrl = null)
+        _uiState.value = state.copy(profilePath = null, profileImage = null, profileImageUrl = null)
     }
 
     fun updateProfileFile(file: MultipartBody.Part) {
@@ -188,6 +217,7 @@ class ProfileSettingViewModel(
             saveAlarmTokenUseCase: SaveAlamTokenUseCase,
             postMemberUseCase: PostMemberUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
+            patchMemberUseCase: PatchMemberUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 ProfileSettingViewModel(
@@ -195,6 +225,7 @@ class ProfileSettingViewModel(
                     savedStateHandle = creator.createSavedStateHandle(),
                     postMemberUseCase = postMemberUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
+                    patchMemberUseCase = patchMemberUseCase,
                 )
             }
         }
