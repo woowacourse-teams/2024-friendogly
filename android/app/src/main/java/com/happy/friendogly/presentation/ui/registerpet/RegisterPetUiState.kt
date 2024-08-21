@@ -5,10 +5,15 @@ import com.happy.friendogly.domain.model.SizeType
 import java.time.LocalDate
 
 data class RegisterPetUiState(
+    val petId: Long = DEFAULT_PET_ID,
     val isFirstTimeSetup: Boolean = true,
     val petBirthdayYear: Int = LocalDate.now().year,
     val petBirthdayMonth: Int = LocalDate.now().month.value,
-)
+) {
+    companion object {
+        private const val DEFAULT_PET_ID = 0L
+    }
+}
 
 enum class PetSize(val title: String) {
     SMALL("소형견"),

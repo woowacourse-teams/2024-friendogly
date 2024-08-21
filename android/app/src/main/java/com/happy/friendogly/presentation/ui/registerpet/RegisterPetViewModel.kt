@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.model.ImageUpdateType
+import com.happy.friendogly.domain.usecase.PatchPetUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
@@ -17,13 +19,13 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
-import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
 
 class RegisterPetViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val postPetUseCase: PostPetUseCase,
+    private val patchPetUseCase: PatchPetUseCase,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<RegisterPetUiState> =
         MutableLiveData(RegisterPetUiState())
@@ -32,7 +34,8 @@ class RegisterPetViewModel(
     private val _profileImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
     val profileImage: LiveData<Bitmap?> get() = _profileImage
 
-    private var profilePath: MultipartBody.Part? = null
+    private val profilePath: MutableLiveData<MultipartBody.Part?> = MutableLiveData(null)
+
     var profileImageUrl: String? = null
 
     private var beforePetProfile: PetProfile? = null
@@ -56,6 +59,7 @@ class RegisterPetViewModel(
     val isProfileComplete =
         MediatorLiveData<Boolean>().apply {
             addSourceList(
+                profilePath,
                 petName,
                 petDescription,
                 petSize,
@@ -73,7 +77,7 @@ class RegisterPetViewModel(
         val petDescription = petDescription.value ?: return false
         val petSize = petSize.value ?: return false
         val petGender = petGender.value ?: return false
-        val neutering = neutering.value ?: return true
+        val neutering = neutering.value ?: return false
 
         return isPetProfileDifferent(
             state,
@@ -123,7 +127,7 @@ class RegisterPetViewModel(
         neutering: Boolean,
     ): Boolean {
         return (
-            (profileImageUrl == null && profilePath != null) &&
+            (profileImageUrl == null && profilePath.value != null) &&
                 (petName != beforePetProfile?.name && petName.isNotBlank()) &&
                 (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) &&
                 (petSize.toSizeType() != beforePetProfile?.sizeType) &&
@@ -144,7 +148,7 @@ class RegisterPetViewModel(
         neutering: Boolean,
     ): Boolean {
         return (
-            (profileImageUrl == null && profilePath != null) ||
+            (profileImageUrl == null && profilePath.value != null) ||
                 (petName != beforePetProfile?.name && petName.isNotBlank()) ||
                 (petDescription != beforePetProfile?.description && petDescription.isNotBlank()) ||
                 (petSize.toSizeType() != beforePetProfile?.sizeType) ||
@@ -180,6 +184,7 @@ class RegisterPetViewModel(
 
         _uiState.value =
             state.copy(
+                petId = petProfile.id,
                 isFirstTimeSetup = false,
                 petBirthdayYear = petProfile.birthDate.year,
                 petBirthdayMonth = petProfile.birthDate.monthNumber,
@@ -210,8 +215,8 @@ class RegisterPetViewModel(
     }
 
     fun updatePetProfileFile(file: MultipartBody.Part) {
-        profilePath = file
         profileImageUrl = null
+        profilePath.value = file
     }
 
     fun updatePetSize(petSize: PetSize) {
@@ -244,6 +249,7 @@ class RegisterPetViewModel(
                 val description = petDescription.value ?: return@launch
                 val birthday = LocalDate(state.petBirthdayYear, state.petBirthdayMonth, 1)
                 val neutering = neutering.value ?: return@launch
+                val profilePath = profilePath.value ?: return@launch
 
                 if (state.isFirstTimeSetup) {
                     postPet(name, description, birthday, neutering, profilePath)
@@ -289,15 +295,48 @@ class RegisterPetViewModel(
         neutering: Boolean,
         profilePath: MultipartBody.Part?,
     ) {
-        // TODO patch use case 호출 예정
+        val state = _uiState.value ?: return
+
+        val imageUpdateType =
+            if (profilePath != null) {
+                ImageUpdateType.UPDATE
+            } else {
+                ImageUpdateType.NOT_UPDATE
+            }
+
+        patchPetUseCase(
+            petId = state.petId,
+            name = name,
+            description = description,
+            birthDate = birthday,
+            sizeType = petSize.value!!.toSizeType(),
+            gender = petGender.value!!.toGender(neutering),
+            file = profilePath,
+            imageUpdateType = imageUpdateType,
+        ).fold(
+            onSuccess = {
+                _navigateAction.emit(RegisterPetNavigationAction.NavigateToMyPage)
+            },
+            onError = { error ->
+                when (error) {
+                    DataError.Network.FILE_SIZE_EXCEED -> _message.emit(RegisterPetMessage.FileSizeExceedMessage)
+                    DataError.Network.SERVER_ERROR -> _message.emit(RegisterPetMessage.ServerErrorMessage)
+                    else -> _message.emit(RegisterPetMessage.ServerErrorMessage)
+                }
+            },
+        )
     }
 
     companion object {
-        fun factory(postPetUseCase: PostPetUseCase): ViewModelProvider.Factory {
+        fun factory(
+            postPetUseCase: PostPetUseCase,
+            patchPetUseCase: PatchPetUseCase,
+        ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 RegisterPetViewModel(
                     savedStateHandle = creator.createSavedStateHandle(),
                     postPetUseCase = postPetUseCase,
+                    patchPetUseCase = patchPetUseCase,
                 )
             }
         }
