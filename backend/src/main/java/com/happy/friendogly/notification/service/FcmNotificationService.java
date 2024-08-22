@@ -59,7 +59,7 @@ public class FcmNotificationService implements NotificationService {
                 .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
 
         if (receiverTokens.isEmpty()) {
-            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.");
+            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
         }
 
         Map<String, String> data = Map.of(
