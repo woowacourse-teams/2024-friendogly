@@ -19,6 +19,18 @@ fun ImageView.bindGlide(uri: String?) {
         .into(this)
 }
 
+@BindingAdapter("clubGlide")
+fun ImageView.bindClubGlide(uri: String?) {
+    if (uri.isNullOrBlank()) {
+        this.setImageResource(R.drawable.ic_club_normal)
+        return
+    }
+    Glide.with(context)
+        .load(uri)
+        .into(this)
+}
+
+
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     if (bitmap == null) {

@@ -61,7 +61,7 @@
                 android:backgroundTint="@color/coral30"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_club_normal"
-                app:glide="@{vm.club.clubPoster}"
+                app:clubGlide="@{vm.club.clubPoster}"
                 app:layout_constraintBottom_toTopOf="@+id/view_club_detail_user_top_bar"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
