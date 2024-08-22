@@ -46,12 +46,14 @@ class ClubDetailViewModel(
                 val filters = club.value?.filters ?: listOf()
                 _clubDetailEvent.emit(ClubDetailEvent.OpenDogSelector(filters))
             }
-            ClubDetailViewType.MINE -> {
+
+            ClubDetailViewType.MINE, ClubDetailViewType.PARTICIPATED -> {
                 val chatRoomId = club.value?.chatRoomId ?: return
                 _clubDetailEvent.emit(
                     ClubDetailEvent.Navigation.NavigateToChat(chatRoomId),
                 )
             }
+
             else -> return
         }
     }
@@ -74,7 +76,11 @@ class ClubDetailViewModel(
                 participatingPetsId = dogs,
             )
                 .onSuccess { clubParticipation ->
-                    _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateToChat(clubParticipation.chatRoomId))
+                    _clubDetailEvent.emit(
+                        ClubDetailEvent.Navigation.NavigateToChat(
+                            clubParticipation.chatRoomId,
+                        ),
+                    )
                 }
                 .onFailure {
                     _clubDetailEvent.emit(ClubDetailEvent.FailParticipation)

@@ -20,6 +20,10 @@ class PetProfileAdapter(
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id
+    }
+
     override fun getItemViewType(position: Int): Int {
         return if (currentList[position] is PetAddView) PET_ADD_VIEW_TYPE else PET_PROFILE_VIEW_TYPE
     }

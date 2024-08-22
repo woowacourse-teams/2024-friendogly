@@ -22,13 +22,14 @@
         style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="30dp"
         android:text="@string/chat_group_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         style="@style/Theme.AppCompat.TextView.SemiBold.Gray07.Size14"
+        android:textColor="@color/gray900"
         android:id="@+id/btn_chat_club"
         android:text="@string/chat_go_club_detail"
         android:layout_marginTop="15dp"
