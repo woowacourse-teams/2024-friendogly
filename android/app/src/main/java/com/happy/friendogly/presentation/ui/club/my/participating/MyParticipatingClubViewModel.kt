@@ -28,10 +28,6 @@ class MyParticipatingClubViewModel(
     private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
     val myClubEvent: LiveData<Event<MyClubEvent.Navigation>> get() = _myClubEvent
 
-    init {
-        loadMyClubs()
-    }
-
     fun loadMyClubs() =
         viewModelScope.launch {
             getMyClubUseCase()
