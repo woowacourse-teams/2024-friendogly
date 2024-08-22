@@ -47,7 +47,13 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
                 JOIN FETCH CM.clubMemberId.member AS M
                 JOIN FETCH C.clubPets AS CP
                 JOIN FETCH CP.clubPetId.pet
-                WHERE M.id = :memberId
+                WHERE C.id IN (
+                    SELECT C2.id
+                    FROM Club AS C2
+                    JOIN ClubMember AS CM2 ON CM2.clubMemberId.club = C2
+                    JOIN Member AS M2 ON CM2.clubMemberId.member = M2
+                    where M2.id = :memberId
+                )
                 ORDER BY C.createdAt DESC
             """)
     List<Club> findAllByParticipatingMemberId(@Param("memberId") Long memberId);
