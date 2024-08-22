@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.animation)
     implementation(libs.bundles.stomp)
+    implementation(libs.bundles.ballon)
     implementation(libs.bundles.room)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)

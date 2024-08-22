@@ -1,18 +1,17 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.View
-import android.view.ViewTreeObserver
+import android.widget.Chronometer
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -22,30 +21,36 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToFaceTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ChangeMapToNoFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.HideRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.RemoveNearFootprints
-import com.happy.friendogly.presentation.ui.woof.WoofMapActions.ShowRegisterMarkerLayout
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowCantClickMarkBtnSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowHasNotPetSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofSnackbarActions.ShowMarkerRegistered
-import com.happy.friendogly.presentation.ui.woof.adapter.FootprintInfoPetDetailAdapter
+import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertEndWalkSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertHasNotPetDialog
+import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkerRegisteredSnackbar
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToNoFollowTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeMyFootprintMarker
+import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeNearFootprintMarkers
+import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
+import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
 import com.happy.friendogly.presentation.utils.logFootprintClicked
 import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
+import com.happy.friendogly.presentation.utils.logFootprintPetImageClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
 import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
+import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
+import com.happy.friendogly.presentation.utils.logRegisterHelpClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
+import com.happy.friendogly.presentation.utils.logWalkHelpClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
@@ -59,6 +64,10 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -77,36 +86,37 @@ class WoofFragment :
     BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
     WoofActionHandler,
     OnMapReadyCallback {
+    private var timer: Timer? = null
+    private val locationPermission: LocationPermission = initLocationPermission()
+
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
     private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
-    private val mapView: MapView by lazy { binding.mapView }
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val locationPermission: LocationPermission = initLocationPermission()
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
-    private val adapter by lazy { FootprintInfoPetDetailAdapter(this) }
+    private val adapter by lazy { PetDetailInfoAdapter(this) }
+    private val mapView: MapView by lazy { binding.mapView }
+    private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
+
     private val viewModel by viewModels<WoofViewModel> {
         WoofViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
+            analyticsHelper = analyticsHelper,
             postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
-            patchWalkStatusUseCase = AppModule.getInstance().patchWalkStatusUseCase,
+            patchFootprintRecentWalkStatusAutoUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusAutoUseCase,
+            patchFootprintRecentWalkStatusManualUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusManualUseCase,
             getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
             getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
+            deleteFootprintUseCase = AppModule.getInstance().deleteFootprintUseCase,
         )
     }
-
-    private var timer: Timer? = null
-    private var recentlyClickedMarker: Marker? = null
-    private var myMarker: Marker? = null
-    private val nearMarkers: MutableList<Marker> = mutableListOf()
 
     override fun onMapReady(naverMap: NaverMap) {
         initMap(naverMap)
@@ -128,6 +138,9 @@ class WoofFragment :
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+        if (locationPermission.hasPermissions() && !locationSource.isActivated) {
+            activateMap()
+        }
     }
 
     override fun onPause() {
@@ -160,11 +173,10 @@ class WoofFragment :
         onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (binding.tvWoofWalkStatus.isVisible) {
-                        hideMarkerDetail()
-                        changeRecentlyClickedMarkerSize()
+                    if (viewModel.uiState.value is WoofUiState.FindingFriends) {
+                        requireActivity().finish()
                     } else {
-                        requireActivity().onBackPressed()
+                        viewModel.updateUiState(WoofUiState.FindingFriends())
                     }
                 }
             }
@@ -182,105 +194,137 @@ class WoofFragment :
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (locationPermission.hasPermissions()) {
-            showLoadingAnimation()
+        if (!locationPermission.hasPermissions()) {
+            viewModel.updateUiState(WoofUiState.FindingFriends())
+        }
+
+        runIfLocationPermissionGranted {
             activateMap()
-        } else {
-            hideLoadingAnimation()
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
     }
 
     override fun clickMarkBtn() {
         analyticsHelper.logMarkBtnClicked()
-        if (locationPermission.hasPermissions()) {
+        runIfLocationPermissionGranted {
             viewModel.loadFootprintMarkBtnInfo()
-        } else {
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
     }
 
     override fun clickRegisterMarkerBtn() {
         analyticsHelper.logRegisterMarkerBtnClicked()
-        if (locationPermission.hasPermissions()) {
-            viewModel.markFootprint(map.cameraPosition.target)
-        } else {
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+        runIfLocationPermissionGranted {
+            viewModel.registerFootprint(map.cameraPosition.target)
         }
     }
 
     override fun clickLocationBtn() {
         analyticsHelper.logLocationBtnClicked()
-        if (locationPermission.hasPermissions()) {
+        runIfLocationPermissionGranted {
             viewModel.changeLocationTrackingMode()
-        } else {
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
     }
 
     override fun clickMyFootprintBtn() {
         analyticsHelper.logMyFootprintBtnClicked()
-        if (locationPermission.hasPermissions()) {
-            if (myMarker == null) {
+        runIfLocationPermissionGranted {
+            val myFootprintMarker = viewModel.myFootprintMarker.value
+            if (myFootprintMarker != null) {
+                val position = myFootprintMarker.marker.position
+                moveCameraCenterPosition(position)
+                viewModel.changeTrackingModeToNoFollow()
+            } else {
                 showSnackbar(resources.getString(R.string.woof_not_exist_my_footprint))
-                return
             }
-            val position = myMarker?.position ?: return
-            moveCameraCenterPosition(position)
-            viewModel.changeTrackingModeToNoFollow()
-        } else {
-            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
         }
+    }
+
+    override fun clickStatusAll() {
+        viewModel.updateFilterState(FilterState.ALL)
+    }
+
+    override fun clickStatusBefore() {
+        viewModel.updateFilterState(FilterState.BEFORE)
+    }
+
+    override fun clickStatusOnGoing() {
+        viewModel.updateFilterState(FilterState.ONGOING)
+    }
+
+    override fun clickStatusAfter() {
+        viewModel.updateFilterState(FilterState.AFTER)
+    }
+
+    override fun clickRefreshBtn() {
+        analyticsHelper.logRefreshBtnClicked()
+        viewModel.changeRefreshBtnVisibility(false)
+        runIfLocationPermissionGranted {
+            viewModel.scanNearFootprints(latLng)
+        }
+    }
+
+    override fun clickDeleteMyFootprintMarkerBtn() {
+        viewModel.deleteMyFootprintMarker()
+        walkTimeChronometer.stop()
+    }
+
+    override fun clickEndWalkBtn() {
+        viewModel.endWalk()
+        walkTimeChronometer.stop()
     }
 
     override fun clickBackBtn() {
         analyticsHelper.logBackBtnClicked()
-        hideRegisterMarkerLayout()
-        hideMarkerDetail()
+        viewModel.updateUiState(WoofUiState.FindingFriends())
     }
 
     override fun clickCloseBtn() {
         analyticsHelper.logCloseBtnClicked()
-        hideRegisterMarkerLayout()
-        hideMarkerDetail()
+        viewModel.updateUiState(WoofUiState.FindingFriends())
     }
 
-    override fun clickFootprint(
+    override fun clickFootprintMarker(
         footprintId: Long,
         marker: Marker,
     ) {
         marker.setOnClickListener {
             analyticsHelper.logFootprintClicked()
-            viewModel.loadFootprintInfo(footprintId)
-            showMarkerDetail()
-
-            val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
-            val offsetDistance =
-                (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
-
-            val adjustedLatitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
-            val adjustedLongitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
-
-            val position = LatLng(adjustedLatitude, adjustedLongitude)
+            changePreviousClickedMarkerSize()
+            viewModel.loadFootprintInfo(footprintId, marker)
+            val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
-
-            changeRecentlyClickedMarkerSize()
-            recentlyClickedMarker = marker
-
-            marker.width = MARKER_CLICKED_WIDTH
-            marker.height = MARKER_CLICKED_HEIGHT
-
+            changeClickedMarkerSize(marker)
+            viewModel.updateUiState(WoofUiState.ViewingFootprintInfo)
             true
         }
     }
 
     override fun clickFootprintPetImage(petImageUrl: String) {
+        analyticsHelper.logFootprintPetImageClicked()
         startActivity(PetImageActivity.getIntent(requireContext(), petImageUrl))
     }
 
     override fun clickFootprintMemberName(memberId: Long) {
         analyticsHelper.logFootprintMemberNameClicked()
         startActivity(OtherProfileActivity.getIntent(requireContext(), memberId))
+    }
+
+    override fun clickRegisterHelp() {
+        analyticsHelper.logRegisterHelpClicked()
+        val balloon = createBalloon(resources.getString(R.string.woof_register_help))
+        balloon.showAlignTop(binding.btnWoofRegisterHelp)
+    }
+
+    override fun clickWalkHelp() {
+        analyticsHelper.logWalkHelpClicked()
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return
+        val text =
+            if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
+                resources.getString(R.string.woof_walk_before_help)
+            } else {
+                resources.getString(R.string.woof_walk_ongoing_help)
+            }
+        val balloon = createBalloon(text)
+        balloon.showAlignTop(binding.btnWoofWalkHelp)
     }
 
     private fun initMap(naverMap: NaverMap) {
@@ -295,18 +339,18 @@ class WoofFragment :
         map.locationSource = locationSource
 
         map.uiSettings.apply {
-            isLocationButtonEnabled = true
-            isCompassEnabled = true
+            isScaleBarEnabled = true
+            isCompassEnabled = false
+            isLocationButtonEnabled = false
             isZoomControlEnabled = false
-            isScaleBarEnabled = false
         }
+        binding.lbvWoofLocation.map = map
         binding.lbvWoofLocationRegister.map = map
 
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
-                if (binding.tvWoofWalkStatus.isVisible) {
-                    hideMarkerDetail()
-                    changeRecentlyClickedMarkerSize()
+                if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
+                    viewModel.updateUiState(WoofUiState.FindingFriends())
                 }
             }
 
@@ -318,19 +362,22 @@ class WoofFragment :
             if (reason == REASON_GESTURE) {
                 viewModel.changeTrackingModeToNoFollow()
 
-                if (binding.tvWoofWalkStatus.isVisible) {
-                    hideMarkerDetail()
-                    changeRecentlyClickedMarkerSize()
+                if (viewModel.uiState.value is WoofUiState.FindingFriends) {
+                    viewModel.changeRefreshBtnVisibility(true)
+                }
+
+                if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
+                    viewModel.updateUiState(WoofUiState.FindingFriends())
                 }
             }
 
-            if (binding.layoutWoofLocationRegister.isVisible) {
+            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
                 circleOverlay.center = map.cameraPosition.target
             }
         }
 
         map.addOnCameraIdleListener {
-            if (binding.layoutWoofLocationRegister.isVisible) {
+            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
                 getAddress(map.cameraPosition.target)
             }
         }
@@ -342,74 +389,101 @@ class WoofFragment :
     }
 
     private fun initObserve() {
-        viewModel.nearFootprints.observe(viewLifecycleOwner) { nearFootprints ->
-            markNearFootprints(nearFootprints)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                is WoofUiState.FindingFriends -> hideRegisterFootprintScreen()
+                is WoofUiState.RegisteringFootprint -> showRegisterFootprintScreen()
+                else -> return@observe
+            }
         }
 
-        viewModel.myFootprint.observe(viewLifecycleOwner) { myFootprint ->
-            myMarker?.map = null
-            if (myFootprint != null) {
-                createMyMarker(myFootprint)
+        viewModel.filterState.observe(viewLifecycleOwner) { filterState ->
+            markFootprintMarkers(filterState)
+        }
+
+        viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
+            if (myWalkStatus == null) {
+                val myFootprintMarker = viewModel.myFootprintMarker.value ?: return@observe
+                myFootprintMarker.marker.map = null
+                circleOverlay.map = null
+                return@observe
+            }
+
+            if (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING) {
+                startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
+            }
+
+            if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
+                timer?.cancel()
             } else {
-                myMarker = null
-                timer?.cancel()
+                monitorDistanceAndManageWalkStatus()
             }
         }
 
-        viewModel.myWalkStatus.observe(viewLifecycleOwner) { walkStatus ->
-            if (walkStatus == null || walkStatus == WalkStatus.AFTER) {
-                timer?.cancel()
-            }
-
-            if (walkStatus != WalkStatus.AFTER) {
-                startTimerAndUpdateWalkStatus()
+        viewModel.myFootprintMarker.observe(viewLifecycleOwner) { myFootprintMarker ->
+            if (myFootprintMarker != null) {
+                myFootprintMarker.marker.map = map
+                setUpCircleOverlay(myFootprintMarker.marker.position)
+                viewModel.updateFootprintRecentWalkStatus(latLng)
             }
         }
 
-        viewModel.footprintInfoPetDetails.observe(viewLifecycleOwner) { footPrintPetDetails ->
-            adapter.submitList(footPrintPetDetails)
+        viewModel.nearFootprintMarkers.observe(viewLifecycleOwner) {
+            clearNearFootprintMarkers()
+            val filterState = viewModel.filterState.value ?: return@observe
+            markFootprintMarkers(filterState)
         }
 
-        viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.footprintInfo.observe(viewLifecycleOwner) { footprintInfo ->
+            adapter.submitList(footprintInfo.petsDetailInfo)
+        }
+
+        viewModel.makeMarkerActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is ChangeMapToNoFollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.NoFollow
+                is MakeMyFootprintMarker -> {
+                    val previousMyFootprintMarker = viewModel.myFootprintMarker.value
+                    if (previousMyFootprintMarker != null) {
+                        previousMyFootprintMarker.marker.map = null
+                    }
 
-                is ChangeMapToFollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.Follow
-
-                is ChangeMapToFaceTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.Face
-
-                is RemoveNearFootprints -> {
-                    clearNearMarkers()
+                    if (event.myFootprint != null) {
+                        val myMarker = createMarker(footprint = event.myFootprint)
+                        viewModel.loadMyFootprintMarker(myMarker)
+                    } else {
+                        circleOverlay.map = null
+                        timer?.cancel()
+                    }
                 }
 
-                is ShowRegisterMarkerLayout -> {
-                    showRegisterMarkerLayout()
-                }
-
-                is HideRegisterMarkerLayout -> {
-                    hideRegisterMarkerLayout()
+                is MakeNearFootprintMarkers -> {
+                    val nearFootprintMarkers =
+                        event.nearFootprints.map { footprint ->
+                            val marker = createMarker(footprint = footprint)
+                            marker
+                        }
+                    clearNearFootprintMarkers()
+                    viewModel.loadNearFootprintMarkers(nearFootprintMarkers)
                 }
             }
         }
 
-        viewModel.snackbarActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.changeTrackingModeActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is ShowHasNotPetSnackbar ->
-                    showSnackbar(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_has_not_pet,
-                            ),
-                        ),
-                    )
+                is ChangeToNoFollowTrackingMode ->
+                    map.locationTrackingMode = LocationTrackingMode.NoFollow
 
-                is ShowCantClickMarkBtnSnackbar -> {
+                is ChangeToFollowTrackingMode ->
+                    map.locationTrackingMode = LocationTrackingMode.Follow
+
+                is ChangeToFaceTrackingMode ->
+                    map.locationTrackingMode = LocationTrackingMode.Face
+            }
+        }
+
+        viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                is AlertHasNotPetDialog -> showRegisterPetDialog()
+                is AlertMarkBtnClickBeforeTimeoutSnackbar ->
                     showSnackbar(
                         String.format(
                             resources.getString(
@@ -418,9 +492,52 @@ class WoofFragment :
                             ),
                         ),
                     )
-                }
 
-                is ShowMarkerRegistered -> showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_delete_my_footprint_marker,
+                        ),
+                    )
+
+                is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
+                is WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar ->
+                    showSnackbar(resources.getString(R.string.woof_fail_to_load_footprint_mark_btn_info))
+
+                is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_near_footprints,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToRegisterFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_register_footprint,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_footprint_info,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar ->
+                    showSnackbar(
+                        resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
+                    )
+
+                is WoofAlertActions.AlertFailToEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_fail_to_end_walk))
+                is WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_delete_my_footprint,
+                        ),
+                    )
             }
         }
     }
@@ -454,31 +571,22 @@ class WoofFragment :
     }
 
     private fun activateMap() {
-        showLoadingAnimation()
+        viewModel.updateUiState(WoofUiState.Loading)
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.loadNearFootprints(latLng)
-            viewModel.updateWalkStatus(latLng)
+            viewModel.initFootprintMarkers(latLng)
+            if (viewModel.myFootprintMarker.value != null) {
+                viewModel.updateFootprintRecentWalkStatus(latLng)
+            }
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     map.locationTrackingMode = LocationTrackingMode.Follow
-                    hideLoadingAnimation()
                 },
-                LOADING_DELAY_MILLIS,
+                TRACKING_DELAY_MILLIS,
             )
         }
-    }
-
-    private fun showLoadingAnimation() {
-        binding.layoutWoofLoading.isVisible = true
-        binding.lottieWoofLoading.playAnimation()
-    }
-
-    private fun hideLoadingAnimation() {
-        binding.layoutWoofLoading.isVisible = false
-        binding.lottieWoofLoading.pauseAnimation()
     }
 
     private fun setUpCircleOverlay(latLng: LatLng) {
@@ -493,38 +601,30 @@ class WoofFragment :
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMyMarker(myFootprint: MyFootprint) {
+    private fun createMarker(footprint: Footprint): Marker {
         val marker = Marker()
-        marker.position = LatLng(myFootprint.latitude, myFootprint.longitude)
-        marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_mine_clicked)
-        marker.width = MARKER_WIDTH
-        marker.height = MARKER_HEIGHT
-        marker.zIndex = myFootprint.createdAt.toZIndex()
-        marker.map = map
-        clickFootprint(footprintId = myFootprint.footprintId, marker = marker)
+        marker.apply {
+            position = LatLng(footprint.latitude, footprint.longitude)
+            icon = OverlayImage.fromResource(markerIcon(footprint))
+            width = MARKER_DEFAULT_WIDTH
+            height = MARKER_DEFAULT_HEIGHT
+            zIndex = footprint.createdAt.toZIndex()
+            map = map
+            clickFootprintMarker(footprintId = footprint.footprintId, marker = marker)
+        }
 
-        myMarker = marker
-        setUpCircleOverlay(marker.position)
+        return marker
     }
 
-    private fun createNearMarker(footprint: Footprint) {
-        val marker = Marker()
-        marker.position = LatLng(footprint.latitude, footprint.longitude)
-        marker.icon = OverlayImage.fromResource(markerIcon(footprint.walkStatus))
-        marker.width = MARKER_WIDTH
-        marker.height = MARKER_HEIGHT
-        marker.zIndex = footprint.createdAt.toZIndex()
-        marker.map = map
-        clickFootprint(footprintId = footprint.footprintId, marker = marker)
-
-        nearMarkers.add(marker)
-    }
-
-    private fun markerIcon(walkStatus: WalkStatus): Int {
-        return when (walkStatus) {
-            WalkStatus.BEFORE -> R.drawable.ic_marker_before_clicked
-            WalkStatus.ONGOING -> R.drawable.ic_marker_ongoing_clicked
-            WalkStatus.AFTER -> R.drawable.ic_marker_after_clicked
+    private fun markerIcon(footprint: Footprint): Int {
+        return if (footprint.isMine) {
+            R.drawable.ic_marker_mine_clicked
+        } else {
+            when (footprint.walkStatus) {
+                WalkStatus.BEFORE -> R.drawable.ic_marker_before_clicked
+                WalkStatus.ONGOING -> R.drawable.ic_marker_ongoing_clicked
+                WalkStatus.AFTER -> R.drawable.ic_marker_after_clicked
+            }
         }
     }
 
@@ -536,143 +636,93 @@ class WoofFragment :
         return (-millis / 1000).toInt()
     }
 
-    private fun showViewAnimation(view: View) {
-        if (view.height == 0) {
-            view.viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        animateView(view)
-                        if (view.height > 0) view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    }
-                },
-            )
-        } else {
-            animateView(view)
+    private fun showRegisterFootprintScreen() {
+        val myFootprintMarker = viewModel.myFootprintMarker.value
+        if (myFootprintMarker != null) {
+            myFootprintMarker.marker.map = null
         }
-    }
-
-    private fun animateView(view: View) {
-        view.apply {
-            translationY = height.toFloat()
-            animate().translationY(0f).setDuration(ANIMATE_DURATION_MILLIS).setListener(
-                object : AnimatorListenerAdapter() {
-                    override fun onAnimationStart(animation: Animator) {
-                        isVisible = true
-                        bringToFront()
-                    }
-                },
-            )
-        }
-    }
-
-    private fun hideViewAnimation(view: View) {
-        view.animate().translationY(view.height.toFloat()).setDuration(ANIMATE_DURATION_MILLIS)
-            .setListener(
-                object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        super.onAnimationEnd(animation)
-                        view.isVisible = false
-                    }
-                },
-            )
-    }
-
-    private fun showMarkerDetail() {
-        showViewAnimation(binding.vpWoofPetDetail)
-        showViewAnimation(binding.tvWoofWalkStatus)
-    }
-
-    private fun hideMarkerDetail() {
-        binding.tvWoofWalkStatus.isVisible = false
-        hideViewAnimation(binding.vpWoofPetDetail)
-    }
-
-    private fun showRegisterMarkerLayout() {
-        myMarker?.map = null
         setUpCircleOverlay(map.cameraPosition.target)
-
         getAddress(map.cameraPosition.target)
-
-        showViewAnimation(binding.layoutWoofRegisterMarker)
-        binding.layoutWoofLocationRegister.isVisible = true
-        binding.btnWoofLocationRegister.isVisible = true
-        binding.btnWoofBack.isVisible = true
-        binding.btnWoofClose.isVisible = true
-        binding.ivWoofRegisterMarker.isVisible = true
-        changeRecentlyClickedMarkerSize()
+        changePreviousClickedMarkerSize()
     }
 
-    private fun hideRegisterMarkerLayout() {
-        myMarker?.let { marker ->
-            if (marker.map == null) {
-                marker.map = map
-            }
-            circleOverlay.center = marker.position
-        }
-
-        if (myMarker == null) {
+    private fun hideRegisterFootprintScreen() {
+        val myFootprintMarker = viewModel.myFootprintMarker.value
+        if (myFootprintMarker != null) {
+            myFootprintMarker.marker.map = map
+            circleOverlay.center = myFootprintMarker.marker.position
+        } else {
             circleOverlay.map = null
         }
-
-        hideViewAnimation(binding.layoutWoofRegisterMarker)
-        binding.layoutWoofLocationRegister.isVisible = false
-        binding.btnWoofLocationRegister.isVisible = false
-        binding.btnWoofBack.isVisible = false
-        binding.btnWoofClose.isVisible = false
-        binding.ivWoofRegisterMarker.isVisible = false
-        changeRecentlyClickedMarkerSize()
+        changePreviousClickedMarkerSize()
     }
 
-    private fun changeRecentlyClickedMarkerSize() {
-        if (recentlyClickedMarker != null) {
-            recentlyClickedMarker?.width = MARKER_WIDTH
-            recentlyClickedMarker?.height = MARKER_HEIGHT
+    private fun changePreviousClickedMarkerSize() {
+        val footprintInfo = viewModel.footprintInfo.value ?: return
+        footprintInfo.marker.width = MARKER_DEFAULT_WIDTH
+        footprintInfo.marker.height = MARKER_DEFAULT_HEIGHT
+    }
+
+    private fun changeClickedMarkerSize(marker: Marker) {
+        marker.width = MARKER_CLICKED_WIDTH
+        marker.height = MARKER_CLICKED_HEIGHT
+    }
+
+    private fun clearNearFootprintMarkers() {
+        val footprintMarkers = viewModel.nearFootprintMarkers.value ?: return
+        footprintMarkers.forEach { footprintMarker ->
+            footprintMarker.marker.map = null
         }
     }
 
-    private fun markNearFootprints(footprints: List<Footprint>) {
-        footprints.forEach { footprint ->
-            createNearMarker(footprint)
-        }
-    }
+    private fun adjustPosition(marker: Marker): LatLng {
+        val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
+        val offsetDistance =
+            (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
 
-    private fun clearNearMarkers() {
-        nearMarkers.forEach { marker ->
-            marker.map = null
-        }
-        nearMarkers.clear()
+        val latitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
+        val longitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
+
+        return LatLng(latitude, longitude)
     }
 
     private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
+        val addressLatLng = convertLtnLng(position)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             geocoder.getFromLocation(
-                convertLtnLng(position.latitude),
-                convertLtnLng(position.longitude),
+                addressLatLng.latitude,
+                addressLatLng.longitude,
                 1,
             ) { addresses ->
-                if (addresses.isEmpty()) return@getFromLocation
-                val address = addresses[0] ?: return@getFromLocation
-                requireActivity().runOnUiThread {
-                    viewModel.loadAddress(address)
-                }
+                showAddress(addresses)
             }
         } else {
             val addresses =
-                geocoder.getFromLocation(position.latitude, position.longitude, 1) ?: return
-            if (addresses.isEmpty()) return
-            val address = addresses[0] ?: return
-            requireActivity().runOnUiThread {
-                viewModel.loadAddress(address)
-            }
+                geocoder.getFromLocation(addressLatLng.latitude, addressLatLng.longitude, 1)
+                    ?: return
+            showAddress(addresses)
         }
     }
 
-    private fun convertLtnLng(latLngArg: Double): Double {
-        return floor(latLngArg * 100) / 100
+    private fun showAddress(addresses: List<Address>) {
+        if (addresses.isEmpty()) return
+        val address = addresses[0]
+        val addressLine =
+            address.getAddressLine(0)
+                .replace(resources.getString(R.string.woof_address_korea), "")
+                .replace(resources.getString(R.string.woof_address_korea_english), "")
+                .trimStart()
+        requireActivity().runOnUiThread {
+            viewModel.loadAddressLine(addressLine)
+        }
     }
 
-    private fun startTimerAndUpdateWalkStatus() {
+    private fun convertLtnLng(latLng: LatLng): LatLng {
+        return LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    }
+
+    private fun monitorDistanceAndManageWalkStatus() {
         if (timer != null) {
             timer?.cancel()
         }
@@ -681,7 +731,8 @@ class WoofFragment :
             timer(period = UPDATE_WALK_STATUS_PERIOD_MILLS) {
                 Handler(Looper.getMainLooper()).post {
                     val distanceResults = FloatArray(1)
-                    val position = myMarker?.position ?: return@post
+                    val myFootprintMarker = viewModel.myFootprintMarker.value ?: return@post
+                    val position = myFootprintMarker.marker.position
                     Location.distanceBetween(
                         latLng.latitude,
                         latLng.longitude,
@@ -690,31 +741,103 @@ class WoofFragment :
                         distanceResults,
                     )
                     val distance = distanceResults[0]
-                    if (startWalking(distance) || endWalking(distance)) {
-                        viewModel.updateWalkStatus(latLng)
+                    if (startWalkIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
+                        viewModel.updateFootprintRecentWalkStatus(latLng)
                     }
                 }
             }
     }
 
-    private fun startWalking(distance: Float): Boolean {
-        return viewModel.myWalkStatus.value == WalkStatus.BEFORE && distance <= WALKING_RADIUS
+    private fun startWalkIfWithinRange(distance: Float): Boolean {
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
+        return myWalkStatus.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
     }
 
-    private fun endWalking(distance: Float): Boolean {
-        return viewModel.myWalkStatus.value == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    private fun endWalkIfOutOfRange(distance: Float): Boolean {
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
+        return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    }
+
+    private fun startWalkStatusChronometer(changedWalkStatusTime: LocalDateTime) {
+        val now = java.time.LocalDateTime.now()
+        val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
+        walkTimeChronometer.base =
+            SystemClock.elapsedRealtime() - duration.toMillis()
+        walkTimeChronometer.start()
+    }
+
+    private fun markFootprintMarkers(filterState: FilterState) {
+        when (filterState) {
+            FilterState.ALL -> filterAllFootprintMarkers()
+            FilterState.BEFORE -> filterFootprintMarkersByWalkStatus(WalkStatus.BEFORE)
+            FilterState.ONGOING -> filterFootprintMarkersByWalkStatus(WalkStatus.ONGOING)
+            FilterState.AFTER -> filterFootprintMarkersByWalkStatus(WalkStatus.AFTER)
+        }
+    }
+
+    private fun filterAllFootprintMarkers() {
+        val allFootprintMarkers = viewModel.nearFootprintMarkers.value ?: return
+        allFootprintMarkers.forEach { footprintMarker ->
+            footprintMarker.marker.map = map
+        }
+    }
+
+    private fun filterFootprintMarkersByWalkStatus(walkStatus: WalkStatus) {
+        val filteredFootprintMarkers = viewModel.nearFootprintMarkers.value ?: return
+        filteredFootprintMarkers.forEach { footprintMarker ->
+            if (footprintMarker.walkStatus == walkStatus) {
+                footprintMarker.marker.map = map
+            } else {
+                footprintMarker.marker.map = null
+            }
+        }
+    }
+
+    private fun runIfLocationPermissionGranted(action: () -> Unit) {
+        if (locationPermission.hasPermissions()) {
+            action()
+        } else {
+            locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+        }
+    }
+
+    private fun showRegisterPetDialog() {
+        PetAddAlertDialog(
+            clickToNegative = {},
+            clickToPositive = {
+                (activity as MainActivityActionHandler).navigateToRegisterPet(null)
+            },
+        ).show(parentFragmentManager, tag)
+    }
+
+    private fun createBalloon(text: String): Balloon {
+        return Balloon.Builder(requireContext())
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText(text)
+            .setTextColorResource(R.color.white)
+            .setTextSize(14f)
+            .setMarginBottom(10)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.coral400)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
     }
 
     companion object {
         private const val WALKING_RADIUS = 1000.0
         private const val MIN_ZOOM = 10.0
         private const val MAX_ZOOM = 20.0
-        private const val MARKER_WIDTH = 72
-        private const val MARKER_HEIGHT = 111
+        private const val MARKER_DEFAULT_WIDTH = 72
+        private const val MARKER_DEFAULT_HEIGHT = 111
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
-        private const val LOADING_DELAY_MILLIS = 1000L
-        private const val ANIMATE_DURATION_MILLIS = 300L
+        private const val TRACKING_DELAY_MILLIS = 300L
         private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
         private const val MIN_KOREA_LATITUDE = 33.0
         private const val MAX_KOREA_LATITUDE = 39.0

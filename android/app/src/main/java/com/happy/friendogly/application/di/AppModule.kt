@@ -48,6 +48,7 @@ import com.happy.friendogly.domain.usecase.ConnectWebsocketUseCase
 import com.happy.friendogly.domain.usecase.DeleteAddressUseCase
 import com.happy.friendogly.domain.usecase.DeleteChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
+import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
 import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.DeleteWoofAlarmUseCase
@@ -73,9 +74,10 @@ import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PatchClubUseCase
+import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
+import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualUseCase
 import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PatchPetUseCase
-import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
@@ -274,12 +276,16 @@ class AppModule(context: Context) {
         GetFootprintInfoUseCase(repository = woofRepository)
     val postFootprintUseCase: PostFootprintUseCase =
         PostFootprintUseCase(repository = woofRepository)
-    val patchWalkStatusUseCase: PatchWalkStatusUseCase =
-        PatchWalkStatusUseCase(repository = woofRepository)
+    val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase =
+        PatchFootprintRecentWalkStatusAutoUseCase(repository = woofRepository)
+    val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase =
+        PatchFootprintRecentWalkStatusManualUseCase(repository = woofRepository)
     val getNearFootprintsUseCase: GetNearFootprintsUseCase =
         GetNearFootprintsUseCase(repository = woofRepository)
     val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase =
         GetFootprintMarkBtnInfoUseCase(repository = woofRepository)
+    val deleteFootprintUseCase: DeleteFootprintUseCase =
+        DeleteFootprintUseCase(repository = woofRepository)
     val postMemberUseCase: PostMemberUseCase = PostMemberUseCase(repository = memberRepository)
     val getPetsMineUseCase: GetPetsMineUseCase = GetPetsMineUseCase(repository = petRepository)
     val getPetsUseCase: GetPetsUseCase = GetPetsUseCase(repository = petRepository)

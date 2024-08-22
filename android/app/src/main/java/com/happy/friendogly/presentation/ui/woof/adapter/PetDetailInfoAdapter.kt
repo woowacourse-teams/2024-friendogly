@@ -6,43 +6,43 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemFootprintInfoPetDetailBinding
 import com.happy.friendogly.presentation.ui.woof.WoofActionHandler
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
 
-class FootprintInfoPetDetailAdapter(private val actionHandler: WoofActionHandler) :
-    ListAdapter<FootprintInfoPetDetailUiModel, FootprintInfoPetDetailViewHolder>(diffUtil) {
+class PetDetailInfoAdapter(private val actionHandler: WoofActionHandler) :
+    ListAdapter<PetDetailInfoUiModel, PetDetailInfoViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): FootprintInfoPetDetailViewHolder {
+    ): PetDetailInfoViewHolder {
         val binding =
             ItemFootprintInfoPetDetailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-        return FootprintInfoPetDetailViewHolder(binding)
+        return PetDetailInfoViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: FootprintInfoPetDetailViewHolder,
+        holder: PetDetailInfoViewHolder,
         position: Int,
     ) {
-        holder.bind(footprintPetDetail = getItem(position), actionHandler = actionHandler)
+        holder.bind(petDetailInfo = getItem(position), actionHandler = actionHandler)
     }
 
     companion object {
         private val diffUtil =
-            object : DiffUtil.ItemCallback<FootprintInfoPetDetailUiModel>() {
+            object : DiffUtil.ItemCallback<PetDetailInfoUiModel>() {
                 override fun areItemsTheSame(
-                    oldItem: FootprintInfoPetDetailUiModel,
-                    newItem: FootprintInfoPetDetailUiModel,
+                    oldItem: PetDetailInfoUiModel,
+                    newItem: PetDetailInfoUiModel,
                 ): Boolean {
-                    return oldItem.petDetail.name == newItem.petDetail.name
+                    return oldItem.memberId == newItem.memberId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: FootprintInfoPetDetailUiModel,
-                    newItem: FootprintInfoPetDetailUiModel,
+                    oldItem: PetDetailInfoUiModel,
+                    newItem: PetDetailInfoUiModel,
                 ): Boolean {
                     return oldItem == newItem
                 }

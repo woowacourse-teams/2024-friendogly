@@ -1,93 +1,79 @@
 package com.happy.friendogly.presentation.ui.woof
 
-import android.location.Address
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.analytics.AnalyticsHelper
+import com.happy.friendogly.data.mapper.toFootprint
+import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
-import com.happy.friendogly.domain.usecase.PatchWalkStatusUseCase
+import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
+import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualUseCase
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.woof.mapper.toPetDetailsPresentation
-import com.happy.friendogly.presentation.ui.woof.mapper.toWalkStatusPresentation
-import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
+import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.woof.model.FilterState
+import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoPetDetailUiModel
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoWalkStatusUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.MyFootprintMarkerUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.OtherFootprintMarkerUiModel
 import com.happy.friendogly.presentation.utils.logFootprintMarkBtnInfo
 import com.happy.friendogly.presentation.utils.logNearFootprintSize
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.overlay.Marker
 import kotlinx.coroutines.launch
 
 class WoofViewModel(
     private val analyticsHelper: AnalyticsHelper,
     private val postFootprintUseCase: PostFootprintUseCase,
-    private val patchWalkStatusUseCase: PatchWalkStatusUseCase,
+    private val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
+    private val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
     private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
     private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
     private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
+    private val deleteFootprintUseCase: DeleteFootprintUseCase,
 ) : BaseViewModel() {
-    private val _nearFootprints: MutableLiveData<List<Footprint>> = MutableLiveData()
-    val nearFootprints: LiveData<List<Footprint>> get() = _nearFootprints
+    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData(WoofUiState.Loading)
+    val uiState: LiveData<WoofUiState> get() = _uiState
 
-    private val _myFootprint: MutableLiveData<MyFootprint?> = MutableLiveData()
-    val myFootprint: LiveData<MyFootprint?> get() = _myFootprint
+    private val _filterState: MutableLiveData<FilterState> = MutableLiveData(FilterState.ALL)
+    val filterState: LiveData<FilterState> get() = _filterState
 
-    private val _myWalkStatus: MutableLiveData<WalkStatus?> = MutableLiveData()
-    val myWalkStatus: LiveData<WalkStatus?> get() = _myWalkStatus
+    private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
+    val myWalkStatus: LiveData<FootprintRecentWalkStatus?> get() = _myWalkStatus
 
-    private val _footprintInfoWalkStatus: MutableLiveData<FootprintInfoWalkStatusUiModel> =
+    private val _myFootprintMarker: MutableLiveData<MyFootprintMarkerUiModel?> = MutableLiveData()
+    val myFootprintMarker: LiveData<MyFootprintMarkerUiModel?> get() = _myFootprintMarker
+
+    private val _nearFootprintMarkers: MutableLiveData<List<OtherFootprintMarkerUiModel>> =
         MutableLiveData()
-    val footprintInfoWalkStatus: LiveData<FootprintInfoWalkStatusUiModel> get() = _footprintInfoWalkStatus
+    val nearFootprintMarkers: LiveData<List<OtherFootprintMarkerUiModel>> get() = _nearFootprintMarkers
 
-    private val _footprintInfoPetDetails: MutableLiveData<List<FootprintInfoPetDetailUiModel>> =
+    private val _footprintInfo: MutableLiveData<FootprintInfoUiModel> = MutableLiveData()
+    val footprintInfo: LiveData<FootprintInfoUiModel> get() = _footprintInfo
+
+    private val _addressLine: MutableLiveData<String> = MutableLiveData()
+    val addressLine: LiveData<String> get() = _addressLine
+
+    private val _makeMarkerActions: MutableLiveData<Event<WoofMakeMarkerActions>> =
         MutableLiveData()
-    val footprintInfoPetDetails: LiveData<List<FootprintInfoPetDetailUiModel>> get() = _footprintInfoPetDetails
+    val makeMarkerActions: LiveData<Event<WoofMakeMarkerActions>> get() = _makeMarkerActions
 
-    private val _registerAddress: MutableLiveData<String> = MutableLiveData()
-    val registerAddress: LiveData<String> get() = _registerAddress
+    private val _changeTrackingModeActions: MutableLiveData<Event<WoofChangeTrackingModeActions>> =
+        MutableLiveData()
+    val changeTrackingModeActions: LiveData<Event<WoofChangeTrackingModeActions>> get() = _changeTrackingModeActions
 
-    private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
-    val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
-
-    private val _snackbarActions: MutableLiveData<Event<WoofSnackbarActions>> = MutableLiveData()
-    val snackbarActions: LiveData<Event<WoofSnackbarActions>> get() = _snackbarActions
-
-    fun loadNearFootprints(latLng: LatLng) {
-        viewModelScope.launch {
-            getNearFootprintsUseCase(
-                latLng.latitude,
-                latLng.longitude,
-            ).onSuccess { nearFootprints ->
-                val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
-                analyticsHelper.logNearFootprintSize(otherFootprints.size)
-
-                val myFootprint = nearFootprints.find { footprint -> footprint.isMine }
-                if (myFootprint != null) {
-                    _myFootprint.value =
-                        MyFootprint(
-                            footprintId = myFootprint.footprintId,
-                            latitude = myFootprint.latitude,
-                            longitude = myFootprint.longitude,
-                            createdAt = myFootprint.createdAt,
-                        )
-                } else {
-                    _myFootprint.value = null
-                    _myWalkStatus.value = null
-                }
-                _nearFootprints.value = otherFootprints
-            }.onFailure {
-            }
-        }
-    }
+    private val _alertActions: MutableLiveData<Event<WoofAlertActions>> = MutableLiveData()
+    val alertActions: LiveData<Event<WoofAlertActions>> get() = _alertActions
 
     fun loadFootprintMarkBtnInfo() {
         viewModelScope.launch {
@@ -97,108 +83,237 @@ class WoofViewModel(
                     footPrintMarkBtnInfo.remainingTime(),
                 )
                 if (!footPrintMarkBtnInfo.hasPet) {
-                    _snackbarActions.emit(WoofSnackbarActions.ShowHasNotPetSnackbar)
+                    _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
                 } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
-                    _snackbarActions.emit(
-                        WoofSnackbarActions.ShowCantClickMarkBtnSnackbar(
+                    _alertActions.emit(
+                        WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar(
                             footPrintMarkBtnInfo.remainingTime(),
                         ),
                     )
                 } else {
-                    _mapActions.emit(WoofMapActions.ShowRegisterMarkerLayout)
+                    _uiState.value = WoofUiState.Loading
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            _uiState.value = WoofUiState.RegisteringFootprint
+                        },
+                        ANIMATE_DURATION_MILLIS,
+                    )
                 }
             }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar)
             }
         }
     }
 
-    fun markFootprint(latLng: LatLng) {
+    fun initFootprintMarkers(latLng: LatLng) {
         viewModelScope.launch {
-            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { footprintSave ->
-                _myFootprint.value = footprintSave
-                _mapActions.value = Event(WoofMapActions.RemoveNearFootprints)
-                _mapActions.value = Event(WoofMapActions.HideRegisterMarkerLayout)
-                _snackbarActions.emit(WoofSnackbarActions.ShowMarkerRegistered)
-                _myWalkStatus.value = WalkStatus.BEFORE
-                loadNearFootprints(latLng)
+            getNearFootprintsUseCase(
+                latLng.latitude,
+                latLng.longitude,
+            ).onSuccess { nearFootprints ->
+                val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
+                analyticsHelper.logNearFootprintSize(otherFootprints.size)
+                _makeMarkerActions.value =
+                    Event(WoofMakeMarkerActions.MakeNearFootprintMarkers(nearFootprints = otherFootprints))
+
+                val myFootprint = nearFootprints.firstOrNull { footprint -> footprint.isMine }
+                _makeMarkerActions.value =
+                    Event(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint))
             }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar)
             }
         }
     }
 
-    fun updateWalkStatus(latLng: LatLng) {
+    fun registerFootprint(latLng: LatLng) {
         viewModelScope.launch {
-            patchWalkStatusUseCase(latLng.latitude, latLng.longitude).onSuccess { walkStatus ->
-                when (walkStatus) {
+            postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { myFootprint ->
+                _makeMarkerActions.emit(WoofMakeMarkerActions.MakeMyFootprintMarker(myFootprint = myFootprint.toFootprint()))
+                _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
+                _uiState.value = WoofUiState.FindingFriends()
+                scanNearFootprints(latLng)
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToRegisterFootprintSnackbar)
+            }
+        }
+    }
+
+    fun loadMyFootprintMarker(marker: Marker) {
+        val makeMarkerActionsValue = makeMarkerActions.value?.value
+        val myFootprint =
+            (makeMarkerActionsValue as? WoofMakeMarkerActions.MakeMyFootprintMarker)?.myFootprint
+                ?: return
+
+        _myFootprintMarker.value =
+            MyFootprintMarkerUiModel(
+                footprintId = myFootprint.footprintId,
+                marker = marker,
+            )
+    }
+
+    fun scanNearFootprints(latLng: LatLng) {
+        _uiState.value = WoofUiState.Loading
+        viewModelScope.launch {
+            getNearFootprintsUseCase(
+                latLng.latitude,
+                latLng.longitude,
+            ).onSuccess { nearFootprints ->
+                val otherFootprints = nearFootprints.filter { footprint -> !footprint.isMine }
+                analyticsHelper.logNearFootprintSize(otherFootprints.size)
+                _makeMarkerActions.emit(
+                    WoofMakeMarkerActions.MakeNearFootprintMarkers(
+                        nearFootprints = otherFootprints,
+                    ),
+                )
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar)
+            }
+        }
+    }
+
+    fun loadNearFootprintMarkers(markers: List<Marker>) {
+        val makeMarkerActionsValue = makeMarkerActions.value?.value
+        val nearFootprints =
+            (makeMarkerActionsValue as? WoofMakeMarkerActions.MakeNearFootprintMarkers)?.nearFootprints
+                ?: return
+        val nearFootprintMarkers =
+            nearFootprints.mapIndexed { index, footprint ->
+                OtherFootprintMarkerUiModel(
+                    marker = markers[index],
+                    walkStatus = footprint.walkStatus,
+                )
+            }
+
+        _nearFootprintMarkers.value = nearFootprintMarkers
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                _uiState.value = WoofUiState.FindingFriends()
+            },
+            ANIMATE_DURATION_MILLIS,
+        )
+    }
+
+    fun loadFootprintInfo(
+        footprintId: Long,
+        marker: Marker,
+    ) {
+        viewModelScope.launch {
+            getFootprintInfoUseCase(footprintId).onSuccess { footprintInfo ->
+                _footprintInfo.value = footprintInfo.toPresentation(marker)
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar)
+            }
+        }
+    }
+
+    fun updateUiState(uiState: WoofUiState) {
+        _uiState.value = uiState
+    }
+
+    fun updateFilterState(filterState: FilterState) {
+        _filterState.value = filterState
+    }
+
+    fun updateFootprintRecentWalkStatus(latLng: LatLng) {
+        viewModelScope.launch {
+            patchFootprintRecentWalkStatusAutoUseCase(
+                latLng.latitude,
+                latLng.longitude,
+            ).onSuccess { footprintRecentWalkStatus ->
+                when (footprintRecentWalkStatus.walkStatus) {
                     WalkStatus.BEFORE -> {
-                        if (myWalkStatus.value == null) {
-                            _myWalkStatus.value = WalkStatus.BEFORE
+                        if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.AFTER) {
+                            _myWalkStatus.value = footprintRecentWalkStatus
                         }
                     }
 
                     WalkStatus.ONGOING -> {
-                        if (myWalkStatus.value == null || myWalkStatus.value == WalkStatus.BEFORE) {
-                            _myWalkStatus.value = WalkStatus.ONGOING
+                        if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.BEFORE) {
+                            _myWalkStatus.value = footprintRecentWalkStatus
                         }
                     }
 
                     WalkStatus.AFTER ->
-                        if (myWalkStatus.value == WalkStatus.ONGOING) {
-                            _myWalkStatus.value = WalkStatus.AFTER
+                        if (myWalkStatus.value?.walkStatus == WalkStatus.ONGOING) {
+                            _myWalkStatus.value = footprintRecentWalkStatus
                         }
                 }
             }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar)
             }
         }
     }
 
-    fun loadFootprintInfo(footprintId: Long) {
+    fun endWalk() {
         viewModelScope.launch {
-            getFootprintInfoUseCase(footprintId).onSuccess { footPrintInfo ->
-                _footprintInfoWalkStatus.value = footPrintInfo.toWalkStatusPresentation()
-                _footprintInfoPetDetails.value = footPrintInfo.toPetDetailsPresentation()
+            patchFootprintRecentWalkStatusManualUseCase(walkStatus = WalkStatus.AFTER).onSuccess { footprintRecentWalkStatus ->
+                _alertActions.emit(WoofAlertActions.AlertEndWalkSnackbar)
+                _myWalkStatus.value = footprintRecentWalkStatus
             }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToEndWalkSnackbar)
             }
         }
+    }
+
+    fun deleteMyFootprintMarker() {
+        viewModelScope.launch {
+            val myFootprintMarker = myFootprintMarker.value ?: return@launch
+            deleteFootprintUseCase(footprintId = myFootprintMarker.footprintId).onSuccess {
+                _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
+                _myWalkStatus.value = null
+                _myFootprintMarker.value = null
+            }.onFailure {
+                _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
+            }
+        }
+    }
+
+    fun changeRefreshBtnVisibility(visible: Boolean) {
+        _uiState.value = WoofUiState.FindingFriends(refreshBtnVisible = visible)
     }
 
     fun changeLocationTrackingMode() {
-        val mapAction = mapActions.value?.value ?: WoofMapActions.ChangeMapToFollowTrackingMode
-        _mapActions.emit(
-            if (mapAction is WoofMapActions.ChangeMapToFollowTrackingMode) {
-                WoofMapActions.ChangeMapToFaceTrackingMode
+        val changeTrackingModeAction =
+            changeTrackingModeActions.value?.value
+                ?: WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+        val trackingMode =
+            if (changeTrackingModeAction is WoofChangeTrackingModeActions.ChangeToFollowTrackingMode) {
+                WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
             } else {
-                WoofMapActions.ChangeMapToFollowTrackingMode
-            },
-        )
+                WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+            }
+        _changeTrackingModeActions.emit(trackingMode)
     }
 
     fun changeTrackingModeToNoFollow() {
-        _mapActions.emit(WoofMapActions.ChangeMapToNoFollowTrackingMode)
+        _changeTrackingModeActions.emit(WoofChangeTrackingModeActions.ChangeToNoFollowTrackingMode)
     }
 
-    fun loadAddress(address: Address) {
-        val addressLine = address.getAddressLine(0).replace("대한민국", "").trimStart()
-        _registerAddress.value = addressLine
+    fun loadAddressLine(addressLine: String) {
+        _addressLine.value = addressLine
     }
 
     companion object {
         fun factory(
             analyticsHelper: AnalyticsHelper,
             postFootprintUseCase: PostFootprintUseCase,
-            patchWalkStatusUseCase: PatchWalkStatusUseCase,
+            patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
+            patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
             getNearFootprintsUseCase: GetNearFootprintsUseCase,
             getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
             getFootprintInfoUseCase: GetFootprintInfoUseCase,
+            deleteFootprintUseCase: DeleteFootprintUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory {
                 WoofViewModel(
                     analyticsHelper = analyticsHelper,
                     postFootprintUseCase = postFootprintUseCase,
-                    patchWalkStatusUseCase = patchWalkStatusUseCase,
+                    patchFootprintRecentWalkStatusAutoUseCase = patchFootprintRecentWalkStatusAutoUseCase,
+                    patchFootprintRecentWalkStatusManualUseCase = patchFootprintRecentWalkStatusManualUseCase,
                     getNearFootprintsUseCase = getNearFootprintsUseCase,
                     getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,
                     getFootprintInfoUseCase = getFootprintInfoUseCase,
+                    deleteFootprintUseCase = deleteFootprintUseCase,
                 )
             }
         }

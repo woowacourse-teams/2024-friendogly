@@ -50,6 +50,10 @@ fun AnalyticsHelper.logMyFootprintBtnClicked() {
     logEvent(type = Types.MY_FOOTPRINT_BTN_CLICKED)
 }
 
+fun AnalyticsHelper.logRefreshBtnClicked() {
+    logEvent(type = Types.REFRESH_BTN_CLICKED)
+}
+
 fun AnalyticsHelper.logBackBtnClicked() {
     logEvent(type = Types.BACK_BTN_CLICKED)
 }
@@ -64,6 +68,18 @@ fun AnalyticsHelper.logFootprintClicked() {
 
 fun AnalyticsHelper.logFootprintMemberNameClicked() {
     logEvent(type = Types.FOOTPRINT_MEMBER_NAME_CLICKED)
+}
+
+fun AnalyticsHelper.logRegisterHelpClicked() {
+    logEvent(type = Types.REGISTER_HELP_CLICKED)
+}
+
+fun AnalyticsHelper.logWalkHelpClicked() {
+    logEvent(type = Types.WALK_HELP_CLICKED)
+}
+
+fun AnalyticsHelper.logFootprintPetImageClicked() {
+    logEvent(type = Types.FOOTPRINT_PET_IMAGE_CLICKED)
 }
 
 fun AnalyticsHelper.logNearFootprintSize(size: Int) {

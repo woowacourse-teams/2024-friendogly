@@ -11,11 +11,25 @@ interface WoofActionHandler {
 
     fun clickMyFootprintBtn()
 
+    fun clickStatusAll()
+
+    fun clickStatusBefore()
+
+    fun clickStatusOnGoing()
+
+    fun clickStatusAfter()
+
+    fun clickRefreshBtn()
+
+    fun clickDeleteMyFootprintMarkerBtn()
+
+    fun clickEndWalkBtn()
+
     fun clickBackBtn()
 
     fun clickCloseBtn()
 
-    fun clickFootprint(
+    fun clickFootprintMarker(
         footprintId: Long,
         marker: Marker,
     )
@@ -23,4 +37,8 @@ interface WoofActionHandler {
     fun clickFootprintPetImage(petImageUrl: String)
 
     fun clickFootprintMemberName(memberId: Long)
+
+    fun clickRegisterHelp()
+
+    fun clickWalkHelp()
 }
