@@ -30,7 +30,6 @@ fun ImageView.bindClubGlide(uri: String?) {
         .into(this)
 }
 
-
 @BindingAdapter("glideProfile1000")
 fun ImageView.bindProfile1000(bitmap: Bitmap?) {
     if (bitmap == null) {

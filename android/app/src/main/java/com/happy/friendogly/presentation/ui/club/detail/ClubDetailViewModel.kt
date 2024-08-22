@@ -78,8 +78,8 @@ class ClubDetailViewModel(
                 .onSuccess { clubParticipation ->
                     _clubDetailEvent.emit(
                         ClubDetailEvent.Navigation.NavigateToChat(
-                            clubParticipation.chatRoomId
-                        )
+                            clubParticipation.chatRoomId,
+                        ),
                     )
                 }
                 .onFailure {
