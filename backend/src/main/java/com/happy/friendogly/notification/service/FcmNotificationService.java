@@ -57,6 +57,10 @@ public class FcmNotificationService implements NotificationService {
     public void sendChatNotification(Long chatRoomId, ChatMessageResponse response) {
         List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
 
+        if (receiverTokens.isEmpty()) {
+            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.");
+        }
+
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),
                 "messageType", response.messageType().toString(),
