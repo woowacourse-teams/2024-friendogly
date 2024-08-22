@@ -55,7 +55,7 @@ public class FcmNotificationService implements NotificationService {
 
     @Override
     public void sendChatNotification(Long chatRoomId, ChatMessageResponse response) {
-        List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomId(chatRoomId);
+        List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
 
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),

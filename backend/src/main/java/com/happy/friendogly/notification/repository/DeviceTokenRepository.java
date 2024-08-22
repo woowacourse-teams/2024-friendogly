@@ -15,9 +15,10 @@ public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> 
             SELECT dt.deviceToken
             FROM DeviceToken dt
             INNER JOIN ChatRoomMember chatRoomMember ON dt.member.id = chatRoomMember.member.id
-            WHERE chatRoomMember.chatRoom.id = :chatRoomId
+            WHERE chatRoomMember.chatRoom.id = :chatRoomId AND dt.member.id != :myMemberId
             """)
-    List<String> findAllByChatRoomId(@Param("chatRoomId") Long chatRoomId);
+    List<String> findAllByChatRoomIdWithoutMine(
+            @Param("chatRoomId") Long chatRoomId, @Param("myMemberId") Long myMemberId);
 
     void deleteByMemberId(Long memberId);
 }
