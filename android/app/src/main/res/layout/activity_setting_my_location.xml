@@ -74,9 +74,6 @@
                 app:myLocation="@{vm.userAddress}"
                 tools:text="대한민국 제주특별자치도 제주시 이도1동 1250-15" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="20dp" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"

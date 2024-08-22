@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/rect_coral100_fill_12"
+        android:background="@drawable/rect_coral30_fill_8"
         android:paddingHorizontal="8dp"
         android:paddingVertical="5dp"
         android:layout_marginEnd="3dp"
@@ -21,6 +21,7 @@
             tools:text = "중형견"
             style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
             app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/coral400"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@{clubFilter.filterName}"

@@ -90,6 +90,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         super.onResume()
         viewModel.fetchPetMine()
         viewModel.fetchMemberMine()
+        viewModel.updateCurrentPage(binding.vpPetProfile.currentItem)
     }
 
     companion object {

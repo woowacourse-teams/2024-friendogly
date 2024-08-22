@@ -113,6 +113,7 @@ class OtherProfileActivity :
     override fun onResume() {
         super.onResume()
         viewModel.fetchPetMine()
+        viewModel.updateCurrentPage(binding.vpPetProfile.currentItem)
     }
 
     companion object {
