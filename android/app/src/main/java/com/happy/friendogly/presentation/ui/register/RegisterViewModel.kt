@@ -94,7 +94,6 @@ class RegisterViewModel(
                     saveAlarmToken()
                     saveJwtToken(tokens)
                 } else {
-                    _loading.emit(false)
                     _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.accessToken))
                 }
             },
@@ -106,6 +105,7 @@ class RegisterViewModel(
                 }
             },
         )
+        _loading.emit(false)
     }
 
     private fun saveAlarmToken() {
@@ -134,7 +134,6 @@ class RegisterViewModel(
     private suspend fun saveJwtToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).fold(
             onSuccess = {
-                _loading.emit(false)
                 _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
             },
             onError = { error ->
