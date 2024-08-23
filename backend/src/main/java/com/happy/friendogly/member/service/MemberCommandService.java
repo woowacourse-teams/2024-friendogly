@@ -8,7 +8,6 @@ import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import com.happy.friendogly.auth.service.jwt.TokenPayload;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.club.service.ClubCommandService;
-import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.infra.FileStorageManager;
 import com.happy.friendogly.infra.ImageUpdateType;
@@ -103,9 +102,8 @@ public class MemberCommandService {
                 .forEach(club -> clubCommandService.deleteClubMember(club.getId(), memberId));
 
         // 해당 회원의 발자국 삭제
-        footprintRepository.findTopOneByMemberIdOrderByCreatedAtDesc(memberId)
-                .ifPresent(Footprint::updateToDeleted);
-        
+        footprintRepository.deleteAllByMemberId(memberId);
+
         // 해당 회원의 반려견 삭제
         // TODO: 해당 반려견 이미지 S3에서 삭제
         petRepository.deleteAllByMemberId(memberId);
