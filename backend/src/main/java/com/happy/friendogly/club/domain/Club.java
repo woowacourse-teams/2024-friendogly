@@ -24,6 +24,7 @@ import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -87,9 +88,11 @@ public class Club {
     private Status status;
 
     @OneToMany(mappedBy = "clubMemberId.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderBy("createdAt")
     private Set<ClubMember> clubMembers = new HashSet<>();
 
     @OneToMany(mappedBy = "clubPetId.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderBy
     private Set<ClubPet> clubPets = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
@@ -220,7 +223,6 @@ public class Club {
     public void removeClubMember(Member member) {
         ClubMember targetClubMember = findTargetClubMember(member);
         clubMembers.remove(targetClubMember);
-//        targetClubMember.updateClub(null);
         removeClubPets(member);
         if (status.isFull()) {
             this.status = Status.OPEN;
@@ -236,8 +238,7 @@ public class Club {
 
     private void removeClubPets(Member member) {
         List<ClubPet> participatingMemberPets = findTargetClubPets(member);
-        clubPets.removeAll(participatingMemberPets);
-//        participatingMemberPets.forEach(clubPet -> clubPet.updateClub(null));
+        participatingMemberPets.forEach(clubPets::remove);
     }
 
     private List<ClubPet> findTargetClubPets(Member member) {
