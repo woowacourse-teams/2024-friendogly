@@ -228,7 +228,7 @@ class WoofViewModel(
                     }
 
                     WalkStatus.ONGOING -> {
-                        if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.BEFORE) {
+                        if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.BEFORE || myWalkStatus.value?.walkStatus == WalkStatus.AFTER) {
                             _myWalkStatus.value = footprintRecentWalkStatus
                         }
                     }
