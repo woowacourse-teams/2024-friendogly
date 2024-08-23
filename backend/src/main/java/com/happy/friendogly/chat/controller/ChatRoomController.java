@@ -23,6 +23,7 @@ public class ChatRoomController {
     private final ChatRoomQueryService chatRoomQueryService;
     private final ChatRoomCommandService chatRoomCommandService;
 
+    // hello
     public ChatRoomController(
             ChatRoomQueryService chatRoomQueryService,
             ChatRoomCommandService chatRoomCommandService
