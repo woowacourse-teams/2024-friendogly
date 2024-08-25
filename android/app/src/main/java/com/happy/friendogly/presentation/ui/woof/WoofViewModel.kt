@@ -42,7 +42,7 @@ class WoofViewModel(
     private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
     private val deleteFootprintUseCase: DeleteFootprintUseCase,
 ) : BaseViewModel() {
-    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData(WoofUiState.Loading)
+    private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
     val uiState: LiveData<WoofUiState> get() = _uiState
 
     private val _filterState: MutableLiveData<FilterState> = MutableLiveData(FilterState.ALL)

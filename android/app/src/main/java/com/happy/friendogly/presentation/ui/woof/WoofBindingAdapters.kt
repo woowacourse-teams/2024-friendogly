@@ -10,6 +10,7 @@ import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -157,12 +158,12 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
 }
 
 @BindingAdapter("registeringVisibility")
-fun View.bindRegisteringVisibility(uiState: WoofUiState) {
+fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
     isVisible = (uiState == WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("registeringVisibilityAnimation")
-fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
+fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
     if (uiState == WoofUiState.RegisteringFootprint) {
         showViewAnimation()
     } else {
@@ -171,7 +172,7 @@ fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("viewingVisibilityAnimation")
-fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
+fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
     if (uiState == WoofUiState.ViewingFootprintInfo) {
         showViewAnimation()
     } else {
@@ -180,12 +181,12 @@ fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("loadingVisibility")
-fun View.bindLoadingVisibility(uiState: WoofUiState) {
+fun FrameLayout.bindLoadingVisibility(uiState: WoofUiState?) {
     isVisible = (uiState == WoofUiState.Loading)
 }
 
 @BindingAdapter("loadingAnimation")
-fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
+fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
     if (uiState == WoofUiState.Loading) {
         playAnimation()
     } else {
@@ -194,7 +195,7 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("stateVisibility")
-fun View.bindStateVisibility(uiState: WoofUiState) {
+fun View.bindStateVisibility(uiState: WoofUiState?) {
     isVisible = (uiState != WoofUiState.RegisteringFootprint)
 }
 
@@ -231,7 +232,7 @@ fun TextView.bindFilterStateBtnBackgroundTint(
 }
 
 @BindingAdapter("refreshBtnVisibility")
-fun View.bindRefreshBtnVisibility(uiState: WoofUiState) {
+fun View.bindRefreshBtnVisibility(uiState: WoofUiState?) {
     isVisible =
         if (uiState is WoofUiState.FindingFriends) {
             uiState.refreshBtnVisible

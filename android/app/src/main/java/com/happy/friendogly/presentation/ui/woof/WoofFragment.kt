@@ -9,17 +9,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Chronometer
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
-import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -82,15 +85,15 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
 
-class WoofFragment :
-    BaseFragment<FragmentWoofBinding>(R.layout.fragment_woof),
-    WoofActionHandler,
-    OnMapReadyCallback {
+class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
+    private var _binding: FragmentWoofBinding? = null
+    private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
     private var timer: Timer? = null
-    private val locationPermission: LocationPermission = initLocationPermission()
 
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
+    private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val analyticsHelper: AnalyticsHelper by lazy { AppModule.getInstance().analyticsHelper }
@@ -118,16 +121,41 @@ class WoofFragment :
         )
     }
 
-    override fun onMapReady(naverMap: NaverMap) {
-        initMap(naverMap)
-        activateMap()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.uiState.value is WoofUiState.FindingFriends) {
+                        requireActivity().finish()
+                    } else {
+                        viewModel.updateUiState(WoofUiState.FindingFriends())
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    override fun initViewCreated() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentWoofBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
+        initLocationPermission()
         initDataBinding()
         initObserve()
         initViewPager()
-        mapView.getMapAsync(this)
     }
 
     override fun onStart() {
@@ -138,8 +166,12 @@ class WoofFragment :
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-        if (locationPermission.hasPermissions() && !locationSource.isActivated) {
+        if (locationPermission.hasPermissions() && viewModel.uiState.value is WoofUiState.LocationPermissionsNotGranted) {
             activateMap()
+        }
+
+        if (!locationPermission.hasPermissions() && viewModel.uiState.value !is WoofUiState.LocationPermissionsNotGranted) {
+            viewModel.updateUiState(WoofUiState.LocationPermissionsNotGranted)
         }
     }
 
@@ -161,26 +193,7 @@ class WoofFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        onBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (viewModel.uiState.value is WoofUiState.FindingFriends) {
-                        requireActivity().finish()
-                    } else {
-                        viewModel.updateUiState(WoofUiState.FindingFriends())
-                    }
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        _binding = null
     }
 
     override fun onDetach() {
@@ -188,17 +201,14 @@ class WoofFragment :
         onBackPressedCallback.remove()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (!locationPermission.hasPermissions()) {
-            viewModel.updateUiState(WoofUiState.FindingFriends())
-        }
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
 
-        runIfLocationPermissionGranted {
+    override fun onMapReady(naverMap: NaverMap) {
+        initMap(naverMap)
+        if (locationPermission.hasPermissions()) {
             activateMap()
         }
     }
@@ -384,6 +394,7 @@ class WoofFragment :
     }
 
     private fun initDataBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         binding.actionHandler = this
     }
@@ -391,6 +402,10 @@ class WoofFragment :
     private fun initObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
+                is WoofUiState.LocationPermissionsNotGranted ->
+                    locationPermission.createAlarmDialog()
+                        .show(parentFragmentManager, tag)
+
                 is WoofUiState.FindingFriends -> hideRegisterFootprintScreen()
                 is WoofUiState.RegisteringFootprint -> showRegisterFootprintScreen()
                 else -> return@observe
@@ -560,14 +575,15 @@ class WoofFragment :
         binding.vpWoofPetDetail.setPageTransformer(transform)
     }
 
-    private fun initLocationPermission(): LocationPermission {
-        return LocationPermission.from(this) { isPermitted ->
-            if (isPermitted) {
-                activateMap()
-            } else {
-                showSnackbar(getString(R.string.permission_denied_message))
+    private fun initLocationPermission() {
+        locationPermission =
+            LocationPermission.from(this) { isPermitted ->
+                if (isPermitted) {
+                    activateMap()
+                } else {
+                    showSnackbar(getString(R.string.permission_denied_message))
+                }
             }
-        }
     }
 
     private fun activateMap() {
@@ -794,7 +810,7 @@ class WoofFragment :
     }
 
     private fun runIfLocationPermissionGranted(action: () -> Unit) {
-        if (locationPermission.hasPermissions()) {
+        if (viewModel.uiState.value !is WoofUiState.LocationPermissionsNotGranted) {
             action()
         } else {
             locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
@@ -808,6 +824,19 @@ class WoofFragment :
                 (activity as MainActivityActionHandler).navigateToRegisterPet(null)
             },
         ).show(parentFragmentManager, tag)
+    }
+
+    private fun showSnackbar(
+        message: String,
+        action: Snackbar.() -> Unit = {},
+    ) {
+        snackbar?.dismiss()
+        snackbar =
+            Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
+                anchorView = requireActivity().findViewById(R.id.bottom_navi)
+                action()
+            }
+        snackbar?.show()
     }
 
     private fun createBalloon(text: String): Balloon {
