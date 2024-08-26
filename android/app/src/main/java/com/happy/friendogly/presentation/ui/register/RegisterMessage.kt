@@ -7,7 +7,5 @@ sealed interface RegisterMessage {
 
     data object TokenNotStoredErrorMessage : RegisterMessage
 
-    data object KakaoLoginErrorMessage : RegisterMessage
-
     data object NoInternetMessage : RegisterMessage
 }
