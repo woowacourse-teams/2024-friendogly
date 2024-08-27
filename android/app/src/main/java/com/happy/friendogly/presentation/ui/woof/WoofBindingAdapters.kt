@@ -157,14 +157,19 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
     }
 }
 
+@BindingAdapter("findFriendsVisibility")
+fun View.bindFindFriendsVisibility(uiState: WoofUiState?) {
+    isVisible = (uiState is WoofUiState.FindingFriends)
+}
+
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState == WoofUiState.RegisteringFootprint)
+    isVisible = (uiState is WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("registeringVisibilityAnimation")
 fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
-    if (uiState == WoofUiState.RegisteringFootprint) {
+    if (uiState is WoofUiState.RegisteringFootprint) {
         showViewAnimation()
     } else {
         hideViewAnimation()
@@ -196,7 +201,7 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
 
 @BindingAdapter("stateVisibility")
 fun View.bindStateVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState != WoofUiState.RegisteringFootprint)
+    isVisible = (uiState !is WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("myWalkStatusVisibility")
@@ -231,11 +236,27 @@ fun TextView.bindFilterStateBtnBackgroundTint(
         ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
 }
 
-@BindingAdapter("refreshBtnVisibility")
-fun View.bindRefreshBtnVisibility(uiState: WoofUiState?) {
+@BindingAdapter("uiState", "refreshBtnVisibility")
+fun TextView.bindRefreshBtnVisibility(
+    uiState: WoofUiState?,
+    refreshBtnVisible: Boolean,
+) {
     isVisible =
         if (uiState is WoofUiState.FindingFriends) {
-            uiState.refreshBtnVisible
+            refreshBtnVisible
+        } else {
+            false
+        }
+}
+
+@BindingAdapter("uiState", "cameraIdle")
+fun TextView.bindRegisterFootprintBtnClickable(
+    uiState: WoofUiState?,
+    cameraIdle: Boolean,
+) {
+    isClickable =
+        if (uiState is WoofUiState.RegisteringFootprint) {
+            cameraIdle
         } else {
             false
         }

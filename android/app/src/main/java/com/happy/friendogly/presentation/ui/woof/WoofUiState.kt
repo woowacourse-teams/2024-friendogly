@@ -5,7 +5,7 @@ sealed interface WoofUiState {
 
     data object LocationPermissionsNotGranted : WoofUiState
 
-    data class FindingFriends(val refreshBtnVisible: Boolean = false) : WoofUiState
+    data object FindingFriends : WoofUiState
 
     data object RegisteringFootprint : WoofUiState
 

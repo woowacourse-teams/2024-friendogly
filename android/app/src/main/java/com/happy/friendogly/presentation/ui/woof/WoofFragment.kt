@@ -129,7 +129,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
                     if (viewModel.uiState.value is WoofUiState.FindingFriends) {
                         requireActivity().finish()
                     } else {
-                        viewModel.updateUiState(WoofUiState.FindingFriends())
+                        viewModel.updateUiState(WoofUiState.FindingFriends)
                     }
                 }
             }
@@ -266,7 +266,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
 
     override fun clickRefreshBtn() {
         analyticsHelper.logRefreshBtnClicked()
-        viewModel.changeRefreshBtnVisibility(false)
+        viewModel.updateRefreshBtnVisibility(visible = false)
         runIfLocationPermissionGranted {
             viewModel.scanNearFootprints(latLng)
         }
@@ -284,12 +284,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
 
     override fun clickBackBtn() {
         analyticsHelper.logBackBtnClicked()
-        viewModel.updateUiState(WoofUiState.FindingFriends())
+        viewModel.updateUiState(WoofUiState.FindingFriends)
     }
 
     override fun clickCloseBtn() {
         analyticsHelper.logCloseBtnClicked()
-        viewModel.updateUiState(WoofUiState.FindingFriends())
+        viewModel.updateUiState(WoofUiState.FindingFriends)
     }
 
     override fun clickFootprintMarker(
@@ -345,7 +345,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
                 LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
             )
         map.minZoom = MIN_ZOOM
-        map.maxZoom = MAX_ZOOM
         map.locationSource = locationSource
 
         map.uiSettings.apply {
@@ -360,7 +359,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
                 if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
-                    viewModel.updateUiState(WoofUiState.FindingFriends())
+                    viewModel.updateUiState(WoofUiState.FindingFriends)
                 }
             }
 
@@ -373,21 +372,23 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
                 viewModel.changeTrackingModeToNoFollow()
 
                 if (viewModel.uiState.value is WoofUiState.FindingFriends) {
-                    viewModel.changeRefreshBtnVisibility(true)
+                    viewModel.updateRefreshBtnVisibility(visible = true)
                 }
 
                 if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
-                    viewModel.updateUiState(WoofUiState.FindingFriends())
+                    viewModel.updateUiState(WoofUiState.FindingFriends)
                 }
             }
 
             if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
                 circleOverlay.center = map.cameraPosition.target
+                viewModel.updateRegisterFootprintBtnCameraIdle(cameraIdle = false)
             }
         }
 
         map.addOnCameraIdleListener {
             if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
+                viewModel.updateRegisterFootprintBtnCameraIdle(cameraIdle = true)
                 getAddress(map.cameraPosition.target)
             }
         }
@@ -429,6 +430,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
             }
 
             if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
+                circleOverlay.map = null
                 timer?.cancel()
             } else {
                 monitorDistanceAndManageWalkStatus()
@@ -505,6 +507,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
                                 R.string.woof_cant_mark,
                                 event.remainingTime,
                             ),
+                        ),
+                    )
+
+                is WoofAlertActions.AlertAddressOutOfKoreaSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_address_out_of_korea,
                         ),
                     )
 
@@ -727,10 +736,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
         val addressLine =
             address.getAddressLine(0)
                 .replace(resources.getString(R.string.woof_address_korea), "")
-                .replace(resources.getString(R.string.woof_address_korea_english), "")
                 .trimStart()
+        val countryName = address.countryName
+        val inKorea =
+            countryName == resources.getString(R.string.woof_address_korea)
         requireActivity().runOnUiThread {
-            viewModel.loadAddressLine(addressLine)
+            viewModel.updateAddressLine(addressLine)
+            viewModel.updateRegisterFootprintBtnInKorea(inKorea = inKorea)
         }
     }
 
@@ -860,8 +872,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
 
     companion object {
         private const val WALKING_RADIUS = 1000.0
-        private const val MIN_ZOOM = 10.0
-        private const val MAX_ZOOM = 20.0
+        private const val MIN_ZOOM = 7.0
         private const val MARKER_DEFAULT_WIDTH = 72
         private const val MARKER_DEFAULT_HEIGHT = 111
         private const val MARKER_CLICKED_WIDTH = 96

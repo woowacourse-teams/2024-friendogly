@@ -34,7 +34,7 @@
             stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rect_white_fill_30"
             android:elevation="4dp"
@@ -43,6 +43,7 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_status_all"
+            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_before"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +55,6 @@
             stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rect_white_fill_30"
             android:drawablePadding="6dp"
@@ -65,6 +65,7 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_before"
             app:drawableStartCompat="@drawable/ic_marker_before"
+            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_ongoing"
             app:layout_constraintStart_toEndOf="@id/btn_woof_status_all"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +77,6 @@
             stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rect_white_fill_30"
             android:drawablePadding="6dp"
@@ -87,6 +87,7 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_ongoing"
             app:drawableStartCompat="@drawable/ic_marker_ongoing"
+            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_after"
             app:layout_constraintStart_toEndOf="@id/btn_woof_status_before"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,8 +99,8 @@
             stateVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rect_white_fill_30"
             android:drawablePadding="6dp"
             android:elevation="4dp"
@@ -109,13 +110,15 @@
             android:paddingVertical="8dp"
             android:text="@string/woof_status_after"
             app:drawableStartCompat="@drawable/ic_marker_after"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_woof_status_ongoing"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/btn_woof_footprint_refresh"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
-            refreshBtnVisibility="@{vm.uiState}"
+            refreshBtnVisibility="@{vm.refreshBtnVisible}"
+            uiState="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -146,9 +149,9 @@
             android:gravity="center"
             android:onClick="@{() -> actionHandler.clickBackBtn()}"
             android:src="@drawable/ic_arrow_left_white"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_woof_close"
@@ -169,6 +172,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_location"
+            findFriendsVisibility="@{vm.uiState}"
             locationBtnMarginBottom="@{vm.myWalkStatus}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -187,6 +191,7 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location"
+            findFriendsVisibility="@{vm.uiState}"
             locationBtnMarginBottom="@{vm.myWalkStatus}"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -198,6 +203,7 @@
         <TextView
             android:id="@+id/btn_woof_my_footprint"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
+            findFriendsVisibility="@{vm.uiState}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
@@ -300,6 +306,7 @@
 
         <ImageButton
             android:id="@+id/btn_woof_mark"
+            findFriendsVisibility="@{vm.uiState}"
             markBtnVisibility="@{vm.myWalkStatus}"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -413,7 +420,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/woof_register_walk_area"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -438,7 +445,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:text="@{vm.addressLine}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -448,10 +455,12 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_woof_register_footprint"
                 style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
+                cameraIdle="@{vm.registerFootprintBtn.cameraIdle}"
+                uiState="@{vm.uiState}"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="12dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"
                 android:onClick="@{() -> actionHandler.clickRegisterMarkerBtn()}"
                 android:text="@string/woof_register_footprint"
