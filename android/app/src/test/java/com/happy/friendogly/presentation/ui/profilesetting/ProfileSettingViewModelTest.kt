@@ -3,6 +3,7 @@ package com.happy.friendogly.presentation.ui.profilesetting
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.model.Member
 import com.happy.friendogly.domain.model.Register
@@ -202,6 +203,120 @@ class ProfileSettingViewModelTest {
             val actual = viewModel.navigateAction.getOrAwaitValue()
             Assertions.assertThat(actual.value)
                 .isEqualTo(ProfileSettingNavigationAction.NavigateToMyPage)
+        }
+
+    @Test
+    fun `프로필을 편집 할 때, 이미지 크기가 1MB보다 크다면, 이미지 크기가 1MB보다 크다는 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    val value = Json.encodeToString(Profile.serializer(), PROFILE)
+                    set(
+                        ProfileSettingActivity.PUT_EXTRA_PROFILE,
+                        value,
+                    )
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                )
+
+            coEvery {
+                patchMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.FILE_SIZE_EXCEED)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.FileSizeExceedMessage)
+        }
+
+    @Test
+    fun `프로필을 편집 할 때, 인터넷 문제가 발생한다면, 인터넷 에러 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    val value = Json.encodeToString(Profile.serializer(), PROFILE)
+                    set(
+                        ProfileSettingActivity.PUT_EXTRA_PROFILE,
+                        value,
+                    )
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                )
+
+            coEvery {
+                patchMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.NO_INTERNET)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.NoInternetMessage)
+        }
+
+    @Test
+    fun `프로필을 편집 할 때, 서버 에러가 발생한다면, 서버 에러 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    val value = Json.encodeToString(Profile.serializer(), PROFILE)
+                    set(
+                        ProfileSettingActivity.PUT_EXTRA_PROFILE,
+                        value,
+                    )
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                )
+
+            coEvery {
+                patchMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.ServerErrorMessage)
         }
 
     companion object {
