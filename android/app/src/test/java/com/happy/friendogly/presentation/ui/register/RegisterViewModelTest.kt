@@ -5,6 +5,7 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.model.KakaoAccessToken
 import com.happy.friendogly.domain.model.Login
+import com.happy.friendogly.domain.usecase.GetFCMTokenUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
@@ -49,6 +50,9 @@ class RegisterViewModelTest {
     @MockK
     private lateinit var saveAlarmTokenUseCase: SaveAlamTokenUseCase
 
+    @MockK
+    private lateinit var getFCMTokenUseCase: GetFCMTokenUseCase
+
     @BeforeEach
     fun setUp() {
         analyticsHelper = mockk(relaxed = true)
@@ -66,6 +70,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             val actual = viewModel.navigateAction.getOrAwaitValue()
@@ -73,7 +78,7 @@ class RegisterViewModelTest {
         }
 
     @Test
-    fun `로컬 스토리지에 유효한 액세스 토큰이 없을 때, 로컬 스토리지에 토큰이 없다는 메시지 이벤트가 발생한다`() =
+    fun `새로운 유저일 때, 로컬 스토리지에 토큰이 없다는 메시지 이벤트가 발생한다`() =
         runTest {
             coEvery { getJwtTokenUseCase() } returns DomainResult.Error(DataError.Local.TOKEN_NOT_STORED)
             viewModel =
@@ -83,6 +88,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             val actual = viewModel.message.getOrAwaitValue()
@@ -100,6 +106,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             val actual = viewModel.message.getOrAwaitValue()
@@ -117,6 +124,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             coEvery { postKakaoLoginUseCase(accessToken = "accessToken") } returns
@@ -148,6 +156,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             coEvery { postKakaoLoginUseCase(accessToken = "accessToken") } returns
@@ -170,6 +179,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
 
             coEvery { postKakaoLoginUseCase(accessToken = "accessToken") } returns
@@ -181,44 +191,31 @@ class RegisterViewModelTest {
             assertThat(actual.value).isEqualTo(RegisterMessage.ServerErrorMessage)
         }
 
-    // TODO Friebase Token 저장 방식을 Coroutines로 변경 시 사용
-//    @Test
-//    fun `사용자 등록이 이미 된 경우, 소셜 로그인을 성공했을 때, 수신된 JWT를 로컬 저장소에 저장한다`() =
-//        runTest {
-//            val jwtToken = JwtToken(accessToken = null, refreshToken = null)
-//            coEvery { getJwtTokenUseCase() } returns DomainResult.Success(jwtToken)
-//            viewModel =
-//                RegisterViewModel(
-//                    analyticsHelper = analyticsHelper,
-//                    getJwtTokenUseCase = getJwtTokenUseCase,
-//                    postKakaoLoginUseCase = postKakaoLoginUseCase,
-//                    saveJwtTokenUseCase = saveJwtTokenUseCase,
-//                    saveAlarmTokenUseCase = saveAlarmTokenUseCase,
-//                )
-//
-//            val login =
-//                Login(
-//                    isRegistered = true,
-//                    tokens = JwtToken(accessToken = "accessToken", refreshToken = "refreshToken"),
-//                )
-//            coEvery { postKakaoLoginUseCase(accessToken = "accessToken") } returns
-//                DomainResult.Success(login)
-//
-//            val tokens = login.tokens ?: return@runTest
-//
-//            coEvery { saveAlarmTokenUseCase(token = "token") } returns Result.success(Unit)
-//            coEvery { saveJwtTokenUseCase(jwtToken = tokens) } returns DomainResult.Success(Unit)
-//
-//            viewModel.postKakaoLogin(
-//                KakaoAccessToken(
-//                    accessToken = "accessToken",
-//                    idToken = "idToken",
-//                ),
-//            )
-//
-//            val actual = viewModel.navigateAction.getOrAwaitValue()
-//            assertThat(actual.value).isEqualTo(RegisterNavigationAction.NavigateToAlreadyLogin)
-//        }
+    @Test
+    fun `사용자 등록이 이미 된 경우, 소셜 로그인을 성공했을 때, 수신된 JWT를 로컬 저장소에 저장한다`() =
+        runTest {
+            coEvery { getJwtTokenUseCase() } returns DomainResult.Success(NULL_JWT)
+            viewModel =
+                RegisterViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getJwtTokenUseCase = getJwtTokenUseCase,
+                    postKakaoLoginUseCase = postKakaoLoginUseCase,
+                    saveJwtTokenUseCase = saveJwtTokenUseCase,
+                    saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
+                )
+
+            coEvery { postKakaoLoginUseCase(accessToken = "accessToken") } returns
+                DomainResult.Success(LOGIN)
+            coEvery { saveAlarmTokenUseCase(token = "token") } returns Result.success(Unit)
+            coEvery { saveJwtTokenUseCase(jwtToken = JWT) } returns DomainResult.Success(Unit)
+            coEvery { getFCMTokenUseCase() } returns DomainResult.Success("token")
+
+            viewModel.postKakaoLogin(KAKAO_ACCESS_TOKEN)
+
+            val actual = viewModel.navigateAction.getOrAwaitValue()
+            assertThat(actual.value).isEqualTo(RegisterNavigationAction.NavigateToProfileSetting("accessToken"))
+        }
 
     @Test
     fun `카카오 로그인 실행 시, 카카오 로그인 이동 이벤트가 발생한다`() =
@@ -231,6 +228,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
             viewModel.executeKakaoLogin()
 
@@ -249,6 +247,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
             viewModel.executeGoogleLogin()
 
@@ -267,6 +266,7 @@ class RegisterViewModelTest {
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
             viewModel.handleGoogleLogin(idToken = "idToken")
 
