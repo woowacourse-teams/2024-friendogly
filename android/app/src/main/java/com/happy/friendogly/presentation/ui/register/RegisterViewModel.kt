@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.register
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +12,6 @@ import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.model.KakaoAccessToken
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
-import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
@@ -23,11 +21,9 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.logGoogleLoginClicked
 import com.happy.friendogly.presentation.utils.logKakaoLoginClicked
-import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val analyticsHelper: AnalyticsHelper,
-    private val kakaoLoginUseCase: KakaoLoginUseCase,
     private val getJwtTokenUseCase: GetJwtTokenUseCase,
     private val postKakaoLoginUseCase: PostKakaoLoginUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
@@ -70,42 +66,39 @@ class RegisterViewModel(
         }
     }
 
-    fun executeKakaoLogin(context: Context) {
-        launch {
-            kakaoLoginUseCase(context = context).fold(
-                onSuccess = { kakaAccessToken ->
-                    kakaoLogin(kakaAccessToken)
-                },
-                onError = {
-                    _message.emit(RegisterMessage.KakaoLoginErrorMessage)
-                },
-            )
-        }
+    fun executeKakaoLogin() {
+        _navigateAction.emit(RegisterNavigationAction.NavigateToKakaoLogin)
     }
 
-    private suspend fun kakaoLogin(kakaAccessToken: KakaoAccessToken) {
-        val accessToken = kakaAccessToken.accessToken ?: return
+    fun postKakaoLogin(kakaAccessToken: KakaoAccessToken) {
+        launch {
+            val accessToken = kakaAccessToken.accessToken ?: return@launch
 
-        _loading.emit(true)
-        postKakaoLoginUseCase(accessToken = accessToken).fold(
-            onSuccess = { login ->
-                if (login.isRegistered) {
-                    val tokens = login.tokens ?: return
-                    saveAlarmToken()
-                    saveJwtToken(tokens)
-                } else {
-                    _navigateAction.emit(RegisterNavigationAction.NavigateToProfileSetting(idToken = kakaAccessToken.accessToken))
-                }
-            },
-            onError = { error ->
-                when (error) {
-                    DataError.Network.NO_INTERNET -> _message.emit(RegisterMessage.NoInternetMessage)
-                    DataError.Network.SERVER_ERROR -> _message.emit(RegisterMessage.ServerErrorMessage)
-                    else -> _message.emit(RegisterMessage.DefaultErrorMessage)
-                }
-            },
-        )
-        _loading.emit(false)
+            _loading.emit(true)
+            postKakaoLoginUseCase(accessToken = accessToken).fold(
+                onSuccess = { login ->
+                    if (login.isRegistered) {
+                        val tokens = login.tokens ?: return@fold
+                        saveAlarmToken()
+                        saveJwtToken(tokens)
+                    } else {
+                        _navigateAction.emit(
+                            RegisterNavigationAction.NavigateToProfileSetting(
+                                idToken = kakaAccessToken.accessToken,
+                            ),
+                        )
+                    }
+                },
+                onError = { error ->
+                    when (error) {
+                        DataError.Network.NO_INTERNET -> _message.emit(RegisterMessage.NoInternetMessage)
+                        DataError.Network.SERVER_ERROR -> _message.emit(RegisterMessage.ServerErrorMessage)
+                        else -> _message.emit(RegisterMessage.DefaultErrorMessage)
+                    }
+                },
+            )
+            _loading.emit(false)
+        }
     }
 
     private fun saveAlarmToken() {
@@ -148,7 +141,6 @@ class RegisterViewModel(
     companion object {
         fun factory(
             analyticsHelper: AnalyticsHelper,
-            kakaoLoginUseCase: KakaoLoginUseCase,
             getJwtTokenUseCase: GetJwtTokenUseCase,
             postKakaoLoginUseCase: PostKakaoLoginUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
@@ -157,7 +149,6 @@ class RegisterViewModel(
             return BaseViewModelFactory { _ ->
                 RegisterViewModel(
                     analyticsHelper = analyticsHelper,
-                    kakaoLoginUseCase = kakaoLoginUseCase,
                     getJwtTokenUseCase = getJwtTokenUseCase,
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
