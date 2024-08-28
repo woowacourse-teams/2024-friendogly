@@ -7,11 +7,13 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.model.Member
 import com.happy.friendogly.domain.model.Register
+import com.happy.friendogly.domain.usecase.GetFCMTokenUseCase
 import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.register.RegisterViewModelTest
 import com.happy.friendogly.presentation.utils.toMultipartBody
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
@@ -51,6 +53,9 @@ class ProfileSettingViewModelTest {
     @MockK
     private lateinit var patchMemberUseCase: PatchMemberUseCase
 
+    @MockK
+    private lateinit var getFCMTokenUseCase: GetFCMTokenUseCase
+
     @Test
     fun `프로필 이미지 이동 이벤트가 발생한다`() {
         savedStateHandle =
@@ -65,6 +70,7 @@ class ProfileSettingViewModelTest {
                 postMemberUseCase,
                 saveJwtTokenUseCase,
                 patchMemberUseCase,
+                getFCMTokenUseCase,
             )
         viewModel.selectProfileImage()
 
@@ -87,6 +93,7 @@ class ProfileSettingViewModelTest {
                 postMemberUseCase,
                 saveJwtTokenUseCase,
                 patchMemberUseCase,
+                getFCMTokenUseCase,
             )
 
         val bitmap = mockk<Bitmap>(relaxed = true)
@@ -118,6 +125,7 @@ class ProfileSettingViewModelTest {
                 postMemberUseCase,
                 saveJwtTokenUseCase,
                 patchMemberUseCase,
+                getFCMTokenUseCase,
             )
 
         viewModel.resetProfileImage()
@@ -131,40 +139,149 @@ class ProfileSettingViewModelTest {
             .isEqualTo(null)
     }
 
-//    @Test
-//    fun `프로필을 등록 할 수 있다`() =
-//        runTest {
-//            savedStateHandle =
-//                SavedStateHandle().apply {
-//                    set(ProfileSettingActivity.PUT_EXTRA_PROFILE, null)
-//                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
-//                }
-//            viewModel =
-//                ProfileSettingViewModel(
-//                    saveAlarmTokenUseCase,
-//                    savedStateHandle,
-//                    postMemberUseCase,
-//                    saveJwtTokenUseCase,
-//                    patchMemberUseCase,
-//                )
-//
-//            coEvery {
-//                postMemberUseCase(
-//                    any(),
-//                    any(),
-//                    any(),
-//                )
-//            } returns DomainResult.Success(REGISTER)
-//            coEvery { saveJwtTokenUseCase(jwtToken = JWT_TOKEN) } returns DomainResult.Success(Unit)
-//
-//            viewModel.isButtonActive.value = true
-//            viewModel.nickname.value = "에디"
-//            viewModel.submitProfileSelection()
-//
-//            val actual = viewModel.navigateAction.getOrAwaitValue()
-//            Assertions.assertThat(actual.value)
-//                .isEqualTo(ProfileSettingNavigationAction.NavigateToHome)
-//        }
+    @Test
+    fun `프로필을 등록 할 수 있다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    set(ProfileSettingActivity.PUT_EXTRA_PROFILE, null)
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                    getFCMTokenUseCase,
+                )
+
+            coEvery {
+                postMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Success(REGISTER)
+            coEvery { saveAlarmTokenUseCase(token = "token") } returns Result.success(Unit)
+            coEvery { saveJwtTokenUseCase(jwtToken = RegisterViewModelTest.JWT) } returns
+                DomainResult.Success(Unit)
+            coEvery { getFCMTokenUseCase() } returns DomainResult.Success("token")
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.navigateAction.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingNavigationAction.NavigateToHome)
+        }
+
+    @Test
+    fun `프로필을 등록할 때, 이미지 크기가 1MB보다 크다면, 이미지 크기가 1MB보다 크다는 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    set(ProfileSettingActivity.PUT_EXTRA_PROFILE, null)
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                    getFCMTokenUseCase,
+                )
+
+            coEvery {
+                postMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.FILE_SIZE_EXCEED)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.FileSizeExceedMessage)
+        }
+
+    @Test
+    fun `프로필을 등록 할 때, 인터넷 문제가 발생한다면, 인터넷 에러 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    set(ProfileSettingActivity.PUT_EXTRA_PROFILE, null)
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                    getFCMTokenUseCase,
+                )
+
+            coEvery {
+                postMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.NO_INTERNET)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.NoInternetMessage)
+        }
+
+    @Test
+    fun `프로필을 등록 할 때, 서버 에러가 발생한다면, 서버 에러 메시지 이벤트가 발생한다`() =
+        runTest {
+            savedStateHandle =
+                SavedStateHandle().apply {
+                    set(ProfileSettingActivity.PUT_EXTRA_PROFILE, null)
+                    set(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN, "accessToken")
+                }
+            viewModel =
+                ProfileSettingViewModel(
+                    saveAlarmTokenUseCase,
+                    savedStateHandle,
+                    postMemberUseCase,
+                    saveJwtTokenUseCase,
+                    patchMemberUseCase,
+                    getFCMTokenUseCase,
+                )
+
+            coEvery {
+                postMemberUseCase(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
+
+            viewModel.isButtonActive.value = true
+            viewModel.nickname.value = "에디"
+            viewModel.submitProfileSelection()
+
+            val actual = viewModel.message.getOrAwaitValue()
+            Assertions.assertThat(actual.value)
+                .isEqualTo(ProfileSettingMessage.ServerErrorMessage)
+        }
 
     @Test
     fun `프로필을 편집 할 수 있다`() =
@@ -185,6 +302,7 @@ class ProfileSettingViewModelTest {
                     postMemberUseCase,
                     saveJwtTokenUseCase,
                     patchMemberUseCase,
+                    getFCMTokenUseCase,
                 )
 
             coEvery {
@@ -224,6 +342,7 @@ class ProfileSettingViewModelTest {
                     postMemberUseCase,
                     saveJwtTokenUseCase,
                     patchMemberUseCase,
+                    getFCMTokenUseCase,
                 )
 
             coEvery {
@@ -262,6 +381,7 @@ class ProfileSettingViewModelTest {
                     postMemberUseCase,
                     saveJwtTokenUseCase,
                     patchMemberUseCase,
+                    getFCMTokenUseCase,
                 )
 
             coEvery {
@@ -300,6 +420,7 @@ class ProfileSettingViewModelTest {
                     postMemberUseCase,
                     saveJwtTokenUseCase,
                     patchMemberUseCase,
+                    getFCMTokenUseCase,
                 )
 
             coEvery {
