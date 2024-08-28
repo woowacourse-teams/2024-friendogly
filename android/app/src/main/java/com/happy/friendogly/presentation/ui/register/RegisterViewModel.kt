@@ -3,13 +3,11 @@ package com.happy.friendogly.presentation.ui.register
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.tasks.Task
-import com.google.firebase.messaging.FirebaseMessaging
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.model.KakaoAccessToken
+import com.happy.friendogly.domain.usecase.GetFCMTokenUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
@@ -28,6 +26,7 @@ class RegisterViewModel(
     private val postKakaoLoginUseCase: PostKakaoLoginUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
     private val saveAlarmTokenUseCase: SaveAlamTokenUseCase,
+    private val getFCMTokenUseCase: GetFCMTokenUseCase,
 ) : BaseViewModel() {
     private val _navigateAction: MutableLiveData<Event<RegisterNavigationAction>> =
         MutableLiveData(null)
@@ -101,17 +100,15 @@ class RegisterViewModel(
         }
     }
 
-    private fun saveAlarmToken() {
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task: Task<String> ->
-                if (!task.isSuccessful) {
-                    return@addOnCompleteListener
-                }
-                val token = task.result
-                launch { // TODO 에러 핸들링
-                    AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
-                }
-            }
+    private suspend fun saveAlarmToken() {
+        getFCMTokenUseCase().fold(
+            onSuccess = { token ->
+                saveAlarmTokenUseCase(token)
+            },
+            onError = {
+                _message.emit(RegisterMessage.DefaultErrorMessage)
+            },
+        )
     }
 
     fun executeGoogleLogin() {
@@ -145,6 +142,7 @@ class RegisterViewModel(
             postKakaoLoginUseCase: PostKakaoLoginUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
             saveAlarmTokenUseCase: SaveAlamTokenUseCase,
+            getFCMTokenUseCase: GetFCMTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 RegisterViewModel(
@@ -153,6 +151,7 @@ class RegisterViewModel(
                     postKakaoLoginUseCase = postKakaoLoginUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     saveAlarmTokenUseCase = saveAlarmTokenUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
             }
         }
