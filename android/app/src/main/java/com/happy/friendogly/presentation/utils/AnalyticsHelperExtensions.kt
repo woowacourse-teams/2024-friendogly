@@ -1,8 +1,8 @@
 package com.happy.friendogly.presentation.utils
 
-import com.happy.friendogly.analytics.AnalyticsHelper
-import com.happy.friendogly.analytics.ParamKeys
-import com.happy.friendogly.analytics.Types
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
+import com.happy.friendogly.firebase.analytics.ParamKeys
+import com.happy.friendogly.firebase.analytics.Types
 
 fun AnalyticsHelper.logKakaoLoginClicked() {
     logEvent(

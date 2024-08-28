@@ -3,8 +3,6 @@ package com.happy.friendogly.application.di
 import android.content.Context
 import androidx.room.Room
 import com.happy.friendogly.BuildConfig
-import com.happy.friendogly.analytics.AnalyticsHelper
-import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
@@ -13,6 +11,7 @@ import com.happy.friendogly.data.repository.ChatRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
+import com.happy.friendogly.data.repository.MessagingRepositoryImpl
 import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
@@ -39,6 +38,7 @@ import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
+import com.happy.friendogly.domain.repository.MessagingRepository
 import com.happy.friendogly.domain.repository.MyClubRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.TokenRepository
@@ -60,6 +60,7 @@ import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatMessagesUseCase
 import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.GetClubUseCase
+import com.happy.friendogly.domain.usecase.GetFCMTokenUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
@@ -95,6 +96,10 @@ import com.happy.friendogly.domain.usecase.SaveChatMessageUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
+import com.happy.friendogly.firebase.crashlytics.CrashlyticsHelper
+import com.happy.friendogly.firebase.messaging.MessagingHelper
+import com.happy.friendogly.firebase.source.MessagingDataSourceImpl
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.AddressModule
 import com.happy.friendogly.local.di.AlarmTokenModule
@@ -120,9 +125,9 @@ import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
 import com.happy.friendogly.remote.source.WoofDataSourceImpl
 
 class AppModule(context: Context) {
-    // analytics & crashlytics
     val analyticsHelper = AnalyticsHelper(context)
     val crashlyticsHelper = CrashlyticsHelper()
+    val messagingHelper = MessagingHelper()
 
     private val baseUrl = BaseUrl(BuildConfig.base_url)
     private val websocketUrl = BaseUrl(BuildConfig.websocket_url)
@@ -228,6 +233,7 @@ class AppModule(context: Context) {
         )
     private val alarmTokenDataSource: AlarmTokenDataSource =
         AlamTokenDataSourceImpl(service = alarmTokenService)
+    val messagingDataSource = MessagingDataSourceImpl(messagingHelper = messagingHelper)
 
     // repository
     private val authRepository: AuthRepository = AuthRepositoryImpl(source = authDataSource)
@@ -249,6 +255,8 @@ class AppModule(context: Context) {
         AlarmSettingRepositoryImpl(source = alarmSettingDataSource)
     private val alarmTokenRepository: AlarmTokenRepository =
         AlarmTokenRepositoryImpl(source = alarmTokenDataSource)
+    private val messagingRepository: MessagingRepository =
+        MessagingRepositoryImpl(source = messagingDataSource)
 
     // use case
     val postKakaoLoginUseCase: PostKakaoLoginUseCase =
@@ -337,6 +345,8 @@ class AppModule(context: Context) {
     val patchMemberUseCase: PatchMemberUseCase = PatchMemberUseCase(repository = memberRepository)
     val deleteMemberUseCase: DeleteMemberUseCase =
         DeleteMemberUseCase(repository = memberRepository)
+    val getFCMTokenUseCase: GetFCMTokenUseCase =
+        GetFCMTokenUseCase(repository = messagingRepository)
 
     companion object {
         private var instance: AppModule? = null

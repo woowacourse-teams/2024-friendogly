@@ -1,4 +1,4 @@
-package com.happy.friendogly.analytics
+package com.happy.friendogly.firebase.analytics
 
 object ParamKeys {
     const val LOGIN_ATTEMPT_TIME = "login_attempt_time"
