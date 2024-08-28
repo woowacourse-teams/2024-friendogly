@@ -1,4 +1,4 @@
-package com.happy.friendogly.crashlytics
+package com.happy.friendogly.firebase.crashlytics
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 

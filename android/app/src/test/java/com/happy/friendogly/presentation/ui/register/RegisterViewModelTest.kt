@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.register
 
-import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
@@ -10,6 +9,7 @@ import com.happy.friendogly.domain.usecase.GetJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.PostKakaoLoginUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
 import com.happy.friendogly.utils.getOrAwaitValue

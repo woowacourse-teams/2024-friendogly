@@ -3,8 +3,6 @@ package com.happy.friendogly.application.di
 import android.content.Context
 import androidx.room.Room
 import com.happy.friendogly.BuildConfig
-import com.happy.friendogly.analytics.AnalyticsHelper
-import com.happy.friendogly.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
@@ -95,6 +93,8 @@ import com.happy.friendogly.domain.usecase.SaveChatMessageUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
+import com.happy.friendogly.firebase.crashlytics.CrashlyticsHelper
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.di.AddressModule
 import com.happy.friendogly.local.di.AlarmTokenModule

@@ -1,4 +1,4 @@
-package com.happy.friendogly.analytics
+package com.happy.friendogly.firebase.analytics
 
 /**
  * 로깅 전략 및 이벤트 로깅 시나리오
