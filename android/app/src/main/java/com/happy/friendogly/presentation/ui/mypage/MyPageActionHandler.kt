@@ -7,5 +7,5 @@ interface MyPageActionHandler {
 
     fun navigateToProfileEdit()
 
-    fun navigateToPetEdit(id: Long)
+    fun navigateToPetEdit()
 }
