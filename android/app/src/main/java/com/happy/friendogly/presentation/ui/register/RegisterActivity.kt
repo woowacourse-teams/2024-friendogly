@@ -30,6 +30,7 @@ class RegisterActivity : AppCompatActivity() {
             postKakaoLoginUseCase = AppModule.getInstance().postKakaoLoginUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
             saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
+            getFCMTokenUseCase = AppModule.getInstance().getFCMTokenUseCase,
         )
     }
     private val kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase

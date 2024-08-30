@@ -1,4 +1,4 @@
-package com.happy.friendogly.analytics
+package com.happy.friendogly.firebase.analytics
 
 import android.content.Context
 import android.os.Bundle
