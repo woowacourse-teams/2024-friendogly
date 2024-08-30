@@ -13,6 +13,7 @@ import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.presentation.ui.MainActivity
+import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import kotlinx.coroutines.CoroutineScope
@@ -23,21 +24,16 @@ import java.time.LocalDateTime
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
 
-    override fun onNewToken(token: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (token.isNotBlank()) {
-                AppModule.getInstance().saveAlarmTokenUseCase.invoke(token)
-            }
-        }
-        super.onNewToken(token)
-    }
-
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
         if (message.data[ALARM_TYPE] == "CHAT") {
             saveMessage(message)
-            showChatAlarm(message.data["senderName"], message.data["content"])
+            showChatAlarm(
+                message.data["senderName"],
+                message.data["content"],
+                message.data["chatRoomId"]?.toLongOrNull()
+            )
         } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
             showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
@@ -57,34 +53,36 @@ class AlarmReceiver : FirebaseMessagingService() {
                         Message.Other(
                             createdAt = createdAt,
                             member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
+                            ChatMember(
+                                id = memberId,
+                                name = name,
+                                profileImageUrl = profileUrl,
+                            ),
                             content = content,
                         )
+
                     "LEAVE" ->
                         ChatComponent.Leave(
                             createdAt = createdAt,
                             member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
+                            ChatMember(
+                                id = memberId,
+                                name = name,
+                                profileImageUrl = profileUrl,
+                            ),
                         )
 
                     "ENTER" ->
                         ChatComponent.Enter(
                             createdAt = createdAt,
                             member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
+                            ChatMember(
+                                id = memberId,
+                                name = name,
+                                profileImageUrl = profileUrl,
+                            ),
                         )
+
                     else -> error("잘못된 타입이 들어왔습니다.")
                 }
 
@@ -94,6 +92,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     private fun showChatAlarm(
         title: String?,
         body: String?,
+        chatRoomId: Long?
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -101,7 +100,7 @@ class AlarmReceiver : FirebaseMessagingService() {
                 .getOrDefault(true) && ChatLifecycleObserver.getInstance().isBackground
         ) {
             createNotificationChannel()
-            deliverNotification(title, body)
+            deliverChatNotification(title, body, chatRoomId)
         }
     }
 
@@ -113,7 +112,7 @@ class AlarmReceiver : FirebaseMessagingService() {
 
         if (AppModule.getInstance().getWoofAlarmUseCase.invoke().getOrDefault(true)) {
             createNotificationChannel()
-            deliverNotification(title, body)
+            deliverWoofNotification(title, body)
         }
     }
 
@@ -132,7 +131,39 @@ class AlarmReceiver : FirebaseMessagingService() {
         }
     }
 
-    private fun deliverNotification(
+    private fun deliverChatNotification(
+        title: String?,
+        body: String?,
+        chatRoomId: Long?
+    ) {
+
+        val contentIntent = if (chatRoomId == null) {
+            MainActivity.getIntent(this)
+        } else {
+            ChatActivity.getIntent(this, chatRoomId)
+        }
+
+        val contentPendingIntent =
+            PendingIntent.getActivity(
+                this,
+                DEFAULT_INTENT_ID,
+                contentIntent,
+                PendingIntent.FLAG_IMMUTABLE,
+            )
+
+        val builder =
+            NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setContentIntent(contentPendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+        notificationManager.notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, builder.build())
+    }
+
+    private fun deliverWoofNotification(
         title: String?,
         body: String?,
     ) {
@@ -164,6 +195,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         private const val ALARM_TITLE = "title"
         private const val ALARM_BODY = "body"
         private const val ALARM_TYPE = "type"
+        private const val INVALID_CHAT_ROOM_ID = -1
 
         const val NOTIFICATION_ID = 0
         const val DEFAULT_INTENT_ID = 1
