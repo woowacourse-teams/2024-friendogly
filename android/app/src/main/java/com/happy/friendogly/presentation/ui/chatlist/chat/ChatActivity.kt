@@ -9,7 +9,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityChatBinding
-import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
@@ -18,10 +17,7 @@ import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.logChatAlarmClicked
 import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
-import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
-import com.happy.friendogly.presentation.utils.logWalkHelpClicked
 import kotlinx.coroutines.launch
-import android.util.Log
 
 class ChatActivity :
     BaseActivity<ActivityChatBinding>(R.layout.activity_chat),

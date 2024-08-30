@@ -181,32 +181,30 @@ fun AnalyticsHelper.logListAddClubClick() {
 
 fun AnalyticsHelper.logChatAlarmClicked() {
     logEvent(
-        type = Types.CHAT_ALARM_CLICKED
+        type = Types.CHAT_ALARM_CLICKED,
     )
 }
 
 fun AnalyticsHelper.logChatSendMessageClicked() {
     logEvent(
-        type = Types.CHAT_SEND_MESSAGE_CLICKED
+        type = Types.CHAT_SEND_MESSAGE_CLICKED,
     )
 }
 
 fun AnalyticsHelper.logPermissionAlarmDenied() {
     logEvent(
-        type = Types.CHAT_PERMISSION_ALARM_DENIED
+        type = Types.CHAT_PERMISSION_ALARM_DENIED,
     )
 }
 
 fun AnalyticsHelper.logPermissionLocationDenied() {
     logEvent(
-        type = Types.CHAT_PERMISSION_LOCATION_DENIED
+        type = Types.CHAT_PERMISSION_LOCATION_DENIED,
     )
 }
 
 fun AnalyticsHelper.logGoClubFromChatClicked() {
     logEvent(
-        type = Types.CHAT_GO_CLUB_DETAIL_CLICKED
+        type = Types.CHAT_GO_CLUB_DETAIL_CLICKED,
     )
 }
-
-

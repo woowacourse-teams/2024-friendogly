@@ -32,7 +32,7 @@ class AlarmReceiver : FirebaseMessagingService() {
             showChatAlarm(
                 message.data["senderName"],
                 message.data["content"],
-                message.data["chatRoomId"]?.toLongOrNull()
+                message.data["chatRoomId"]?.toLongOrNull(),
             )
         } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
             showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
@@ -53,11 +53,11 @@ class AlarmReceiver : FirebaseMessagingService() {
                         Message.Other(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                             content = content,
                         )
 
@@ -65,22 +65,22 @@ class AlarmReceiver : FirebaseMessagingService() {
                         ChatComponent.Leave(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                         )
 
                     "ENTER" ->
                         ChatComponent.Enter(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                         )
 
                     else -> error("잘못된 타입이 들어왔습니다.")
@@ -92,7 +92,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     private fun showChatAlarm(
         title: String?,
         body: String?,
-        chatRoomId: Long?
+        chatRoomId: Long?,
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -134,14 +134,14 @@ class AlarmReceiver : FirebaseMessagingService() {
     private fun deliverChatNotification(
         title: String?,
         body: String?,
-        chatRoomId: Long?
+        chatRoomId: Long?,
     ) {
-
-        val contentIntent = if (chatRoomId == null) {
-            MainActivity.getIntent(this)
-        } else {
-            ChatActivity.getIntent(this, chatRoomId)
-        }
+        val contentIntent =
+            if (chatRoomId == null) {
+                MainActivity.getIntent(this)
+            } else {
+                ChatActivity.getIntent(this, chatRoomId)
+            }
 
         val contentPendingIntent =
             PendingIntent.getActivity(

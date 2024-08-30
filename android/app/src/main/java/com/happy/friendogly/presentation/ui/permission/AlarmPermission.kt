@@ -19,7 +19,6 @@ import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.utils.logPermissionAlarmDenied
-import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
 import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
