@@ -19,6 +19,8 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
+import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
+import com.happy.friendogly.presentation.utils.logGoClubFromChatClicked
 import kotlinx.coroutines.launch
 
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
@@ -84,6 +86,8 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             setChatInfo(info)
             binding.btnChatClub.setOnClickListener {
                 (requireActivity() as ChatActivity).navigateToClub(info.clubId)
+                AppModule.getInstance().analyticsHelper.logGoClubFromChatClicked()
+
             }
         }
         viewModel.joiningPeople.observe(viewLifecycleOwner) {

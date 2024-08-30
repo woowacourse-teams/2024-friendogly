@@ -15,8 +15,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.utils.logPermissionAlarmDenied
+import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
 import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
@@ -41,6 +44,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
+                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -50,6 +54,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
+                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -123,6 +128,7 @@ class AlarmPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
@@ -142,6 +148,7 @@ class AlarmPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
