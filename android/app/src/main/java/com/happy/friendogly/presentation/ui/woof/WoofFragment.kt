@@ -882,7 +882,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
-
         const val TAG = "WoofFragment"
     }
 }
