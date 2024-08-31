@@ -55,7 +55,7 @@
 
         <ImageButton
             android:id="@+id/ib_kakao_register"
-            onSingleClick="@{(view) -> vm.executeKakaoLogin(view.context)}"
+            onSingleClick="@{() -> vm.executeKakaoLogin()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

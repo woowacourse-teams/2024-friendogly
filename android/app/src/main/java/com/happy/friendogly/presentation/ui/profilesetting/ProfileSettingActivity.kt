@@ -35,6 +35,7 @@ class ProfileSettingActivity :
             postMemberUseCase = AppModule.getInstance().postMemberUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
             patchMemberUseCase = AppModule.getInstance().patchMemberUseCase,
+            getFCMTokenUseCase = AppModule.getInstance().getFCMTokenUseCase,
         )
     }
 

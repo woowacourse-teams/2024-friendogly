@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.android.junit5)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")

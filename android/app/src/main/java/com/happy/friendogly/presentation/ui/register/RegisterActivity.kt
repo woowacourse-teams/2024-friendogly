@@ -7,14 +7,17 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.ApiException
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityRegisterBinding
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
+import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
@@ -23,13 +26,14 @@ class RegisterActivity : AppCompatActivity() {
     private val viewModel: RegisterViewModel by viewModels {
         RegisterViewModel.factory(
             analyticsHelper = AppModule.getInstance().analyticsHelper,
-            kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase,
             getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
             postKakaoLoginUseCase = AppModule.getInstance().postKakaoLoginUseCase,
             saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
             saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
+            getFCMTokenUseCase = AppModule.getInstance().getFCMTokenUseCase,
         )
     }
+    private val kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase
 
     private var toast: Toast? = null
 
@@ -81,6 +85,8 @@ class RegisterActivity : AppCompatActivity() {
                     googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
                 }
 
+                is RegisterNavigationAction.NavigateToKakaoLogin -> kakaoLogin()
+
                 is RegisterNavigationAction.NavigateToProfileSetting ->
                     startActivity(
                         ProfileSettingActivity.getIntent(this, action.idToken, null),
@@ -103,9 +109,21 @@ class RegisterActivity : AppCompatActivity() {
                 is RegisterMessage.TokenNotStoredErrorMessage ->
                     startActivity(MainActivity.getIntent(this))
 
-                is RegisterMessage.KakaoLoginErrorMessage -> showToastMessage(getString(R.string.kakao_login_error_message))
                 is RegisterMessage.NoInternetMessage -> showToastMessage(getString(R.string.no_internet_message))
             }
+        }
+    }
+
+    private fun kakaoLogin() {
+        lifecycleScope.launch {
+            kakaoLoginUseCase(context = this@RegisterActivity).fold(
+                onSuccess = { kakaAccessToken ->
+                    viewModel.postKakaoLogin(kakaAccessToken)
+                },
+                onError = {
+                    showToastMessage(getString(R.string.kakao_login_error_message))
+                },
+            )
         }
     }
 

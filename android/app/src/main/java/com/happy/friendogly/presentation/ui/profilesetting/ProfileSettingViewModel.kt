@@ -7,12 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import com.google.android.gms.tasks.Task
-import com.google.firebase.messaging.FirebaseMessaging
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.ImageUpdateType
 import com.happy.friendogly.domain.model.JwtToken
+import com.happy.friendogly.domain.usecase.GetFCMTokenUseCase
 import com.happy.friendogly.domain.usecase.PatchMemberUseCase
 import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
@@ -32,6 +31,7 @@ class ProfileSettingViewModel(
     private val postMemberUseCase: PostMemberUseCase,
     private val saveJwtTokenUseCase: SaveJwtTokenUseCase,
     private val patchMemberUseCase: PatchMemberUseCase,
+    private val getFCMTokenUseCase: GetFCMTokenUseCase,
 ) : BaseViewModel() {
     val accessToken = savedStateHandle.get<String>(ProfileSettingActivity.PUT_EXTRA_ACCESS_TOKEN)
 
@@ -126,8 +126,8 @@ class ProfileSettingViewModel(
             accessToken = accessToken,
         ).fold(
             onSuccess = { register ->
-                saveJwaToken(register.tokens)
                 saveAlarmToken()
+                saveJwaToken(register.tokens)
             },
             onError = { error ->
                 when (error) {
@@ -154,16 +154,15 @@ class ProfileSettingViewModel(
         )
     }
 
-    private fun saveAlarmToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task: Task<String> ->
-            if (!task.isSuccessful) {
-                return@addOnCompleteListener
-            }
-            val token = task.result
-            launch { // TODO 에러 핸들링
+    private suspend fun saveAlarmToken() {
+        getFCMTokenUseCase().fold(
+            onSuccess = { token ->
                 saveAlarmTokenUseCase(token)
-            }
-        }
+            },
+            onError = {
+                _message.emit(ProfileSettingMessage.DefaultErrorMessage)
+            },
+        )
     }
 
     private suspend fun patchMember(
@@ -221,6 +220,7 @@ class ProfileSettingViewModel(
             postMemberUseCase: PostMemberUseCase,
             saveJwtTokenUseCase: SaveJwtTokenUseCase,
             patchMemberUseCase: PatchMemberUseCase,
+            getFCMTokenUseCase: GetFCMTokenUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { creator ->
                 ProfileSettingViewModel(
@@ -229,6 +229,7 @@ class ProfileSettingViewModel(
                     postMemberUseCase = postMemberUseCase,
                     saveJwtTokenUseCase = saveJwtTokenUseCase,
                     patchMemberUseCase = patchMemberUseCase,
+                    getFCMTokenUseCase = getFCMTokenUseCase,
                 )
             }
         }

@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.analytics.AnalyticsHelper
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
