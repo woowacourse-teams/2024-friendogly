@@ -876,17 +876,20 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
     }
 
     private fun showHelpBalloon() {
-        val uiState = viewModel.uiState.value ?: return
-        val myWalkStatus = viewModel.myWalkStatus.value ?: return
-
         val text =
-            if (uiState is WoofUiState.RegisteringFootprint) {
+            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
                 resources.getString(R.string.woof_register_help)
             } else {
-                if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
-                    resources.getString(R.string.woof_walk_before_help)
-                } else {
-                    resources.getString(R.string.woof_walk_ongoing_help)
+                when (viewModel.myWalkStatus.value?.walkStatus) {
+                    WalkStatus.BEFORE -> {
+                        resources.getString(R.string.woof_walk_before_help)
+                    }
+                    WalkStatus.ONGOING -> {
+                        resources.getString(R.string.woof_walk_ongoing_help)
+                    }
+                    else -> {
+                        return
+                    }
                 }
             }
         val balloon = createBalloon(text)
