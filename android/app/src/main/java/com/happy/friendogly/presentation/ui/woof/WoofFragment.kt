@@ -20,9 +20,9 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
-import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentWoofBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -882,6 +882,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
+
         const val TAG = "WoofFragment"
     }
 }
