@@ -9,10 +9,10 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -280,8 +280,11 @@ fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
     }
 }
 
-@BindingAdapter("locationBtnMarginBottom")
-fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
+@BindingAdapter("uiState", "locationBtn")
+fun View.bindLocationBtn(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -289,13 +292,57 @@ fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
     }
 
     val marginBottom =
-        if (myWalkStatus != null) {
-            if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+        if (uiState is WoofUiState.RegisteringFootprint) {
+            12
         } else {
-            36
+            if (myWalkStatus != null) {
+                if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+            } else {
+                36
+            }
         }
 
-    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
-    layoutParams.bottomMargin = marginBottom.dp()
+    val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+    layoutParams.apply {
+        bottomToTop =
+            if (uiState is WoofUiState.RegisteringFootprint) {
+                R.id.layout_woof_register_marker
+            } else {
+                R.id.layout_woof_walk
+            }
+        bottomMargin = marginBottom.dp()
+    }
+
+    this.layoutParams = layoutParams
+}
+
+@BindingAdapter("uiState", "helpBtn")
+fun ImageButton.bindHelpBtn(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
+    isVisible =
+        when (uiState) {
+            WoofUiState.FindingFriends -> {
+                (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
+            }
+            WoofUiState.RegisteringFootprint -> {
+                true
+            }
+            else -> {
+                false
+            }
+        }
+
+    val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+    layoutParams.apply {
+        bottomToTop =
+            if (uiState is WoofUiState.RegisteringFootprint) {
+                R.id.layout_woof_register_marker
+            } else {
+                R.id.layout_woof_walk
+            }
+    }
+
     this.layoutParams = layoutParams
 }
