@@ -33,11 +33,11 @@ import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertEndWalkSn
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar
 import com.happy.friendogly.presentation.ui.woof.WoofAlertActions.AlertMarkerRegisteredSnackbar
-import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.WoofChangeTrackingModeActions.ChangeToNoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeMyFootprintMarker
 import com.happy.friendogly.presentation.ui.woof.WoofMakeMarkerActions.MakeNearFootprintMarkers
+import com.happy.friendogly.presentation.ui.woof.WoofTrackingModeActions.ToFaceTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofTrackingModeActions.ToFollowTrackingMode
+import com.happy.friendogly.presentation.ui.woof.WoofTrackingModeActions.ToNoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
@@ -371,7 +371,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
             if (reason == REASON_GESTURE) {
                 viewModel.changeTrackingModeToNoFollow()
 
-                if (viewModel.uiState.value is WoofUiState.FindingFriends) {
+                if (viewModel.uiState.value is WoofUiState.FindingFriends && viewModel.refreshBtnVisible.value == false) {
                     viewModel.updateRefreshBtnVisibility(visible = true)
                 }
 
@@ -486,13 +486,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
 
         viewModel.changeTrackingModeActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is ChangeToNoFollowTrackingMode ->
+                is ToNoFollowTrackingMode ->
                     map.locationTrackingMode = LocationTrackingMode.NoFollow
 
-                is ChangeToFollowTrackingMode ->
+                is ToFollowTrackingMode ->
                     map.locationTrackingMode = LocationTrackingMode.Follow
 
-                is ChangeToFaceTrackingMode ->
+                is ToFaceTrackingMode ->
                     map.locationTrackingMode = LocationTrackingMode.Face
             }
         }
@@ -737,13 +737,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback, WoofActionHandler {
             address.getAddressLine(0)
                 .replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
+        viewModel.updateAddressLine(addressLine)
+
         val countryName = address.countryName
         val inKorea =
             countryName == resources.getString(R.string.woof_address_korea)
-        requireActivity().runOnUiThread {
-            viewModel.updateAddressLine(addressLine)
-            viewModel.updateRegisterFootprintBtnInKorea(inKorea = inKorea)
-        }
+        viewModel.updateRegisterFootprintBtnInKorea(inKorea = inKorea)
     }
 
     private fun convertLtnLng(latLng: LatLng): LatLng {

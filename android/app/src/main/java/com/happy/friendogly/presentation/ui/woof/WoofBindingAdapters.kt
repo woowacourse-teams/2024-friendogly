@@ -159,7 +159,8 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
 
 @BindingAdapter("findFriendsVisibility")
 fun View.bindFindFriendsVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState is WoofUiState.FindingFriends)
+    isVisible =
+        (uiState is WoofUiState.Loading || uiState is WoofUiState.FindingFriends || uiState is WoofUiState.LocationPermissionsNotGranted)
 }
 
 @BindingAdapter("registeringVisibility")
@@ -204,11 +205,14 @@ fun View.bindStateVisibility(uiState: WoofUiState?) {
     isVisible = (uiState !is WoofUiState.RegisteringFootprint)
 }
 
-@BindingAdapter("myWalkStatusVisibility")
-fun View.bindMyWalkStatusVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+@BindingAdapter("uiState", "myWalkStatusVisibility")
+fun View.bindMyWalkStatusVisibility(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
     isVisible =
-        if (myWalkStatus != null) {
-            (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING)
+        if (uiState == WoofUiState.FindingFriends) {
+            (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
         } else {
             false
         }

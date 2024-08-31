@@ -69,9 +69,9 @@ class WoofViewModel(
         MutableLiveData()
     val makeMarkerActions: LiveData<Event<WoofMakeMarkerActions>> get() = _makeMarkerActions
 
-    private val _changeTrackingModeActions: MutableLiveData<Event<WoofChangeTrackingModeActions>> =
+    private val _changeTrackingModeActions: MutableLiveData<Event<WoofTrackingModeActions>> =
         MutableLiveData()
-    val changeTrackingModeActions: LiveData<Event<WoofChangeTrackingModeActions>> get() = _changeTrackingModeActions
+    val changeTrackingModeActions: LiveData<Event<WoofTrackingModeActions>> get() = _changeTrackingModeActions
 
     private val _alertActions: MutableLiveData<Event<WoofAlertActions>> = MutableLiveData()
     val alertActions: LiveData<Event<WoofAlertActions>> get() = _alertActions
@@ -257,7 +257,7 @@ class WoofViewModel(
     }
 
     fun updateAddressLine(addressLine: String) {
-        _addressLine.value = addressLine
+        _addressLine.postValue(addressLine)
     }
 
     fun updateRefreshBtnVisibility(visible: Boolean) {
@@ -269,7 +269,7 @@ class WoofViewModel(
     }
 
     fun updateRegisterFootprintBtnInKorea(inKorea: Boolean) {
-        _registerFootprintBtn.value = registerFootprintBtn.value?.copy(inKorea = inKorea)
+        _registerFootprintBtn.postValue(registerFootprintBtn.value?.copy(inKorea = inKorea))
     }
 
     fun endWalk() {
@@ -299,18 +299,18 @@ class WoofViewModel(
     fun changeLocationTrackingMode() {
         val changeTrackingModeAction =
             changeTrackingModeActions.value?.value
-                ?: WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+                ?: WoofTrackingModeActions.ToFollowTrackingMode
         val trackingMode =
-            if (changeTrackingModeAction is WoofChangeTrackingModeActions.ChangeToFollowTrackingMode) {
-                WoofChangeTrackingModeActions.ChangeToFaceTrackingMode
+            if (changeTrackingModeAction is WoofTrackingModeActions.ToFollowTrackingMode) {
+                WoofTrackingModeActions.ToFaceTrackingMode
             } else {
-                WoofChangeTrackingModeActions.ChangeToFollowTrackingMode
+                WoofTrackingModeActions.ToFollowTrackingMode
             }
         _changeTrackingModeActions.emit(trackingMode)
     }
 
     fun changeTrackingModeToNoFollow() {
-        _changeTrackingModeActions.emit(WoofChangeTrackingModeActions.ChangeToNoFollowTrackingMode)
+        _changeTrackingModeActions.emit(WoofTrackingModeActions.ToNoFollowTrackingMode)
     }
 
     companion object {
