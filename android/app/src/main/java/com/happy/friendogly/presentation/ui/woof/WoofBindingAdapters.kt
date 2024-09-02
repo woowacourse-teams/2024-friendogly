@@ -30,6 +30,10 @@ import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 import java.time.Period
 
+private const val MARGIN_BOTTOM_DEFAULT = 36
+private const val MARGIN_BOTTOM_REGISTERING_FOOTPRINT = 12
+private const val MARGIN_BOTTOM_ON_WALKING = 12
+
 @BindingAdapter("memberName")
 fun TextView.bindMemberName(memberName: String) {
     val spannableString =
@@ -293,12 +297,12 @@ fun View.bindLocationBtn(
 
     val marginBottom =
         if (uiState is WoofUiState.RegisteringFootprint) {
-            12
+            MARGIN_BOTTOM_REGISTERING_FOOTPRINT
         } else {
             if (myWalkStatus != null) {
-                if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+                if (myWalkStatus.walkStatus == WalkStatus.AFTER) MARGIN_BOTTOM_DEFAULT else MARGIN_BOTTOM_ON_WALKING
             } else {
-                36
+                MARGIN_BOTTOM_DEFAULT
             }
         }
 
@@ -326,9 +330,11 @@ fun ImageButton.bindHelpBtn(
             WoofUiState.FindingFriends -> {
                 (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
             }
+
             WoofUiState.RegisteringFootprint -> {
                 true
             }
+
             else -> {
                 false
             }
