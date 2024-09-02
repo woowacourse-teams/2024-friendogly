@@ -70,12 +70,8 @@ fun AnalyticsHelper.logFootprintMemberNameClicked() {
     logEvent(type = Types.FOOTPRINT_MEMBER_NAME_CLICKED)
 }
 
-fun AnalyticsHelper.logRegisterHelpClicked() {
-    logEvent(type = Types.REGISTER_HELP_CLICKED)
-}
-
-fun AnalyticsHelper.logWalkHelpClicked() {
-    logEvent(type = Types.WALK_HELP_CLICKED)
+fun AnalyticsHelper.logHelpBtnClicked() {
+    logEvent(type = Types.HELP_BTN_CLICKED)
 }
 
 fun AnalyticsHelper.logFootprintPetImageClicked() {

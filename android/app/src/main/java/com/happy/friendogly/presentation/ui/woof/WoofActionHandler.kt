@@ -38,7 +38,5 @@ interface WoofActionHandler {
 
     fun clickFootprintMemberName(memberId: Long)
 
-    fun clickRegisterHelp()
-
-    fun clickWalkHelp()
+    fun clickHelpBtn()
 }

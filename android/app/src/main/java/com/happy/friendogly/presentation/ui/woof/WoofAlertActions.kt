@@ -7,6 +7,8 @@ sealed interface WoofAlertActions {
         val remainingTime: Int,
     ) : WoofAlertActions
 
+    data object AlertAddressOutOfKoreaSnackbar : WoofAlertActions
+
     data object AlertMarkerRegisteredSnackbar : WoofAlertActions
 
     data object AlertDeleteMyFootprintMarkerSnackbar : WoofAlertActions
