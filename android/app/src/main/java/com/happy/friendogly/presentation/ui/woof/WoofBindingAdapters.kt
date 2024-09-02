@@ -9,9 +9,10 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -156,14 +157,20 @@ fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
     }
 }
 
+@BindingAdapter("findFriendsVisibility")
+fun View.bindFindFriendsVisibility(uiState: WoofUiState?) {
+    isVisible =
+        (uiState is WoofUiState.Loading || uiState is WoofUiState.FindingFriends || uiState is WoofUiState.LocationPermissionsNotGranted)
+}
+
 @BindingAdapter("registeringVisibility")
-fun View.bindRegisteringVisibility(uiState: WoofUiState) {
-    isVisible = (uiState == WoofUiState.RegisteringFootprint)
+fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
+    isVisible = (uiState is WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("registeringVisibilityAnimation")
-fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
-    if (uiState == WoofUiState.RegisteringFootprint) {
+fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
+    if (uiState is WoofUiState.RegisteringFootprint) {
         showViewAnimation()
     } else {
         hideViewAnimation()
@@ -171,7 +178,7 @@ fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("viewingVisibilityAnimation")
-fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
+fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
     if (uiState == WoofUiState.ViewingFootprintInfo) {
         showViewAnimation()
     } else {
@@ -180,12 +187,12 @@ fun View.bindViewingVisibilityAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("loadingVisibility")
-fun View.bindLoadingVisibility(uiState: WoofUiState) {
+fun FrameLayout.bindLoadingVisibility(uiState: WoofUiState?) {
     isVisible = (uiState == WoofUiState.Loading)
 }
 
 @BindingAdapter("loadingAnimation")
-fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
+fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
     if (uiState == WoofUiState.Loading) {
         playAnimation()
     } else {
@@ -194,15 +201,18 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState) {
 }
 
 @BindingAdapter("stateVisibility")
-fun View.bindStateVisibility(uiState: WoofUiState) {
-    isVisible = (uiState != WoofUiState.RegisteringFootprint)
+fun View.bindStateVisibility(uiState: WoofUiState?) {
+    isVisible = (uiState !is WoofUiState.RegisteringFootprint)
 }
 
-@BindingAdapter("myWalkStatusVisibility")
-fun View.bindMyWalkStatusVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+@BindingAdapter("uiState", "myWalkStatusVisibility")
+fun View.bindMyWalkStatusVisibility(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
     isVisible =
-        if (myWalkStatus != null) {
-            (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING)
+        if (uiState == WoofUiState.FindingFriends) {
+            (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
         } else {
             false
         }
@@ -230,11 +240,27 @@ fun TextView.bindFilterStateBtnBackgroundTint(
         ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
 }
 
-@BindingAdapter("refreshBtnVisibility")
-fun View.bindRefreshBtnVisibility(uiState: WoofUiState) {
+@BindingAdapter("uiState", "refreshBtnVisibility")
+fun TextView.bindRefreshBtnVisibility(
+    uiState: WoofUiState?,
+    refreshBtnVisible: Boolean,
+) {
     isVisible =
         if (uiState is WoofUiState.FindingFriends) {
-            uiState.refreshBtnVisible
+            refreshBtnVisible
+        } else {
+            false
+        }
+}
+
+@BindingAdapter("uiState", "cameraIdle")
+fun TextView.bindRegisterFootprintBtnClickable(
+    uiState: WoofUiState?,
+    cameraIdle: Boolean,
+) {
+    isClickable =
+        if (uiState is WoofUiState.RegisteringFootprint) {
+            cameraIdle
         } else {
             false
         }
@@ -254,8 +280,11 @@ fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
     }
 }
 
-@BindingAdapter("locationBtnMarginBottom")
-fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
+@BindingAdapter("uiState", "locationBtn")
+fun View.bindLocationBtn(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -263,13 +292,57 @@ fun View.bindLocationBtnMarginBottom(myWalkStatus: FootprintRecentWalkStatus?) {
     }
 
     val marginBottom =
-        if (myWalkStatus != null) {
-            if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+        if (uiState is WoofUiState.RegisteringFootprint) {
+            12
         } else {
-            36
+            if (myWalkStatus != null) {
+                if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+            } else {
+                36
+            }
         }
 
-    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
-    layoutParams.bottomMargin = marginBottom.dp()
+    val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+    layoutParams.apply {
+        bottomToTop =
+            if (uiState is WoofUiState.RegisteringFootprint) {
+                R.id.layout_woof_register_marker
+            } else {
+                R.id.layout_woof_walk
+            }
+        bottomMargin = marginBottom.dp()
+    }
+
+    this.layoutParams = layoutParams
+}
+
+@BindingAdapter("uiState", "helpBtn")
+fun ImageButton.bindHelpBtn(
+    uiState: WoofUiState?,
+    myWalkStatus: FootprintRecentWalkStatus?,
+) {
+    isVisible =
+        when (uiState) {
+            WoofUiState.FindingFriends -> {
+                (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
+            }
+            WoofUiState.RegisteringFootprint -> {
+                true
+            }
+            else -> {
+                false
+            }
+        }
+
+    val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+    layoutParams.apply {
+        bottomToTop =
+            if (uiState is WoofUiState.RegisteringFootprint) {
+                R.id.layout_woof_register_marker
+            } else {
+                R.id.layout_woof_walk
+            }
+    }
+
     this.layoutParams = layoutParams
 }
