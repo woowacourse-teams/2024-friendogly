@@ -145,7 +145,7 @@ class MyPageViewModel(
         _navigateAction.emit(MyPageNavigationAction.NavigateToSetting)
     }
 
-    override fun navigateToPetEdit(id: Long) {
+    override fun navigateToPetEdit() {
         val state = uiState.value ?: return
         val currentPage = currentPage.value ?: return
         val pet = state.pets[currentPage] as PetView

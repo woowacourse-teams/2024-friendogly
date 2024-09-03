@@ -23,7 +23,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_user_profile_edit"
-            onSingleClick="@{() -> actionHandler.navigateToPetEdit(petView.id)}"
+            onSingleClick="@{() -> actionHandler.navigateToPetEdit()}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="parent"
