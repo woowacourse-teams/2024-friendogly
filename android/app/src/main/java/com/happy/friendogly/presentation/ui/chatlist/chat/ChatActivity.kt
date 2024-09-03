@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityChatBinding
@@ -14,6 +15,8 @@ import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
+import com.happy.friendogly.presentation.utils.logChatAlarmClicked
+import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
 import kotlinx.coroutines.launch
 
 class ChatActivity :
@@ -41,12 +44,17 @@ class ChatActivity :
 
         clickChatInfo(chatId)
 
+        clickSendMessage(chatId)
+        viewModel.subscribeMessage(chatId)
+        hideMessageKeyBoard()
+    }
+
+    private fun clickSendMessage(chatId: Long) {
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
+            AppModule.getInstance().analyticsHelper.logChatSendMessageClicked()
         }
-        viewModel.subscribeMessage(chatId)
-        hideMessageKeyBoard()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -118,6 +126,9 @@ class ChatActivity :
             context: Context,
             chatId: Long,
         ): Intent {
+            if (context is FirebaseMessagingService) {
+                AppModule.getInstance().analyticsHelper.logChatAlarmClicked()
+            }
             return Intent(context, ChatActivity::class.java).apply {
                 putExtra(EXTRA_CHAT_ID, chatId)
             }

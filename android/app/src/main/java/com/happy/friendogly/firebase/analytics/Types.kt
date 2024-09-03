@@ -61,4 +61,9 @@ object Types {
     const val CLUB_MY_CLICKED = "club_detail_clicked"
     const val CLUB_MY_ADD_BTN_CLICKED = "club_my_add_btn_clicked"
     const val CLUB_LIST_ADD_BTN_CLICKED = "club_list_add_btn_clicked"
+    const val CHAT_ALARM_CLICKED = "chat_alarm_clicked"
+    const val CHAT_SEND_MESSAGE_CLICKED = "chat_send_message_clicked"
+    const val CHAT_PERMISSION_ALARM_DENIED = "chat_permission_alarm_denied"
+    const val CHAT_PERMISSION_LOCATION_DENIED = "chat_permission_location_denied"
+    const val CHAT_GO_CLUB_DETAIL_CLICKED = "chat_go_club_detail_clicked"
 }

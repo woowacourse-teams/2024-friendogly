@@ -15,8 +15,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
+import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
 import java.lang.ref.WeakReference
 
 class LocationPermission private constructor(
@@ -42,6 +44,7 @@ class LocationPermission private constructor(
                 isPermitted(true)
             } else {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
             }
         }
 
@@ -51,6 +54,7 @@ class LocationPermission private constructor(
                 isPermitted(true)
             } else {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
             }
         }
 
@@ -91,6 +95,7 @@ class LocationPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
             },
             clickToPositive = {
                 val intent =
@@ -110,6 +115,7 @@ class LocationPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
+                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
             },
             clickToPositive = {
                 val intent =
