@@ -5,5 +5,6 @@ public enum MessageType {
     ENTER,
     CHAT,
     LEAVE,
-    DATE
+    DATE, // 현재 미사용
+    IMAGE
 }

@@ -25,6 +25,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class ChatSocketController {
@@ -75,16 +76,27 @@ public class ChatSocketController {
     }
 
     @MessageMapping("/chat/{chatRoomId}")
-    public void sendMessage(
+    public void sendText(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
         LocalDateTime createdAt = LocalDateTime.now();
-        ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
+        ChatMessageResponse response = chatService.parseTextMessage(memberId, request, createdAt);
 
         // TODO: 하나의 service method에서 처리하도록 리팩토링 필요
         notificationService.sendChatNotification(chatRoomId, response);
+        template.convertAndSend("/topic/chat/" + chatRoomId, response);
+    }
+
+    @MessageMapping("/chat/{chatRoomId}/image")
+    public void sendImage(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId,
+            @Payload MultipartFile image // TODO: 클라이언트에서 잘 작동하는지 확인 필요
+    ) {
+        LocalDateTime createdAt = LocalDateTime.now();
+        ChatMessageResponse response = chatService.parseImageMessage(memberId, image, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
     }
 
