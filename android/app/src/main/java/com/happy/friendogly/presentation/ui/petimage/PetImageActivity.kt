@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.woof
+package com.happy.friendogly.presentation.ui.petimage
 
 import android.content.Context
 import android.content.Intent

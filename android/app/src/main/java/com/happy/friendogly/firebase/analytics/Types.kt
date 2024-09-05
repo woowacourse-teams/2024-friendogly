@@ -44,7 +44,6 @@ object Types {
     const val REFRESH_BTN_CLICKED = "refresh_btn_clicked"
     const val BACK_BTN_CLICKED = "back_btn_clicked"
     const val CLOSE_BTN_CLICKED = "close_btn_clicked"
-    const val FOOTPRINT_CLICKED = "footprint_clicked"
     const val FOOTPRINT_MEMBER_NAME_CLICKED = "footprint_member_name_clicked"
     const val HELP_BTN_CLICKED = "help_btn_clicked"
     const val FOOTPRINT_PET_IMAGE_CLICKED = "footprint_pet_image_clicked"

@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.woof
+package com.happy.friendogly.presentation.ui.woof.util
 
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -23,6 +23,7 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
