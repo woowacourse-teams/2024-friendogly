@@ -294,22 +294,24 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 return@observe
             }
 
-            if (myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING) {
-                startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
-
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        showHelpBalloon()
-                    },
-                    DELAY_MILLIS,
-                )
-            }
-
             if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
                 circleOverlay.map = null
                 timer?.cancel()
             } else {
+                startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
                 monitorDistanceAndManageWalkStatus()
+                val textResId =
+                    if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
+                        R.string.woof_walk_before_help
+                    } else {
+                        R.string.woof_walk_ongoing_help
+                    }
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        showHelpBalloon(textRestId = textResId)
+                    },
+                    DELAY_MILLIS,
+                )
             }
         }
 
@@ -458,7 +460,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
-                is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon()
+                is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon(event.textResId)
             }
 
             viewModel.navigateActions.observeEvent(viewLifecycleOwner) { event ->
@@ -606,7 +608,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                showHelpBalloon()
+                showHelpBalloon(textRestId = R.string.woof_register_help)
             },
             DELAY_MILLIS,
         )
@@ -807,25 +809,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             .build()
     }
 
-    private fun showHelpBalloon() {
-        val text =
-            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
-                resources.getString(R.string.woof_register_help)
-            } else {
-                when (viewModel.myWalkStatus.value?.walkStatus) {
-                    WalkStatus.BEFORE -> {
-                        resources.getString(R.string.woof_walk_before_help)
-                    }
-
-                    WalkStatus.ONGOING -> {
-                        resources.getString(R.string.woof_walk_ongoing_help)
-                    }
-
-                    else -> {
-                        return
-                    }
-                }
-            }
+    private fun showHelpBalloon(textRestId: Int) {
+        val text = resources.getString(textRestId)
         val balloon = createBalloon(text)
         balloon.showAlignTop(binding.btnWoofWalkHelp)
     }

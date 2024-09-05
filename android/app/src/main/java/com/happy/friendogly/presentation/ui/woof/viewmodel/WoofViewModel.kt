@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toFootprint
 import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
@@ -193,7 +194,25 @@ class WoofViewModel(
 
     override fun clickHelpBtn() {
         analyticsHelper.logHelpBtnClicked()
-        _alertActions.emit(WoofAlertActions.AlertHelpBalloon)
+        val textResId =
+            if (uiState.value is WoofUiState.RegisteringFootprint) {
+                R.string.woof_register_help
+            } else {
+                when (myWalkStatus.value?.walkStatus) {
+                    WalkStatus.BEFORE -> {
+                        R.string.woof_walk_before_help
+                    }
+
+                    WalkStatus.ONGOING -> {
+                        R.string.woof_walk_ongoing_help
+                    }
+
+                    else -> {
+                        return
+                    }
+                }
+            }
+        _alertActions.emit(WoofAlertActions.AlertHelpBalloon(textResId))
     }
 
     private fun loadFootprintMarkBtnInfo() {
