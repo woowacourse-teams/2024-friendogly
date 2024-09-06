@@ -18,6 +18,7 @@ import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@Slf4j
 public class ChatSocketController {
 
     private final ChatService chatService;
@@ -95,6 +97,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload MultipartFile image // TODO: 클라이언트에서 잘 작동하는지 확인 필요
     ) {
+        log.info("이미지를 정상적으로 불러왔습니다. 이미지 파일명: {}", image.getOriginalFilename());
         LocalDateTime createdAt = LocalDateTime.now();
         ChatMessageResponse response = chatService.parseImageMessage(memberId, image, createdAt);
         template.convertAndSend("/topic/chat/" + chatRoomId, response);
