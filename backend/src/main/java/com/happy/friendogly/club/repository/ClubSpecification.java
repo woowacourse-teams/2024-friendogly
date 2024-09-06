@@ -64,7 +64,7 @@ public class ClubSpecification {
     }
 
     public ClubSpecification orderByCreatedAtDesc() {
-        spec.and((root, query, criteriaBuilder) -> {
+        spec = spec.and((root, query, criteriaBuilder) -> {
             Order orderByCreatedAt = criteriaBuilder.desc(root.get("createdAt"));
             query.orderBy(orderByCreatedAt);
             return criteriaBuilder.conjunction();
