@@ -2,6 +2,7 @@ package com.happy.friendogly.notification.service;
 
 import static com.happy.friendogly.notification.domain.NotificationType.CHAT;
 import static com.happy.friendogly.notification.domain.NotificationType.FOOTPRINT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +55,12 @@ public class FcmNotificationService implements NotificationService {
 
     @Override
     public void sendChatNotification(Long chatRoomId, ChatMessageResponse response) {
-        List<String> receiverTokens = deviceTokenRepository.findAllByChatRoomId(chatRoomId);
+        List<String> receiverTokens = deviceTokenRepository
+                .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
+
+        if (receiverTokens.isEmpty()) {
+            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
+        }
 
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),
@@ -88,7 +93,7 @@ public class FcmNotificationService implements NotificationService {
                 firebaseMessaging.sendEachForMulticast(message);
             } catch (FirebaseMessagingException e) {
                 throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.",
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+                        INTERNAL_SERVER_ERROR);
             }
         }
     }

@@ -24,23 +24,27 @@ class DeviceTokenRepositoryTest {
     @Autowired
     private ChatRoomRepository chatRoomRepository;
 
-    @DisplayName("채팅방 ID로부터 device token을 가져올 수 있다.")
+    @DisplayName("채팅방 ID로부터 자기 자신을 제외한 device token들을 가져올 수 있다.")
     @Test
     void findAllByChatRoomId() {
         // given
-        Member member1 = memberRepository.save(new Member("name1", "tag1", "https://test.com/test.jpg"));
-        Member member2 = memberRepository.save(new Member("name2", "tag2", "https://test.com/test.jpg"));
-        Member member3 = memberRepository.save(new Member("name3", "tag3", "https://test.com/test.jpg"));
+        Member me = memberRepository.save(new Member("name1", "tag1", "https://test.com/test.jpg"));
+        Member other1 = memberRepository.save(new Member("name2", "tag2", "https://test.com/test.jpg"));
+        Member other2 = memberRepository.save(new Member("name3", "tag3", "https://test.com/test.jpg"));
+        Member notInChatRoom = memberRepository.save(new Member("name4", "tag4", "https://test.com/test.jpg"));
 
-        deviceTokenRepository.save(new DeviceToken(member1, "token1"));
-        deviceTokenRepository.save(new DeviceToken(member2, "token2"));
-        deviceTokenRepository.save(new DeviceToken(member3, "token3"));
+        deviceTokenRepository.save(new DeviceToken(me, "token1"));
+        deviceTokenRepository.save(new DeviceToken(other1, "token2"));
+        deviceTokenRepository.save(new DeviceToken(other2, "token3"));
+        deviceTokenRepository.save(new DeviceToken(notInChatRoom, "token4"));
 
         ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
-        chatRoom.addMember(member1);
-        chatRoom.addMember(member2);
+        chatRoom.addMember(me);
+        chatRoom.addMember(other1);
+        chatRoom.addMember(other2);
 
         // when - then
-        assertThat(deviceTokenRepository.findAllByChatRoomId(chatRoom.getId())).containsExactly("token1", "token2");
+        assertThat(deviceTokenRepository.findAllByChatRoomIdWithoutMine(chatRoom.getId(), me.getId()))
+                .containsExactly("token2", "token3");
     }
 }
