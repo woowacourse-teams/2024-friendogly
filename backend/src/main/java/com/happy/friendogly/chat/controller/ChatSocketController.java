@@ -1,21 +1,15 @@
 package com.happy.friendogly.chat.controller;
 
-import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
-
 import com.happy.friendogly.auth.WebSocketAuth;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
-import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
 import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
-import com.happy.friendogly.chat.service.ChatRoomCommandService;
 import com.happy.friendogly.chat.service.ChatRoomQueryService;
 import com.happy.friendogly.chat.service.ChatService;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
-import com.happy.friendogly.notification.service.NotificationService;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -29,23 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatSocketController {
 
     private final ChatService chatService;
-    private final ChatRoomCommandService chatRoomCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
     private final SimpMessagingTemplate template;
-    private final NotificationService notificationService;
 
     public ChatSocketController(
             ChatService chatService,
-            ChatRoomCommandService chatRoomCommandService,
             ChatRoomQueryService chatRoomQueryService,
-            SimpMessagingTemplate template,
-            NotificationService notificationService
+            SimpMessagingTemplate template
     ) {
         this.chatService = chatService;
-        this.chatRoomCommandService = chatRoomCommandService;
         this.chatRoomQueryService = chatRoomQueryService;
         this.template = template;
-        this.notificationService = notificationService;
     }
 
     @MessageMapping("/invite")
@@ -82,12 +70,7 @@ public class ChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        LocalDateTime createdAt = LocalDateTime.now();
-        chatRoomCommandService.leave(memberId, chatRoomId);
-        ChatMessageResponse response = chatService.parseNotice(LEAVE, memberId, createdAt);
-
-        notificationService.sendChatNotification(chatRoomId, response);
-        template.convertAndSend("/topic/chat/" + chatRoomId, response);
+        chatService.leave(memberId, chatRoomId);
     }
 
     @MessageExceptionHandler // TODO: 패키지 정리 과정에서 옮겨야 할 수도 있음!

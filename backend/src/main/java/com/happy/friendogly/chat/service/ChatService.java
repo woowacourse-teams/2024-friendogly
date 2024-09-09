@@ -2,9 +2,9 @@ package com.happy.friendogly.chat.service;
 
 import static com.happy.friendogly.chat.domain.MessageType.CHAT;
 import static com.happy.friendogly.chat.domain.MessageType.ENTER;
+import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
-import com.happy.friendogly.chat.domain.MessageType;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
@@ -27,11 +27,6 @@ public class ChatService {
     private final NotificationService notificationService;
     private final SimpMessagingTemplate template;
 
-    public ChatMessageResponse parseNotice(MessageType messageType, Long senderMemberId, LocalDateTime createdAt) {
-        Member senderMember = memberRepository.getById(senderMemberId);
-        return new ChatMessageResponse(messageType, "", senderMember, createdAt);
-    }
-
     public void enter(Long senderMemberId, Long chatRoomId) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
@@ -48,6 +43,16 @@ public class ChatService {
     public void send(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatMessageResponse chat = new ChatMessageResponse(CHAT, request.content(), senderMember, LocalDateTime.now());
+        notificationService.sendChatNotification(chatRoomId, chat);
+        template.convertAndSend("/topic/chat/" + chatRoomId, chat);
+    }
+
+    public void leave(Long senderMemberId, Long chatRoomId) {
+        Member senderMember = memberRepository.getById(senderMemberId);
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+        chatRoom.removeMember(senderMember);
+
+        ChatMessageResponse chat = new ChatMessageResponse(LEAVE, "", senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
         template.convertAndSend("/topic/chat/" + chatRoomId, chat);
     }
