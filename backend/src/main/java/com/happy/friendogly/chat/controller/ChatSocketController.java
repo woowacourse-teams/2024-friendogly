@@ -1,6 +1,5 @@
 package com.happy.friendogly.chat.controller;
 
-import static com.happy.friendogly.chat.domain.MessageType.ENTER;
 import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 
 import com.happy.friendogly.auth.WebSocketAuth;
@@ -66,12 +65,7 @@ public class ChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        LocalDateTime createdAt = LocalDateTime.now();
-        chatRoomCommandService.enter(memberId, chatRoomId);
-        ChatMessageResponse response = chatService.parseNotice(ENTER, memberId, createdAt);
-
-        notificationService.sendChatNotification(chatRoomId, response);
-        template.convertAndSend("/topic/chat/" + chatRoomId, response);
+        chatService.enter(memberId, chatRoomId);
     }
 
     @MessageMapping("/chat/{chatRoomId}")
