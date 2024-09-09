@@ -80,12 +80,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        LocalDateTime createdAt = LocalDateTime.now();
-        ChatMessageResponse response = chatService.parseMessage(memberId, request, createdAt);
-
-        // TODO: 하나의 service method에서 처리하도록 리팩토링 필요
-        notificationService.sendChatNotification(chatRoomId, response);
-        template.convertAndSend("/topic/chat/" + chatRoomId, response);
+        chatService.send(memberId, chatRoomId, request);
     }
 
     @MessageMapping("/leave/{chatRoomId}")
