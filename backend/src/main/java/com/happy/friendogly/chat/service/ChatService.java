@@ -4,9 +4,11 @@ import static com.happy.friendogly.chat.domain.MessageType.CHAT;
 import static com.happy.friendogly.chat.domain.MessageType.ENTER;
 import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 
+import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
+import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -24,6 +26,7 @@ public class ChatService {
 
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
     private final SimpMessagingTemplate template;
 
@@ -38,13 +41,17 @@ public class ChatService {
         ChatMessageResponse chat = new ChatMessageResponse(ENTER, "", senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
         template.convertAndSend("/topic/chat/" + chatRoomId, chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, ENTER, senderMember, ""));
     }
 
     public void send(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
         Member senderMember = memberRepository.getById(senderMemberId);
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+
         ChatMessageResponse chat = new ChatMessageResponse(CHAT, request.content(), senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
         template.convertAndSend("/topic/chat/" + chatRoomId, chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, CHAT, senderMember, request.content()));
     }
 
     public void leave(Long senderMemberId, Long chatRoomId) {
@@ -55,5 +62,6 @@ public class ChatService {
         ChatMessageResponse chat = new ChatMessageResponse(LEAVE, "", senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
         template.convertAndSend("/topic/chat/" + chatRoomId, chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, LEAVE, senderMember, ""));
     }
 }
