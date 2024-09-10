@@ -1,7 +1,7 @@
 package com.happy.friendogly.chat.dto.response;
 
+import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.MessageType;
-import com.happy.friendogly.member.domain.Member;
 import java.time.LocalDateTime;
 
 public record FindChatMessagesResponse(
@@ -13,19 +13,14 @@ public record FindChatMessagesResponse(
         String profilePictureUrl
 ) {
 
-    public FindChatMessagesResponse(
-            MessageType messageType,
-            String content,
-            Member senderMember,
-            LocalDateTime createdAt
-    ) {
+    public FindChatMessagesResponse(ChatMessage chatMessage) {
         this(
-                messageType,
-                senderMember.getId(),
-                senderMember.getName().getValue(),
-                content,
-                createdAt,
-                senderMember.getImageUrl()
+                chatMessage.getMessageType(),
+                chatMessage.getSenderMember().getId(),
+                chatMessage.getSenderMember().getName().getValue(),
+                chatMessage.getContent(),
+                chatMessage.getCreatedAt(),
+                chatMessage.getSenderMember().getImageUrl()
         );
     }
 }

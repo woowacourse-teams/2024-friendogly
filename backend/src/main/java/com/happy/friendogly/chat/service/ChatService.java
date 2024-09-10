@@ -44,12 +44,8 @@ public class ChatService {
 
         List<ChatMessage> messages = chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
         return messages.stream()
-                .map(message -> new FindChatMessagesResponse(
-                        message.getMessageType(),
-                        message.getContent(),
-                        message.getSenderMember(),
-                        message.getCreatedAt()
-                )).toList();
+                .map(FindChatMessagesResponse::new)
+                .toList();
     }
 
     public void enter(Long senderMemberId, Long chatRoomId) {
