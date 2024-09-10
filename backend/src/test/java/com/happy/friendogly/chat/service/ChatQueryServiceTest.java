@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
@@ -28,16 +27,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-class ChatServiceTest {
+class ChatQueryServiceTest {
 
     @Autowired
-    private ChatService chatService;
+    private ChatQueryService chatQueryService;
 
     @Autowired
-    private ChatRoomRepository chatRoomRepository;
+    private ChatCommandService chatCommandService;
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
@@ -62,32 +64,6 @@ class ChatServiceTest {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("채팅방에 입장한다.")
-    @Transactional
-    @Test
-    void enter() {
-        // given
-        Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
-
-        // when
-        chatService.enter(otherMember.getId(), chatRoom.getId());
-
-        // then
-        assertThat(chatRoom.findMembers()).extracting(Member::getId)
-                .containsExactly(member.getId(), otherMember.getId());
-    }
-
-    @DisplayName("채팅방에서 퇴장한다.")
-    @Transactional
-    @Test
-    void leave() {
-        // when
-        chatService.leave(member.getId(), chatRoom.getId());
-
-        // then
-        assertThat(chatRoom.isEmpty()).isTrue();
-    }
-
     @DisplayName("채팅방 ID로 채팅 메시지를 모두 찾을 수 있다.")
     @Transactional
     @Test
@@ -95,14 +71,15 @@ class ChatServiceTest {
         // given
         Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
 
-        chatService.enter(otherMember.getId(), chatRoom.getId());
-        chatService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("안녕하세요!"));
-        chatService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageRequest("반가워요!"));
-        chatService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("이만 나가볼게요!"));
-        chatService.leave(otherMember.getId(), chatRoom.getId());
+        chatCommandService.enter(otherMember.getId(), chatRoom.getId());
+        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("안녕하세요!"));
+        chatCommandService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageRequest("반가워요!"));
+        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("이만 나가볼게요!"));
+        chatCommandService.leave(otherMember.getId(), chatRoom.getId());
 
         // when
-        List<FindChatMessagesResponse> messages = chatService.findAllByChatRoomId(member.getId(), chatRoom.getId());
+        List<FindChatMessagesResponse> messages = chatQueryService.findAllByChatRoomId(
+                member.getId(), chatRoom.getId());
 
         // then
         Long memberId = member.getId();
@@ -138,7 +115,7 @@ class ChatServiceTest {
         Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
 
         // when - then
-        assertThatThrownBy(() -> chatService.findAllByChatRoomId(otherMember.getId(), chatRoom.getId()))
+        assertThatThrownBy(() -> chatQueryService.findAllByChatRoomId(otherMember.getId(), chatRoom.getId()))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("채팅 내역을 조회할 수 있는 권한이 없습니다.");
     }
@@ -163,60 +140,11 @@ class ChatServiceTest {
         );
 
         // when
-        List<FindChatMessagesResponse> response = chatService.findRecent(
+        List<FindChatMessagesResponse> response = chatQueryService.findRecent(
                 member.getId(), chatRoom.getId(), LocalDateTime.parse("2024-01-01T11:00:00"));
 
         // then
         assertThat(response).extracting(FindChatMessagesResponse::content)
                 .containsExactly("반갑습니다", "환영합니다");
-    }
-
-    @DisplayName("채팅 입장 메시지를 DB에 저장한다.")
-    @Test
-    void enter_SaveDatabase() {
-        // when
-        chatService.enter(member.getId(), chatRoom.getId());
-
-        // then
-        List<ChatMessage> messages = chatMessageRepository.findAll();
-        assertAll(
-                () -> assertThat(messages).extracting(ChatMessage::getMessageType)
-                        .containsExactly(ENTER),
-                () -> assertThat(messages).extracting(ChatMessage::getContent)
-                        .containsExactly("")
-        );
-    }
-
-    @DisplayName("채팅 메시지를 DB에 저장한다.")
-    @Transactional
-    @Test
-    void send_SaveDatabase() {
-        // given
-        ChatMessageRequest request = new ChatMessageRequest("반갑습니다.");
-
-        // when
-        chatService.sendChat(member.getId(), chatRoom.getId(), request);
-
-        // then
-        List<ChatMessage> messages = chatMessageRepository.findAll();
-        assertThat(messages).extracting(ChatMessage::getContent)
-                .containsExactly("반갑습니다.");
-    }
-
-    @DisplayName("채팅 퇴장 메시지를 DB에 저장한다.")
-    @Transactional
-    @Test
-    void leave_SaveDatabase() {
-        // when
-        chatService.leave(member.getId(), chatRoom.getId());
-
-        // then
-        List<ChatMessage> messages = chatMessageRepository.findAll();
-        assertAll(
-                () -> assertThat(messages).extracting(ChatMessage::getMessageType)
-                        .containsExactly(LEAVE),
-                () -> assertThat(messages).extracting(ChatMessage::getContent)
-                        .containsExactly("")
-        );
     }
 }

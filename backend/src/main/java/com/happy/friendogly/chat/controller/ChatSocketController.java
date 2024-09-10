@@ -5,7 +5,7 @@ import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.happy.friendogly.chat.service.ChatRoomQueryService;
-import com.happy.friendogly.chat.service.ChatService;
+import com.happy.friendogly.chat.service.ChatCommandService;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
@@ -22,16 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatSocketController {
 
-    private final ChatService chatService;
+    private final ChatCommandService chatCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
     private final SimpMessagingTemplate template;
 
     public ChatSocketController(
-            ChatService chatService,
+            ChatCommandService chatCommandService,
             ChatRoomQueryService chatRoomQueryService,
             SimpMessagingTemplate template
     ) {
-        this.chatService = chatService;
+        this.chatCommandService = chatCommandService;
         this.chatRoomQueryService = chatRoomQueryService;
         this.template = template;
     }
@@ -53,7 +53,7 @@ public class ChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        chatService.enter(memberId, chatRoomId);
+        chatCommandService.enter(memberId, chatRoomId);
     }
 
     @MessageMapping("/chat/{chatRoomId}")
@@ -62,7 +62,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        chatService.sendChat(memberId, chatRoomId, request);
+        chatCommandService.sendChat(memberId, chatRoomId, request);
     }
 
     @MessageMapping("/leave/{chatRoomId}")
@@ -70,7 +70,7 @@ public class ChatSocketController {
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId
     ) {
-        chatService.leave(memberId, chatRoomId);
+        chatCommandService.leave(memberId, chatRoomId);
     }
 
     @MessageExceptionHandler // TODO: 패키지 정리 과정에서 옮겨야 할 수도 있음!
