@@ -18,14 +18,12 @@ import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ChatService {
 
     private final MemberRepository memberRepository;
@@ -33,6 +31,20 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
     private final SimpMessagingTemplate template;
+
+    public ChatService(
+            MemberRepository memberRepository,
+            ChatRoomRepository chatRoomRepository,
+            ChatMessageRepository chatMessageRepository,
+            NotificationService notificationService,
+            SimpMessagingTemplate template
+    ) {
+        this.memberRepository = memberRepository;
+        this.chatRoomRepository = chatRoomRepository;
+        this.chatMessageRepository = chatMessageRepository;
+        this.notificationService = notificationService;
+        this.template = template;
+    }
 
     public List<FindChatMessagesResponse> findAllByChatRoomId(Long memberId, Long chatRoomId) {
         validateParticipation(memberId, chatRoomId);
