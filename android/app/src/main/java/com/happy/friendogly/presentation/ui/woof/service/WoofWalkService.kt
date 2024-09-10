@@ -15,6 +15,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
+import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver.Companion.ACTION_LOCATION_UPDATED
 import com.naver.maps.geometry.LatLng
 
@@ -34,9 +35,11 @@ class WoofWalkService : Service() {
             } else {
                 intent?.getParcelableExtra(EXTRA_MY_FOOTPRINT_MARKER_POSITION)
             } ?: return super.onStartCommand(intent, flags, startId)
+        val walkStatus = intent?.getSerializableExtra(EXTRA_WALK_STATUS) as WalkStatus
+        val walkStatusTitle = convertWalkStatusToTitle(walkStatus)
 
-        val startTimeMillis = intent?.getLongExtra(EXTRA_START_MILLIS, 0) ?: 0
-        startForegroundService(startTimeMillis)
+        val startTimeMillis = intent.getLongExtra(EXTRA_START_MILLIS, 0)
+        startForegroundService(walkStatusTitle, startTimeMillis)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -49,10 +52,13 @@ class WoofWalkService : Service() {
         return null
     }
 
-    private fun startForegroundService(startMillis: Long) {
+    private fun startForegroundService(
+        walkStatusTitle: String,
+        startMillis: Long,
+    ) {
         startLocationUpdate()
         createNotificationChannel()
-        startForeground(SERVICE_ID, createNotification(startMillis))
+        startForeground(SERVICE_ID, createNotification(walkStatusTitle, startMillis))
     }
 
     private fun startLocationUpdate() {
@@ -76,7 +82,10 @@ class WoofWalkService : Service() {
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
-    private fun createNotification(startMillis: Long): Notification {
+    private fun createNotification(
+        walkStatusTitle: String,
+        startMillis: Long,
+    ): Notification {
         val intent =
             MainActivity.getIntent(this).apply {
                 putExtra(EXTRA_FRAGMENT, WoofFragment.TAG)
@@ -91,7 +100,8 @@ class WoofWalkService : Service() {
             )
 
         return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
-            .setContentTitle(NOTIFICATION_TITLE).setContentText("산책 중 입니다.")
+            .setContentTitle(walkStatusTitle)
+            .setContentText(resources.getString(R.string.woof_location_tracking))
             .setSmallIcon(R.mipmap.ic_launcher).setUsesChronometer(true).setWhen(startMillis)
             .setContentIntent(pendingIntent).setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(false).setDefaults(NotificationCompat.DEFAULT_ALL).build()
@@ -105,21 +115,31 @@ class WoofWalkService : Service() {
         sendBroadcast(intent)
     }
 
+    private fun convertWalkStatusToTitle(walkStatus: WalkStatus): String {
+        return when (walkStatus) {
+            WalkStatus.BEFORE -> return resources.getString(R.string.woof_status_before)
+            WalkStatus.ONGOING -> return resources.getString(R.string.woof_status_ongoing)
+            WalkStatus.AFTER -> return resources.getString(R.string.woof_status_after)
+        }
+    }
+
     companion object {
         private const val WALK_SERVICE_CHANNEL_ID = "walk_service_id"
         private const val WALK_SERVICE_CHANNEL_NAME = "Walk Service"
+        private const val EXTRA_WALK_STATUS = "walkStatus"
         private const val EXTRA_START_MILLIS = "startMillis"
         private const val EXTRA_MY_FOOTPRINT_MARKER_POSITION = "myFootprintMarkerPosition"
-        private const val NOTIFICATION_TITLE = "산책 상태"
         private const val REQUEST_CODE_ID = 0
         private const val SERVICE_ID = 1
 
         fun getIntent(
             context: Context,
+            walkStatus: WalkStatus,
             startMillis: Long,
             myFootprintMarkerPosition: LatLng,
         ): Intent {
             return Intent(context, WoofWalkService::class.java).apply {
+                putExtra(EXTRA_WALK_STATUS, walkStatus)
                 putExtra(EXTRA_START_MILLIS, startMillis)
                 putExtra(EXTRA_MY_FOOTPRINT_MARKER_POSITION, myFootprintMarkerPosition)
             }

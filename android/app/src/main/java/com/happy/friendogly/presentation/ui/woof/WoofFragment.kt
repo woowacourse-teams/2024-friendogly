@@ -726,6 +726,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun startWalkService() {
         val myWalkStatus = viewModel.myWalkStatus.value ?: return
+        val walkStatus = myWalkStatus.walkStatus
         val now = java.time.LocalDateTime.now()
         val duration =
             Duration.between(myWalkStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
@@ -733,7 +734,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         val myFootprintMarker = viewModel.myFootprintMarker.value ?: return
         val position = myFootprintMarker.marker.position
 
-        val intent = WoofWalkService.getIntent(requireContext(), startMillis, position)
+        val intent = WoofWalkService.getIntent(requireContext(), walkStatus, startMillis, position)
         requireContext().startForegroundService(intent)
     }
 

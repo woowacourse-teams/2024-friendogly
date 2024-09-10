@@ -273,6 +273,7 @@
     <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
     <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
+    <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
     <string name="woof_footprint_refresh">새로고침</string>
