@@ -3,14 +3,12 @@ package com.happy.friendogly.chat.service;
 import static com.happy.friendogly.pet.domain.Gender.MALE;
 import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.club.domain.Club;
-import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.support.ServiceTest;
@@ -34,7 +32,6 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     private Member member1;
     private Member member2;
     private Pet pet;
-    private ChatRoom chatRoom;
     private Club club;
 
     @BeforeEach
@@ -46,7 +43,6 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         club = clubRepository.save(
                 Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, member1, Set.of(MALE), Set.of(SMALL), "https://a.com",
                         List.of(pet)));
-        chatRoom = club.getChatRoom();
     }
 
     @DisplayName("새로운 1대1 채팅방을 개설할 수 있다.")
@@ -78,28 +74,5 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
         // then
         assertThat(response.chatRoomId()).isEqualTo(chatRoom.getId());
-    }
-
-    @DisplayName("채팅방에 참여한 경우, 채팅방에서 나갈 수 있다.")
-    @Transactional
-    @Test
-    void leave() {
-        // given
-        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1, member2));
-
-        // when
-        chatRoomCommandService.leave(member1.getId(), newChatRoom.getId());
-
-        // then
-        assertThat(newChatRoom.countMembers()).isOne();
-    }
-
-    @DisplayName("모임에 참여하지 않은 경우, 모임 채팅방에서 나갈 수 없다.")
-    @Test
-    void leave_Fail_NotInClub() {
-        // when - then
-        assertThatThrownBy(() -> chatRoomCommandService.leave(member2.getId(), chatRoom.getId()))
-                .isInstanceOf(FriendoglyException.class)
-                .hasMessage("채팅에 참여한 상태가 아닙니다.");
     }
 }

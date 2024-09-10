@@ -4,7 +4,6 @@ import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
-import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import java.util.List;
@@ -42,19 +41,5 @@ public class ChatRoomCommandService {
         return chatRooms.stream()
                 .filter(chatRoom -> chatRoom.containsMember(otherMember))
                 .findAny();
-    }
-
-    public void leave(Long memberId, Long chatRoomId) {
-        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        Member member = memberRepository.getById(memberId);
-        validateParticipation(chatRoom, member);
-        chatRoom.removeMember(member);
-    }
-
-    private void validateParticipation(ChatRoom chatRoom, Member member) {
-        // TODO: 웹 소켓에서는 예외 처리 로직을 다르게 가져가야 함. 400 에러가 터지더라도 정상적으로 채팅방에 들어가진다.
-        if (!chatRoom.containsMember(member)) {
-            throw new FriendoglyException("채팅에 참여한 상태가 아닙니다.");
-        }
     }
 }
