@@ -1,20 +1,13 @@
 package com.happy.friendogly.chat.service;
 
-import static com.happy.friendogly.pet.domain.Gender.MALE;
-import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
-import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.support.ServiceTest;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,18 +24,11 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
     private Member member1;
     private Member member2;
-    private Pet pet;
-    private Club club;
 
     @BeforeEach
     void setUp() {
         member1 = memberRepository.save(new Member("n", "t", "https://a.com"));
         member2 = memberRepository.save(new Member("a", "b", "https://b.com"));
-        pet = petRepository.save(
-                new Pet(member1, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
-        club = clubRepository.save(
-                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, member1, Set.of(MALE), Set.of(SMALL), "https://a.com",
-                        List.of(pet)));
     }
 
     @DisplayName("새로운 1대1 채팅방을 개설할 수 있다.")
