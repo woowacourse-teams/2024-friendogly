@@ -57,7 +57,7 @@ public class ChatService {
         chatMessageRepository.save(new ChatMessage(chatRoom, ENTER, senderMember, ""));
     }
 
-    public void send(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
+    public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
 

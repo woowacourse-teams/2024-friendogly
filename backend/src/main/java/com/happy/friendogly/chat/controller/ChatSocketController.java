@@ -62,7 +62,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageRequest request
     ) {
-        chatService.send(memberId, chatRoomId, request);
+        chatService.sendChat(memberId, chatRoomId, request);
     }
 
     @MessageMapping("/leave/{chatRoomId}")
