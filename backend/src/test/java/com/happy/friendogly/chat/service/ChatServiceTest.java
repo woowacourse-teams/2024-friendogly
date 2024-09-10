@@ -4,6 +4,7 @@ import static com.happy.friendogly.chat.domain.MessageType.CHAT;
 import static com.happy.friendogly.chat.domain.MessageType.ENTER;
 import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatMessage;
@@ -12,6 +13,7 @@ import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import java.time.LocalDateTime;
@@ -96,7 +98,7 @@ class ChatServiceTest {
         chatService.leave(otherMember.getId(), chatRoom.getId());
 
         // when
-        List<FindChatMessagesResponse> messages = chatService.findAllByChatRoomId(chatRoom.getId());
+        List<FindChatMessagesResponse> messages = chatService.findAllByChatRoomId(member.getId(), chatRoom.getId());
 
         // then
         Long memberId = member.getId();
@@ -123,6 +125,18 @@ class ChatServiceTest {
                                 "https://image.com/image.jpg"
                         )
         );
+    }
+
+    @DisplayName("채팅방에 들어가 있지 않은 Member는 채팅 내역을 조회할 수 없다.")
+    @Test
+    void findAllByChatRoomId_Fail_Unauthorized() {
+        // given
+        Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
+
+        // when - then
+        assertThatThrownBy(() -> chatService.findAllByChatRoomId(otherMember.getId(), chatRoom.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("채팅 내역을 조회할 수 있는 권한이 없습니다.");
     }
 
     @DisplayName("채팅 입장 메시지를 DB에 저장한다.")

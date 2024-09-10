@@ -3,6 +3,7 @@ package com.happy.friendogly.chat.service;
 import static com.happy.friendogly.chat.domain.MessageType.CHAT;
 import static com.happy.friendogly.chat.domain.MessageType.ENTER;
 import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
@@ -33,7 +34,14 @@ public class ChatService {
     private final NotificationService notificationService;
     private final SimpMessagingTemplate template;
 
-    public List<FindChatMessagesResponse> findAllByChatRoomId(Long chatRoomId) {
+    public List<FindChatMessagesResponse> findAllByChatRoomId(Long memberId, Long chatRoomId) {
+        Member member = memberRepository.getById(memberId);
+        ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+
+        if (!chatRoom.containsMember(member)) {
+            throw new FriendoglyException("채팅 내역을 조회할 수 있는 권한이 없습니다.", FORBIDDEN);
+        }
+
         List<ChatMessage> messages = chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
         return messages.stream()
                 .map(message -> new FindChatMessagesResponse(

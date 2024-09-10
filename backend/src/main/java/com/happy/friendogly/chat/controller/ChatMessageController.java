@@ -1,5 +1,6 @@
 package com.happy.friendogly.chat.controller;
 
+import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.service.ChatService;
 import com.happy.friendogly.common.ApiResponse;
@@ -21,8 +22,9 @@ public class ChatMessageController {
 
     @GetMapping("/{chatRoomId}")
     public ApiResponse<List<FindChatMessagesResponse>> findAllByChatRoomId(
+            @Auth Long memberId,
             @PathVariable("chatRoomId") Long chatRoomId
     ) {
-        return ApiResponse.ofSuccess(chatService.findAllByChatRoomId(chatRoomId));
+        return ApiResponse.ofSuccess(chatService.findAllByChatRoomId(memberId, chatRoomId));
     }
 }
