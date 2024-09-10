@@ -11,6 +11,7 @@ import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.service.NotificationService;
@@ -60,6 +61,10 @@ public class ChatService {
     public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
+
+        if (!chatRoom.containsMember(senderMember)) {
+            throw new FriendoglyException("자신이 참여한 채팅방에만 메시지를 보낼 수 있습니다.");
+        }
 
         ChatMessageResponse chat = new ChatMessageResponse(CHAT, request.content(), senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
