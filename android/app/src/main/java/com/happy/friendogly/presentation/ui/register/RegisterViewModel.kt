@@ -78,8 +78,8 @@ class RegisterViewModel(
                 onSuccess = { login ->
                     if (login.isRegistered) {
                         val tokens = login.tokens ?: return@fold
-                        saveAlarmToken()
                         saveJwtToken(tokens)
+                        saveAlarmToken()
                     } else {
                         _navigateAction.emit(
                             RegisterNavigationAction.NavigateToProfileSetting(
@@ -103,7 +103,8 @@ class RegisterViewModel(
     private suspend fun saveAlarmToken() {
         getFCMTokenUseCase().fold(
             onSuccess = { token ->
-                saveAlarmTokenUseCase(token)
+                saveAlarmTokenUseCase(token).getOrThrow()
+                _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
             },
             onError = {
                 _message.emit(RegisterMessage.DefaultErrorMessage)
@@ -123,9 +124,7 @@ class RegisterViewModel(
 
     private suspend fun saveJwtToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).fold(
-            onSuccess = {
-                _navigateAction.emit(RegisterNavigationAction.NavigateToAlreadyLogin)
-            },
+            onSuccess = {},
             onError = { error ->
                 when (error) {
                     DataError.Local.TOKEN_NOT_STORED -> _message.emit(RegisterMessage.TokenNotStoredErrorMessage)
