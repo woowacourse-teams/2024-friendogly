@@ -4,7 +4,7 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.service.ChatQueryService;
 import com.happy.friendogly.common.ApiResponse;
-import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ public class ChatMessageController {
     @GetMapping("/{chatRoomId}/recent")
     public ApiResponse<List<FindChatMessagesResponse>> findRecent(
             @Auth Long memberId,
-            @RequestParam @PastOrPresent LocalDateTime since,
+            @RequestParam @Past LocalDateTime since,
             @PathVariable("chatRoomId") Long chatRoomId
     ) {
         return ApiResponse.ofSuccess(chatQueryService.findRecent(memberId, chatRoomId, since));
