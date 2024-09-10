@@ -73,7 +73,7 @@ public class ChatSocketController {
         chatCommandService.leave(memberId, chatRoomId);
     }
 
-    @MessageExceptionHandler // TODO: 패키지 정리 과정에서 옮겨야 할 수도 있음!
+    @MessageExceptionHandler
     public ResponseEntity<ApiResponse<ErrorResponse>> handleException(FriendoglyException exception) {
         ErrorResponse errorResponse = new ErrorResponse(
                 ErrorCode.DEFAULT_ERROR_CODE,
