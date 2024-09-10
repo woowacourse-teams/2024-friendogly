@@ -262,7 +262,7 @@
     <string name="woof_my_footprint">MY</string>
     <string name="woof_register_walk_area">발자국 등록</string>
     <string name="woof_address_out_of_korea">발자국 등록은 한국에서만 가능합니다!</string>
-    <string name="woof_register_help">발자국은 30초마다 새로 등록할 수 있으며\n기존 발자국은 삭제됩니다!</string>
+    <string name="woof_register_help">발자국은 10초마다 새로 등록할 수 있으며\n기존 발자국은 삭제됩니다!</string>
     <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
     <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
     <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
@@ -275,7 +275,7 @@
     <string name="woof_register_footprint">이 위치에 발자국 등록</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
-    <string name="woof_footprint_refresh">발자국 불러오기</string>
+    <string name="woof_footprint_refresh">새로고침</string>
     <string name="woof_end_walk">산책 종료하기</string>
     <string name="woof_delete_my_footprint_marker">발자국을 삭제했어요!</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>

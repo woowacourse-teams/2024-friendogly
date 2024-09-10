@@ -1,6 +1,8 @@
 package com.happy.friendogly.presentation.ui.woof
 
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -9,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +48,8 @@ import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
+import com.happy.friendogly.presentation.ui.woof.service.WoofWalkService
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.viewmodel.WoofViewModel
 import com.naver.maps.geometry.LatLng
@@ -71,8 +76,6 @@ import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
-import java.util.Timer
-import kotlin.concurrent.timer
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.floor
@@ -82,12 +85,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentWoofBinding? = null
     private val binding get() = _binding!!
     private var snackbar: Snackbar? = null
-    private var timer: Timer? = null
+    private var balloon: Balloon? = null
 
     private lateinit var map: NaverMap
     private lateinit var latLng: LatLng
     private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private lateinit var walkReceiver: WoofWalkReceiver
 
     private val circleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val locationSource: FusedLocationSource by lazy {
@@ -145,6 +149,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
         initLocationPermission()
+        initBroadCastReceiver()
         initDataBinding()
         initObserve()
         initViewPager()
@@ -186,6 +191,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         super.onDestroyView()
         mapView.onDestroy()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopWalkService()
+        requireContext().unregisterReceiver(walkReceiver)
     }
 
     override fun onDetach() {
@@ -287,6 +298,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
+            Log.e("chad", "myWalkStatus: $myWalkStatus")
+            stopWalkService()
             if (myWalkStatus == null) {
                 val myFootprintMarker = viewModel.myFootprintMarker.value ?: return@observe
                 myFootprintMarker.marker.map = null
@@ -296,10 +309,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
             if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
                 circleOverlay.map = null
-                timer?.cancel()
+                balloon?.dismiss()
             } else {
                 startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
-                monitorDistanceAndManageWalkStatus()
+                startWalkService()
                 val textResId =
                     if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
                         R.string.woof_walk_before_help
@@ -346,7 +359,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         viewModel.loadMyFootprintMarker(myMarker)
                     } else {
                         circleOverlay.map = null
-                        timer?.cancel()
                     }
                 }
 
@@ -372,14 +384,11 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.changeTrackingModeActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is NoFollowTrackingMode ->
-                    map.locationTrackingMode = LocationTrackingMode.NoFollow
+                is NoFollowTrackingMode -> map.locationTrackingMode = LocationTrackingMode.NoFollow
 
-                is FollowTrackingMode ->
-                    map.locationTrackingMode = LocationTrackingMode.Follow
+                is FollowTrackingMode -> map.locationTrackingMode = LocationTrackingMode.Follow
 
-                is FaceTrackingMode ->
-                    map.locationTrackingMode = LocationTrackingMode.Face
+                is FaceTrackingMode -> map.locationTrackingMode = LocationTrackingMode.Face
             }
         }
 
@@ -415,16 +424,22 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
-                is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar ->
+                is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar -> {
                     showSnackbar(
                         resources.getString(
                             R.string.woof_delete_my_footprint_marker,
                         ),
                     )
+                    stopWalkService()
+                }
 
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
-                is WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar ->
-                    showSnackbar(resources.getString(R.string.woof_fail_to_load_footprint_mark_btn_info))
+                is WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar -> {
+                    showSnackbar(
+                        resources.getString(R.string.woof_fail_to_load_footprint_mark_btn_info),
+                    )
+                    stopWalkService()
+                }
 
                 is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar ->
                     showSnackbar(
@@ -462,26 +477,26 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
                 is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon(event.textResId)
             }
+        }
 
-            viewModel.navigateActions.observeEvent(viewLifecycleOwner) { event ->
-                when (event) {
-                    is WoofNavigateActions.NavigateToPetImage -> {
-                        startActivity(
-                            PetImageActivity.getIntent(
-                                requireContext(),
-                                event.petImageUrl,
-                            ),
-                        )
-                    }
+        viewModel.navigateActions.observeEvent(viewLifecycleOwner) { event ->
+            when (event) {
+                is WoofNavigateActions.NavigateToPetImage -> {
+                    startActivity(
+                        PetImageActivity.getIntent(
+                            requireContext(),
+                            event.petImageUrl,
+                        ),
+                    )
+                }
 
-                    is WoofNavigateActions.NavigateToOtherProfile -> {
-                        startActivity(
-                            OtherProfileActivity.getIntent(
-                                requireContext(),
-                                event.memberId,
-                            ),
-                        )
-                    }
+                is WoofNavigateActions.NavigateToOtherProfile -> {
+                    startActivity(
+                        OtherProfileActivity.getIntent(
+                            requireContext(),
+                            event.memberId,
+                        ),
+                    )
                 }
             }
         }
@@ -514,6 +529,21 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     showSnackbar(getString(R.string.permission_denied_message))
                 }
             }
+    }
+
+    private fun initBroadCastReceiver() {
+        walkReceiver =
+            WoofWalkReceiver { location ->
+                Log.e("chad", "location: $location")
+                latLng = LatLng(location.latitude, location.longitude)
+                monitorDistanceAndManageWalkStatus()
+            }
+        val intentFilter =
+            IntentFilter().apply {
+                addAction(WoofWalkReceiver.ACTION_LOCATION_UPDATED)
+            }
+
+        requireContext().registerReceiver(walkReceiver, intentFilter)
     }
 
     private fun activateMap() {
@@ -681,14 +711,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         if (addresses.isEmpty()) return
         val address = addresses[0]
         val addressLine =
-            address.getAddressLine(0)
-                .replace(resources.getString(R.string.woof_address_korea), "")
+            address.getAddressLine(0).replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
         viewModel.updateAddressLine(addressLine)
 
         val countryName = address.countryName
-        val inKorea =
-            countryName == resources.getString(R.string.woof_address_korea)
+        val inKorea = countryName == resources.getString(R.string.woof_address_korea)
         viewModel.updateRegisterFootprintBtnInKorea(inKorea = inKorea)
     }
 
@@ -696,30 +724,35 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         return LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
     }
 
-    private fun monitorDistanceAndManageWalkStatus() {
-        if (timer != null) {
-            timer?.cancel()
-        }
+    private fun startWalkService() {
+        val myWalkStatus = viewModel.myWalkStatus.value ?: return
+        val now = java.time.LocalDateTime.now()
+        val duration =
+            Duration.between(myWalkStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
+        val startMillis = System.currentTimeMillis() - duration.toMillis()
+        val myFootprintMarker = viewModel.myFootprintMarker.value ?: return
+        val position = myFootprintMarker.marker.position
 
-        timer =
-            timer(period = UPDATE_WALK_STATUS_PERIOD_MILLS) {
-                Handler(Looper.getMainLooper()).post {
-                    val distanceResults = FloatArray(1)
-                    val myFootprintMarker = viewModel.myFootprintMarker.value ?: return@post
-                    val position = myFootprintMarker.marker.position
-                    Location.distanceBetween(
-                        latLng.latitude,
-                        latLng.longitude,
-                        position.latitude,
-                        position.longitude,
-                        distanceResults,
-                    )
-                    val distance = distanceResults[0]
-                    if (startWalkIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
-                        viewModel.updateFootprintRecentWalkStatus(latLng)
-                    }
-                }
-            }
+        val intent = WoofWalkService.getIntent(requireContext(), startMillis, position)
+        requireContext().startForegroundService(intent)
+    }
+
+    private fun monitorDistanceAndManageWalkStatus() {
+        val distanceResults = FloatArray(1)
+        val myFootprintMarker = viewModel.myFootprintMarker.value ?: return
+        val position = myFootprintMarker.marker.position
+        Location.distanceBetween(
+            latLng.latitude,
+            latLng.longitude,
+            position.latitude,
+            position.longitude,
+            distanceResults,
+        )
+        val distance = distanceResults[0]
+
+        if (startWalkIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
+            viewModel.updateFootprintRecentWalkStatus(latLng)
+        }
     }
 
     private fun startWalkIfWithinRange(distance: Float): Boolean {
@@ -729,14 +762,22 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun endWalkIfOutOfRange(distance: Float): Boolean {
         val myWalkStatus = viewModel.myWalkStatus.value ?: return false
+        if (myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS) {
+            stopWalkService()
+        }
         return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
+    }
+
+    private fun stopWalkService() {
+        requireContext().stopService(Intent(requireContext(), WoofWalkService::class.java))
     }
 
     private fun startWalkStatusChronometer(changedWalkStatusTime: LocalDateTime) {
         val now = java.time.LocalDateTime.now()
         val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
-        walkTimeChronometer.base =
-            SystemClock.elapsedRealtime() - duration.toMillis()
+        val startMillis = System.currentTimeMillis() - duration.toMillis()
+        val elapsedRealtimeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime()
+        walkTimeChronometer.base = startMillis - elapsedRealtimeOffset
         walkTimeChronometer.start()
     }
 
@@ -789,30 +830,23 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         snackbar?.show()
     }
 
-    private fun createBalloon(text: String): Balloon {
-        return Balloon.Builder(requireContext())
-            .setWidth(BalloonSizeSpec.WRAP)
-            .setHeight(BalloonSizeSpec.WRAP)
-            .setText(text)
-            .setTextColorResource(R.color.white)
-            .setTextSize(14f)
-            .setMarginBottom(10)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setArrowSize(10)
-            .setArrowPosition(0.5f)
-            .setPadding(12)
-            .setFocusable(false)
-            .setCornerRadius(8f)
-            .setBackgroundColorResource(R.color.coral400)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
-            .setLifecycleOwner(viewLifecycleOwner)
-            .build()
+    private fun showBalloon(text: String) {
+        balloon?.dismiss()
+        balloon =
+            Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
+                .setTextSize(14f).setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
+                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
+                .setBackgroundColorResource(R.color.coral400)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
+                .build()
+        balloon?.showAlignTop(binding.btnWoofWalkHelp)
     }
 
     private fun showHelpBalloon(textRestId: Int) {
         val text = resources.getString(textRestId)
-        val balloon = createBalloon(text)
-        balloon.showAlignTop(binding.btnWoofWalkHelp)
+        showBalloon(text)
     }
 
     companion object {
@@ -823,7 +857,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         private const val MARKER_CLICKED_WIDTH = 96
         private const val MARKER_CLICKED_HEIGHT = 148
         private const val DELAY_MILLIS = 300L
-        private const val UPDATE_WALK_STATUS_PERIOD_MILLS = 30000L
         private const val MIN_KOREA_LATITUDE = 33.0
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0

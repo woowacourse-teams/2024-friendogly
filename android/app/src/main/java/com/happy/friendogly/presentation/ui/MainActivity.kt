@@ -42,6 +42,21 @@ class MainActivity :
         permission.showDialog().launch()
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        navigateToFragment(intent)
+    }
+
+    private fun navigateToFragment(intent: Intent) {
+        val fragmentTag = intent.getStringExtra(EXTRA_FRAGMENT)
+        when (fragmentTag) {
+            WoofFragment.TAG -> {
+                binding.bottomNavi.selectedItemId = R.id.woofFragment
+                switchFragment(WoofFragment::class.java, WoofFragment.TAG)
+            }
+        }
+    }
+
     private fun initNavController() {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) ?: switchFragment(
             ClubListFragment::class.java,
@@ -164,6 +179,7 @@ class MainActivity :
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        const val EXTRA_FRAGMENT = "Fragment"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)

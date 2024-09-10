@@ -6,11 +6,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <application
         android:name=".application.FriendoglyApplication"
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Friendogly"
         android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup"
         tools:targetApi="31">
+
         <activity
             android:name=".presentation.ui.club.my.MyClubActivity"
             android:exported="false"
@@ -48,7 +51,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.ui.woof.PetImageActivity"
+            android:name=".presentation.ui.petimage.PetImageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -76,8 +79,8 @@
         <activity
             android:name=".presentation.ui.chatlist.chat.ChatActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true"
@@ -108,13 +111,25 @@
                     android:scheme="@string/KAKAO_OAUTH_HOST" />
             </intent-filter>
         </activity>
-        <service android:name=".presentation.alarm.AlarmReceiver"
+
+        <service
+            android:name=".presentation.alarm.AlarmReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-
             </intent-filter>
         </service>
+
+        <service
+            android:name=".presentation.ui.woof.service.WoofWalkService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <receiver
+            android:name=".presentation.ui.woof.service.WoofWalkReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
