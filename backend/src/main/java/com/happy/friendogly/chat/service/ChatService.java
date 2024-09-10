@@ -35,17 +35,28 @@ public class ChatService {
     private final SimpMessagingTemplate template;
 
     public List<FindChatMessagesResponse> findAllByChatRoomId(Long memberId, Long chatRoomId) {
+        validateParticipation(memberId, chatRoomId);
+        List<ChatMessage> messages = chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
+        return messages.stream()
+                .map(FindChatMessagesResponse::new)
+                .toList();
+    }
+
+    public List<FindChatMessagesResponse> findRecent(Long memberId, Long chatRoomId, LocalDateTime since) {
+        validateParticipation(memberId, chatRoomId);
+        List<ChatMessage> messages = chatMessageRepository.findRecent(chatRoomId, since);
+        return messages.stream()
+                .map(FindChatMessagesResponse::new)
+                .toList();
+    }
+
+    private void validateParticipation(Long memberId, Long chatRoomId) {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
 
         if (!chatRoom.containsMember(member)) {
             throw new FriendoglyException("채팅 내역을 조회할 수 있는 권한이 없습니다.", FORBIDDEN);
         }
-
-        List<ChatMessage> messages = chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
-        return messages.stream()
-                .map(FindChatMessagesResponse::new)
-                .toList();
     }
 
     public void enter(Long senderMemberId, Long chatRoomId) {

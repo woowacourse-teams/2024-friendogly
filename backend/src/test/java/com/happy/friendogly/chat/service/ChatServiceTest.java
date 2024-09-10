@@ -24,6 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -40,6 +41,9 @@ class ChatServiceTest {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private Member member;
     private ChatRoom chatRoom;
@@ -137,6 +141,34 @@ class ChatServiceTest {
         assertThatThrownBy(() -> chatService.findAllByChatRoomId(otherMember.getId(), chatRoom.getId()))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("채팅 내역을 조회할 수 있는 권한이 없습니다.");
+    }
+
+    @DisplayName("특정 시점보다 미래의 채팅 내역을 조회할 수 있다.")
+    @Transactional
+    @Test
+    void findRecent() {
+        // given
+        jdbcTemplate.update("""
+                        INSERT INTO chat_message (chat_room_id, message_type, member_id, content, created_at)
+                        VALUES
+                        (?, 'CHAT', ?, '안녕하세요', ?),
+                        (?, 'CHAT', ?, '감사합니다', ?),
+                        (?, 'CHAT', ?, '반갑습니다', ?),
+                        (?, 'CHAT', ?, '환영합니다', ?);
+                        """,
+                chatRoom.getId(), member.getId(), LocalDateTime.parse("2024-01-01T10:00:00"),
+                chatRoom.getId(), member.getId(), LocalDateTime.parse("2024-01-01T11:00:00"),
+                chatRoom.getId(), member.getId(), LocalDateTime.parse("2024-01-01T12:00:00"),
+                chatRoom.getId(), member.getId(), LocalDateTime.parse("2024-01-01T13:00:00")
+        );
+
+        // when
+        List<FindChatMessagesResponse> response = chatService.findRecent(
+                member.getId(), chatRoom.getId(), LocalDateTime.parse("2024-01-01T11:00:00"));
+
+        // then
+        assertThat(response).extracting(FindChatMessagesResponse::content)
+                .containsExactly("반갑습니다", "환영합니다");
     }
 
     @DisplayName("채팅 입장 메시지를 DB에 저장한다.")
