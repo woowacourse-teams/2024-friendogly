@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ChatCommandService {
 
+    private static final String TOPIC_CHAT_PREFIX = "/topic/chat/";
+    private static final String EMPTY_CONTENT = "";
+
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
@@ -51,10 +54,10 @@ public class ChatCommandService {
             chatRoom.addMember(senderMember);
         }
 
-        ChatMessageResponse chat = new ChatMessageResponse(ENTER, "", senderMember, LocalDateTime.now());
+        ChatMessageResponse chat = new ChatMessageResponse(ENTER, EMPTY_CONTENT, senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend("/topic/chat/" + chatRoomId, chat);
-        chatMessageRepository.save(new ChatMessage(chatRoom, ENTER, senderMember, ""));
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, ENTER, senderMember, EMPTY_CONTENT));
     }
 
     public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
@@ -67,7 +70,7 @@ public class ChatCommandService {
 
         ChatMessageResponse chat = new ChatMessageResponse(CHAT, request.content(), senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend("/topic/chat/" + chatRoomId, chat);
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, CHAT, senderMember, request.content()));
     }
 
@@ -76,9 +79,9 @@ public class ChatCommandService {
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
         chatRoom.removeMember(senderMember);
 
-        ChatMessageResponse chat = new ChatMessageResponse(LEAVE, "", senderMember, LocalDateTime.now());
+        ChatMessageResponse chat = new ChatMessageResponse(LEAVE, EMPTY_CONTENT, senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend("/topic/chat/" + chatRoomId, chat);
-        chatMessageRepository.save(new ChatMessage(chatRoom, LEAVE, senderMember, ""));
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, LEAVE, senderMember, EMPTY_CONTENT));
     }
 }
