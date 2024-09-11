@@ -126,8 +126,8 @@ class ProfileSettingViewModel(
             accessToken = accessToken,
         ).fold(
             onSuccess = { register ->
-                saveAlarmToken()
                 saveJwaToken(register.tokens)
+                saveAlarmToken()
             },
             onError = { error ->
                 when (error) {
@@ -142,9 +142,7 @@ class ProfileSettingViewModel(
 
     private suspend fun saveJwaToken(jwtToken: JwtToken) {
         saveJwtTokenUseCase(jwtToken = jwtToken).fold(
-            onSuccess = {
-                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
-            },
+            onSuccess = {},
             onError = { error ->
                 when (error) {
                     DataError.Local.TOKEN_NOT_STORED -> _message.emit(ProfileSettingMessage.TokenNotStoredErrorMessage)
@@ -157,7 +155,8 @@ class ProfileSettingViewModel(
     private suspend fun saveAlarmToken() {
         getFCMTokenUseCase().fold(
             onSuccess = { token ->
-                saveAlarmTokenUseCase(token)
+                saveAlarmTokenUseCase(token).getOrThrow()
+                _navigateAction.emit(ProfileSettingNavigationAction.NavigateToHome)
             },
             onError = {
                 _message.emit(ProfileSettingMessage.DefaultErrorMessage)
