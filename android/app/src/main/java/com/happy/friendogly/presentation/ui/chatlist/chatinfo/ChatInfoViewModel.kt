@@ -7,16 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
+import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class ChatInfoViewModel(
     private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
     private val getChatMemberUseCase: GetChatMemberUseCase,
     private val getChatAlarmUseCase: GetChatAlarmUseCase,
+    private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
 ) : BaseViewModel() {
     private val _clubInfo: MutableLiveData<ChatInfoUiModel> = MutableLiveData()
     val clubInfo: LiveData<ChatInfoUiModel> get() = _clubInfo
@@ -25,7 +26,7 @@ class ChatInfoViewModel(
     val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
 
     private val _alamSetting: MutableLiveData<Boolean> = MutableLiveData()
-    val alarmSetting:LiveData<Boolean> get() = _alamSetting
+    val alarmSetting: LiveData<Boolean> get() = _alamSetting
 
     fun getClubInfo(chatRoomId: Long): Deferred<Long> =
         viewModelScope.async {
@@ -59,17 +60,27 @@ class ChatInfoViewModel(
         }
     }
 
+    fun saveAlamSetting(isChecked: Boolean)  {
+        launch {
+            saveChatAlarmUseCase(isChecked).onFailure {
+                // TODO 에러 처리
+            }
+        }
+    }
+
     companion object {
         fun factory(
             getChatRoomClubUseCase: GetChatRoomClubUseCase,
             getChatMemberUseCase: GetChatMemberUseCase,
-            getChatAlarmUseCase: GetChatAlarmUseCase
+            getChatAlarmUseCase: GetChatAlarmUseCase,
+            saveChatAlarmUseCase: SaveChatAlarmUseCase,
         ): ViewModelProvider.Factory {
             return BaseViewModelFactory { _ ->
                 ChatInfoViewModel(
                     getChatRoomClubUseCase,
                     getChatMemberUseCase,
-                    getChatAlarmUseCase
+                    getChatAlarmUseCase,
+                    saveChatAlarmUseCase,
                 )
             }
         }

@@ -61,16 +61,18 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
             val isValidSDK = AlarmPermission.isValidPermissionSDK()
 
             with(binding) {
-                alarmSettingsChattingPushSwitch.isChecked = if (isValidSDK) {
-                    uiState.chattingAlarmPushPermitted && hasPermission
-                } else {
-                    uiState.chattingAlarmPushPermitted
-                }
-                alarmSettingsWoofPushSwitch.isChecked = if (isValidSDK) {
-                    uiState.woofAlarmPushPermitted && hasPermission
-                } else {
-                    uiState.woofAlarmPushPermitted
-                }
+                alarmSettingsChattingPushSwitch.isChecked =
+                    if (isValidSDK) {
+                        uiState.chattingAlarmPushPermitted && hasPermission
+                    } else {
+                        uiState.chattingAlarmPushPermitted
+                    }
+                alarmSettingsWoofPushSwitch.isChecked =
+                    if (isValidSDK) {
+                        uiState.woofAlarmPushPermitted && hasPermission
+                    } else {
+                        uiState.woofAlarmPushPermitted
+                    }
             }
         }
     }

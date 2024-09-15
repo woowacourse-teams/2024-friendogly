@@ -44,7 +44,8 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         ChatInfoViewModel.factory(
             AppModule.getInstance().getChatRoomClubUseCase,
             AppModule.getInstance().getChatMemberUseCase,
-            AppModule.getInstance().getChatAlarmUseCase
+            AppModule.getInstance().getChatAlarmUseCase,
+            AppModule.getInstance().saveChatAlarmUseCase,
         )
     }
 
@@ -77,6 +78,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         val chatId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))
         viewModel.getChatMember(chatRoomId = chatId)
         viewModel.getClubInfo(chatId)
+        viewModel.getAlamSetting()
         observeData()
     }
 
@@ -103,9 +105,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             if (isChecked) {
                 requestNotificationPermission()
             }
-            lifecycleScope.launch {
-                AppModule.getInstance().saveChatAlarmUseCase(isChecked)
-            }
+            viewModel.saveAlamSetting(isChecked)
         }
     }
 
@@ -121,16 +121,18 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             val isValidSDK = AlarmPermission.isValidPermissionSDK()
 
             with(binding) {
-                switchChatSettingAlarm.isChecked = if (isValidSDK) {
-                    isAlamOn && hasPermission
-                } else {
-                    isAlamOn
-                }
-                switchChatSettingAlarm.isChecked = if (isValidSDK) {
-                    isAlamOn && hasPermission
-                } else {
-                    isAlamOn
-                }
+                switchChatSettingAlarm.isChecked =
+                    if (isValidSDK) {
+                        isAlamOn && hasPermission
+                    } else {
+                        isAlamOn
+                    }
+                switchChatSettingAlarm.isChecked =
+                    if (isValidSDK) {
+                        isAlamOn && hasPermission
+                    } else {
+                        isAlamOn
+                    }
             }
         }
     }
