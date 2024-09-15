@@ -25,8 +25,9 @@ class ChatInfoViewModel(
     private val _joiningPeople: MutableLiveData<List<JoinPeople>> = MutableLiveData()
     val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
 
-    private val _alamSetting: MutableLiveData<Boolean> = MutableLiveData()
-    val alarmSetting: LiveData<Boolean> get() = _alamSetting
+    private val _alarmSetting: MutableLiveData<Boolean> = MutableLiveData()
+    val alarmSetting: LiveData<Boolean>
+        get() = _alarmSetting
 
     fun getClubInfo(chatRoomId: Long): Deferred<Long> =
         viewModelScope.async {
@@ -53,14 +54,14 @@ class ChatInfoViewModel(
     fun getAlamSetting() {
         launch {
             getChatAlarmUseCase().onSuccess {
-                _alamSetting.value = it
+                _alarmSetting.value = it
             }.onFailure {
                 // TODO 에러 처리
             }
         }
     }
 
-    fun saveAlamSetting(isChecked: Boolean)  {
+    fun saveAlamSetting(isChecked: Boolean) {
         launch {
             saveChatAlarmUseCase(isChecked).onFailure {
                 // TODO 에러 처리
