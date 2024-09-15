@@ -44,6 +44,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         ChatInfoViewModel.factory(
             AppModule.getInstance().getChatRoomClubUseCase,
             AppModule.getInstance().getChatMemberUseCase,
+            AppModule.getInstance().getChatAlarmUseCase
         )
     }
 
@@ -67,9 +68,8 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
-
         initChatInfo()
-
+        setChatAlarm()
         clickAlarmSetting()
     }
 
@@ -91,6 +91,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         viewModel.joiningPeople.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
         lifecycleScope.launch {
             binding.switchChatSettingAlarm.isChecked =
                 alarmPermission.hasPermissions() && AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
@@ -111,6 +112,26 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private fun requestNotificationPermission() {
         if (AlarmPermission.isValidPermissionSDK() && !alarmPermission.hasPermissions()) {
             alarmPermission.createAlarmDialog().show(parentFragmentManager, "TAG")
+        }
+    }
+
+    private fun setChatAlarm() {
+        viewModel.alarmSetting.observe(viewLifecycleOwner) { isAlamOn ->
+            val hasPermission = alarmPermission.hasPermissions()
+            val isValidSDK = AlarmPermission.isValidPermissionSDK()
+
+            with(binding) {
+                switchChatSettingAlarm.isChecked = if (isValidSDK) {
+                    isAlamOn && hasPermission
+                } else {
+                    isAlamOn
+                }
+                switchChatSettingAlarm.isChecked = if (isValidSDK) {
+                    isAlamOn && hasPermission
+                } else {
+                    isAlamOn
+                }
+            }
         }
     }
 

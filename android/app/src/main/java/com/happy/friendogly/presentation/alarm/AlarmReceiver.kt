@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -26,7 +27,6 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-
         if (message.data[ALARM_TYPE] == "CHAT") {
             saveMessage(message)
             showChatAlarm(
@@ -117,6 +117,16 @@ class AlarmReceiver : FirebaseMessagingService() {
     }
 
     private fun createNotificationChannel() {
+        val notificationChannel =
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH,
+            )
+        notificationChannel.enableVibration(true)
+        notificationManager.createNotificationChannel(
+            notificationChannel,
+        )
         if (AlarmPermission.isValidPermissionSDK()) {
             val notificationChannel =
                 NotificationChannel(
