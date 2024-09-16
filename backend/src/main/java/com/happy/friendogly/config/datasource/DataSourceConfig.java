@@ -15,27 +15,33 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 @Configuration
 public class DataSourceConfig {
 
+    private static final String WRITER_DATA_SOURCE_BEAN_NAME = "writerDataSource";
+    private static final String READER_DATA_SOURCE_BEAN_NAME = "readerDataSource";
+    private static final String WRITER_DATA_SOURCE_PREFIX = "spring.datasource.writer.hikari";
+    private static final String READER_DATA_SOURCE_PREFIX = "spring.datasource.reader.hikari";
+    private static final String ROUTING_DATA_SOURCE = "routingDataSource";
+
     @Primary
-    @Bean(name = "writerDataSource")
-    @ConfigurationProperties(prefix="spring.datasource.writer.hikari")
+    @Bean(name = WRITER_DATA_SOURCE_BEAN_NAME)
+    @ConfigurationProperties(prefix= WRITER_DATA_SOURCE_PREFIX)
     public DataSource writerDataSource() {
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
                 .build();
     }
 
-    @Bean(name = "readerDataSource")
-    @ConfigurationProperties(prefix="spring.datasource.reader.hikari")
+    @Bean(name = READER_DATA_SOURCE_BEAN_NAME)
+    @ConfigurationProperties(prefix= READER_DATA_SOURCE_PREFIX)
     public DataSource readerDataSource() {
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
                 .build();
     }
 
-    @Bean(name = "routingDataSource")
+    @Bean(name = ROUTING_DATA_SOURCE)
     public DataSource routingDataSource(
-            @Qualifier("writerDataSource") DataSource writerDataSourceType,
-            @Qualifier("readerDataSource") DataSource readerDataSourceType
+            @Qualifier(WRITER_DATA_SOURCE_BEAN_NAME) DataSource writerDataSourceType,
+            @Qualifier(READER_DATA_SOURCE_BEAN_NAME) DataSource readerDataSourceType
     ) {
 
         ReplicationRoutingDataSource routingDataSource = new ReplicationRoutingDataSource();
@@ -52,7 +58,7 @@ public class DataSourceConfig {
     }
 
     @Bean(name = "dataSource")
-    public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSourceType) {
+    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSourceType) {
         return new LazyConnectionDataSourceProxy(routingDataSourceType);
     }
 }
