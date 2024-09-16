@@ -36,10 +36,21 @@ spring:
     init:
       data-locations:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    writer:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: ${WRITER_MYSQL_URL}
+        read-only: false
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+    reader:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: ${READER_MYSQL_URL}
+        read-only: true
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: validate
