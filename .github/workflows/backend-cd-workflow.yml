@@ -69,12 +69,19 @@ jobs:
       - name: Wait until WAS being started
         run: |
           URL="http://localhost:8080/healthchecktestapi"
+          wait_time=0
+          
           while true; do
-                  HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
+                  HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL" | true)
                   if [ "$HTTP_STATUS" -eq 404 ]; then
                           break
                   fi
+                  if [ wait_time -le 60 ]; then
+                          echo "WAS has not started, waited too long"
+                          break
+                  fi
                   sleep 3
+                  wait_time += 3
           done
           echo "WAS has started"
 
