@@ -76,12 +76,12 @@ jobs:
                   if [ "$HTTP_STATUS" -eq 404 ]; then
                           break
                   fi
-                  if [ wait_time -le 60 ]; then
+                  if [ $wait_time -ge 60 ]; then
                           echo "WAS has not started, waited too long"
                           break
                   fi
                   sleep 3
-                  wait_time += 3
+                  wait_time=$((wait_time + 3))
           done
           echo "WAS has started"
 
