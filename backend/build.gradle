@@ -130,5 +130,4 @@ resolveMainClassName {
 
 test {
     systemProperty 'user.timezone', 'Asia/Seoul'
-
 }
