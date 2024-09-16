@@ -2,13 +2,13 @@ name: deploy
 
 on:
   push:
-    branches: [ "release/backend" ]
+    branches: ["develop"]
     paths:
       - "backend/**"
 
 jobs:
-  build-a:
-    runs-on: self-hosted-prod-a
+  build:
+    runs-on: self-hosted-dev
 
     steps:
       - name: Checkout Repository
@@ -19,6 +19,12 @@ jobs:
         with:
           java-version: "17"
           distribution: "corretto"
+
+      # - name: Setup Gradle
+      #   uses: gradle/actions/setup-gradle@v3
+      #   with:
+      #     gradle-version: 8.1.1
+
 
       - name: create-json
         uses: jsdaniell/create-json@1.1.2
@@ -35,20 +41,32 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build
 
-  deploy-a:
-    needs: build-a
-    runs-on: self-hosted-prod-a
+  #      - name: Upload build artifact
+  #        uses: actions/upload-artifact@v3
+  #        with:
+  #          name: friendogly-be-develop-jar
+  #          path: ./backend/build/libs/friendogly-0.0.1-SNAPSHOT.jar
+
+  deploy:
+    needs: build
+    runs-on: self-hosted-dev
     steps:
       - name: Change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
+
+      #      - name: Download build artifact
+      #        uses: actions/download-artifact@v3
+      #        with:
+      #          name: friendogly-be-develop-jar
+      #          path: ./backend/build/libs
 
       - name: Find Java Application PID And Kill PID
         id: find_pid
         run: |
           sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
 
-      - name: Check if WAS is running on port 8080 after stop
+      - name: Check if room-esc server is running on port 8080 after stop
         run: |
           PID=$(lsof -t -i:8080 || true)
           if [ -n "$PID" ]; then
@@ -63,89 +81,5 @@ jobs:
           cd backend/build/libs
           echo "File creation time(KR-09:00):"
           ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} --spring.datasource.url=${{ secrets.MYSQL_URL }} --spring.datasource.username=${{ secrets.MYSQL_USERNAME }} --spring.datasource.password=${{ secrets.MYSQL_PASSWORD }} &
-          echo "start backend server"
-
-      - name: Wait until WAS being started
-        run: |
-          URL="http://localhost:8080/healthchecktestapi"
-          wait_time=0
-
-          while true; do
-                  HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL" | true)
-
-                  if [[ $HTTP_STATUS =~ ^[0-9]+$ ]] && [ "$HTTP_STATUS" -eq 404 ]; then
-                          echo "WAS has started"
-                          break
-                  fi
-
-                  if [ $wait_time -ge 120 ]; then
-                          echo "WAS has not started, waited too long"
-                          break
-                  fi
-
-                  echo "WAS has not yet started"
-
-                  sleep 3
-                  wait_time=$((wait_time + 3))
-          done
-
-  build-b:
-    needs: deploy-a
-    runs-on: self-hosted-prod-b
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "corretto"
-
-      - name: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "firebase-friendogly-private-key.json"
-          json: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
-          dir: './backend/src/main/resources/'
-
-      - name: Grant execute permission for gradlew
-        working-directory: ./backend
-        run: chmod +x gradlew
-
-      - name: Build project using Gradle
-        working-directory: ./backend
-        run: ./gradlew build
-
-  deploy-b:
-    needs: build-b
-    runs-on: self-hosted-prod-b
-    steps:
-      - name: Change permission
-        run: |
-          sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
-
-      - name: Find Java Application PID And Kill PID
-        id: find_pid
-        run: |
-          sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
-
-      - name: Check if WAS is running on port 8080 after stop
-        run: |
-          PID=$(lsof -t -i:8080 || true)
-          if [ -n "$PID" ]; then
-            echo "Server is still running with PID: $PID"
-            exit 1
-          else
-            echo "Server successfully stopped."
-          fi
-
-      - name: Start server
-        run: |
-          cd backend/build/libs
-          echo "File creation time(KR-09:00):"
-          ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
-          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} --spring.datasource.writer.hikari.jdbc-url=${{ secrets.MYSQL_RDS_WRITER_URL }} --spring.datasource.writer.hikari.username=${{ secrets.MYSQL_RDS_USERNAME }} --spring.datasource.writer.hikari.password=${{ secrets.MYSQL_RDS_PASSWORD }} --spring.datasource.reader.hikari.jdbc-url=${{ secrets.MYSQL_RDS_READER_URL }} --spring.datasource.reader.hikari.username=${{ secrets.MYSQL_RDS_USERNAME }} --spring.datasource.reader.hikari.password=${{ secrets.MYSQL_PASSWORD }}
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} --spring.datasource.username=${{ secrets.H2_CONSOLE_USERNAME }} --spring.datasource.password=${{ secrets.H2_CONSOLE_PASSWORD }} --spring.h2.console.path=${{ secrets.H2_CONSOLE_ENDPOINT }} &
           echo "start backend server"
