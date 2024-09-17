@@ -57,11 +57,22 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
     private fun initDataBinding() {
         binding.vm = viewModel
         viewModel.uiState.observe(this) { uiState ->
+            val hasPermission = alarmPermission.hasPermissions()
+            val isValidSDK = AlarmPermission.isValidPermissionSDK()
+
             with(binding) {
                 alarmSettingsChattingPushSwitch.isChecked =
-                    uiState.chattingAlarmPushPermitted && alarmPermission.hasPermissions()
+                    if (isValidSDK) {
+                        uiState.chattingAlarmPushPermitted && hasPermission
+                    } else {
+                        uiState.chattingAlarmPushPermitted
+                    }
                 alarmSettingsWoofPushSwitch.isChecked =
-                    uiState.woofAlarmPushPermitted && alarmPermission.hasPermissions()
+                    if (isValidSDK) {
+                        uiState.woofAlarmPushPermitted && hasPermission
+                    } else {
+                        uiState.woofAlarmPushPermitted
+                    }
             }
         }
     }
@@ -99,6 +110,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 is SettingNavigationAction.NavigateToPrivacyPolicy -> {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(APP_INFO_URL)))
                 }
+
                 is SettingNavigationAction.NavigateToLogout -> logOutDialog()
                 is SettingNavigationAction.NavigateToUnsubscribe -> userDeleteDialog()
                 is SettingNavigationAction.NavigateToRegister -> {
@@ -181,7 +193,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
 
     companion object {
         private const val APP_INFO_URL = "https://github.com/woowacourse-teams/2024-friendogly"
-        private const val PRIVATE_INFO_URL = "https://principled-staircase-b45.notion.site/197be0cd421b437698f639cda10ece04?pvs=4"
+        private const val PRIVATE_INFO_URL =
+            "https://principled-staircase-b45.notion.site/197be0cd421b437698f639cda10ece04?pvs=4"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingActivity::class.java)

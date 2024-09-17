@@ -15,7 +15,6 @@ import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
-import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +25,6 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-
         if (message.data[ALARM_TYPE] == "CHAT") {
             saveMessage(message)
             showChatAlarm(
@@ -117,18 +115,16 @@ class AlarmReceiver : FirebaseMessagingService() {
     }
 
     private fun createNotificationChannel() {
-        if (AlarmPermission.isValidPermissionSDK()) {
-            val notificationChannel =
-                NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH,
-                )
-            notificationChannel.enableVibration(true)
-            notificationManager.createNotificationChannel(
-                notificationChannel,
+        val notificationChannel =
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH,
             )
-        }
+        notificationChannel.enableVibration(true)
+        notificationManager.createNotificationChannel(
+            notificationChannel,
+        )
     }
 
     private fun deliverChatNotification(
