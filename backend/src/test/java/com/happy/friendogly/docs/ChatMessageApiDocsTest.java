@@ -105,7 +105,7 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("채팅방의 모든 채팅 내역 조회")
+    @DisplayName("채팅방의 채팅 내역 기간별 조회")
     @Test
     void findRecent() throws Exception {
         List<FindChatMessagesResponse> response = List.of(
@@ -146,8 +146,8 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                                         headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .queryParameters(
-                                        parameterWithName("since").description("조회 범위의 시작 시간(LocalDateTime). 해당 시간 바로 후부터 전송된 채팅을 응답한다. (since 시간에 전송된 메시지는 조회 X)"),
-                                        parameterWithName("until").description("조회 범위의 종료 시간(LocalDateTime). 해당 시간 바로 전까지 전송된 채팅을 응답한다. (until 시간에 전송된 메시지는 조회 X)")
+                                        parameterWithName("since").description("조회 범위의 시작 시간(LocalDateTime). 해당 시간 바로 후부터 전송된 채팅을 응답한다. (since 시간에 전송된 메시지는 조회 X) (형식 예시: 2024-01-01T20:00:00.12345)"),
+                                        parameterWithName("until").description("조회 범위의 종료 시간(LocalDateTime). 해당 시간 바로 전까지 전송된 채팅을 응답한다. (until 시간에 전송된 메시지는 조회 X) (형식 예시: 2024-01-01T20:00:00.12345)")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
