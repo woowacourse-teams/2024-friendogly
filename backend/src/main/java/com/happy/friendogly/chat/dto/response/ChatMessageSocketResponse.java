@@ -13,7 +13,12 @@ public record ChatMessageSocketResponse(
         String profilePictureUrl
 ) {
 
-    public ChatMessageSocketResponse(MessageType messageType, String content, Member senderMember, LocalDateTime createdAt) {
+    public ChatMessageSocketResponse(
+            MessageType messageType,
+            String content,
+            Member senderMember,
+            LocalDateTime createdAt
+    ) {
         this(
                 messageType,
                 senderMember.getId(),
