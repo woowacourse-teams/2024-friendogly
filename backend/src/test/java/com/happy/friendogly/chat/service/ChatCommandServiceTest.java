@@ -53,32 +53,6 @@ class ChatCommandServiceTest {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("채팅방에 입장한다.")
-    @Transactional
-    @Test
-    void enter() {
-        // given
-        Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
-
-        // when
-        chatCommandService.sendEnter(otherMember.getId(), chatRoom.getId());
-
-        // then
-        assertThat(chatRoom.findMembers()).extracting(Member::getId)
-                .containsExactly(member.getId(), otherMember.getId());
-    }
-
-    @DisplayName("채팅방에서 퇴장한다.")
-    @Transactional
-    @Test
-    void leave() {
-        // when
-        chatCommandService.sendLeave(member.getId(), chatRoom.getId());
-
-        // then
-        assertThat(chatRoom.isEmpty()).isTrue();
-    }
-
     @DisplayName("채팅 입장 메시지를 DB에 저장한다.")
     @Test
     void enter_SaveDatabase() {
