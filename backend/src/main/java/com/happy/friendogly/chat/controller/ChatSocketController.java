@@ -4,8 +4,8 @@ import com.happy.friendogly.auth.WebSocketAuth;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
-import com.happy.friendogly.chat.service.ChatRoomQueryService;
 import com.happy.friendogly.chat.service.ChatCommandService;
+import com.happy.friendogly.chat.service.ChatRoomQueryService;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
@@ -48,14 +48,6 @@ public class ChatSocketController {
         );
     }
 
-    @MessageMapping("/enter/{chatRoomId}")
-    public void enter(
-            @WebSocketAuth Long memberId,
-            @DestinationVariable(value = "chatRoomId") Long chatRoomId
-    ) {
-        chatCommandService.enter(memberId, chatRoomId);
-    }
-
     @MessageMapping("/chat/{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
@@ -63,14 +55,6 @@ public class ChatSocketController {
             @Payload ChatMessageRequest request
     ) {
         chatCommandService.sendChat(memberId, chatRoomId, request);
-    }
-
-    @MessageMapping("/leave/{chatRoomId}")
-    public void leave(
-            @WebSocketAuth Long memberId,
-            @DestinationVariable(value = "chatRoomId") Long chatRoomId
-    ) {
-        chatCommandService.leave(memberId, chatRoomId);
     }
 
     @MessageExceptionHandler

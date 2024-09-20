@@ -1,6 +1,7 @@
 package com.happy.friendogly.chat.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
@@ -60,5 +61,44 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
         // then
         assertThat(response.chatRoomId()).isEqualTo(chatRoom.getId());
+    }
+
+    @DisplayName("채팅방에 참여한다.")
+    @Transactional
+    @Test
+    void enter() {
+        // given
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
+
+        // when
+        chatRoomCommandService.enter(member1.getId(), chatRoom.getId());
+
+        // then
+        ChatRoom foundChatRoom = chatRoomRepository.getById(chatRoom.getId());
+        assertThat(foundChatRoom.countMembers()).isOne();
+    }
+
+    @DisplayName("채팅방에서 나간다.")
+    @Transactional
+    @Test
+    void leave() {
+        // given
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
+        Member member3 = memberRepository.save(new Member("john", "aaa111ab", "https://image.com"));
+
+        chatRoom.addMember(member1);
+        chatRoom.addMember(member2);
+        chatRoom.addMember(member3);
+
+        // when
+        chatRoomCommandService.leave(member2.getId(), chatRoom.getId());
+
+        // then
+        ChatRoom foundChatRoom = chatRoomRepository.getById(chatRoom.getId());
+        assertAll(
+                () -> assertThat(foundChatRoom.containsMember(member1)).isTrue(),
+                () -> assertThat(foundChatRoom.containsMember(member2)).isFalse(),
+                () -> assertThat(foundChatRoom.containsMember(member3)).isTrue()
+        );
     }
 }

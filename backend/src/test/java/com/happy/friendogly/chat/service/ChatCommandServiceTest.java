@@ -61,7 +61,7 @@ class ChatCommandServiceTest {
         Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
 
         // when
-        chatCommandService.enter(otherMember.getId(), chatRoom.getId());
+        chatCommandService.sendEnter(otherMember.getId(), chatRoom.getId());
 
         // then
         assertThat(chatRoom.findMembers()).extracting(Member::getId)
@@ -73,7 +73,7 @@ class ChatCommandServiceTest {
     @Test
     void leave() {
         // when
-        chatCommandService.leave(member.getId(), chatRoom.getId());
+        chatCommandService.sendLeave(member.getId(), chatRoom.getId());
 
         // then
         assertThat(chatRoom.isEmpty()).isTrue();
@@ -83,7 +83,7 @@ class ChatCommandServiceTest {
     @Test
     void enter_SaveDatabase() {
         // when
-        chatCommandService.enter(member.getId(), chatRoom.getId());
+        chatCommandService.sendEnter(member.getId(), chatRoom.getId());
 
         // then
         List<ChatMessage> messages = chatMessageRepository.findAll();
@@ -116,7 +116,7 @@ class ChatCommandServiceTest {
     @Test
     void leave_SaveDatabase() {
         // when
-        chatCommandService.leave(member.getId(), chatRoom.getId());
+        chatCommandService.sendLeave(member.getId(), chatRoom.getId());
 
         // then
         List<ChatMessage> messages = chatMessageRepository.findAll();

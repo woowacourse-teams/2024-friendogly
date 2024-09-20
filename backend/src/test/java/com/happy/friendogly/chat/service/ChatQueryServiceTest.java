@@ -71,11 +71,11 @@ class ChatQueryServiceTest {
         // given
         Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
 
-        chatCommandService.enter(otherMember.getId(), chatRoom.getId());
+        chatCommandService.sendEnter(otherMember.getId(), chatRoom.getId());
         chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("안녕하세요!"));
         chatCommandService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageRequest("반가워요!"));
         chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("이만 나가볼게요!"));
-        chatCommandService.leave(otherMember.getId(), chatRoom.getId());
+        chatCommandService.sendLeave(otherMember.getId(), chatRoom.getId());
 
         // when
         List<FindChatMessagesResponse> messages = chatQueryService.findAllByChatRoomId(

@@ -47,14 +47,9 @@ public class ChatCommandService {
         this.template = template;
     }
 
-    public void enter(Long senderMemberId, Long chatRoomId) {
+    public void sendEnter(Long senderMemberId, Long chatRoomId) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-
-        if (chatRoom.isGroupChat()) {
-            chatRoom.addMember(senderMember);
-        }
-
         sendAndSave(ENTER, EMPTY_CONTENT, chatRoom, senderMember);
     }
 
@@ -69,10 +64,9 @@ public class ChatCommandService {
         sendAndSave(CHAT, request.content(), chatRoom, senderMember);
     }
 
-    public void leave(Long senderMemberId, Long chatRoomId) {
+    public void sendLeave(Long senderMemberId, Long chatRoomId) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
-        chatRoom.removeMember(senderMember);
         sendAndSave(LEAVE, EMPTY_CONTENT, chatRoom, senderMember);
     }
 
