@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
+import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
@@ -123,10 +124,10 @@ class ChatQueryServiceTest {
                 .hasMessage("채팅 내역을 조회할 수 있는 권한이 없습니다.");
     }
 
-    @DisplayName("특정 시점보다 미래의 채팅 내역을 조회할 수 있다.")
+    @DisplayName("since 시간과 until 시간 사이의 (포함 X) 채팅 내역을 조회할 수 있다.")
     @Transactional
     @Test
-    void findRecent() {
+    void findAllByTimeRange() {
         // given
         jdbcTemplate.update("""
                         INSERT INTO chat_message (chat_room_id, message_type, member_id, content, created_at)
@@ -143,11 +144,34 @@ class ChatQueryServiceTest {
         );
 
         // when
-        List<FindChatMessagesResponse> response = chatQueryService.findRecent(
-                member.getId(), chatRoom.getId(), LocalDateTime.parse("2024-01-01T11:00:00"));
+        FindMessagesByTimeRangeRequest request = new FindMessagesByTimeRangeRequest(
+                LocalDateTime.parse("2024-01-01T10:00:00"),
+                LocalDateTime.parse("2024-01-01T13:00:00")
+        );
+
+        List<FindChatMessagesResponse> response = chatQueryService.findByTimeRange(
+                member.getId(),
+                chatRoom.getId(),
+                request
+        );
 
         // then
         assertThat(response).extracting(FindChatMessagesResponse::content)
-                .containsExactly("반갑습니다", "환영합니다");
+                .containsExactly("감사합니다", "반갑습니다");
+    }
+
+    @DisplayName("채팅 메시지 시간 범위 조회에서, 시간 범위가 잘못된 경우 예외가 발생한다.")
+    @Test
+    void findAllByTimeRange_Fail_InvalidTimeRange() {
+        // given
+        FindMessagesByTimeRangeRequest request = new FindMessagesByTimeRangeRequest(
+                LocalDateTime.parse("2021-01-01T10:00:00"),
+                LocalDateTime.parse("2021-01-01T09:59:59")
+        );
+
+        // when & then
+        assertThatThrownBy(() -> chatQueryService.findByTimeRange(member.getId(), chatRoom.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("since 시간을 until 시간보다 과거로 설정해 주세요.");
     }
 }

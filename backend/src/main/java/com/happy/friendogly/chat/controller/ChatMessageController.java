@@ -1,16 +1,15 @@
 package com.happy.friendogly.chat.controller;
 
 import com.happy.friendogly.auth.Auth;
+import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.service.ChatQueryService;
 import com.happy.friendogly.common.ApiResponse;
-import jakarta.validation.constraints.Past;
-import java.time.LocalDateTime;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,14 +30,12 @@ public class ChatMessageController {
         return ApiResponse.ofSuccess(chatQueryService.findAllByChatRoomId(memberId, chatRoomId));
     }
 
-    @GetMapping("/{chatRoomId}/recent")
-    public ApiResponse<List<FindChatMessagesResponse>> findRecent(
+    @GetMapping("/{chatRoomId}/times")
+    public ApiResponse<List<FindChatMessagesResponse>> findAllByTimeRange(
             @Auth Long memberId,
-            @RequestParam @Past LocalDateTime since,
+            @Valid FindMessagesByTimeRangeRequest request,
             @PathVariable("chatRoomId") Long chatRoomId
     ) {
-        return ApiResponse.ofSuccess(chatQueryService.findRecent(memberId, chatRoomId, since));
+        return ApiResponse.ofSuccess(chatQueryService.findByTimeRange(memberId, chatRoomId, request));
     }
-
-    // TODO: since - until 조회 메서드 추가
 }

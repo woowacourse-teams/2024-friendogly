@@ -17,6 +17,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.chat.controller.ChatMessageController;
 import com.happy.friendogly.chat.domain.MessageType;
+import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.service.ChatQueryService;
 import java.time.LocalDateTime;
@@ -126,15 +127,16 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                 )
         );
 
-        given(chatQueryService.findRecent(anyLong(), anyLong(), any(LocalDateTime.class)))
+        given(chatQueryService.findByTimeRange(anyLong(), anyLong(), any(FindMessagesByTimeRangeRequest.class)))
                 .willReturn(response);
 
         mockMvc
-                .perform(get("/chat-messages/{chatRoomId}/recent", 1L)
+                .perform(get("/chat-messages/{chatRoomId}/times", 1L)
                         .header(AUTHORIZATION, getMemberToken())
-                        .param("since", "2024-09-01T11:10:00.000"))
+                        .param("since", "2024-09-01T11:10:00.000")
+                        .param("until", "2024-09-01T11:40:00.000"))
                 .andDo(print())
-                .andDo(document("chat-messages/findRecent",
+                .andDo(document("chat-messages/findAllByTimeRange",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
@@ -144,8 +146,8 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                                         headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
                                 )
                                 .queryParameters(
-                                        parameterWithName("since").description(
-                                                "조회 범위의 시작 시간(LocalDateTime). 해당 시간부터 (해당 시간 포함 X) 현재까지 전송된 채팅을 응답한다.")
+                                        parameterWithName("since").description("조회 범위의 시작 시간(LocalDateTime). 해당 시간 바로 후부터 전송된 채팅을 응답한다. (since 시간에 전송된 메시지는 조회 X)"),
+                                        parameterWithName("until").description("조회 범위의 종료 시간(LocalDateTime). 해당 시간 바로 전까지 전송된 채팅을 응답한다. (until 시간에 전송된 메시지는 조회 X)")
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),

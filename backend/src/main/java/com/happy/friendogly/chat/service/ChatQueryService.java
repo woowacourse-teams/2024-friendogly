@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
+import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
@@ -41,12 +42,26 @@ public class ChatQueryService {
                 .toList();
     }
 
-    public List<FindChatMessagesResponse> findRecent(Long memberId, Long chatRoomId, LocalDateTime since) {
+    public List<FindChatMessagesResponse> findByTimeRange(
+            Long memberId,
+            Long chatRoomId,
+            FindMessagesByTimeRangeRequest request
+    ) {
+        validateTimeRange(request.since(), request.until());
         validateParticipation(memberId, chatRoomId);
-        List<ChatMessage> messages = chatMessageRepository.findRecent(chatRoomId, since);
+
+        List<ChatMessage> messages = chatMessageRepository
+                .findAllByTimeRange(chatRoomId, request.since(), request.until());
+
         return messages.stream()
                 .map(FindChatMessagesResponse::new)
                 .toList();
+    }
+
+    private void validateTimeRange(LocalDateTime since, LocalDateTime until) {
+        if (since.isAfter(until)) {
+            throw new FriendoglyException("since 시간을 until 시간보다 과거로 설정해 주세요.");
+        }
     }
 
     private void validateParticipation(Long memberId, Long chatRoomId) {

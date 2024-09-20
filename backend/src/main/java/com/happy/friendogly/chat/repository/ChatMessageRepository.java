@@ -12,9 +12,10 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     List<ChatMessage> findAllByChatRoomIdOrderByCreatedAtAsc(Long chatRoomId);
 
     @EntityGraph(attributePaths = {"senderMember"})
-    List<ChatMessage> findAllByChatRoomIdAndCreatedAtAfterOrderByCreatedAtAsc(Long chatRoomId, LocalDateTime since);
+    List<ChatMessage> findAllByChatRoomIdAndCreatedAtAfterAndCreatedAtBeforeOrderByCreatedAtAsc(
+            Long chatRoomId, LocalDateTime since, LocalDateTime until);
 
-    default List<ChatMessage> findRecent(Long chatRoomId, LocalDateTime since) {
-        return findAllByChatRoomIdAndCreatedAtAfterOrderByCreatedAtAsc(chatRoomId, since);
+    default List<ChatMessage> findAllByTimeRange(Long chatRoomId, LocalDateTime since, LocalDateTime until) {
+        return findAllByChatRoomIdAndCreatedAtAfterAndCreatedAtBeforeOrderByCreatedAtAsc(chatRoomId, since, until);
     }
 }
