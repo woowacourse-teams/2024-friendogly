@@ -6,6 +6,7 @@ import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
+import com.happy.friendogly.chat.domain.MessageType;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
 import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
@@ -54,10 +55,7 @@ public class ChatCommandService {
             chatRoom.addMember(senderMember);
         }
 
-        ChatMessageResponse chat = new ChatMessageResponse(ENTER, EMPTY_CONTENT, senderMember, LocalDateTime.now());
-        notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
-        chatMessageRepository.save(new ChatMessage(chatRoom, ENTER, senderMember, EMPTY_CONTENT));
+        sendAndSave(ENTER, EMPTY_CONTENT, chatRoom, senderMember);
     }
 
     public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
@@ -68,20 +66,20 @@ public class ChatCommandService {
             throw new FriendoglyException("자신이 참여한 채팅방에만 메시지를 보낼 수 있습니다.");
         }
 
-        ChatMessageResponse chat = new ChatMessageResponse(CHAT, request.content(), senderMember, LocalDateTime.now());
-        notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
-        chatMessageRepository.save(new ChatMessage(chatRoom, CHAT, senderMember, request.content()));
+        sendAndSave(CHAT, request.content(), chatRoom, senderMember);
     }
 
     public void leave(Long senderMemberId, Long chatRoomId) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
         chatRoom.removeMember(senderMember);
+        sendAndSave(LEAVE, EMPTY_CONTENT, chatRoom, senderMember);
+    }
 
-        ChatMessageResponse chat = new ChatMessageResponse(LEAVE, EMPTY_CONTENT, senderMember, LocalDateTime.now());
-        notificationService.sendChatNotification(chatRoomId, chat);
-        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, chat);
-        chatMessageRepository.save(new ChatMessage(chatRoom, LEAVE, senderMember, EMPTY_CONTENT));
+    private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
+        ChatMessageResponse chat = new ChatMessageResponse(messageType, content, senderMember, LocalDateTime.now());
+        notificationService.sendChatNotification(chatRoom.getId(), chat);
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
+        chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }

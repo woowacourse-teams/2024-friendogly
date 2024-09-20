@@ -39,4 +39,6 @@ public class ChatMessageController {
     ) {
         return ApiResponse.ofSuccess(chatQueryService.findRecent(memberId, chatRoomId, since));
     }
+
+    // TODO: since - until 조회 메서드 추가
 }
