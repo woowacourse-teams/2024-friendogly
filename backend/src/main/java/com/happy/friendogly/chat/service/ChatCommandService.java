@@ -8,7 +8,7 @@ import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.domain.MessageType;
 import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
-import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
+import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.exception.FriendoglyException;
@@ -71,7 +71,7 @@ public class ChatCommandService {
     }
 
     private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
-        ChatMessageResponse chat = new ChatMessageResponse(messageType, content, senderMember, LocalDateTime.now());
+        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember, LocalDateTime.now());
         notificationService.sendChatNotification(chatRoom.getId(), chat);
         template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
