@@ -7,7 +7,7 @@ import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.domain.MessageType;
-import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
+import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
@@ -53,7 +53,7 @@ public class ChatCommandService {
         sendAndSave(ENTER, EMPTY_CONTENT, chatRoom, senderMember);
     }
 
-    public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageRequest request) {
+    public void sendChat(Long senderMemberId, Long chatRoomId, ChatMessageSocketRequest request) {
         Member senderMember = memberRepository.getById(senderMemberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
 

@@ -1,7 +1,7 @@
 package com.happy.friendogly.chat.controller;
 
 import com.happy.friendogly.auth.WebSocketAuth;
-import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
+import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.happy.friendogly.chat.service.ChatCommandService;
@@ -52,7 +52,7 @@ public class ChatSocketController {
     public void sendMessage(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
-            @Payload ChatMessageRequest request
+            @Payload ChatMessageSocketRequest request
     ) {
         chatCommandService.sendChat(memberId, chatRoomId, request);
     }

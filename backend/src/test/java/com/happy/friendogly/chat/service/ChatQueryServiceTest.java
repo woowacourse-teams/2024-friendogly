@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
-import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
+import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
@@ -75,9 +75,9 @@ class ChatQueryServiceTest {
         Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
 
         chatRoomCommandService.enter(otherMember.getId(), chatRoom.getId());
-        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("안녕하세요!"));
-        chatCommandService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageRequest("반가워요!"));
-        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageRequest("이만 나가볼게요!"));
+        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageSocketRequest("안녕하세요!"));
+        chatCommandService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageSocketRequest("반가워요!"));
+        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageSocketRequest("이만 나가볼게요!"));
         chatRoomCommandService.leave(otherMember.getId(), chatRoom.getId());
 
         // when

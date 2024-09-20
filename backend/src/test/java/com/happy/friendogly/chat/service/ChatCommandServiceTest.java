@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
-import com.happy.friendogly.chat.dto.request.ChatMessageRequest;
+import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.member.domain.Member;
@@ -74,7 +74,7 @@ class ChatCommandServiceTest {
     @Test
     void send_SaveDatabase() {
         // given
-        ChatMessageRequest request = new ChatMessageRequest("반갑습니다.");
+        ChatMessageSocketRequest request = new ChatMessageSocketRequest("반갑습니다.");
 
         // when
         chatCommandService.sendChat(member.getId(), chatRoom.getId(), request);
