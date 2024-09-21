@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemClubBinding
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
-import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.pet.ClubPetAdapter
 
 class ClubViewHolder(
