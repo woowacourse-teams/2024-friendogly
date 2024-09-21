@@ -6,7 +6,6 @@ import kotlinx.datetime.LocalDateTime
 
 data class ClubItemUiModel(
     val clubId: Long,
-    val filters: List<ClubFilter>,
     val clubPoster: String?,
     val clubState: ClubState,
     val title: String,

@@ -10,8 +10,6 @@ data class Club(
     val address: ClubAddress,
     val status: ClubState,
     val createdAt: LocalDateTime,
-    val allowedGender: List<Gender>,
-    val allowedSize: List<SizeType>,
     val memberCapacity: Int,
     val currentMemberCount: Int,
     val imageUrl: String? = null,

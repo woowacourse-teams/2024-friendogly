@@ -10,11 +10,9 @@ import com.happy.friendogly.presentation.ui.club.list.adapter.pet.ClubPetAdapter
 class ClubViewHolder(
     private val binding: ItemClubBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val filterAdapter = FilterAdapter()
     private val woofAdapter = ClubPetAdapter()
 
     init {
-        binding.rcvClubListFilterList.adapter = filterAdapter
         binding.rcvClubListDogList.adapter = woofAdapter
     }
 
@@ -24,7 +22,6 @@ class ClubViewHolder(
     ) {
         binding.club = clubItemUiModel
         binding.actionHandler = actionHandler
-        filterAdapter.submitList(clubItemUiModel.filters)
         woofAdapter.submitList(clubItemUiModel.clubPets)
     }
 }

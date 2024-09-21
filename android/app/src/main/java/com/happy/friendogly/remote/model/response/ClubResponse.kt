@@ -14,8 +14,6 @@ data class ClubResponse(
     val status: ClubStateResponse,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
-    val allowedGender: List<GenderResponse>,
-    val allowedSize: List<SizeTypeResponse>,
     val memberCapacity: Int,
     val currentMemberCount: Int,
     val imageUrl: String? = null,
