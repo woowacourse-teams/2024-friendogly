@@ -16,8 +16,6 @@ fun ClubResponse.toData(): ClubDto {
         address = address.toData(),
         status = status.toData(),
         createdAt = createdAt,
-        allowedGender = allowedGender.map { it.toData() },
-        allowedSize = allowedSize.map { it.toData() },
         memberCapacity = memberCapacity,
         currentMemberCount = currentMemberCount,
         imageUrl = imageUrl,

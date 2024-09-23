@@ -16,7 +16,6 @@ fun Club.toPresentation(): ClubItemUiModel {
         clubLocation = address.toPresentation(),
         clubLeaderName = ownerMemberName,
         title = title,
-        filters = allowedGender.toGenderGroupFilters() + allowedSize.toSizeGroupFilters(),
         clubDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
         content = content,
