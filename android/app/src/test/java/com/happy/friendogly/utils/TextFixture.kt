@@ -7,7 +7,6 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.model.UserAddress
-import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 
@@ -29,14 +28,14 @@ object TextFixture {
     }
 
     fun makeUserAddress(): UserAddress {
-        return UserAddress("서울특별시",null,null)
+        return UserAddress("서울특별시", null, null)
     }
 
     private fun makeClubAddress(): ClubAddress {
-        return ClubAddress("서울특별시",null,null)
+        return ClubAddress("서울특별시", null, null)
     }
 
-    fun makePet() : Pet {
+    fun makePet(): Pet {
         return Pet(
             id = 0,
             memberId = 0,
@@ -45,7 +44,7 @@ object TextFixture {
             birthDate = LocalDate.parse("2024-09-23"),
             sizeType = SizeType.SMALL,
             gender = Gender.MALE_NEUTERED,
-            imageUrl =  "",
+            imageUrl = "",
         )
     }
 }

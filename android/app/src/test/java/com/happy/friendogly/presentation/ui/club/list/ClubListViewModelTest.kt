@@ -23,8 +23,6 @@ import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions
-import org.junit.Before
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -50,114 +48,123 @@ class ClubListViewModelTest {
     private lateinit var getSearchingClubsUseCase: GetSearchingClubsUseCase
 
     @Test
-    fun `등록한 주소의 모임 리스트가 로드된다`() = runTest {
-        // given
-        val clubs: List<Club> = listOf(
-            TextFixture.makeClub(),
-        )
+    fun `등록한 주소의 모임 리스트가 로드된다`() =
+        runTest {
+            // given
+            val clubs: List<Club> =
+                listOf(
+                    TextFixture.makeClub(),
+                )
 
-        coEvery {
-            getAddressUseCase()
-        } returns Result.success(makeUserAddress())
+            coEvery {
+                getAddressUseCase()
+            } returns Result.success(makeUserAddress())
 
-        coEvery {
-            getPetsMineUseCase()
-        } returns DomainResult.Success(listOf(makePet()))
+            coEvery {
+                getPetsMineUseCase()
+            } returns DomainResult.Success(listOf(makePet()))
 
-        coEvery {
-            getSearchingClubsUseCase(
-                filterCondition = ClubFilterCondition.ALL,
-                address = ClubAddress(
-                    province = "서울특별시", null, null
-                ),
-                genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
-                sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
-            )
-        } returns Result.success(clubs)
+            coEvery {
+                getSearchingClubsUseCase(
+                    filterCondition = ClubFilterCondition.ALL,
+                    address =
+                        ClubAddress(
+                            province = "서울특별시", null, null,
+                        ),
+                    genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
+                    sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
+                )
+            } returns Result.success(clubs)
 
-        viewModel = ClubListViewModel(
-            analyticsHelper = analyticsHelper,
-            getPetsMineUseCase = getPetsMineUseCase,
-            getAddressUseCase = getAddressUseCase,
-            searchingClubsUseCase = getSearchingClubsUseCase,
-        )
+            viewModel =
+                ClubListViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getPetsMineUseCase = getPetsMineUseCase,
+                    getAddressUseCase = getAddressUseCase,
+                    searchingClubsUseCase = getSearchingClubsUseCase,
+                )
 
-        //when
-        val actualClubs = viewModel.clubs.getOrAwaitValue()
+            // when
+            val actualClubs = viewModel.clubs.getOrAwaitValue()
 
-        //then
-        Assertions.assertThat(clubs.first().equals(actualClubs.firstOrNull()))
-    }
-
-    @Test
-    fun `등록한 주소가 없는 경우 사용자에게 주소 등록을 요구하는 화면을 표시한다`() = runTest {
-        //given
-        coEvery {
-            getAddressUseCase()
-        } returns Result.failure(Throwable())
-
-        coEvery {
-            getPetsMineUseCase()
-        } returns DomainResult.Success(listOf(makePet()))
-
-        viewModel = ClubListViewModel(
-            analyticsHelper = analyticsHelper,
-            getPetsMineUseCase = getPetsMineUseCase,
-            getAddressUseCase = getAddressUseCase,
-            searchingClubsUseCase = getSearchingClubsUseCase,
-        )
-
-        val expectUiState = ClubListUiState.NotAddress
-
-        //when
-        val actualUiState = viewModel.uiState.getOrAwaitValue()
-
-        //then
-        Assertions.assertThat(actualUiState).isEqualTo(expectUiState)
-    }
+            // then
+            Assertions.assertThat(clubs.first().equals(actualClubs.firstOrNull()))
+        }
 
     @Test
-    fun `적합한 모임이 없는 경우 사용자에게 모임이 없다는 것을 나타내는 화면을 표시한다`() = runTest {
-        //given
-        coEvery {
-            getAddressUseCase()
-        } returns Result.success(makeUserAddress())
+    fun `등록한 주소가 없는 경우 사용자에게 주소 등록을 요구하는 화면을 표시한다`() =
+        runTest {
+            // given
+            coEvery {
+                getAddressUseCase()
+            } returns Result.failure(Throwable())
 
-        coEvery {
-            getPetsMineUseCase()
-        } returns DomainResult.Success(listOf(makePet()))
+            coEvery {
+                getPetsMineUseCase()
+            } returns DomainResult.Success(listOf(makePet()))
 
-        coEvery {
-            getSearchingClubsUseCase(
-                filterCondition = ClubFilterCondition.ALL,
-                address = ClubAddress(
-                    province = "서울특별시", null, null
-                ),
-                genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
-                sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
-            )
-        } returns Result.success(emptyList())
+            viewModel =
+                ClubListViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getPetsMineUseCase = getPetsMineUseCase,
+                    getAddressUseCase = getAddressUseCase,
+                    searchingClubsUseCase = getSearchingClubsUseCase,
+                )
 
-        viewModel = ClubListViewModel(
-            analyticsHelper = analyticsHelper,
-            getPetsMineUseCase = getPetsMineUseCase,
-            getAddressUseCase = getAddressUseCase,
-            searchingClubsUseCase = getSearchingClubsUseCase,
-        )
+            val expectUiState = ClubListUiState.NotAddress
 
-        val expectUiState = ClubListUiState.NotData
+            // when
+            val actualUiState = viewModel.uiState.getOrAwaitValue()
 
-        //when
-        val actualUiState = viewModel.uiState.getOrAwaitValue()
+            // then
+            Assertions.assertThat(actualUiState).isEqualTo(expectUiState)
+        }
 
-        //then
-        Assertions.assertThat(actualUiState).isEqualTo(expectUiState)
-    }
+    @Test
+    fun `적합한 모임이 없는 경우 사용자에게 모임이 없다는 것을 나타내는 화면을 표시한다`() =
+        runTest {
+            // given
+            coEvery {
+                getAddressUseCase()
+            } returns Result.success(makeUserAddress())
+
+            coEvery {
+                getPetsMineUseCase()
+            } returns DomainResult.Success(listOf(makePet()))
+
+            coEvery {
+                getSearchingClubsUseCase(
+                    filterCondition = ClubFilterCondition.ALL,
+                    address =
+                        ClubAddress(
+                            province = "서울특별시", null, null,
+                        ),
+                    genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
+                    sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
+                )
+            } returns Result.success(emptyList())
+
+            viewModel =
+                ClubListViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getPetsMineUseCase = getPetsMineUseCase,
+                    getAddressUseCase = getAddressUseCase,
+                    searchingClubsUseCase = getSearchingClubsUseCase,
+                )
+
+            val expectUiState = ClubListUiState.NotData
+
+            // when
+            val actualUiState = viewModel.uiState.getOrAwaitValue()
+
+            // then
+            Assertions.assertThat(actualUiState).isEqualTo(expectUiState)
+        }
 
     // TODO -> 에러 분석하여 분기 Test 예정
     @Test
     fun `모임 리스트 로드에 실패하면 사용자에게 에러 발생을 나타내는 화면을 표시한다`() {
-        //given
+        // given
         coEvery {
             getAddressUseCase()
         } returns Result.success(makeUserAddress())
@@ -169,27 +176,29 @@ class ClubListViewModelTest {
         coEvery {
             getSearchingClubsUseCase(
                 filterCondition = ClubFilterCondition.ALL,
-                address = ClubAddress(
-                    province = "서울특별시", null, null
-                ),
+                address =
+                    ClubAddress(
+                        province = "서울특별시", null, null,
+                    ),
                 genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                 sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
             )
         } returns Result.failure(Throwable())
 
-        viewModel = ClubListViewModel(
-            analyticsHelper = analyticsHelper,
-            getPetsMineUseCase = getPetsMineUseCase,
-            getAddressUseCase = getAddressUseCase,
-            searchingClubsUseCase = getSearchingClubsUseCase,
-        )
+        viewModel =
+            ClubListViewModel(
+                analyticsHelper = analyticsHelper,
+                getPetsMineUseCase = getPetsMineUseCase,
+                getAddressUseCase = getAddressUseCase,
+                searchingClubsUseCase = getSearchingClubsUseCase,
+            )
 
         val expectUiState = ClubListUiState.Error
 
-        //when
+        // when
         val actualUiState = viewModel.uiState.getOrAwaitValue()
 
-        //then
+        // then
         Assertions.assertThat(actualUiState).isEqualTo(expectUiState)
     }
 }
