@@ -22,6 +22,7 @@ public class ChatMessageController {
         this.chatQueryService = chatQueryService;
     }
 
+    // TODO: 전체 조회 API 필요성 논의 필요, 만약 필요하다면 페이징을 통한 성능 개선 필요
     @GetMapping("/{chatRoomId}")
     public ApiResponse<List<FindChatMessagesResponse>> findAllByChatRoomId(
             @Auth Long memberId,

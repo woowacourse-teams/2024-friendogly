@@ -5,6 +5,8 @@ import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.EnterChatRoomResponse;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
+import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -19,15 +21,19 @@ public class ChatRoomCommandService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
+    private final ClubRepository clubRepository;
+
     private final ChatCommandService chatCommandService;
 
     public ChatRoomCommandService(
             ChatRoomRepository chatRoomRepository,
             MemberRepository memberRepository,
+            ClubRepository clubRepository,
             ChatCommandService chatCommandService
     ) {
         this.chatRoomRepository = chatRoomRepository;
         this.memberRepository = memberRepository;
+        this.clubRepository = clubRepository;
         this.chatCommandService = chatCommandService;
     }
 
@@ -56,25 +62,33 @@ public class ChatRoomCommandService {
         chatCommandService.sendLeave(memberId, chatRoomId);
     }
 
-    private void validateParticipation(ChatRoom chatRoom, Member member) {
-        if (!chatRoom.containsMember(member)) {
-            throw new FriendoglyException("채팅에 참여한 상태가 아닙니다.");
-        }
-    }
-
     public EnterChatRoomResponse enter(Long memberId, Long chatRoomId) {
         Member member = memberRepository.getById(memberId);
         ChatRoom chatRoom = chatRoomRepository.getById(chatRoomId);
 
         if (chatRoom.isPrivateChat()) {
-            validateParticipation(chatRoom, member);
+            validateInvitation(chatRoom, member);
         }
 
         if (chatRoom.isGroupChat()) {
-            chatRoom.addMember(member);
+            validateClubParticipation(chatRoom, member);
         }
 
         chatCommandService.sendEnter(memberId, chatRoomId);
         return new EnterChatRoomResponse(chatRoomId);
+    }
+
+    private void validateInvitation(ChatRoom chatRoom, Member member) {
+        if (!chatRoom.containsMember(member)) {
+            throw new FriendoglyException("채팅에 참여한 상태가 아닙니다.");
+        }
+    }
+
+    private void validateClubParticipation(ChatRoom chatRoom, Member member) {
+        Club club = clubRepository.getByChatRoomId(chatRoom.getId());
+
+        if (!club.isAlreadyJoined(member)) {
+            throw new FriendoglyException("모임에 참여해야만 채팅에 참여할 수 있습니다.");
+        }
     }
 }
