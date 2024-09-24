@@ -6,28 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
-import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 class ChatRoomCommandServiceTest extends ServiceTest {
 
     @Autowired
     private ChatRoomCommandService chatRoomCommandService;
-
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     private Member member1;
     private Member member2;

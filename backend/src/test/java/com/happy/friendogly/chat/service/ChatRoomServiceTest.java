@@ -1,19 +1,13 @@
 package com.happy.friendogly.chat.service;
 
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ChatRoomServiceTest extends ServiceTest {
 
-    @Autowired
-    protected MemberRepository memberRepository;
-
-    protected Member member1;
-
-    protected Member member2;
+    private Member member1;
+    private Member member2;
 
     @BeforeEach
     void setUp() {

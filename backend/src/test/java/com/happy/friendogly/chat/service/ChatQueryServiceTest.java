@@ -14,12 +14,9 @@ import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.club.domain.Club;
-import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Pet;
-import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.support.ServiceTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,27 +26,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 class ChatQueryServiceTest extends ServiceTest {
 
     @Autowired
     private ChatQueryService chatQueryService;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     private Member member;
     private ChatRoom chatRoom;
