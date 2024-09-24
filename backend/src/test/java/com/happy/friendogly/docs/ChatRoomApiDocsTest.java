@@ -24,7 +24,6 @@ import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.chat.controller.ChatRoomController;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.ChatRoomDetail;
-import com.happy.friendogly.chat.dto.response.EnterChatRoomResponse;
 import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
 import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
@@ -207,40 +206,7 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                 ))
                 .andExpect(status().isOk());
     }
-    @DisplayName("채팅방 참여")
-    @Test
-    void enter() throws Exception {
-        EnterChatRoomResponse response = new EnterChatRoomResponse(5L);
 
-        given(chatRoomCommandService.enter(any(), any()))
-                .willReturn(response);
-
-        mockMvc
-                .perform(post("/chat-rooms/enter/{chatRoomId}", 5L)
-                        .header(AUTHORIZATION, getMemberToken()))
-                .andDo(print())
-                .andDo(document("chat-rooms/enter",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        resource(ResourceSnippetParameters.builder()
-                                .tag("ChatRoom API")
-                                .summary("채팅방 참여 API")
-                                .requestHeaders(
-                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
-                                )
-                                .pathParameters(
-                                        parameterWithName("chatRoomId").description("채팅방 ID")
-                                )
-                                .responseFields(
-                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.chatRoomId").description("참여한 채팅방 ID")
-                                )
-                                .responseSchema(Schema.schema("EnterChatRoomResponse"))
-                                .build()
-                        )
-                ))
-                .andExpect(status().isOk());
-    }
     @DisplayName("채팅방 퇴장")
     @Test
     void leave() throws Exception {
@@ -273,7 +239,6 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                 ))
                 .andExpect(status().isOk());
     }
-
 
     @Override
     protected Object controller() {

@@ -12,8 +12,8 @@ import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.support.ServiceTest;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-class ChatCommandServiceTest {
+class ChatCommandServiceTest extends ServiceTest {
 
     @Autowired
     private ChatCommandService chatCommandService;
@@ -44,13 +44,6 @@ class ChatCommandServiceTest {
         member = memberRepository.save(new Member("트레", "abcdef12", "https://image.com/image.jpg"));
         chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
         chatRoom.addMember(member);
-    }
-
-    @AfterEach
-    void tearDown() {
-        chatMessageRepository.deleteAll();
-        chatRoomRepository.deleteAll();
-        memberRepository.deleteAll();
     }
 
     @DisplayName("채팅 입장 메시지를 DB에 저장한다.")

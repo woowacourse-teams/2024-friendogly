@@ -1,8 +1,5 @@
 package com.happy.friendogly.chat.service;
 
-import static com.happy.friendogly.chat.domain.MessageType.CHAT;
-import static com.happy.friendogly.chat.domain.MessageType.ENTER;
-import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 import static com.happy.friendogly.pet.domain.Gender.FEMALE;
 import static com.happy.friendogly.pet.domain.Gender.FEMALE_NEUTERED;
 import static com.happy.friendogly.pet.domain.Gender.MALE;
@@ -12,10 +9,8 @@ import static com.happy.friendogly.pet.domain.SizeType.MEDIUM;
 import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
-import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
 import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
 import com.happy.friendogly.club.domain.Club;
@@ -25,11 +20,11 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
+import com.happy.friendogly.support.ServiceTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,16 +34,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-class ChatQueryServiceTest {
+class ChatQueryServiceTest extends ServiceTest {
 
     @Autowired
     private ChatQueryService chatQueryService;
-
-    @Autowired
-    private ChatCommandService chatCommandService;
-
-    @Autowired
-    private ChatRoomCommandService chatRoomCommandService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -79,63 +68,6 @@ class ChatQueryServiceTest {
                 List.of(pet)));
 
         chatRoom = club.getChatRoom();
-    }
-
-    @AfterEach
-    void tearDown() {
-        jdbcTemplate.update("""
-                SET REFERENTIAL_INTEGRITY FALSE;
-                                
-                DELETE FROM chat_room;
-                DELETE FROM chat_room_member;
-                DELETE FROM chat_message;
-                DELETE FROM club;
-                DELETE FROM club_member;
-                DELETE FROM club_pet;
-                DELETE FROM member;
-                DELETE FROM pet;
-                                
-                SET REFERENTIAL_INTEGRITY TRUE;
-                """);
-    }
-
-    @DisplayName("채팅방 ID로 채팅 메시지를 모두 찾을 수 있다.")
-    @Transactional
-    @Test
-    void findAllByChatRoomId() {
-        // given
-        Member otherMember = memberRepository.save(new Member("땡이", "aaa111bc", "https://image.com/image.jpg"));
-        club.addClubMember(otherMember);
-        chatRoom.addMember(otherMember);
-
-        chatRoomCommandService.enter(otherMember.getId(), chatRoom.getId());
-        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageSocketRequest("안녕하세요!"));
-        chatCommandService.sendChat(member.getId(), chatRoom.getId(), new ChatMessageSocketRequest("반가워요!"));
-        chatCommandService.sendChat(otherMember.getId(), chatRoom.getId(), new ChatMessageSocketRequest("이만 나가볼게요!"));
-        chatRoomCommandService.leave(otherMember.getId(), chatRoom.getId());
-
-        // when
-        List<FindChatMessagesResponse> messages = chatQueryService.findAllByChatRoomId(member.getId(),
-                chatRoom.getId());
-
-        // then
-        Long memberId = member.getId();
-        Long otherMemberId = otherMember.getId();
-
-        assertAll(() -> assertThat(messages).extracting(FindChatMessagesResponse::messageType)
-                        .containsExactly(ENTER, CHAT, CHAT, CHAT, LEAVE),
-                () -> assertThat(messages).extracting(FindChatMessagesResponse::senderMemberId)
-                        .containsExactly(otherMemberId, otherMemberId, memberId, otherMemberId, otherMemberId),
-                () -> assertThat(messages).extracting(FindChatMessagesResponse::senderName)
-                        .containsExactly("땡이", "땡이", "트레", "땡이", "땡이"),
-                () -> assertThat(messages).extracting(FindChatMessagesResponse::content)
-                        .containsExactly("", "안녕하세요!", "반가워요!", "이만 나가볼게요!", ""),
-                () -> assertThat(messages).extracting(FindChatMessagesResponse::createdAt)
-                        .hasOnlyElementsOfType(LocalDateTime.class).doesNotContainNull(),
-                () -> assertThat(messages).extracting(FindChatMessagesResponse::profilePictureUrl)
-                        .containsExactly("https://image.com/image.jpg", "https://image.com/image.jpg",
-                                "https://image.com/image.jpg", "https://image.com/image.jpg",
-                                "https://image.com/image.jpg"));
     }
 
     @DisplayName("채팅방에 들어가 있지 않은 Member는 채팅 내역을 조회할 수 없다.")
