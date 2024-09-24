@@ -62,10 +62,6 @@ fun AnalyticsHelper.logCloseBtnClicked() {
     logEvent(type = Types.CLOSE_BTN_CLICKED)
 }
 
-fun AnalyticsHelper.logFootprintClicked() {
-    logEvent(type = Types.FOOTPRINT_CLICKED)
-}
-
 fun AnalyticsHelper.logFootprintMemberNameClicked() {
     logEvent(type = Types.FOOTPRINT_MEMBER_NAME_CLICKED)
 }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemFootprintInfoPetDetailBinding
-import com.happy.friendogly.presentation.ui.woof.WoofActionHandler
+import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
 
 class PetDetailInfoAdapter(private val actionHandler: WoofActionHandler) :

@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.woof
+package com.happy.friendogly.presentation.ui.woof.util
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

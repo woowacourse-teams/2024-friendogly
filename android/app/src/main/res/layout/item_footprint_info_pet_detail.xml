@@ -11,7 +11,7 @@
 
         <variable
             name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.woof.WoofActionHandler" />
+            type="com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

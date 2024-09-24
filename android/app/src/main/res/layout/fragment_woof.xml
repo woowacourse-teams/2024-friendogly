@@ -8,12 +8,8 @@
         <import type="com.happy.friendogly.presentation.ui.woof.model.FilterState" />
 
         <variable
-            name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.woof.WoofActionHandler" />
-
-        <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.woof.WoofViewModel" />
+            type="com.happy.friendogly.presentation.ui.woof.viewmodel.WoofViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +35,7 @@
             android:background="@drawable/rect_white_fill_30"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickStatusAll()}"
+            android:onClick="@{() -> vm.clickStatusAll()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_status_all"
@@ -60,7 +56,7 @@
             android:drawablePadding="6dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickStatusBefore()}"
+            android:onClick="@{() -> vm.clickStatusBefore()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_status_before"
@@ -82,7 +78,7 @@
             android:drawablePadding="6dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickStatusOnGoing()}"
+            android:onClick="@{() -> vm.clickStatusOnGoing()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_status_ongoing"
@@ -105,7 +101,7 @@
             android:drawablePadding="6dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickStatusAfter()}"
+            android:onClick="@{() -> vm.clickStatusAfter()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_status_after"
@@ -126,7 +122,7 @@
             android:drawablePadding="8dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickRefreshBtn()}"
+            android:onClick="@{() -> vm.clickRefreshBtn()}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="@string/woof_footprint_refresh"
@@ -147,7 +143,7 @@
             android:background="@drawable/rect_coral400_fill_12"
             android:elevation="10dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickBackBtn()}"
+            android:onClick="@{() -> vm.clickBackBtn()}"
             android:src="@drawable/ic_arrow_left_white"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +160,7 @@
             android:background="@drawable/rect_coral400_fill_12"
             android:elevation="10dp"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickCloseBtn()}"
+            android:onClick="@{() -> vm.clickCloseBtn()}"
             android:src="@drawable/ic_close_white"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -196,7 +192,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
-            android:onClick="@{() -> actionHandler.clickLocationBtn()}"
+            android:onClick="@{() -> vm.clickLocationBtn()}"
             app:layout_constraintBottom_toTopOf="@id/layout_woof_walk"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -210,7 +206,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/rect_coral400_fill_12"
             android:gravity="center"
-            android:onClick="@{() -> actionHandler.clickMyFootprintBtn()}"
+            android:onClick="@{() -> vm.clickMyFootprintBtn()}"
             android:text="@string/woof_my_footprint"
             app:layout_constraintBottom_toTopOf="@id/btn_woof_location"
             app:layout_constraintStart_toStartOf="parent" />
@@ -226,7 +222,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/rect_coral10_fill_50"
             android:elevation="10dp"
-            android:onClick="@{() -> actionHandler.clickHelpBtn()}"
+            android:onClick="@{() -> vm.clickHelpBtn()}"
             android:padding="6dp"
             android:src="@drawable/ic_help_coral500"
             app:layout_constraintBottom_toTopOf="@id/layout_woof_walk"
@@ -255,7 +251,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
-                android:onClick="@{() -> actionHandler.clickDeleteMyFootprintMarkerBtn()}"
+                android:onClick="@{() -> vm.clickDeleteMyFootprintMarkerBtn()}"
                 android:src="@drawable/ic_close_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -271,7 +267,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
-                android:onClick="@{() -> actionHandler.clickEndWalkBtn()}"
+                android:onClick="@{() -> vm.clickEndWalkBtn()}"
                 android:src="@drawable/ic_stop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -317,7 +313,7 @@
             android:background="@color/transparent"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> actionHandler.clickMarkBtn()}"
+            android:onClick="@{() -> vm.clickMarkBtn()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_foot_print_btn"
             android:visibility="visible"
@@ -391,7 +387,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/woof_register_walk_area"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -420,7 +416,7 @@
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"
-                android:onClick="@{() -> actionHandler.clickRegisterMarkerBtn()}"
+                android:onClick="@{() -> vm.clickRegisterMarkerBtn()}"
                 android:text="@string/woof_register_footprint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

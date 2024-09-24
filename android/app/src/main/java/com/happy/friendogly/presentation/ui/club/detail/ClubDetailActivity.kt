@@ -24,8 +24,8 @@ import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
-import com.happy.friendogly.presentation.ui.woof.PetImageActivity
 
 class ClubDetailActivity :
     BaseActivity<ActivityClubDetailBinding>(R.layout.activity_club_detail),

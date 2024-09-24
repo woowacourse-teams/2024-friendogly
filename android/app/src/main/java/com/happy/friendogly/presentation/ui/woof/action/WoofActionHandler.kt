@@ -1,6 +1,4 @@
-package com.happy.friendogly.presentation.ui.woof
-
-import com.naver.maps.map.overlay.Marker
+package com.happy.friendogly.presentation.ui.woof.action
 
 interface WoofActionHandler {
     fun clickMarkBtn()
@@ -28,11 +26,6 @@ interface WoofActionHandler {
     fun clickBackBtn()
 
     fun clickCloseBtn()
-
-    fun clickFootprintMarker(
-        footprintId: Long,
-        marker: Marker,
-    )
 
     fun clickFootprintPetImage(petImageUrl: String)
 

@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.woof
+package com.happy.friendogly.presentation.ui.woof.util
 
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -23,12 +23,17 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Duration
 import java.time.Period
+
+private const val MARGIN_BOTTOM_DEFAULT = 36
+private const val MARGIN_BOTTOM_REGISTERING_FOOTPRINT = 12
+private const val MARGIN_BOTTOM_ON_WALKING = 12
 
 @BindingAdapter("memberName")
 fun TextView.bindMemberName(memberName: String) {
@@ -293,12 +298,12 @@ fun View.bindLocationBtn(
 
     val marginBottom =
         if (uiState is WoofUiState.RegisteringFootprint) {
-            12
+            MARGIN_BOTTOM_REGISTERING_FOOTPRINT
         } else {
             if (myWalkStatus != null) {
-                if (myWalkStatus.walkStatus == WalkStatus.AFTER) 36 else 12
+                if (myWalkStatus.walkStatus == WalkStatus.AFTER) MARGIN_BOTTOM_DEFAULT else MARGIN_BOTTOM_ON_WALKING
             } else {
-                36
+                MARGIN_BOTTOM_DEFAULT
             }
         }
 
@@ -326,9 +331,11 @@ fun ImageButton.bindHelpBtn(
             WoofUiState.FindingFriends -> {
                 (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
             }
+
             WoofUiState.RegisteringFootprint -> {
                 true
             }
+
             else -> {
                 false
             }
