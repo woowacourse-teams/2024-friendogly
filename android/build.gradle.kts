@@ -19,6 +19,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.hilt) apply false
 }
 
 allprojects {
