@@ -315,7 +315,7 @@
             android:focusable="true"
             android:onClick="@{() -> vm.clickMarkBtn()}"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_mark_foot_print_btn"
+            android:src="@drawable/ic_mark_footprint_btn"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
