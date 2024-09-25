@@ -21,10 +21,13 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class RegisterPetViewModel(
+@HiltViewModel
+class RegisterPetViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val postPetUseCase: PostPetUseCase,
     private val patchPetUseCase: PatchPetUseCase,

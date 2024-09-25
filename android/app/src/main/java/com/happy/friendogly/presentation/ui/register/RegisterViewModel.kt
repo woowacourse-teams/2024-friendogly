@@ -19,8 +19,11 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.logGoogleLoginClicked
 import com.happy.friendogly.presentation.utils.logKakaoLoginClicked
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterViewModel(
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val getJwtTokenUseCase: GetJwtTokenUseCase,
     private val postKakaoLoginUseCase: PostKakaoLoginUseCase,

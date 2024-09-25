@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentClubListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
@@ -20,18 +19,13 @@ import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAda
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private val viewModel: ClubListViewModel by viewModels<ClubListViewModel> {
-        ClubListViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-            getAddressUseCase = AppModule.getInstance().getAddressUseCase,
-            searchingClubsUseCase = AppModule.getInstance().getSearchingClubsUseCase,
-        )
-    }
+    private val viewModel: ClubListViewModel by viewModels()
 
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as ClubListActionHandler)

@@ -23,7 +23,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+
 import com.happy.friendogly.databinding.FragmentWoofBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
@@ -69,6 +69,7 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -81,6 +82,7 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
 
+@AndroidEntryPoint
 class WoofFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentWoofBinding? = null
     private val binding get() = _binding!!
@@ -104,18 +106,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private val mapView: MapView by lazy { binding.mapView }
     private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
 
-    private val viewModel by viewModels<WoofViewModel> {
-        WoofViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            postFootprintUseCase = AppModule.getInstance().postFootprintUseCase,
-            patchFootprintRecentWalkStatusAutoUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusAutoUseCase,
-            patchFootprintRecentWalkStatusManualUseCase = AppModule.getInstance().patchFootprintRecentWalkStatusManualUseCase,
-            getNearFootprintsUseCase = AppModule.getInstance().getNearFootprintsUseCase,
-            getFootprintMarkBtnInfoUseCase = AppModule.getInstance().getFootprintMarkBtnInfoUseCase,
-            getFootprintInfoUseCase = AppModule.getInstance().getFootprintInfoUseCase,
-            deleteFootprintUseCase = AppModule.getInstance().deleteFootprintUseCase,
-        )
-    }
+    private val viewModel by viewModels<WoofViewModel>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

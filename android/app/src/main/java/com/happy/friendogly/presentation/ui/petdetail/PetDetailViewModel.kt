@@ -10,8 +10,11 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.getSerializable
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PetDetailViewModel(
+@HiltViewModel
+class PetDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel() {
     private val _uiState: MutableLiveData<PetDetailUiState> = MutableLiveData(PetDetailUiState())

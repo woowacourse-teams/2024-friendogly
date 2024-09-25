@@ -12,24 +12,35 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.LayoutChatDrawerBinding
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
+import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.utils.logGoClubFromChatClicked
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
+
+    @Inject
+    lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
+
+    @Inject
+    lateinit var analyticsHelper:AnalyticsHelper
+
     private var _binding: LayoutChatDrawerBinding? = null
     val binding: LayoutChatDrawerBinding
         get() = requireNotNull(_binding) { "${this::class.java.simpleName} is null" }
 
     private lateinit var adapter: JoinPeopleAdapter
     private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this) { isPermitted ->
+        AlarmPermission.from(this,analyticsHelper) { isPermitted ->
             if (!isPermitted) {
                 Snackbar.make(
                     binding.root,
@@ -40,14 +51,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             }
         }
 
-    private val viewModel: ChatInfoViewModel by viewModels {
-        ChatInfoViewModel.factory(
-            AppModule.getInstance().getChatRoomClubUseCase,
-            AppModule.getInstance().getChatMemberUseCase,
-            AppModule.getInstance().getChatAlarmUseCase,
-            AppModule.getInstance().saveChatAlarmUseCase,
-        )
-    }
+    private val viewModel: ChatInfoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,7 +91,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
             setChatInfo(info)
             binding.btnChatClub.setOnClickListener {
                 (requireActivity() as ChatActivity).navigateToClub(info.clubId)
-                AppModule.getInstance().analyticsHelper.logGoClubFromChatClicked()
+                analyticsHelper.logGoClubFromChatClicked()
             }
         }
         viewModel.joiningPeople.observe(viewLifecycleOwner) {
@@ -96,7 +100,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
 
         lifecycleScope.launch {
             binding.switchChatSettingAlarm.isChecked =
-                alarmPermission.hasPermissions() && AppModule.getInstance().getChatAlarmUseCase().getOrDefault(true)
+                alarmPermission.hasPermissions() && getChatAlarmUseCase().getOrDefault(true)
         }
     }
 

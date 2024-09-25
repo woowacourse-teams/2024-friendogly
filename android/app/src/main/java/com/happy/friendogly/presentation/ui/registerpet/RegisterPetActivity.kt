@@ -14,7 +14,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+
 import com.happy.friendogly.databinding.ActivityRegisterPetBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -28,17 +28,14 @@ import com.happy.friendogly.presentation.utils.putSerializable
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@AndroidEntryPoint
 class RegisterPetActivity :
     BaseActivity<ActivityRegisterPetBinding>(R.layout.activity_register_pet) {
-    private val viewModel: RegisterPetViewModel by viewModels {
-        RegisterPetViewModel.factory(
-            postPetUseCase = AppModule.getInstance().postPetUseCase,
-            patchPetUseCase = AppModule.getInstance().patchPetUseCase,
-        )
-    }
+    private val viewModel: RegisterPetViewModel by viewModels()
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>

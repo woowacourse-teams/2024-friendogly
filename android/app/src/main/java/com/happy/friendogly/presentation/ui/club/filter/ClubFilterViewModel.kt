@@ -13,8 +13,11 @@ import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFil
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ParticipationFilter
 import com.happy.friendogly.presentation.utils.logSelectClubFilter
 import com.happy.friendogly.presentation.utils.logSelectParticipationFilter
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ClubFilterViewModel(
+@HiltViewModel
+class ClubFilterViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel(), ClubFilterItemActionHandler, ClubFilterActionHandler {
     private val _clubFilterEvent: MutableLiveData<Event<ClubFilterEvent>> = MutableLiveData()

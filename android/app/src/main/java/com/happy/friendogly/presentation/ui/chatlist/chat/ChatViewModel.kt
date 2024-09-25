@@ -15,6 +15,7 @@ import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.toUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChatViewModel(
+@HiltViewModel
+class ChatViewModel @Inject constructor(
     private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val connectWebsocketUseCase: ConnectWebsocketUseCase,

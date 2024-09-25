@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityChatBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
@@ -17,22 +18,19 @@ import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.logChatAlarmClicked
 import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatActivity :
     BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
     ChatNavigationAction {
-    private val viewModel: ChatViewModel by viewModels {
-        ChatViewModel.factory(
-            AppModule.getInstance().getChatRoomClubUseCase,
-            AppModule.getInstance().getChatMessagesUseCase,
-            AppModule.getInstance().connectWebsocketUseCase,
-            AppModule.getInstance().disconnectWebsocketUseCase,
-            AppModule.getInstance().subScribeMessageUseCase,
-            AppModule.getInstance().publishSendUseCase,
-        )
-    }
+    private val viewModel: ChatViewModel by viewModels()
     private lateinit var adapter: ChatAdapter
+
+    @Inject
+    lateinit var analyticsHelper:AnalyticsHelper
 
     override fun initCreateView() {
         binding.vm = viewModel
@@ -53,7 +51,7 @@ class ChatActivity :
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
-            AppModule.getInstance().analyticsHelper.logChatSendMessageClicked()
+            analyticsHelper.logChatSendMessageClicked()
         }
     }
 
@@ -116,7 +114,10 @@ class ChatActivity :
         lifecycle.removeObserver(ChatLifecycleObserver.getInstance())
     }
 
+
     companion object {
+         // var analyticsHelper:AnalyticsHelper = AnalyticsHelper(this)
+
         private const val INVALID_ID = -1L
         private const val EXTRA_CHAT_ID = "chatId"
 
@@ -127,7 +128,7 @@ class ChatActivity :
             chatId: Long,
         ): Intent {
             if (context is FirebaseMessagingService) {
-                AppModule.getInstance().analyticsHelper.logChatAlarmClicked()
+                //analyticsHelper.logChatAlarmClicked()
             }
             return Intent(context, ChatActivity::class.java).apply {
                 putExtra(EXTRA_CHAT_ID, chatId)

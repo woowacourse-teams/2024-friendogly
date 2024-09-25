@@ -12,7 +12,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+
 import com.happy.friendogly.databinding.ActivityProfileSettingBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -26,18 +26,12 @@ import com.happy.friendogly.presentation.utils.putSerializable
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileSettingActivity :
     BaseActivity<ActivityProfileSettingBinding>(R.layout.activity_profile_setting) {
-    private val viewModel: ProfileSettingViewModel by viewModels {
-        ProfileSettingViewModel.factory(
-            saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
-            postMemberUseCase = AppModule.getInstance().postMemberUseCase,
-            saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
-            patchMemberUseCase = AppModule.getInstance().patchMemberUseCase,
-            getFCMTokenUseCase = AppModule.getInstance().getFCMTokenUseCase,
-        )
-    }
+    private val viewModel: ProfileSettingViewModel by viewModels()
 
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 

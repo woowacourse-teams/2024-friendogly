@@ -12,9 +12,12 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.addSourceList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ClubModifyViewModel(
+@HiltViewModel
+class ClubModifyViewModel @Inject constructor(
     private val patchClubUseCase: PatchClubUseCase,
 ) : BaseViewModel(), ClubModifyActionHandler {
     private val _modifyEvent: MutableLiveData<Event<ClubModifyEvent>> = MutableLiveData()

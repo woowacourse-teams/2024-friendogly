@@ -13,7 +13,6 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubAddBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -25,16 +24,12 @@ import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileIma
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 
+@AndroidEntryPoint
 class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_club_add) {
-    private val viewModel: ClubAddViewModel by viewModels<ClubAddViewModel> {
-        ClubAddViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            getAddressUseCase = AppModule.getInstance().getAddressUseCase,
-            postClubUseCase = AppModule.getInstance().postClubUseCase,
-        )
-    }
+    private val viewModel: ClubAddViewModel by viewModels()
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private lateinit var imageCropLauncher: ActivityResultLauncher<CropImageContractOptions>

@@ -10,30 +10,26 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.ApiException
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityRegisterBinding
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.usecase.KakaoLoginUseCase
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
     val binding get() = requireNotNull(_binding)
 
-    private val viewModel: RegisterViewModel by viewModels {
-        RegisterViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            getJwtTokenUseCase = AppModule.getInstance().getJwtTokenUseCase,
-            postKakaoLoginUseCase = AppModule.getInstance().postKakaoLoginUseCase,
-            saveJwtTokenUseCase = AppModule.getInstance().saveJwtTokenUseCase,
-            saveAlarmTokenUseCase = AppModule.getInstance().saveAlarmTokenUseCase,
-            getFCMTokenUseCase = AppModule.getInstance().getFCMTokenUseCase,
-        )
-    }
-    private val kakaoLoginUseCase = AppModule.getInstance().kakaoLoginUseCase
+    private val viewModel: RegisterViewModel by viewModels()
+
+    @Inject
+    lateinit var kakaoLoginUseCase: KakaoLoginUseCase
 
     private var toast: Toast? = null
 
@@ -81,7 +77,6 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 is RegisterNavigationAction.NavigateToGoogleLogin -> {
-                    // TODO 구글 로그인 x
                     googleSignInLauncher.launch(SIGN_IN_REQUEST_CODE)
                 }
 

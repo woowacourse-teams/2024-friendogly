@@ -27,9 +27,12 @@ import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.Partici
 import com.happy.friendogly.presentation.utils.logClubDetailClick
 import com.happy.friendogly.presentation.utils.logListAddClubClick
 import com.happy.friendogly.presentation.utils.logUpdateUserLocation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ClubListViewModel(
+@HiltViewModel
+class ClubListViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val getPetsMineUseCase: GetPetsMineUseCase,
     private val getAddressUseCase: GetAddressUseCase,

@@ -1,8 +1,9 @@
 package com.happy.friendogly.firebase.crashlytics
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import javax.inject.Inject
 
-class CrashlyticsHelper {
+class CrashlyticsHelper @Inject constructor() {
     private val crashlytics = FirebaseCrashlytics.getInstance()
 
     /**

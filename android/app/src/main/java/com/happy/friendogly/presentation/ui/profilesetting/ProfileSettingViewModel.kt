@@ -23,9 +23,12 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.utils.addSourceList
 import com.happy.friendogly.presentation.utils.getSerializable
+import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class ProfileSettingViewModel(
+@HiltViewModel
+class ProfileSettingViewModel @Inject constructor(
     private val saveAlarmTokenUseCase: SaveAlamTokenUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val postMemberUseCase: PostMemberUseCase,

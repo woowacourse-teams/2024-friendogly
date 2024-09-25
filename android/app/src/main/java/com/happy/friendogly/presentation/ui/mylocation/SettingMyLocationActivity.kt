@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -24,8 +24,10 @@ import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
+@AndroidEntryPoint
 class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
     OnMapReadyCallback {
@@ -35,11 +37,7 @@ class SettingMyLocationActivity :
     private val loadingView: LottieAnimationView by lazy { binding.lottieMyLocationLoading }
     private val locationPermission: LocationPermission = initLocationPermission()
 
-    private val viewModel: SettingMyLocationViewModel by viewModels<SettingMyLocationViewModel> {
-        SettingMyLocationViewModel.factory(
-            saveAddressUseCase = AppModule.getInstance().saveAddressUseCase,
-        )
-    }
+    private val viewModel: SettingMyLocationViewModel by viewModels()
 
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(

@@ -16,12 +16,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.utils.logPermissionAlarmDenied
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
 class AlarmPermission private constructor(
+    private val analyticsHelper: AnalyticsHelper? = null,
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
     private val isPermitted: (Boolean) -> Unit,
 ) : Permission(PermissionType.Alarm) {
@@ -43,7 +46,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -53,7 +56,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -119,15 +122,15 @@ class AlarmPermission private constructor(
     private fun AppCompatActivity.createDialog(): DialogFragment =
         DefaultCoralAlertDialog(
             alertDialogModel =
-                AlertDialogModel(
-                    getString(R.string.alarm_dialog_title),
-                    getString(R.string.alarm_dialog_body),
-                    getString(R.string.permission_cancel),
-                    getString(R.string.permission_go_setting),
-                ),
+            AlertDialogModel(
+                getString(R.string.alarm_dialog_title),
+                getString(R.string.alarm_dialog_body),
+                getString(R.string.permission_cancel),
+                getString(R.string.permission_go_setting),
+            ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
@@ -147,7 +150,7 @@ class AlarmPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
@@ -168,8 +171,10 @@ class AlarmPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
+            analyticsHelper: AnalyticsHelper? = null,
             isPermitted: (Boolean) -> Unit,
-        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner), isPermitted)
+        ): AlarmPermission =
+            AlarmPermission(analyticsHelper, WeakReference(lifecycleOwner), isPermitted)
 
         fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     }

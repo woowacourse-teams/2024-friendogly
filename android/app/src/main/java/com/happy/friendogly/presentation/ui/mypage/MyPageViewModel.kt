@@ -15,9 +15,12 @@ import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyPageViewModel(
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
     private val getPetsMineUseCase: GetPetsMineUseCase,
     private val getMemberMineUseCase: GetMemberMineUseCase,
 ) : BaseViewModel(), MyPageActionHandler {

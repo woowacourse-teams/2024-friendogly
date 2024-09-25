@@ -12,9 +12,12 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingMyLocationViewModel(
+@HiltViewModel
+class SettingMyLocationViewModel @Inject constructor(
     private val saveAddressUseCase: SaveAddressUseCase,
 ) : BaseViewModel(), SettingMyLocationActionHandler {
     private val _event: MutableLiveData<Event<SettingMyLocationEvent>> = MutableLiveData()

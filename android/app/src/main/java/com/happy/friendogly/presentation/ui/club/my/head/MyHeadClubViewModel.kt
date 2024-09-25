@@ -14,9 +14,12 @@ import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyHeadClubViewModel(
+@HiltViewModel
+class MyHeadClubViewModel @Inject constructor(
     private val getMyHeadClubUseCase: GetMyHeadClubUseCase,
 ) : BaseViewModel(), ClubItemActionHandler {
     private val _myHeadClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()

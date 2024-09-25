@@ -10,10 +10,13 @@ import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import javax.inject.Inject
 
-class ChatInfoViewModel(
+@HiltViewModel
+class ChatInfoViewModel @Inject constructor(
     private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
     private val getChatMemberUseCase: GetChatMemberUseCase,
     private val getChatAlarmUseCase: GetChatAlarmUseCase,

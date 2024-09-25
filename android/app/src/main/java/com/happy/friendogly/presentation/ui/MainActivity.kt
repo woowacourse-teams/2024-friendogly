@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityMainBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
@@ -29,11 +29,17 @@ import com.happy.friendogly.presentation.utils.logClubListFragmentSwitched
 import com.happy.friendogly.presentation.utils.logMyClubClick
 import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
 import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
-    private val analyticsHelper = AppModule.getInstance().analyticsHelper
+
+    @Inject
+    lateinit var analyticsHelper:AnalyticsHelper
+
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
 

@@ -15,8 +15,11 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class OtherProfileViewModel(
+@HiltViewModel
+class OtherProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPetsUseCase: GetPetsUseCase,
     private val getMemberUseCase: GetMemberUseCase,

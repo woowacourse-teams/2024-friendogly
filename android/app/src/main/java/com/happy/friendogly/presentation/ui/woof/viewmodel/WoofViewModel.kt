@@ -49,9 +49,12 @@ import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.overlay.Marker
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WoofViewModel(
+@HiltViewModel
+class WoofViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val postFootprintUseCase: PostFootprintUseCase,
     private val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,

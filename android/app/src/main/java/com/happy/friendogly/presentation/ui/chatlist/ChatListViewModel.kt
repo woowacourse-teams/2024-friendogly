@@ -9,9 +9,12 @@ import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatListUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChatListViewModel(
+@HiltViewModel
+class ChatListViewModel @Inject constructor(
     private val getChatListUseCase: GetChatListUseCase,
 ) : BaseViewModel() {
     private val _chats: MutableLiveData<List<ChatListUiModel>> = MutableLiveData()

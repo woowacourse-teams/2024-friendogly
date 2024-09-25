@@ -13,9 +13,12 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import com.happy.friendogly.presentation.utils.logDeleteMemberClick
 import com.happy.friendogly.presentation.utils.logUpdateClubClick
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ClubMenuViewModel(
+@HiltViewModel
+class ClubMenuViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val deleteClubMemberUseCase: DeleteClubMemberUseCase,
 ) : BaseViewModel(), ClubMenuActionHandler {

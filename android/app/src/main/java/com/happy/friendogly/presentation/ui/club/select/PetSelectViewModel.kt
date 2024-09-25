@@ -10,9 +10,12 @@ import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PetSelectViewModel(
+@HiltViewModel
+class PetSelectViewModel @Inject constructor(
     private val getPetsMineUseCase: GetPetsMineUseCase,
 ) : BaseViewModel(), PetSelectActionHandler {
     private val _pets: MutableLiveData<List<PetSelectUiModel>> = MutableLiveData()

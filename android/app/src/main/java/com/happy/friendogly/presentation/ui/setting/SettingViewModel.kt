@@ -16,8 +16,11 @@ import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel @Inject constructor(
     private val deleteTokenUseCase: DeleteTokenUseCase,
     private val getChatAlarmUseCase: GetChatAlarmUseCase,
     private val getWoofAlarmUseCase: GetWoofAlarmUseCase,

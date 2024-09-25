@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -17,19 +16,11 @@ import com.happy.friendogly.presentation.dialog.LoadingDialog
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.register.RegisterActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
-    val viewModel: SettingViewModel by viewModels {
-        SettingViewModel.factory(
-            getWoofAlarmUseCase = AppModule.getInstance().getWoofAlarmUseCase,
-            getChatAlarmUseCase = AppModule.getInstance().getChatAlarmUseCase,
-            saveChatAlarmUseCase = AppModule.getInstance().saveChatAlarmUseCase,
-            saveWoofAlarmUseCase = AppModule.getInstance().saveWoofAlarmUseCase,
-            deleteTokenUseCase = AppModule.getInstance().deleteTokenUseCase,
-            deleteMemberUseCase = AppModule.getInstance().deleteMemberUseCase,
-            postLogoutUseCase = AppModule.getInstance().postLogoutUseCase,
-        )
-    }
+    val viewModel: SettingViewModel by viewModels()
 
     private val alarmPermission: AlarmPermission =
         AlarmPermission.from(this) { isPermitted ->

@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+
 import com.happy.friendogly.databinding.ActivityClubModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -14,14 +14,12 @@ import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.intentSerializable
 import com.happy.friendogly.presentation.utils.putSerializable
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubModifyActivity :
     BaseActivity<ActivityClubModifyBinding>(R.layout.activity_club_modify) {
-    private val viewModel: ClubModifyViewModel by viewModels<ClubModifyViewModel> {
-        ClubModifyViewModel.factory(
-            patchClubUseCase = AppModule.getInstance().patchClubUseCase,
-        )
-    }
+    private val viewModel: ClubModifyViewModel by viewModels()
 
     override fun initCreateView() {
         initDataBinding()
