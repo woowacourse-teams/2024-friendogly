@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import java.lang.ref.WeakReference
 
 class MultiPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
+    private val analyticsHelper: AnalyticsHelper,
     private val permissionActions: Map<PermissionType, (Boolean) -> Unit> = mapOf(),
     private var request: ActivityResultLauncher<Array<String>>? = null,
 ) {
@@ -17,6 +19,7 @@ class MultiPermission private constructor(
         return if (AlarmPermission.isValidPermissionSDK()) {
             MultiPermission(
                 lifecycleOwnerRef,
+                analyticsHelper,
                 permissionActions.plus(Pair(PermissionType.Alarm, isPermitted)),
             )
         } else {
@@ -27,6 +30,7 @@ class MultiPermission private constructor(
     fun addLocationPermission(isPermitted: (Boolean) -> Unit = {}): MultiPermission {
         return MultiPermission(
             lifecycleOwnerRef,
+            analyticsHelper,
             permissionActions.plus(Pair(PermissionType.Location, isPermitted)),
         )
     }
@@ -81,16 +85,19 @@ class MultiPermission private constructor(
                     PermissionType.Alarm ->
                         AlarmPermission.from(
                             lifecycleOwner,
+                            analyticsHelper,
                             isPermitted =
-                                permissionActions[it.key]
-                                    ?: error("유효하지 않은 값이 들어왔습니다"),
+                            permissionActions[it.key]
+                                ?: error("유효하지 않은 값이 들어왔습니다"),
                         )
+
                     PermissionType.Location ->
                         LocationPermission.from(
                             lifecycleOwner,
+                            analyticsHelper,
                             isPermitted =
-                                permissionActions[it.key]
-                                    ?: error("유효하지 않은 값이 들어왔습니다"),
+                            permissionActions[it.key]
+                                ?: error("유효하지 않은 값이 들어왔습니다"),
                         )
                 }
             }
@@ -104,6 +111,7 @@ class MultiPermission private constructor(
         }
         return MultiPermission(
             lifecycleOwnerRef,
+            analyticsHelper,
             permissionActions.filterKeys {
                 requestPermissions.map { it.permissionType }.contains(it)
             },
@@ -125,6 +133,9 @@ class MultiPermission private constructor(
     }
 
     companion object {
-        fun from(lifecycleOwner: LifecycleOwner): MultiPermission = MultiPermission(WeakReference(lifecycleOwner))
+        fun from(
+            lifecycleOwner: LifecycleOwner,
+            analyticsHelper: AnalyticsHelper
+        ): MultiPermission = MultiPermission(WeakReference(lifecycleOwner),analyticsHelper)
     }
 }

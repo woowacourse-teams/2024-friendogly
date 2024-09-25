@@ -22,8 +22,8 @@ import com.happy.friendogly.presentation.utils.logPermissionAlarmDenied
 import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
-    private val analyticsHelper: AnalyticsHelper? = null,
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
+    private val analyticsHelper: AnalyticsHelper,
     private val isPermitted: (Boolean) -> Unit,
 ) : Permission(PermissionType.Alarm) {
     private lateinit var request: ActivityResultLauncher<String>
@@ -169,9 +169,9 @@ class AlarmPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
-            analyticsHelper: AnalyticsHelper? = null,
+            analyticsHelper: AnalyticsHelper,
             isPermitted: (Boolean) -> Unit,
-        ): AlarmPermission = AlarmPermission(analyticsHelper, WeakReference(lifecycleOwner), isPermitted)
+        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner),analyticsHelper, isPermitted)
 
         fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     }

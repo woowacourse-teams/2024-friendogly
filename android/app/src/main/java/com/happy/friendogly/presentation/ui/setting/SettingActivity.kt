@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivitySettingBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
@@ -17,32 +18,38 @@ import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
 import com.happy.friendogly.presentation.ui.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     val viewModel: SettingViewModel by viewModels()
 
-    private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this) { isPermitted ->
-            if (!isPermitted) {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.chat_setting_alarm_alert),
-                    Snackbar.LENGTH_SHORT,
-                ).show()
-                with(binding) {
-                    alarmSettingsChattingPushSwitch.isChecked = false
-                    alarmSettingsWoofPushSwitch.isChecked = false
-                }
-            }
-        }
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    private lateinit var alarmPermission: AlarmPermission
 
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
 
     override fun initCreateView() {
+        alarmPermission = initAlarmPermission()
         initDataBinding()
         initObserve()
         setSwitchCheckListener()
+    }
+
+    private fun initAlarmPermission() = AlarmPermission.from(this, analyticsHelper) { isPermitted ->
+        if (!isPermitted) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.chat_setting_alarm_alert),
+                Snackbar.LENGTH_SHORT,
+            ).show()
+            with(binding) {
+                alarmSettingsChattingPushSwitch.isChecked = false
+                alarmSettingsWoofPushSwitch.isChecked = false
+            }
+        }
     }
 
     private fun initDataBinding() {

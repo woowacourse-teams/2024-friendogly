@@ -39,13 +39,18 @@ class MainActivity :
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private val permission =
-        MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
+    private lateinit var permission:MultiPermission
 
     override fun initCreateView() {
         initNavController()
-        permission.showDialog().launch()
+        permission = initMultiPermission().apply {
+            showDialog().launch()
+        }
     }
+
+    private fun initMultiPermission() =
+        MultiPermission.from(this, analyticsHelper).addAlarmPermission().addLocationPermission()
+            .createRequest()
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentWoofBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -76,6 +77,7 @@ import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.floor
@@ -106,6 +108,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
 
     private val viewModel by viewModels<WoofViewModel>()
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -512,7 +517,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun initLocationPermission() {
         locationPermission =
-            LocationPermission.from(this) { isPermitted ->
+            LocationPermission.from(this, analyticsHelper) { isPermitted ->
                 if (isPermitted) {
                     activateMap()
                 } else {
