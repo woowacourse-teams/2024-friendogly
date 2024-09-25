@@ -15,12 +15,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AddressModule
-    @Inject
-    constructor(
-        @ApplicationContext
-        val context: Context,
-    ) {
+class AddressModule(val context: Context){
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
         private val keyAdmin = stringPreferencesKey(KEY_ADMIN)

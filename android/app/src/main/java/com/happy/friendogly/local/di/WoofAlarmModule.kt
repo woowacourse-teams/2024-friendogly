@@ -14,12 +14,7 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class WoofAlarmModule
-    @Inject
-    constructor(
-        @ApplicationContext
-        val context: Context,
-    ) {
+class WoofAlarmModule(val context: Context) {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
         private val key = booleanPreferencesKey(ALARM_SETTING)

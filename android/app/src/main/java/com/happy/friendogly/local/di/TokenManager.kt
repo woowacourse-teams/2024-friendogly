@@ -14,61 +14,58 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class TokenManager
-    @Inject
-    constructor(
-        @ApplicationContext
-        val context: Context,
-    ) {
-        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
+class TokenManager constructor(
+    val context: Context,
+) {
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
-        private val keyAccessToken = stringPreferencesKey(KEY_ACCESS_TOKEN)
-        private val keyRefreshToken = stringPreferencesKey(KEY_REFRESH_TOKEN)
+    private val keyAccessToken = stringPreferencesKey(KEY_ACCESS_TOKEN)
+    private val keyRefreshToken = stringPreferencesKey(KEY_REFRESH_TOKEN)
 
-        var accessToken: Flow<String> =
-            context.dataStore.data.catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }.map { preferences ->
-                preferences[keyAccessToken] ?: ""
+    var accessToken: Flow<String> =
+        context.dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
             }
-
-        var refreshToken: Flow<String> =
-            context.dataStore.data.catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }.map { preferences ->
-                preferences[keyRefreshToken] ?: ""
-            }
-
-        suspend fun saveAccessToken(value: String) {
-            context.dataStore.edit { preferences ->
-                preferences[keyAccessToken] = value
-            }
+        }.map { preferences ->
+            preferences[keyAccessToken] ?: ""
         }
 
-        suspend fun saveRefreshToken(value: String) {
-            context.dataStore.edit { preferences ->
-                preferences[keyRefreshToken] = value
+    var refreshToken: Flow<String> =
+        context.dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
             }
+        }.map { preferences ->
+            preferences[keyRefreshToken] ?: ""
         }
 
-        suspend fun deleteToken() {
-            context.dataStore.edit { prefs ->
-                prefs.remove(keyAccessToken)
-                prefs.remove(keyRefreshToken)
-            }
-        }
-
-        companion object {
-            private const val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
-            private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
-            private const val DATA_STORE_NAME = "dataStore"
+    suspend fun saveAccessToken(value: String) {
+        context.dataStore.edit { preferences ->
+            preferences[keyAccessToken] = value
         }
     }
+
+    suspend fun saveRefreshToken(value: String) {
+        context.dataStore.edit { preferences ->
+            preferences[keyRefreshToken] = value
+        }
+    }
+
+    suspend fun deleteToken() {
+        context.dataStore.edit { prefs ->
+            prefs.remove(keyAccessToken)
+            prefs.remove(keyRefreshToken)
+        }
+    }
+
+    companion object {
+        private const val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
+        private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
+        private const val DATA_STORE_NAME = "dataStore"
+    }
+}

@@ -38,17 +38,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         get() = requireNotNull(_binding) { "${this::class.java.simpleName} is null" }
 
     private lateinit var adapter: JoinPeopleAdapter
-    private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this, analyticsHelper) { isPermitted ->
-            if (!isPermitted) {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.chat_setting_alarm_alert),
-                    Snackbar.LENGTH_SHORT,
-                ).show()
-                binding.switchChatSettingAlarm.isChecked = false
-            }
-        }
+    private lateinit var alarmPermission: AlarmPermission
 
     private val viewModel: ChatInfoViewModel by viewModels()
 
@@ -70,11 +60,22 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-
+        alarmPermission = initAlamPermission()
         initAdapter()
         initChatInfo()
         setChatAlarm()
         clickAlarmSetting()
+    }
+
+    private fun initAlamPermission() = AlarmPermission.from(this, analyticsHelper) { isPermitted ->
+        if (!isPermitted) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.chat_setting_alarm_alert),
+                Snackbar.LENGTH_SHORT,
+            ).show()
+            binding.switchChatSettingAlarm.isChecked = false
+        }
     }
 
     private fun initChatInfo() {

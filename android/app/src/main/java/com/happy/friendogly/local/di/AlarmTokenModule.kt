@@ -14,41 +14,36 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class AlarmTokenModule
-    @Inject
-    constructor(
-        @ApplicationContext
-        val context: Context,
-    ) {
-        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
+class AlarmTokenModule(val context: Context) {
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
-        private val key = stringPreferencesKey(FCM_TOKEN)
+    private val key = stringPreferencesKey(FCM_TOKEN)
 
-        var token: Flow<String> =
-            context.dataStore.data.catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }.map { preferences ->
-                preferences[key] ?: ""
+    var token: Flow<String> =
+        context.dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
             }
-
-        suspend fun saveToken(value: String) {
-            context.dataStore.edit { preferences ->
-                preferences[key] = value
-            }
+        }.map { preferences ->
+            preferences[key] ?: ""
         }
 
-        suspend fun deleteToken() {
-            context.dataStore.edit { prefs ->
-                prefs.remove(key)
-            }
-        }
-
-        companion object {
-            private const val FCM_TOKEN = "FCM_TOKEN"
-            private const val DATA_STORE_NAME = "fcmDataStore"
+    suspend fun saveToken(value: String) {
+        context.dataStore.edit { preferences ->
+            preferences[key] = value
         }
     }
+
+    suspend fun deleteToken() {
+        context.dataStore.edit { prefs ->
+            prefs.remove(key)
+        }
+    }
+
+    companion object {
+        private const val FCM_TOKEN = "FCM_TOKEN"
+        private const val DATA_STORE_NAME = "fcmDataStore"
+    }
+}
