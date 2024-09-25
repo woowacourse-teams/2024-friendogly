@@ -12,8 +12,9 @@ import com.happy.friendogly.remote.mapper.toRemote
 import com.happy.friendogly.remote.model.request.PatchMemberRequest
 import com.happy.friendogly.remote.model.request.PostMembersRequest
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class MemberDataSourceImpl(
+class MemberDataSourceImpl @Inject constructor(
     private val service: MemberService,
 ) : MemberDataSource {
     override suspend fun postMember(

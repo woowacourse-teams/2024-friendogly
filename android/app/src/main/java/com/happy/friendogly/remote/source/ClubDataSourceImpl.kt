@@ -16,8 +16,9 @@ import com.happy.friendogly.remote.model.request.ClubModifyRequest
 import com.happy.friendogly.remote.model.request.PostClubMemberRequest
 import com.happy.friendogly.remote.model.request.PostClubRequest
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class ClubDataSourceImpl(private val service: ClubService) : ClubDataSource {
+class ClubDataSourceImpl @Inject constructor(private val service: ClubService) : ClubDataSource {
     override suspend fun postClub(
         title: String,
         content: String,

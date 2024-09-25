@@ -11,8 +11,9 @@ import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
 import com.happy.friendogly.remote.model.request.FootprintRequest
+import javax.inject.Inject
 
-class WoofDataSourceImpl(private val service: WoofService) : WoofDataSource {
+class WoofDataSourceImpl @Inject constructor(private val service: WoofService) : WoofDataSource {
     override suspend fun postFootprint(request: FootprintRequest): Result<MyFootprintDto> {
         return runCatching { service.postFootprint(request).data.toData() }
     }

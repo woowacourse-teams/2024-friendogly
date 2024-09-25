@@ -14,8 +14,9 @@ import com.happy.friendogly.remote.model.request.PatchPetRequest
 import com.happy.friendogly.remote.model.request.PostPetRequest
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class PetDataSourceImpl(private val service: PetService) : PetDataSource {
+class PetDataSourceImpl @Inject constructor(private val service: PetService) : PetDataSource {
     override suspend fun getPetsMine(): Result<List<PetDto>> {
         val result =
             runCatching {

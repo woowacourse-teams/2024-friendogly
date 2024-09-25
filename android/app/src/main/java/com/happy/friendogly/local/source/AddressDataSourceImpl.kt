@@ -4,8 +4,9 @@ import com.happy.friendogly.data.model.UserAddressDto
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.local.di.AddressModule
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class AddressDataSourceImpl(
+class AddressDataSourceImpl @Inject constructor(
     private val addressModule: AddressModule,
 ) : AddressDataSource {
     override suspend fun getAddress(): Result<UserAddressDto> =

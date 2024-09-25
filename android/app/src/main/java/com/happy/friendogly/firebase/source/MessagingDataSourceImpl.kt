@@ -3,9 +3,10 @@ package com.happy.friendogly.firebase.source
 import com.happy.friendogly.data.source.MessagingDataSource
 import com.happy.friendogly.firebase.messaging.MessagingHelper
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class MessagingDataSourceImpl(private val messagingHelper: MessagingHelper) : MessagingDataSource {
+class MessagingDataSourceImpl @Inject constructor(private val messagingHelper: MessagingHelper) : MessagingDataSource {
     override suspend fun getToken(): Result<String> =
         suspendCancellableCoroutine { cancellable ->
             messagingHelper.messaging.token.addOnCompleteListener { task ->

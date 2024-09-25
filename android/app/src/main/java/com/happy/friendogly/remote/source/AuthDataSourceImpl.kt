@@ -6,8 +6,9 @@ import com.happy.friendogly.remote.api.AuthService
 import com.happy.friendogly.remote.error.ApiExceptionResponse
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.PostLoginRequest
+import javax.inject.Inject
 
-class AuthDataSourceImpl(
+class AuthDataSourceImpl @Inject constructor(
     private val service: AuthService,
 ) : AuthDataSource {
     override suspend fun postKakaoLogin(accessToken: String): Result<LoginDto> {

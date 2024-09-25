@@ -4,8 +4,9 @@ import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.local.di.ChatAlarmModule
 import com.happy.friendogly.local.di.WoofAlarmModule
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class AlarmSettingDataSourceImpl(
+class AlarmSettingDataSourceImpl @Inject constructor(
     private val chatAlarmModule: ChatAlarmModule,
     private val woofAlarmModule: WoofAlarmModule,
 ) : AlarmSettingDataSource {

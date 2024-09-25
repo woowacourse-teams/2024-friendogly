@@ -6,8 +6,9 @@ import com.happy.friendogly.remote.api.WebSocketService
 import com.happy.friendogly.remote.mapper.toData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class WebSocketDataSourceImpl(private val service: WebSocketService) : WebSocketDataSource {
+class WebSocketDataSourceImpl @Inject constructor(private val service: WebSocketService) : WebSocketDataSource {
     override suspend fun connect(): Result<Unit> =
         runCatching {
             service.connect()

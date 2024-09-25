@@ -6,8 +6,9 @@ import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.local.mapper.toData
 import com.happy.friendogly.local.model.JwtTokenEntity
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class TokenDataSourceImpl(
+class TokenDataSourceImpl @Inject constructor(
     private val tokenManager: TokenManager,
 ) : TokenDataSource {
     override suspend fun getJwtToken(): Result<JwtTokenDto> =
