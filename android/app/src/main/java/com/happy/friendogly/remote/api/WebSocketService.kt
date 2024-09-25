@@ -1,5 +1,6 @@
 package com.happy.friendogly.remote.api
 
+import com.happy.friendogly.application.di.Websocket
 import com.happy.friendogly.local.di.TokenManager
 import com.happy.friendogly.remote.model.request.ChatMessageRequest
 import com.happy.friendogly.remote.model.response.ChatMessageResponse
@@ -10,9 +11,11 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxS
 import org.hildan.krossbow.stomp.conversions.kxserialization.json.withJsonConversions
 import org.hildan.krossbow.stomp.headers.StompSendHeaders
 import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
+import javax.inject.Inject
 
-class WebSocketService(
+class WebSocketService @Inject constructor(
     private val client: StompClient,
+    @Websocket
     private val baseUrl: BaseUrl,
     private val tokenManager: TokenManager,
 ) {
