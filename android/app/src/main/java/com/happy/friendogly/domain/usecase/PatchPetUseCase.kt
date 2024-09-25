@@ -8,8 +8,9 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.PetRepository
 import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class PatchPetUseCase(private val repository: PetRepository) {
+class PatchPetUseCase @Inject constructor(private val repository: PetRepository) {
     suspend operator fun invoke(
         petId: Long,
         name: String,
