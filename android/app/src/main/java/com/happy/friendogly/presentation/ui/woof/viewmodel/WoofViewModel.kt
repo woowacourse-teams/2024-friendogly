@@ -24,7 +24,6 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions
 import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
@@ -67,11 +66,8 @@ class WoofViewModel
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
         val uiState: LiveData<WoofUiState> get() = _uiState
 
-        private val _filterState: MutableLiveData<FilterState> = MutableLiveData(FilterState.ALL)
-        val filterState: LiveData<FilterState> get() = _filterState
-
-        private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
-        val myWalkStatus: LiveData<FootprintRecentWalkStatus?> get() = _myWalkStatus
+    private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
+    val myWalkStatus: LiveData<FootprintRecentWalkStatus?> get() = _myWalkStatus
 
         private val _myFootprintMarker: MutableLiveData<MyFootprintMarkerUiModel?> = MutableLiveData()
         val myFootprintMarker: LiveData<MyFootprintMarkerUiModel?> get() = _myFootprintMarker
@@ -141,29 +137,13 @@ class WoofViewModel
             }
         }
 
-        override fun clickStatusAll() {
-            updateFilterState(FilterState.ALL)
+    override fun clickRefreshBtn() {
+        analyticsHelper.logRefreshBtnClicked()
+        updateRefreshBtnVisibility(visible = false)
+        runIfLocationPermissionGranted {
+            _mapActions.emit(WoofMapActions.ScanNearFootprints)
         }
-
-        override fun clickStatusBefore() {
-            updateFilterState(FilterState.BEFORE)
-        }
-
-        override fun clickStatusOnGoing() {
-            updateFilterState(FilterState.ONGOING)
-        }
-
-        override fun clickStatusAfter() {
-            updateFilterState(FilterState.AFTER)
-        }
-
-        override fun clickRefreshBtn() {
-            analyticsHelper.logRefreshBtnClicked()
-            updateRefreshBtnVisibility(visible = false)
-            runIfLocationPermissionGranted {
-                _mapActions.emit(WoofMapActions.ScanNearFootprints)
-            }
-        }
+    }
 
         override fun clickDeleteMyFootprintMarkerBtn() {
             deleteMyFootprintMarker()
@@ -272,22 +252,18 @@ class WoofViewModel
             }
         }
 
-        private fun updateFilterState(filterState: FilterState) {
-            _filterState.value = filterState
-        }
-
-        private fun changeLocationTrackingMode() {
-            val changeTrackingModeAction =
-                changeTrackingModeActions.value?.value
-                    ?: WoofTrackingModeActions.FollowTrackingMode
-            val trackingMode =
-                if (changeTrackingModeAction is WoofTrackingModeActions.FollowTrackingMode) {
-                    WoofTrackingModeActions.FaceTrackingMode
-                } else {
-                    WoofTrackingModeActions.FollowTrackingMode
-                }
-            _changeTrackingModeActions.emit(trackingMode)
-        }
+    private fun changeLocationTrackingMode() {
+        val changeTrackingModeAction =
+            changeTrackingModeActions.value?.value
+                ?: WoofTrackingModeActions.FollowTrackingMode
+        val trackingMode =
+            if (changeTrackingModeAction is WoofTrackingModeActions.FollowTrackingMode) {
+                WoofTrackingModeActions.FaceTrackingMode
+            } else {
+                WoofTrackingModeActions.FollowTrackingMode
+            }
+        _changeTrackingModeActions.emit(trackingMode)
+    }
 
         private fun runIfLocationPermissionGranted(action: () -> Unit) {
             if (uiState.value !is WoofUiState.LocationPermissionsNotGranted) {

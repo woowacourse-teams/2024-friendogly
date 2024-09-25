@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.woof.util
 
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.text.Spannable
@@ -20,7 +19,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
-import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
@@ -231,18 +229,6 @@ fun View.bindMarkBtnVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
         } else {
             true
         }
-}
-
-@BindingAdapter("filterState", "btnState")
-fun TextView.bindFilterStateBtnBackgroundTint(
-    filterState: FilterState,
-    btnState: FilterState,
-) {
-    val whiteColor = resources.getColor(R.color.white, null)
-    val coralColor = resources.getColor(R.color.coral50, null)
-
-    backgroundTintList =
-        ColorStateList.valueOf(if (filterState == btnState) coralColor else whiteColor)
 }
 
 @BindingAdapter("uiState", "refreshBtnVisibility")

@@ -44,7 +44,6 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
-import com.happy.friendogly.presentation.ui.woof.model.FilterState
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
@@ -115,15 +114,16 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (viewModel.uiState.value is WoofUiState.FindingFriends) {
-                    requireActivity().finish()
-                } else {
-                    viewModel.updateUiState(WoofUiState.FindingFriends)
+        onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (viewModel.uiState.value is WoofUiState.FindingFriends) {
+                        requireActivity().finish()
+                    } else {
+                        viewModel.updateUiState(WoofUiState.FindingFriends)
+                    }
                 }
             }
-        }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
@@ -213,10 +213,11 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
-        map.extent = LatLngBounds(
-            LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
-            LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
-        )
+        map.extent =
+            LatLngBounds(
+                LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
+                LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
+            )
         map.minZoom = MIN_ZOOM
         map.locationSource = locationSource
 
@@ -228,16 +229,20 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
         binding.lbvWoofLocation.map = map
 
-        map.onMapClickListener = NaverMap.OnMapClickListener { _, _ ->
-            if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
-                viewModel.updateUiState(WoofUiState.FindingFriends)
+        map.onMapClickListener =
+            NaverMap.OnMapClickListener { _, _ ->
+                if (viewModel.uiState.value is WoofUiState.ViewingFootprintInfo) {
+                    viewModel.updateUiState(WoofUiState.FindingFriends)
+                }
             }
-        }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
 
-            if (viewModel.myFootprintMarker.value != null && viewModel.myWalkStatus.value?.walkStatus != WalkStatus.AFTER && viewModel.uiState.value !is WoofUiState.RegisteringFootprint) {
+            if (viewModel.myFootprintMarker.value != null &&
+                viewModel.myWalkStatus.value?.walkStatus != WalkStatus.AFTER &&
+                viewModel.uiState.value !is WoofUiState.RegisteringFootprint
+            ) {
                 pathOverlay.coords =
                     listOf(latLng, viewModel.myFootprintMarker.value?.marker?.position)
             }
@@ -278,8 +283,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private fun setUpObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
-                is WoofUiState.LocationPermissionsNotGranted -> locationPermission.createAlarmDialog()
-                    .show(parentFragmentManager, tag)
+                is WoofUiState.LocationPermissionsNotGranted ->
+                    locationPermission.createAlarmDialog()
+                        .show(parentFragmentManager, tag)
 
                 is WoofUiState.FindingFriends -> hideRegisterFootprintScreen()
                 is WoofUiState.RegisteringFootprint -> {
@@ -288,10 +294,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
                 else -> return@observe
             }
-        }
-
-        viewModel.filterState.observe(viewLifecycleOwner) { filterState ->
-            markFootprintMarkers(filterState)
         }
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
@@ -311,11 +313,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             } else {
                 startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
                 startWalkService()
-                val textResId = if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
-                    R.string.woof_walk_before_help
-                } else {
-                    R.string.woof_walk_ongoing_help
-                }
+                val textResId =
+                    if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
+                        R.string.woof_walk_before_help
+                    } else {
+                        R.string.woof_walk_ongoing_help
+                    }
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
                         showHelpBalloon(textRestId = textResId)
@@ -336,8 +339,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.nearFootprintMarkers.observe(viewLifecycleOwner) {
             clearNearFootprintMarkers()
-            val filterState = viewModel.filterState.value ?: return@observe
-            markFootprintMarkers(filterState)
+            markFootprintMarkers()
         }
 
         viewModel.footprintInfo.observe(viewLifecycleOwner) { footprintInfo ->
@@ -362,10 +364,11 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 is MakeNearFootprintMarkers -> {
-                    val nearFootprintMarkers = event.nearFootprints.map { footprint ->
-                        val marker = createMarker(footprint = footprint)
-                        marker
-                    }
+                    val nearFootprintMarkers =
+                        event.nearFootprints.map { footprint ->
+                            val marker = createMarker(footprint = footprint)
+                            marker
+                        }
                     clearNearFootprintMarkers()
                     viewModel.loadNearFootprintMarkers(nearFootprintMarkers)
                 }
@@ -392,31 +395,35 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofAlertActions.AlertHasNotLocationPermissionDialog -> locationPermission.createAlarmDialog()
-                    .show(parentFragmentManager, tag)
+                is WoofAlertActions.AlertHasNotLocationPermissionDialog ->
+                    locationPermission.createAlarmDialog()
+                        .show(parentFragmentManager, tag)
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
-                is AlertMarkBtnClickBeforeTimeoutSnackbar -> showSnackbar(
-                    String.format(
-                        resources.getString(
-                            R.string.woof_cant_mark,
-                            event.remainingTime,
+                is AlertMarkBtnClickBeforeTimeoutSnackbar ->
+                    showSnackbar(
+                        String.format(
+                            resources.getString(
+                                R.string.woof_cant_mark,
+                                event.remainingTime,
+                            ),
                         ),
-                    ),
-                )
+                    )
 
-                is WoofAlertActions.AlertAddressOutOfKoreaSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_address_out_of_korea,
-                    ),
-                )
+                is WoofAlertActions.AlertAddressOutOfKoreaSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_address_out_of_korea,
+                        ),
+                    )
 
                 is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
-                is WoofAlertActions.AlertNotExistMyFootprintSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_not_exist_my_footprint,
-                    ),
-                )
+                is WoofAlertActions.AlertNotExistMyFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_not_exist_my_footprint,
+                        ),
+                    )
 
                 is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar -> {
                     showSnackbar(
@@ -435,34 +442,39 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     stopWalkService()
                 }
 
-                is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_fail_to_load_near_footprints,
-                    ),
-                )
+                is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_near_footprints,
+                        ),
+                    )
 
-                is WoofAlertActions.AlertFailToRegisterFootprintSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_fail_to_register_footprint,
-                    ),
-                )
+                is WoofAlertActions.AlertFailToRegisterFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_register_footprint,
+                        ),
+                    )
 
-                is WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_fail_to_load_footprint_info,
-                    ),
-                )
+                is WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_load_footprint_info,
+                        ),
+                    )
 
-                is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar -> showSnackbar(
-                    resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
-                )
+                is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar ->
+                    showSnackbar(
+                        resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
+                    )
 
                 is WoofAlertActions.AlertFailToEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_fail_to_end_walk))
-                is WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar -> showSnackbar(
-                    resources.getString(
-                        R.string.woof_fail_to_delete_my_footprint,
-                    ),
-                )
+                is WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.woof_fail_to_delete_my_footprint,
+                        ),
+                    )
 
                 is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon(event.textResId)
             }
@@ -510,23 +522,26 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setUpLocationPermission() {
-        locationPermission = LocationPermission.from(this) { isPermitted ->
-            if (isPermitted) {
-                activateMap()
-            } else {
-                showSnackbar(getString(R.string.permission_denied_message))
+        locationPermission =
+            LocationPermission.from(this) { isPermitted ->
+                if (isPermitted) {
+                    activateMap()
+                } else {
+                    showSnackbar(getString(R.string.permission_denied_message))
+                }
             }
-        }
     }
 
     private fun setUpBroadCastReceiver() {
-        walkReceiver = WoofWalkReceiver { location ->
-            latLng = LatLng(location.latitude, location.longitude)
-            monitorDistanceAndManageWalkStatus()
-        }
-        val intentFilter = IntentFilter().apply {
-            addAction(WoofWalkReceiver.ACTION_LOCATION_UPDATED)
-        }
+        walkReceiver =
+            WoofWalkReceiver { location ->
+                latLng = LatLng(location.latitude, location.longitude)
+                monitorDistanceAndManageWalkStatus()
+            }
+        val intentFilter =
+            IntentFilter().apply {
+                addAction(WoofWalkReceiver.ACTION_LOCATION_UPDATED)
+            }
 
         requireContext().registerReceiver(walkReceiver, intentFilter)
     }
@@ -779,30 +794,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         walkTimeChronometer.start()
     }
 
-    private fun markFootprintMarkers(filterState: FilterState) {
-        when (filterState) {
-            FilterState.ALL -> filterAllFootprintMarkers()
-            FilterState.BEFORE -> filterFootprintMarkersByWalkStatus(WalkStatus.BEFORE)
-            FilterState.ONGOING -> filterFootprintMarkersByWalkStatus(WalkStatus.ONGOING)
-            FilterState.AFTER -> filterFootprintMarkersByWalkStatus(WalkStatus.AFTER)
-        }
-    }
-
-    private fun filterAllFootprintMarkers() {
-        val allFootprintMarkers = viewModel.nearFootprintMarkers.value ?: return
-        allFootprintMarkers.forEach { footprintMarker ->
+    private fun markFootprintMarkers() {
+        val footprintMarkers = viewModel.nearFootprintMarkers.value ?: return
+        footprintMarkers.forEach { footprintMarker ->
             footprintMarker.marker.map = map
-        }
-    }
-
-    private fun filterFootprintMarkersByWalkStatus(walkStatus: WalkStatus) {
-        val filteredFootprintMarkers = viewModel.nearFootprintMarkers.value ?: return
-        filteredFootprintMarkers.forEach { footprintMarker ->
-            if (footprintMarker.walkStatus == walkStatus) {
-                footprintMarker.marker.map = map
-            } else {
-                footprintMarker.marker.map = null
-            }
         }
     }
 
@@ -820,23 +815,25 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         action: Snackbar.() -> Unit = {},
     ) {
         snackbar?.dismiss()
-        snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
-            anchorView = requireActivity().findViewById(R.id.bottom_navi)
-            action()
-        }
+        snackbar =
+            Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
+                anchorView = requireActivity().findViewById(R.id.bottom_navi)
+                action()
+            }
         snackbar?.show()
     }
 
     private fun showBalloon(text: String) {
         balloon?.dismiss()
-        balloon = Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
-            .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
-            .setTextSize(14f).setMarginBottom(10)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
-            .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
-            .setBackgroundColorResource(R.color.coral400)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
-            .build()
+        balloon =
+            Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
+                .setTextSize(14f).setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
+                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
+                .setBackgroundColorResource(R.color.coral400)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
+                .build()
         balloon?.showAlignTop(binding.btnWoofWalkHelp)
     }
 

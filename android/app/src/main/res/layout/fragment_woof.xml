@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="com.happy.friendogly.presentation.ui.woof.model.FilterState" />
-
         <variable
             name="vm"
             type="com.happy.friendogly.presentation.ui.woof.viewmodel.WoofViewModel" />
@@ -23,101 +21,13 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/btn_woof_status_all"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
-            btnState="@{FilterState.ALL}"
-            filterState="@{vm.filterState}"
-            stateVisibility="@{vm.uiState}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rect_white_fill_30"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:onClick="@{() -> vm.clickStatusAll()}"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:text="@string/woof_status_all"
-            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_before"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/btn_woof_status_before"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
-            btnState="@{FilterState.BEFORE}"
-            filterState="@{vm.filterState}"
-            stateVisibility="@{vm.uiState}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rect_white_fill_30"
-            android:drawablePadding="6dp"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:onClick="@{() -> vm.clickStatusBefore()}"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:text="@string/woof_status_before"
-            app:drawableStartCompat="@drawable/ic_marker_before"
-            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_ongoing"
-            app:layout_constraintStart_toEndOf="@id/btn_woof_status_all"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/btn_woof_status_ongoing"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Coral500.Size14"
-            btnState="@{FilterState.ONGOING}"
-            filterState="@{vm.filterState}"
-            stateVisibility="@{vm.uiState}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rect_white_fill_30"
-            android:drawablePadding="6dp"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:onClick="@{() -> vm.clickStatusOnGoing()}"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:text="@string/woof_status_ongoing"
-            app:drawableStartCompat="@drawable/ic_marker_ongoing"
-            app:layout_constraintEnd_toStartOf="@id/btn_woof_status_after"
-            app:layout_constraintStart_toEndOf="@id/btn_woof_status_before"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/btn_woof_status_after"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Gray06.Size14"
-            btnState="@{FilterState.AFTER}"
-            filterState="@{vm.filterState}"
-            stateVisibility="@{vm.uiState}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/rect_white_fill_30"
-            android:drawablePadding="6dp"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:onClick="@{() -> vm.clickStatusAfter()}"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:text="@string/woof_status_after"
-            app:drawableStartCompat="@drawable/ic_marker_after"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_woof_status_ongoing"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/btn_woof_footprint_refresh"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size16"
             refreshBtnVisibility="@{vm.refreshBtnVisible}"
             uiState="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/rect_white_fill_30"
             android:drawablePadding="8dp"
             android:elevation="4dp"
@@ -130,7 +40,7 @@
             app:drawableStartCompat="@drawable/ic_refresh"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_woof_status_before" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_woof_back"
