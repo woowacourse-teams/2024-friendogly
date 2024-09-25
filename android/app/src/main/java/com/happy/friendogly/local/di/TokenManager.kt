@@ -7,61 +7,68 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
 
-class TokenManager(val context: Context) {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
+class TokenManager
+    @Inject
+    constructor(
+        @ApplicationContext
+        val context: Context,
+    ) {
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
-    private val keyAccessToken = stringPreferencesKey(KEY_ACCESS_TOKEN)
-    private val keyRefreshToken = stringPreferencesKey(KEY_REFRESH_TOKEN)
+        private val keyAccessToken = stringPreferencesKey(KEY_ACCESS_TOKEN)
+        private val keyRefreshToken = stringPreferencesKey(KEY_REFRESH_TOKEN)
 
-    var accessToken: Flow<String> =
-        context.dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
+        var accessToken: Flow<String> =
+            context.dataStore.data.catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { preferences ->
+                preferences[keyAccessToken] ?: ""
             }
-        }.map { preferences ->
-            preferences[keyAccessToken] ?: ""
-        }
 
-    var refreshToken: Flow<String> =
-        context.dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
+        var refreshToken: Flow<String> =
+            context.dataStore.data.catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { preferences ->
+                preferences[keyRefreshToken] ?: ""
             }
-        }.map { preferences ->
-            preferences[keyRefreshToken] ?: ""
+
+        suspend fun saveAccessToken(value: String) {
+            context.dataStore.edit { preferences ->
+                preferences[keyAccessToken] = value
+            }
         }
 
-    suspend fun saveAccessToken(value: String) {
-        context.dataStore.edit { preferences ->
-            preferences[keyAccessToken] = value
+        suspend fun saveRefreshToken(value: String) {
+            context.dataStore.edit { preferences ->
+                preferences[keyRefreshToken] = value
+            }
+        }
+
+        suspend fun deleteToken() {
+            context.dataStore.edit { prefs ->
+                prefs.remove(keyAccessToken)
+                prefs.remove(keyRefreshToken)
+            }
+        }
+
+        companion object {
+            private const val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
+            private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
+            private const val DATA_STORE_NAME = "dataStore"
         }
     }
-
-    suspend fun saveRefreshToken(value: String) {
-        context.dataStore.edit { preferences ->
-            preferences[keyRefreshToken] = value
-        }
-    }
-
-    suspend fun deleteToken() {
-        context.dataStore.edit { prefs ->
-            prefs.remove(keyAccessToken)
-            prefs.remove(keyRefreshToken)
-        }
-    }
-
-    companion object {
-        private const val KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN"
-        private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
-        private const val DATA_STORE_NAME = "dataStore"
-    }
-}
