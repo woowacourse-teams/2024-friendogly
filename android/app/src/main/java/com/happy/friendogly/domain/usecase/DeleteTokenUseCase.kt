@@ -5,8 +5,10 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.repository.TokenRepository
 import javax.inject.Inject
 
-class DeleteTokenUseCase @Inject constructor(
-    private val repository: TokenRepository,
-) {
-    suspend operator fun invoke(): DomainResult<Unit, DataError.Local> = repository.deleteToken()
-}
+class DeleteTokenUseCase
+    @Inject
+    constructor(
+        private val repository: TokenRepository,
+    ) {
+        suspend operator fun invoke(): DomainResult<Unit, DataError.Local> = repository.deleteToken()
+    }

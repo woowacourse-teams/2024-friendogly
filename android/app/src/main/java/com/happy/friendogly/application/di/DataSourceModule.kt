@@ -1,6 +1,5 @@
 package com.happy.friendogly.application.di
 
-import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.data.source.AlarmTokenDataSource
@@ -15,7 +14,6 @@ import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.TokenDataSource
 import com.happy.friendogly.data.source.WebSocketDataSource
 import com.happy.friendogly.data.source.WoofDataSource
-import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.firebase.source.MessagingDataSourceImpl
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.source.AddressDataSourceImpl
@@ -36,11 +34,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataSourceModule {
-
     @Binds
     @Singleton
     abstract fun provideAddressDataSource(dataSourceImpl: AddressDataSourceImpl): AddressDataSource
@@ -96,5 +92,4 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun provideWoofDataSource(dataSourceImpl: WoofDataSourceImpl): WoofDataSource
-
 }

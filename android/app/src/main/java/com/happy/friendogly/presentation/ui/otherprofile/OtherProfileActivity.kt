@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-
 import com.happy.friendogly.databinding.ActivityOtherProfileBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent

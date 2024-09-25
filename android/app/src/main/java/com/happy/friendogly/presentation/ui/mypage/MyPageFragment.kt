@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.ui.mypage
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-
 import com.happy.friendogly.databinding.FragmentMyPageBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent

@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.ui.club.my.participating
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
-
 import com.happy.friendogly.databinding.FragmentMyClubBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent

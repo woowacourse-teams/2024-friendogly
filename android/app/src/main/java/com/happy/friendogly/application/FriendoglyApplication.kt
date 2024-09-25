@@ -5,14 +5,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.FirebaseApp
 import com.happy.friendogly.BuildConfig
 import com.happy.friendogly.application.di.AppModule
-import com.happy.friendogly.local.room.ChatRoomDao
-import com.happy.friendogly.remote.api.AuthService
 import com.kakao.sdk.common.KakaoSdk
 import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.runBlocking
-import retrofit2.Retrofit
-import javax.inject.Inject
 
 @HiltAndroidApp
 class FriendoglyApplication : Application() {

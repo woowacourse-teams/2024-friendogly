@@ -9,16 +9,18 @@ import com.happy.friendogly.domain.model.KakaoAccessToken
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import javax.inject.Inject
 
-class KakaoLoginRepositoryImpl @Inject constructor(
-    private val dataSource: KakaoLoginDataSource,
-) : KakaoLoginRepository {
-    override suspend fun login(context: Context): DomainResult<KakaoAccessToken, DataError.Local> =
-        dataSource.login(context = context).fold(
-            onSuccess = { kakaoAccessTokenDto ->
-                DomainResult.Success(kakaoAccessTokenDto.toDomain())
-            },
-            onFailure = {
-                DomainResult.Error(DataError.Local.LOCAL_ERROR)
-            },
-        )
-}
+class KakaoLoginRepositoryImpl
+    @Inject
+    constructor(
+        private val dataSource: KakaoLoginDataSource,
+    ) : KakaoLoginRepository {
+        override suspend fun login(context: Context): DomainResult<KakaoAccessToken, DataError.Local> =
+            dataSource.login(context = context).fold(
+                onSuccess = { kakaoAccessTokenDto ->
+                    DomainResult.Success(kakaoAccessTokenDto.toDomain())
+                },
+                onFailure = {
+                    DomainResult.Error(DataError.Local.LOCAL_ERROR)
+                },
+            )
+    }

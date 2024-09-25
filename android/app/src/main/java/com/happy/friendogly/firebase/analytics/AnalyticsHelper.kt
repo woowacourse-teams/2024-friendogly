@@ -7,28 +7,31 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class AnalyticsHelper @Inject constructor(
-    @ApplicationContext
-    context: Context) {
-    private val analytics = FirebaseAnalytics.getInstance(context)
-
-    fun logEvent(
-        type: String,
-        vararg params: Pair<String, Any?>,
+class AnalyticsHelper
+    @Inject
+    constructor(
+        @ApplicationContext
+        context: Context,
     ) {
-        val bundle =
-            bundleOf(
-                *params.map { (key, value) ->
-                    key.take(40) to value.toString().take(100)
-                }.toTypedArray(),
-            )
-        logEvent(type, bundle)
-    }
+        private val analytics = FirebaseAnalytics.getInstance(context)
 
-    fun logEvent(
-        type: String,
-        params: Bundle? = null,
-    ) {
-        analytics.logEvent(type, params)
+        fun logEvent(
+            type: String,
+            vararg params: Pair<String, Any?>,
+        ) {
+            val bundle =
+                bundleOf(
+                    *params.map { (key, value) ->
+                        key.take(40) to value.toString().take(100)
+                    }.toTypedArray(),
+                )
+            logEvent(type, bundle)
+        }
+
+        fun logEvent(
+            type: String,
+            params: Bundle? = null,
+        ) {
+            analytics.logEvent(type, params)
+        }
     }
-}

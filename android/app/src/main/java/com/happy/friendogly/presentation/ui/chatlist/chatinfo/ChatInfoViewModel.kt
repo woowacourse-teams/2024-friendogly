@@ -16,77 +16,79 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatInfoViewModel @Inject constructor(
-    private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
-    private val getChatMemberUseCase: GetChatMemberUseCase,
-    private val getChatAlarmUseCase: GetChatAlarmUseCase,
-    private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
-) : BaseViewModel() {
-    private val _clubInfo: MutableLiveData<ChatInfoUiModel> = MutableLiveData()
-    val clubInfo: LiveData<ChatInfoUiModel> get() = _clubInfo
+class ChatInfoViewModel
+    @Inject
+    constructor(
+        private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
+        private val getChatMemberUseCase: GetChatMemberUseCase,
+        private val getChatAlarmUseCase: GetChatAlarmUseCase,
+        private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
+    ) : BaseViewModel() {
+        private val _clubInfo: MutableLiveData<ChatInfoUiModel> = MutableLiveData()
+        val clubInfo: LiveData<ChatInfoUiModel> get() = _clubInfo
 
-    private val _joiningPeople: MutableLiveData<List<JoinPeople>> = MutableLiveData()
-    val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
+        private val _joiningPeople: MutableLiveData<List<JoinPeople>> = MutableLiveData()
+        val joiningPeople: LiveData<List<JoinPeople>> get() = _joiningPeople
 
-    private val _alarmSetting: MutableLiveData<Boolean> = MutableLiveData()
-    val alarmSetting: LiveData<Boolean>
-        get() = _alarmSetting
+        private val _alarmSetting: MutableLiveData<Boolean> = MutableLiveData()
+        val alarmSetting: LiveData<Boolean>
+            get() = _alarmSetting
 
-    fun getClubInfo(chatRoomId: Long): Deferred<Long> =
-        viewModelScope.async {
-            val clubInfo = getChatRoomClubUseCase(chatRoomId).getOrThrow()
-            _clubInfo.value =
-                ChatInfoUiModel(
-                    clubId = clubInfo.clubId,
-                    dogSize = clubInfo.allowedSize,
-                    dogGender = clubInfo.allowedGender,
-                )
-            return@async clubInfo.clubId
+        fun getClubInfo(chatRoomId: Long): Deferred<Long> =
+            viewModelScope.async {
+                val clubInfo = getChatRoomClubUseCase(chatRoomId).getOrThrow()
+                _clubInfo.value =
+                    ChatInfoUiModel(
+                        clubId = clubInfo.clubId,
+                        dogSize = clubInfo.allowedSize,
+                        dogGender = clubInfo.allowedGender,
+                    )
+                return@async clubInfo.clubId
+            }
+
+        fun getChatMember(chatRoomId: Long) {
+            launch {
+                getChatMemberUseCase.invoke(chatRoomId).onSuccess { members ->
+                    _joiningPeople.value = members.map { it.toUiModel(getClubInfo(chatRoomId).await()) }
+                }.onFailure {
+                    // TODO 에러 처리
+                }
+            }
         }
 
-    fun getChatMember(chatRoomId: Long) {
-        launch {
-            getChatMemberUseCase.invoke(chatRoomId).onSuccess { members ->
-                _joiningPeople.value = members.map { it.toUiModel(getClubInfo(chatRoomId).await()) }
-            }.onFailure {
-                // TODO 에러 처리
+        fun getAlamSetting() {
+            launch {
+                getChatAlarmUseCase().onSuccess {
+                    _alarmSetting.value = it
+                }.onFailure {
+                    // TODO 에러 처리
+                }
+            }
+        }
+
+        fun saveAlamSetting(isChecked: Boolean) {
+            launch {
+                saveChatAlarmUseCase(isChecked).onFailure {
+                    // TODO 에러 처리
+                }
+            }
+        }
+
+        companion object {
+            fun factory(
+                getChatRoomClubUseCase: GetChatRoomClubUseCase,
+                getChatMemberUseCase: GetChatMemberUseCase,
+                getChatAlarmUseCase: GetChatAlarmUseCase,
+                saveChatAlarmUseCase: SaveChatAlarmUseCase,
+            ): ViewModelProvider.Factory {
+                return BaseViewModelFactory { _ ->
+                    ChatInfoViewModel(
+                        getChatRoomClubUseCase,
+                        getChatMemberUseCase,
+                        getChatAlarmUseCase,
+                        saveChatAlarmUseCase,
+                    )
+                }
             }
         }
     }
-
-    fun getAlamSetting() {
-        launch {
-            getChatAlarmUseCase().onSuccess {
-                _alarmSetting.value = it
-            }.onFailure {
-                // TODO 에러 처리
-            }
-        }
-    }
-
-    fun saveAlamSetting(isChecked: Boolean) {
-        launch {
-            saveChatAlarmUseCase(isChecked).onFailure {
-                // TODO 에러 처리
-            }
-        }
-    }
-
-    companion object {
-        fun factory(
-            getChatRoomClubUseCase: GetChatRoomClubUseCase,
-            getChatMemberUseCase: GetChatMemberUseCase,
-            getChatAlarmUseCase: GetChatAlarmUseCase,
-            saveChatAlarmUseCase: SaveChatAlarmUseCase,
-        ): ViewModelProvider.Factory {
-            return BaseViewModelFactory { _ ->
-                ChatInfoViewModel(
-                    getChatRoomClubUseCase,
-                    getChatMemberUseCase,
-                    getChatAlarmUseCase,
-                    saveChatAlarmUseCase,
-                )
-            }
-        }
-    }
-}

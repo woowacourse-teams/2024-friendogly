@@ -28,108 +28,110 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(
-    private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
-    private val getChatMessagesUseCase: GetChatMessagesUseCase,
-    private val connectWebsocketUseCase: ConnectWebsocketUseCase,
-    private val disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
-    private val subScribeMessageUseCase: SubScribeMessageUseCase,
-    private val publishSendMessageUseCase: PublishSendMessageUseCase,
-) : BaseViewModel() {
-    private val _chats: MutableStateFlow<List<ChatUiModel>> = MutableStateFlow(emptyList())
-    val chats: StateFlow<List<ChatUiModel>> get() = _chats.asStateFlow()
+class ChatViewModel
+    @Inject
+    constructor(
+        private val getChatRoomClubUseCase: GetChatRoomClubUseCase,
+        private val getChatMessagesUseCase: GetChatMessagesUseCase,
+        private val connectWebsocketUseCase: ConnectWebsocketUseCase,
+        private val disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
+        private val subScribeMessageUseCase: SubScribeMessageUseCase,
+        private val publishSendMessageUseCase: PublishSendMessageUseCase,
+    ) : BaseViewModel() {
+        private val _chats: MutableStateFlow<List<ChatUiModel>> = MutableStateFlow(emptyList())
+        val chats: StateFlow<List<ChatUiModel>> get() = _chats.asStateFlow()
 
-    val sendMessage = MutableLiveData("")
+        val sendMessage = MutableLiveData("")
 
-    val isCanSend =
-        MediatorLiveData<Boolean>().apply {
-            addSource(sendMessage) {
-                value = it.isNotBlank()
-            }
-        }
-
-    fun subscribeMessage(chatRoomId: Long) {
-        viewModelScope.launch {
-            val myMemberId = myMemberId(chatRoomId).await()
-            val chats = initChats(chatRoomId, myMemberId)
-
-            connect().await()
-            _chats.value = chats.await()
-            subScribeMessageUseCase(chatRoomId, myMemberId).distinctUntilChanged().map {
-                when (it) {
-                    is ChatComponent.Date -> it.toUiModel()
-                    is ChatComponent.Enter -> it.toUiModel()
-                    is ChatComponent.Leave -> it.toUiModel()
-                    is Message.Mine -> it.toUiModel()
-                    is Message.Other -> it.toUiModel()
+        val isCanSend =
+            MediatorLiveData<Boolean>().apply {
+                addSource(sendMessage) {
+                    value = it.isNotBlank()
                 }
-            }.collect { newChat ->
-                _chats.update { it.plus(newChat) }
             }
-        }
-    }
 
-    private fun myMemberId(chatRoomId: Long): Deferred<Long> =
-        viewModelScope.async {
-            getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
-        }
+        fun subscribeMessage(chatRoomId: Long) {
+            viewModelScope.launch {
+                val myMemberId = myMemberId(chatRoomId).await()
+                val chats = initChats(chatRoomId, myMemberId)
 
-    private fun connect(): Deferred<Unit> =
-        viewModelScope.async {
-            connectWebsocketUseCase()
-        }
-
-    private fun initChats(
-        chatRoomId: Long,
-        myMemberId: Long,
-    ): Deferred<List<ChatUiModel>> =
-        viewModelScope.async {
-            getChatMessagesUseCase(chatRoomId, myMemberId).getOrDefault(emptyList()).map {
-                when (it) {
-                    is ChatComponent.Date -> it.toUiModel()
-                    is ChatComponent.Enter -> it.toUiModel()
-                    is ChatComponent.Leave -> it.toUiModel()
-                    is Message.Mine -> it.toUiModel()
-                    is Message.Other -> it.toUiModel()
+                connect().await()
+                _chats.value = chats.await()
+                subScribeMessageUseCase(chatRoomId, myMemberId).distinctUntilChanged().map {
+                    when (it) {
+                        is ChatComponent.Date -> it.toUiModel()
+                        is ChatComponent.Enter -> it.toUiModel()
+                        is ChatComponent.Leave -> it.toUiModel()
+                        is Message.Mine -> it.toUiModel()
+                        is Message.Other -> it.toUiModel()
+                    }
+                }.collect { newChat ->
+                    _chats.update { it.plus(newChat) }
                 }
             }
         }
 
-    fun sendMessage(
-        chatRoomId: Long,
-        content: String,
-    ) {
-        viewModelScope.launch {
-            publishSendMessageUseCase(chatRoomId, content)
-        }
-    }
+        private fun myMemberId(chatRoomId: Long): Deferred<Long> =
+            viewModelScope.async {
+                getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
+            }
 
-    override fun onCleared() {
-        viewModelScope.launch {
-            disconnectWebsocketUseCase()
-        }
-        super.onCleared()
-    }
+        private fun connect(): Deferred<Unit> =
+            viewModelScope.async {
+                connectWebsocketUseCase()
+            }
 
-    companion object {
-        fun factory(
-            getChatRoomClubUseCase: GetChatRoomClubUseCase,
-            getChatMessagesUseCase: GetChatMessagesUseCase,
-            connectWebsocketUseCase: ConnectWebsocketUseCase,
-            disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
-            subScribeMessageUseCase: SubScribeMessageUseCase,
-            publishSendMessageUseCase: PublishSendMessageUseCase,
-        ): ViewModelProvider.Factory {
-            return BaseViewModelFactory { _ ->
-                ChatViewModel(
-                    getChatRoomClubUseCase,
-                    getChatMessagesUseCase,
-                    connectWebsocketUseCase,
-                    disconnectWebsocketUseCase,
-                    subScribeMessageUseCase,
-                    publishSendMessageUseCase,
-                )
+        private fun initChats(
+            chatRoomId: Long,
+            myMemberId: Long,
+        ): Deferred<List<ChatUiModel>> =
+            viewModelScope.async {
+                getChatMessagesUseCase(chatRoomId, myMemberId).getOrDefault(emptyList()).map {
+                    when (it) {
+                        is ChatComponent.Date -> it.toUiModel()
+                        is ChatComponent.Enter -> it.toUiModel()
+                        is ChatComponent.Leave -> it.toUiModel()
+                        is Message.Mine -> it.toUiModel()
+                        is Message.Other -> it.toUiModel()
+                    }
+                }
+            }
+
+        fun sendMessage(
+            chatRoomId: Long,
+            content: String,
+        ) {
+            viewModelScope.launch {
+                publishSendMessageUseCase(chatRoomId, content)
+            }
+        }
+
+        override fun onCleared() {
+            viewModelScope.launch {
+                disconnectWebsocketUseCase()
+            }
+            super.onCleared()
+        }
+
+        companion object {
+            fun factory(
+                getChatRoomClubUseCase: GetChatRoomClubUseCase,
+                getChatMessagesUseCase: GetChatMessagesUseCase,
+                connectWebsocketUseCase: ConnectWebsocketUseCase,
+                disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
+                subScribeMessageUseCase: SubScribeMessageUseCase,
+                publishSendMessageUseCase: PublishSendMessageUseCase,
+            ): ViewModelProvider.Factory {
+                return BaseViewModelFactory { _ ->
+                    ChatViewModel(
+                        getChatRoomClubUseCase,
+                        getChatMessagesUseCase,
+                        connectWebsocketUseCase,
+                        disconnectWebsocketUseCase,
+                        subScribeMessageUseCase,
+                        publishSendMessageUseCase,
+                    )
+                }
             }
         }
     }
-}

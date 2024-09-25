@@ -8,28 +8,30 @@ import com.happy.friendogly.local.model.JwtTokenEntity
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class TokenDataSourceImpl @Inject constructor(
-    private val tokenManager: TokenManager,
-) : TokenDataSource {
-    override suspend fun getJwtToken(): Result<JwtTokenDto> =
-        runCatching {
-            val accessToken = tokenManager.accessToken.first()
-            val refreshToken = tokenManager.refreshToken.first()
+class TokenDataSourceImpl
+    @Inject
+    constructor(
+        private val tokenManager: TokenManager,
+    ) : TokenDataSource {
+        override suspend fun getJwtToken(): Result<JwtTokenDto> =
+            runCatching {
+                val accessToken = tokenManager.accessToken.first()
+                val refreshToken = tokenManager.refreshToken.first()
 
-            JwtTokenEntity(accessToken = accessToken, refreshToken = refreshToken).toData()
-        }
+                JwtTokenEntity(accessToken = accessToken, refreshToken = refreshToken).toData()
+            }
 
-    override suspend fun saveJwtToken(jwtTokenDto: JwtTokenDto): Result<Unit> =
-        runCatching {
-            val accessToken = jwtTokenDto.accessToken ?: return@runCatching
-            val refreshToken = jwtTokenDto.refreshToken ?: return@runCatching
+        override suspend fun saveJwtToken(jwtTokenDto: JwtTokenDto): Result<Unit> =
+            runCatching {
+                val accessToken = jwtTokenDto.accessToken ?: return@runCatching
+                val refreshToken = jwtTokenDto.refreshToken ?: return@runCatching
 
-            tokenManager.saveAccessToken(accessToken)
-            tokenManager.saveRefreshToken(refreshToken)
-        }
+                tokenManager.saveAccessToken(accessToken)
+                tokenManager.saveRefreshToken(refreshToken)
+            }
 
-    override suspend fun deleteLocalData(): Result<Unit> =
-        runCatching {
-            tokenManager.deleteToken()
-        }
-}
+        override suspend fun deleteLocalData(): Result<Unit> =
+            runCatching {
+                tokenManager.deleteToken()
+            }
+    }

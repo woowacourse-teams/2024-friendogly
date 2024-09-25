@@ -12,31 +12,33 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class WebSocketRepositoryImpl @Inject constructor(private val source: WebSocketDataSource) : WebSocketRepository {
-    override suspend fun connect(): Result<Unit> = source.connect()
+class WebSocketRepositoryImpl
+    @Inject
+    constructor(private val source: WebSocketDataSource) : WebSocketRepository {
+        override suspend fun connect(): Result<Unit> = source.connect()
 
-    override suspend fun disconnect(): Result<Unit> = source.disconnect()
+        override suspend fun disconnect(): Result<Unit> = source.disconnect()
 
-    override suspend fun publishEnter(memberId: Long) = source.publishEnter(memberId)
+        override suspend fun publishEnter(memberId: Long) = source.publishEnter(memberId)
 
-    override suspend fun publishSend(
-        chatRoomId: Long,
-        content: String,
-    ) = source.publishSend(chatRoomId, content)
+        override suspend fun publishSend(
+            chatRoomId: Long,
+            content: String,
+        ) = source.publishSend(chatRoomId, content)
 
-    override suspend fun publishLeave(chatRoomId: Long) = source.publishLeave(chatRoomId)
+        override suspend fun publishLeave(chatRoomId: Long) = source.publishLeave(chatRoomId)
 
-    override suspend fun subscribeMessage(
-        chatRoomId: Long,
-        myMemberId: Long,
-    ): Flow<ChatComponent> =
-        source.subscribeMessage(chatRoomId).map {
-            when (it.messageType) {
-                MessageTypeDto.ENTER -> it.toEnter()
-                MessageTypeDto.LEAVE -> it.toLeave()
-                MessageTypeDto.CHAT -> {
-                    if (myMemberId == it.senderMemberId) it.toMine() else it.toOther()
+        override suspend fun subscribeMessage(
+            chatRoomId: Long,
+            myMemberId: Long,
+        ): Flow<ChatComponent> =
+            source.subscribeMessage(chatRoomId).map {
+                when (it.messageType) {
+                    MessageTypeDto.ENTER -> it.toEnter()
+                    MessageTypeDto.LEAVE -> it.toLeave()
+                    MessageTypeDto.CHAT -> {
+                        if (myMemberId == it.senderMemberId) it.toMine() else it.toOther()
+                    }
                 }
             }
-        }
-}
+    }

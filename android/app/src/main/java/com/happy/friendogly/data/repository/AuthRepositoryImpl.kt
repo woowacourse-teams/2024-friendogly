@@ -11,38 +11,40 @@ import java.net.ConnectException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
-    private val source: AuthDataSource,
-) : AuthRepository {
-    override suspend fun postKakaoLogin(accessToken: String): DomainResult<Login, DataError.Network> {
-        return source.postKakaoLogin(accessToken = accessToken).fold(
-            onSuccess = { login ->
-                DomainResult.Success(login.toDomain())
-            },
-            onFailure = { e ->
-                when (e) {
-                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
-                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
-                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
-                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
-                }
-            },
-        )
-    }
+class AuthRepositoryImpl
+    @Inject
+    constructor(
+        private val source: AuthDataSource,
+    ) : AuthRepository {
+        override suspend fun postKakaoLogin(accessToken: String): DomainResult<Login, DataError.Network> {
+            return source.postKakaoLogin(accessToken = accessToken).fold(
+                onSuccess = { login ->
+                    DomainResult.Success(login.toDomain())
+                },
+                onFailure = { e ->
+                    when (e) {
+                        is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                        is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                    }
+                },
+            )
+        }
 
-    override suspend fun postLogout(): DomainResult<Unit, DataError.Network> {
-        return source.postLogout().fold(
-            onSuccess = {
-                DomainResult.Success(Unit)
-            },
-            onFailure = { e ->
-                when (e) {
-                    is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
-                    is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
-                    is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
-                    else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
-                }
-            },
-        )
+        override suspend fun postLogout(): DomainResult<Unit, DataError.Network> {
+            return source.postLogout().fold(
+                onSuccess = {
+                    DomainResult.Success(Unit)
+                },
+                onFailure = { e ->
+                    when (e) {
+                        is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                        is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                    }
+                },
+            )
+        }
     }
-}

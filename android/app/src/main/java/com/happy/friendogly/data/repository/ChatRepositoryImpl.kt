@@ -13,40 +13,42 @@ import com.happy.friendogly.local.mapper.toDomain
 import com.happy.friendogly.local.room.ChatRoomDao
 import javax.inject.Inject
 
-class ChatRepositoryImpl @Inject constructor(
-    private val source: ChatDataSource,
-    private val chatRoomDao: ChatRoomDao,
-) : ChatRepository {
-    override suspend fun getChatList(): Result<ChatRooms> = source.getChatList().mapCatching { it.toDomain() }
+class ChatRepositoryImpl
+    @Inject
+    constructor(
+        private val source: ChatDataSource,
+        private val chatRoomDao: ChatRoomDao,
+    ) : ChatRepository {
+        override suspend fun getChatList(): Result<ChatRooms> = source.getChatList().mapCatching { it.toDomain() }
 
-    override suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>> =
-        source.getMembers(chatRoomId).mapCatching { member ->
-            member.map { it.toDomain() }
-        }
+        override suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>> =
+            source.getMembers(chatRoomId).mapCatching { member ->
+                member.map { it.toDomain() }
+            }
 
-    override suspend fun saveMessage(
-        chatRoomId: Long,
-        chat: ChatComponent,
-    ): Result<Unit> =
-        runCatching {
-            val message =
-                when (chat) {
-                    is ChatComponent.Date -> chat.toData()
-                    is ChatComponent.Enter -> chat.toData()
-                    is ChatComponent.Leave -> chat.toData()
-                    is Message.Mine -> chat.toData()
-                    is Message.Other -> chat.toData()
-                }
-            chatRoomDao.addMessageToChatRoom(chatRoomId, message)
-        }
+        override suspend fun saveMessage(
+            chatRoomId: Long,
+            chat: ChatComponent,
+        ): Result<Unit> =
+            runCatching {
+                val message =
+                    when (chat) {
+                        is ChatComponent.Date -> chat.toData()
+                        is ChatComponent.Enter -> chat.toData()
+                        is ChatComponent.Leave -> chat.toData()
+                        is Message.Mine -> chat.toData()
+                        is Message.Other -> chat.toData()
+                    }
+                chatRoomDao.addMessageToChatRoom(chatRoomId, message)
+            }
 
-    override suspend fun getChatMessages(
-        chatRoomId: Long,
-        myMemberId: Long,
-    ): Result<List<ChatComponent>> =
-        runCatching {
-            chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }
-        }
+        override suspend fun getChatMessages(
+            chatRoomId: Long,
+            myMemberId: Long,
+        ): Result<List<ChatComponent>> =
+            runCatching {
+                chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }
+            }
 
-    override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> = source.getClubs(chatRoomId).mapCatching { it.toDomain() }
-}
+        override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> = source.getClubs(chatRoomId).mapCatching { it.toDomain() }
+    }

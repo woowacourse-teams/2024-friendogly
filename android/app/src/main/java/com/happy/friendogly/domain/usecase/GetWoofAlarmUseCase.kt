@@ -3,8 +3,10 @@ package com.happy.friendogly.domain.usecase
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 import javax.inject.Inject
 
-class GetWoofAlarmUseCase @Inject constructor(
-    private val repository: AlarmSettingRepository,
-) {
-    suspend operator fun invoke(): Result<Boolean> = repository.getWoofSetting()
-}
+class GetWoofAlarmUseCase
+    @Inject
+    constructor(
+        private val repository: AlarmSettingRepository,
+    ) {
+        suspend operator fun invoke(): Result<Boolean> = repository.getWoofSetting()
+    }

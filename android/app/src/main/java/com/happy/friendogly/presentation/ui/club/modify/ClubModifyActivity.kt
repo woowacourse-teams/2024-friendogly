@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.happy.friendogly.R
-
 import com.happy.friendogly.databinding.ActivityClubModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent

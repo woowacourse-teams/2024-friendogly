@@ -8,15 +8,17 @@ import com.happy.friendogly.domain.repository.MemberRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class PatchMemberUseCase @Inject constructor(private val repository: MemberRepository) {
-    suspend operator fun invoke(
-        name: String,
-        imageUpdateType: ImageUpdateType,
-        file: MultipartBody.Part?,
-    ): DomainResult<Member, DataError.Network> =
-        repository.patchMember(
-            name = name,
-            imageUpdateType = imageUpdateType,
-            file = file,
-        )
-}
+class PatchMemberUseCase
+    @Inject
+    constructor(private val repository: MemberRepository) {
+        suspend operator fun invoke(
+            name: String,
+            imageUpdateType: ImageUpdateType,
+            file: MultipartBody.Part?,
+        ): DomainResult<Member, DataError.Network> =
+            repository.patchMember(
+                name = name,
+                imageUpdateType = imageUpdateType,
+                file = file,
+            )
+    }

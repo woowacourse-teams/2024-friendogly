@@ -10,25 +10,27 @@ import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class PatchPetUseCase @Inject constructor(private val repository: PetRepository) {
-    suspend operator fun invoke(
-        petId: Long,
-        name: String,
-        description: String,
-        birthDate: LocalDate,
-        sizeType: SizeType,
-        gender: Gender,
-        file: MultipartBody.Part?,
-        imageUpdateType: ImageUpdateType,
-    ): DomainResult<Unit, DataError.Network> =
-        repository.patchPet(
-            petId = petId,
-            name = name,
-            description = description,
-            birthDate = birthDate,
-            sizeType = sizeType,
-            gender = gender,
-            file = file,
-            imageUpdateType = imageUpdateType,
-        )
-}
+class PatchPetUseCase
+    @Inject
+    constructor(private val repository: PetRepository) {
+        suspend operator fun invoke(
+            petId: Long,
+            name: String,
+            description: String,
+            birthDate: LocalDate,
+            sizeType: SizeType,
+            gender: Gender,
+            file: MultipartBody.Part?,
+            imageUpdateType: ImageUpdateType,
+        ): DomainResult<Unit, DataError.Network> =
+            repository.patchPet(
+                petId = petId,
+                name = name,
+                description = description,
+                birthDate = birthDate,
+                sizeType = sizeType,
+                gender = gender,
+                file = file,
+                imageUpdateType = imageUpdateType,
+            )
+    }

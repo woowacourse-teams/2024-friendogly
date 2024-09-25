@@ -6,8 +6,10 @@ import com.happy.friendogly.domain.model.Pet
 import com.happy.friendogly.domain.repository.PetRepository
 import javax.inject.Inject
 
-class GetPetsMineUseCase @Inject constructor(
-    private val repository: PetRepository,
-) {
-    suspend operator fun invoke(): DomainResult<List<Pet>, DataError.Network> = repository.getPetsMine()
-}
+class GetPetsMineUseCase
+    @Inject
+    constructor(
+        private val repository: PetRepository,
+    ) {
+        suspend operator fun invoke(): DomainResult<List<Pet>, DataError.Network> = repository.getPetsMine()
+    }

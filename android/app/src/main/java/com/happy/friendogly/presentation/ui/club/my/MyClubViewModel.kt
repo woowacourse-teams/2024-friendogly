@@ -15,36 +15,38 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyClubViewModel @Inject constructor(
-    private val getPetsMineUseCase: GetPetsMineUseCase,
-) : BaseViewModel() {
-    private val _myClubEvent: MutableLiveData<Event<MyClubEvent.AddPet>> = MutableLiveData()
-    val myClubEvent: LiveData<Event<MyClubEvent.AddPet>> get() = _myClubEvent
+class MyClubViewModel
+    @Inject
+    constructor(
+        private val getPetsMineUseCase: GetPetsMineUseCase,
+    ) : BaseViewModel() {
+        private val _myClubEvent: MutableLiveData<Event<MyClubEvent.AddPet>> = MutableLiveData()
+        val myClubEvent: LiveData<Event<MyClubEvent.AddPet>> get() = _myClubEvent
 
-    fun loadPetState() =
-        viewModelScope.launch {
-            getPetsMineUseCase()
-                .fold(
-                    onSuccess = { pets ->
-                        if (pets.isEmpty()) {
-                            _myClubEvent.emit(MyClubEvent.AddPet.OpenAddPet)
-                        } else {
-                            _myClubEvent.emit(MyClubEvent.AddPet.OpenAddClub)
-                        }
-                    },
-                    onError = {
-                        // TODO 예외처리
-                    },
-                )
-        }
+        fun loadPetState() =
+            viewModelScope.launch {
+                getPetsMineUseCase()
+                    .fold(
+                        onSuccess = { pets ->
+                            if (pets.isEmpty()) {
+                                _myClubEvent.emit(MyClubEvent.AddPet.OpenAddPet)
+                            } else {
+                                _myClubEvent.emit(MyClubEvent.AddPet.OpenAddClub)
+                            }
+                        },
+                        onError = {
+                            // TODO 예외처리
+                        },
+                    )
+            }
 
-    companion object {
-        fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
-            return BaseViewModelFactory {
-                MyClubViewModel(
-                    getPetsMineUseCase = getPetsMineUseCase,
-                )
+        companion object {
+            fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
+                return BaseViewModelFactory {
+                    MyClubViewModel(
+                        getPetsMineUseCase = getPetsMineUseCase,
+                    )
+                }
             }
         }
     }
-}

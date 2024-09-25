@@ -14,38 +14,41 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class ChatAlarmModule @Inject constructor(
-    @ApplicationContext
-    val context: Context) {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
+class ChatAlarmModule
+    @Inject
+    constructor(
+        @ApplicationContext
+        val context: Context,
+    ) {
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
-    private val key = booleanPreferencesKey(ALARM_SETTING)
+        private val key = booleanPreferencesKey(ALARM_SETTING)
 
-    var isSet: Flow<Boolean> =
-        context.dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
+        var isSet: Flow<Boolean> =
+            context.dataStore.data.catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { preferences ->
+                preferences[key] ?: true
             }
-        }.map { preferences ->
-            preferences[key] ?: true
+
+        suspend fun saveSetting(value: Boolean) {
+            context.dataStore.edit { preferences ->
+                preferences[key] = value
+            }
         }
 
-    suspend fun saveSetting(value: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[key] = value
+        suspend fun deleteSetting() {
+            context.dataStore.edit { prefs ->
+                prefs.remove(key)
+            }
+        }
+
+        companion object {
+            private const val ALARM_SETTING = "CHAT_ALARM_SETTING"
+            private const val DATA_STORE_NAME = "chatAlarmDataStore"
         }
     }
-
-    suspend fun deleteSetting() {
-        context.dataStore.edit { prefs ->
-            prefs.remove(key)
-        }
-    }
-
-    companion object {
-        private const val ALARM_SETTING = "CHAT_ALARM_SETTING"
-        private const val DATA_STORE_NAME = "chatAlarmDataStore"
-    }
-}

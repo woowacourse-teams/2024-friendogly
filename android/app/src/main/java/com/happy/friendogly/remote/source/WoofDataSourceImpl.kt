@@ -13,39 +13,41 @@ import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManual
 import com.happy.friendogly.remote.model.request.FootprintRequest
 import javax.inject.Inject
 
-class WoofDataSourceImpl @Inject constructor(private val service: WoofService) : WoofDataSource {
-    override suspend fun postFootprint(request: FootprintRequest): Result<MyFootprintDto> {
-        return runCatching { service.postFootprint(request).data.toData() }
-    }
+class WoofDataSourceImpl
+    @Inject
+    constructor(private val service: WoofService) : WoofDataSource {
+        override suspend fun postFootprint(request: FootprintRequest): Result<MyFootprintDto> {
+            return runCatching { service.postFootprint(request).data.toData() }
+        }
 
-    override suspend fun patchFootprintRecentWalkStatusAuto(
-        request: FootprintRecentWalkStatusAutoRequest,
-    ): Result<FootprintRecentWalkStatusDto> {
-        return runCatching { service.patchFootprintRecentWalkStatusAuto(request).data.toData() }
-    }
+        override suspend fun patchFootprintRecentWalkStatusAuto(
+            request: FootprintRecentWalkStatusAutoRequest,
+        ): Result<FootprintRecentWalkStatusDto> {
+            return runCatching { service.patchFootprintRecentWalkStatusAuto(request).data.toData() }
+        }
 
-    override suspend fun patchFootprintRecentWalkStatusManual(
-        request: FootprintRecentWalkStatusManualRequest,
-    ): Result<FootprintRecentWalkStatusDto> {
-        return runCatching { service.patchFootprintRecentWalkStatusManual(request).data.toData() }
-    }
+        override suspend fun patchFootprintRecentWalkStatusManual(
+            request: FootprintRecentWalkStatusManualRequest,
+        ): Result<FootprintRecentWalkStatusDto> {
+            return runCatching { service.patchFootprintRecentWalkStatusManual(request).data.toData() }
+        }
 
-    override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
-        return runCatching { service.getFootprintMarkBtnInfo().data.toData() }
-    }
+        override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
+            return runCatching { service.getFootprintMarkBtnInfo().data.toData() }
+        }
 
-    override suspend fun getNearFootprints(
-        latitude: Double,
-        longitude: Double,
-    ): Result<List<FootprintDto>> {
-        return runCatching { service.getNearFootprints(latitude, longitude).data.toData() }
-    }
+        override suspend fun getNearFootprints(
+            latitude: Double,
+            longitude: Double,
+        ): Result<List<FootprintDto>> {
+            return runCatching { service.getNearFootprints(latitude, longitude).data.toData() }
+        }
 
-    override suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfoDto> {
-        return runCatching { service.getFootprintInfo(footprintId).data.toData() }
-    }
+        override suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfoDto> {
+            return runCatching { service.getFootprintInfo(footprintId).data.toData() }
+        }
 
-    override suspend fun deleteFootprint(footprintId: Long): Result<Unit> {
-        return runCatching { service.deleteFootprint(footprintId) }
+        override suspend fun deleteFootprint(footprintId: Long): Result<Unit> {
+            return runCatching { service.deleteFootprint(footprintId) }
+        }
     }
-}

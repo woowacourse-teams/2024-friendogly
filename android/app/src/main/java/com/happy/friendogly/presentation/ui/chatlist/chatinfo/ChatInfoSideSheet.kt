@@ -27,12 +27,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatInfoSideSheet : BottomSheetDialogFragment() {
-
     @Inject
     lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
 
     @Inject
-    lateinit var analyticsHelper:AnalyticsHelper
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private var _binding: LayoutChatDrawerBinding? = null
     val binding: LayoutChatDrawerBinding
@@ -40,7 +39,7 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
 
     private lateinit var adapter: JoinPeopleAdapter
     private val alarmPermission: AlarmPermission =
-        AlarmPermission.from(this,analyticsHelper) { isPermitted ->
+        AlarmPermission.from(this, analyticsHelper) { isPermitted ->
             if (!isPermitted) {
                 Snackbar.make(
                     binding.root,

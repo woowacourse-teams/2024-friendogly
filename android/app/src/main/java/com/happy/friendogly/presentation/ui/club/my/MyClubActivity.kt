@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.happy.friendogly.R
-
 import com.happy.friendogly.databinding.ActivityMyClubBinding
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
@@ -23,7 +22,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MyClubActivity :
     BaseActivity<ActivityMyClubBinding>(R.layout.activity_my_club), MyClubActionHandler {
-
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 

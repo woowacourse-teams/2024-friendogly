@@ -36,9 +36,8 @@ import javax.inject.Inject
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
     MainActivityActionHandler {
-
     @Inject
-    lateinit var analyticsHelper:AnalyticsHelper
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private val permission =
         MultiPermission.from(this).addAlarmPermission().addLocationPermission().createRequest()
