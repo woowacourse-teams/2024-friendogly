@@ -8,6 +8,7 @@ import com.happy.friendogly.data.source.AuthDataSource
 import com.happy.friendogly.data.source.ChatDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
+import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.data.source.MessagingDataSource
 import com.happy.friendogly.data.source.MyClubDataSource
 import com.happy.friendogly.data.source.PetDataSource
@@ -24,6 +25,7 @@ import com.happy.friendogly.remote.source.AlamTokenDataSourceImpl
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ChatDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
+import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.MyClubDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
@@ -69,7 +71,7 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun provideMemberDataSource(dataSourceImpl: MemberRepositoryImpl): MemberRepository
+    abstract fun provideMemberDataSource(dataSourceImpl: MemberDataSourceImpl): MemberDataSource
 
     @Binds
     @Singleton

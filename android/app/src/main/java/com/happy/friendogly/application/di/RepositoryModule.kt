@@ -2,6 +2,7 @@ package com.happy.friendogly.application.di
 
 import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
+import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
 import com.happy.friendogly.data.repository.ChatRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
@@ -26,6 +27,7 @@ import com.happy.friendogly.data.source.WebSocketDataSource
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
+import com.happy.friendogly.domain.repository.AlarmTokenRepository
 import com.happy.friendogly.domain.repository.AuthRepository
 import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.domain.repository.ClubRepository
@@ -42,6 +44,7 @@ import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.AlarmSettingDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
+import com.happy.friendogly.remote.source.AlamTokenDataSourceImpl
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
 import com.happy.friendogly.remote.source.ChatDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
@@ -70,7 +73,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun provideAlarmTokenRepository(repositoryImpl: AlarmSettingRepositoryImpl): AlarmSettingRepository
+    abstract fun provideAlarmTokenRepository(repositoryImpl: AlarmTokenRepositoryImpl): AlarmTokenRepository
 
     @Binds
     @Singleton
