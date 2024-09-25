@@ -9,11 +9,16 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.happy.friendogly.data.model.UserAddressDto
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class AddressModule(val context: Context) {
+class AddressModule @Inject constructor(
+    @ApplicationContext
+    val context: Context
+) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
     private val keyAdmin = stringPreferencesKey(KEY_ADMIN)
