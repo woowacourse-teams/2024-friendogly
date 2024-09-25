@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.chatlist.chat
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.Message
@@ -13,7 +12,6 @@ import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.PublishSendMessageUseCase
 import com.happy.friendogly.domain.usecase.SubScribeMessageUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
@@ -111,27 +109,5 @@ class ChatViewModel
                 disconnectWebsocketUseCase()
             }
             super.onCleared()
-        }
-
-        companion object {
-            fun factory(
-                getChatRoomClubUseCase: GetChatRoomClubUseCase,
-                getChatMessagesUseCase: GetChatMessagesUseCase,
-                connectWebsocketUseCase: ConnectWebsocketUseCase,
-                disconnectWebsocketUseCase: DisconnectWebsocketUseCase,
-                subScribeMessageUseCase: SubScribeMessageUseCase,
-                publishSendMessageUseCase: PublishSendMessageUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { _ ->
-                    ChatViewModel(
-                        getChatRoomClubUseCase,
-                        getChatMessagesUseCase,
-                        connectWebsocketUseCase,
-                        disconnectWebsocketUseCase,
-                        subScribeMessageUseCase,
-                        publishSendMessageUseCase,
-                    )
-                }
-            }
         }
     }

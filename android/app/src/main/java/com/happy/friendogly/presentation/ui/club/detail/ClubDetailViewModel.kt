@@ -2,13 +2,11 @@ package com.happy.friendogly.presentation.ui.club.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
@@ -98,21 +96,5 @@ class ClubDetailViewModel
 
         fun makeClubModifyUiModel(): ClubModifyUiModel? {
             return club.value?.toClubModifyUiModel()
-        }
-
-        companion object {
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                getClubUseCase: GetClubUseCase,
-                postClubMemberUseCase: PostClubMemberUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubDetailViewModel(
-                        analyticsHelper = analyticsHelper,
-                        getClubUseCase = getClubUseCase,
-                        postClubMemberUseCase = postClubMemberUseCase,
-                    )
-                }
-            }
         }
     }

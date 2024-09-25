@@ -3,12 +3,10 @@ package com.happy.friendogly.presentation.ui.club.modify
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.addSourceList
@@ -103,13 +101,5 @@ class ClubModifyViewModel
             private const val MIN_TEXT_LENGTH = 1
             private const val MAX_TITLE_LENGTH = 100
             private const val MAX_CONTENT_LENGTH = 1000
-
-            fun factory(patchClubUseCase: PatchClubUseCase): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubModifyViewModel(
-                        patchClubUseCase = patchClubUseCase,
-                    )
-                }
-            }
         }
     }

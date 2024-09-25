@@ -2,10 +2,8 @@ package com.happy.friendogly.presentation.ui.club.filter
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.model.ClubFilterSelector
@@ -66,16 +64,6 @@ class ClubFilterViewModel
                 clubFilterSelector.addClubFilter(clubFilter)
             } else {
                 clubFilterSelector.removeClubFilter(clubFilter)
-            }
-        }
-
-        companion object {
-            fun factory(analyticsHelper: AnalyticsHelper): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubFilterViewModel(
-                        analyticsHelper = analyticsHelper,
-                    )
-                }
             }
         }
     }

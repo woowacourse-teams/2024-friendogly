@@ -4,12 +4,10 @@ import android.location.Address
 import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.SaveAddressUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -175,14 +173,6 @@ class SettingMyLocationViewModel
         }
 
         companion object {
-            fun factory(saveAddressUseCase: SaveAddressUseCase): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    SettingMyLocationViewModel(
-                        saveAddressUseCase = saveAddressUseCase,
-                    )
-                }
-            }
-
             private const val ADDRESS_LINE_SPLIT = " "
             private const val ADMIN_SPLIT = "도 특별시 자치시"
             private const val LOCALITY_SPLIT = "시군구읍면"

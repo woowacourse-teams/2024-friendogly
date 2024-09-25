@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.setting
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
@@ -13,7 +12,6 @@ import com.happy.friendogly.domain.usecase.PostLogoutUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -161,29 +159,5 @@ class SettingViewModel
                     }
                 },
             )
-        }
-
-        companion object {
-            fun factory(
-                getChatAlarmUseCase: GetChatAlarmUseCase,
-                getWoofAlarmUseCase: GetWoofAlarmUseCase,
-                saveChatAlarmUseCase: SaveChatAlarmUseCase,
-                saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
-                deleteTokenUseCase: DeleteTokenUseCase,
-                deleteMemberUseCase: DeleteMemberUseCase,
-                postLogoutUseCase: PostLogoutUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { _ ->
-                    SettingViewModel(
-                        getChatAlarmUseCase = getChatAlarmUseCase,
-                        getWoofAlarmUseCase = getWoofAlarmUseCase,
-                        saveChatAlarmUseCase = saveChatAlarmUseCase,
-                        saveWoofAlarmUseCase = saveWoofAlarmUseCase,
-                        deleteTokenUseCase = deleteTokenUseCase,
-                        deleteMemberUseCase = deleteMemberUseCase,
-                        postLogoutUseCase = postLogoutUseCase,
-                    )
-                }
-            }
         }
     }

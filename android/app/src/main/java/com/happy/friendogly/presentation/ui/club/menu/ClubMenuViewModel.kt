@@ -2,12 +2,10 @@ package com.happy.friendogly.presentation.ui.club.menu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.DeleteClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
@@ -66,19 +64,5 @@ class ClubMenuViewModel
 
         override fun selectBlock() {
             _clubMenuEvent.emit(ClubMenuEvent.Block)
-        }
-
-        companion object {
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                deleteClubMemberUseCase: DeleteClubMemberUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubMenuViewModel(
-                        analyticsHelper = analyticsHelper,
-                        deleteClubMemberUseCase = deleteClubMemberUseCase,
-                    )
-                }
-            }
         }
     }

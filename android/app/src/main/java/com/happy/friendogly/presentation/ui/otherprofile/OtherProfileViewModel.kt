@@ -3,14 +3,11 @@ package com.happy.friendogly.presentation.ui.otherprofile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberUseCase
 import com.happy.friendogly.domain.usecase.GetPetsUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
@@ -129,20 +126,5 @@ class OtherProfileViewModel
 
         fun navigateToMore(id: Long) {
             _navigateAction.emit(OtherProfileNavigationAction.NavigateToUserMore(id = id))
-        }
-
-        companion object {
-            fun factory(
-                getPetsUseCase: GetPetsUseCase,
-                getMemberUseCase: GetMemberUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { creator ->
-                    OtherProfileViewModel(
-                        savedStateHandle = creator.createSavedStateHandle(),
-                        getPetsUseCase = getPetsUseCase,
-                        getMemberUseCase = getMemberUseCase,
-                    )
-                }
-            }
         }
     }

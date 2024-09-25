@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.ImageUpdateType
@@ -17,7 +15,6 @@ import com.happy.friendogly.domain.usecase.PostMemberUseCase
 import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
@@ -218,24 +215,5 @@ class ProfileSettingViewModel
 
         companion object {
             private val regex = "^[ㄱ-ㅎㅏ-ㅣ]+$".toRegex()
-
-            fun factory(
-                saveAlarmTokenUseCase: SaveAlamTokenUseCase,
-                postMemberUseCase: PostMemberUseCase,
-                saveJwtTokenUseCase: SaveJwtTokenUseCase,
-                patchMemberUseCase: PatchMemberUseCase,
-                getFCMTokenUseCase: GetFCMTokenUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { creator ->
-                    ProfileSettingViewModel(
-                        saveAlarmTokenUseCase = saveAlarmTokenUseCase,
-                        savedStateHandle = creator.createSavedStateHandle(),
-                        postMemberUseCase = postMemberUseCase,
-                        saveJwtTokenUseCase = saveJwtTokenUseCase,
-                        patchMemberUseCase = patchMemberUseCase,
-                        getFCMTokenUseCase = getFCMTokenUseCase,
-                    )
-                }
-            }
         }
     }

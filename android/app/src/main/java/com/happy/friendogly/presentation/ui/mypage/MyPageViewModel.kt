@@ -2,13 +2,11 @@ package com.happy.friendogly.presentation.ui.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMemberMineUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.petdetail.PetDetail
@@ -179,17 +177,5 @@ class MyPageViewModel
 
         companion object {
             const val MAX_PET_SIZE = 5
-
-            fun factory(
-                getPetsMineUseCase: GetPetsMineUseCase,
-                getMemberMineUseCase: GetMemberMineUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { _ ->
-                    MyPageViewModel(
-                        getPetsMineUseCase = getPetsMineUseCase,
-                        getMemberMineUseCase = getMemberMineUseCase,
-                    )
-                }
-            }
         }
     }

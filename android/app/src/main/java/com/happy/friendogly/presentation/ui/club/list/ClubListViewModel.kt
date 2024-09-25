@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.club.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Pet
@@ -12,7 +11,6 @@ import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
@@ -189,22 +187,4 @@ class ClubListViewModel
         }
 
         private fun isInValidPetCount(pets: List<Pet>): Boolean = pets.isEmpty()
-
-        companion object {
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                getPetsMineUseCase: GetPetsMineUseCase,
-                getAddressUseCase: GetAddressUseCase,
-                searchingClubsUseCase: GetSearchingClubsUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubListViewModel(
-                        analyticsHelper = analyticsHelper,
-                        getPetsMineUseCase = getPetsMineUseCase,
-                        getAddressUseCase = getAddressUseCase,
-                        searchingClubsUseCase = searchingClubsUseCase,
-                    )
-                }
-            }
-        }
     }

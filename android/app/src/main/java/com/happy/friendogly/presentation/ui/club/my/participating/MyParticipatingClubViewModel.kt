@@ -2,11 +2,9 @@ package com.happy.friendogly.presentation.ui.club.my.participating
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetMyClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
@@ -59,15 +57,5 @@ class MyParticipatingClubViewModel
 
         override fun addClub() {
             _myClubEvent.emit(MyClubEvent.Navigation.NavigateToAddClub)
-        }
-
-        companion object {
-            fun factory(getMyClubUseCase: GetMyClubUseCase): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    MyParticipatingClubViewModel(
-                        getMyClubUseCase = getMyClubUseCase,
-                    )
-                }
-            }
         }
     }

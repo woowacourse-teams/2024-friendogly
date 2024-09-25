@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Gender
@@ -15,7 +13,6 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.usecase.PatchPetUseCase
 import com.happy.friendogly.domain.usecase.PostPetUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
@@ -338,20 +335,5 @@ class RegisterPetViewModel
                     }
                 },
             )
-        }
-
-        companion object {
-            fun factory(
-                postPetUseCase: PostPetUseCase,
-                patchPetUseCase: PatchPetUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { creator ->
-                    RegisterPetViewModel(
-                        savedStateHandle = creator.createSavedStateHandle(),
-                        postPetUseCase = postPetUseCase,
-                        patchPetUseCase = patchPetUseCase,
-                    )
-                }
-            }
         }
     }

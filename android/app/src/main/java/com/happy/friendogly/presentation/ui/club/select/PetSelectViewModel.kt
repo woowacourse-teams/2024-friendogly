@@ -2,11 +2,9 @@ package com.happy.friendogly.presentation.ui.club.select
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
@@ -107,15 +105,5 @@ class PetSelectViewModel
 
         override fun cancelSelection() {
             _petSelectEvent.emit(PetSelectEvent.CancelSelection)
-        }
-
-        companion object {
-            fun factory(getPetsMineUseCase: GetPetsMineUseCase): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    PetSelectViewModel(
-                        getPetsMineUseCase = getPetsMineUseCase,
-                    )
-                }
-            }
         }
     }

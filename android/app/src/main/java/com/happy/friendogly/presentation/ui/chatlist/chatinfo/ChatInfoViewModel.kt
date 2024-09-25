@@ -2,14 +2,12 @@ package com.happy.friendogly.presentation.ui.chatlist.chatinfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -70,24 +68,6 @@ class ChatInfoViewModel
             launch {
                 saveChatAlarmUseCase(isChecked).onFailure {
                     // TODO 에러 처리
-                }
-            }
-        }
-
-        companion object {
-            fun factory(
-                getChatRoomClubUseCase: GetChatRoomClubUseCase,
-                getChatMemberUseCase: GetChatMemberUseCase,
-                getChatAlarmUseCase: GetChatAlarmUseCase,
-                saveChatAlarmUseCase: SaveChatAlarmUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { _ ->
-                    ChatInfoViewModel(
-                        getChatRoomClubUseCase,
-                        getChatMemberUseCase,
-                        getChatAlarmUseCase,
-                        saveChatAlarmUseCase,
-                    )
                 }
             }
         }

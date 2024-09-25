@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toFootprint
@@ -17,7 +16,6 @@ import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualU
 import com.happy.friendogly.domain.usecase.PostFootprintUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
@@ -456,31 +454,5 @@ class WoofViewModel
 
         fun changeTrackingModeToNoFollow() {
             _changeTrackingModeActions.emit(WoofTrackingModeActions.NoFollowTrackingMode)
-        }
-
-        companion object {
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                postFootprintUseCase: PostFootprintUseCase,
-                patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
-                patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
-                getNearFootprintsUseCase: GetNearFootprintsUseCase,
-                getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
-                getFootprintInfoUseCase: GetFootprintInfoUseCase,
-                deleteFootprintUseCase: DeleteFootprintUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    WoofViewModel(
-                        analyticsHelper = analyticsHelper,
-                        postFootprintUseCase = postFootprintUseCase,
-                        patchFootprintRecentWalkStatusAutoUseCase = patchFootprintRecentWalkStatusAutoUseCase,
-                        patchFootprintRecentWalkStatusManualUseCase = patchFootprintRecentWalkStatusManualUseCase,
-                        getNearFootprintsUseCase = getNearFootprintsUseCase,
-                        getFootprintMarkBtnInfoUseCase = getFootprintMarkBtnInfoUseCase,
-                        getFootprintInfoUseCase = getFootprintInfoUseCase,
-                        deleteFootprintUseCase = deleteFootprintUseCase,
-                    )
-                }
-            }
         }
     }

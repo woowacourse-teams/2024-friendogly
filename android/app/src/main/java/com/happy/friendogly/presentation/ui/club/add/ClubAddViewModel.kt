@@ -4,14 +4,12 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MAX_PAGE_SIZE
@@ -225,19 +223,5 @@ class ClubAddViewModel
             private const val MIN_TEXT_LENGTH = 1
             private const val MAX_TITLE_LENGTH = 100
             private const val MAX_CONTENT_LENGTH = 1000
-
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                getAddressUseCase: GetAddressUseCase,
-                postClubUseCase: PostClubUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory {
-                    ClubAddViewModel(
-                        analyticsHelper = analyticsHelper,
-                        getAddressUseCase = getAddressUseCase,
-                        postClubUseCase = postClubUseCase,
-                    )
-                }
-            }
         }
     }

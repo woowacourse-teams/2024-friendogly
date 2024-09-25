@@ -3,10 +3,7 @@ package com.happy.friendogly.presentation.ui.petdetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.getSerializable
@@ -60,11 +57,5 @@ class PetDetailViewModel
 
         companion object {
             private const val MIDDLE_PAGE = Int.MAX_VALUE / 2
-
-            fun factory(): ViewModelProvider.Factory {
-                return BaseViewModelFactory { creator ->
-                    PetDetailViewModel(savedStateHandle = creator.createSavedStateHandle())
-                }
-            }
         }
     }

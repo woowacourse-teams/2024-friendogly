@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.JwtToken
@@ -14,7 +13,6 @@ import com.happy.friendogly.domain.usecase.SaveAlamTokenUseCase
 import com.happy.friendogly.domain.usecase.SaveJwtTokenUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
-import com.happy.friendogly.presentation.base.BaseViewModelFactory
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.utils.logGoogleLoginClicked
@@ -137,27 +135,5 @@ class RegisterViewModel
                     }
                 },
             )
-        }
-
-        companion object {
-            fun factory(
-                analyticsHelper: AnalyticsHelper,
-                getJwtTokenUseCase: GetJwtTokenUseCase,
-                postKakaoLoginUseCase: PostKakaoLoginUseCase,
-                saveJwtTokenUseCase: SaveJwtTokenUseCase,
-                saveAlarmTokenUseCase: SaveAlamTokenUseCase,
-                getFCMTokenUseCase: GetFCMTokenUseCase,
-            ): ViewModelProvider.Factory {
-                return BaseViewModelFactory { _ ->
-                    RegisterViewModel(
-                        analyticsHelper = analyticsHelper,
-                        getJwtTokenUseCase = getJwtTokenUseCase,
-                        postKakaoLoginUseCase = postKakaoLoginUseCase,
-                        saveJwtTokenUseCase = saveJwtTokenUseCase,
-                        saveAlarmTokenUseCase = saveAlarmTokenUseCase,
-                        getFCMTokenUseCase = getFCMTokenUseCase,
-                    )
-                }
-            }
         }
     }
