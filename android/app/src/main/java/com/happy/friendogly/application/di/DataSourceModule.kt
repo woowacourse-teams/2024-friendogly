@@ -39,57 +39,57 @@ import javax.inject.Singleton
 abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun provideAddressDataSource(dataSourceImpl: AddressDataSourceImpl): AddressDataSource
+    abstract fun bindsAddressDataSource(dataSourceImpl: AddressDataSourceImpl): AddressDataSource
 
     @Binds
     @Singleton
-    abstract fun provideAlarmSettingDataSource(dataSourceImpl: AlarmSettingDataSourceImpl): AlarmSettingDataSource
+    abstract fun bindsAlarmSettingDataSource(dataSourceImpl: AlarmSettingDataSourceImpl): AlarmSettingDataSource
 
     @Binds
     @Singleton
-    abstract fun provideAlarmTokenDataSource(dataSourceImpl: AlamTokenDataSourceImpl): AlarmTokenDataSource
+    abstract fun bindsAlarmTokenDataSource(dataSourceImpl: AlamTokenDataSourceImpl): AlarmTokenDataSource
 
     @Binds
     @Singleton
-    abstract fun provideAuthDataSource(dataSourceImpl: AuthDataSourceImpl): AuthDataSource
+    abstract fun bindsAuthDataSource(dataSourceImpl: AuthDataSourceImpl): AuthDataSource
 
     @Binds
     @Singleton
-    abstract fun provideChatDataSource(dataSourceImpl: ChatDataSourceImpl): ChatDataSource
+    abstract fun bindsChatDataSource(dataSourceImpl: ChatDataSourceImpl): ChatDataSource
 
     @Binds
     @Singleton
-    abstract fun provideClubDataSource(dataSourceImpl: ClubDataSourceImpl): ClubDataSource
+    abstract fun bindsClubDataSource(dataSourceImpl: ClubDataSourceImpl): ClubDataSource
 
     @Binds
     @Singleton
-    abstract fun provideKakaoLoginDataSource(dataSourceImpl: KakaoLoginDataSourceImpl): KakaoLoginDataSource
+    abstract fun bindsKakaoLoginDataSource(dataSourceImpl: KakaoLoginDataSourceImpl): KakaoLoginDataSource
 
     @Binds
     @Singleton
-    abstract fun provideMemberDataSource(dataSourceImpl: MemberDataSourceImpl): MemberDataSource
+    abstract fun bindsMemberDataSource(dataSourceImpl: MemberDataSourceImpl): MemberDataSource
 
     @Binds
     @Singleton
-    abstract fun provideMessagingDataSource(dataSourceImpl: MessagingDataSourceImpl): MessagingDataSource
+    abstract fun bindsMessagingDataSource(dataSourceImpl: MessagingDataSourceImpl): MessagingDataSource
 
     @Binds
     @Singleton
-    abstract fun provideMyClubDataSource(dataSourceImpl: MyClubDataSourceImpl): MyClubDataSource
+    abstract fun bindsMyClubDataSource(dataSourceImpl: MyClubDataSourceImpl): MyClubDataSource
 
     @Binds
     @Singleton
-    abstract fun providePetDataSource(dataSourceImpl: PetDataSourceImpl): PetDataSource
+    abstract fun bindsPetDataSource(dataSourceImpl: PetDataSourceImpl): PetDataSource
 
     @Binds
     @Singleton
-    abstract fun provideTokenDataSource(dataSourceImpl: TokenDataSourceImpl): TokenDataSource
+    abstract fun bindsTokenDataSource(dataSourceImpl: TokenDataSourceImpl): TokenDataSource
 
     @Binds
     @Singleton
-    abstract fun provideWebSocketDataSource(dataSourceImpl: WebSocketDataSourceImpl): WebSocketDataSource
+    abstract fun bindsWebSocketDataSource(dataSourceImpl: WebSocketDataSourceImpl): WebSocketDataSource
 
     @Binds
     @Singleton
-    abstract fun provideWoofDataSource(dataSourceImpl: WoofDataSourceImpl): WoofDataSource
+    abstract fun bindsWoofDataSource(dataSourceImpl: WoofDataSourceImpl): WoofDataSource
 }

@@ -35,8 +35,8 @@ annotation class Websocket
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private val contentType = "application/json".toMediaType()
-    private val timeOutMinute = 1L
-    private val pingOutSecond = 100L
+    private const val TIME_OUT_MINUTE = 1L
+    private const val PING_OUT_SECOND = 100L
     private val logging =
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -112,6 +112,6 @@ object NetworkModule {
     }
 
     private fun createOkHttpClient(interceptors: OkHttpClient.Builder.() -> Unit = { }): OkHttpClient =
-        OkHttpClient.Builder().callTimeout(Duration.ofMinutes(timeOutMinute))
-            .pingInterval(Duration.ofSeconds(pingOutSecond)).apply(interceptors).build()
+        OkHttpClient.Builder().callTimeout(Duration.ofMinutes(TIME_OUT_MINUTE))
+            .pingInterval(Duration.ofSeconds(PING_OUT_SECOND)).apply(interceptors).build()
 }

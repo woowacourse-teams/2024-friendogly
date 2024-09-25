@@ -17,7 +17,7 @@ import javax.inject.Singleton
 object RoomModule {
     @Provides
     @Singleton
-    fun provideChatRoomDatabase(
+    fun providesChatRoomDatabase(
         @ApplicationContext appContext: Context,
     ): ChatMessageDatabase =
         Room.databaseBuilder(
@@ -28,9 +28,9 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideChatRoomDao(chatMessageDatabase: ChatMessageDatabase): ChatRoomDao = chatMessageDatabase.chatRoomDao()
+    fun providesChatRoomDao(chatMessageDatabase: ChatMessageDatabase): ChatRoomDao = chatMessageDatabase.chatRoomDao()
 
     @Provides
     @Singleton
-    fun provideChatMessageDao(chatMessageDatabase: ChatMessageDatabase): ChatMessageDao = chatMessageDatabase.chatMessageDao()
+    fun providesChatMessageDao(chatMessageDatabase: ChatMessageDatabase): ChatMessageDao = chatMessageDatabase.chatMessageDao()
 }

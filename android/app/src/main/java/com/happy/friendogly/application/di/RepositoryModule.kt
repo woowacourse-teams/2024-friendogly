@@ -39,57 +39,57 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun provideAddressRepository(repositoryImpl: AddressRepositoryImpl): AddressRepository
+    abstract fun bindsAddressRepository(repositoryImpl: AddressRepositoryImpl): AddressRepository
 
     @Binds
     @Singleton
-    abstract fun provideAlarmSettingRepository(repositoryImpl: AlarmSettingRepositoryImpl): AlarmSettingRepository
+    abstract fun bindsAlarmSettingRepository(repositoryImpl: AlarmSettingRepositoryImpl): AlarmSettingRepository
 
     @Binds
     @Singleton
-    abstract fun provideAlarmTokenRepository(repositoryImpl: AlarmTokenRepositoryImpl): AlarmTokenRepository
+    abstract fun bindsAlarmTokenRepository(repositoryImpl: AlarmTokenRepositoryImpl): AlarmTokenRepository
 
     @Binds
     @Singleton
-    abstract fun provideAuthRepository(repositoryImpl: AuthRepositoryImpl): AuthRepository
+    abstract fun bindsAuthRepository(repositoryImpl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    abstract fun provideChatRepository(repositoryImpl: ChatRepositoryImpl): ChatRepository
+    abstract fun bindsChatRepository(repositoryImpl: ChatRepositoryImpl): ChatRepository
 
     @Binds
     @Singleton
-    abstract fun provideClubRepository(repositoryImpl: ClubRepositoryImpl): ClubRepository
+    abstract fun bindsClubRepository(repositoryImpl: ClubRepositoryImpl): ClubRepository
 
     @Binds
     @Singleton
-    abstract fun provideKakaoLoginRepository(repositoryImpl: KakaoLoginRepositoryImpl): KakaoLoginRepository
+    abstract fun bindsKakaoLoginRepository(repositoryImpl: KakaoLoginRepositoryImpl): KakaoLoginRepository
 
     @Binds
     @Singleton
-    abstract fun provideMemberRepository(repositoryImpl: MemberRepositoryImpl): MemberRepository
+    abstract fun bindsMemberRepository(repositoryImpl: MemberRepositoryImpl): MemberRepository
 
     @Binds
     @Singleton
-    abstract fun provideMessagingRepository(repositoryImpl: MessagingRepositoryImpl): MessagingRepository
+    abstract fun bindsMessagingRepository(repositoryImpl: MessagingRepositoryImpl): MessagingRepository
 
     @Binds
     @Singleton
-    abstract fun provideMyClubRepository(repositoryImpl: MyClubRepositoryImpl): MyClubRepository
+    abstract fun bindsMyClubRepository(repositoryImpl: MyClubRepositoryImpl): MyClubRepository
 
     @Binds
     @Singleton
-    abstract fun providePetRepository(repositoryImpl: PetRepositoryImpl): PetRepository
+    abstract fun bindsPetRepository(repositoryImpl: PetRepositoryImpl): PetRepository
 
     @Binds
     @Singleton
-    abstract fun provideTokenRepository(repositoryImpl: TokenRepositoryImpl): TokenRepository
+    abstract fun bindsTokenRepository(repositoryImpl: TokenRepositoryImpl): TokenRepository
 
     @Binds
     @Singleton
-    abstract fun provideWebSocketRepository(repositoryImpl: WebSocketRepositoryImpl): WebSocketRepository
+    abstract fun bindsWebSocketRepository(repositoryImpl: WebSocketRepositoryImpl): WebSocketRepository
 
     @Binds
     @Singleton
-    abstract fun provideWoofRepository(repositoryImpl: WoofRepositoryImpl): WoofRepository
+    abstract fun bindsWoofRepository(repositoryImpl: WoofRepositoryImpl): WoofRepository
 }

@@ -19,32 +19,32 @@ import javax.inject.Singleton
 object ServiceModule {
     @Provides
     @Singleton
-    fun provideAlarmTokenService(retrofit: Retrofit): AlarmTokenService =
+    fun providesAlarmTokenService(retrofit: Retrofit): AlarmTokenService =
         retrofit.create(
             AlarmTokenService::class.java,
         )
 
     @Provides
     @Singleton
-    fun provideChatService(retrofit: Retrofit): ChatService = retrofit.create(ChatService::class.java)
+    fun providesChatService(retrofit: Retrofit): ChatService = retrofit.create(ChatService::class.java)
 
     @Provides
     @Singleton
-    fun provideClubService(retrofit: Retrofit): ClubService = retrofit.create(ClubService::class.java)
+    fun providesClubService(retrofit: Retrofit): ClubService = retrofit.create(ClubService::class.java)
 
     @Provides
     @Singleton
-    fun provideMemberService(retrofit: Retrofit): MemberService = retrofit.create(MemberService::class.java)
+    fun providesMemberService(retrofit: Retrofit): MemberService = retrofit.create(MemberService::class.java)
 
     @Provides
     @Singleton
-    fun provideMyClubService(retrofit: Retrofit): MyClubService = retrofit.create(MyClubService::class.java)
+    fun providesMyClubService(retrofit: Retrofit): MyClubService = retrofit.create(MyClubService::class.java)
 
     @Provides
     @Singleton
-    fun providePerService(retrofit: Retrofit): PetService = retrofit.create(PetService::class.java)
+    fun providesPerService(retrofit: Retrofit): PetService = retrofit.create(PetService::class.java)
 
     @Provides
     @Singleton
-    fun provideWoofService(retrofit: Retrofit): WoofService = retrofit.create(WoofService::class.java)
+    fun providesWoofService(retrofit: Retrofit): WoofService = retrofit.create(WoofService::class.java)
 }

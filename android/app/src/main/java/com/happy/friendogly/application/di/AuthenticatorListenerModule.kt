@@ -12,5 +12,5 @@ import javax.inject.Singleton
 abstract class AuthenticatorListenerModule {
     @Binds
     @Singleton
-    abstract fun provideAuthenticatorListener(listenerImpl: AuthenticationListenerImpl): AuthenticationListener
+    abstract fun bindsAuthenticatorListener(listenerImpl: AuthenticationListenerImpl): AuthenticationListener
 }

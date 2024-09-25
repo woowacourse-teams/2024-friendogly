@@ -18,31 +18,31 @@ import javax.inject.Singleton
 object DataStoreModule {
     @Provides
     @Singleton
-    fun provideAddress(
+    fun providesAddress(
         @ApplicationContext appContext: Context,
     ): AddressModule = AddressModule(appContext)
 
     @Provides
     @Singleton
-    fun provideAlarmTokenModule(
+    fun providesAlarmTokenModule(
         @ApplicationContext appContext: Context,
     ): AlarmTokenModule = AlarmTokenModule(appContext)
 
     @Provides
     @Singleton
-    fun provideChatAlarmModule(
+    fun providesChatAlarmModule(
         @ApplicationContext appContext: Context,
     ): ChatAlarmModule = ChatAlarmModule(appContext)
 
     @Provides
     @Singleton
-    fun provideTokenManager(
+    fun providesTokenManager(
         @ApplicationContext appContext: Context,
     ): TokenManager = TokenManager(appContext)
 
     @Provides
     @Singleton
-    fun provideWoofAlarmModule(
+    fun providesWoofAlarmModule(
         @ApplicationContext appContext: Context,
     ): WoofAlarmModule = WoofAlarmModule(appContext)
 }
