@@ -67,16 +67,17 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         clickAlarmSetting()
     }
 
-    private fun initAlamPermission() = AlarmPermission.from(this, analyticsHelper) { isPermitted ->
-        if (!isPermitted) {
-            Snackbar.make(
-                binding.root,
-                getString(R.string.chat_setting_alarm_alert),
-                Snackbar.LENGTH_SHORT,
-            ).show()
-            binding.switchChatSettingAlarm.isChecked = false
+    private fun initAlamPermission() =
+        AlarmPermission.from(this, analyticsHelper) { isPermitted ->
+            if (!isPermitted) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.chat_setting_alarm_alert),
+                    Snackbar.LENGTH_SHORT,
+                ).show()
+                binding.switchChatSettingAlarm.isChecked = false
+            }
         }
-    }
 
     private fun initChatInfo() {
         val chatId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))

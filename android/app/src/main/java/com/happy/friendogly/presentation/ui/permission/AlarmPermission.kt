@@ -171,7 +171,7 @@ class AlarmPermission private constructor(
             lifecycleOwner: LifecycleOwner,
             analyticsHelper: AnalyticsHelper,
             isPermitted: (Boolean) -> Unit,
-        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner),analyticsHelper, isPermitted)
+        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner), analyticsHelper, isPermitted)
 
         fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     }

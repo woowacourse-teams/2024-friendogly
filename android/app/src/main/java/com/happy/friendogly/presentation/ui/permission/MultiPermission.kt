@@ -87,8 +87,8 @@ class MultiPermission private constructor(
                             lifecycleOwner,
                             analyticsHelper,
                             isPermitted =
-                            permissionActions[it.key]
-                                ?: error("유효하지 않은 값이 들어왔습니다"),
+                                permissionActions[it.key]
+                                    ?: error("유효하지 않은 값이 들어왔습니다"),
                         )
 
                     PermissionType.Location ->
@@ -96,8 +96,8 @@ class MultiPermission private constructor(
                             lifecycleOwner,
                             analyticsHelper,
                             isPermitted =
-                            permissionActions[it.key]
-                                ?: error("유효하지 않은 값이 들어왔습니다"),
+                                permissionActions[it.key]
+                                    ?: error("유효하지 않은 값이 들어왔습니다"),
                         )
                 }
             }
@@ -135,7 +135,7 @@ class MultiPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
-            analyticsHelper: AnalyticsHelper
-        ): MultiPermission = MultiPermission(WeakReference(lifecycleOwner),analyticsHelper)
+            analyticsHelper: AnalyticsHelper,
+        ): MultiPermission = MultiPermission(WeakReference(lifecycleOwner), analyticsHelper)
     }
 }

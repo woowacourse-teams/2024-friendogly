@@ -8,7 +8,6 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
-
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
@@ -66,11 +65,11 @@ class AlarmReceiver : FirebaseMessagingService() {
                         Message.Other(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                             content = content,
                         )
 
@@ -78,22 +77,22 @@ class AlarmReceiver : FirebaseMessagingService() {
                         ChatComponent.Leave(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                         )
 
                     "ENTER" ->
                         ChatComponent.Enter(
                             createdAt = createdAt,
                             member =
-                            ChatMember(
-                                id = memberId,
-                                name = name,
-                                profileImageUrl = profileUrl,
-                            ),
+                                ChatMember(
+                                    id = memberId,
+                                    name = name,
+                                    profileImageUrl = profileUrl,
+                                ),
                         )
 
                     else -> error("잘못된 타입이 들어왔습니다.")

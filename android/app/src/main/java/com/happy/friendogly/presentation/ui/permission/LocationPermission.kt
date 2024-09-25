@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
-
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
@@ -64,9 +63,9 @@ class LocationPermission private constructor(
         return getActivity()?.checkSelfPermission(
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED &&
-                getActivity()?.checkSelfPermission(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                ) == PackageManager.PERMISSION_GRANTED
+            getActivity()?.checkSelfPermission(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getActivity(): AppCompatActivity? =
@@ -89,12 +88,12 @@ class LocationPermission private constructor(
     private fun AppCompatActivity.createDialog(): DialogFragment =
         DefaultCoralAlertDialog(
             alertDialogModel =
-            AlertDialogModel(
-                getString(R.string.location_dialog_title),
-                getString(R.string.location_dialog_body),
-                getString(R.string.permission_cancel),
-                getString(R.string.permission_go_setting),
-            ),
+                AlertDialogModel(
+                    getString(R.string.location_dialog_title),
+                    getString(R.string.location_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
             clickToNegative = {
                 isPermitted(false)
                 analyticsHelper.logPermissionLocationDenied()
@@ -109,12 +108,12 @@ class LocationPermission private constructor(
     private fun Fragment.createDialog(): DialogFragment =
         DefaultCoralAlertDialog(
             alertDialogModel =
-            AlertDialogModel(
-                getString(R.string.location_dialog_title),
-                getString(R.string.location_dialog_body),
-                getString(R.string.permission_cancel),
-                getString(R.string.permission_go_setting),
-            ),
+                AlertDialogModel(
+                    getString(R.string.location_dialog_title),
+                    getString(R.string.location_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
             clickToNegative = {
                 isPermitted(false)
                 analyticsHelper.logPermissionLocationDenied()
@@ -142,10 +141,10 @@ class LocationPermission private constructor(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
     }
 
     companion object {
@@ -153,7 +152,6 @@ class LocationPermission private constructor(
             lifecycleOwner: LifecycleOwner,
             analyticsHelper: AnalyticsHelper,
             isPermitted: (Boolean) -> Unit,
-        ): LocationPermission =
-            LocationPermission(WeakReference(lifecycleOwner), analyticsHelper, isPermitted)
+        ): LocationPermission = LocationPermission(WeakReference(lifecycleOwner), analyticsHelper, isPermitted)
     }
 }

@@ -25,25 +25,24 @@ object DataStoreModule {
     @Provides
     @Singleton
     fun provideAlarmTokenModule(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): AlarmTokenModule = AlarmTokenModule(appContext)
 
     @Provides
     @Singleton
     fun provideChatAlarmModule(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): ChatAlarmModule = ChatAlarmModule(appContext)
 
     @Provides
     @Singleton
     fun provideTokenManager(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): TokenManager = TokenManager(appContext)
 
     @Provides
     @Singleton
     fun provideWoofAlarmModule(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): WoofAlarmModule = WoofAlarmModule(appContext)
-
 }

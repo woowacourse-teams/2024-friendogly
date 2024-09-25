@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.firebase.crashlytics.CrashlyticsHelper
-
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -15,7 +14,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
     @Inject
-    lateinit var crashlyticsHelper:CrashlyticsHelper
+    lateinit var crashlyticsHelper: CrashlyticsHelper
 
     protected fun launch(
         context: CoroutineContext = EmptyCoroutineContext,

@@ -38,19 +38,20 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
         setSwitchCheckListener()
     }
 
-    private fun initAlarmPermission() = AlarmPermission.from(this, analyticsHelper) { isPermitted ->
-        if (!isPermitted) {
-            Snackbar.make(
-                binding.root,
-                getString(R.string.chat_setting_alarm_alert),
-                Snackbar.LENGTH_SHORT,
-            ).show()
-            with(binding) {
-                alarmSettingsChattingPushSwitch.isChecked = false
-                alarmSettingsWoofPushSwitch.isChecked = false
+    private fun initAlarmPermission() =
+        AlarmPermission.from(this, analyticsHelper) { isPermitted ->
+            if (!isPermitted) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.chat_setting_alarm_alert),
+                    Snackbar.LENGTH_SHORT,
+                ).show()
+                with(binding) {
+                    alarmSettingsChattingPushSwitch.isChecked = false
+                    alarmSettingsWoofPushSwitch.isChecked = false
+                }
             }
         }
-    }
 
     private fun initDataBinding() {
         binding.vm = viewModel

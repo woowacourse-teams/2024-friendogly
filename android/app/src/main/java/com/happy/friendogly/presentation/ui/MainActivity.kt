@@ -39,13 +39,14 @@ class MainActivity :
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private lateinit var permission:MultiPermission
+    private lateinit var permission: MultiPermission
 
     override fun initCreateView() {
         initNavController()
-        permission = initMultiPermission().apply {
-            showDialog().launch()
-        }
+        permission =
+            initMultiPermission().apply {
+                showDialog().launch()
+            }
     }
 
     private fun initMultiPermission() =

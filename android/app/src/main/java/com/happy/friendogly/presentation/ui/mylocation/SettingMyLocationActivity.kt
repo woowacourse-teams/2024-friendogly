@@ -97,7 +97,7 @@ class SettingMyLocationActivity :
     }
 
     private fun initLocationPermission() =
-        LocationPermission.from(this,analyticsHelper) { isPermitted ->
+        LocationPermission.from(this, analyticsHelper) { isPermitted ->
             if (isPermitted) {
                 mapView.getMapAsync(this)
                 activateMap()
