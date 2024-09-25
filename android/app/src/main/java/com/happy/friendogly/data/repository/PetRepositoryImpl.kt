@@ -15,8 +15,9 @@ import kotlinx.datetime.LocalDate
 import okhttp3.MultipartBody
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class PetRepositoryImpl(private val source: PetDataSource) : PetRepository {
+class PetRepositoryImpl @Inject constructor(private val source: PetDataSource) : PetRepository {
     override suspend fun getPetsMine(): DomainResult<List<Pet>, DataError.Network> =
         source.getPetsMine().fold(
             onSuccess = { result ->

@@ -2,8 +2,9 @@ package com.happy.friendogly.data.repository
 
 import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
+import javax.inject.Inject
 
-class AlarmSettingRepositoryImpl(private val source: AlarmSettingDataSource) :
+class AlarmSettingRepositoryImpl @Inject constructor(private val source: AlarmSettingDataSource) :
     AlarmSettingRepository {
     override suspend fun saveChatSetting(isSet: Boolean): Result<Unit> = source.saveChatSetting(isSet)
 

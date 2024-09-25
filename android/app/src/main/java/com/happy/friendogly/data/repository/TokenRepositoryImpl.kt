@@ -7,8 +7,9 @@ import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.JwtToken
 import com.happy.friendogly.domain.repository.TokenRepository
+import javax.inject.Inject
 
-class TokenRepositoryImpl(
+class TokenRepositoryImpl @Inject constructor(
     private val source: TokenDataSource,
 ) : TokenRepository {
     override suspend fun getJwtToken(): DomainResult<JwtToken?, DataError.Local> =

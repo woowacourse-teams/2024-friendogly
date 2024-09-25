@@ -10,8 +10,9 @@ import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.repository.WebSocketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class WebSocketRepositoryImpl(private val source: WebSocketDataSource) : WebSocketRepository {
+class WebSocketRepositoryImpl @Inject constructor(private val source: WebSocketDataSource) : WebSocketRepository {
     override suspend fun connect(): Result<Unit> = source.connect()
 
     override suspend fun disconnect(): Result<Unit> = source.disconnect()

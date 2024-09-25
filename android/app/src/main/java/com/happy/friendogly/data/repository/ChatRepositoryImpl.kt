@@ -11,8 +11,9 @@ import com.happy.friendogly.domain.repository.ChatRepository
 import com.happy.friendogly.local.mapper.toData
 import com.happy.friendogly.local.mapper.toDomain
 import com.happy.friendogly.local.room.ChatRoomDao
+import javax.inject.Inject
 
-class ChatRepositoryImpl(
+class ChatRepositoryImpl @Inject constructor(
     private val source: ChatDataSource,
     private val chatRoomDao: ChatRoomDao,
 ) : ChatRepository {

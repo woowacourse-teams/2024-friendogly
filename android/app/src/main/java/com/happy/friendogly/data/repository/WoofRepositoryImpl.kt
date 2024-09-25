@@ -12,8 +12,9 @@ import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
 import com.happy.friendogly.remote.model.request.FootprintRequest
+import javax.inject.Inject
 
-class WoofRepositoryImpl(private val source: WoofDataSource) : WoofRepository {
+class WoofRepositoryImpl @Inject constructor(private val source: WoofDataSource) : WoofRepository {
     override suspend fun postFootprint(
         latitude: Double,
         longitude: Double,

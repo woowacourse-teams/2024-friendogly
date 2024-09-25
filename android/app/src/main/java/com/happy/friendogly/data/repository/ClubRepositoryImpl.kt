@@ -13,8 +13,9 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.ClubRepository
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class ClubRepositoryImpl(
+class ClubRepositoryImpl @Inject constructor(
     private val source: ClubDataSource,
 ) : ClubRepository {
     override suspend fun postClub(

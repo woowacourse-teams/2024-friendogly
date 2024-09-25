@@ -9,8 +9,9 @@ import com.happy.friendogly.domain.model.Login
 import com.happy.friendogly.domain.repository.AuthRepository
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val source: AuthDataSource,
 ) : AuthRepository {
     override suspend fun postKakaoLogin(accessToken: String): DomainResult<Login, DataError.Network> {

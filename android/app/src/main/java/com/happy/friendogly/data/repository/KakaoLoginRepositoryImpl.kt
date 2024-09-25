@@ -7,8 +7,9 @@ import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.KakaoAccessToken
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
+import javax.inject.Inject
 
-class KakaoLoginRepositoryImpl(
+class KakaoLoginRepositoryImpl @Inject constructor(
     private val dataSource: KakaoLoginDataSource,
 ) : KakaoLoginRepository {
     override suspend fun login(context: Context): DomainResult<KakaoAccessToken, DataError.Local> =

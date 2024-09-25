@@ -4,8 +4,9 @@ import com.happy.friendogly.data.source.MessagingDataSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.repository.MessagingRepository
+import javax.inject.Inject
 
-class MessagingRepositoryImpl(
+class MessagingRepositoryImpl @Inject constructor(
     private val source: MessagingDataSource,
 ) : MessagingRepository {
     override suspend fun getToken(): DomainResult<String, DataError.Local> {

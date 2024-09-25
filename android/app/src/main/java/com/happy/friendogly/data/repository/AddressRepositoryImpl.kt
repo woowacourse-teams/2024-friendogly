@@ -5,8 +5,9 @@ import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.repository.AddressRepository
+import javax.inject.Inject
 
-class AddressRepositoryImpl(
+class AddressRepositoryImpl @Inject constructor(
     private val addressDataSource: AddressDataSource,
 ) : AddressRepository {
     override suspend fun getAddress(): Result<UserAddress> =

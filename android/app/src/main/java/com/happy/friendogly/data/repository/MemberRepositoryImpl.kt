@@ -13,8 +13,9 @@ import com.happy.friendogly.domain.repository.MemberRepository
 import okhttp3.MultipartBody
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class MemberRepositoryImpl(
+class MemberRepositoryImpl @Inject constructor(
     private val source: MemberDataSource,
 ) : MemberRepository {
     override suspend fun postMember(
