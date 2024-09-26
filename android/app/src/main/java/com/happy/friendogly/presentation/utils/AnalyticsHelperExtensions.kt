@@ -70,8 +70,8 @@ fun AnalyticsHelper.logHelpBtnClicked() {
     logEvent(type = Types.HELP_BTN_CLICKED)
 }
 
-fun AnalyticsHelper.logFootprintPetImageClicked() {
-    logEvent(type = Types.FOOTPRINT_PET_IMAGE_CLICKED)
+fun AnalyticsHelper.logPetImageClicked() {
+    logEvent(type = Types.PET_IMAGE_CLICKED)
 }
 
 fun AnalyticsHelper.logNearFootprintSize(size: Int) {

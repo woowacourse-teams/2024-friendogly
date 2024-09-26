@@ -1,7 +1,7 @@
 package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.model.PetDetailDto
-import com.happy.friendogly.presentation.ui.woof.model.PetDetail
+import com.happy.friendogly.presentation.ui.playground.model.PetDetail
 
 fun PetDetailDto.toDomain(): PetDetail {
     return PetDetail(

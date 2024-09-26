@@ -1,7 +1,7 @@
 package com.happy.friendogly.domain.repository
 
+import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
-import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
@@ -27,7 +27,7 @@ interface WoofRepository {
         longitude: Double,
     ): Result<List<Footprint>>
 
-    suspend fun getFootprintInfo(footprintId: Long): Result<FootprintInfo>
+    suspend fun getFootprintInfo(footprintId: Long): Result<PlaygroundInfo>
 
     suspend fun deleteFootprint(footprintId: Long): Result<Unit>
 }

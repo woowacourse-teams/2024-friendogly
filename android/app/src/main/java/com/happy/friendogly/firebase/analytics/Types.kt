@@ -46,7 +46,7 @@ object Types {
     const val CLOSE_BTN_CLICKED = "close_btn_clicked"
     const val FOOTPRINT_MEMBER_NAME_CLICKED = "footprint_member_name_clicked"
     const val HELP_BTN_CLICKED = "help_btn_clicked"
-    const val FOOTPRINT_PET_IMAGE_CLICKED = "footprint_pet_image_clicked"
+    const val PET_IMAGE_CLICKED = "pet_image_clicked"
     const val CLUB_SELECT_PARTICIPATION_FILTER = "club_select_participation_filter"
     const val CLUB_SELECT_CLUB_FILTER = "club_select_club_filter"
     const val CLUB_ADD_UN_SELECT_FILTER = "club_add_un_select_filter"

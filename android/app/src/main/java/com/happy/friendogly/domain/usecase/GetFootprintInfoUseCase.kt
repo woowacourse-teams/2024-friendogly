@@ -1,11 +1,11 @@
 package com.happy.friendogly.domain.usecase
 
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.woof.model.FootprintInfo
+import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import javax.inject.Inject
 
 class GetFootprintInfoUseCase
     @Inject
     constructor(private val repository: WoofRepository) {
-        suspend operator fun invoke(footprintId: Long): Result<FootprintInfo> = repository.getFootprintInfo(footprintId)
+        suspend operator fun invoke(footprintId: Long): Result<PlaygroundInfo> = repository.getFootprintInfo(footprintId)
     }

@@ -1,8 +1,9 @@
-package com.happy.friendogly.presentation.ui.woof.model
+package com.happy.friendogly.presentation.ui.playground.model
 
+import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import kotlinx.datetime.LocalDateTime
 
-data class FootprintInfo(
+data class PlaygroundInfo(
     val memberId: Long,
     val memberName: String,
     val walkStatus: WalkStatus,

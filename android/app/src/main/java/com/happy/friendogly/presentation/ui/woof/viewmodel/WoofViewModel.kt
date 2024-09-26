@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toFootprint
 import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
-import com.happy.friendogly.domain.usecase.GetFootprintInfoUseCase
 import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
 import com.happy.friendogly.domain.usecase.GetNearFootprintsUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
@@ -23,11 +22,9 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions
-import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
-import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.MyFootprintMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.OtherFootprintMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterFootprintBtnUiModel
@@ -36,7 +33,6 @@ import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
 import com.happy.friendogly.presentation.utils.logFootprintMarkBtnInfo
 import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
-import com.happy.friendogly.presentation.utils.logFootprintPetImageClicked
 import com.happy.friendogly.presentation.utils.logHelpBtnClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
 import com.happy.friendogly.presentation.utils.logMarkBtnClicked
@@ -60,7 +56,6 @@ class WoofViewModel
         private val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
         private val getNearFootprintsUseCase: GetNearFootprintsUseCase,
         private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
-        private val getFootprintInfoUseCase: GetFootprintInfoUseCase,
         private val deleteFootprintUseCase: DeleteFootprintUseCase,
     ) : BaseViewModel(), WoofActionHandler {
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
@@ -76,8 +71,8 @@ class WoofViewModel
             MutableLiveData()
         val nearFootprintMarkers: LiveData<List<OtherFootprintMarkerUiModel>> get() = _nearFootprintMarkers
 
-        private val _footprintInfo: MutableLiveData<FootprintInfoUiModel> = MutableLiveData()
-        val footprintInfo: LiveData<FootprintInfoUiModel> get() = _footprintInfo
+        private val _recentlyClickedMarker: MutableLiveData<Marker> = MutableLiveData()
+        val recentlyClickedMarker: LiveData<Marker> get() = _recentlyClickedMarker
 
         private val _addressLine: MutableLiveData<String> = MutableLiveData()
         val addressLine: LiveData<String> get() = _addressLine
@@ -163,11 +158,6 @@ class WoofViewModel
         override fun clickCloseBtn() {
             analyticsHelper.logCloseBtnClicked()
             updateUiState(WoofUiState.FindingFriends)
-        }
-
-        override fun clickFootprintPetImage(petImageUrl: String) {
-            analyticsHelper.logFootprintPetImageClicked()
-            _navigateActions.emit(WoofNavigateActions.NavigateToPetImage(petImageUrl))
         }
 
         override fun clickFootprintMemberName(memberId: Long) {
@@ -365,17 +355,8 @@ class WoofViewModel
             )
         }
 
-        fun loadFootprintInfo(
-            footprintId: Long,
-            marker: Marker,
-        ) {
-            viewModelScope.launch {
-                getFootprintInfoUseCase(footprintId).onSuccess { footprintInfo ->
-                    _footprintInfo.value = footprintInfo.toPresentation(marker)
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar)
-                }
-            }
+        fun loadRecentlyClickedMarker(marker: Marker) {
+            _recentlyClickedMarker.value = marker
         }
 
         fun updateUiState(uiState: WoofUiState) {

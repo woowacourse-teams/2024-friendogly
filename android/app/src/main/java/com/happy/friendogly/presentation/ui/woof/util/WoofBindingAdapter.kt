@@ -22,11 +22,8 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
-import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
-import kotlinx.datetime.toJavaLocalDateTime
-import java.time.Duration
 import java.time.Period
 
 private const val MARGIN_BOTTOM_DEFAULT = 36
@@ -96,37 +93,6 @@ fun TextView.bindPetGender(petGender: Gender) {
         }
 }
 
-@BindingAdapter("walkStatusInfo")
-fun TextView.bindWalkStatusInfo(walkStatusInfo: WalkStatusInfoUiModel?) {
-    if (walkStatusInfo != null) {
-        val duration =
-            Duration.between(
-                walkStatusInfo.changedWalkStatusTime.toJavaLocalDateTime(),
-                java.time.LocalDateTime.now(),
-            )
-
-        val minute = duration.toMinutes()
-        when (walkStatusInfo.walkStatus) {
-            WalkStatus.BEFORE -> {
-                text = resources.getString(R.string.woof_walk_before, minute)
-                setTextColor(ContextCompat.getColor(context, R.color.coral400))
-            }
-
-            WalkStatus.ONGOING -> {
-                text = resources.getString(R.string.woof_walk_ongoing, minute)
-                setTextColor(ContextCompat.getColor(context, R.color.coral500))
-            }
-
-            WalkStatus.AFTER -> {
-                val afterHour = walkStatusInfo.changedWalkStatusTime.hour
-                val afterMinute = walkStatusInfo.changedWalkStatusTime.minute
-                text = resources.getString(R.string.woof_walk_after, afterHour, afterMinute)
-                setTextColor(ContextCompat.getColor(context, R.color.gray600))
-            }
-        }
-    }
-}
-
 @BindingAdapter("myWalkStatus")
 fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
     if (walkStatus != null) {
@@ -174,15 +140,6 @@ fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
 @BindingAdapter("registeringVisibilityAnimation")
 fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
     if (uiState is WoofUiState.RegisteringFootprint) {
-        showViewAnimation()
-    } else {
-        hideViewAnimation()
-    }
-}
-
-@BindingAdapter("viewingVisibilityAnimation")
-fun View.bindViewingVisibilityAnimation(uiState: WoofUiState?) {
-    if (uiState == WoofUiState.ViewingFootprintInfo) {
         showViewAnimation()
     } else {
         hideViewAnimation()

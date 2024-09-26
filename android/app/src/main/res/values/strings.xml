@@ -273,7 +273,7 @@
     <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">주변 발자국을 불러오지 못했습니다!</string>
     <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
-    <string name="woof_fail_to_load_footprint_info">발자국 정보를 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
     <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
     <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
     <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>

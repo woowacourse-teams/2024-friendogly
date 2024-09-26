@@ -1,21 +1,21 @@
-package com.happy.friendogly.presentation.ui.woof.adapter
+package com.happy.friendogly.presentation.ui.playground.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.happy.friendogly.databinding.ItemFootprintInfoPetDetailBinding
-import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
-import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
+import com.happy.friendogly.databinding.ItemPlaygroundPetDetailBinding
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
+import com.happy.friendogly.presentation.ui.playground.uimodel.PetDetailInfoUiModel
 
-class PetDetailInfoAdapter(private val actionHandler: WoofActionHandler) :
+class PetDetailInfoAdapter(private val actionHandler: PlaygroundActionHandler) :
     ListAdapter<PetDetailInfoUiModel, PetDetailInfoViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): PetDetailInfoViewHolder {
         val binding =
-            ItemFootprintInfoPetDetailBinding.inflate(
+            ItemPlaygroundPetDetailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,

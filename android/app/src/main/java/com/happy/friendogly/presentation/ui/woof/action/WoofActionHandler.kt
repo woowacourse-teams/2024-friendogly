@@ -19,8 +19,6 @@ interface WoofActionHandler {
 
     fun clickCloseBtn()
 
-    fun clickFootprintPetImage(petImageUrl: String)
-
     fun clickFootprintMemberName(memberId: Long)
 
     fun clickHelpBtn()

@@ -18,8 +18,6 @@ import android.widget.Chronometer
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentWoofBinding
@@ -30,7 +28,7 @@ import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERM
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
-import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
+import com.happy.friendogly.presentation.ui.playground.PlaygroundBottomSheet
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertEndWalkSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertHasNotPetDialog
@@ -43,7 +41,6 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FaceTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.NoFollowTrackingMode
-import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailInfoAdapter
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
@@ -77,7 +74,6 @@ import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -103,7 +99,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
-    private val adapter by lazy { PetDetailInfoAdapter(viewModel) }
+
     private val mapView: MapView by lazy { binding.mapView }
     private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
 
@@ -143,11 +139,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
-        setUpLocationPermission()
-        setUpBroadCastReceiver()
-        setUpDataBinding()
-        setUpObserve()
-        setUpViewPager()
+        setupLocationPermission()
+        setupBroadCastReceiver()
+        setupDataBinding()
+        setupObserving()
     }
 
     override fun onStart() {
@@ -276,12 +271,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpDataBinding() {
+    private fun setupDataBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
     }
 
-    private fun setUpObserve() {
+    private fun setupObserving() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState as WoofUiState) {
                 is WoofUiState.LocationPermissionsNotGranted ->
@@ -342,10 +337,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         viewModel.nearFootprintMarkers.observe(viewLifecycleOwner) {
             clearNearFootprintMarkers()
             markFootprintMarkers()
-        }
-
-        viewModel.footprintInfo.observe(viewLifecycleOwner) { footprintInfo ->
-            adapter.submitList(footprintInfo.petsDetailInfo)
         }
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
@@ -458,13 +449,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
-                is WoofAlertActions.AlertFailToLoadFootprintInfoSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.woof_fail_to_load_footprint_info,
-                        ),
-                    )
-
                 is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar ->
                     showSnackbar(
                         resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
@@ -484,15 +468,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.navigateActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is WoofNavigateActions.NavigateToPetImage -> {
-                    startActivity(
-                        PetImageActivity.getIntent(
-                            requireContext(),
-                            event.petImageUrl,
-                        ),
-                    )
-                }
-
                 is WoofNavigateActions.NavigateToOtherProfile -> {
                     startActivity(
                         OtherProfileActivity.getIntent(
@@ -505,25 +480,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpViewPager() {
-        val viewPager = binding.vpWoofPetDetail
-        viewPager.offscreenPageLimit = 3
-        viewPager.getChildAt(0).overScrollMode = View.OVER_SCROLL_NEVER
-        viewPager.adapter = adapter
-        initNearViewSize()
-    }
-
-    private fun initNearViewSize() {
-        val transform = CompositePageTransformer()
-        transform.addTransformer(MarginPageTransformer(12))
-        transform.addTransformer { view: View, fl: Float ->
-            val v = 1 - abs(fl)
-            view.scaleY = 0.8f + v * 0.2f
-        }
-        binding.vpWoofPetDetail.setPageTransformer(transform)
-    }
-
-    private fun setUpLocationPermission() {
+    private fun setupLocationPermission() {
         locationPermission =
             LocationPermission.from(this, analyticsHelper) { isPermitted ->
                 if (isPermitted) {
@@ -534,7 +491,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             }
     }
 
-    private fun setUpBroadCastReceiver() {
+    private fun setupBroadCastReceiver() {
         walkReceiver =
             WoofWalkReceiver { location ->
                 latLng = LatLng(location.latitude, location.longitude)
@@ -610,13 +567,23 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     ) {
         marker.setOnClickListener {
             changePreviousClickedMarkerSize()
-            viewModel.loadFootprintInfo(footprintId, marker)
+            viewModel.loadRecentlyClickedMarker(marker)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
             changeClickedMarkerSize(marker)
             viewModel.updateUiState(WoofUiState.ViewingFootprintInfo)
+            showPlaygroundBottomSheet(footprintId)
             true
         }
+    }
+
+    private fun showPlaygroundBottomSheet(footprintId: Long) {
+        val playgroundBottomSheet =
+            PlaygroundBottomSheet.newInstance(playgroundId = footprintId)
+        playgroundBottomSheet.show(
+            requireActivity().supportFragmentManager,
+            PlaygroundBottomSheet.TAG,
+        )
     }
 
     private fun markerIcon(footprint: Footprint): Int {
@@ -666,9 +633,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun changePreviousClickedMarkerSize() {
-        val footprintInfo = viewModel.footprintInfo.value ?: return
-        footprintInfo.marker.width = MARKER_DEFAULT_WIDTH
-        footprintInfo.marker.height = MARKER_DEFAULT_HEIGHT
+        val recentlyClickedMarker = viewModel.recentlyClickedMarker.value ?: return
+        recentlyClickedMarker.width = MARKER_DEFAULT_WIDTH
+        recentlyClickedMarker.height = MARKER_DEFAULT_HEIGHT
     }
 
     private fun changeClickedMarkerSize(marker: Marker) {

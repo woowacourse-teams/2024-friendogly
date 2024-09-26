@@ -231,40 +231,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/tv_woof_footprint_info_walk_status"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-            viewingVisibilityAnimation="@{vm.uiState}"
-            walkStatusInfo="@{vm.footprintInfo.walkStatusInfo}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rect_white_fill_30"
-            android:elevation="10dp"
-            android:gravity="center"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="10dp"
-            android:textColor="@color/coral500"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@id/vp_woof_pet_detail"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="30분째 산책중" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_woof_pet_detail"
-            viewingVisibilityAnimation="@{vm.uiState}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:elevation="10dp"
-            android:paddingHorizontal="12dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ImageView
             android:id="@+id/iv_woof_register_marker"
             registeringVisibility="@{vm.uiState}"
