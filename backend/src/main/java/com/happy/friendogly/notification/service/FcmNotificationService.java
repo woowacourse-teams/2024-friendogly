@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@Profile("!local")
+@Profile("prod")
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
