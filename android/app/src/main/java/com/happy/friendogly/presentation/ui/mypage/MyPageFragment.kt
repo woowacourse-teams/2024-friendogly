@@ -3,20 +3,16 @@ package com.happy.friendogly.presentation.ui.mypage
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentMyPageBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.mypage.adapter.PetProfileAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val viewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.factory(
-            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-            getMemberMineUseCase = AppModule.getInstance().getMemberMineUseCase,
-        )
-    }
+    private val viewModel: MyPageViewModel by viewModels()
 
     private val adapter: PetProfileAdapter by lazy { PetProfileAdapter(viewModel) }
 

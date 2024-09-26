@@ -13,67 +13,70 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.ClubRepository
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class ClubRepositoryImpl(
-    private val source: ClubDataSource,
-) : ClubRepository {
-    override suspend fun postClub(
-        title: String,
-        content: String,
-        address: ClubAddress,
-        allowedGender: List<Gender>,
-        allowedSize: List<SizeType>,
-        memberCapacity: Int,
-        file: MultipartBody.Part?,
-        petIds: List<Long>,
-    ): Result<Unit> =
-        source.postClub(
-            title = title,
-            content = content,
-            address = address.toData(),
-            allowedGender = allowedGender.map { it.toData() },
-            allowedSize = allowedSize.map { it.toData() },
-            memberCapacity = memberCapacity,
-            file = file,
-            petIds = petIds,
-        )
+class ClubRepositoryImpl
+    @Inject
+    constructor(
+        private val source: ClubDataSource,
+    ) : ClubRepository {
+        override suspend fun postClub(
+            title: String,
+            content: String,
+            address: ClubAddress,
+            allowedGender: List<Gender>,
+            allowedSize: List<SizeType>,
+            memberCapacity: Int,
+            file: MultipartBody.Part?,
+            petIds: List<Long>,
+        ): Result<Unit> =
+            source.postClub(
+                title = title,
+                content = content,
+                address = address.toData(),
+                allowedGender = allowedGender.map { it.toData() },
+                allowedSize = allowedSize.map { it.toData() },
+                memberCapacity = memberCapacity,
+                file = file,
+                petIds = petIds,
+            )
 
-    override suspend fun getSearchingClubs(
-        filterCondition: ClubFilterCondition,
-        address: ClubAddress,
-        genderParams: List<Gender>,
-        sizeParams: List<SizeType>,
-    ): Result<List<Club>> =
-        source.getSearchingClubs(
-            filterCondition = filterCondition.toData(),
-            address = address.toData(),
-            genderParams = genderParams.map { it.toData() },
-            sizeParams = sizeParams.map { it.toData() },
-        ).mapCatching { it.toDomain() }
+        override suspend fun getSearchingClubs(
+            filterCondition: ClubFilterCondition,
+            address: ClubAddress,
+            genderParams: List<Gender>,
+            sizeParams: List<SizeType>,
+        ): Result<List<Club>> =
+            source.getSearchingClubs(
+                filterCondition = filterCondition.toData(),
+                address = address.toData(),
+                genderParams = genderParams.map { it.toData() },
+                sizeParams = sizeParams.map { it.toData() },
+            ).mapCatching { it.toDomain() }
 
-    override suspend fun getClub(clubId: Long): Result<ClubDetail> = source.getClub(clubId).mapCatching { it.toDomain() }
+        override suspend fun getClub(clubId: Long): Result<ClubDetail> = source.getClub(clubId).mapCatching { it.toDomain() }
 
-    override suspend fun postClubMember(
-        clubId: Long,
-        participatingPetsId: List<Long>,
-    ): Result<ClubParticipation> =
-        source.postClubMember(
-            clubId = clubId,
-            participatingPetsId = participatingPetsId,
-        ).mapCatching { it.toDomain() }
+        override suspend fun postClubMember(
+            clubId: Long,
+            participatingPetsId: List<Long>,
+        ): Result<ClubParticipation> =
+            source.postClubMember(
+                clubId = clubId,
+                participatingPetsId = participatingPetsId,
+            ).mapCatching { it.toDomain() }
 
-    override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
+        override suspend fun deleteClubMember(clubId: Long): Result<Unit> = source.deleteClubMember(clubId)
 
-    override suspend fun patchClub(
-        clubId: Long,
-        title: String,
-        content: String,
-        state: ClubState,
-    ): Result<Unit> =
-        source.patchClub(
-            clubId = clubId,
-            title = title,
-            content = content,
-            state = state.toData(),
-        )
-}
+        override suspend fun patchClub(
+            clubId: Long,
+            title: String,
+            content: String,
+            state: ClubState,
+        ): Result<Unit> =
+            source.patchClub(
+                clubId = clubId,
+                title = title,
+                content = content,
+                state = state.toData(),
+            )
+    }

@@ -5,7 +5,9 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubAddFilterBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubAddFilterFragment :
     BaseFragment<FragmentClubAddFilterBinding>(R.layout.fragment_club_add_filter) {
     private val viewModel: ClubAddViewModel by activityViewModels()

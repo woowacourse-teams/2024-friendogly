@@ -8,7 +8,9 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel
 import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
 import com.happy.friendogly.presentation.utils.hideKeyboard
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubAddInformationFragment :
     BaseFragment<FragmentClubAddInformationBinding>(R.layout.fragment_club_add_information) {
     private val viewModel: ClubAddViewModel by activityViewModels()

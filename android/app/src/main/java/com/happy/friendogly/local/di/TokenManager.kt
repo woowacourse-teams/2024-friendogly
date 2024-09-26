@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class TokenManager(val context: Context) {
+class TokenManager constructor(
+    val context: Context,
+) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
     private val keyAccessToken = stringPreferencesKey(KEY_ACCESS_TOKEN)

@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityMyClubBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
@@ -16,16 +16,16 @@ import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubAdapter
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.utils.logClubDetailClick
 import com.happy.friendogly.presentation.utils.logMyAddClubClick
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MyClubActivity :
     BaseActivity<ActivityMyClubBinding>(R.layout.activity_my_club), MyClubActionHandler {
-    private val analyticsHelper = AppModule.getInstance().analyticsHelper
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
-    private val viewModel: MyClubViewModel by viewModels {
-        MyClubViewModel.factory(
-            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-        )
-    }
+    private val viewModel: MyClubViewModel by viewModels()
 
     private val adapter: MyClubAdapter by lazy {
         MyClubAdapter(this@MyClubActivity)

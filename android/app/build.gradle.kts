@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.services)
     alias(libs.plugins.android.junit5)
+    alias(libs.plugins.hilt)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -31,6 +32,10 @@ val releaseKeyAlias = keystoreProperties.getProperty("release.keyAlias") ?: ""
 val releaseKeyPassword = keystoreProperties.getProperty("release.keyPassword") ?: ""
 val releaseStoreFile = keystoreProperties.getProperty("release.storeFile") ?: ""
 val releaseStorePassword = keystoreProperties.getProperty("release.storePassword") ?: ""
+
+kapt {
+    correctErrorTypes = true
+}
 
 android {
     namespace = libs.versions.applicationId.get()
@@ -78,11 +83,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -119,4 +124,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     annotationProcessor(libs.room.compiler)
     kapt(libs.room.compiler)
+    kapt(libs.hilt.compiler)
 }

@@ -6,7 +6,9 @@ import com.happy.friendogly.databinding.FragmentClubAddDetailBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel
 import com.happy.friendogly.presentation.ui.club.add.model.ClubCounter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubAddDetailFragment :
     BaseFragment<FragmentClubAddDetailBinding>(R.layout.fragment_club_add_detail) {
     private val viewModel: ClubAddViewModel by activityViewModels()

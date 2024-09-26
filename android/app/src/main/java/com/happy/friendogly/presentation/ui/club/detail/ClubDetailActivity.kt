@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -26,19 +25,16 @@ import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubDetailActivity :
     BaseActivity<ActivityClubDetailBinding>(R.layout.activity_club_detail),
     ClubDetailNavigation {
     private lateinit var clubModifyResultLauncher: ActivityResultLauncher<Intent>
 
-    private val viewModel: ClubDetailViewModel by viewModels<ClubDetailViewModel> {
-        ClubDetailViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            getClubUseCase = AppModule.getInstance().getClubUseCase,
-            postClubMemberUseCase = AppModule.getInstance().postClubMemberUseCase,
-        )
-    }
+    private val viewModel: ClubDetailViewModel by viewModels()
+
     private val filterAdapter: FilterAdapter by lazy {
         FilterAdapter()
     }

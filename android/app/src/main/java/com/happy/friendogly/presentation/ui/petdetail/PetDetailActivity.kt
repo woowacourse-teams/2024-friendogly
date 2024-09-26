@@ -10,11 +10,11 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.petdetail.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.utils.putSerializable
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PetDetailActivity : BaseActivity<ActivityPetDetailBinding>(R.layout.activity_pet_detail) {
-    private val viewModel: PetDetailViewModel by viewModels {
-        PetDetailViewModel.factory()
-    }
+    private val viewModel: PetDetailViewModel by viewModels()
 
     private val adapter: PetDetailAdapter by lazy { PetDetailAdapter() }
 

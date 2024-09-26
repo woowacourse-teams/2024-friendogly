@@ -10,8 +10,8 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieAnimationView
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivitySettingMyLocationBinding
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.MainActivity
@@ -24,8 +24,11 @@ import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingMyLocationActivity :
     BaseActivity<ActivitySettingMyLocationBinding>(R.layout.activity_setting_my_location),
     OnMapReadyCallback {
@@ -33,13 +36,12 @@ class SettingMyLocationActivity :
     private lateinit var latLng: LatLng
     private val mapView: MapView by lazy { binding.mapViewMyLocation }
     private val loadingView: LottieAnimationView by lazy { binding.lottieMyLocationLoading }
-    private val locationPermission: LocationPermission = initLocationPermission()
+    private lateinit var locationPermission: LocationPermission
 
-    private val viewModel: SettingMyLocationViewModel by viewModels<SettingMyLocationViewModel> {
-        SettingMyLocationViewModel.factory(
-            saveAddressUseCase = AppModule.getInstance().saveAddressUseCase,
-        )
-    }
+    private val viewModel: SettingMyLocationViewModel by viewModels()
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
@@ -49,6 +51,7 @@ class SettingMyLocationActivity :
     }
 
     override fun initCreateView() {
+        locationPermission = initLocationPermission()
         requestUserPermission()
         initDataBinding()
         initObserver()
@@ -94,7 +97,7 @@ class SettingMyLocationActivity :
     }
 
     private fun initLocationPermission() =
-        LocationPermission.from(this) { isPermitted ->
+        LocationPermission.from(this, analyticsHelper) { isPermitted ->
             if (isPermitted) {
                 mapView.getMapAsync(this)
                 activateMap()

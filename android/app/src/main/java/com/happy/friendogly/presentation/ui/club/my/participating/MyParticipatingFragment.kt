@@ -3,7 +3,6 @@ package com.happy.friendogly.presentation.ui.club.my.participating
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.FragmentMyClubBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
@@ -12,13 +11,11 @@ import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAda
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
-    private val viewModel: MyParticipatingClubViewModel by viewModels {
-        MyParticipatingClubViewModel.factory(
-            getMyClubUseCase = AppModule.getInstance().getMyClubsUseCase,
-        )
-    }
+    private val viewModel: MyParticipatingClubViewModel by viewModels()
 
     private val adapter: ClubListAdapter by lazy {
         ClubListAdapter(viewModel as ClubItemActionHandler)

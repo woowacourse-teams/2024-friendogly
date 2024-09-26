@@ -15,13 +15,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.select.adapter.PetSelectAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
+@AndroidEntryPoint
 class PetSelectBottomSheet(
     private val filters: List<ClubFilter>,
     private val submit: (List<Long>) -> Unit,
@@ -33,11 +34,7 @@ class PetSelectBottomSheet(
     private lateinit var dlg: BottomSheetDialog
     private var toast: Toast? = null
 
-    private val viewModel: PetSelectViewModel by viewModels<PetSelectViewModel> {
-        PetSelectViewModel.factory(
-            getPetsMineUseCase = AppModule.getInstance().getPetsMineUseCase,
-        )
-    }
+    private val viewModel: PetSelectViewModel by viewModels()
 
     private val adapter: PetSelectAdapter by lazy {
         PetSelectAdapter(viewModel as PetSelectActionHandler)
