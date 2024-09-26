@@ -283,7 +283,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun setUpObserve() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
+            when (uiState as WoofUiState) {
                 is WoofUiState.LocationPermissionsNotGranted ->
                     locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
@@ -293,6 +293,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     showRegisterFootprintScreen()
                 }
 
+                is WoofUiState.ViewingFootprintInfo -> circleOverlay.map = null
                 else -> return@observe
             }
         }
@@ -619,15 +620,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun markerIcon(footprint: Footprint): Int {
-        return if (footprint.isMine) {
-            R.drawable.ic_marker_ongoing
-        } else {
-            when (footprint.walkStatus) {
-                WalkStatus.BEFORE -> R.drawable.ic_marker_before
-                WalkStatus.ONGOING -> R.drawable.ic_marker_ongoing
-                WalkStatus.AFTER -> R.drawable.ic_marker_after
-            }
-        }
+        return if (footprint.isMine) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
     }
 
     private fun LocalDateTime.toZIndex(): Int {
@@ -650,7 +643,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                showHelpBalloon(textRestId = R.string.woof_register_help)
+                showHelpBalloon(textRestId = R.string.woof_register_playground_help)
             },
             DELAY_MILLIS,
         )
