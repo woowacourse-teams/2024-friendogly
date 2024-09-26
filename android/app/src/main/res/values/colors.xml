@@ -15,6 +15,7 @@
     <color name="gray400">#BDBDBD</color>
     <color name="gray300">#E0E0E0</color>
     <color name="gray200">#EEEEEE</color>
+    <color name="gray150">#F1F1F1</color>
     <color name="gray100">#F5F5F5</color>
     <color name="gray50">#FAFAFA</color>
 
@@ -32,6 +33,7 @@
     <color name="coral10">#FFF5F3</color>
     <color name="coral05">#FFF9F8</color>
 
+    <color name="green400">#46E825</color>
     <color name="blue">#8AABFF</color>
     <color name="map_circle">#1A6568EB</color>
     <color name="lottie_layout">#4DBDBDBD</color>
