@@ -9,6 +9,7 @@ import static com.happy.friendogly.pet.domain.SizeType.MEDIUM;
 import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -200,6 +201,39 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                                 .description("모임 이름 (MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)")
                                 )
                                 .responseSchema(Schema.schema("FindClubDetailsResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("채팅방 퇴장")
+    @Test
+    void leave() throws Exception {
+        doNothing()
+                .when(chatRoomCommandService).leave(any(), any());
+
+        mockMvc
+                .perform(post("/chat-rooms/leave/{chatRoomId}", 1L)
+                        .header(AUTHORIZATION, getMemberToken()))
+                .andDo(print())
+                .andDo(document("chat-rooms/leave",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("ChatRoom API")
+                                .summary("채팅방 퇴장 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .pathParameters(
+                                        parameterWithName("chatRoomId").description("나갈 채팅방 ID")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data").description("데이터 (항상 null)")
+                                )
+                                .responseSchema(Schema.schema("LeaveChatRoomResponse"))
                                 .build()
                         )
                 ))

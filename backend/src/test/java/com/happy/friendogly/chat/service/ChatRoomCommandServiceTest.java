@@ -1,22 +1,13 @@
 package com.happy.friendogly.chat.service;
 
-import static com.happy.friendogly.pet.domain.Gender.MALE;
-import static com.happy.friendogly.pet.domain.SizeType.SMALL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
-import com.happy.friendogly.chat.repository.ChatRoomRepository;
-import com.happy.friendogly.club.domain.Club;
-import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.support.ServiceTest;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,25 +19,13 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Autowired
     private ChatRoomCommandService chatRoomCommandService;
 
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
-
     private Member member1;
     private Member member2;
-    private Pet pet;
-    private ChatRoom chatRoom;
-    private Club club;
 
     @BeforeEach
     void setUp() {
         member1 = memberRepository.save(new Member("n", "t", "https://a.com"));
         member2 = memberRepository.save(new Member("a", "b", "https://b.com"));
-        pet = petRepository.save(
-                new Pet(member1, "a", "d", LocalDate.now().minusYears(1), SMALL, MALE, "https://a.com"));
-        club = clubRepository.save(
-                Club.create("t", "c", "서울특별시", "성동구", "옥수동", 5, member1, Set.of(MALE), Set.of(SMALL), "https://a.com",
-                        List.of(pet)));
-        chatRoom = club.getChatRoom();
     }
 
     @DisplayName("새로운 1대1 채팅방을 개설할 수 있다.")
@@ -80,26 +59,27 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         assertThat(response.chatRoomId()).isEqualTo(chatRoom.getId());
     }
 
-    @DisplayName("채팅방에 참여한 경우, 채팅방에서 나갈 수 있다.")
+    @DisplayName("채팅방에서 나간다.")
     @Transactional
     @Test
     void leave() {
         // given
-        ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.createPrivate(member1, member2));
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
+        Member member3 = memberRepository.save(new Member("john", "aaa111ab", "https://image.com"));
+
+        chatRoom.addMember(member1);
+        chatRoom.addMember(member2);
+        chatRoom.addMember(member3);
 
         // when
-        chatRoomCommandService.leave(member1.getId(), newChatRoom.getId());
+        chatRoomCommandService.leave(member2.getId(), chatRoom.getId());
 
         // then
-        assertThat(newChatRoom.countMembers()).isOne();
-    }
-
-    @DisplayName("모임에 참여하지 않은 경우, 모임 채팅방에서 나갈 수 없다.")
-    @Test
-    void leave_Fail_NotInClub() {
-        // when - then
-        assertThatThrownBy(() -> chatRoomCommandService.leave(member2.getId(), chatRoom.getId()))
-                .isInstanceOf(FriendoglyException.class)
-                .hasMessage("채팅에 참여한 상태가 아닙니다.");
+        ChatRoom foundChatRoom = chatRoomRepository.getById(chatRoom.getId());
+        assertAll(
+                () -> assertThat(foundChatRoom.containsMember(member1)).isTrue(),
+                () -> assertThat(foundChatRoom.containsMember(member2)).isFalse(),
+                () -> assertThat(foundChatRoom.containsMember(member3)).isTrue()
+        );
     }
 }

@@ -54,4 +54,10 @@ public class ChatRoomController {
         FindClubDetailsResponse response = chatRoomQueryService.findClubDetails(memberId, chatRoomId);
         return ApiResponse.ofSuccess(response);
     }
+
+    @PostMapping("/leave/{chatRoomId}")
+    public ApiResponse<Void> leave(@Auth Long memberId, @PathVariable Long chatRoomId) {
+        chatRoomCommandService.leave(memberId, chatRoomId);
+        return ApiResponse.ofSuccess(null);
+    }
 }
