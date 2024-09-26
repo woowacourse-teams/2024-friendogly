@@ -524,7 +524,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun setUpLocationPermission() {
         locationPermission =
-            LocationPermission.from(this) { isPermitted ->
+            LocationPermission.from(this, analyticsHelper) { isPermitted ->
                 if (isPermitted) {
                     activateMap()
                 } else {
