@@ -16,12 +16,14 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Slf4j
 public class ChatCommandService {
 
     private static final String TOPIC_CHAT_PREFIX = "/topic/chat/";
@@ -61,6 +63,8 @@ public class ChatCommandService {
             throw new FriendoglyException("자신이 참여한 채팅방에만 메시지를 보낼 수 있습니다.");
         }
 
+        log.info("ChatMessageSocketRequest 채팅 내용: {}", request.content());
+
         sendAndSave(CHAT, request.content(), chatRoom, senderMember);
     }
 
@@ -72,6 +76,7 @@ public class ChatCommandService {
 
     private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
         ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember, LocalDateTime.now());
+        log.info("ChatMessageSocketResponse 채팅 내용: {}", chat.content());
         notificationService.sendChatNotification(chatRoom.getId(), chat);
         template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
