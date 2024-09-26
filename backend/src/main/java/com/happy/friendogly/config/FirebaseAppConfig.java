@@ -18,7 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 
 @Configuration
-@Profile("!local")
+@Profile("prod")
 public class FirebaseAppConfig {
 
     @Value("${file.firebase.path}")
