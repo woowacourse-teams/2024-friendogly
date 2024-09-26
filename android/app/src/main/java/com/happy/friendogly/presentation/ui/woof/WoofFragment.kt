@@ -213,13 +213,14 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
+        map.locationSource = locationSource
         map.extent =
             LatLngBounds(
                 LatLng(MIN_KOREA_LATITUDE, MIN_KOREA_LONGITUDE),
                 LatLng(MAX_KOREA_LATITUDE, MAX_KOREA_LONGITUDE),
             )
         map.minZoom = MIN_ZOOM
-        map.locationSource = locationSource
+        map.moveCamera(CameraUpdate.zoomTo(DEFAULT_ZOOM))
 
         map.uiSettings.apply {
             isScaleBarEnabled = true
@@ -845,6 +846,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     companion object {
         private const val WALKING_RADIUS = 150.0
         private const val MIN_ZOOM = 7.0
+        private const val DEFAULT_ZOOM = 15.0
         private const val MARKER_DEFAULT_WIDTH = 96
         private const val MARKER_DEFAULT_HEIGHT = 144
         private const val MARKER_CLICKED_WIDTH = 144
