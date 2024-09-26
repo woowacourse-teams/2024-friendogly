@@ -257,6 +257,14 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         FindClubResponse response = clubQueryService.findById(savedMember.getId(), club.getId());
 
-        assertThat(response.id()).isEqualTo(club.getId());
+        assertAll(
+                () -> assertThat(response.id()).isEqualTo(club.getId()),
+                () -> assertThat(response.memberDetails().size()).isEqualTo(1),
+                () -> assertThat(response.memberDetails().get(0).id()).isEqualTo(savedMember.getId()),
+                () -> assertThat(response.petDetails().size()).isEqualTo(1),
+                () -> assertThat(response.petDetails().get(0).id()).isEqualTo(savedPet.getId()),
+                () -> assertThat(response.allowedGender()).containsExactlyInAnyOrder(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                () -> assertThat(response.allowedSize()).containsExactlyInAnyOrder(SizeType.SMALL)
+        );
     }
 }
