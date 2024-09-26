@@ -11,6 +11,7 @@ import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
 import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -20,6 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class ChatSocketController {
 
     private final ChatCommandService chatCommandService;
@@ -54,6 +56,7 @@ public class ChatSocketController {
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageSocketRequest request
     ) {
+        log.info(request.content());
         chatCommandService.sendChat(memberId, chatRoomId, request);
     }
 
