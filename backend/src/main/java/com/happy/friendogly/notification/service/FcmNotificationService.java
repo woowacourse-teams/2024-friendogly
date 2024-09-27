@@ -14,6 +14,7 @@ import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 @Profile("!local")
 public class FcmNotificationService implements NotificationService {
 
@@ -57,10 +59,6 @@ public class FcmNotificationService implements NotificationService {
     public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response) {
         List<String> receiverTokens = deviceTokenRepository
                 .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
-
-        if (receiverTokens.isEmpty()) {
-            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
-        }
 
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),
