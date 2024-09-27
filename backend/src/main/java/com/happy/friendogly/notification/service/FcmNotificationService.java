@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.exception.FriendoglyException;
@@ -14,6 +13,7 @@ import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@Profile("prod")
+@Slf4j
+@Profile("prod | dev")
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -58,9 +59,11 @@ public class FcmNotificationService implements NotificationService {
         List<String> receiverTokens = deviceTokenRepository
                 .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
 
-        if (receiverTokens.isEmpty()) {
-            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
-        }
+        log.error("기기 토큰이 비어 있어, 알림을 전송할 수 없습니다.");
+
+//        if (receiverTokens.isEmpty()) {
+//            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
+//        }
 
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),
@@ -91,7 +94,8 @@ public class FcmNotificationService implements NotificationService {
 
             try {
                 firebaseMessaging.sendEachForMulticast(message);
-            } catch (FirebaseMessagingException e) {
+            } catch (Exception e) {
+                log.error("FCM Device Token 관련 에러 발생: ", e);
                 throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.",
                         INTERNAL_SERVER_ERROR);
             }
