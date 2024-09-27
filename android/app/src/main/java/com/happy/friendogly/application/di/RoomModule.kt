@@ -2,9 +2,9 @@ package com.happy.friendogly.application.di
 
 import android.content.Context
 import androidx.room.Room
-import com.happy.friendogly.local.room.ChatMessageDao
+import com.happy.friendogly.local.dao.ChatMessageDao
+import com.happy.friendogly.local.dao.ChatRoomDao
 import com.happy.friendogly.local.room.ChatMessageDatabase
-import com.happy.friendogly.local.room.ChatRoomDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

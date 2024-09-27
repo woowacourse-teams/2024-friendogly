@@ -8,9 +8,9 @@ import com.happy.friendogly.domain.model.ChatRoomClub
 import com.happy.friendogly.domain.model.ChatRooms
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.repository.ChatRepository
+import com.happy.friendogly.local.dao.ChatRoomDao
 import com.happy.friendogly.local.mapper.toData
 import com.happy.friendogly.local.mapper.toDomain
-import com.happy.friendogly.local.room.ChatRoomDao
 import javax.inject.Inject
 
 class ChatRepositoryImpl

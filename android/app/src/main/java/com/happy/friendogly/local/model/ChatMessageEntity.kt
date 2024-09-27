@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.happy.friendogly.local.room.MessageTypeEntity
 import com.happy.friendogly.remote.util.JavaLocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime

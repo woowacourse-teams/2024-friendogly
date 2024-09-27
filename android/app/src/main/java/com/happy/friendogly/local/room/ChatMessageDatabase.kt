@@ -3,6 +3,8 @@ package com.happy.friendogly.local.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.happy.friendogly.local.dao.ChatMessageDao
+import com.happy.friendogly.local.dao.ChatRoomDao
 import com.happy.friendogly.local.mapper.ChatMessagesConverter
 import com.happy.friendogly.local.mapper.LocalDateTimeConverter
 import com.happy.friendogly.local.mapper.MessageTypeConverter

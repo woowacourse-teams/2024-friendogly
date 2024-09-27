@@ -1,4 +1,4 @@
-package com.happy.friendogly.local.room
+package com.happy.friendogly.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
