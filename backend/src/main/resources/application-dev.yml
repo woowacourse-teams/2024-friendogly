@@ -44,3 +44,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      data-locations:
