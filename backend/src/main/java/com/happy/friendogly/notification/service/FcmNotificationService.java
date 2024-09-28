@@ -14,7 +14,6 @@ import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@Slf4j
 @Profile("!local")
 public class FcmNotificationService implements NotificationService {
 
