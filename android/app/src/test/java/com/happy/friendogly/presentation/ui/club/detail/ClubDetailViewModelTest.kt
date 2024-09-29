@@ -38,7 +38,6 @@ class ClubDetailViewModelTest {
     @MockK
     private lateinit var postClubMemberUseCase: PostClubMemberUseCase
 
-
     @BeforeEach
     fun setup() {
         analyticsHelper = mockk(relaxed = true)
@@ -49,9 +48,10 @@ class ClubDetailViewModelTest {
     fun `모임 상세가 로드된다`() =
         runTest {
             // given
-            val clubDetail = TestFixture.makeClubDetail(
-                clubState = ClubState.OPEN,
-            )
+            val clubDetail =
+                TestFixture.makeClubDetail(
+                    clubState = ClubState.OPEN,
+                )
 
             coEvery {
                 getClubUseCase(0L)
@@ -73,98 +73,101 @@ class ClubDetailViewModelTest {
         }
 
     @Test
-    fun `모임 상세 로드에 실패하면 사용자에게 실패를 알리는 이벤트를 발생시킨다`() = runTest {
-        // given
-        coEvery {
-            getClubUseCase(0L)
-        } returns Result.failure(Throwable())
+    fun `모임 상세 로드에 실패하면 사용자에게 실패를 알리는 이벤트를 발생시킨다`() =
+        runTest {
+            // given
+            coEvery {
+                getClubUseCase(0L)
+            } returns Result.failure(Throwable())
 
-        viewModel =
-            ClubDetailViewModel(
-                analyticsHelper = analyticsHelper,
-                getClubUseCase = getClubUseCase,
-                postClubMemberUseCase = postClubMemberUseCase,
-            )
+            viewModel =
+                ClubDetailViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getClubUseCase = getClubUseCase,
+                    postClubMemberUseCase = postClubMemberUseCase,
+                )
 
-        // when
-        viewModel.loadClub(0L)
-        val actualClubEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+            // when
+            viewModel.loadClub(0L)
+            val actualClubEvent = viewModel.clubDetailEvent.getOrAwaitValue()
 
-        // then
-        Assertions.assertThat(actualClubEvent.equals(ClubDetailEvent.FailLoadDetail))
-    }
-
-    @Test
-    fun `모임 참여에 성공하면 사용자에게 참여 성공을 알리는 이벤트가 발생된다`() = runTest {
-        // given
-        val clubDetail = TestFixture.makeClubDetail(
-            clubState = ClubState.OPEN,
-            isMyPetsEmpty = true,
-        )
-
-        val clubParticipation = TestFixture.makeClubParticipation()
-
-        coEvery {
-            getClubUseCase(0L)
-        } returns Result.success(clubDetail)
-
-        coEvery {
-            postClubMemberUseCase(
-                0L,
-                listOf(),
-            )
-        } returns Result.success(clubParticipation)
-
-        viewModel =
-            ClubDetailViewModel(
-                analyticsHelper = analyticsHelper,
-                getClubUseCase = getClubUseCase,
-                postClubMemberUseCase = postClubMemberUseCase,
-            )
-
-        // when
-        viewModel.loadClub(0L)
-        viewModel.joinClub(listOf())
-        val clubDetailEvent = viewModel.clubDetailEvent.getOrAwaitValue()
-
-        // then
-        Assertions.assertThat(clubDetailEvent.equals(ClubDetailEvent.Navigation.NavigateToChat(0L)))
-
-    }
+            // then
+            Assertions.assertThat(actualClubEvent.equals(ClubDetailEvent.FailLoadDetail))
+        }
 
     @Test
-    fun `모임 참여할 수 없는 경우 사용자에게 참여 실패를 알리는 이벤트가 발생한다`() = runTest {
-        // given
-        val clubDetail = TestFixture.makeClubDetail(
-            clubState = ClubState.OPEN,
-            isMyPetsEmpty = true,
-        )
+    fun `모임 참여에 성공하면 사용자에게 참여 성공을 알리는 이벤트가 발생된다`() =
+        runTest {
+            // given
+            val clubDetail =
+                TestFixture.makeClubDetail(
+                    clubState = ClubState.OPEN,
+                    isMyPetsEmpty = true,
+                )
 
-        coEvery {
-            getClubUseCase(0L)
-        } returns Result.success(clubDetail)
+            val clubParticipation = TestFixture.makeClubParticipation()
 
-        coEvery {
-            postClubMemberUseCase(
-                0L,
-                listOf(),
-            )
-        } returns Result.failure(Throwable())
+            coEvery {
+                getClubUseCase(0L)
+            } returns Result.success(clubDetail)
 
-        viewModel =
-            ClubDetailViewModel(
-                analyticsHelper = analyticsHelper,
-                getClubUseCase = getClubUseCase,
-                postClubMemberUseCase = postClubMemberUseCase,
-            )
+            coEvery {
+                postClubMemberUseCase(
+                    0L,
+                    listOf(),
+                )
+            } returns Result.success(clubParticipation)
 
-        // when
-        viewModel.loadClub(0L)
-        viewModel.joinClub(listOf())
-        val clubDetailEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+            viewModel =
+                ClubDetailViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getClubUseCase = getClubUseCase,
+                    postClubMemberUseCase = postClubMemberUseCase,
+                )
 
-        // then
-        Assertions.assertThat(clubDetailEvent.equals(ClubDetailEvent.FailParticipation))
-    }
+            // when
+            viewModel.loadClub(0L)
+            viewModel.joinClub(listOf())
+            val clubDetailEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+
+            // then
+            Assertions.assertThat(clubDetailEvent.equals(ClubDetailEvent.Navigation.NavigateToChat(0L)))
+        }
+
+    @Test
+    fun `모임 참여할 수 없는 경우 사용자에게 참여 실패를 알리는 이벤트가 발생한다`() =
+        runTest {
+            // given
+            val clubDetail =
+                TestFixture.makeClubDetail(
+                    clubState = ClubState.OPEN,
+                    isMyPetsEmpty = true,
+                )
+
+            coEvery {
+                getClubUseCase(0L)
+            } returns Result.success(clubDetail)
+
+            coEvery {
+                postClubMemberUseCase(
+                    0L,
+                    listOf(),
+                )
+            } returns Result.failure(Throwable())
+
+            viewModel =
+                ClubDetailViewModel(
+                    analyticsHelper = analyticsHelper,
+                    getClubUseCase = getClubUseCase,
+                    postClubMemberUseCase = postClubMemberUseCase,
+                )
+
+            // when
+            viewModel.loadClub(0L)
+            viewModel.joinClub(listOf())
+            val clubDetailEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+
+            // then
+            Assertions.assertThat(clubDetailEvent.equals(ClubDetailEvent.FailParticipation))
+        }
 }
-

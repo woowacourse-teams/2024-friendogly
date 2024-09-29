@@ -16,11 +16,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 
 object TestFixture {
-
     fun makeClubParticipation(
-        memberId : Long = 0L,
+        memberId: Long = 0L,
         chatRoomId: Long = 0L,
-    ): ClubParticipation{
+    ): ClubParticipation {
         return ClubParticipation(
             memberId = memberId,
             chatRoomId = chatRoomId,
@@ -57,7 +56,6 @@ object TestFixture {
             isMyPetsEmpty = isMyPetsEmpty,
         )
     }
-
 
     fun makeClub(): Club {
         return Club(
