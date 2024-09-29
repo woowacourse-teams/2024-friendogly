@@ -1,8 +1,10 @@
-package com.happy.friendogly.presentation.ui.playground.mapper
+package com.happy.friendogly.presentation.ui.woof.mapper
 
-import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
-import com.happy.friendogly.presentation.ui.playground.uimodel.PetDetailInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter.Companion.FIRST_PET_DETAIL_VIEW_TYPE
+import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter.Companion.PET_DETAIL_VIEW_TYPE
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.uimodel.FootprintInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.WalkStatusInfoUiModel
 import com.naver.maps.map.overlay.Marker
 
@@ -22,11 +24,12 @@ fun PlaygroundInfo.toWalkStatusPresentation(): WalkStatusInfoUiModel {
 }
 
 fun PlaygroundInfo.toPetDetailInfoPresentation(): List<PetDetailInfoUiModel> {
-    return petDetails.map { petDetail ->
+    return petDetails.mapIndexed { index, petDetail ->
         PetDetailInfoUiModel(
             memberId = memberId,
             memberName = memberName,
             petDetail = petDetail,
+            viewType = if (index == 0) FIRST_PET_DETAIL_VIEW_TYPE else PET_DETAIL_VIEW_TYPE,
         )
     }
 }

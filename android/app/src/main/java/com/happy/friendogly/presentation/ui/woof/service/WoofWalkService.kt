@@ -96,7 +96,7 @@ class WoofWalkService : Service() {
                 this,
                 REQUEST_CODE_ID,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT,
+                PendingIntent.FLAG_IMMUTABLE,
             )
 
         return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)

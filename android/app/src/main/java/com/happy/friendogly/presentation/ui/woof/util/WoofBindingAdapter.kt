@@ -1,7 +1,6 @@
 package com.happy.friendogly.presentation.ui.woof.util
 
 import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -9,8 +8,8 @@ import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -19,16 +18,16 @@ import com.airbnb.lottie.LottieAnimationView
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
-import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
+import com.happy.friendogly.presentation.ui.woof.uimodel.MyFootprintMarkerUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
 
 private const val MARGIN_BOTTOM_DEFAULT = 36
-private const val MARGIN_BOTTOM_REGISTERING_FOOTPRINT = 12
-private const val MARGIN_BOTTOM_ON_WALKING = 12
+private const val MARGIN_BOTTOM_PLAYING = 108
 
 @BindingAdapter("memberName")
 fun TextView.bindMemberName(memberName: String) {
@@ -59,77 +58,49 @@ fun TextView.bindMemberName(memberName: String) {
 }
 
 @BindingAdapter("petAge")
-fun TextView.bindPetAge(petBirthDate: LocalDate) {
-    val period = Period.between(petBirthDate.toJavaLocalDate(), java.time.LocalDate.now())
-    val years = period.years
-    val months = period.months
+fun TextView.bindPetAge(petBirthDate: LocalDate?) {
+    if (petBirthDate != null) {
+        val period = Period.between(petBirthDate.toJavaLocalDate(), java.time.LocalDate.now())
+        val years = period.years
+        val months = period.months
 
-    text =
-        if (years < 1) {
-            resources.getString(R.string.woof_age_month, months)
-        } else {
-            resources.getString(R.string.woof_age_year, years)
-        }
-}
-
-@BindingAdapter("petSizeType")
-fun TextView.bindPetSizeType(petSizeType: SizeType) {
-    text =
-        when (petSizeType) {
-            SizeType.SMALL -> resources.getString(R.string.dog_small)
-            SizeType.MEDIUM -> resources.getString(R.string.dog_medium)
-            SizeType.LARGE -> resources.getString(R.string.dog_large)
-        }
-}
-
-@BindingAdapter("petGender")
-fun TextView.bindPetGender(petGender: Gender) {
-    text =
-        when (petGender) {
-            Gender.MALE -> resources.getString(R.string.dog_gender_male)
-            Gender.FEMALE -> resources.getString(R.string.dog_gender_female)
-            Gender.MALE_NEUTERED -> resources.getString(R.string.dog_gender_male_neutered)
-            Gender.FEMALE_NEUTERED -> resources.getString(R.string.dog_gender_female_neutered)
-        }
-}
-
-@BindingAdapter("myWalkStatus")
-fun TextView.bindMyWalkStatus(walkStatus: WalkStatus?) {
-    if (walkStatus != null) {
-        val drawable: Drawable? =
-            when (walkStatus) {
-                WalkStatus.BEFORE ->
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_marker_before_clicked,
-                    )
-
-                WalkStatus.ONGOING ->
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_marker_ongoing_clicked,
-                    )
-
-                WalkStatus.AFTER ->
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_marker_after_clicked,
-                    )
-            }
         text =
-            when (walkStatus) {
-                WalkStatus.BEFORE -> context.getString(R.string.woof_status_before)
-                WalkStatus.ONGOING -> context.getString(R.string.woof_status_ongoing)
-                WalkStatus.AFTER -> context.getString(R.string.woof_status_after)
+            if (years < 1) {
+                resources.getString(R.string.woof_age_month, months)
+            } else {
+                resources.getString(R.string.woof_age_year, years)
             }
-        setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
 }
 
-@BindingAdapter("findFriendsVisibility")
-fun View.bindFindFriendsVisibility(uiState: WoofUiState?) {
-    isVisible =
-        (uiState is WoofUiState.Loading || uiState is WoofUiState.FindingFriends || uiState is WoofUiState.LocationPermissionsNotGranted)
+@BindingAdapter("petSizeType")
+fun TextView.bindPetSizeType(petSizeType: SizeType?) {
+    if (petSizeType != null) {
+        text =
+            when (petSizeType) {
+                SizeType.SMALL -> resources.getString(R.string.dog_small)
+                SizeType.MEDIUM -> resources.getString(R.string.dog_medium)
+                SizeType.LARGE -> resources.getString(R.string.dog_large)
+            }
+    }
+}
+
+@BindingAdapter("petGender")
+fun TextView.bindPetGender(petGender: Gender?) {
+    if (petGender != null) {
+        text =
+            when (petGender) {
+                Gender.MALE -> resources.getString(R.string.dog_gender_male)
+                Gender.FEMALE -> resources.getString(R.string.dog_gender_female)
+                Gender.MALE_NEUTERED -> resources.getString(R.string.dog_gender_male_neutered)
+                Gender.FEMALE_NEUTERED -> resources.getString(R.string.dog_gender_female_neutered)
+            }
+    }
+}
+
+@BindingAdapter("uiState")
+fun View.bindMyFootprintBtnVisibility(uiState: WoofUiState?) {
+    isVisible = (uiState != WoofUiState.RegisteringFootprint)
 }
 
 @BindingAdapter("registeringVisibility")
@@ -160,31 +131,27 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
     }
 }
 
-@BindingAdapter("stateVisibility")
-fun View.bindStateVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState !is WoofUiState.RegisteringFootprint)
-}
-
-@BindingAdapter("uiState", "myWalkStatusVisibility")
-fun View.bindMyWalkStatusVisibility(
-    uiState: WoofUiState?,
-    myWalkStatus: FootprintRecentWalkStatus?,
-) {
+@BindingAdapter("playgroundDetailVisibility")
+fun View.bindPlaygroundDetailVisibility(myFootprint: MyFootprintMarkerUiModel?) {
     isVisible =
-        if (uiState == WoofUiState.FindingFriends) {
-            (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
+        if (myFootprint != null) {
+            bringToFront()
+            true
         } else {
             false
         }
 }
 
-@BindingAdapter("markBtnVisibility")
-fun View.bindMarkBtnVisibility(myWalkStatus: FootprintRecentWalkStatus?) {
+@BindingAdapter("uiState", "markBtnVisibility")
+fun View.bindMarkBtnVisibility(
+    uiState: WoofUiState?,
+    myFootprint: MyFootprintMarkerUiModel?,
+) {
     isVisible =
-        if (myWalkStatus != null) {
-            !(myWalkStatus.walkStatus == WalkStatus.BEFORE || myWalkStatus.walkStatus == WalkStatus.ONGOING)
+        if (uiState == WoofUiState.RegisteringFootprint) {
+            false
         } else {
-            true
+            if (myFootprint == null) true else false
         }
 }
 
@@ -214,25 +181,8 @@ fun TextView.bindRegisterFootprintBtnClickable(
         }
 }
 
-@BindingAdapter("deleteMyFootprintBtnVisibility")
-fun ImageButton.bindDeleteMyFootprintBtnVisibility(walkStatus: WalkStatus?) {
-    if (walkStatus != null) {
-        isVisible = (walkStatus == WalkStatus.BEFORE)
-    }
-}
-
-@BindingAdapter("endWalkBtnVisibility")
-fun ImageButton.bindEndWalkBtnVisibility(walkStatus: WalkStatus?) {
-    if (walkStatus != null) {
-        isVisible = (walkStatus == WalkStatus.ONGOING)
-    }
-}
-
-@BindingAdapter("uiState", "locationBtn")
-fun View.bindLocationBtn(
-    uiState: WoofUiState?,
-    myWalkStatus: FootprintRecentWalkStatus?,
-) {
+@BindingAdapter("locationBtnMargin")
+fun View.bindLocationBtn(myFootprint: MyFootprintMarkerUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -240,59 +190,46 @@ fun View.bindLocationBtn(
     }
 
     val marginBottom =
-        if (uiState is WoofUiState.RegisteringFootprint) {
-            MARGIN_BOTTOM_REGISTERING_FOOTPRINT
+        if (myFootprint != null) {
+            MARGIN_BOTTOM_PLAYING
         } else {
-            if (myWalkStatus != null) {
-                if (myWalkStatus.walkStatus == WalkStatus.AFTER) MARGIN_BOTTOM_DEFAULT else MARGIN_BOTTOM_ON_WALKING
-            } else {
-                MARGIN_BOTTOM_DEFAULT
-            }
+            MARGIN_BOTTOM_DEFAULT
         }
 
     val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
     layoutParams.apply {
-        bottomToTop =
-            if (uiState is WoofUiState.RegisteringFootprint) {
-                R.id.layout_woof_register_marker
-            } else {
-                R.id.layout_woof_walk
-            }
         bottomMargin = marginBottom.dp()
     }
 
     this.layoutParams = layoutParams
 }
 
-@BindingAdapter("uiState", "helpBtn")
-fun ImageButton.bindHelpBtn(
-    uiState: WoofUiState?,
-    myWalkStatus: FootprintRecentWalkStatus?,
+@BindingAdapter("registerLocationBtnVisibility")
+fun View.bindRegisterLocationBtnVisibility(uiState: WoofUiState?) {
+    isVisible = (uiState == WoofUiState.RegisteringFootprint)
+}
+
+@BindingAdapter("playgroundAction", "playgroundBtn")
+fun AppCompatButton.bindPlaygroundBtn(
+    playgroundAction: WoofActionHandler,
+    myFootprint: MyFootprintMarkerUiModel?,
 ) {
-    isVisible =
-        when (uiState) {
-            WoofUiState.FindingFriends -> {
-                (myWalkStatus?.walkStatus == WalkStatus.BEFORE || myWalkStatus?.walkStatus == WalkStatus.ONGOING)
-            }
-
-            WoofUiState.RegisteringFootprint -> {
-                true
-            }
-
-            else -> {
-                false
-            }
+    if (myFootprint == null) {
+        text = resources.getString(R.string.playground_participate)
+        setOnClickListener {
+            playgroundAction.clickParticipatePlayground()
         }
-
-    val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
-    layoutParams.apply {
-        bottomToTop =
-            if (uiState is WoofUiState.RegisteringFootprint) {
-                R.id.layout_woof_register_marker
-            } else {
-                R.id.layout_woof_walk
-            }
+    } else {
+        text = resources.getString(R.string.playground_exit)
+        setOnClickListener {
+            playgroundAction.clickEndWalkBtn()
+        }
     }
+}
 
-    this.layoutParams = layoutParams
+@BindingAdapter("playgroundBtnVisibility")
+fun AppCompatButton.bindPlaygroundBtnVisibility(petDetailInfo: List<PetDetailInfoUiModel>?) {
+    if (petDetailInfo != null) {
+        visibility = if (petDetailInfo.isNotEmpty()) View.VISIBLE else View.GONE
+    }
 }

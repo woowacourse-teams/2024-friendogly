@@ -1,6 +1,5 @@
-package com.happy.friendogly.presentation.ui.playground.model
+package com.happy.friendogly.presentation.ui.woof.model
 
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import kotlinx.datetime.LocalDateTime
 
 data class PlaygroundInfo(

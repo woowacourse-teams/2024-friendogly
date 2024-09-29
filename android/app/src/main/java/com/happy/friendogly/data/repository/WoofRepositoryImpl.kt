@@ -3,11 +3,11 @@ package com.happy.friendogly.data.repository
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest

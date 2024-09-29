@@ -1,7 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import javax.inject.Inject
 
 class GetFootprintInfoUseCase

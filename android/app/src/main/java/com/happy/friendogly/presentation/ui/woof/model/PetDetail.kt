@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.playground.model
+package com.happy.friendogly.presentation.ui.woof.model
 
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType

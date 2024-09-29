@@ -1,9 +1,23 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="20dp"
-    android:viewportWidth="24"
-    android:viewportHeight="20">
-  <path
-      android:pathData="M12,1.667L19,17.5L12,14.167L5,17.5L12,1.667Z"
-      android:fillColor="#F2F2F2"/>
+    android:width="11dp"
+    android:height="10dp"
+    android:viewportWidth="11"
+    android:viewportHeight="10">
+    <group>
+        <path
+            android:fillColor="@color/coral50"
+            android:pathData="M7.592,6.256C8.581,6.596 9.23,7.164 9.23,7.808C9.23,8.849 7.536,9.692 5.447,9.692C3.358,9.692 1.664,8.849 1.664,7.808C1.664,7.164 2.313,6.596 3.302,6.256C3.387,4.867 4.309,3.769 5.447,3.769C6.584,3.769 7.506,4.867 7.592,6.256Z" />
+        <path
+            android:fillColor="@color/coral50"
+            android:pathData="M1.663,2.692C2.259,2.692 2.744,3.295 2.744,4.039C2.744,4.782 2.259,5.385 1.663,5.385C1.066,5.385 0.582,4.782 0.582,4.039C0.582,3.295 1.066,2.692 1.663,2.692Z" />
+        <path
+            android:fillColor="@color/coral50"
+            android:pathData="M9.229,2.692C9.826,2.692 10.31,3.295 10.31,4.039C10.31,4.782 9.826,5.385 9.229,5.385C8.632,5.385 8.148,4.782 8.148,4.039C8.148,3.295 8.632,2.692 9.229,2.692Z" />
+        <path
+            android:fillColor="@color/coral50"
+            android:pathData="M3.827,0C4.423,0 4.908,0.603 4.908,1.346C4.908,2.09 4.423,2.692 3.827,2.692C3.23,2.692 2.746,2.09 2.746,1.346C2.746,0.603 3.23,0 3.827,0Z" />
+        <path
+            android:fillColor="@color/coral50"
+            android:pathData="M7.069,0C7.666,0 8.15,0.603 8.15,1.346C8.15,2.09 7.666,2.692 7.069,2.692C6.472,2.692 5.988,2.09 5.988,1.346C5.988,0.603 6.472,0 7.069,0Z" />
+    </group>
 </vector>

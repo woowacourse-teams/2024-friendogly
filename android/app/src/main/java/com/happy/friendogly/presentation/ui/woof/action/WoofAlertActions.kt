@@ -31,5 +31,7 @@ sealed interface WoofAlertActions {
 
     data object AlertFailToDeleteMyFootprintSnackbar : WoofAlertActions
 
+    data object AlertFailToLoadPlaygroundInfoSnackbar : WoofAlertActions
+
     data class AlertHelpBalloon(val textResId: Int) : WoofAlertActions
 }

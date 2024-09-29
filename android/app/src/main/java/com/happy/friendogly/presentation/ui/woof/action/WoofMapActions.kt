@@ -14,5 +14,5 @@ sealed interface WoofMapActions {
 
     data object ScanNearFootprints : WoofMapActions
 
-    data object StopWalkTimeChronometer : WoofMapActions
+//    data object StopWalkTimeChronometer : WoofMapActions
 }

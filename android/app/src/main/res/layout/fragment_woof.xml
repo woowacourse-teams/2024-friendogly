@@ -20,16 +20,64 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/layout_playground_detail"
+            playgroundDetailVisibility="@{vm.myFootprintMarker}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/bottom_sheet_playground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_white_fill_20"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="14dp"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+                <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_playground"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_playground_pet_detail" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_playground"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
+                    playgroundAction="@{vm}"
+                    playgroundBtn="@{vm.myFootprintMarker}"
+                    playgroundBtnVisibility="@{vm.petDetailInfo}"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/rect_coral400_fill_16"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
         <TextView
             android:id="@+id/btn_woof_footprint_refresh"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size16"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
             refreshBtnVisibility="@{vm.refreshBtnVisible}"
             uiState="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/rect_white_fill_30"
-            android:drawablePadding="8dp"
+            android:drawablePadding="6dp"
             android:elevation="4dp"
             android:gravity="center"
             android:onClick="@{() -> vm.clickRefreshBtn()}"
@@ -78,13 +126,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_location"
-            locationBtn="@{vm.myWalkStatus}"
-            uiState="@{vm.uiState}"
+            locationBtnMargin="@{vm.myFootprintMarker}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_walk"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.naver.maps.map.widget.LocationButtonView
@@ -97,19 +144,19 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location"
-            locationBtn="@{vm.myWalkStatus}"
-            uiState="@{vm.uiState}"
+            locationBtnMargin="@{vm.myFootprintMarker}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:onClick="@{() -> vm.clickLocationBtn()}"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_walk"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/btn_woof_my_footprint"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
-            findFriendsVisibility="@{vm.uiState}"
+            uiState="@{vm.uiState}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
@@ -118,104 +165,15 @@
             android:gravity="center"
             android:onClick="@{() -> vm.clickMyFootprintBtn()}"
             android:text="@string/woof_my_footprint"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/btn_woof_location"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btn_woof_walk_help"
-            helpBtn="@{vm.myWalkStatus}"
-            uiState="@{vm.uiState}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/rect_coral10_fill_50"
-            android:elevation="10dp"
-            android:onClick="@{() -> vm.clickHelpBtn()}"
-            android:padding="6dp"
-            android:src="@drawable/ic_help_coral500"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_walk"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_woof_walk"
-            myWalkStatusVisibility="@{vm.myWalkStatus}"
-            uiState="@{vm.uiState}"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rect_coral10_fill_50"
-            android:elevation="10dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="invisible">
-
-            <ImageButton
-                android:id="@+id/btn_woof_delete_my_footprint"
-                deleteMyFootprintBtnVisibility="@{vm.myWalkStatus.walkStatus}"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/rect_coral500_fill_30"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="@{() -> vm.clickDeleteMyFootprintMarkerBtn()}"
-                android:src="@drawable/ic_close_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/btn_woof_end_walk"
-                endWalkBtnVisibility="@{vm.myWalkStatus.walkStatus}"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/rect_coral500_fill_30"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:onClick="@{() -> vm.clickEndWalkBtn()}"
-                android:src="@drawable/ic_stop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_woof_walk_status"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size20"
-                myWalkStatus="@{vm.myWalkStatus.walkStatus}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_woof_end_walk"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:drawableStart="@drawable/ic_marker_ongoing_clicked"
-                tools:text="산책중" />
-
-            <Chronometer
-                android:id="@+id/chronometer_woof_walk_time"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_woof_end_walk"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone" />
 
         <ImageButton
             android:id="@+id/btn_woof_mark"
-            findFriendsVisibility="@{vm.uiState}"
-            markBtnVisibility="@{vm.myWalkStatus}"
+            markBtnVisibility="@{vm.myFootprintMarker}"
+            uiState="@{vm.uiState}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="12dp"
@@ -245,6 +203,37 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_woof_register_location"
+            registerLocationBtnVisibility="@{vm.uiState}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.naver.maps.map.widget.LocationButtonView
+                android:id="@+id/lbv_woof_register_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_woof_register_location"
+            registerLocationBtnVisibility="@{vm.uiState}"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="@{() -> vm.clickLocationBtn()}"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_register_marker"
             registeringVisibilityAnimation="@{vm.uiState}"
             android:layout_width="match_parent"
@@ -253,7 +242,7 @@
             android:background="@drawable/rect_white_fill_30"
             android:elevation="10dp"
             android:paddingHorizontal="6dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible">
 
@@ -267,7 +256,6 @@
                 android:text="@string/woof_register_playground_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/tv_woof_address"
@@ -288,7 +276,7 @@
                 cameraIdle="@{vm.registerFootprintBtn.cameraIdle}"
                 uiState="@{vm.uiState}"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="55dp"
                 android:layout_marginHorizontal="14dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"

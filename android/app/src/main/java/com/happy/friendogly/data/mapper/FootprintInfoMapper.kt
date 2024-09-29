@@ -1,7 +1,7 @@
 package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.model.FootprintInfoDto
-import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 
 fun FootprintInfoDto.toDomain(): PlaygroundInfo {
     return PlaygroundInfo(

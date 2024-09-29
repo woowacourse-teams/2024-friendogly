@@ -11,8 +11,6 @@ interface WoofActionHandler {
 
     fun clickRefreshBtn()
 
-    fun clickDeleteMyFootprintMarkerBtn()
-
     fun clickEndWalkBtn()
 
     fun clickBackBtn()
@@ -22,4 +20,8 @@ interface WoofActionHandler {
     fun clickFootprintMemberName(memberId: Long)
 
     fun clickHelpBtn()
+
+    fun clickPetImage(petImageUrl: String)
+
+    fun clickParticipatePlayground()
 }
