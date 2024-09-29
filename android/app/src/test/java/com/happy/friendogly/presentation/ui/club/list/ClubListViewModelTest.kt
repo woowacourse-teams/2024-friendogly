@@ -13,9 +13,9 @@ import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeType
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
-import com.happy.friendogly.utils.TextFixture
-import com.happy.friendogly.utils.TextFixture.makePet
-import com.happy.friendogly.utils.TextFixture.makeUserAddress
+import com.happy.friendogly.utils.TestFixture
+import com.happy.friendogly.utils.TestFixture.makePet
+import com.happy.friendogly.utils.TestFixture.makeUserAddress
 import com.happy.friendogly.utils.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -53,7 +53,7 @@ class ClubListViewModelTest {
             // given
             val clubs: List<Club> =
                 listOf(
-                    TextFixture.makeClub(),
+                    TestFixture.makeClub(),
                 )
 
             coEvery {
