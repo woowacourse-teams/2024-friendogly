@@ -31,10 +31,10 @@ public class PlaygroundMember {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "isInside", nullable = false)
+    @Column(name = "is_inside", nullable = false)
     private boolean isInside;
 
-    @Column(name = "exitTime")
+    @Column(name = "exit_time")
     private LocalDateTime exitTime;
 
     public PlaygroundMember(

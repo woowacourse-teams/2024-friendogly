@@ -1,6 +1,5 @@
 package com.happy.friendogly.playground.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +14,5 @@ public class Playground {
     private Long id;
 
     @Embedded
-    @Column(nullable = false)
     private Location location;
 }
