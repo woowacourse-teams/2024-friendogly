@@ -14,7 +14,7 @@ class PatchClubUseCase
             title: String,
             content: String,
             state: ClubState,
-        ): DomainResult<Unit,DataError.Network> =
+        ): DomainResult<Unit, DataError.Network> =
             repository.patchClub(
                 clubId = clubId,
                 title = title,

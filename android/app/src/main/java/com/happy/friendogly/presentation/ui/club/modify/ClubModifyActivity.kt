@@ -72,7 +72,7 @@ class ClubModifyActivity :
         viewModel.clubErrorHandler.observeClubError(
             owner = this@ClubModifyActivity,
             sendToast = { messageId -> showToastMessage(getString(messageId)) },
-            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) }
+            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) },
         )
     }
 

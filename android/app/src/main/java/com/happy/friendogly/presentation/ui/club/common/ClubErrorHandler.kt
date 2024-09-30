@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.common
 
-
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +11,11 @@ import com.happy.friendogly.presentation.base.observeEvent
 
 sealed interface ClubErrorEvent {
     data object InternetError : ClubErrorEvent
+
     data object FileSizeError : ClubErrorEvent
+
     data object ServerError : ClubErrorEvent
+
     data object UnKnownError : ClubErrorEvent
 }
 
@@ -34,14 +36,13 @@ class ClubErrorHandler {
                 }
 
                 is DataError.Local -> {
-                    //TODO : Local Exception
+                    // TODO : Local Exception
                     ClubErrorEvent.UnKnownError
                 }
-            }
+            },
         )
     }
 }
-
 
 fun ClubErrorHandler.observeClubError(
     owner: LifecycleOwner,

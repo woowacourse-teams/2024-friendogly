@@ -11,5 +11,5 @@ class GetMyHeadClubUseCase
     constructor(
         private val repository: MyClubRepository,
     ) {
-        suspend operator fun invoke(): DomainResult<List<Club>,DataError.Network> = repository.getMyHeadClubs()
+        suspend operator fun invoke(): DomainResult<List<Club>, DataError.Network> = repository.getMyHeadClubs()
     }

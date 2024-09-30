@@ -92,7 +92,7 @@ class ClubModifyViewModel
                     },
                     onError = { error ->
                         clubErrorHandler.handle(error)
-                    }
+                    },
                 )
             }
 

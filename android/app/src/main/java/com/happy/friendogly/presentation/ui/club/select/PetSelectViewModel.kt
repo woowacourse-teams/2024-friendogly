@@ -15,102 +15,102 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PetSelectViewModel
-@Inject
-constructor(
-    private val getPetsMineUseCase: GetPetsMineUseCase,
-) : BaseViewModel(), PetSelectActionHandler {
-    val clubErrorHandler = ClubErrorHandler()
+    @Inject
+    constructor(
+        private val getPetsMineUseCase: GetPetsMineUseCase,
+    ) : BaseViewModel(), PetSelectActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
 
-    private val _pets: MutableLiveData<List<PetSelectUiModel>> = MutableLiveData()
-    val pets: LiveData<List<PetSelectUiModel>> get() = _pets
+        private val _pets: MutableLiveData<List<PetSelectUiModel>> = MutableLiveData()
+        val pets: LiveData<List<PetSelectUiModel>> get() = _pets
 
-    private val selectedPets: MutableList<PetSelectUiModel> = mutableListOf()
+        private val selectedPets: MutableList<PetSelectUiModel> = mutableListOf()
 
-    private var filters: List<ClubFilter> = listOf()
+        private var filters: List<ClubFilter> = listOf()
 
-    private val _petSelectEvent: MutableLiveData<Event<PetSelectEvent>> = MutableLiveData()
-    val petSelectEvent: LiveData<Event<PetSelectEvent>> get() = _petSelectEvent
+        private val _petSelectEvent: MutableLiveData<Event<PetSelectEvent>> = MutableLiveData()
+        val petSelectEvent: LiveData<Event<PetSelectEvent>> get() = _petSelectEvent
 
-    private val _validCommit: MutableLiveData<Boolean> = MutableLiveData()
-    val validCommit: LiveData<Boolean> get() = _validCommit
+        private val _validCommit: MutableLiveData<Boolean> = MutableLiveData()
+        val validCommit: LiveData<Boolean> get() = _validCommit
 
-    init {
-        loadMyPets()
-    }
+        init {
+            loadMyPets()
+        }
 
-    fun loadFilters(filters: List<ClubFilter>) {
-        this.filters = filters
-    }
+        fun loadFilters(filters: List<ClubFilter>) {
+            this.filters = filters
+        }
 
-    private fun loadMyPets() =
-        launch {
-            getPetsMineUseCase().fold(
-                onSuccess = { pets ->
-                    if (pets.isEmpty()){
-                        _petSelectEvent.emit(PetSelectEvent.EmptyPet)
-                    } else {
-                        _pets.value =
-                            pets.map { pet ->
-                                pet.toPetSelectUiModel().apply {
-                                    initSelectableState(filters)
+        private fun loadMyPets() =
+            launch {
+                getPetsMineUseCase().fold(
+                    onSuccess = { pets ->
+                        if (pets.isEmpty()) {
+                            _petSelectEvent.emit(PetSelectEvent.EmptyPet)
+                        } else {
+                            _pets.value =
+                                pets.map { pet ->
+                                    pet.toPetSelectUiModel().apply {
+                                        initSelectableState(filters)
+                                    }
                                 }
-                            }
-                    }
-                },
-                onError = { error ->
-                    clubErrorHandler.handle(error)
-                },
+                        }
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
+            }
+
+        override fun selectPet(petSelectUiModel: PetSelectUiModel) {
+            if (selectedPets.contains(petSelectUiModel)) {
+                removeDog(petSelectUiModel)
+            } else {
+                applyValidDog(petSelectUiModel)
+            }
+        }
+
+        private fun applyValidDog(petSelectUiModel: PetSelectUiModel) {
+            if (petSelectUiModel.selectable) {
+                addDog(petSelectUiModel)
+            } else {
+                _petSelectEvent.emit(PetSelectEvent.PreventSelection(petSelectUiModel.name))
+            }
+        }
+
+        private fun removeDog(petSelectUiModel: PetSelectUiModel) {
+            petSelectUiModel.unSelectDog()
+            selectedPets.remove(petSelectUiModel)
+            _petSelectEvent.emit(PetSelectEvent.SelectPet)
+            updateValidation()
+        }
+
+        private fun addDog(petSelectUiModel: PetSelectUiModel) {
+            petSelectUiModel.selectDog()
+            selectedPets.add(petSelectUiModel)
+            _petSelectEvent.emit(PetSelectEvent.SelectPet)
+            updateValidation()
+        }
+
+        fun updateValidation() {
+            _validCommit.value = selectedPets.isNotEmpty()
+        }
+
+        override fun submitDogs() {
+            validCommit.value?.takeIf { it } ?: return preventComplete()
+            _petSelectEvent.emit(
+                PetSelectEvent.SelectPets(
+                    pets = selectedPets.map { it.id },
+                ),
             )
         }
 
-    override fun selectPet(petSelectUiModel: PetSelectUiModel) {
-        if (selectedPets.contains(petSelectUiModel)) {
-            removeDog(petSelectUiModel)
-        } else {
-            applyValidDog(petSelectUiModel)
+        private fun preventComplete() {
+            _petSelectEvent.emit(PetSelectEvent.PreventCommit)
+        }
+
+        override fun cancelSelection() {
+            _petSelectEvent.emit(PetSelectEvent.CancelSelection)
         }
     }
-
-    private fun applyValidDog(petSelectUiModel: PetSelectUiModel) {
-        if (petSelectUiModel.selectable) {
-            addDog(petSelectUiModel)
-        } else {
-            _petSelectEvent.emit(PetSelectEvent.PreventSelection(petSelectUiModel.name))
-        }
-    }
-
-    private fun removeDog(petSelectUiModel: PetSelectUiModel) {
-        petSelectUiModel.unSelectDog()
-        selectedPets.remove(petSelectUiModel)
-        _petSelectEvent.emit(PetSelectEvent.SelectPet)
-        updateValidation()
-    }
-
-    private fun addDog(petSelectUiModel: PetSelectUiModel) {
-        petSelectUiModel.selectDog()
-        selectedPets.add(petSelectUiModel)
-        _petSelectEvent.emit(PetSelectEvent.SelectPet)
-        updateValidation()
-    }
-
-    fun updateValidation() {
-        _validCommit.value = selectedPets.isNotEmpty()
-    }
-
-    override fun submitDogs() {
-        validCommit.value?.takeIf { it } ?: return preventComplete()
-        _petSelectEvent.emit(
-            PetSelectEvent.SelectPets(
-                pets = selectedPets.map { it.id },
-            ),
-        )
-    }
-
-    private fun preventComplete() {
-        _petSelectEvent.emit(PetSelectEvent.PreventCommit)
-    }
-
-    override fun cancelSelection() {
-        _petSelectEvent.emit(PetSelectEvent.CancelSelection)
-    }
-}

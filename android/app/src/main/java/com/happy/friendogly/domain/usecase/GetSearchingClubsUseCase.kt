@@ -20,7 +20,7 @@ class GetSearchingClubsUseCase
             address: ClubAddress,
             genderParams: List<Gender>,
             sizeParams: List<SizeType>,
-        ): DomainResult<List<Club>,DataError.Network> =
+        ): DomainResult<List<Club>, DataError.Network> =
             repository.getSearchingClubs(
                 filterCondition = filterCondition,
                 address = address,

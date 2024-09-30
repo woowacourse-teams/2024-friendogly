@@ -32,164 +32,164 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClubListViewModel
-@Inject
-constructor(
-    private val analyticsHelper: AnalyticsHelper,
-    private val getPetsMineUseCase: GetPetsMineUseCase,
-    private val getAddressUseCase: GetAddressUseCase,
-    private val searchingClubsUseCase: GetSearchingClubsUseCase,
-) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
-    val clubErrorHandler = ClubErrorHandler()
+    @Inject
+    constructor(
+        private val analyticsHelper: AnalyticsHelper,
+        private val getPetsMineUseCase: GetPetsMineUseCase,
+        private val getAddressUseCase: GetAddressUseCase,
+        private val searchingClubsUseCase: GetSearchingClubsUseCase,
+    ) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
 
-    private val _uiState: MutableLiveData<ClubListUiState> =
-        MutableLiveData(ClubListUiState.Init)
-    val uiState: LiveData<ClubListUiState> get() = _uiState
+        private val _uiState: MutableLiveData<ClubListUiState> =
+            MutableLiveData(ClubListUiState.Init)
+        val uiState: LiveData<ClubListUiState> get() = _uiState
 
-    private val _myAddress: MutableLiveData<UserAddress> =
-        MutableLiveData(null)
-    val myAddress: LiveData<UserAddress> get() = _myAddress
+        private val _myAddress: MutableLiveData<UserAddress> =
+            MutableLiveData(null)
+        val myAddress: LiveData<UserAddress> get() = _myAddress
 
-    private val _participationFilter: MutableLiveData<ParticipationFilter> =
-        MutableLiveData(ParticipationFilter.ENTIRE)
-    val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
+        private val _participationFilter: MutableLiveData<ParticipationFilter> =
+            MutableLiveData(ParticipationFilter.ENTIRE)
+        val participationFilter: LiveData<ParticipationFilter> get() = _participationFilter
 
-    val clubFilterSelector = ClubFilterSelector()
+        val clubFilterSelector = ClubFilterSelector()
 
-    private val _clubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
-    val clubs: LiveData<List<ClubItemUiModel>> get() = _clubs
+        private val _clubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
+        val clubs: LiveData<List<ClubItemUiModel>> get() = _clubs
 
-    private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
-    val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
+        private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
+        val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
 
-    init {
-        initPetState()
-        loadClubWithAddress()
-    }
-
-    fun loadClubWithAddress() =
-        viewModelScope.launch {
-            _uiState.value = ClubListUiState.Init
-            getAddressUseCase()
-                .onSuccess {
-                    _myAddress.value = it
-                    loadClubs()
-                }
-                .onFailure {
-                    _uiState.value = ClubListUiState.NotAddress
-                }
+        init {
+            initPetState()
+            loadClubWithAddress()
         }
 
-    private fun initPetState() =
-        launch {
-            getPetsMineUseCase().fold(
-                onSuccess = { pets ->
-                    if (isInValidPetCount(pets)) {
-                        _clubListEvent.emit(ClubListEvent.OpenAddPet)
+        fun loadClubWithAddress() =
+            viewModelScope.launch {
+                _uiState.value = ClubListUiState.Init
+                getAddressUseCase()
+                    .onSuccess {
+                        _myAddress.value = it
+                        loadClubs()
                     }
-                },
-                onError = { error ->
-                    clubErrorHandler.handle(error)
-                },
+                    .onFailure {
+                        _uiState.value = ClubListUiState.NotAddress
+                    }
+            }
+
+        private fun initPetState() =
+            launch {
+                getPetsMineUseCase().fold(
+                    onSuccess = { pets ->
+                        if (isInValidPetCount(pets)) {
+                            _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                        }
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
+            }
+
+        private fun loadClubs() =
+            viewModelScope.launch {
+                searchingClubsUseCase(
+                    filterCondition = participationFilter.value?.toDomain() ?: return@launch,
+                    address = myAddress.value?.toDomain() ?: return@launch,
+                    genderParams = clubFilterSelector.selectGenderFilters().toGenders(),
+                    sizeParams = clubFilterSelector.selectSizeFilters().toSizeTypes(),
+                ).fold(
+                    onSuccess = { clubs ->
+                        if (clubs.isEmpty()) {
+                            _uiState.value = ClubListUiState.NotData
+                        } else {
+                            _uiState.value = ClubListUiState.Init
+                        }
+                        _clubs.value = clubs.toPresentation()
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                        _uiState.value = ClubListUiState.Error
+                    },
+                )
+            }
+
+        fun updateClubFilter(filters: List<ClubFilter>) {
+            clubFilterSelector.initClubFilter(filters)
+            loadClubWithAddress()
+        }
+
+        fun updateParticipationFilter(participationFilter: ParticipationFilter) {
+            _participationFilter.value = participationFilter
+            loadClubWithAddress()
+        }
+
+        override fun loadClub(clubId: Long) {
+            analyticsHelper.logClubDetailClick()
+            _clubListEvent.emit(ClubListEvent.OpenClub(clubId))
+        }
+
+        override fun addClub() {
+            analyticsHelper.logListAddClubClick()
+            applyAddClubState()
+        }
+
+        private fun applyAddClubState() =
+            launch {
+                getPetsMineUseCase().fold(
+                    onSuccess = { pets ->
+                        if (isInValidPetCount(pets)) {
+                            _clubListEvent.emit(ClubListEvent.OpenAddPet)
+                        } else if (myAddress.value == null) {
+                            _clubListEvent.emit(ClubListEvent.FailLocation)
+                        } else {
+                            _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
+                        }
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
+            }
+
+        override fun selectParticipationFilter() {
+            val participationFilter = participationFilter.value ?: return
+            _clubListEvent.emit(ClubListEvent.OpenParticipationFilter(participationFilter))
+        }
+
+        override fun selectSizeFilter() {
+            val filters = clubFilterSelector.currentSelectedFilters.value ?: emptyList()
+            _clubListEvent.emit(
+                ClubListEvent.OpenFilterSelector(
+                    clubFilterType = ClubFilter.SizeFilter.Init,
+                    clubFilters = filters,
+                ),
             )
         }
 
-    private fun loadClubs() =
-        viewModelScope.launch {
-            searchingClubsUseCase(
-                filterCondition = participationFilter.value?.toDomain() ?: return@launch,
-                address = myAddress.value?.toDomain() ?: return@launch,
-                genderParams = clubFilterSelector.selectGenderFilters().toGenders(),
-                sizeParams = clubFilterSelector.selectSizeFilters().toSizeTypes(),
-            ).fold(
-                onSuccess = { clubs ->
-                    if (clubs.isEmpty()) {
-                        _uiState.value = ClubListUiState.NotData
-                    } else {
-                        _uiState.value = ClubListUiState.Init
-                    }
-                    _clubs.value = clubs.toPresentation()
-                },
-                onError = { error ->
-                    clubErrorHandler.handle(error)
-                    _uiState.value = ClubListUiState.Error
-                }
+        override fun selectGenderFilter() {
+            val filters = clubFilterSelector.currentSelectedFilters.value ?: emptyList()
+            _clubListEvent.emit(
+                ClubListEvent.OpenFilterSelector(
+                    clubFilterType = ClubFilter.GenderFilter.Init,
+                    clubFilters = filters,
+                ),
             )
         }
 
-    fun updateClubFilter(filters: List<ClubFilter>) {
-        clubFilterSelector.initClubFilter(filters)
-        loadClubWithAddress()
-    }
+        override fun removeFilter(clubFilter: ClubFilter) {
+            clubFilterSelector.removeClubFilter(filter = clubFilter)
+            loadClubWithAddress()
+        }
 
-    fun updateParticipationFilter(participationFilter: ParticipationFilter) {
-        _participationFilter.value = participationFilter
-        loadClubWithAddress()
-    }
-
-    override fun loadClub(clubId: Long) {
-        analyticsHelper.logClubDetailClick()
-        _clubListEvent.emit(ClubListEvent.OpenClub(clubId))
-    }
-
-    override fun addClub() {
-        analyticsHelper.logListAddClubClick()
-        applyAddClubState()
-    }
-
-    private fun applyAddClubState() =
-        launch {
-            getPetsMineUseCase().fold(
-                onSuccess = { pets ->
-                    if (isInValidPetCount(pets)) {
-                        _clubListEvent.emit(ClubListEvent.OpenAddPet)
-                    } else if (myAddress.value == null) {
-                        _clubListEvent.emit(ClubListEvent.FailLocation)
-                    } else {
-                        _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
-                    }
-                },
-                onError = { error ->
-                    clubErrorHandler.handle(error)
-                },
+        override fun addMyLocation() {
+            analyticsHelper.logUpdateUserLocation()
+            _clubListEvent.emit(
+                ClubListEvent.Navigation.NavigateToAddress,
             )
         }
 
-    override fun selectParticipationFilter() {
-        val participationFilter = participationFilter.value ?: return
-        _clubListEvent.emit(ClubListEvent.OpenParticipationFilter(participationFilter))
+        private fun isInValidPetCount(pets: List<Pet>): Boolean = pets.isEmpty()
     }
-
-    override fun selectSizeFilter() {
-        val filters = clubFilterSelector.currentSelectedFilters.value ?: emptyList()
-        _clubListEvent.emit(
-            ClubListEvent.OpenFilterSelector(
-                clubFilterType = ClubFilter.SizeFilter.Init,
-                clubFilters = filters,
-            ),
-        )
-    }
-
-    override fun selectGenderFilter() {
-        val filters = clubFilterSelector.currentSelectedFilters.value ?: emptyList()
-        _clubListEvent.emit(
-            ClubListEvent.OpenFilterSelector(
-                clubFilterType = ClubFilter.GenderFilter.Init,
-                clubFilters = filters,
-            ),
-        )
-    }
-
-    override fun removeFilter(clubFilter: ClubFilter) {
-        clubFilterSelector.removeClubFilter(filter = clubFilter)
-        loadClubWithAddress()
-    }
-
-    override fun addMyLocation() {
-        analyticsHelper.logUpdateUserLocation()
-        _clubListEvent.emit(
-            ClubListEvent.Navigation.NavigateToAddress,
-        )
-    }
-
-    private fun isInValidPetCount(pets: List<Pet>): Boolean = pets.isEmpty()
-}

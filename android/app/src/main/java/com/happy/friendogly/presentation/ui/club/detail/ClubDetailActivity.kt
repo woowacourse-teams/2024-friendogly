@@ -147,7 +147,7 @@ class ClubDetailActivity :
                         finish()
                     }
                 }
-            }
+            },
         )
     }
 

@@ -46,7 +46,7 @@ class ClubMenuViewModel
                         },
                         onError = { error ->
                             clubErrorHandler.handle(error)
-                        }
+                        },
                     )
             }
 

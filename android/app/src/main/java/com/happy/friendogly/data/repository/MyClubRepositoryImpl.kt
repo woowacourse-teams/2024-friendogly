@@ -21,18 +21,18 @@ class MyClubRepositoryImpl
                 },
                 onFailure = { error ->
                     error.toDomainError()
-                }
+                },
             )
         }
 
-        override suspend fun getMyHeadClubs(): DomainResult<List<Club>,DataError.Network> {
-          return source.getMyOwningClubs().fold(
-              onSuccess = { clubs ->
-                  DomainResult.Success(clubs.toDomain())
-              },
-              onFailure = { error ->
-                  error.toDomainError()
-              }
-          )
+        override suspend fun getMyHeadClubs(): DomainResult<List<Club>, DataError.Network> {
+            return source.getMyOwningClubs().fold(
+                onSuccess = { clubs ->
+                    DomainResult.Success(clubs.toDomain())
+                },
+                onFailure = { error ->
+                    error.toDomainError()
+                },
+            )
         }
     }

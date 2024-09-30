@@ -23,7 +23,7 @@ class PostClubUseCase
             memberCapacity: Int,
             file: MultipartBody.Part?,
             petIds: List<Long>,
-        ): DomainResult<Unit,DataError.Network> =
+        ): DomainResult<Unit, DataError.Network> =
             repository.postClub(
                 title = title,
                 content = content,

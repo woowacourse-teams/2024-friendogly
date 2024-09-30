@@ -20,49 +20,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyParticipatingClubViewModel
-@Inject
-constructor(
-    private val getMyClubUseCase: GetMyClubUseCase,
-) : BaseViewModel(), ClubItemActionHandler {
-    val clubErrorHandler = ClubErrorHandler()
+    @Inject
+    constructor(
+        private val getMyClubUseCase: GetMyClubUseCase,
+    ) : BaseViewModel(), ClubItemActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
 
-    private val _myClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
-    val myClubs: LiveData<List<ClubItemUiModel>> get() = _myClubs
+        private val _myClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
+        val myClubs: LiveData<List<ClubItemUiModel>> get() = _myClubs
 
-    private val _myClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData()
-    val myClubUiState: LiveData<MyClubUiState> get() = _myClubUiState
+        private val _myClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData()
+        val myClubUiState: LiveData<MyClubUiState> get() = _myClubUiState
 
-    private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
-    val myClubEvent: LiveData<Event<MyClubEvent.Navigation>> get() = _myClubEvent
+        private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
+        val myClubEvent: LiveData<Event<MyClubEvent.Navigation>> get() = _myClubEvent
 
-    init {
-        loadMyClubs()
-    }
-
-    fun loadMyClubs() =
-        viewModelScope.launch {
-            getMyClubUseCase()
-                .fold(
-                    onSuccess = { clubs ->
-                        if (clubs.isEmpty()) {
-                            _myClubUiState.value = MyClubUiState.NotData
-                        } else {
-                            _myClubUiState.value = MyClubUiState.Init
-                        }
-                        _myClubs.value = clubs.toPresentation()
-                    },
-                    onError = { error ->
-                        _myClubUiState.value = MyClubUiState.Error
-                        clubErrorHandler.handle(error)
-                    }
-                )
+        init {
+            loadMyClubs()
         }
 
-    override fun loadClub(clubId: Long) {
-        _myClubEvent.emit(MyClubEvent.Navigation.NavigateToClub(clubId))
-    }
+        fun loadMyClubs() =
+            viewModelScope.launch {
+                getMyClubUseCase()
+                    .fold(
+                        onSuccess = { clubs ->
+                            if (clubs.isEmpty()) {
+                                _myClubUiState.value = MyClubUiState.NotData
+                            } else {
+                                _myClubUiState.value = MyClubUiState.Init
+                            }
+                            _myClubs.value = clubs.toPresentation()
+                        },
+                        onError = { error ->
+                            _myClubUiState.value = MyClubUiState.Error
+                            clubErrorHandler.handle(error)
+                        },
+                    )
+            }
 
-    override fun addClub() {
-        _myClubEvent.emit(MyClubEvent.Navigation.NavigateToAddClub)
+        override fun loadClub(clubId: Long) {
+            _myClubEvent.emit(MyClubEvent.Navigation.NavigateToClub(clubId))
+        }
+
+        override fun addClub() {
+            _myClubEvent.emit(MyClubEvent.Navigation.NavigateToAddClub)
+        }
     }
-}

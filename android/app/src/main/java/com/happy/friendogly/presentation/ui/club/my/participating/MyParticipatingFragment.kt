@@ -60,7 +60,7 @@ class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fra
         viewModel.clubErrorHandler.observeClubError(
             owner = viewLifecycleOwner,
             sendSnackBar = { messageId -> showSnackbar(getString(messageId)) },
-            sendToast = { messageId -> showToastMessage(getString(messageId)) }
+            sendToast = { messageId -> showToastMessage(getString(messageId)) },
         )
     }
 

@@ -10,5 +10,5 @@ class DeleteClubMemberUseCase
     constructor(
         private val repository: ClubRepository,
     ) {
-        suspend operator fun invoke(id: Long): DomainResult<Unit,DataError.Network> = repository.deleteClubMember(clubId = id)
+        suspend operator fun invoke(id: Long): DomainResult<Unit, DataError.Network> = repository.deleteClubMember(clubId = id)
     }

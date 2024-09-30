@@ -108,7 +108,6 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
         }
         viewModel.clubErrorHandler.observeClubError(
             owner = this@ClubAddActivity,
-
             sendSnackBar = { messageId ->
                 showSnackbar(getString(messageId)) {
                     setAction(resources.getString(R.string.club_detail_fail_button)) {
@@ -116,7 +115,6 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                     }
                 }
             },
-
             sendToast = { messageId -> showToastMessage(getString(messageId)) },
         )
     }
