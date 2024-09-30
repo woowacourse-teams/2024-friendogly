@@ -8,7 +8,7 @@ public record FindPlaygroundDetailResponse(
 
         Long id,
         int totalPetCount,
-        int participatePetCount,
+        int arrivedPetCount,
         List<PlaygroundPetDetail> playgroundPetDetails
 ) {
 

@@ -4,6 +4,6 @@ public record FindPlaygroundSummaryResponse(
 
         Long id,
         int totalPetCount,
-        int participatePetCount
+        int arrivedPetCount
 ) {
 }

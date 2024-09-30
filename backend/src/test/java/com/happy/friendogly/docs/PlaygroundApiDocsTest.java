@@ -103,7 +103,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.id").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("놀이터에 참여한 전체 강아지 수"),
-                                        fieldWithPath("data.participatePetCount").description("놀이터에 도착한 강아지 수"),
+                                        fieldWithPath("data.arrivedPetCount").description("놀이터에 도착한 강아지 수"),
                                         fieldWithPath("data.playgroundPetDetails.[].memberId")
                                                 .description("강아지 주인 멤버ID"),
                                         fieldWithPath("data.playgroundPetDetails.[].petId")
@@ -174,7 +174,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.id").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("전체 참여 강아지 수"),
-                                        fieldWithPath("data.participatePetCount").description("현재 홯성화 강아지 수")
+                                        fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundSummaryResponse"))
                                 .build()
