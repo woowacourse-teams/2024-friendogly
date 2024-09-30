@@ -41,14 +41,12 @@ public class PlaygroundMember {
     private LocalDateTime exitTime;
 
     public PlaygroundMember(
-            Long id,
             Playground playground,
             Member member,
             String message,
             boolean isInside,
             LocalDateTime exitTime
     ) {
-        this.id = id;
         this.playground = playground;
         this.member = member;
         this.message = message;
