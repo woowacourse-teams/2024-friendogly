@@ -136,7 +136,9 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @Test
     void findAllLocation() throws Exception {
         mockMvc
-                .perform(get("/playgrounds/locations"))
+                .perform(get("/playgrounds/locations")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                )
                 .andDo(document("playgrounds/findLocations",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -147,7 +149,8 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.[].id").description("놀이터의 ID"),
                                         fieldWithPath("data.[].latitude").description("놀이터의 위도"),
-                                        fieldWithPath("data.[].longitude").description("놀이터의 경도")
+                                        fieldWithPath("data.[].longitude").description("놀이터의 경도"),
+                                        fieldWithPath("data.[].isParticipated").description("놀이터 참여 유무")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundLocationResponse"))
                                 .build()
@@ -170,7 +173,8 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.id").description("놀이터의 ID"),
-                                        fieldWithPath("data.totalPetCount").description("전체 참여 강아지 수")
+                                        fieldWithPath("data.totalPetCount").description("전체 참여 강아지 수"),
+                                        fieldWithPath("data.participatePetCount").description("현재 홯성화 강아지 수")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundSummaryResponse"))
                                 .build()

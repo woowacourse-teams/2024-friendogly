@@ -4,7 +4,8 @@ public record FindPlaygroundLocationResponse(
 
         Long id,
         double latitude,
-        double longitude
+        double longitude,
+        boolean isParticipated
 ) {
 
 }

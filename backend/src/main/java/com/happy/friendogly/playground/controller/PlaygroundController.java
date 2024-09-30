@@ -109,17 +109,17 @@ public class PlaygroundController {
 
     @GetMapping("/{id}/summary")
     public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long id) {
-        return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10));
+        return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10, 4));
     }
 
     @GetMapping("/locations")
-    public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocation() {
+    public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocation(@Auth Long memberId) {
         return ApiResponse.ofSuccess(
                 List.of(
-                        new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661),
-                        new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778),
-                        new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182),
-                        new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528)
+                        new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661, true),
+                        new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778, false),
+                        new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182, false),
+                        new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
                 )
         );
     }

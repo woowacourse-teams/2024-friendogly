@@ -7,8 +7,8 @@ import java.util.List;
 public record FindPlaygroundDetailResponse(
 
         Long id,
-        long totalPetCount,
-        long participatePetCount,
+        int totalPetCount,
+        int participatePetCount,
         List<PlaygroundPetDetail> playgroundPetDetails
 ) {
 
