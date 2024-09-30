@@ -37,6 +37,15 @@ public class Location {
         this.longitude = longitude;
     }
 
+    private void validate(double latitude, double longitude) {
+        if (latitude < MIN_LATITUDE || latitude > MAX_LATITUDE) {
+            throw new FriendoglyException("위도 범위가 올바르지 않습니다.");
+        }
+        if (longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
+            throw new FriendoglyException("경도 범위가 올바르지 않습니다.");
+        }
+    }
+
     public boolean isWithin(Location other, int radius) {
         return calculateDistanceInMeters(other) <= radius;
     }
@@ -48,14 +57,5 @@ public class Location {
 
         dist = toDegrees(acos(dist));
         return abs(dist * 60 * 1.1515 * 1609.344);
-    }
-
-    private void validate(double latitude, double longitude) {
-        if (latitude < MIN_LATITUDE || latitude > MAX_LATITUDE) {
-            throw new FriendoglyException("위도 범위가 올바르지 않습니다.");
-        }
-        if (longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
-            throw new FriendoglyException("경도 범위가 올바르지 않습니다.");
-        }
     }
 }
