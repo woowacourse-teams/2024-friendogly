@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.utils.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,6 +22,8 @@ class ClubModifyViewModel
     constructor(
         private val patchClubUseCase: PatchClubUseCase,
     ) : BaseViewModel(), ClubModifyActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _modifyEvent: MutableLiveData<Event<ClubModifyEvent>> = MutableLiveData()
         val modifyEvent: LiveData<Event<ClubModifyEvent>> get() = _modifyEvent
 
@@ -82,13 +86,14 @@ class ClubModifyViewModel
                     title = clubTitle.value ?: return@launch,
                     content = clubContent.value ?: return@launch,
                     state = clubState.value ?: return@launch,
-                )
-                    .onSuccess {
+                ).fold(
+                    onSuccess = {
                         _modifyEvent.emit(ClubModifyEvent.Navigation.NavigateSubmit)
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
                     }
-                    .onFailure {
-                        _modifyEvent.emit(ClubModifyEvent.FailModify)
-                    }
+                )
             }
 
         override fun openSelectState() {

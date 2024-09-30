@@ -19,6 +19,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
+import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
@@ -99,13 +100,25 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 }
 
                 ClubAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.club_add_information_fail_address))
-                ClubAddEvent.FailAddClub -> showSnackbar(getString(R.string.club_add_fail))
                 ClubAddEvent.Navigation.NavigateToHomeWithAdded -> {
                     putLoadState()
                     finish()
                 }
             }
         }
+        viewModel.clubErrorHandler.observeClubError(
+            owner = this@ClubAddActivity,
+
+            sendSnackBar = { messageId ->
+                showSnackbar(getString(messageId)) {
+                    setAction(resources.getString(R.string.club_detail_fail_button)) {
+                        finish()
+                    }
+                }
+            },
+
+            sendToast = { messageId -> showToastMessage(getString(messageId)) },
+        )
     }
 
     private fun putLoadState() {

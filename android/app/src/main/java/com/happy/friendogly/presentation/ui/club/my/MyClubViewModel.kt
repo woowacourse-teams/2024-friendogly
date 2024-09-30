@@ -8,6 +8,7 @@ import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +19,8 @@ class MyClubViewModel
     constructor(
         private val getPetsMineUseCase: GetPetsMineUseCase,
     ) : BaseViewModel() {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _myClubEvent: MutableLiveData<Event<MyClubEvent.AddPet>> = MutableLiveData()
         val myClubEvent: LiveData<Event<MyClubEvent.AddPet>> get() = _myClubEvent
 
@@ -32,8 +35,8 @@ class MyClubViewModel
                                 _myClubEvent.emit(MyClubEvent.AddPet.OpenAddClub)
                             }
                         },
-                        onError = {
-                            // TODO 예외처리
+                        onError = { error ->
+                            clubErrorHandler.handle(error)
                         },
                     )
             }

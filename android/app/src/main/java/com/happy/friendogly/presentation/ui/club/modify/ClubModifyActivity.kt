@@ -8,6 +8,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityClubModifyBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.modify.bottom.ClubRecruitmentBottomSheet
 import com.happy.friendogly.presentation.utils.customOnFocusChangeListener
 import com.happy.friendogly.presentation.utils.hideKeyboard
@@ -65,9 +66,14 @@ class ClubModifyActivity :
                 }
 
                 ClubModifyEvent.Navigation.NavigateSelectState -> openSelectState()
-                ClubModifyEvent.FailModify -> showSnackbar(getString(R.string.club_modify_fail))
             }
         }
+
+        viewModel.clubErrorHandler.observeClubError(
+            owner = this@ClubModifyActivity,
+            sendToast = { messageId -> showToastMessage(getString(messageId)) },
+            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) }
+        )
     }
 
     private fun openSelectState() {

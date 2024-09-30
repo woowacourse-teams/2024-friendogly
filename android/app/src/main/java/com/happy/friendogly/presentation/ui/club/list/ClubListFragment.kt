@@ -16,6 +16,7 @@ import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
+import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
@@ -134,6 +135,13 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 ClubListEvent.OpenAddPet -> openRegisterPetDialog()
             }
         }
+
+        viewModel.clubErrorHandler.observeClubError(
+            owner = viewLifecycleOwner,
+            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) },
+
+            sendToast = { messageId -> showToastMessage(getString(messageId)) },
+        )
     }
 
     private fun openRegisterPetDialog() {

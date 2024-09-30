@@ -1,11 +1,14 @@
 package com.happy.friendogly.presentation.ui.club.common
 
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.happy.friendogly.R
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.base.observeEvent
 
 sealed interface ClubErrorEvent {
     data object InternetError : ClubErrorEvent
@@ -36,5 +39,21 @@ class ClubErrorHandler {
                 }
             }
         )
+    }
+}
+
+
+fun ClubErrorHandler.observeClubError(
+    owner: LifecycleOwner,
+    sendToast: (Int) -> Unit,
+    sendSnackBar: (Int) -> Unit,
+) {
+    this.error.observeEvent(owner) { clubError ->
+        when (clubError) {
+            ClubErrorEvent.FileSizeError -> sendToast(R.string.file_size_exceed_message)
+            ClubErrorEvent.ServerError -> sendToast(R.string.server_error_message)
+            ClubErrorEvent.UnKnownError -> sendToast(R.string.default_error_message)
+            ClubErrorEvent.InternetError -> sendSnackBar(R.string.no_internet_message)
+        }
     }
 }

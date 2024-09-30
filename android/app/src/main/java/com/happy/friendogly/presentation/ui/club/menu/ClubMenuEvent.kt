@@ -14,6 +14,4 @@ sealed interface ClubMenuEvent {
     sealed interface Navigation : ClubMenuEvent {
         data object NavigateToPrev : Navigation
     }
-
-    data object FailDelete : ClubMenuEvent
 }

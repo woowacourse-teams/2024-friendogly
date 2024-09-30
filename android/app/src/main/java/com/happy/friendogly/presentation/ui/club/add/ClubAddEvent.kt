@@ -16,6 +16,4 @@ sealed interface ClubAddEvent {
     data class ChangePage(val page: Int) : ClubAddEvent
 
     data object FailLoadAddress : ClubAddEvent
-
-    data object FailAddClub : ClubAddEvent
 }

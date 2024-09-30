@@ -14,6 +14,7 @@ import com.happy.friendogly.databinding.BottomSheetClubMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,15 +80,24 @@ class ClubMenuBottomSheet(
                     (activity as ClubDetailNavigation).navigateToPrevWithReload()
                     dismissNow()
                 }
-
-                ClubMenuEvent.FailDelete -> {
-                    makeToast(
-                        requireContext().getString(R.string.club_detail_delete_fail),
-                    )
-                    dismissNow()
-                }
             }
         }
+
+        viewModel.clubErrorHandler.observeClubError(
+            owner = viewLifecycleOwner,
+            sendSnackBar = { messageId ->
+                makeToast(
+                    requireContext().getString(messageId),
+                )
+                dismissNow()
+            },
+            sendToast = { messageId ->
+                makeToast(
+                    requireContext().getString(messageId),
+                )
+                dismissNow()
+            }
+        )
     }
 
     private fun makeToast(message: String) {
@@ -105,12 +115,12 @@ class ClubMenuBottomSheet(
         val dialog =
             DefaultCoralAlertDialog(
                 alertDialogModel =
-                    AlertDialogModel(
-                        title = requireContext().getString(R.string.club_detail_delete_title),
-                        description = null,
-                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
-                    ),
+                AlertDialogModel(
+                    title = requireContext().getString(R.string.club_detail_delete_title),
+                    description = null,
+                    negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                    positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                ),
                 clickToNegative = { },
                 clickToPositive = {
                     viewModel.withdrawClub(clubId)
