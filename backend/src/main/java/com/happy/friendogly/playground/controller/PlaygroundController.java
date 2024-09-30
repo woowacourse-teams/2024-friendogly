@@ -120,7 +120,7 @@ public class PlaygroundController {
     }
 
     @GetMapping("/{id}/summary")
-    public ApiResponse<FindPlaygroundSummaryResponse> findSummary() {
+    public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long id) {
         return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10));
     }
 
