@@ -56,6 +56,10 @@ public class Location {
                 cos(toRadians(this.latitude)) * cos(toRadians(other.latitude)) * cos(toRadians(theta));
 
         dist = toDegrees(acos(dist));
+        return degreeToMeter(dist);
+    }
+
+    private double degreeToMeter(double dist) {
         return abs(dist * 60 * 1.1515 * 1609.344);
     }
 }
