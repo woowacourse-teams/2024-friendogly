@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.list
 
 import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubFilterCondition
@@ -74,7 +75,7 @@ class ClubListViewModelTest {
                     genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                     sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
                 )
-            } returns Result.success(clubs)
+            } returns DomainResult.Success(clubs)
 
             viewModel =
                 ClubListViewModel(
@@ -142,7 +143,7 @@ class ClubListViewModelTest {
                     genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                     sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
                 )
-            } returns Result.success(emptyList())
+            } returns DomainResult.Success(emptyList())
 
             viewModel =
                 ClubListViewModel(
@@ -183,7 +184,7 @@ class ClubListViewModelTest {
                 genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                 sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
             )
-        } returns Result.failure(Throwable())
+        } returns DomainResult.Error(DataError.Network.UNKNOWN)
 
         viewModel =
             ClubListViewModel(
