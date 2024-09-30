@@ -1,7 +1,7 @@
 package com.happy.friendogly.playground.dto.response;
 
 public record UpdatePlaygroundArrivalResponse(
-        boolean isArrival
+        boolean isArrived
 ) {
 
 }
