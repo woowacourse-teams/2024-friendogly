@@ -54,7 +54,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 .andExpect(status().isCreated());
     }
 
-    @DisplayName("놀이터를 저장")
+    @DisplayName("놀이터도착 유무 업데이트")
     @Test
     void updateArrival() throws Exception {
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(37.5173316, 127.1011661);
@@ -76,7 +76,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.isArrival").description("도착 유무")
+                                        fieldWithPath("data.isArrived").description("도착 유무")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundArrivalResponse"))
                                 .build()
