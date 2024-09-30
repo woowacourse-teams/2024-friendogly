@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.happy.friendogly.local.dao.ChatMessageDao
 import com.happy.friendogly.local.dao.ChatRoomDao
+import com.happy.friendogly.local.dao.RecentPetsDao
 import com.happy.friendogly.local.room.ChatMessageDatabase
+import com.happy.friendogly.local.room.RecentPetsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +35,19 @@ object RoomModule {
     @Provides
     @Singleton
     fun providesChatMessageDao(chatMessageDatabase: ChatMessageDatabase): ChatMessageDao = chatMessageDatabase.chatMessageDao()
+
+    @Provides
+    @Singleton
+    fun providesRecentPetsDatabase(
+        @ApplicationContext appContext: Context,
+    ): RecentPetsDatabase =
+        Room.databaseBuilder(
+            appContext,
+            RecentPetsDatabase::class.java,
+            "recent_pets",
+        ).build()
+
+    @Provides
+    @Singleton
+    fun providesRecentPetDao(database: RecentPetsDatabase): RecentPetsDao = database.recentPetDao()
 }
