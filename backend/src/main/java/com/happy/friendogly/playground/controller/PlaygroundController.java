@@ -8,11 +8,11 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
-import com.happy.friendogly.playground.dto.response.PlaygroundArrivalResponse;
-import com.happy.friendogly.playground.dto.response.PlaygroundDetailResponse;
-import com.happy.friendogly.playground.dto.response.PlaygroundLocationResponse;
-import com.happy.friendogly.playground.dto.response.PlaygroundSummaryResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -75,8 +75,8 @@ public class PlaygroundController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<PlaygroundDetailResponse> find(@PathVariable Long id) {
-        return ApiResponse.ofSuccess(new PlaygroundDetailResponse(
+    public ApiResponse<FindPlaygroundDetailResponse> find(@PathVariable Long id) {
+        return ApiResponse.ofSuccess(new FindPlaygroundDetailResponse(
                         1L,
                         20,
                         10,
@@ -108,27 +108,27 @@ public class PlaygroundController {
     }
 
     @GetMapping("/locations")
-    public ApiResponse<List<PlaygroundLocationResponse>> findAllLocation() {
+    public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocation() {
         return ApiResponse.ofSuccess(
                 List.of(
-                        new PlaygroundLocationResponse(1L, 37.5173316, 127.1011661),
-                        new PlaygroundLocationResponse(2L, 37.5185122, 127.098778),
-                        new PlaygroundLocationResponse(3L, 37.5136533, 127.0983182),
-                        new PlaygroundLocationResponse(4L, 37.5131474, 127.1042528)
+                        new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661),
+                        new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778),
+                        new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182),
+                        new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528)
                 )
         );
     }
 
     @GetMapping("/{id}/summary")
-    public ApiResponse<PlaygroundSummaryResponse> findSummary() {
-        return ApiResponse.ofSuccess(new PlaygroundSummaryResponse(1L, 10));
+    public ApiResponse<FindPlaygroundSummaryResponse> findSummary() {
+        return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10));
     }
 
     @PatchMapping("/arrival")
-    public ApiResponse<PlaygroundArrivalResponse> updateArrival(
+    public ApiResponse<UpdatePlaygroundArrivalResponse> updateArrival(
             @Auth Long memberId,
             @Valid @RequestBody UpdatePlaygroundArrivalRequest request
     ) {
-        return ApiResponse.ofSuccess(new PlaygroundArrivalResponse(true));
+        return ApiResponse.ofSuccess(new UpdatePlaygroundArrivalResponse(true));
     }
 }

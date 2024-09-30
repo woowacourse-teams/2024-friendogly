@@ -1,6 +1,6 @@
 package com.happy.friendogly.playground.dto.response;
 
-public record PlaygroundSummaryResponse(
+public record FindPlaygroundSummaryResponse(
 
         Long id,
         int totalPetCount
