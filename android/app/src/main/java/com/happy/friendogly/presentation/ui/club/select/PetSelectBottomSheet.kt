@@ -17,8 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.select.adapter.PetSelectAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -123,11 +124,14 @@ class PetSelectBottomSheet(
             }
         }
 
-        viewModel.clubErrorHandler.observeClubError(
-            owner = viewLifecycleOwner,
-            sendToast = { messageId -> makeToast(getString(messageId)) },
-            sendSnackBar = { messageId -> makeToast(getString(messageId)) },
-        )
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> makeToast(getString(message.messageId))
+                    is MessageHandler.SendToast -> makeToast(getString(message.messageId))
+                }
+            }
+        }
     }
 
     private fun makeToast(message: String) {

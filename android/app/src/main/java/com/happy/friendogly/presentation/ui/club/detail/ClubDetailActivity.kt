@@ -14,8 +14,9 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
 import com.happy.friendogly.presentation.ui.club.list.adapter.filter.FilterAdapter
@@ -138,17 +139,21 @@ class ClubDetailActivity :
             }
         }
 
-        viewModel.clubErrorHandler.observeClubError(
-            owner = this@ClubDetailActivity,
-            sendToast = { messageId -> showToastMessage(getString(messageId)) },
-            sendSnackBar = { messageId ->
-                showSnackbar(getString(messageId)) {
-                    setAction(resources.getString(R.string.club_detail_fail_button)) {
-                        finish()
+        viewModel.clubErrorHandler.error.observeEvent(this@ClubDetailActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> {
+                        showSnackbar(getString(message.messageId)) {
+                            setAction(resources.getString(R.string.club_detail_fail_button)) {
+                                finish()
+                            }
+                        }
                     }
+
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
                 }
-            },
-        )
+            }
+        }
     }
 
     override fun navigateToModify() {

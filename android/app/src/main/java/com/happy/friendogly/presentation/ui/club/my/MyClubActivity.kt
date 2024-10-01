@@ -11,7 +11,8 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
-import com.happy.friendogly.presentation.ui.club.common.observeClubError
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubAdapter
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
@@ -68,11 +69,14 @@ class MyClubActivity :
             }
         }
 
-        viewModel.clubErrorHandler.observeClubError(
-            owner = this@MyClubActivity,
-            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) },
-            sendToast = { messageId -> showToastMessage(getString(messageId)) },
-        )
+        viewModel.clubErrorHandler.error.observeEvent(this@MyClubActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                }
+            }
+        }
     }
 
     private fun openRegisterPetDialog() {

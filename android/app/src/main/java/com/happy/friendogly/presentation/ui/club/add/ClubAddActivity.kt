@@ -18,8 +18,9 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
-import com.happy.friendogly.presentation.ui.club.common.observeClubError
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
@@ -106,17 +107,22 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 }
             }
         }
-        viewModel.clubErrorHandler.observeClubError(
-            owner = this@ClubAddActivity,
-            sendSnackBar = { messageId ->
-                showSnackbar(getString(messageId)) {
-                    setAction(resources.getString(R.string.club_detail_fail_button)) {
-                        finish()
+
+        viewModel.clubErrorHandler.error.observeEvent(this@ClubAddActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> {
+                        showSnackbar(getString(message.messageId)) {
+                            setAction(resources.getString(R.string.club_detail_fail_button)) {
+                                finish()
+                            }
+                        }
                     }
+
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
                 }
-            },
-            sendToast = { messageId -> showToastMessage(getString(messageId)) },
-        )
+            }
+        }
     }
 
     private fun putLoadState() {

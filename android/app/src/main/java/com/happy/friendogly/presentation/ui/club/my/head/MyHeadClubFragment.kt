@@ -7,8 +7,9 @@ import com.happy.friendogly.databinding.FragmentMyClubBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
-import com.happy.friendogly.presentation.ui.club.common.observeClubError
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
@@ -60,11 +61,14 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
             }
         }
 
-        viewModel.clubErrorHandler.observeClubError(
-            owner = viewLifecycleOwner,
-            sendSnackBar = { messageId -> showSnackbar(getString(messageId)) },
-            sendToast = { messageId -> showToastMessage(getString(messageId)) },
-        )
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                }
+            }
+        }
     }
 
     private fun applyViewState(currentView: View) {
