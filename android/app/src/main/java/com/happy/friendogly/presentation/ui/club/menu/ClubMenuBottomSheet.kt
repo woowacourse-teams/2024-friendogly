@@ -90,7 +90,7 @@ class ClubMenuBottomSheet(
                     when (message) {
                         is MessageHandler.SendSnackBar -> {
                             makeToast(
-                                requireContext().getString(message.messageId)
+                                requireContext().getString(message.messageId),
                             )
                             dismissNow()
                         }
@@ -100,7 +100,7 @@ class ClubMenuBottomSheet(
                             dismissNow()
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -120,12 +120,12 @@ class ClubMenuBottomSheet(
         val dialog =
             DefaultCoralAlertDialog(
                 alertDialogModel =
-                AlertDialogModel(
-                    title = requireContext().getString(R.string.club_detail_delete_title),
-                    description = null,
-                    negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                    positiveContents = requireContext().getString(R.string.dialog_positive_default),
-                ),
+                    AlertDialogModel(
+                        title = requireContext().getString(R.string.club_detail_delete_title),
+                        description = null,
+                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                    ),
                 clickToNegative = { },
                 clickToPositive = {
                     viewModel.withdrawClub(clubId)

@@ -145,7 +145,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                         is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
                         is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
                     }
-                }
+                },
             )
         }
     }
@@ -185,9 +185,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         const val TAG = "ClubListFragment"
     }
 
-    fun ClubErrorEvent.handleError(
-        messageHandler: (MessageHandler) -> Unit,
-    ) {
+    fun ClubErrorEvent.handleError(messageHandler: (MessageHandler) -> Unit) {
         when (this) {
             ClubErrorEvent.FileSizeError -> messageHandler(MessageHandler.SendToast(R.string.file_size_exceed_message))
             ClubErrorEvent.ServerError -> MessageHandler.SendToast(R.string.server_error_message)
@@ -195,5 +193,4 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             ClubErrorEvent.InternetError -> MessageHandler.SendSnackBar(R.string.no_internet_message)
         }
     }
-
 }
