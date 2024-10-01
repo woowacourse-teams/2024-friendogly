@@ -1,9 +1,12 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
 import com.happy.friendogly.utils.TestFixture
@@ -55,7 +58,7 @@ class ClubDetailViewModelTest {
 
             coEvery {
                 getClubUseCase(0L)
-            } returns Result.success(clubDetail)
+            } returns DomainResult.Success(clubDetail)
 
             viewModel =
                 ClubDetailViewModel(
@@ -78,7 +81,7 @@ class ClubDetailViewModelTest {
             // given
             coEvery {
                 getClubUseCase(0L)
-            } returns Result.failure(Throwable())
+            } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
 
             viewModel =
                 ClubDetailViewModel(
@@ -89,10 +92,10 @@ class ClubDetailViewModelTest {
 
             // when
             viewModel.loadClub(0L)
-            val actualClubEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+            val actualClubEvent = viewModel.clubErrorHandler.error.getOrAwaitValue()
 
             // then
-            Assertions.assertThat(actualClubEvent.equals(ClubDetailEvent.FailLoadDetail))
+            Assertions.assertThat(actualClubEvent.equals(ClubErrorEvent.ServerError))
         }
 
     @Test
@@ -109,14 +112,14 @@ class ClubDetailViewModelTest {
 
             coEvery {
                 getClubUseCase(0L)
-            } returns Result.success(clubDetail)
+            } returns DomainResult.Success(clubDetail)
 
             coEvery {
                 postClubMemberUseCase(
                     0L,
                     listOf(),
                 )
-            } returns Result.success(clubParticipation)
+            } returns DomainResult.Success(clubParticipation)
 
             viewModel =
                 ClubDetailViewModel(
@@ -146,14 +149,14 @@ class ClubDetailViewModelTest {
 
             coEvery {
                 getClubUseCase(0L)
-            } returns Result.success(clubDetail)
+            } returns DomainResult.Success(clubDetail)
 
             coEvery {
                 postClubMemberUseCase(
                     0L,
                     listOf(),
                 )
-            } returns Result.failure(Throwable())
+            } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
 
             viewModel =
                 ClubDetailViewModel(
@@ -165,9 +168,9 @@ class ClubDetailViewModelTest {
             // when
             viewModel.loadClub(0L)
             viewModel.joinClub(listOf())
-            val clubDetailEvent = viewModel.clubDetailEvent.getOrAwaitValue()
+            val clubDetailEvent = viewModel.clubErrorHandler.error.getOrAwaitValue()
 
             // then
-            Assertions.assertThat(clubDetailEvent.equals(ClubDetailEvent.FailParticipation))
+            Assertions.assertThat(clubDetailEvent.equals(ClubErrorEvent.ServerError))
         }
 }

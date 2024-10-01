@@ -14,6 +14,8 @@ import com.happy.friendogly.databinding.BottomSheetClubMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,14 +81,27 @@ class ClubMenuBottomSheet(
                     (activity as ClubDetailNavigation).navigateToPrevWithReload()
                     dismissNow()
                 }
-
-                ClubMenuEvent.FailDelete -> {
-                    makeToast(
-                        requireContext().getString(R.string.club_detail_delete_fail),
-                    )
-                    dismissNow()
-                }
             }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError(
+                sendMessage = { message ->
+                    when (message) {
+                        is MessageHandler.SendSnackBar -> {
+                            makeToast(
+                                requireContext().getString(message.messageId),
+                            )
+                            dismissNow()
+                        }
+
+                        is MessageHandler.SendToast -> {
+                            makeToast(getString(message.messageId))
+                            dismissNow()
+                        }
+                    }
+                },
+            )
         }
     }
 

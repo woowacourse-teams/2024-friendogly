@@ -18,6 +18,8 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileImageBottomSheet
@@ -99,10 +101,25 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 }
 
                 ClubAddEvent.FailLoadAddress -> showSnackbar(getString(R.string.club_add_information_fail_address))
-                ClubAddEvent.FailAddClub -> showSnackbar(getString(R.string.club_add_fail))
                 ClubAddEvent.Navigation.NavigateToHomeWithAdded -> {
                     putLoadState()
                     finish()
+                }
+            }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(this@ClubAddActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> {
+                        showSnackbar(getString(message.messageId)) {
+                            setAction(resources.getString(R.string.club_detail_fail_button)) {
+                                finish()
+                            }
+                        }
+                    }
+
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
                 }
             }
         }

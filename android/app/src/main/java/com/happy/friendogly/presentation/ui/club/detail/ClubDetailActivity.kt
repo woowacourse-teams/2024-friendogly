@@ -14,6 +14,8 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel
@@ -133,13 +135,23 @@ class ClubDetailActivity :
                     bottomSheet.show(supportFragmentManager, "TAG")
                 }
 
-                ClubDetailEvent.FailLoadDetail -> openFailClubDetailLoad()
-                ClubDetailEvent.FailParticipation ->
-                    showSnackbar(
-                        getString(R.string.club_detail_participate_fail),
-                    )
-
                 ClubDetailEvent.Navigation.NavigateToRegisterPet -> openRegisterPetDialog()
+            }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(this@ClubDetailActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> {
+                        showSnackbar(getString(message.messageId)) {
+                            setAction(resources.getString(R.string.club_detail_fail_button)) {
+                                finish()
+                            }
+                        }
+                    }
+
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                }
             }
         }
     }
@@ -158,7 +170,6 @@ class ClubDetailActivity :
     }
 
     private fun openChatRoom(chatRoomId: Long) {
-        // TODO : memberId 지우기
         startActivity(
             ChatActivity.getIntent(
                 context = this@ClubDetailActivity,

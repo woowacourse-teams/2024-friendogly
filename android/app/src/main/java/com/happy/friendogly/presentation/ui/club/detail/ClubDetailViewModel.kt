@@ -3,12 +3,14 @@ package com.happy.friendogly.presentation.ui.club.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
@@ -25,6 +27,8 @@ class ClubDetailViewModel
         private val getClubUseCase: GetClubUseCase,
         private val postClubMemberUseCase: PostClubMemberUseCase,
     ) : BaseViewModel(), ClubDetailActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _club: MutableLiveData<ClubDetailUiModel> = MutableLiveData()
         val club: LiveData<ClubDetailUiModel> get() = _club
 
@@ -33,13 +37,14 @@ class ClubDetailViewModel
 
         fun loadClub(clubId: Long) =
             viewModelScope.launch {
-                getClubUseCase(clubId)
-                    .onSuccess {
-                        _club.value = it.toPresentation()
-                    }
-                    .onFailure {
-                        _clubDetailEvent.emit(ClubDetailEvent.FailLoadDetail)
-                    }
+                getClubUseCase(clubId).fold(
+                    onSuccess = { club ->
+                        _club.value = club.toPresentation()
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
             }
 
         override fun confirmParticipation() {
@@ -77,17 +82,18 @@ class ClubDetailViewModel
                 postClubMemberUseCase(
                     id = clubDetailId,
                     participatingPetsId = dogs,
-                )
-                    .onSuccess { clubParticipation ->
+                ).fold(
+                    onSuccess = { clubParticipation ->
                         _clubDetailEvent.emit(
                             ClubDetailEvent.Navigation.NavigateToChat(
                                 clubParticipation.chatRoomId,
                             ),
                         )
-                    }
-                    .onFailure {
-                        _clubDetailEvent.emit(ClubDetailEvent.FailParticipation)
-                    }
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
             }
 
         private fun requireRegisterUserPet() {

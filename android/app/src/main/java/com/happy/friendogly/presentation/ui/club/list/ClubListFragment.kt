@@ -14,8 +14,11 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
@@ -134,6 +137,17 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 ClubListEvent.OpenAddPet -> openRegisterPetDialog()
             }
         }
+
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError(
+                sendMessage = { message ->
+                    when (message) {
+                        is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
+                        is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                    }
+                },
+            )
+        }
     }
 
     private fun openRegisterPetDialog() {
@@ -169,5 +183,14 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     companion object {
         const val TAG = "ClubListFragment"
+    }
+
+    fun ClubErrorEvent.handleError(messageHandler: (MessageHandler) -> Unit) {
+        when (this) {
+            ClubErrorEvent.FileSizeError -> messageHandler(MessageHandler.SendToast(R.string.file_size_exceed_message))
+            ClubErrorEvent.ServerError -> MessageHandler.SendToast(R.string.server_error_message)
+            ClubErrorEvent.UnKnownError -> MessageHandler.SendToast(R.string.default_error_message)
+            ClubErrorEvent.InternetError -> MessageHandler.SendSnackBar(R.string.no_internet_message)
+        }
     }
 }

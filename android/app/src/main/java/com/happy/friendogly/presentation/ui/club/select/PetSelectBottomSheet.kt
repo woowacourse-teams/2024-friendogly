@@ -17,6 +17,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetDogSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.select.adapter.PetSelectAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,7 +108,7 @@ class PetSelectBottomSheet(
                     submit(event.pets)
                 }
 
-                PetSelectEvent.FailLoadPet ->
+                PetSelectEvent.EmptyPet ->
                     makeToast(
                         requireContext().getString(
                             R.string.dog_select_load_fail,
@@ -119,6 +121,15 @@ class PetSelectBottomSheet(
                             R.string.dog_selector_title,
                         ),
                     )
+            }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> makeToast(getString(message.messageId))
+                    is MessageHandler.SendToast -> makeToast(getString(message.messageId))
+                }
             }
         }
     }

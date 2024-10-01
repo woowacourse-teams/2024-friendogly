@@ -15,8 +15,4 @@ sealed interface ClubDetailEvent {
 
         data object NavigateToRegisterPet : Navigation
     }
-
-    data object FailLoadDetail : ClubDetailEvent
-
-    data object FailParticipation : ClubDetailEvent
 }

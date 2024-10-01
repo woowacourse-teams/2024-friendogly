@@ -3,10 +3,12 @@ package com.happy.friendogly.presentation.ui.club.my.head
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.GetMyHeadClubUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
@@ -22,6 +24,8 @@ class MyHeadClubViewModel
     constructor(
         private val getMyHeadClubUseCase: GetMyHeadClubUseCase,
     ) : BaseViewModel(), ClubItemActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _myHeadClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
         val myHeadClubs: LiveData<List<ClubItemUiModel>> get() = _myHeadClubs
 
@@ -38,17 +42,20 @@ class MyHeadClubViewModel
         fun loadMyHeadClubs() =
             viewModelScope.launch {
                 getMyHeadClubUseCase()
-                    .onSuccess { clubs ->
-                        if (clubs.isEmpty()) {
-                            _myHeadClubUiState.value = MyClubUiState.NotData
-                        } else {
-                            _myHeadClubUiState.value = MyClubUiState.Init
-                        }
-                        _myHeadClubs.value = clubs.toPresentation()
-                    }
-                    .onFailure {
-                        _myHeadClubUiState.value = MyClubUiState.Error
-                    }
+                    .fold(
+                        onSuccess = { clubs ->
+                            if (clubs.isEmpty()) {
+                                _myHeadClubUiState.value = MyClubUiState.NotData
+                            } else {
+                                _myHeadClubUiState.value = MyClubUiState.Init
+                            }
+                            _myHeadClubs.value = clubs.toPresentation()
+                        },
+                        onError = { error ->
+                            _myHeadClubUiState.value = MyClubUiState.Error
+                            clubErrorHandler.handle(error)
+                        },
+                    )
             }
 
         override fun loadClub(clubId: Long) {

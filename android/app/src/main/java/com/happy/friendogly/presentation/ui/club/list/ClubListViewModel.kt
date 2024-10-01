@@ -13,6 +13,7 @@ import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
 import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
@@ -38,6 +39,8 @@ class ClubListViewModel
         private val getAddressUseCase: GetAddressUseCase,
         private val searchingClubsUseCase: GetSearchingClubsUseCase,
     ) : BaseViewModel(), ClubListActionHandler, ClubItemActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _uiState: MutableLiveData<ClubListUiState> =
             MutableLiveData(ClubListUiState.Init)
         val uiState: LiveData<ClubListUiState> get() = _uiState
@@ -84,8 +87,8 @@ class ClubListViewModel
                             _clubListEvent.emit(ClubListEvent.OpenAddPet)
                         }
                     },
-                    onError = {
-                        // TODO 예외처리
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
                     },
                 )
             }
@@ -97,18 +100,20 @@ class ClubListViewModel
                     address = myAddress.value?.toDomain() ?: return@launch,
                     genderParams = clubFilterSelector.selectGenderFilters().toGenders(),
                     sizeParams = clubFilterSelector.selectSizeFilters().toSizeTypes(),
-                )
-                    .onSuccess { clubs ->
+                ).fold(
+                    onSuccess = { clubs ->
                         if (clubs.isEmpty()) {
                             _uiState.value = ClubListUiState.NotData
                         } else {
                             _uiState.value = ClubListUiState.Init
                         }
                         _clubs.value = clubs.toPresentation()
-                    }
-                    .onFailure {
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
                         _uiState.value = ClubListUiState.Error
-                    }
+                    },
+                )
             }
 
         fun updateClubFilter(filters: List<ClubFilter>) {
@@ -143,8 +148,8 @@ class ClubListViewModel
                             _clubListEvent.emit(ClubListEvent.Navigation.NavigateToAddClub)
                         }
                     },
-                    onError = {
-                        // TODO 예외처리
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
                     },
                 )
             }
