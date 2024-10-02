@@ -4,6 +4,8 @@ import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
-import java.util.Collections;
-import java.util.List;
 
 // TODO: 적절한 로그 레벨 설정
 @Slf4j
@@ -105,8 +104,8 @@ public class GlobalExceptionHandler {
         log.error(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
-                ErrorCode.DEFAULT_ERROR_CODE,
-                exception.getMessage(), // TODO: 처리 필요
+                ErrorCode.UNKNOWN_EXCEPTION,
+                "알 수 없는 예외가 발생했습니다.",
                 Collections.emptyList()
         );
 
