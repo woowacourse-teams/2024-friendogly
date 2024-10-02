@@ -5,7 +5,7 @@ import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.ChatRoomClub
 import com.happy.friendogly.domain.model.ChatRooms
 
-interface ChatRepository {
+interface ChatRoomRepository {
     suspend fun getChatList(): Result<ChatRooms>
 
     suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>>

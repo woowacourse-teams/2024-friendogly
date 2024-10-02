@@ -1,24 +1,24 @@
 package com.happy.friendogly.data.repository
 
 import com.happy.friendogly.data.mapper.toDomain
-import com.happy.friendogly.data.source.ChatDataSource
+import com.happy.friendogly.data.source.ChatRoomDataSource
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.ChatRoomClub
 import com.happy.friendogly.domain.model.ChatRooms
 import com.happy.friendogly.domain.model.Message
-import com.happy.friendogly.domain.repository.ChatRepository
+import com.happy.friendogly.domain.repository.ChatRoomRepository
 import com.happy.friendogly.local.mapper.toData
 import com.happy.friendogly.local.mapper.toDomain
 import com.happy.friendogly.local.room.ChatRoomDao
 import javax.inject.Inject
 
-class ChatRepositoryImpl
+class ChatRoomRepositoryImpl
     @Inject
     constructor(
-        private val source: ChatDataSource,
+        private val source: ChatRoomDataSource,
         private val chatRoomDao: ChatRoomDao,
-    ) : ChatRepository {
+    ) : ChatRoomRepository {
         override suspend fun getChatList(): Result<ChatRooms> = source.getChatList().mapCatching { it.toDomain() }
 
         override suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>> =

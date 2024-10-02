@@ -53,7 +53,7 @@ class ApiClient {
         const val PARTICIPATING = "$BASE_URL/participating"
     }
 
-    object Chat {
+    object ChatRoom {
         private const val BASE_URL = "/api/chat-rooms"
         const val CHAT_LIST = "$BASE_URL/mine"
         const val MEMBERS = "$BASE_URL/{chatRoomId}"

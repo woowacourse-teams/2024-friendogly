@@ -6,7 +6,7 @@ import com.happy.friendogly.remote.api.AuthService
 import com.happy.friendogly.remote.api.AuthenticationListener
 import com.happy.friendogly.remote.api.Authenticator
 import com.happy.friendogly.remote.api.BaseUrl
-import com.happy.friendogly.remote.api.ChatService
+import com.happy.friendogly.remote.api.ChatRoomService
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.MyClubService
@@ -22,7 +22,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
-import retrofit2.create
 import java.time.Duration
 
 object RemoteModule {
@@ -111,12 +110,12 @@ object RemoteModule {
         baseUrl: BaseUrl,
         tokenManager: TokenManager,
         authenticationListener: AuthenticationListener,
-    ): ChatService {
+    ): ChatRoomService {
         return createRetrofit(
             baseUrl,
             tokenManager,
             authenticationListener,
-        ).create(ChatService::class.java)
+        ).create(ChatRoomService::class.java)
     }
 
     fun createAlarmTokenService(
