@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -57,11 +57,11 @@ public class GlobalExceptionHandler {
                 detail
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handle(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(HttpMessageNotReadableException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -70,11 +70,11 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handle(HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(HttpRequestMethodNotSupportedException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -83,11 +83,11 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<String> handle(NoResourceFoundException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(NoResourceFoundException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -96,11 +96,11 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handle(Exception exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(Exception exception) {
         log.error(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -109,6 +109,6 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
