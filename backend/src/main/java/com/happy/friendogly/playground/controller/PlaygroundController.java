@@ -75,7 +75,7 @@ public class PlaygroundController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<FindPlaygroundDetailResponse> find(@PathVariable Long id) {
+    public ApiResponse<FindPlaygroundDetailResponse> findById(@PathVariable Long id) {
         return ApiResponse.ofSuccess(new FindPlaygroundDetailResponse(
                         1L,
                         20,
