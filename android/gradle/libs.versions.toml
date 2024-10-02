@@ -2,7 +2,7 @@
 applicationId = "com.happy.friendogly"
 compileSdk = "34"
 minSdk = "26"
-targetSdk = "33"
+targetSdk = "34"
 versionCode = "13"
 versionName = "0.4.1"
 

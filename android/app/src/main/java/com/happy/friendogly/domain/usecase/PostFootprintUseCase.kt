@@ -1,7 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
+import com.happy.friendogly.presentation.ui.woof.model.MyPlayground
 import javax.inject.Inject
 
 class PostFootprintUseCase
@@ -10,7 +10,7 @@ class PostFootprintUseCase
         suspend operator fun invoke(
             latitude: Double,
             longitude: Double,
-        ): Result<MyFootprint> =
+        ): Result<MyPlayground> =
             repository.postFootprint(
                 latitude,
                 longitude,

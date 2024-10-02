@@ -74,8 +74,8 @@ fun AnalyticsHelper.logPetImageClicked() {
     logEvent(type = Types.PET_IMAGE_CLICKED)
 }
 
-fun AnalyticsHelper.logNearFootprintSize(size: Int) {
-    logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.NEAR_FOOTPRINTS_SIZE to size)
+fun AnalyticsHelper.logPlaygroundSize(size: Int) {
+    logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
 }
 
 fun AnalyticsHelper.logFootprintMarkBtnInfo(

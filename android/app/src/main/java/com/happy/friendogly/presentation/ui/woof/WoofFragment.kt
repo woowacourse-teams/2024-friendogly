@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.woof
 
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Address
@@ -36,14 +37,14 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertHa
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertMarkerRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions
-import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions.MakeMyFootprintMarker
-import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions.MakeNearFootprintMarkers
+import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions.MakeMyPlaygroundMarker
+import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions.MakeNearPlaygroundMarkers
 import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FaceTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter
-import com.happy.friendogly.presentation.ui.woof.model.Footprint
+import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkService
@@ -68,11 +69,7 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toLocalDateTime
 import java.time.Duration
 import java.util.Locale
 import javax.inject.Inject
@@ -362,21 +359,21 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.nearFootprintMarkers.observe(viewLifecycleOwner) {
-            clearNearFootprintMarkers()
-            markFootprintMarkers()
+        viewModel.nearPlaygroundMarkers.observe(viewLifecycleOwner) {
+            clearNearPlaygroundMarkers()
+            markNearPlaygroundMarkers()
         }
 
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is MakeMyFootprintMarker -> {
+                is MakeMyPlaygroundMarker -> {
                     val previousMyFootprintMarker = viewModel.myFootprintMarker.value
                     if (previousMyFootprintMarker != null) {
                         previousMyFootprintMarker.marker.map = null
                     }
 
-                    if (event.myFootprint != null) {
-                        val myMarker = createMarker(footprint = event.myFootprint)
+                    if (event.myPlayground != null) {
+                        val myMarker = createMarker(playground = event.myPlayground)
                         viewModel.loadMyFootprintMarker(myMarker)
                     } else {
                         circleOverlay.map = null
@@ -384,21 +381,21 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
 
-                is MakeNearFootprintMarkers -> {
+                is MakeNearPlaygroundMarkers -> {
                     val nearFootprintMarkers =
-                        event.nearFootprints.map { footprint ->
-                            val marker = createMarker(footprint = footprint)
+                        event.nearPlaygrounds.map { playground ->
+                            val marker = createMarker(playground = playground)
                             marker
                         }
-                    clearNearFootprintMarkers()
-                    viewModel.loadNearFootprintMarkers(nearFootprintMarkers)
+                    clearNearPlaygroundMarkers()
+                    viewModel.loadNearPlaygroundMarkers(nearFootprintMarkers)
                 }
 
                 is WoofMapActions.RegisterMyFootprint -> viewModel.registerMyFootprint(map.cameraPosition.target)
 
                 is WoofMapActions.MoveCameraCenterPosition -> moveCameraCenterPosition(event.position)
 
-                is WoofMapActions.ScanNearFootprints -> viewModel.scanNearFootprints(latLng)
+                is WoofMapActions.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
 //                is WoofMapActions.StopWalkTimeChronometer -> walkTimeChronometer.stop()
             }
@@ -463,7 +460,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     stopWalkService()
                 }
 
-                is WoofAlertActions.AlertFailToLoadNearFootprintsSnackbar ->
+                is WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar ->
                     showSnackbar(
                         resources.getString(
                             R.string.woof_fail_to_load_near_footprints,
@@ -548,7 +545,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             requireContext().registerReceiver(
                 walkReceiver,
                 intentFilter,
-                Context.RECEIVER_NOT_EXPORTED,
+                RECEIVER_NOT_EXPORTED,
             )
         } else {
             requireContext().registerReceiver(walkReceiver, intentFilter)
@@ -560,7 +557,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.initFootprintMarkers(latLng)
+            viewModel.initPlaygrounds()
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
@@ -593,16 +590,15 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         map.moveCamera(cameraUpdate)
     }
 
-    private fun createMarker(footprint: Footprint): Marker {
+    private fun createMarker(playground: Playground): Marker {
         val marker = Marker()
         marker.apply {
-            position = LatLng(footprint.latitude, footprint.longitude)
-            icon = OverlayImage.fromResource(markerIcon(footprint))
+            position = LatLng(playground.latitude, playground.longitude)
+            icon = OverlayImage.fromResource(markerIcon(playground))
             width = MARKER_DEFAULT_WIDTH
             height = MARKER_DEFAULT_HEIGHT
-            zIndex = footprint.createdAt.toZIndex()
             map = map
-            clickFootprintMarker(footprintId = footprint.footprintId, marker = this)
+            clickFootprintMarker(footprintId = playground.id, marker = this)
         }
 
         return marker
@@ -624,16 +620,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun markerIcon(footprint: Footprint): Int {
-        return if (footprint.isMine) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
-    }
-
-    private fun LocalDateTime.toZIndex(): Int {
-        val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val duration =
-            Duration.between(this.toJavaLocalDateTime(), currentDateTime.toJavaLocalDateTime())
-        val millis = duration.toMillis()
-        return (-millis / 1000).toInt()
+    private fun markerIcon(playground: Playground): Int {
+        return if (playground.isParticipated) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
     }
 
     private fun showRegisterFootprintScreen() {
@@ -681,10 +669,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         marker.height = MARKER_CLICKED_HEIGHT
     }
 
-    private fun clearNearFootprintMarkers() {
-        val footprintMarkers = viewModel.nearFootprintMarkers.value ?: return
-        footprintMarkers.forEach { footprintMarker ->
-            footprintMarker.marker.map = null
+    private fun clearNearPlaygroundMarkers() {
+        val nearPlaygroundMarkers = viewModel.nearPlaygroundMarkers.value ?: return
+        nearPlaygroundMarkers.forEach { playgroundMarker ->
+            playgroundMarker.map = null
         }
     }
 
@@ -793,10 +781,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 //        walkTimeChronometer.start()
 //    }
 
-    private fun markFootprintMarkers() {
-        val footprintMarkers = viewModel.nearFootprintMarkers.value ?: return
-        footprintMarkers.forEach { footprintMarker ->
-            footprintMarker.marker.map = map
+    private fun markNearPlaygroundMarkers() {
+        val nearPlaygroundMarkers = viewModel.nearPlaygroundMarkers.value ?: return
+        nearPlaygroundMarkers.forEach { playgroundMarker ->
+            playgroundMarker.map = map
         }
     }
 

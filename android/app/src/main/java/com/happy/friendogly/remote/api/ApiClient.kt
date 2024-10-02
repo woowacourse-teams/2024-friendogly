@@ -13,10 +13,14 @@ class ApiClient {
         const val POST_FOOTPRINT = BASE_URL
         const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO = "$BASE_URL/recent/walk-status/auto"
         const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_MANUAL = "$BASE_URL/recent/walk-status/manual"
-        const val GET_FOOTPRINTS_NEAR = "$BASE_URL/near"
         const val GET_FOOTPRINT_INFO = "$BASE_URL/{footprintId}"
         const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
         const val DELETE_FOOTPRINT = "$BASE_URL/{footprintId}"
+    }
+
+    object PlayGround {
+        private const val BASE_URL = "/playgrounds"
+        const val GET_PLAYGROUNDS = "$BASE_URL/locations"
     }
 
     object Member {

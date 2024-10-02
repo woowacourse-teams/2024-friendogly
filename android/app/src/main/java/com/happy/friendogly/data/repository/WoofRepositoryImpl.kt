@@ -3,10 +3,10 @@ package com.happy.friendogly.data.repository
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.woof.model.Footprint
 import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
-import com.happy.friendogly.presentation.ui.woof.model.MyFootprint
+import com.happy.friendogly.presentation.ui.woof.model.MyPlayground
+import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
@@ -20,7 +20,7 @@ class WoofRepositoryImpl
         override suspend fun postFootprint(
             latitude: Double,
             longitude: Double,
-        ): Result<MyFootprint> {
+        ): Result<MyPlayground> {
             return source.postFootprint(
                 FootprintRequest(
                     latitude = latitude,
@@ -59,11 +59,8 @@ class WoofRepositoryImpl
             }
         }
 
-        override suspend fun getNearFootprints(
-            latitude: Double,
-            longitude: Double,
-        ): Result<List<Footprint>> {
-            return source.getNearFootprints(latitude, longitude)
+        override suspend fun getPlaygrounds(): Result<List<Playground>> {
+            return source.getNearFootprints()
                 .mapCatching { dto ->
                     dto.toDomain()
                 }

@@ -1,20 +1,18 @@
 package com.happy.friendogly.remote.mapper
 
-import com.happy.friendogly.data.model.FootprintDto
-import com.happy.friendogly.remote.model.response.FootprintsNearResponse
+import com.happy.friendogly.data.model.PlaygroundDto
+import com.happy.friendogly.remote.model.response.PlaygroundResponse
 
-fun FootprintsNearResponse.toData(): FootprintDto {
-    return FootprintDto(
-        footprintId = footprintId,
+fun PlaygroundResponse.toData(): PlaygroundDto {
+    return PlaygroundDto(
+        id = id,
         latitude = latitude,
         longitude = longitude,
-        walkStatus = walkStatus.toData(),
-        createdAt = createdAt,
-        isMine = isMine,
+        isParticipated = isParticipated,
     )
 }
 
-fun List<FootprintsNearResponse>.toData(): List<FootprintDto> {
+fun List<PlaygroundResponse>.toData(): List<PlaygroundDto> {
     return map { response ->
         response.toData()
     }
