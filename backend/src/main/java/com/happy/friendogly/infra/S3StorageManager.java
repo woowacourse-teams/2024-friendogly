@@ -100,7 +100,8 @@ public class S3StorageManager implements FileStorageManager {
         }
 
         if (!contentType.startsWith(IMAGE_MIME_TYPE_PREFIX)) {
-            throw new FriendoglyException("이미지 파일만 업로드할 수 있습니다.");
+            throw new FriendoglyException(
+                    String.format("이미지 파일만 업로드할 수 있습니다. %s는 이미지 Content-Type이 아닙니다.", contentType));
         }
     }
 
