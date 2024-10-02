@@ -9,12 +9,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@NamedEntityGraph(
+        name = "graph.PlaygroundMember",
+        attributeNodes = {
+                @NamedAttributeNode("member")
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PlaygroundMember {
@@ -52,5 +60,9 @@ public class PlaygroundMember {
         this.message = message;
         this.isInside = isInside;
         this.exitTime = exitTime;
+    }
+
+    public boolean equalsMemberId(Long memberId) {
+        return member.getId().equals(memberId);
     }
 }

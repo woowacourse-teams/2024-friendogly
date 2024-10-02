@@ -18,7 +18,7 @@ public record PlaygroundPetDetail(
         boolean isMine
 ) {
 
-    public static PlaygroundPetDetail dummyOf(
+    public static PlaygroundPetDetail of(
             Long memberId,
             Pet pet,
             String message,

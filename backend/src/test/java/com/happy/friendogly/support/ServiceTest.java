@@ -7,6 +7,8 @@ import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.repository.PetRepository;
+import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
+import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.TimeZone;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,12 @@ public abstract class ServiceTest {
     protected ChatMessageRepository chatMessageRepository;
 
     @Autowired
+    protected PlaygroundRepository playgroundRepository;
+
+    @Autowired
+    protected PlaygroundMemberRepository playgroundMemberRepository;
+
+    @Autowired
     protected JdbcTemplate jdbcTemplate;
 
     @BeforeAll
@@ -51,6 +59,8 @@ public abstract class ServiceTest {
         jdbcTemplate.update("""
                 SET REFERENTIAL_INTEGRITY FALSE;
                                 
+                DELETE FROM playground_member;
+                DELETE FROM playground;
                 DELETE FROM chat_room;
                 DELETE FROM chat_room_member;
                 DELETE FROM club;
