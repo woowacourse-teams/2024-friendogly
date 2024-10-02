@@ -1,5 +1,6 @@
 package com.happy.friendogly.playground.service;
 
+import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaygroundQueryService {
 
     private final PlaygroundRepository playgroundRepository;
+    private final PlaygroundMemberRepository playgroundMemberRepository;
 
-    public PlaygroundQueryService(PlaygroundRepository playgroundRepository) {
+    public PlaygroundQueryService(PlaygroundRepository playgroundRepository,
+                                  PlaygroundMemberRepository playgroundMemberRepository) {
         this.playgroundRepository = playgroundRepository;
+        this.playgroundMemberRepository = playgroundMemberRepository;
     }
 }
