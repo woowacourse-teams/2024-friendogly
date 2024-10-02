@@ -64,7 +64,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("playgrounds/save",
+                .andDo(document("playgrounds/arrival",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         resource(ResourceSnippetParameters.builder()
