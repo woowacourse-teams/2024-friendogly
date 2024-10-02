@@ -58,6 +58,13 @@ class ApiClient {
         const val CHAT_LIST = "$BASE_URL/mine"
         const val MEMBERS = "$BASE_URL/{chatRoomId}"
         const val CLUB = "$BASE_URL/{chatRoomId}/club"
+        const val LEAVE = "$BASE_URL/leave/{chatRoomId}"
+    }
+
+    object ChatMessage {
+        private const val BASE_URL = "/api/chat-messages/{chatRoomId}"
+        const val ALL = "$BASE_URL/{chatRoomId}"
+        const val TIMES = "$BASE_URL/{chatRoomId}/times"
     }
 
     object WebSocket {
