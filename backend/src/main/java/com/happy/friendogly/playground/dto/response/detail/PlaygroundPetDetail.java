@@ -28,7 +28,7 @@ public record PlaygroundPetDetail(
         return new PlaygroundPetDetail(
                 memberId,
                 pet.getId(),
-                pet.getName().toString(),
+                pet.getName().getValue(),
                 pet.getBirthDate().getValue(),
                 pet.getSizeType(),
                 pet.getGender(),
