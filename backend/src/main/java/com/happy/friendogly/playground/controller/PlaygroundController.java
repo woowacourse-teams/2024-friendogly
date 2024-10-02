@@ -30,8 +30,10 @@ public class PlaygroundController {
     private final PlaygroundCommandService playgroundCommandService;
     private final PlaygroundQueryService playgroundQueryService;
 
-    public PlaygroundController(PlaygroundCommandService playgroundCommandService,
-                                PlaygroundQueryService playgroundQueryService) {
+    public PlaygroundController(
+            PlaygroundCommandService playgroundCommandService,
+            PlaygroundQueryService playgroundQueryService
+    ) {
         this.playgroundCommandService = playgroundCommandService;
         this.playgroundQueryService = playgroundQueryService;
     }

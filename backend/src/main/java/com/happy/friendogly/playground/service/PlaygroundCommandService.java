@@ -12,8 +12,10 @@ public class PlaygroundCommandService {
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
 
-    public PlaygroundCommandService(PlaygroundRepository playgroundRepository,
-                                    PlaygroundMemberRepository playgroundMemberRepository) {
+    public PlaygroundCommandService(
+            PlaygroundRepository playgroundRepository,
+            PlaygroundMemberRepository playgroundMemberRepository
+    ) {
         this.playgroundRepository = playgroundRepository;
         this.playgroundMemberRepository = playgroundMemberRepository;
     }
