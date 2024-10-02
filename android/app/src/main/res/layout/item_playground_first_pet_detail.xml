@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="petDetailInfo"
-            type="com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel" />
+            name="petDetail"
+            type="com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundPetDetailUiModel" />
 
         <variable
             name="actionHandler"
@@ -22,10 +22,10 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_playground_pet"
-            glide="@{petDetailInfo.petDetail.imageUrl}"
+            glide="@{petDetail.imageUrl}"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:onClick="@{() -> actionHandler.clickPetImage(petDetailInfo.petDetail.imageUrl)}"
+            android:onClick="@{() -> actionHandler.clickPetImage(petDetail.imageUrl)}"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@{petDetailInfo.petDetail.name}"
+            android:text="@{petDetail.name}"
             app:layout_constraintStart_toEndOf="@id/iv_playground_pet"
             app:layout_constraintTop_toTopOf="@id/iv_playground_pet"
             tools:text="땡이" />
@@ -46,7 +46,7 @@
         <TextView
             android:id="@+id/tv_playground_pet_age"
             style="@style/Theme.AppCompat.TextView.SemiBold.Gray08.Size14"
-            petAge="@{petDetailInfo.petDetail.birthDate}"
+            petAge="@{petDetail.birthDate}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -57,19 +57,21 @@
         <TextView
             android:id="@+id/tv_playground_pet_state"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size12"
+            petIsArrival="@{petDetail.isArrival}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rect_green400_fill_20"
+            android:background="@drawable/rect_fill_20"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
-            android:text="노는중"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_playground_pet_name" />
+            app:layout_constraintTop_toTopOf="@id/tv_playground_pet_name"
+            tools:backgroundTint="@color/green400"
+            tools:text="노는중" />
 
         <TextView
             android:id="@+id/tv_playground_pet_size"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size12"
-            petSizeType="@{petDetailInfo.petDetail.sizeType}"
+            petSizeType="@{petDetail.sizeType}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -83,7 +85,7 @@
         <TextView
             android:id="@+id/tv_playground_pet_gender"
             style="@style/Theme.AppCompat.TextView.Regular.White.Size12"
-            petGender="@{petDetailInfo.petDetail.gender}"
+            petGender="@{petDetail.gender}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -107,7 +109,7 @@
             android:maxLines="1"
             android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
-            android:text="@{petDetailInfo.petDetail.description}"
+            android:text="@{petDetail.message}"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/tv_playground_pet_state"

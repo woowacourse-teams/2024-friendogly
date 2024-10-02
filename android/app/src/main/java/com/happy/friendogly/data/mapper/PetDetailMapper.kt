@@ -1,20 +1,24 @@
 package com.happy.friendogly.data.mapper
 
-import com.happy.friendogly.data.model.PetDetailDto
-import com.happy.friendogly.presentation.ui.woof.model.PetDetail
+import com.happy.friendogly.data.model.PlaygroundPetDetailDto
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundPetDetail
 
-fun PetDetailDto.toDomain(): PetDetail {
-    return PetDetail(
+fun PlaygroundPetDetailDto.toDomain(): PlaygroundPetDetail {
+    return PlaygroundPetDetail(
+        memberId = memberId,
+        petId = petId,
         name = name,
-        description = description,
         birthDate = birthDate,
         sizeType = sizeType.toDomain(),
         gender = gender.toDomain(),
         imageUrl = imageUrl,
+        message = message,
+        isArrival = isArrival,
+        isMine = isMine,
     )
 }
 
-fun List<PetDetailDto>.toDomain(): List<PetDetail> {
+fun List<PlaygroundPetDetailDto>.toDomain(): List<PlaygroundPetDetail> {
     return map { dto ->
         dto.toDomain()
     }

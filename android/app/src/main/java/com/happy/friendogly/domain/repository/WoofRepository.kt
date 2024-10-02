@@ -24,7 +24,7 @@ interface WoofRepository {
 
     suspend fun getPlaygrounds(): Result<List<Playground>>
 
-    suspend fun getFootprintInfo(footprintId: Long): Result<PlaygroundInfo>
+    suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo>
 
     suspend fun deleteFootprint(footprintId: Long): Result<Unit>
 }

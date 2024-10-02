@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.happy.friendogly.databinding.ItemPlaygroundFirstPetDetailBinding
 import com.happy.friendogly.databinding.ItemPlaygroundPetDetailBinding
 import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
-import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundPetDetailUiModel
 
 class PetDetailAdapter(private val actionHandler: WoofActionHandler) :
-    ListAdapter<PetDetailInfoUiModel, ViewHolder>(diffUtil) {
+    ListAdapter<PlaygroundPetDetailUiModel, ViewHolder>(diffUtil) {
     override fun getItemViewType(position: Int): Int {
         return getItem(position).viewType
     }
@@ -46,27 +46,27 @@ class PetDetailAdapter(private val actionHandler: WoofActionHandler) :
         position: Int,
     ) {
         if (holder is FirstPetDetailViewHolder) {
-            holder.bind(petDetailInfo = getItem(position), actionHandler = actionHandler)
+            holder.bind(petDetail = getItem(position), actionHandler = actionHandler)
         }
 
         if (holder is PetDetailViewHolder) {
-            holder.bind(petDetailInfo = getItem(position), actionHandler = actionHandler)
+            holder.bind(petDetail = getItem(position), actionHandler = actionHandler)
         }
     }
 
     companion object {
         private val diffUtil =
-            object : DiffUtil.ItemCallback<PetDetailInfoUiModel>() {
+            object : DiffUtil.ItemCallback<PlaygroundPetDetailUiModel>() {
                 override fun areItemsTheSame(
-                    oldItem: PetDetailInfoUiModel,
-                    newItem: PetDetailInfoUiModel,
+                    oldItem: PlaygroundPetDetailUiModel,
+                    newItem: PlaygroundPetDetailUiModel,
                 ): Boolean {
                     return oldItem.memberId == newItem.memberId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: PetDetailInfoUiModel,
-                    newItem: PetDetailInfoUiModel,
+                    oldItem: PlaygroundPetDetailUiModel,
+                    newItem: PlaygroundPetDetailUiModel,
                 ): Boolean {
                     return oldItem == newItem
                 }

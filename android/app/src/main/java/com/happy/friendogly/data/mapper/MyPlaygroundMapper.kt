@@ -17,6 +17,6 @@ fun MyPlayground.toPlayground(): Playground {
         id = id,
         latitude = latitude,
         longitude = longitude,
-        isParticipated = true,
+        isParticipating = true,
     )
 }

@@ -4,10 +4,10 @@ import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRe
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
 import com.happy.friendogly.remote.model.request.FootprintRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
-import com.happy.friendogly.remote.model.response.FootprintInfoResponse
 import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
 import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.MyPlaygroundResponse
+import com.happy.friendogly.remote.model.response.PlaygroundInfoResponse
 import com.happy.friendogly.remote.model.response.PlaygroundResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -39,10 +39,10 @@ interface WoofService {
     @GET(ApiClient.Footprints.GET_FOOTPRINT_MINE_LATEST)
     suspend fun getFootprintMarkBtnInfo(): BaseResponse<FootprintMarkBtnInfoResponse>
 
-    @GET(ApiClient.Footprints.GET_FOOTPRINT_INFO)
-    suspend fun getFootprintInfo(
-        @Path("footprintId") footprintId: Long,
-    ): BaseResponse<FootprintInfoResponse>
+    @GET(ApiClient.PlayGround.GET_PLAYGROUND_INFO)
+    suspend fun getPlaygroundInfo(
+        @Path("id") id: Long,
+    ): BaseResponse<PlaygroundInfoResponse>
 
     @DELETE(ApiClient.Footprints.DELETE_FOOTPRINT)
     suspend fun deleteFootprint(

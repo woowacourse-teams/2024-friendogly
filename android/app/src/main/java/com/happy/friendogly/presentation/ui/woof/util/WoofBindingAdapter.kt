@@ -21,7 +21,7 @@ import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.uimodel.MyFootprintMarkerUiModel
-import com.happy.friendogly.presentation.ui.woof.uimodel.PetDetailInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
@@ -228,8 +228,19 @@ fun AppCompatButton.bindPlaygroundBtn(
 }
 
 @BindingAdapter("playgroundBtnVisibility")
-fun AppCompatButton.bindPlaygroundBtnVisibility(petDetailInfo: List<PetDetailInfoUiModel>?) {
-    if (petDetailInfo != null) {
-        visibility = if (petDetailInfo.isNotEmpty()) View.VISIBLE else View.GONE
+fun AppCompatButton.bindPlaygroundBtnVisibility(playgroundInfo: PlaygroundInfoUiModel?) {
+    if (playgroundInfo != null) {
+        visibility = if (playgroundInfo.petDetails.isNotEmpty()) View.VISIBLE else View.GONE
+    }
+}
+
+@BindingAdapter("petIsArrival")
+fun TextView.bindPetIsArrival(isArrival: Boolean) {
+    if (isArrival) {
+        text = resources.getString(R.string.playground_pet_is_playing)
+        backgroundTintList = resources.getColorStateList(R.color.green400, null)
+    } else {
+        text = resources.getString(R.string.playground_pet_is_absent)
+        backgroundTintList = resources.getColorStateList(R.color.gray400, null)
     }
 }

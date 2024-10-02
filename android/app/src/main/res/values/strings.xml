@@ -270,12 +270,6 @@
         \n친구들을 만나 반갑게 인사해보세요~</string>
     <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
     <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
-    <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
-    <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
-    <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
-    <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
-    <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
-    <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="woof_register_playground">이 위치에 놀이터 등록</string>
     <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
     <string name="woof_information">정보</string>
@@ -286,11 +280,19 @@
     <string name="woof_stop_walk">산책을 종료했어요!</string>
     <string name="woof_status_all">전체</string>
     <string name="woof_address_korea">대한민국</string>
-
-    <!--놀이터-->
     <string name="playground_participate">놀이터 참여하기</string>
     <string name="playground_exit">놀이터 나가기</string>
+    <string name="playground_pet_is_playing">노는중</string>
+    <string name="playground_pet_is_absent">자리비움</string>
+
+    <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
+    <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
+    <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
+    <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
+
 
     <!--프로필-->
     <string name="male">남</string>

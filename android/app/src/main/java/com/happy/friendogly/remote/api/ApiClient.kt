@@ -21,6 +21,7 @@ class ApiClient {
     object PlayGround {
         private const val BASE_URL = "/playgrounds"
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
+        const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
     }
 
     object Member {

@@ -309,8 +309,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.petDetailInfo.observe(viewLifecycleOwner) { petDetailInfo ->
-            adapter.submitList(petDetailInfo)
+        viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
+            adapter.submitList(playgroundInfo.petDetails)
         }
 
         viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
@@ -351,7 +351,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 setUpCircleOverlay(myFootprintMarker.marker.position)
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
-                viewModel.loadPetDetailInfo(myFootprintMarker.footprintId)
+                viewModel.loadPlaygroundInfo(myFootprintMarker.footprintId)
                 viewModel.updateFootprintRecentWalkStatus(latLng)
             } else {
                 bottomSheetBehavior.isHideable = true
@@ -598,20 +598,20 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             width = MARKER_DEFAULT_WIDTH
             height = MARKER_DEFAULT_HEIGHT
             map = map
-            clickFootprintMarker(footprintId = playground.id, marker = this)
+            clickPlaygroundMarker(playgroundId = playground.id, marker = this)
         }
 
         return marker
     }
 
-    private fun clickFootprintMarker(
-        footprintId: Long,
+    private fun clickPlaygroundMarker(
+        playgroundId: Long,
         marker: Marker,
     ) {
         marker.setOnClickListener {
             changePreviousClickedMarkerSize()
             viewModel.loadRecentlyClickedMarker(marker)
-            viewModel.loadPetDetailInfo(playgroundId = footprintId)
+            viewModel.loadPlaygroundInfo(playgroundId = playgroundId)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
             changeClickedMarkerSize(marker)
@@ -621,7 +621,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun markerIcon(playground: Playground): Int {
-        return if (playground.isParticipated) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
+        return if (playground.isParticipating) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
     }
 
     private fun showRegisterFootprintScreen() {

@@ -8,7 +8,7 @@ fun PlaygroundResponse.toData(): PlaygroundDto {
         id = id,
         latitude = latitude,
         longitude = longitude,
-        isParticipated = isParticipated,
+        isParticipating = isParticipating,
     )
 }
 

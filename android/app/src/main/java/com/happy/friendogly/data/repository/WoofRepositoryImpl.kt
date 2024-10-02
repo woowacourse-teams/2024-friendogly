@@ -66,8 +66,8 @@ class WoofRepositoryImpl
                 }
         }
 
-        override suspend fun getFootprintInfo(footprintId: Long): Result<PlaygroundInfo> {
-            return source.getFootprintInfo(footprintId)
+        override suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo> {
+            return source.getPlaygroundInfo(id)
                 .mapCatching { dto -> dto.toDomain() }
         }
 

@@ -8,7 +8,7 @@ fun PlaygroundDto.toDomain(): Playground {
         id = id,
         latitude = latitude,
         longitude = longitude,
-        isParticipated = isParticipated,
+        isParticipating = isParticipating,
     )
 }
 

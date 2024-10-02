@@ -4,5 +4,5 @@ data class Playground(
     val id: Long,
     val latitude: Double,
     val longitude: Double,
-    val isParticipated: Boolean,
+    val isParticipating: Boolean,
 )
