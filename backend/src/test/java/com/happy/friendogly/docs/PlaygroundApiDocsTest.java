@@ -89,7 +89,8 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @Test
     void find() throws Exception {
         mockMvc
-                .perform(get("/playgrounds/{id}", 1L))
+                .perform(get("/playgrounds/{id}", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andDo(document("playgrounds/find",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -104,6 +105,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.id").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("놀이터에 참여한 전체 강아지 수"),
                                         fieldWithPath("data.arrivedPetCount").description("놀이터에 도착한 강아지 수"),
+                                        fieldWithPath("data.isParticipating").description("놀이터에 참여했는지 여부"),
                                         fieldWithPath("data.playgroundPetDetails.[].memberId")
                                                 .description("강아지 주인 멤버ID"),
                                         fieldWithPath("data.playgroundPetDetails.[].petId")

@@ -75,27 +75,28 @@ public class PlaygroundController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<FindPlaygroundDetailResponse> findById(@PathVariable Long id) {
+    public ApiResponse<FindPlaygroundDetailResponse> findById(@Auth Long memberId, @PathVariable Long id) {
         return ApiResponse.ofSuccess(new FindPlaygroundDetailResponse(
                         1L,
-                        20,
-                        10,
+                        3,
+                        0,
+                        false,
                         List.of(
-                                PlaygroundPetDetail.dummyOf(
+                                PlaygroundPetDetail.of(
                                         1L,
                                         dummyPet1,
                                         null,
                                         true,
-                                        true
+                                        false
                                 ),
-                                PlaygroundPetDetail.dummyOf(
+                                PlaygroundPetDetail.of(
                                         1L,
                                         dummyPet2,
                                         null,
                                         true,
-                                        true
+                                        false
                                 ),
-                                PlaygroundPetDetail.dummyOf(
+                                PlaygroundPetDetail.of(
                                         2L,
                                         dummyPet3,
                                         "7시에 가요~",
