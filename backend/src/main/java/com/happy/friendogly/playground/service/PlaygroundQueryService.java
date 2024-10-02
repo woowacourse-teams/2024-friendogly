@@ -32,7 +32,7 @@ public class PlaygroundQueryService {
         this.petRepository = petRepository;
     }
 
-    public FindPlaygroundDetailResponse findDetailById(Long callMemberId, Long playgroundId) {
+    public FindPlaygroundDetailResponse findDetail(Long callMemberId, Long playgroundId) {
         Playground playground = playgroundRepository.getById(playgroundId);
         List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findByPlaygroundId(playgroundId);
 

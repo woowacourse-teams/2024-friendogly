@@ -47,7 +47,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         );
 
         // when
-        FindPlaygroundDetailResponse response = playgroundQueryService.findDetailById(1L, 1L);
+        FindPlaygroundDetailResponse response = playgroundQueryService.findDetail(1L, 1L);
 
         // then
         assertAll(
