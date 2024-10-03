@@ -36,7 +36,7 @@ public record PlaygroundPetDetail(
                 .toList();
     }
 
-    private static PlaygroundPetDetail of(
+    public static PlaygroundPetDetail of(
             Long memberId,
             Pet pet,
             String message,
