@@ -13,7 +13,6 @@ import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
-import com.happy.friendogly.domain.usecase.SaveChatMessageUseCase
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
@@ -28,8 +27,6 @@ import javax.inject.Inject
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
 
-    @Inject
-    lateinit var saveChatMessageUseCase: SaveChatMessageUseCase
 
     @Inject
     lateinit var getWoofAlarmUseCase: GetWoofAlarmUseCase
@@ -97,8 +94,6 @@ class AlarmReceiver : FirebaseMessagingService() {
 
                     else -> error("잘못된 타입이 들어왔습니다.")
                 }
-
-            saveChatMessageUseCase(chatRoomId, message)
         }
 
     private fun showChatAlarm(

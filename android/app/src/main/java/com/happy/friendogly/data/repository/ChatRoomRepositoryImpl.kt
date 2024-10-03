@@ -17,7 +17,6 @@ class ChatRoomRepositoryImpl
     @Inject
     constructor(
         private val source: ChatRoomDataSource,
-        private val chatRoomDao: ChatRoomDao,
     ) : ChatRoomRepository {
         override suspend fun getChatList(): Result<ChatRooms> = source.getChatList().mapCatching { it.toDomain() }
 
@@ -26,29 +25,6 @@ class ChatRoomRepositoryImpl
                 member.map { it.toDomain() }
             }
 
-        override suspend fun saveMessage(
-            chatRoomId: Long,
-            chat: ChatComponent,
-        ): Result<Unit> =
-            runCatching {
-                val message =
-                    when (chat) {
-                        is ChatComponent.Date -> chat.toData()
-                        is ChatComponent.Enter -> chat.toData()
-                        is ChatComponent.Leave -> chat.toData()
-                        is Message.Mine -> chat.toData()
-                        is Message.Other -> chat.toData()
-                    }
-                chatRoomDao.addMessageToChatRoom(chatRoomId, message)
-            }
-
-        override suspend fun getChatMessages(
-            chatRoomId: Long,
-            myMemberId: Long,
-        ): Result<List<ChatComponent>> =
-            runCatching {
-                chatRoomDao.getMessagesByRoomId(chatRoomId).map { it.toDomain(myMemberId) }
-            }
 
         override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> = source.getClubs(chatRoomId).mapCatching { it.toDomain() }
     }
