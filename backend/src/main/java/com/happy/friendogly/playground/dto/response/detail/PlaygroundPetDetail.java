@@ -3,7 +3,9 @@ package com.happy.friendogly.playground.dto.response.detail;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
+import com.happy.friendogly.playground.domain.PlaygroundMember;
 import java.time.LocalDate;
+import java.util.List;
 
 public record PlaygroundPetDetail(
         Long memberId,
@@ -18,7 +20,23 @@ public record PlaygroundPetDetail(
         boolean isMine
 ) {
 
-    public static PlaygroundPetDetail of(
+    public static List<PlaygroundPetDetail> getListOf(
+            List<Pet> pets,
+            PlaygroundMember petOwner,
+            boolean isMyPet
+    ) {
+        return pets.stream()
+                .map(pet -> PlaygroundPetDetail.of(
+                        petOwner.getId(),
+                        pet,
+                        petOwner.getMessage(),
+                        petOwner.isInside(),
+                        isMyPet
+                ))
+                .toList();
+    }
+
+    private static PlaygroundPetDetail of(
             Long memberId,
             Pet pet,
             String message,

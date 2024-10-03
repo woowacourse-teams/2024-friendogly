@@ -50,7 +50,7 @@ public class PlaygroundQueryService {
             arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
 
             playgroundPetDetails.addAll(
-                    getPlaygroundPetDetails(pets, playgroundMember, isMyPet)
+                    PlaygroundPetDetail.getListOf(pets, playgroundMember, isMyPet)
             );
         }
 
@@ -71,21 +71,5 @@ public class PlaygroundQueryService {
             return pets.size();
         }
         return 0;
-    }
-
-    private List<PlaygroundPetDetail> getPlaygroundPetDetails(
-            List<Pet> pets,
-            PlaygroundMember petOwner,
-            boolean isMyPet
-    ) {
-        return pets.stream()
-                .map(pet -> PlaygroundPetDetail.of(
-                        petOwner.getId(),
-                        pet,
-                        petOwner.getMessage(),
-                        petOwner.isInside(),
-                        isMyPet
-                ))
-                .toList();
     }
 }
