@@ -1,5 +1,7 @@
 package com.happy.friendogly.playground.dto.response;
 
+import com.happy.friendogly.playground.domain.Playground;
+
 public record SavePlaygroundResponse(
 
         Long id,
@@ -7,4 +9,11 @@ public record SavePlaygroundResponse(
         double longitude
 ) {
 
+    public static SavePlaygroundResponse from(Playground playground) {
+        return new SavePlaygroundResponse(
+                playground.getId(),
+                playground.getLocation().getLatitude(),
+                playground.getLocation().getLongitude()
+        );
+    }
 }
