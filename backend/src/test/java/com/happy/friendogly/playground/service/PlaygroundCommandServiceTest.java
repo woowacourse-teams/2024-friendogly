@@ -30,9 +30,10 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         SavePlaygroundResponse response = playgroundCommandService.save(request, member.getId());
 
         // then
-        assertAll(() -> assertThat(response.id()).isEqualTo(1), // todo: 테스트 격리 안되서 id가 틀릴 위험 있음
+        assertAll(
                 () -> assertThat(response.latitude()).isEqualTo(request.latitude()),
-                () -> assertThat(response.longitude()).isEqualTo(request.longitude()));
+                () -> assertThat(response.longitude()).isEqualTo(request.longitude())
+        );
     }
 
 
@@ -68,7 +69,6 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 .hasMessage("이미 참여한 놀이터가 존재합니다.");
 
     }
-    // 이미 참여한 놀이터가 있다.
     // 겹치는 범위안에 놀이터가 있다.
 
 }
