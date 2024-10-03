@@ -55,6 +55,13 @@ public class PlaygroundMember {
         this.exitTime = exitTime;
     }
 
+    public PlaygroundMember(
+            Playground playground,
+            Member member
+    ) {
+        this(playground, member, null, false, null);
+    }
+
     public boolean equalsMemberId(Long memberId) {
         return member.getId().equals(memberId);
     }

@@ -26,14 +26,28 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         SavePlaygroundResponse response = playgroundCommandService.save(request, member.getId());
 
         // then
-        assertAll(
-                () -> assertThat(response.id()).isEqualTo(1), // todo: 테스트 격리 안되서 id가 틀릴 위험 있음
+        assertAll(() -> assertThat(response.id()).isEqualTo(1), // todo: 테스트 격리 안되서 id가 틀릴 위험 있음
                 () -> assertThat(response.latitude()).isEqualTo(request.latitude()),
-                () -> assertThat(response.longitude()).isEqualTo(request.longitude())
-        );
+                () -> assertThat(response.longitude()).isEqualTo(request.longitude()));
+    }
+
+
+    @DisplayName("멤버가 놀이터를 등록하면 해당 멤버는 놀이터에 자동으로 참가")
+    @Test
+    void autoParticipatePlaygroundWhenCreate() {
+        // given
+        Member member = saveMember("김도선");
+        SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
+
+        // when
+        SavePlaygroundResponse response = playgroundCommandService.save(request, member.getId());
+        boolean isParticipating = playgroundMemberRepository
+                .existsByPlaygroundIdAndMemberId(response.id(), member.getId());
+
+        // then
+        assertThat(isParticipating).isTrue();
     }
     // 이미 참여한 놀이터가 있다.
     // 겹치는 범위안에 놀이터가 있다.
 
-    // 등록하면 자동으로 참가
 }
