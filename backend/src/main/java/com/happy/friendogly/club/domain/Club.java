@@ -24,8 +24,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -78,11 +78,10 @@ public class Club {
 
     @OneToMany(mappedBy = "clubMemberId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderBy("createdAt")
-    private Set<ClubMember> clubMembers = new HashSet<>();
+    private List<ClubMember> clubMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "clubPetId.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    @OrderBy
-    private Set<ClubPet> clubPets = new HashSet<>();
+    private List<ClubPet> clubPets = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private ChatRoom chatRoom;

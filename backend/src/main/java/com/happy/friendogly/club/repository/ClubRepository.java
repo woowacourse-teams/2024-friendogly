@@ -17,10 +17,6 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
     @Query(value = """
             SELECT C
             FROM Club AS C
-            JOIN FETCH C.allowedGenders
-            JOIN FETCH C.allowedSizes
-            JOIN FETCH C.clubMembers AS CM
-            JOIN FETCH CM.clubMemberId.member AS M
             JOIN FETCH C.clubPets AS CP
             JOIN FETCH CP.clubPetId.pet AS P
             WHERE C.id = :id
