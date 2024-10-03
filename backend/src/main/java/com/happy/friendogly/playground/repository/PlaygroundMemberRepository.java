@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaygroundMemberRepository extends JpaRepository<PlaygroundMember, Long> {
 
-    @EntityGraph(value = "graph.PlaygroundMember")
-    List<PlaygroundMember> findByPlaygroundId(Long playgroundId);
+    @EntityGraph(attributePaths = "member")
+    List<PlaygroundMember> findAllByPlaygroundId(Long playgroundId);
 }

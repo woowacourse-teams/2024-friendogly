@@ -34,7 +34,7 @@ public class PlaygroundQueryService {
 
     public FindPlaygroundDetailResponse findDetail(Long callMemberId, Long playgroundId) {
         Playground playground = playgroundRepository.getById(playgroundId);
-        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findByPlaygroundId(playgroundId);
+        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findAllByPlaygroundId(playgroundId);
 
         int totalPetCount = 0;
         int arrivedPetCount = 0;
