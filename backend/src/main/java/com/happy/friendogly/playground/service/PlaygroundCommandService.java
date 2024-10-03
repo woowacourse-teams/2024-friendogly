@@ -1,5 +1,6 @@
 package com.happy.friendogly.playground.service;
 
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.playground.domain.Location;
@@ -31,11 +32,17 @@ public class PlaygroundCommandService {
 
     public SavePlaygroundResponse save(SavePlaygroundRequest request, Long memberId) {
         Member member = memberRepository.getById(memberId);
-
+        validateExistParticipatingPlayground(member);
         Playground savedPlayground = playgroundRepository.save(
                 new Playground(new Location(request.latitude(), request.longitude()))
         );
         playgroundMemberRepository.save(new PlaygroundMember(savedPlayground, member));
         return SavePlaygroundResponse.from(savedPlayground);
+    }
+
+    private void validateExistParticipatingPlayground(Member member) {
+        if (playgroundMemberRepository.existsByMemberId(member.getId())) {
+            throw new FriendoglyException("이미 참여한 놀이터가 존재합니다.");
+        }
     }
 }

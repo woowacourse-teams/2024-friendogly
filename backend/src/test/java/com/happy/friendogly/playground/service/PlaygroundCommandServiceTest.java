@@ -1,9 +1,13 @@
 package com.happy.friendogly.playground.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.playground.domain.Playground;
+import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -46,6 +50,23 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
 
         // then
         assertThat(isParticipating).isTrue();
+    }
+
+    @DisplayName("이미 참여한 놀이터가 있을 경우 예외가 발생한다.")
+    @Test
+    void throwExceptionWhenAlreadyParticipateOther() {
+        // given
+        Playground playground = savePlayground();
+        Member member = saveMember("김도선");
+        playgroundMemberRepository.save(new PlaygroundMember(playground, member));
+
+        SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
+
+        // when, then
+        assertThatThrownBy(() -> playgroundCommandService.save(request, member.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("이미 참여한 놀이터가 존재합니다.");
+
     }
     // 이미 참여한 놀이터가 있다.
     // 겹치는 범위안에 놀이터가 있다.
