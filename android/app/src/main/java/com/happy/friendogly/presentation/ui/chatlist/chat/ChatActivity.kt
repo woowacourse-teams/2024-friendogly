@@ -13,6 +13,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
@@ -114,6 +115,7 @@ class ChatActivity :
     }
 
     override fun leaveChat() {
+        setResult(ChatListFragment.LEAVE_CHAT_CODE, intent)
         finish()
     }
 
