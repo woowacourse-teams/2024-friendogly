@@ -62,7 +62,7 @@ class ApiClient {
     }
 
     object ChatMessage {
-        private const val BASE_URL = "/api/chat-messages/{chatRoomId}"
+        private const val BASE_URL = "/api/chat-messages"
         const val ALL = "$BASE_URL/{chatRoomId}"
         const val TIMES = "$BASE_URL/{chatRoomId}/times"
     }

@@ -1,6 +1,7 @@
 package com.happy.friendogly.application.di
 
 import com.happy.friendogly.remote.api.AlarmTokenService
+import com.happy.friendogly.remote.api.ChatMessageService
 import com.happy.friendogly.remote.api.ChatRoomService
 import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.MemberService
@@ -27,6 +28,10 @@ object ServiceModule {
     @Provides
     @Singleton
     fun providesChatRoomService(retrofit: Retrofit): ChatRoomService = retrofit.create(ChatRoomService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesChatMessageService(retrofit: Retrofit):ChatMessageService = retrofit.create(ChatMessageService::class.java)
 
     @Provides
     @Singleton
