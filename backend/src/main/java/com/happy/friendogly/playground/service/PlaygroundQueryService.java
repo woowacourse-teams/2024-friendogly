@@ -6,6 +6,7 @@ import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
@@ -71,5 +72,25 @@ public class PlaygroundQueryService {
             return pets.size();
         }
         return 0;
+    }
+
+    public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
+        List<Playground> playgrounds = playgroundRepository.findAll();
+        List<FindPlaygroundLocationResponse> playgroundLocationResponses = new ArrayList<>();
+        for (Playground playground : playgrounds) {
+            List<PlaygroundMember> playgroundMembers = playgroundMemberRepository
+                    .findAllByPlaygroundId(playground.getId());
+            boolean isParticipating = playgroundMembers.stream()
+                    .anyMatch(playgroundMember -> playgroundMember.equalsMemberId(memberId));
+            playgroundLocationResponses.add(
+                    new FindPlaygroundLocationResponse(
+                            playground.getId(),
+                            playground.getLocation().getLatitude(),
+                            playground.getLocation().getLongitude(),
+                            isParticipating
+                    )
+            );
+        }
+        return playgroundLocationResponses;
     }
 }

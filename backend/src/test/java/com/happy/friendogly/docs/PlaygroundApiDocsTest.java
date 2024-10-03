@@ -22,6 +22,7 @@ import com.happy.friendogly.playground.controller.PlaygroundController;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
@@ -185,6 +186,17 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("모든 놀이터의 위치 정보를 조회")
     @Test
     void findAllLocation() throws Exception {
+
+        List<FindPlaygroundLocationResponse> response = List.of(
+                new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661, true),
+                new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778, false),
+                new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182, false),
+                new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
+        );
+
+        when(playgroundQueryService.findLocations(anyLong()))
+                .thenReturn(response);
+
         mockMvc
                 .perform(get("/playgrounds/locations")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
@@ -200,7 +212,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].id").description("놀이터의 ID"),
                                         fieldWithPath("data.[].latitude").description("놀이터의 위도"),
                                         fieldWithPath("data.[].longitude").description("놀이터의 경도"),
-                                        fieldWithPath("data.[].isParticipated").description("놀이터 참여 유무")
+                                        fieldWithPath("data.[].isParticipating").description("놀이터 참여 유무")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundLocationResponse"))
                                 .build()

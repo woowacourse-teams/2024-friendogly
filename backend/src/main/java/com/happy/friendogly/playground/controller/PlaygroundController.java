@@ -65,14 +65,7 @@ public class PlaygroundController {
 
     @GetMapping("/locations")
     public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocation(@Auth Long memberId) {
-        return ApiResponse.ofSuccess(
-                List.of(
-                        new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661, true),
-                        new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778, false),
-                        new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182, false),
-                        new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
-                )
-        );
+        return ApiResponse.ofSuccess(playgroundQueryService.findLocations(memberId));
     }
 
     @PatchMapping("/arrival")

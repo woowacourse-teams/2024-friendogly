@@ -36,4 +36,10 @@ public abstract class PlaygroundServiceTest extends ServiceTest {
                 new Playground(new Location(37.5173316, 127.1011661))
         );
     }
+
+    protected Playground savePlayground(double latitude, double longitude) {
+        return playgroundRepository.save(
+                new Playground(new Location(latitude, longitude))
+        );
+    }
 }
