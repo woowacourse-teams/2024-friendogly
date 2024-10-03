@@ -18,15 +18,16 @@ import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMEN
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
-
 
     @Inject
     lateinit var getWoofAlarmUseCase: GetWoofAlarmUseCase
@@ -37,7 +38,6 @@ class AlarmReceiver : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if (message.data[ALARM_TYPE] == "CHAT") {
-            saveMessage(message)
             showChatAlarm(
                 message.data["senderName"],
                 message.data["content"],
@@ -48,54 +48,6 @@ class AlarmReceiver : FirebaseMessagingService() {
         }
     }
 
-    private fun saveMessage(message: RemoteMessage) =
-        CoroutineScope(Dispatchers.IO).launch {
-            val memberId = message.data["senderMemberId"]!!.toLong()
-            val name = message.data["senderName"] ?: ""
-            val content = message.data["content"] ?: ""
-            val createdAt: LocalDateTime = LocalDateTime.parse(message.data["createdAt"])
-            val profileUrl = message.data["profilePictureUrl"] ?: ""
-            val chatRoomId: Long = message.data["chatRoomId"]?.toLong() ?: -1L
-            val message: ChatComponent =
-                when (message.data["messageType"]) {
-                    "CHAT" ->
-                        Message.Other(
-                            createdAt = createdAt,
-                            member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
-                            content = content,
-                        )
-
-                    "LEAVE" ->
-                        ChatComponent.Leave(
-                            createdAt = createdAt,
-                            member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
-                        )
-
-                    "ENTER" ->
-                        ChatComponent.Enter(
-                            createdAt = createdAt,
-                            member =
-                                ChatMember(
-                                    id = memberId,
-                                    name = name,
-                                    profileImageUrl = profileUrl,
-                                ),
-                        )
-
-                    else -> error("잘못된 타입이 들어왔습니다.")
-                }
-        }
-
     private fun showChatAlarm(
         title: String?,
         body: String?,
@@ -103,7 +55,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (getChatAlarmUseCase.invoke()
+        if (getChatAlarmUseCase()
                 .getOrDefault(true) && ChatLifecycleObserver.getInstance().isBackground
         ) {
             createNotificationChannel()
