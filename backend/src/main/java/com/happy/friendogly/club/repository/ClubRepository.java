@@ -2,17 +2,34 @@ package com.happy.friendogly.club.repository;
 
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
+import com.happy.friendogly.pet.domain.Gender;
+import com.happy.friendogly.pet.domain.SizeType;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
+public interface ClubRepository extends JpaRepository<Club, Long> {
 
-    List<Club> findAll(Specification<Club> clubSpecification);
+    @Query("""
+            SELECT C
+            FROM Club AS C
+            WHERE C.address.province = :province
+                AND C.id IN (
+                    SELECT CG.clubGenderId.club.id
+                    FROM ClubGender CG
+                    WHERE CG.clubGenderId.allowedGender IN :searchingGenders
+                )
+                AND C.id IN (
+                    SELECT CS.clubSizeId.club.id
+                    FROM ClubSize CS
+                    WHERE CS.clubSizeId.allowedSize IN :searchingSizes
+                )
+            ORDER BY C.createdAt DESC
+            """)
+    List<Club> findAllBy(String province, Set<Gender> searchingGenders, Set<SizeType> searchingSizes);
 
     @Query(value = """
             SELECT C

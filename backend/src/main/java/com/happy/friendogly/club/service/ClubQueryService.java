@@ -8,7 +8,6 @@ import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.repository.ClubRepository;
-import com.happy.friendogly.club.repository.ClubSpecification;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Gender;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,14 +43,11 @@ public class ClubQueryService {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
-        Specification<Club> spec = ClubSpecification.where()
-                .equalsProvince(request.province())
-                .hasGenders(Gender.toGenders(request.genderParams()))
-                .hasSizeTypes(SizeType.toSizeTypes(request.sizeParams()))
-                .orderByCreatedAtDesc()
-                .build();
-
-        List<Club> clubs = clubRepository.findAll(spec);
+        List<Club> clubs = clubRepository.findAllBy(
+                request.province(),
+                Gender.toGenders(request.genderParams()),
+                SizeType.toSizeTypes(request.sizeParams())
+        );
 
         FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
 

@@ -105,5 +105,4 @@ public class ClubController {
         UpdateClubResponse response = clubCommandService.update(clubId, memberId, request);
         return ResponseEntity.ok(ApiResponse.ofSuccess(response));
     }
-
 }
