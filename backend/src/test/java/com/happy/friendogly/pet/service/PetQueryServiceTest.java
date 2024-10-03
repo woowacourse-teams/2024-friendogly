@@ -1,6 +1,7 @@
 package com.happy.friendogly.pet.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -45,8 +46,10 @@ public class PetQueryServiceTest extends ServiceTest {
 
         FindPetResponse response = petQueryService.findById(pet.getId());
 
-        assertThat(response.id()).isEqualTo(pet.getId());
-        assertThat(response.memberId()).isEqualTo(pet.getMember().getId());
+        assertAll(
+                () -> assertThat(response.id()).isEqualTo(pet.getId()),
+                () -> assertThat(response.memberId()).isEqualTo(pet.getMember().getId())
+        );
     }
 
     @DisplayName("memberId로 pet 단건 조회 테스트")
@@ -66,7 +69,10 @@ public class PetQueryServiceTest extends ServiceTest {
         );
 
         List<FindPetResponse> responses = petQueryService.findByMemberId(member.getId());
-        assertThat(responses.size()).isEqualTo(1);
-        assertThat(responses.get(0).id()).isEqualTo(pet.getId());
+
+        assertAll(
+                () -> assertThat(responses.size()).isEqualTo(1),
+                () -> assertThat(responses.get(0).id()).isEqualTo(pet.getId())
+        );
     }
 }
