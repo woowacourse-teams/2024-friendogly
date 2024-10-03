@@ -69,6 +69,22 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 .hasMessage("이미 참여한 놀이터가 존재합니다.");
 
     }
-    // 겹치는 범위안에 놀이터가 있다.
+
+    @DisplayName("놀이터 생성시, 놀이터 범위에 다른 겹치는 놀이터 범위가 존재하면 예외가 발생한다.")
+    @Test
+    void throwExceptionWhenOverlapPlaygroundScope() {
+        // given
+        Member member = saveMember("김도선");
+        double latitude = 37.516382;
+        double longitudeA = 127.120040;
+        double longitudeFar300mFromA = 127.123430;
+        savePlayground(latitude, longitudeA);
+        SavePlaygroundRequest request = new SavePlaygroundRequest(latitude, longitudeFar300mFromA);
+
+        // when, then
+        assertThatThrownBy(() -> playgroundCommandService.save(request, member.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
+    }
 
 }
