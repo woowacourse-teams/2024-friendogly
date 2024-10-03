@@ -52,9 +52,9 @@ public class PlaygroundController {
                 .body(ApiResponse.ofSuccess(savePlaygroundResponse));
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<FindPlaygroundDetailResponse> findById(@Auth Long memberId, @PathVariable Long id) {
-        FindPlaygroundDetailResponse response = playgroundQueryService.findDetail(memberId, id);
+    @GetMapping("/{playgroundId}")
+    public ApiResponse<FindPlaygroundDetailResponse> findById(@Auth Long memberId, @PathVariable Long playgroundId) {
+        FindPlaygroundDetailResponse response = playgroundQueryService.findDetail(memberId, playgroundId);
         return ApiResponse.ofSuccess(response);
     }
 
