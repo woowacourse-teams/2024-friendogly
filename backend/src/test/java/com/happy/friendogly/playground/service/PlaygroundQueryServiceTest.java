@@ -47,11 +47,11 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         );
 
         // when
-        FindPlaygroundDetailResponse response = playgroundQueryService.findDetail(1L, 1L);
+        FindPlaygroundDetailResponse response = playgroundQueryService.findDetail(member1.getId(), playground.getId());
 
         // then
         assertAll(
-                () -> assertThat(response.id()).isEqualTo(1L),
+                () -> assertThat(response.id()).isEqualTo(playground.getId()),
                 () -> assertThat(response.totalPetCount()).isEqualTo(4),
                 () -> assertThat(response.arrivedPetCount()).isEqualTo(3),
                 () -> assertThat(response.playgroundPetDetails().size()).isEqualTo(4)
