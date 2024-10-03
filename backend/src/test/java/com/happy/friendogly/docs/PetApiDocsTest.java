@@ -4,6 +4,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
@@ -18,6 +19,7 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
 import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
+import com.happy.friendogly.pet.dto.response.FindExistMyPetResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.service.PetCommandService;
@@ -399,6 +401,37 @@ public class PetApiDocsTest extends RestDocsTest {
                                 )
                                 .pathParameters(
                                         parameterWithName("id").description("수정하려는 Pet ID"))
+                                .build()))
+                );
+    }
+
+    @DisplayName("내 반려견 유무 조회 문서화")
+    @Test
+    void findExistMine() throws Exception {
+
+        FindExistMyPetResponse response = new FindExistMyPetResponse(true);
+
+        Mockito.when(petQueryService.existMine(anyLong()))
+                .thenReturn(response);
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/pets/exists/mine")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isOk())
+                .andDo(MockMvcRestDocumentationWrapper.document("pet-exist-mine",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Pet API")
+                                .summary("내 반려견 유무 조회 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 accessToken")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
+                                        fieldWithPath("data.isExistPet").description("내 반려견 존재 유무")
+                                )
+                                .responseSchema(Schema.schema("FindExistMyPetResponse"))
                                 .build()))
                 );
     }
