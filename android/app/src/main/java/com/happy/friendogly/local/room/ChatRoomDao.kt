@@ -38,6 +38,31 @@ interface ChatRoomDao {
     }
 
     @Transaction
+    suspend fun addMessagesToChatRoom(
+        chatRoomId: Long,
+        newMessages: List<ChatMessageEntity>,
+    ) {
+        val chatRoom = getChatRoomById(chatRoomId)
+        if (chatRoom != null) {
+            val updatedMessages = chatRoom.messages.toMutableList()
+
+            newMessages.forEach { newMessage ->
+                updatedMessages.find {
+                    it.createdAt == newMessage.createdAt && it.content == newMessage.content
+                } ?: return@forEach
+
+                updatedMessages.add(newMessage)
+            }
+
+            val updatedChatRoom = chatRoom.copy(messages = updatedMessages)
+            updateChatRoom(updatedChatRoom)
+        } else {
+            insert(ChatRoomEntity(id = chatRoomId, messages = newMessages))
+        }
+    }
+
+
+    @Transaction
     suspend fun getMessagesByRoomId(chatRoomId: Long): List<ChatMessageEntity> {
         val chatRoom = getChatRoomById(chatRoomId)
         return chatRoom?.messages ?: emptyList()
