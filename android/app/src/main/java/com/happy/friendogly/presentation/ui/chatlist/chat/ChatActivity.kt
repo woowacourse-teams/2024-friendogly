@@ -1,8 +1,11 @@
 package com.happy.friendogly.presentation.ui.chatlist.chat
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -13,6 +16,7 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
+import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
@@ -24,6 +28,7 @@ import javax.inject.Inject
 class ChatActivity :
     BaseActivity<ActivityChatBinding>(R.layout.activity_chat),
     ChatNavigationAction {
+
     private val viewModel: ChatViewModel by viewModels()
     private lateinit var adapter: ChatAdapter
 
@@ -79,6 +84,7 @@ class ChatActivity :
         }
     }
 
+
     private fun initAdapter() {
         adapter = ChatAdapter(this)
         binding.rcvChatDetail.adapter = adapter
@@ -104,6 +110,10 @@ class ChatActivity :
             ClubDetailActivity.getIntent(this, clubId)
                 .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT),
         )
+        finish()
+    }
+
+    override fun leaveChat() {
         finish()
     }
 

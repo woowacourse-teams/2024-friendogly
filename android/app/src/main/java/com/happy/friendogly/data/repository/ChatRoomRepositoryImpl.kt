@@ -14,17 +14,22 @@ import com.happy.friendogly.local.room.ChatRoomDao
 import javax.inject.Inject
 
 class ChatRoomRepositoryImpl
-    @Inject
-    constructor(
-        private val source: ChatRoomDataSource,
-    ) : ChatRoomRepository {
-        override suspend fun getChatList(): Result<ChatRooms> = source.getChatList().mapCatching { it.toDomain() }
+@Inject
+constructor(
+    private val source: ChatRoomDataSource,
+) : ChatRoomRepository {
+    override suspend fun getChatList(): Result<ChatRooms> =
+        source.getChatList().mapCatching { it.toDomain() }
 
-        override suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>> =
-            source.getMembers(chatRoomId).mapCatching { member ->
-                member.map { it.toDomain() }
-            }
+    override suspend fun getMembers(chatRoomId: Long): Result<List<ChatMember>> =
+        source.getMembers(chatRoomId).mapCatching { member ->
+            member.map { it.toDomain() }
+        }
 
 
-        override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> = source.getClubs(chatRoomId).mapCatching { it.toDomain() }
-    }
+    override suspend fun getChatClub(chatRoomId: Long): Result<ChatRoomClub> =
+        source.getClubs(chatRoomId).mapCatching { it.toDomain() }
+
+    override suspend fun leaveChatRoom(chatRoomId: Long): Result<Unit> =
+        source.leaveChatRoom(chatRoomId)
+}

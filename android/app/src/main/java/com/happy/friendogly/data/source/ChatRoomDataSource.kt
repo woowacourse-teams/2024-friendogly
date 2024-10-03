@@ -10,4 +10,6 @@ interface ChatRoomDataSource {
     suspend fun getMembers(chatRoomId: Long): Result<List<ChatMemberDto>>
 
     suspend fun getClubs(chatRoomId: Long): Result<ChatRoomClubDto>
+
+    suspend fun leaveChatRoom(chatRoomId: Long): Result<Unit>
 }

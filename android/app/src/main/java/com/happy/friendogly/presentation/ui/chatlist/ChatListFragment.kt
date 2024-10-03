@@ -1,11 +1,14 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
+import android.app.Activity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentChatListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.ui.chatlist.adapter.ChatListAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
+import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

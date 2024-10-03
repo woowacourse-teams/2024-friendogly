@@ -237,6 +237,9 @@
     <string name="chat_setting_alarm">채팅방 알림</string>
     <string name="chat_setting_alarm_alert">알림을 거부하여 채팅 알림을 받을 수 없습니다.</string>
     <string name="chat_mine">나</string>
+    <string name="chat_leave_title">채팅방을 나가시겠어요?</string>
+    <string name="chat_leave_positive">나가기</string>
+    <string name="chat_leave_negative">머무르기</string>
 
     <!--멍멍 짓기-->
     <string name="woof_member_name">%s\'s 댕댕이</string>
