@@ -43,7 +43,7 @@ constructor(
                     dogSize = clubInfo.allowedSize,
                     dogGender = clubInfo.allowedGender,
                 )
-            return@async clubInfo.clubId
+            return@async clubInfo.myMemberId
         }
 
     fun getChatMember(chatRoomId: Long) {
