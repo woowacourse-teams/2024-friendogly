@@ -4,13 +4,9 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.FirebaseApp
 import com.happy.friendogly.BuildConfig
-import com.happy.friendogly.data.source.ChatMessageDataSource
 import com.kakao.sdk.common.KakaoSdk
 import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.runBlocking
-import java.time.LocalDateTime
-import javax.inject.Inject
 
 @HiltAndroidApp
 class FriendoglyApplication : Application() {

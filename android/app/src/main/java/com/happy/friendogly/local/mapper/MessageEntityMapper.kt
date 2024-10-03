@@ -7,15 +7,16 @@ import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
 import com.happy.friendogly.local.room.MessageTypeEntity
 
-fun List<ChatComponent>.toData(): List<ChatMessageEntity> = this.map { chat ->
-    when(chat) {
-        is ChatComponent.Date -> chat.toData()
-        is ChatComponent.Enter -> chat.toData()
-        is ChatComponent.Leave -> chat.toData()
-        is Message.Mine -> chat.toData()
-        is Message.Other -> chat.toData()
+fun List<ChatComponent>.toData(): List<ChatMessageEntity> =
+    this.map { chat ->
+        when (chat) {
+            is ChatComponent.Date -> chat.toData()
+            is ChatComponent.Enter -> chat.toData()
+            is ChatComponent.Leave -> chat.toData()
+            is Message.Mine -> chat.toData()
+            is Message.Other -> chat.toData()
+        }
     }
-}
 
 fun ChatComponent.Date.toData(): ChatMessageEntity =
     ChatMessageEntity(

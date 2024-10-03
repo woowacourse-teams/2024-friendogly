@@ -31,7 +31,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesChatMessageService(retrofit: Retrofit):ChatMessageService = retrofit.create(ChatMessageService::class.java)
+    fun providesChatMessageService(retrofit: Retrofit): ChatMessageService = retrofit.create(ChatMessageService::class.java)
 
     @Provides
     @Singleton

@@ -6,18 +6,19 @@ import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 
-fun List<MessageDto>.toDomain(myMemberId:Long) = this.map { message ->
-    when(message.messageType) {
-        MessageTypeDto.ENTER -> message.toEnter()
-        MessageTypeDto.LEAVE -> message.toLeave()
-        MessageTypeDto.CHAT -> if (myMemberId == message.senderMemberId) {
-            message.toMine()
-        } else {
-            message.toOther()
+fun List<MessageDto>.toDomain(myMemberId: Long) =
+    this.map { message ->
+        when (message.messageType) {
+            MessageTypeDto.ENTER -> message.toEnter()
+            MessageTypeDto.LEAVE -> message.toLeave()
+            MessageTypeDto.CHAT ->
+                if (myMemberId == message.senderMemberId) {
+                    message.toMine()
+                } else {
+                    message.toOther()
+                }
         }
     }
-
-}
 
 fun MessageDto.toOther(): Message.Other =
     Message.Other(

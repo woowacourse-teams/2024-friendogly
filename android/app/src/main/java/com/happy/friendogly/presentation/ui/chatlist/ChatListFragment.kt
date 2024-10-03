@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
-import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,14 +9,12 @@ import com.happy.friendogly.databinding.FragmentChatListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.ui.chatlist.adapter.ChatListAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
-import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChatListFragment :
     BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list),
     ChatListNavigationAction {
-
     private lateinit var chatRegisterLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: ChatListViewModel by viewModels()

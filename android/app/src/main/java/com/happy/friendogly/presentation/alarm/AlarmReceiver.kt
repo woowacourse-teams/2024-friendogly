@@ -8,9 +8,6 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
-import com.happy.friendogly.domain.model.ChatComponent
-import com.happy.friendogly.domain.model.ChatMember
-import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
 import com.happy.friendogly.presentation.ui.MainActivity
@@ -22,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint

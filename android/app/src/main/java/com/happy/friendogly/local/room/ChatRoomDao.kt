@@ -61,7 +61,6 @@ interface ChatRoomDao {
         }
     }
 
-
     @Transaction
     suspend fun getMessagesByRoomId(chatRoomId: Long): List<ChatMessageEntity> {
         val chatRoom = getChatRoomById(chatRoomId)

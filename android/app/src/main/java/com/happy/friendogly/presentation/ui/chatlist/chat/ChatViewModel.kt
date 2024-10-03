@@ -84,7 +84,7 @@ class ChatViewModel
             myMemberId: Long,
         ): Deferred<List<ChatUiModel>> =
             viewModelScope.async {
-                getChatMessagesUseCase( myMemberId,chatRoomId).getOrDefault(emptyList()).map {
+                getChatMessagesUseCase(myMemberId, chatRoomId).getOrDefault(emptyList()).map {
                     when (it) {
                         is ChatComponent.Date -> it.toUiModel()
                         is ChatComponent.Enter -> it.toUiModel()
