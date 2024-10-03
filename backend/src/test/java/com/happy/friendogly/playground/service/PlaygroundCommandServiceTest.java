@@ -77,9 +77,9 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         Member member = saveMember("김도선");
         double latitude = 37.516382;
         double longitudeA = 127.120040;
-        double longitudeFar300mFromA = 127.123430;
+        double longitudeFar299mFromA = 127.123430;
         savePlayground(latitude, longitudeA);
-        SavePlaygroundRequest request = new SavePlaygroundRequest(latitude, longitudeFar300mFromA);
+        SavePlaygroundRequest request = new SavePlaygroundRequest(latitude, longitudeFar299mFromA);
 
         // when, then
         assertThatThrownBy(() -> playgroundCommandService.save(request, member.getId()))

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaygroundCommandService {
 
     public static final int PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD = 300;
+
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
     private final MemberRepository memberRepository;
@@ -35,12 +36,15 @@ public class PlaygroundCommandService {
 
     public SavePlaygroundResponse save(SavePlaygroundRequest request, Long memberId) {
         Member member = memberRepository.getById(memberId);
+
         validateExistParticipatingPlayground(member);
         validateOverlapPlayground(request.latitude(), request.longitude());
+
         Playground savedPlayground = playgroundRepository.save(
                 new Playground(new Location(request.latitude(), request.longitude()))
         );
         playgroundMemberRepository.save(new PlaygroundMember(savedPlayground, member));
+
         return SavePlaygroundResponse.from(savedPlayground);
     }
 
