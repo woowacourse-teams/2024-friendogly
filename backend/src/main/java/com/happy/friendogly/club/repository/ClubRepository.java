@@ -12,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificationExecutor<Club> {
 
-
     List<Club> findAll(Specification<Club> clubSpecification);
 
     @Query(value = """
@@ -21,7 +20,6 @@ public interface ClubRepository extends JpaRepository<Club, Long>, JpaSpecificat
             JOIN FETCH C.clubPets AS CP
             JOIN FETCH CP.clubPetId.pet AS P
             WHERE C.id = :id
-            ORDER BY C.createdAt DESC 
             """)
     Optional<Club> findById(Long id);
 
