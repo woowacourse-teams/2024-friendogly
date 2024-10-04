@@ -14,6 +14,8 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.repository.PetRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class ClubQueryService {
+
+    private static final int PAGE_SIZE = 20;    // TODO: 클라이언트에서 입력받도록 수정
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
@@ -44,24 +48,68 @@ public class ClubQueryService {
     public Slice<FindClubByFilterResponse> findByFilter(Long memberId, FindClubByFilterRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
-        Slice<Club> clubs = clubRepository.findAllBy(
+
+        FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
+        LocalDateTime lastFoundCreatedAt = request.lastFoundCreatedAt();
+        Long lastFoundId = request.lastFoundId();
+
+        // TODO: 중복 코드 제거
+        List<Club> result = new ArrayList<>();
+        Slice<Club> clubSlice = clubRepository.findAllBy(
                 request.province(),
                 Gender.toGenders(request.genderParams()),
                 SizeType.toSizeTypes(request.sizeParams()),
-                PageRequest.ofSize(20),
-                request.lastFoundCreatedAt(),
-                request.lastFoundId()
+                PageRequest.ofSize(PAGE_SIZE),
+                lastFoundCreatedAt,
+                lastFoundId
         );
 
-        FilterCondition filterCondition = FilterCondition.from(request.filterCondition());
-
-        List<FindClubByFilterResponse> clubContents = clubs.getContent()
+        List<Club> filteredClubs = clubSlice.getContent()
                 .stream()
                 .filter(club -> isConditionMatch(club, filterCondition, member, pets))
+                .toList();
+
+        for (Club club : filteredClubs) {
+            if (result.size() >= PAGE_SIZE) {
+                break;
+            }
+            result.add(club);
+        }
+
+        while (result.size() < PAGE_SIZE && clubSlice.hasNext()) {
+            if (!result.isEmpty()) {
+                lastFoundCreatedAt = result.get(result.size() - 1).getCreatedAt();
+                lastFoundId = result.get(result.size() - 1).getId();
+            }
+
+            // TODO: 중복 코드 제거
+            clubSlice = clubRepository.findAllBy(
+                    request.province(),
+                    Gender.toGenders(request.genderParams()),
+                    SizeType.toSizeTypes(request.sizeParams()),
+                    PageRequest.ofSize(PAGE_SIZE),
+                    lastFoundCreatedAt,
+                    lastFoundId
+            );
+
+            filteredClubs = clubSlice.getContent()
+                    .stream()
+                    .filter(club -> isConditionMatch(club, filterCondition, member, pets))
+                    .toList();
+
+            for (Club club : filteredClubs) {
+                if (result.size() >= PAGE_SIZE) {
+                    break;
+                }
+                result.add(club);
+            }
+        }
+
+        List<FindClubByFilterResponse> response = result.stream()
                 .map(club -> new FindClubByFilterResponse(club, collectOverviewPetImages(club)))
                 .toList();
 
-        return new SliceImpl<>(clubContents, clubs.getPageable(), clubs.hasNext());
+        return new SliceImpl<>(response, clubSlice.getPageable(), clubSlice.hasNext());
     }
 
     private boolean isConditionMatch(Club club, FilterCondition filterCondition, Member member, List<Pet> pets) {
@@ -88,7 +136,6 @@ public class ClubQueryService {
                 .stream()
                 .map(club -> new FindClubParticipatingResponse(club, collectOverviewPetImages(club)))
                 .toList();
-
     }
 
     private List<String> collectOverviewPetImages(Club club) {
