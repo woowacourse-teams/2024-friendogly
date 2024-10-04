@@ -1,8 +1,8 @@
 package com.happy.friendogly.remote.source
 
-import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
 import com.happy.friendogly.data.model.FootprintRecentWalkStatusDto
 import com.happy.friendogly.data.model.MyPlaygroundDto
+import com.happy.friendogly.data.model.PetExistenceDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.data.source.WoofDataSource
@@ -32,8 +32,8 @@ class WoofDataSourceImpl
             return runCatching { service.patchFootprintRecentWalkStatusManual(request).data.toData() }
         }
 
-        override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto> {
-            return runCatching { service.getFootprintMarkBtnInfo().data.toData() }
+        override suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto> {
+            return runCatching { service.getPetExistence().data.toData() }
         }
 
         override suspend fun getNearFootprints(): Result<List<PlaygroundDto>> {

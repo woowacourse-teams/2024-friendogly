@@ -100,17 +100,17 @@ fun TextView.bindPetGender(petGender: Gender?) {
 
 @BindingAdapter("uiState")
 fun View.bindMyFootprintBtnVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState != WoofUiState.RegisteringFootprint)
+    isVisible = (uiState != WoofUiState.RegisteringPlayground)
 }
 
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState is WoofUiState.RegisteringFootprint)
+    isVisible = (uiState is WoofUiState.RegisteringPlayground)
 }
 
 @BindingAdapter("registeringVisibilityAnimation")
 fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
-    if (uiState is WoofUiState.RegisteringFootprint) {
+    if (uiState is WoofUiState.RegisteringPlayground) {
         showViewAnimation()
     } else {
         hideViewAnimation()
@@ -148,7 +148,7 @@ fun View.bindMarkBtnVisibility(
     myFootprint: MyFootprintMarkerUiModel?,
 ) {
     isVisible =
-        if (uiState == WoofUiState.RegisteringFootprint) {
+        if (uiState == WoofUiState.RegisteringPlayground) {
             false
         } else {
             if (myFootprint == null) true else false
@@ -174,7 +174,7 @@ fun TextView.bindRegisterFootprintBtnClickable(
     cameraIdle: Boolean,
 ) {
     isClickable =
-        if (uiState is WoofUiState.RegisteringFootprint) {
+        if (uiState is WoofUiState.RegisteringPlayground) {
             cameraIdle
         } else {
             false
@@ -206,7 +206,7 @@ fun View.bindLocationBtn(myFootprint: MyFootprintMarkerUiModel?) {
 
 @BindingAdapter("registerLocationBtnVisibility")
 fun View.bindRegisterLocationBtnVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState == WoofUiState.RegisteringFootprint)
+    isVisible = (uiState == WoofUiState.RegisteringPlayground)
 }
 
 @BindingAdapter("playgroundAction", "playgroundBtn")

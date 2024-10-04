@@ -3,9 +3,9 @@ package com.happy.friendogly.data.repository
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.domain.repository.WoofRepository
-import com.happy.friendogly.presentation.ui.woof.model.FootprintMarkBtnInfo
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.MyPlayground
+import com.happy.friendogly.presentation.ui.woof.model.PetExistence
 import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
@@ -53,7 +53,7 @@ class WoofRepositoryImpl
             }
         }
 
-        override suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfo> {
+        override suspend fun getFootprintMarkBtnInfo(): Result<PetExistence> {
             return source.getFootprintMarkBtnInfo().mapCatching { dto ->
                 dto.toDomain()
             }

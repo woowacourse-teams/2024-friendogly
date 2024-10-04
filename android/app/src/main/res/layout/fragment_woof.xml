@@ -171,7 +171,7 @@
             tools:visibility="gone" />
 
         <ImageButton
-            android:id="@+id/btn_woof_mark"
+            android:id="@+id/btn_playground_pet_existence"
             markBtnVisibility="@{vm.myFootprintMarker}"
             uiState="@{vm.uiState}"
             android:layout_width="80dp"
@@ -181,13 +181,13 @@
             android:background="@color/transparent"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> vm.clickMarkBtn()}"
+            android:onClick="@{() -> vm.clickPetExistenceBtn()}"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mark_footprint_btn"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:visibility="invisible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_woof_register_marker"

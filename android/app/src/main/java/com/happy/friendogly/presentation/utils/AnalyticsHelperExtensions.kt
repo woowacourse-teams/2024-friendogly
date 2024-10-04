@@ -34,8 +34,8 @@ fun AnalyticsHelper.logMyPageFragmentSwitched() {
     logEvent(type = Types.MY_PAGE_FRAGMENT_SWITCHED)
 }
 
-fun AnalyticsHelper.logMarkBtnClicked() {
-    logEvent(type = Types.MARK_BTN_CLICKED)
+fun AnalyticsHelper.logPetExistenceBtnClicked() {
+    logEvent(type = Types.PET_EXISTENCE_BTN_CLICKED)
 }
 
 fun AnalyticsHelper.logRegisterMarkerBtnClicked() {
@@ -78,14 +78,10 @@ fun AnalyticsHelper.logPlaygroundSize(size: Int) {
     logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
 }
 
-fun AnalyticsHelper.logFootprintMarkBtnInfo(
-    hasPet: Boolean,
-    remainingTime: Int,
-) {
+fun AnalyticsHelper.logPetExistence(isExistPet: Boolean) {
     logEvent(
         type = Types.WOOF_FRAGMENT,
-        ParamKeys.FOOTPRINT_MARK_BTN_HAS_PET to hasPet,
-        ParamKeys.FOOTPRINT_MARK_BTN_REMAINING_TIME to remainingTime,
+        ParamKeys.PET_EXISTENCE to isExistPet,
     )
 }
 

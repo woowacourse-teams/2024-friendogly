@@ -37,7 +37,7 @@ object Types {
     const val WOOF_FRAGMENT_SWITCHED = "woof_fragment_switched"
     const val CHAT_LIST_FRAGMENT_SWITCHED = "chat_list_fragment_switched"
     const val MY_PAGE_FRAGMENT_SWITCHED = "my_page_fragment_switched"
-    const val MARK_BTN_CLICKED = "mark_btn_clicked"
+    const val PET_EXISTENCE_BTN_CLICKED = "pet_existence_btn_clicked"
     const val REGISTER_MARKER_BTN_CLICKED = "register_marker_btn_clicked"
     const val LOCATION_BTN_CLICKED = "location_btn_clicked"
     const val MY_FOOTPRINT_BTN_CLICKED = "my_footprint_btn_clicked"

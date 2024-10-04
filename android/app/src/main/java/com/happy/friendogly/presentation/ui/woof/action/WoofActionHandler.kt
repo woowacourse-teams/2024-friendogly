@@ -1,7 +1,7 @@
 package com.happy.friendogly.presentation.ui.woof.action
 
 interface WoofActionHandler {
-    fun clickMarkBtn()
+    fun clickPetExistenceBtn()
 
     fun clickRegisterMarkerBtn()
 

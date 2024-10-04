@@ -247,7 +247,6 @@
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
-    <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
     <string name="woof_marker_registered">발자국을 등록했어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
     <string name="woof_days_ago">%d일 전</string>
@@ -285,7 +284,7 @@
     <string name="playground_pet_is_playing">노는중</string>
     <string name="playground_pet_is_absent">자리비움</string>
 
-    <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
     <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
     <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>

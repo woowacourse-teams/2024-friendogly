@@ -7,7 +7,7 @@ sealed interface WoofUiState {
 
     data object FindingFriends : WoofUiState
 
-    data object RegisteringFootprint : WoofUiState
+    data object RegisteringPlayground : WoofUiState
 
     data object ViewingFootprintInfo : WoofUiState
 }

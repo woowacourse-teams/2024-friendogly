@@ -4,9 +4,9 @@ import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRe
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
 import com.happy.friendogly.remote.model.request.FootprintRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
-import com.happy.friendogly.remote.model.response.FootprintMarkBtnInfoResponse
 import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.MyPlaygroundResponse
+import com.happy.friendogly.remote.model.response.PetExistenceResponse
 import com.happy.friendogly.remote.model.response.PlaygroundInfoResponse
 import com.happy.friendogly.remote.model.response.PlaygroundResponse
 import retrofit2.Response
@@ -36,8 +36,8 @@ interface WoofService {
     @GET(ApiClient.PlayGround.GET_PLAYGROUNDS)
     suspend fun getPlaygrounds(): BaseResponse<List<PlaygroundResponse>>
 
-    @GET(ApiClient.Footprints.GET_FOOTPRINT_MINE_LATEST)
-    suspend fun getFootprintMarkBtnInfo(): BaseResponse<FootprintMarkBtnInfoResponse>
+    @GET(ApiClient.Pet.GET_PET_EXISTENCE)
+    suspend fun getPetExistence(): BaseResponse<PetExistenceResponse>
 
     @GET(ApiClient.PlayGround.GET_PLAYGROUND_INFO)
     suspend fun getPlaygroundInfo(

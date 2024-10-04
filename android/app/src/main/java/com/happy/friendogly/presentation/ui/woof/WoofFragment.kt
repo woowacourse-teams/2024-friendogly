@@ -34,7 +34,6 @@ import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertEndWalkSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertHasNotPetDialog
-import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofAlertActions.AlertMarkerRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions.MakeMyPlaygroundMarker
@@ -246,7 +245,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
             if (viewModel.myFootprintMarker.value != null &&
                 viewModel.myWalkStatus.value?.walkStatus != WalkStatus.AFTER &&
-                viewModel.uiState.value !is WoofUiState.RegisteringFootprint
+                viewModel.uiState.value !is WoofUiState.RegisteringPlayground
             ) {
                 pathOverlay.coords =
                     listOf(latLng, viewModel.myFootprintMarker.value?.marker?.position)
@@ -266,14 +265,14 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 }
             }
 
-            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
+            if (viewModel.uiState.value is WoofUiState.RegisteringPlayground) {
                 circleOverlay.center = map.cameraPosition.target
                 viewModel.updateRegisterFootprintBtnCameraIdle(cameraIdle = false)
             }
         }
 
         map.addOnCameraIdleListener {
-            if (viewModel.uiState.value is WoofUiState.RegisteringFootprint) {
+            if (viewModel.uiState.value is WoofUiState.RegisteringPlayground) {
                 viewModel.updateRegisterFootprintBtnCameraIdle(cameraIdle = true)
                 getAddress(map.cameraPosition.target)
             }
@@ -293,7 +292,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         .show(parentFragmentManager, tag)
 
                 is WoofUiState.FindingFriends -> hideRegisterFootprintScreen()
-                is WoofUiState.RegisteringFootprint -> {
+                is WoofUiState.RegisteringPlayground -> {
                     showRegisterFootprintScreen()
                 }
 
@@ -418,16 +417,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         .show(parentFragmentManager, tag)
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
-                is AlertMarkBtnClickBeforeTimeoutSnackbar ->
-                    showSnackbar(
-                        String.format(
-                            resources.getString(
-                                R.string.woof_cant_mark,
-                                event.remainingTime,
-                            ),
-                        ),
-                    )
-
                 is WoofAlertActions.AlertAddressOutOfKoreaSnackbar ->
                     showSnackbar(
                         resources.getString(
@@ -453,9 +442,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
-                is WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar -> {
+                is WoofAlertActions.AlertFailToCheckPetExistence -> {
                     showSnackbar(
-                        resources.getString(R.string.woof_fail_to_load_footprint_mark_btn_info),
+                        resources.getString(R.string.woof_fail_to_load_pet_existence_btn),
                     )
                     stopWalkService()
                 }

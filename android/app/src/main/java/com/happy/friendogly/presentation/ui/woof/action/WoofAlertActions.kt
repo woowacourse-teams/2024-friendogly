@@ -5,10 +5,6 @@ sealed interface WoofAlertActions {
 
     data object AlertHasNotPetDialog : WoofAlertActions
 
-    data class AlertMarkBtnClickBeforeTimeoutSnackbar(
-        val remainingTime: Int,
-    ) : WoofAlertActions
-
     data object AlertAddressOutOfKoreaSnackbar : WoofAlertActions
 
     data object AlertNotExistMyFootprintSnackbar : WoofAlertActions
@@ -19,7 +15,7 @@ sealed interface WoofAlertActions {
 
     data object AlertEndWalkSnackbar : WoofAlertActions
 
-    data object AlertFailToLoadFootprintMarkBtnInfoSnackbar : WoofAlertActions
+    data object AlertFailToCheckPetExistence : WoofAlertActions
 
     data object AlertFailToLoadPlaygroundsSnackbar : WoofAlertActions
 

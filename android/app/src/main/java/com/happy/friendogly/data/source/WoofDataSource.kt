@@ -1,8 +1,8 @@
 package com.happy.friendogly.data.source
 
-import com.happy.friendogly.data.model.FootprintMarkBtnInfoDto
 import com.happy.friendogly.data.model.FootprintRecentWalkStatusDto
 import com.happy.friendogly.data.model.MyPlaygroundDto
+import com.happy.friendogly.data.model.PetExistenceDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
@@ -16,7 +16,7 @@ interface WoofDataSource {
 
     suspend fun patchFootprintRecentWalkStatusManual(request: FootprintRecentWalkStatusManualRequest): Result<FootprintRecentWalkStatusDto>
 
-    suspend fun getFootprintMarkBtnInfo(): Result<FootprintMarkBtnInfoDto>
+    suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto>
 
     suspend fun getNearFootprints(): Result<List<PlaygroundDto>>
 

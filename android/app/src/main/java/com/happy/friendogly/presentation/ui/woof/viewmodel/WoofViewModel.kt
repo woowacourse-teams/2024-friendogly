@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toPlayground
 import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
-import com.happy.friendogly.domain.usecase.GetFootprintMarkBtnInfoUseCase
+import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundsUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
@@ -33,12 +33,12 @@ import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterFootprintBtnUiM
 import com.happy.friendogly.presentation.ui.woof.util.ANIMATE_DURATION_MILLIS
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
-import com.happy.friendogly.presentation.utils.logFootprintMarkBtnInfo
 import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
 import com.happy.friendogly.presentation.utils.logHelpBtnClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
-import com.happy.friendogly.presentation.utils.logMarkBtnClicked
 import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
+import com.happy.friendogly.presentation.utils.logPetExistence
+import com.happy.friendogly.presentation.utils.logPetExistenceBtnClicked
 import com.happy.friendogly.presentation.utils.logPetImageClicked
 import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
@@ -58,7 +58,7 @@ class WoofViewModel
         private val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
         private val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
         private val getPlaygroundsUseCase: GetPlaygroundsUseCase,
-        private val getFootprintMarkBtnInfoUseCase: GetFootprintMarkBtnInfoUseCase,
+        private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
         private val deleteFootprintUseCase: DeleteFootprintUseCase,
     ) : BaseViewModel(), WoofActionHandler {
@@ -115,10 +115,10 @@ class WoofViewModel
             }
         }
 
-        override fun clickMarkBtn() {
-            analyticsHelper.logMarkBtnClicked()
+        override fun clickPetExistenceBtn() {
+            analyticsHelper.logPetExistenceBtnClicked()
             runIfLocationPermissionGranted {
-                loadFootprintMarkBtnInfo()
+                checkPetExistence()
             }
         }
 
@@ -180,7 +180,7 @@ class WoofViewModel
         override fun clickHelpBtn() {
             analyticsHelper.logHelpBtnClicked()
             val textResId =
-                if (uiState.value is WoofUiState.RegisteringFootprint) {
+                if (uiState.value is WoofUiState.RegisteringPlayground) {
                     R.string.woof_register_playground_help
                 } else {
                     when (myWalkStatus.value?.walkStatus) {
@@ -208,32 +208,23 @@ class WoofViewModel
         override fun clickParticipatePlayground() {
         }
 
-        private fun loadFootprintMarkBtnInfo() {
+        private fun checkPetExistence() {
             viewModelScope.launch {
-                getFootprintMarkBtnInfoUseCase().onSuccess { footPrintMarkBtnInfo ->
-                    analyticsHelper.logFootprintMarkBtnInfo(
-                        footPrintMarkBtnInfo.hasPet,
-                        footPrintMarkBtnInfo.remainingTime(),
-                    )
-                    if (!footPrintMarkBtnInfo.hasPet) {
+                getPetExistenceUseCase().onSuccess { petExistence ->
+                    analyticsHelper.logPetExistence(petExistence.isExistPet)
+                    if (!petExistence.isExistPet) {
                         _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
-                    } else if (!footPrintMarkBtnInfo.isMarkBtnClickable()) {
-                        _alertActions.emit(
-                            WoofAlertActions.AlertMarkBtnClickBeforeTimeoutSnackbar(
-                                footPrintMarkBtnInfo.remainingTime(),
-                            ),
-                        )
                     } else {
                         _uiState.value = WoofUiState.Loading
                         Handler(Looper.getMainLooper()).postDelayed(
                             {
-                                _uiState.value = WoofUiState.RegisteringFootprint
+                                _uiState.value = WoofUiState.RegisteringPlayground
                             },
                             ANIMATE_DURATION_MILLIS,
                         )
                     }
                 }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadFootprintMarkBtnInfoSnackbar)
+                    _alertActions.emit(WoofAlertActions.AlertFailToCheckPetExistence)
                 }
             }
         }
