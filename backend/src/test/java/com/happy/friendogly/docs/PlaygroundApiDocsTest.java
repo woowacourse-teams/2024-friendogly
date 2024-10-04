@@ -1,6 +1,7 @@
 package com.happy.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,7 +20,11 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
+import com.happy.friendogly.pet.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.controller.PlaygroundController;
+import com.happy.friendogly.playground.domain.Location;
+import com.happy.friendogly.playground.domain.Playground;
+import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
@@ -251,6 +256,52 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundSummaryResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("놀이터 참여합니다.")
+    @Test
+    void joinPlayground() throws Exception {
+
+        PlaygroundMember playgroundMember = new PlaygroundMember(
+                new Playground(new Location(37.5173316, 127.1011661)),
+                new Member("name", "tag", "imageUrl")
+        );
+        SaveJoinPlaygroundMemberResponse response = SaveJoinPlaygroundMemberResponse.from(playgroundMember);
+
+        when(playgroundCommandService.joinPlayground(anyLong(), anyLong()))
+                .thenReturn(response);
+        
+        mockMvc
+                .perform(post("/playgrounds/{playgroundId}/join", 1)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isOk())
+                .andDo(document("playgrounds/saveJoinPlaygroundMember",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("놀이터 참여 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.playground.id").description("놀이터의 ID"),
+                                        fieldWithPath("data.playground.location.latitude").description("놀이터의 위도"),
+                                        fieldWithPath("data.playground.location.longitude").description("놀이터의 경도"),
+                                        fieldWithPath("data.member.id").description("멤버의 ID"),
+                                        fieldWithPath("data.member.name.value").description("멤버의 이름"),
+                                        fieldWithPath("data.member.tag").description("멤버의 tag"),
+                                        fieldWithPath("data.member.imageUrl").description("멤버의 이미지URL"),
+                                        fieldWithPath("data.message").description("멤버의 상태 메세지"),
+                                        fieldWithPath("data.isInside").description("멤버의 놀이터 내부 유무"),
+                                        fieldWithPath("data.exitTime").description("멤버의 놀이터 나간 시간")
+                                )
+                                .responseSchema(Schema.schema("SavePlaygroundResponse"))
                                 .build()
                         )
                 ))

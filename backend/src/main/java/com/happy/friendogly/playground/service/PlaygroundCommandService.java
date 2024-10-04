@@ -3,6 +3,7 @@ package com.happy.friendogly.playground.service;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.pet.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
@@ -75,5 +76,17 @@ public class PlaygroundCommandService {
         if (isExistWithinRadius) {
             throw new FriendoglyException("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
         }
+    }
+
+    public SaveJoinPlaygroundMemberResponse joinPlayground(Long memberId, Long playgroundId) {
+        Playground playground = playgroundRepository.getById(playgroundId);
+        Member member = memberRepository.getById(memberId);
+        PlaygroundMember playgroundMember = playgroundMemberRepository.save(
+                new PlaygroundMember(
+                        playground,
+                        member
+                )
+        );
+        return SaveJoinPlaygroundMemberResponse.from(playgroundMember);
     }
 }

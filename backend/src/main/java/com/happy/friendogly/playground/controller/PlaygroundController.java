@@ -2,6 +2,7 @@ package com.happy.friendogly.playground.controller;
 
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
+import com.happy.friendogly.pet.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
@@ -70,5 +71,15 @@ public class PlaygroundController {
             @Valid @RequestBody UpdatePlaygroundArrivalRequest request
     ) {
         return ApiResponse.ofSuccess(new UpdatePlaygroundArrivalResponse(true));
+    }
+
+    @PostMapping("/{playgroundId}/join")
+    public ApiResponse<SaveJoinPlaygroundMemberResponse> saveJoinMember(
+            @Auth Long memberId,
+            @PathVariable Long playgroundId
+    ) {
+        SaveJoinPlaygroundMemberResponse response = playgroundCommandService
+                .joinPlayground(memberId, playgroundId);
+        return ApiResponse.ofSuccess(response);
     }
 }
