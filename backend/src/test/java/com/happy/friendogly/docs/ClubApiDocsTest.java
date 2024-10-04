@@ -51,6 +51,8 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,10 +78,13 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "송파구",
                 "신천동",
                 Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                LocalDateTime.of(1, 1, 1, 0, 0, 0),
+                0L
         );
 
-        List<FindClubByFilterResponse> responses = List.of(new FindClubByFilterResponse(
+        Slice<FindClubByFilterResponse> responses = new SliceImpl<>(
+                List.of(new FindClubByFilterResponse(
                         1L,
                         "모임 제목1",
                         "모임 본문 내용1",
@@ -108,7 +113,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         1,
                         "https:/clubImage2.com",
                         List.of("https://petImage1.com")
-                )
+                ))
         );
 
         when(clubQueryService.findByFilter(anyLong(), any()))
@@ -121,7 +126,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                         .param("city", request.city())
                         .param("village", request.village())
                         .param("genderParams", request.genderParams().toArray(String[]::new))
-                        .param("sizeParams", request.sizeParams().toArray(String[]::new)))
+                        .param("sizeParams", request.sizeParams().toArray(String[]::new))
+                        .param("lastFoundCreatedAt", request.lastFoundCreatedAt().toString())
+                        .param("lastFoundId", String.valueOf(request.lastFoundId())))
                 .andExpect(status().isOk())
                 .andDo(document("clubs/findSearching/200",
                         getDocumentRequest(),
@@ -138,7 +145,9 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         parameterWithName("city").description("모임의 시/군/구 주소, nullable"),
                                         parameterWithName("village").description("모임의 읍/면/동주소, nullable"),
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
-                                        parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"))
+                                        parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"),
+                                        parameterWithName("lastFoundCreatedAt").description("마지막으로 조회한 모임의 생성시간 (yyyy-MM-dd'T'HH:mm:ss), 첫 페이지 조회 시 9999-12-31T23:59:59"),
+                                        parameterWithName("lastFoundId").description("마지막으로 조회한 모임의 id, 첫 페이지 조회 시 0x7fffffffffffffff"))
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
                                         fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("모임 식별자"),

@@ -18,6 +18,7 @@ import com.happy.friendogly.common.ApiResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class ClubController {
     }
 
     @GetMapping("/searching")
-    public ApiResponse<List<FindClubByFilterResponse>> findByFilter(
+    public ApiResponse<Slice<FindClubByFilterResponse>> findByFilter(
             @Auth Long memberId,
             @Valid @ModelAttribute FindClubByFilterRequest request
     ) {

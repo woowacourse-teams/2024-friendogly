@@ -16,12 +16,14 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Slice;
 
 
 class ClubQueryServiceTest extends ClubServiceTest {
@@ -64,18 +66,20 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 city,
                 null,
                 Set.of(Gender.FEMALE.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
         );
 
-        List<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        Slice<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
         List<FindClubByFilterResponse> expectedResponses = List.of(
                 new FindClubByFilterResponse(club2, List.of(petImageUrl)),
                 new FindClubByFilterResponse(club1, List.of(petImageUrl))
         );
 
-        FindClubByFilterResponse actual1 = responses.get(0);
+        FindClubByFilterResponse actual1 = responses.getContent().get(0);
         FindClubByFilterResponse expected1 = expectedResponses.get(0);
-        FindClubByFilterResponse actual2 = responses.get(1);
+        FindClubByFilterResponse actual2 = responses.getContent().get(1);
         FindClubByFilterResponse expected2 = expectedResponses.get(1);
 
         assertAll(
@@ -123,12 +127,14 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 city,
                 village,
                 Set.of(Gender.MALE.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                LocalDateTime.of(1, 1, 1, 0, 0, 0),
+                0L
         );
 
-        List<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        Slice<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
 
-        assertThat(responses.isEmpty()).isTrue();
+        assertThat(responses.getContent().isEmpty()).isTrue();
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")

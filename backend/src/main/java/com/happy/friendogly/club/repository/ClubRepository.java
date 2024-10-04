@@ -4,9 +4,12 @@ import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.SizeType;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,19 +20,28 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
             SELECT C
             FROM Club AS C
             WHERE C.address.province = :province
-                AND C.id IN (
-                    SELECT CG.clubGenderId.club.id
+                AND C.createdAt <= :lastFoundCreatedAt
+                AND C.id < :lastFoundId
+                AND EXISTS (
+                    SELECT 1
                     FROM ClubGender CG
-                    WHERE CG.clubGenderId.allowedGender IN :searchingGenders
+                    WHERE C = CG.clubGenderId.club AND CG.clubGenderId.allowedGender IN :searchingGenders
                 )
-                AND C.id IN (
-                    SELECT CS.clubSizeId.club.id
+                AND EXISTS (
+                    SELECT 1
                     FROM ClubSize CS
-                    WHERE CS.clubSizeId.allowedSize IN :searchingSizes
+                    WHERE C = CS.clubSizeId.club AND CS.clubSizeId.allowedSize IN :searchingSizes
                 )
-            ORDER BY C.createdAt DESC
+            ORDER BY C.createdAt DESC, C.id DESC 
             """)
-    List<Club> findAllBy(String province, Set<Gender> searchingGenders, Set<SizeType> searchingSizes);
+    Slice<Club> findAllBy(
+            String province,
+            Set<Gender> searchingGenders,
+            Set<SizeType> searchingSizes,
+            Pageable pageable,
+            LocalDateTime lastFoundCreatedAt,
+            Long lastFoundId
+    );
 
     @Query(value = """
             SELECT C
