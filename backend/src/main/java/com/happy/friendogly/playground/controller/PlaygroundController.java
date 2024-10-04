@@ -43,13 +43,9 @@ public class PlaygroundController {
             @Auth Long memberId,
             @Valid @RequestBody SavePlaygroundRequest request
     ) {
-        SavePlaygroundResponse savePlaygroundResponse = new SavePlaygroundResponse(
-                1L,
-                request.latitude(),
-                request.longitude()
-        );
-        return ResponseEntity.created(URI.create("/playgrounds/" + 1))
-                .body(ApiResponse.ofSuccess(savePlaygroundResponse));
+        SavePlaygroundResponse response = playgroundCommandService.save(request, memberId);
+        return ResponseEntity.created(URI.create("/playgrounds/" + response.id()))
+                .body(ApiResponse.ofSuccess(response));
     }
 
     @GetMapping("/{playgroundId}")

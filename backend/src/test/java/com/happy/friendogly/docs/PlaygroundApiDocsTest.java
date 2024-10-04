@@ -3,6 +3,7 @@ package com.happy.friendogly.docs;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -23,6 +24,7 @@ import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
@@ -45,6 +47,16 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @Test
     void save() throws Exception {
         SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
+
+        SavePlaygroundResponse response = new SavePlaygroundResponse(
+                1L,
+                request.latitude(),
+                request.longitude()
+        );
+
+        when(playgroundCommandService.save(any(), anyLong()))
+                .thenReturn(response);
+
         mockMvc
                 .perform(post("/playgrounds")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
