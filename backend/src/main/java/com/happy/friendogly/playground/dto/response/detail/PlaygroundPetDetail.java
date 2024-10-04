@@ -22,15 +22,15 @@ public record PlaygroundPetDetail(
 
     public static List<PlaygroundPetDetail> getListOf(
             List<Pet> pets,
-            PlaygroundMember petOwner,
+            PlaygroundMember playgroundMember,
             boolean isMyPet
     ) {
         return pets.stream()
                 .map(pet -> PlaygroundPetDetail.of(
-                        petOwner.getId(),
+                        playgroundMember.getMember().getId(),
                         pet,
-                        petOwner.getMessage(),
-                        petOwner.isInside(),
+                        playgroundMember.getMessage(),
+                        playgroundMember.isInside(),
                         isMyPet
                 ))
                 .toList();
