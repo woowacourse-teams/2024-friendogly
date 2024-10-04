@@ -6,8 +6,10 @@ import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class PetQueryService {
 
     private final PetRepository petRepository;
