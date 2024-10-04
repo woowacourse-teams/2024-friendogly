@@ -1,10 +1,14 @@
 package com.happy.friendogly.local.source
 
 import com.happy.friendogly.data.mapper.toLocal
+import com.happy.friendogly.data.model.GenderDto
 import com.happy.friendogly.data.model.RecentPetDto
+import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.data.source.RecentPetsDataSource
 import com.happy.friendogly.local.dao.RecentPetsDao
 import com.happy.friendogly.local.mapper.toData
+import kotlinx.datetime.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RecentPetsDataSourceImpl
@@ -24,9 +28,12 @@ class RecentPetsDataSourceImpl
             }
 
         override suspend fun insertRecentPet(
-            imgUrl: String,
-            name: String,
             id: Long,
+            name: String,
+            imgUrl: String,
+            birthday: LocalDate,
+            gender: GenderDto,
+            sizeType: SizeTypeDto,
         ): Result<Unit> =
             runCatching {
                 val recentPetDto =
@@ -34,6 +41,10 @@ class RecentPetsDataSourceImpl
                         memberId = id,
                         imgUrl = imgUrl,
                         name = name,
+                        birthday = birthday,
+                        gender = gender,
+                        sizeType = sizeType,
+                        createAt = LocalDateTime.now(),
                     )
                 dao.insertRecentPet(recentPetEntity = recentPetDto.toLocal())
             }

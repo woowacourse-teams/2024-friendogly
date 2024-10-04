@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.happy.friendogly.local.dao.RecentPetsDao
+import com.happy.friendogly.local.model.GenderEntity
 import com.happy.friendogly.local.model.RecentPetEntity
+import com.happy.friendogly.local.model.SizeTypeEntity
 import com.happy.friendogly.local.room.RecentPetsDatabase
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -69,6 +72,9 @@ class RecentPetsDatabaseTest {
                 memberId = 0L,
                 imgUrl = "imageUrl",
                 name = "땡이",
+                birthday = LocalDate(2024, 10, 2),
+                gender = GenderEntity.FEMALE,
+                sizeType = SizeTypeEntity.SMALL,
             )
 
         private val DUMMY_RECENT_PETS =

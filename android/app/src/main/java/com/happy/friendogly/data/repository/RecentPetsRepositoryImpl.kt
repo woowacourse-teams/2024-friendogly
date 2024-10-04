@@ -1,11 +1,15 @@
 package com.happy.friendogly.data.repository
 
+import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.RecentPetsDataSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.RecentPet
+import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.repository.RecentPetsRepository
+import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
 class RecentPetsRepositoryImpl
@@ -34,14 +38,20 @@ class RecentPetsRepositoryImpl
             )
 
         override suspend fun insertRecentPet(
-            imgUrl: String,
-            name: String,
             id: Long,
+            name: String,
+            imgUrl: String,
+            birthday: LocalDate,
+            gender: Gender,
+            sizeType: SizeType,
         ): DomainResult<Unit, DataError.Local> {
             return dataSource.insertRecentPet(
-                imgUrl = imgUrl,
-                name = name,
                 id = id,
+                name = name,
+                imgUrl = imgUrl,
+                birthday = birthday,
+                gender = gender.toData(),
+                sizeType = sizeType.toData(),
             ).fold(
                 onSuccess = { recentPetDto ->
                     DomainResult.Success(recentPetDto)

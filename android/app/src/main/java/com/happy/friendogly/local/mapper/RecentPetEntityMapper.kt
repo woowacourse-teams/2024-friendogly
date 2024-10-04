@@ -8,4 +8,8 @@ fun RecentPetEntity.toData(): RecentPetDto =
         memberId = id,
         name = name,
         imgUrl = imgUrl,
+        birthday = birthday,
+        gender = gender.toData(),
+        sizeType = sizeType.toData(),
+        createAt = createdAt,
     )
