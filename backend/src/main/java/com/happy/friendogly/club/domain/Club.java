@@ -199,9 +199,8 @@ public class Club {
     public boolean isJoinable(Member member, List<Pet> pets) {
         boolean hasJoinablePet = pets.stream()
                 .anyMatch(this::canJoinWith);
-        boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
-        return hasJoinablePet && isNotFull && !isAlreadyJoined(member) && isOpen();
+        return hasJoinablePet && !isAlreadyJoined(member) && isOpen();
     }
 
     public void removeClubMember(Member member) {
