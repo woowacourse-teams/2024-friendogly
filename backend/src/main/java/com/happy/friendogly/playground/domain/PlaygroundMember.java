@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class PlaygroundMember {
     @JoinColumn(name = "playground_id", nullable = false)
     private Playground playground;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -52,5 +53,16 @@ public class PlaygroundMember {
         this.message = message;
         this.isInside = isInside;
         this.exitTime = exitTime;
+    }
+
+    public PlaygroundMember(
+            Playground playground,
+            Member member
+    ) {
+        this(playground, member, null, false, null);
+    }
+
+    public boolean equalsMemberId(Long memberId) {
+        return member.getId().equals(memberId);
     }
 }

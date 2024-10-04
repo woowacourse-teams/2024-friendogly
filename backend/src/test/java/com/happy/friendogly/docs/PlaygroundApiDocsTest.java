@@ -3,6 +3,9 @@ package com.happy.friendogly.docs;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -12,19 +15,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
+import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Gender;
+import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.controller.PlaygroundController;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
+import com.happy.friendogly.playground.service.PlaygroundCommandService;
+import com.happy.friendogly.playground.service.PlaygroundQueryService;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
 public class PlaygroundApiDocsTest extends RestDocsTest {
+
+    @Mock
+    private PlaygroundQueryService playgroundQueryService;
+
+    @Mock
+    private PlaygroundCommandService playgroundCommandService;
 
     @DisplayName("놀이터를 저장")
     @Test
     void save() throws Exception {
         SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
+
+        SavePlaygroundResponse response = new SavePlaygroundResponse(
+                1L,
+                request.latitude(),
+                request.longitude()
+        );
+
+        when(playgroundCommandService.save(any(), anyLong()))
+                .thenReturn(response);
+
         mockMvc
                 .perform(post("/playgrounds")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
@@ -88,8 +120,38 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터의 정보를 조회")
     @Test
     void find() throws Exception {
+
+        Pet dummyPet1 = new Pet(
+                new Member("김도선", "tag1", "imgaeUrl"),
+                "초코",
+                "뛰어놀기 좋아해요",
+                LocalDate.of(2024, 9, 27),
+                SizeType.LARGE,
+                Gender.FEMALE,
+                "https://i.pinimg.com/564x/d1/62/cb/d162cb12dfa0011a7bd67188a14d661c.jpg"
+        );
+        FindPlaygroundDetailResponse response = new FindPlaygroundDetailResponse(
+                1L,
+                3,
+                0,
+                false,
+                List.of(
+                        PlaygroundPetDetail.of(
+                                1L,
+                                dummyPet1,
+                                null,
+                                true,
+                                false
+                        )
+                )
+        );
+
+        when(playgroundQueryService.findDetail(anyLong(), anyLong()))
+                .thenReturn(response);
+
         mockMvc
-                .perform(get("/playgrounds/{id}", 1L))
+                .perform(get("/playgrounds/{id}", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
                 .andDo(document("playgrounds/find",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -104,6 +166,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.id").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("놀이터에 참여한 전체 강아지 수"),
                                         fieldWithPath("data.arrivedPetCount").description("놀이터에 도착한 강아지 수"),
+                                        fieldWithPath("data.isParticipating").description("놀이터에 참여했는지 여부"),
                                         fieldWithPath("data.playgroundPetDetails.[].memberId")
                                                 .description("강아지 주인 멤버ID"),
                                         fieldWithPath("data.playgroundPetDetails.[].petId")
@@ -135,6 +198,17 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("모든 놀이터의 위치 정보를 조회")
     @Test
     void findAllLocation() throws Exception {
+
+        List<FindPlaygroundLocationResponse> response = List.of(
+                new FindPlaygroundLocationResponse(1L, 37.5173316, 127.1011661, true),
+                new FindPlaygroundLocationResponse(2L, 37.5185122, 127.098778, false),
+                new FindPlaygroundLocationResponse(3L, 37.5136533, 127.0983182, false),
+                new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
+        );
+
+        when(playgroundQueryService.findLocations(anyLong()))
+                .thenReturn(response);
+
         mockMvc
                 .perform(get("/playgrounds/locations")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
@@ -150,7 +224,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].id").description("놀이터의 ID"),
                                         fieldWithPath("data.[].latitude").description("놀이터의 위도"),
                                         fieldWithPath("data.[].longitude").description("놀이터의 경도"),
-                                        fieldWithPath("data.[].isParticipated").description("놀이터 참여 유무")
+                                        fieldWithPath("data.[].isParticipating").description("놀이터 참여 유무")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundLocationResponse"))
                                 .build()
@@ -185,6 +259,6 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
 
     @Override
     protected Object controller() {
-        return new PlaygroundController();
+        return new PlaygroundController(playgroundCommandService, playgroundQueryService);
     }
 }
