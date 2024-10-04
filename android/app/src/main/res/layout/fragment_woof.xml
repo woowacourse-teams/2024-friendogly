@@ -22,7 +22,7 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/layout_playground_detail"
-            playgroundDetailVisibility="@{vm.myPlaygroundMarker}"
+            playgroundDetailVisibility="@{vm.myPlayground}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible"
@@ -56,7 +56,7 @@
                     android:id="@+id/btn_playground"
                     style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
                     playgroundAction="@{vm}"
-                    playgroundBtn="@{vm.myPlaygroundMarker}"
+                    playgroundBtn="@{vm.myPlayground}"
                     playgroundBtnVisibility="@{vm.playgroundInfo}"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -126,7 +126,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_location"
-            locationBtnMargin="@{vm.myPlaygroundMarker}"
+            locationBtnMargin="@{vm.myPlayground}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -144,7 +144,7 @@
 
         <FrameLayout
             android:id="@+id/btn_woof_location"
-            locationBtnMargin="@{vm.myPlaygroundMarker}"
+            locationBtnMargin="@{vm.myPlayground}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
@@ -154,7 +154,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/btn_woof_my_footprint"
+            android:id="@+id/btn_woof_my_playground"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
             uiState="@{vm.uiState}"
             android:layout_width="48dp"
@@ -163,7 +163,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/rect_coral400_fill_12"
             android:gravity="center"
-            android:onClick="@{() -> vm.clickMyFootprintBtn()}"
+            android:onClick="@{() -> vm.clickMyPlaygroundBtn()}"
             android:text="@string/woof_my_footprint"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/btn_woof_location"
@@ -172,7 +172,7 @@
 
         <ImageButton
             android:id="@+id/btn_playground_pet_existence"
-            petExistenceBtnVisibility="@{vm.myPlaygroundMarker}"
+            petExistenceBtnVisibility="@{vm.myPlayground}"
             uiState="@{vm.uiState}"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -207,11 +207,11 @@
             registerLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="12dp"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.naver.maps.map.widget.LocationButtonView
                 android:id="@+id/lbv_woof_register_location"
@@ -226,10 +226,27 @@
             registerLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="12dp"
             android:onClick="@{() -> vm.clickLocationBtn()}"
             android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/btn_playground_registering_help"
+            helpBtnVisibility="@{vm.uiState}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rect_coral10_fill_50"
+            android:elevation="10dp"
+            android:onClick="@{() -> vm.clickHelpBtn()}"
+            android:padding="6dp"
+            android:src="@drawable/ic_help_coral500"
             app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -244,7 +261,7 @@
             android:paddingHorizontal="6dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_woof_register_walk_area"

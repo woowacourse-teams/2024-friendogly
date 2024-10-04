@@ -43,8 +43,8 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter
+import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
 import com.happy.friendogly.presentation.ui.woof.model.Playground
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkService
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
@@ -68,8 +68,6 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.datetime.toJavaLocalDateTime
-import java.time.Duration
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.cos
@@ -243,12 +241,11 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
 
-            if (viewModel.myPlaygroundMarker.value != null &&
-                viewModel.myWalkStatus.value?.walkStatus != WalkStatus.AFTER &&
+            if (viewModel.myPlayground.value != null &&
                 viewModel.uiState.value !is WoofUiState.RegisteringPlayground
             ) {
                 pathOverlay.coords =
-                    listOf(latLng, viewModel.myPlaygroundMarker.value?.marker?.position)
+                    listOf(latLng, viewModel.myPlayground.value?.marker?.position)
             }
         }
 
@@ -291,9 +288,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
-                is WoofUiState.FindingPlayground -> hideRegisterFootprintScreen()
+                is WoofUiState.FindingPlayground -> hideRegisterPlaygroundScreen()
                 is WoofUiState.RegisteringPlayground -> {
-                    showRegisterFootprintScreen()
+                    showRegisterPlaygroundScreen()
                 }
 
                 is WoofUiState.ViewingPlaygroundInfo -> {
@@ -312,53 +309,36 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             adapter.submitList(playgroundInfo.petDetails)
         }
 
-        viewModel.myWalkStatus.observe(viewLifecycleOwner) { myWalkStatus ->
-            stopWalkService()
-            if (myWalkStatus == null) {
-                val myFootprintMarker = viewModel.myPlaygroundMarker.value ?: return@observe
-                myFootprintMarker.marker.map = null
-                circleOverlay.map = null
-                pathOverlay.map = null
-                return@observe
-            }
-
-            if (myWalkStatus.walkStatus == WalkStatus.AFTER) {
+        viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
+            if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
+                val myPlaygroundMarker = viewModel.myPlayground.value ?: return@observe
+                myPlaygroundMarker.marker.map = null
                 circleOverlay.map = null
                 pathOverlay.map = null
                 balloon?.dismiss()
-            } else {
-//                startWalkStatusChronometer(myWalkStatus.changedWalkStatusTime)
-                startWalkService()
-                val textResId =
-                    if (myWalkStatus.walkStatus == WalkStatus.BEFORE) {
-                        R.string.woof_walk_before_help
-                    } else {
-                        R.string.woof_walk_ongoing_help
-                    }
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        showHelpBalloon(textRestId = textResId)
-                    },
-                    DELAY_MILLIS,
-                )
             }
+//            else {
+//                startWalkStatusChronometer(myPlayStatus.changedWalkStatusTime)
+//            }
         }
 
-        viewModel.myPlaygroundMarker.observe(viewLifecycleOwner) { myFootprintMarker ->
-            if (myFootprintMarker != null) {
-                myFootprintMarker.marker.map = map
-                setUpCircleOverlay(myFootprintMarker.marker.position)
+        viewModel.myPlayground.observe(viewLifecycleOwner) { myPlaygroundMarker ->
+            if (myPlaygroundMarker != null) {
+                startWalkService()
+                myPlaygroundMarker.marker.map = map
+                setUpCircleOverlay(myPlaygroundMarker.marker.position)
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
-                viewModel.loadPlaygroundInfo(myFootprintMarker.playgroundId)
-                viewModel.updateFootprintRecentWalkStatus(latLng)
+                viewModel.loadPlaygroundInfo(myPlaygroundMarker.playgroundId)
+                viewModel.updatePlaygroundArrival(latLng)
             } else {
+                stopWalkService()
                 bottomSheetBehavior.isHideable = true
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
 
-        viewModel.nearPlaygroundMarkers.observe(viewLifecycleOwner) {
+        viewModel.nearPlaygrounds.observe(viewLifecycleOwner) {
             clearNearPlaygroundMarkers()
             markNearPlaygroundMarkers()
         }
@@ -366,14 +346,14 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is MakeMyPlaygroundMarker -> {
-                    val previousMyFootprintMarker = viewModel.myPlaygroundMarker.value
+                    val previousMyFootprintMarker = viewModel.myPlayground.value
                     if (previousMyFootprintMarker != null) {
                         previousMyFootprintMarker.marker.map = null
                     }
 
                     if (event.myPlayground != null) {
-                        val myMarker = createMarker(playground = event.myPlayground)
-                        viewModel.loadMyPlaygroundMarker(myMarker)
+                        val marker = createMarker(playground = event.myPlayground)
+                        viewModel.loadMyPlayground(marker)
                     } else {
                         circleOverlay.map = null
                         pathOverlay.map = null
@@ -387,7 +367,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                             marker
                         }
                     clearNearPlaygroundMarkers()
-                    viewModel.loadNearPlaygroundMarkers(nearFootprintMarkers)
+                    viewModel.loadNearPlaygrounds(nearFootprintMarkers)
                 }
 
                 is WoofMapActions.RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
@@ -425,29 +405,27 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     )
 
                 is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
-                is WoofAlertActions.AlertNotExistMyFootprintSnackbar ->
+                is WoofAlertActions.AlertNotExistMyPlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_not_exist_my_footprint,
+                            R.string.woof_not_exist_my_playground,
                         ),
                     )
 
-                is WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar -> {
+                is WoofAlertActions.AlertExitMyPlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_delete_my_footprint_marker,
+                            R.string.woof_exit_my_playground,
                         ),
                     )
-                    stopWalkService()
-                }
 
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
-                is WoofAlertActions.AlertFailToCheckPetExistence -> {
+                is WoofAlertActions.AlertFailToCheckPetExistence ->
                     showSnackbar(
-                        resources.getString(R.string.woof_fail_to_load_pet_existence_btn),
+                        resources.getString(
+                            R.string.woof_fail_to_load_pet_existence_btn,
+                        ),
                     )
-                    stopWalkService()
-                }
 
                 is WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar ->
                     showSnackbar(
@@ -463,9 +441,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
-                is WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar ->
+                is WoofAlertActions.AlertFailToUpdatePlaygroundArrival ->
                     showSnackbar(
-                        resources.getString(R.string.woof_fail_to_update_footprint_walk_status),
+                        resources.getString(R.string.woof_fail_to_update_playground_arrival),
                     )
 
                 is WoofAlertActions.AlertFailToEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_fail_to_end_walk))
@@ -565,7 +543,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setUpPathOverlay() {
-        pathOverlay.coords = listOf(latLng, viewModel.myPlaygroundMarker.value?.marker?.position)
+        pathOverlay.coords = listOf(latLng, viewModel.myPlayground.value?.marker?.position)
         pathOverlay.width = 30
         pathOverlay.outlineWidth = 0
         pathOverlay.patternImage = OverlayImage.fromResource(R.drawable.ic_path_pattern)
@@ -599,7 +577,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     ) {
         marker.setOnClickListener {
             changePreviousClickedMarkerSize()
-            viewModel.loadRecentlyClickedMarker(marker)
+            viewModel.loadRecentlyClickedPlayground(marker)
             viewModel.loadPlaygroundInfo(playgroundId = playgroundId)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
@@ -613,10 +591,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         return if (playground.isParticipating) R.drawable.ic_marker_ongoing_clicked else R.drawable.ic_marker_before_clicked
     }
 
-    private fun showRegisterFootprintScreen() {
-        val myFootprintMarker = viewModel.myPlaygroundMarker.value
-        if (myFootprintMarker != null) {
-            myFootprintMarker.marker.map = null
+    private fun showRegisterPlaygroundScreen() {
+        val myPlayground = viewModel.myPlayground.value
+        if (myPlayground != null) {
+            myPlayground.marker.map = null
             pathOverlay.map = null
         }
         setUpCircleOverlay(map.cameraPosition.target)
@@ -631,16 +609,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    private fun hideRegisterFootprintScreen() {
-        val myFootprintMarker = viewModel.myPlaygroundMarker.value
-        if (myFootprintMarker != null) {
-            myFootprintMarker.marker.map = map
-            if (viewModel.myWalkStatus.value?.walkStatus != WalkStatus.AFTER) {
-                circleOverlay.center = myFootprintMarker.marker.position
-                pathOverlay.map = map
-            } else {
-                circleOverlay.map = null
-            }
+    private fun hideRegisterPlaygroundScreen() {
+        val myPlayground = viewModel.myPlayground.value
+        if (myPlayground != null) {
+            myPlayground.marker.map = map
+            circleOverlay.center = myPlayground.marker.position
+            pathOverlay.map = map
         } else {
             circleOverlay.map = null
         }
@@ -648,7 +622,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun changePreviousClickedMarkerSize() {
-        val recentlyClickedMarker = viewModel.recentlyClickedMarker.value ?: return
+        val recentlyClickedMarker = viewModel.recentlyClickedPlayground.value ?: return
         recentlyClickedMarker.width = MARKER_DEFAULT_WIDTH
         recentlyClickedMarker.height = MARKER_DEFAULT_HEIGHT
     }
@@ -659,7 +633,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun clearNearPlaygroundMarkers() {
-        val nearPlaygroundMarkers = viewModel.nearPlaygroundMarkers.value ?: return
+        val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
         nearPlaygroundMarkers.forEach { playgroundMarker ->
             playgroundMarker.map = null
         }
@@ -713,22 +687,22 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun startWalkService() {
-        val myWalkStatus = viewModel.myWalkStatus.value ?: return
-        val walkStatus = myWalkStatus.walkStatus
-        val now = java.time.LocalDateTime.now()
-        val duration =
-            Duration.between(myWalkStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
-        val startMillis = System.currentTimeMillis() - duration.toMillis()
-        val myFootprintMarker = viewModel.myPlaygroundMarker.value ?: return
-        val position = myFootprintMarker.marker.position
+//        val myPlayStatus = viewModel.myPlayStatus.value ?: return
+//        val walkStatus = myPlayStatus.walkStatus
+//        val now = java.time.LocalDateTime.now()
+//        val duration =
+//            Duration.between(myPlayStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
+//        val startMillis = System.currentTimeMillis() - duration.toMillis()
+//        val myFootprintMarker = viewModel.myPlayground.value ?: return
+//        val position = myFootprintMarker.marker.position
 
-        val intent = WoofWalkService.getIntent(requireContext(), walkStatus, startMillis, position)
+        val intent = WoofWalkService.getIntent(requireContext())
         requireContext().startForegroundService(intent)
     }
 
     private fun monitorDistanceAndManageWalkStatus() {
         val distanceResults = FloatArray(1)
-        val myFootprintMarker = viewModel.myPlaygroundMarker.value ?: return
+        val myFootprintMarker = viewModel.myPlayground.value ?: return
         val position = myFootprintMarker.marker.position
         Location.distanceBetween(
             latLng.latitude,
@@ -739,22 +713,23 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         )
         val distance = distanceResults[0]
 
-        if (startWalkIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
-            viewModel.updateFootprintRecentWalkStatus(latLng)
+        if (startPlayingIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
+            viewModel.updatePlaygroundArrival(latLng)
         }
     }
 
-    private fun startWalkIfWithinRange(distance: Float): Boolean {
-        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
-        return myWalkStatus.walkStatus == WalkStatus.BEFORE && distance <= WALKING_RADIUS
+    private fun startPlayingIfWithinRange(distance: Float): Boolean {
+        val myPlayStatus = viewModel.myPlayStatus.value ?: return false
+        return myPlayStatus == PlayStatus.AWAY && distance <= WALKING_RADIUS
     }
 
     private fun endWalkIfOutOfRange(distance: Float): Boolean {
-        val myWalkStatus = viewModel.myWalkStatus.value ?: return false
-        if (myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS) {
+        val myPlayStatus = viewModel.myPlayStatus.value ?: return false
+        if (myPlayStatus == PlayStatus.PLAYING && distance > WALKING_RADIUS) {
             stopWalkService()
+            return true
         }
-        return myWalkStatus.walkStatus == WalkStatus.ONGOING && distance > WALKING_RADIUS
+        return false
     }
 
     private fun stopWalkService() {
@@ -771,7 +746,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 //    }
 
     private fun markNearPlaygroundMarkers() {
-        val nearPlaygroundMarkers = viewModel.nearPlaygroundMarkers.value ?: return
+        val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
         nearPlaygroundMarkers.forEach { playgroundMarker ->
             playgroundMarker.map = map
         }
@@ -804,7 +779,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     newState: Int,
                 ) {
                     if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                        if (viewModel.myPlaygroundMarker.value != null) {
+                        if (viewModel.myPlayground.value != null) {
                             changePreviousClickedMarkerSize()
                         }
                         binding.rcvPlayground.smoothScrollToPosition(0)

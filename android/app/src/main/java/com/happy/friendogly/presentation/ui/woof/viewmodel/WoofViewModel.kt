@@ -11,8 +11,7 @@ import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
 import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundsUseCase
-import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
-import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualUseCase
+import com.happy.friendogly.domain.usecase.PatchPlaygroundArrivalUseCase
 import com.happy.friendogly.domain.usecase.PostPlaygroundUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -24,8 +23,7 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofMapActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions
 import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
+import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.uimodel.MyPlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
@@ -36,7 +34,7 @@ import com.happy.friendogly.presentation.utils.logCloseBtnClicked
 import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
 import com.happy.friendogly.presentation.utils.logHelpBtnClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
-import com.happy.friendogly.presentation.utils.logMyFootprintBtnClicked
+import com.happy.friendogly.presentation.utils.logMyPlaygroundBtnClicked
 import com.happy.friendogly.presentation.utils.logPetExistence
 import com.happy.friendogly.presentation.utils.logPetExistenceBtnClicked
 import com.happy.friendogly.presentation.utils.logPetImageClicked
@@ -55,8 +53,7 @@ class WoofViewModel
     constructor(
         private val analyticsHelper: AnalyticsHelper,
         private val postPlaygroundUseCase: PostPlaygroundUseCase,
-        private val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
-        private val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
+        private val patchPlaygroundArrivalUseCase: PatchPlaygroundArrivalUseCase,
         private val getPlaygroundsUseCase: GetPlaygroundsUseCase,
         private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
@@ -65,18 +62,18 @@ class WoofViewModel
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
         val uiState: LiveData<WoofUiState> get() = _uiState
 
-        private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
-        val myWalkStatus: LiveData<FootprintRecentWalkStatus?> get() = _myWalkStatus
+        private val _myPlayStatus: MutableLiveData<PlayStatus> = MutableLiveData()
+        val myPlayStatus: LiveData<PlayStatus> get() = _myPlayStatus
 
-        private val _myPlaygroundMarker: MutableLiveData<MyPlaygroundMarkerUiModel?> = MutableLiveData()
-        val myPlaygroundMarker: LiveData<MyPlaygroundMarkerUiModel?> get() = _myPlaygroundMarker
+        private val _myPlayground: MutableLiveData<MyPlaygroundMarkerUiModel?> = MutableLiveData()
+        val myPlayground: LiveData<MyPlaygroundMarkerUiModel?> get() = _myPlayground
 
-        private val _nearPlaygroundMarkers: MutableLiveData<List<Marker>> =
+        private val _nearPlaygrounds: MutableLiveData<List<Marker>> =
             MutableLiveData()
-        val nearPlaygroundMarkers: LiveData<List<Marker>> get() = _nearPlaygroundMarkers
+        val nearPlaygrounds: LiveData<List<Marker>> get() = _nearPlaygrounds
 
-        private val _recentlyClickedMarker: MutableLiveData<Marker> = MutableLiveData()
-        val recentlyClickedMarker: LiveData<Marker> get() = _recentlyClickedMarker
+        private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
+        val recentlyClickedPlayground: LiveData<Marker> get() = _recentlyClickedPlayground
 
         private val _playgroundInfo: MutableLiveData<PlaygroundInfoUiModel> = MutableLiveData()
         val playgroundInfo: LiveData<PlaygroundInfoUiModel> get() = _playgroundInfo
@@ -136,15 +133,15 @@ class WoofViewModel
             }
         }
 
-        override fun clickMyFootprintBtn() {
-            analyticsHelper.logMyFootprintBtnClicked()
+        override fun clickMyPlaygroundBtn() {
+            analyticsHelper.logMyPlaygroundBtnClicked()
             runIfLocationPermissionGranted {
-                val myFootprintMarker = myPlaygroundMarker.value
-                if (myFootprintMarker != null) {
-                    _mapActions.emit(WoofMapActions.MoveCameraCenterPosition(myFootprintMarker.marker.position))
+                val myPlaygroundMarker = myPlayground.value
+                if (myPlaygroundMarker != null) {
+                    _mapActions.emit(WoofMapActions.MoveCameraCenterPosition(myPlaygroundMarker.marker.position))
                     changeTrackingModeToNoFollow()
                 } else {
-                    _alertActions.emit(WoofAlertActions.AlertNotExistMyFootprintSnackbar)
+                    _alertActions.emit(WoofAlertActions.AlertNotExistMyPlaygroundSnackbar)
                 }
             }
         }
@@ -157,8 +154,8 @@ class WoofViewModel
             }
         }
 
-        override fun clickEndWalkBtn() {
-            endWalk()
+        override fun clickExitPlaygroundBtn() {
+            exitPlayground()
 //        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
         }
 
@@ -179,25 +176,11 @@ class WoofViewModel
 
         override fun clickHelpBtn() {
             analyticsHelper.logHelpBtnClicked()
-            val textResId =
-                if (uiState.value is WoofUiState.RegisteringPlayground) {
-                    R.string.woof_register_playground_help
-                } else {
-                    when (myWalkStatus.value?.walkStatus) {
-                        WalkStatus.BEFORE -> {
-                            R.string.woof_walk_before_help
-                        }
-
-                        WalkStatus.ONGOING -> {
-                            R.string.woof_walk_ongoing_help
-                        }
-
-                        else -> {
-                            return
-                        }
-                    }
-                }
-            _alertActions.emit(WoofAlertActions.AlertHelpBalloon(textResId))
+            // VIEWING 상태일때 help 추가
+            if (uiState.value is WoofUiState.RegisteringPlayground) {
+                val textResId = R.string.woof_register_playground_help
+                _alertActions.emit(WoofAlertActions.AlertHelpBalloon(textResId))
+            }
         }
 
         override fun clickPetImage(petImageUrl: String) {
@@ -229,13 +212,13 @@ class WoofViewModel
             }
         }
 
-        private fun endWalk() {
+        private fun exitPlayground() {
             viewModelScope.launch {
-                val myFootprintMarker = myPlaygroundMarker.value ?: return@launch
+                val myFootprintMarker = myPlayground.value ?: return@launch
                 deleteFootprintUseCase(footprintId = myFootprintMarker.playgroundId).onSuccess {
-                    _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
-                    _myWalkStatus.value = null
-                    _myPlaygroundMarker.value = null
+                    _alertActions.emit(WoofAlertActions.AlertExitMyPlaygroundSnackbar)
+                    _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
+                    _myPlayground.value = null
                 }.onFailure {
                     _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
                 }
@@ -309,13 +292,13 @@ class WoofViewModel
             }
         }
 
-        fun loadMyPlaygroundMarker(marker: Marker) {
+        fun loadMyPlayground(marker: Marker) {
             val actionsValue = mapActions.value?.value
             val myPlayground =
                 (actionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground
                     ?: return
 
-            _myPlaygroundMarker.value =
+            _myPlayground.value =
                 MyPlaygroundMarkerUiModel(
                     playgroundId = myPlayground.id,
                     marker = marker,
@@ -340,8 +323,8 @@ class WoofViewModel
             }
         }
 
-        fun loadNearPlaygroundMarkers(markers: List<Marker>) {
-            _nearPlaygroundMarkers.value = markers
+        fun loadNearPlaygrounds(markers: List<Marker>) {
+            _nearPlaygrounds.value = markers
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     _uiState.value = WoofUiState.FindingPlayground
@@ -350,40 +333,25 @@ class WoofViewModel
             )
         }
 
-        fun loadRecentlyClickedMarker(marker: Marker) {
-            _recentlyClickedMarker.value = marker
+        fun loadRecentlyClickedPlayground(marker: Marker) {
+            _recentlyClickedPlayground.value = marker
         }
 
         fun updateUiState(uiState: WoofUiState) {
             _uiState.value = uiState
         }
 
-        fun updateFootprintRecentWalkStatus(latLng: LatLng) {
+        fun updatePlaygroundArrival(latLng: LatLng) {
             viewModelScope.launch {
-                patchFootprintRecentWalkStatusAutoUseCase(
+                patchPlaygroundArrivalUseCase(
                     latLng.latitude,
                     latLng.longitude,
-                ).onSuccess { footprintRecentWalkStatus ->
-                    when (footprintRecentWalkStatus.walkStatus) {
-                        WalkStatus.BEFORE -> {
-                            if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.AFTER) {
-                                _myWalkStatus.value = footprintRecentWalkStatus
-                            }
-                        }
-
-                        WalkStatus.ONGOING -> {
-                            if (myWalkStatus.value?.walkStatus != WalkStatus.ONGOING) {
-                                _myWalkStatus.value = footprintRecentWalkStatus
-                            }
-                        }
-
-                        WalkStatus.AFTER ->
-                            if (myWalkStatus.value == null || myWalkStatus.value?.walkStatus == WalkStatus.ONGOING) {
-                                _myWalkStatus.value = footprintRecentWalkStatus
-                            }
-                    }
+                ).onSuccess { playgroundArrival ->
+                    // 수정해야함
+                    _myPlayStatus.value =
+                        if (playgroundArrival.isArrived) PlayStatus.PLAYING else PlayStatus.AWAY
                 }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToUpdateFootprintWalkStatusSnackbar)
+                    _alertActions.emit(WoofAlertActions.AlertFailToUpdatePlaygroundArrival)
                 }
             }
         }

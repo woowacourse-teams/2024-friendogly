@@ -1,11 +1,10 @@
 package com.happy.friendogly.domain.repository
 
-import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.MyPlayground
 import com.happy.friendogly.presentation.ui.woof.model.PetExistence
 import com.happy.friendogly.presentation.ui.woof.model.Playground
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 
 interface WoofRepository {
     suspend fun postPlayground(
@@ -13,12 +12,10 @@ interface WoofRepository {
         longitude: Double,
     ): Result<MyPlayground>
 
-    suspend fun patchFootprintRecentWalkStatusAuto(
+    suspend fun patchPlaygroundArrival(
         latitude: Double,
         longitude: Double,
-    ): Result<FootprintRecentWalkStatus>
-
-    suspend fun patchFootprintRecentWalkStatusManual(walkStatus: WalkStatus): Result<FootprintRecentWalkStatus>
+    ): Result<PlaygroundArrival>
 
     suspend fun getFootprintMarkBtnInfo(): Result<PetExistence>
 

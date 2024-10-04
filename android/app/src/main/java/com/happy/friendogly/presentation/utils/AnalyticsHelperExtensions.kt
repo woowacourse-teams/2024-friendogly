@@ -46,8 +46,8 @@ fun AnalyticsHelper.logLocationBtnClicked() {
     logEvent(type = Types.LOCATION_BTN_CLICKED)
 }
 
-fun AnalyticsHelper.logMyFootprintBtnClicked() {
-    logEvent(type = Types.MY_FOOTPRINT_BTN_CLICKED)
+fun AnalyticsHelper.logMyPlaygroundBtnClicked() {
+    logEvent(type = Types.MY_PLAYGROUND_BTN_CLICKED)
 }
 
 fun AnalyticsHelper.logRefreshBtnClicked() {

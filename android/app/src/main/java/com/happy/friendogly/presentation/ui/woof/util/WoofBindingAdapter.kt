@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -222,7 +223,7 @@ fun AppCompatButton.bindPlaygroundBtn(
     } else {
         text = resources.getString(R.string.playground_exit)
         setOnClickListener {
-            playgroundAction.clickEndWalkBtn()
+            playgroundAction.clickExitPlaygroundBtn()
         }
     }
 }
@@ -243,4 +244,9 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
         text = resources.getString(R.string.playground_pet_is_absent)
         backgroundTintList = resources.getColorStateList(R.color.gray400, null)
     }
+}
+
+@BindingAdapter("helpBtnVisibility")
+fun ImageButton.bindHelpBtnVisibility(uiState: WoofUiState?) {
+    isVisible = uiState == WoofUiState.RegisteringPlayground
 }

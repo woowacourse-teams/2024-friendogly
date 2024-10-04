@@ -40,7 +40,7 @@ object Types {
     const val PET_EXISTENCE_BTN_CLICKED = "pet_existence_btn_clicked"
     const val REGISTER_MARKER_BTN_CLICKED = "register_marker_btn_clicked"
     const val LOCATION_BTN_CLICKED = "location_btn_clicked"
-    const val MY_FOOTPRINT_BTN_CLICKED = "my_footprint_btn_clicked"
+    const val MY_PLAYGROUND_BTN_CLICKED = "my_playground_btn_clicked"
     const val REFRESH_BTN_CLICKED = "refresh_btn_clicked"
     const val BACK_BTN_CLICKED = "back_btn_clicked"
     const val CLOSE_BTN_CLICKED = "close_btn_clicked"

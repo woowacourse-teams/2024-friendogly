@@ -1,15 +1,14 @@
 package com.happy.friendogly.remote.source
 
-import com.happy.friendogly.data.model.FootprintRecentWalkStatusDto
 import com.happy.friendogly.data.model.MyPlaygroundDto
 import com.happy.friendogly.data.model.PetExistenceDto
+import com.happy.friendogly.data.model.PlaygroundArrivalDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.mapper.toData
-import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
-import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
+import com.happy.friendogly.remote.model.request.PlaygroundArrivalRequest
 import com.happy.friendogly.remote.model.request.PlaygroundRequest
 import javax.inject.Inject
 
@@ -20,16 +19,8 @@ class WoofDataSourceImpl
             return runCatching { service.postFootprint(request).data.toData() }
         }
 
-        override suspend fun patchFootprintRecentWalkStatusAuto(
-            request: FootprintRecentWalkStatusAutoRequest,
-        ): Result<FootprintRecentWalkStatusDto> {
-            return runCatching { service.patchFootprintRecentWalkStatusAuto(request).data.toData() }
-        }
-
-        override suspend fun patchFootprintRecentWalkStatusManual(
-            request: FootprintRecentWalkStatusManualRequest,
-        ): Result<FootprintRecentWalkStatusDto> {
-            return runCatching { service.patchFootprintRecentWalkStatusManual(request).data.toData() }
+        override suspend fun patchPlaygroundArrival(request: PlaygroundArrivalRequest): Result<PlaygroundArrivalDto> {
+            return runCatching { service.patchPlaygroundArrival(request).data.toData() }
         }
 
         override suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto> {

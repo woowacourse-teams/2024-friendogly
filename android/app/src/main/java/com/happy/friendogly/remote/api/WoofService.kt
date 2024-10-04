@@ -1,12 +1,11 @@
 package com.happy.friendogly.remote.api
 
-import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
-import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
+import com.happy.friendogly.remote.model.request.PlaygroundArrivalRequest
 import com.happy.friendogly.remote.model.request.PlaygroundRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
-import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.MyPlaygroundResponse
 import com.happy.friendogly.remote.model.response.PetExistenceResponse
+import com.happy.friendogly.remote.model.response.PlaygroundArrivalResponse
 import com.happy.friendogly.remote.model.response.PlaygroundInfoResponse
 import com.happy.friendogly.remote.model.response.PlaygroundResponse
 import retrofit2.Response
@@ -23,15 +22,10 @@ interface WoofService {
         @Body request: PlaygroundRequest,
     ): BaseResponse<MyPlaygroundResponse>
 
-    @PATCH(ApiClient.Footprints.PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO)
-    suspend fun patchFootprintRecentWalkStatusAuto(
-        @Body request: FootprintRecentWalkStatusAutoRequest,
-    ): BaseResponse<FootprintWalkStatusResponse>
-
-    @PATCH(ApiClient.Footprints.PATCH_FOOTPRINT_RECENT_WALK_STATUS_MANUAL)
-    suspend fun patchFootprintRecentWalkStatusManual(
-        @Body request: FootprintRecentWalkStatusManualRequest,
-    ): BaseResponse<FootprintWalkStatusResponse>
+    @PATCH(ApiClient.PlayGround.PATCH_PLAYGROUND_ARRIVAL)
+    suspend fun patchPlaygroundArrival(
+        @Body request: PlaygroundArrivalRequest,
+    ): BaseResponse<PlaygroundArrivalResponse>
 
     @GET(ApiClient.PlayGround.GET_PLAYGROUNDS)
     suspend fun getPlaygrounds(): BaseResponse<List<PlaygroundResponse>>

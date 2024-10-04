@@ -7,11 +7,11 @@ sealed interface WoofAlertActions {
 
     data object AlertAddressOutOfKoreaSnackbar : WoofAlertActions
 
-    data object AlertNotExistMyFootprintSnackbar : WoofAlertActions
+    data object AlertNotExistMyPlaygroundSnackbar : WoofAlertActions
 
     data object AlertMarkerRegisteredSnackbar : WoofAlertActions
 
-    data object AlertDeleteMyFootprintMarkerSnackbar : WoofAlertActions
+    data object AlertExitMyPlaygroundSnackbar : WoofAlertActions
 
     data object AlertEndWalkSnackbar : WoofAlertActions
 
@@ -21,7 +21,7 @@ sealed interface WoofAlertActions {
 
     data object AlertFailToRegisterPlaygroundSnackbar : WoofAlertActions
 
-    data object AlertFailToUpdateFootprintWalkStatusSnackbar : WoofAlertActions
+    data object AlertFailToUpdatePlaygroundArrival : WoofAlertActions
 
     data object AlertFailToEndWalkSnackbar : WoofAlertActions
 

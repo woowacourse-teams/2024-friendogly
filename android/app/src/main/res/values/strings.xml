@@ -261,21 +261,19 @@
     <string name="woof_walk_after">%d시 %d분에 왔다감</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
-    <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
+    <string name="woof_not_exist_my_playground">내가 참여한 놀이터가 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
     <string name="woof_register_playground_title">놀이터 등록하기</string>
     <string name="woof_address_out_of_korea">발자국 등록은 한국에서만 가능합니다!</string>
     <string name="woof_register_playground_help">놀이터에 다른 강아지들도 참여할 수 있어요!
         \n친구들을 만나 반갑게 인사해보세요~</string>
-    <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
-    <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
     <string name="woof_register_playground">이 위치에 놀이터 등록</string>
     <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
     <string name="woof_footprint_refresh">새로고침</string>
     <string name="woof_end_walk">산책 종료하기</string>
-    <string name="woof_delete_my_footprint_marker">발자국을 삭제했어요!</string>
+    <string name="woof_exit_my_playground">놀이터를 나갔어요!</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>
     <string name="woof_status_all">전체</string>
     <string name="woof_address_korea">대한민국</string>
@@ -287,7 +285,7 @@
     <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
     <string name="woof_fail_to_register_playground">놀이터 등록에 실패했습니다!</string>
-    <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
+    <string name="woof_fail_to_update_playground_arrival">놀이터 도착 여부를 업데이트하지 못했습니다!</string>
     <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
     <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>

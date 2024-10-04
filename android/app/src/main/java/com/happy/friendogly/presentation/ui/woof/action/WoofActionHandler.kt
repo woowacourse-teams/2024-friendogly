@@ -7,11 +7,11 @@ interface WoofActionHandler {
 
     fun clickLocationBtn()
 
-    fun clickMyFootprintBtn()
+    fun clickMyPlaygroundBtn()
 
     fun clickRefreshBtn()
 
-    fun clickEndWalkBtn()
+    fun clickExitPlaygroundBtn()
 
     fun clickBackBtn()
 
