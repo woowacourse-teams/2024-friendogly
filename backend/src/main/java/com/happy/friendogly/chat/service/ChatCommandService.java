@@ -16,7 +16,7 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,19 +31,22 @@ public class ChatCommandService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
-    private final SimpMessagingTemplate template;
+    //    private final SimpMessagingTemplate template;
+    private final RabbitTemplate template;
 
     public ChatCommandService(
             MemberRepository memberRepository,
             ChatRoomRepository chatRoomRepository,
             ChatMessageRepository chatMessageRepository,
             NotificationService notificationService,
-            SimpMessagingTemplate template
+//            SimpMessagingTemplate template
+            RabbitTemplate template
     ) {
         this.memberRepository = memberRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.notificationService = notificationService;
+//        this.template = template;
         this.template = template;
     }
 
@@ -71,9 +74,10 @@ public class ChatCommandService {
     }
 
     private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
-        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember, LocalDateTime.now());
+        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember,
+                LocalDateTime.now());
         notificationService.sendChatNotification(chatRoom.getId(), chat);
-        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
+        template.convertAndSend("hello.exchange", "hello.key", chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }

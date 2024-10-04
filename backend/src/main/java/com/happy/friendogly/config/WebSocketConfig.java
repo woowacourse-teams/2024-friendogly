@@ -30,7 +30,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
+//        registry.enableSimpleBroker("/topic");
+//        registry.setPathMatcher(new AntPathMatcher("/"));
+//        registry.enableStompBrokerRelay("/topic")
+//                .setRelayHost("localhost")
+//                .setRelayPort(61613)
+//                .setSystemLogin("test")
+//                .setSystemPasscode("test")
+//                .setClientLogin("test")
+//                .setClientPasscode("test");
         registry.setApplicationDestinationPrefixes("/publish");
     }
 
