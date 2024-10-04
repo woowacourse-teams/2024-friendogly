@@ -10,7 +10,7 @@ sealed interface WoofMapActions {
 
     data class MoveCameraCenterPosition(val position: LatLng) : WoofMapActions
 
-    data object RegisterMyFootprint : WoofMapActions
+    data object RegisterMyPlayground : WoofMapActions
 
     data object ScanNearPlaygrounds : WoofMapActions
 

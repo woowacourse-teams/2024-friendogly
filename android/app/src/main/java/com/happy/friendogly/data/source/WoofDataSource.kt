@@ -7,10 +7,10 @@ import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
-import com.happy.friendogly.remote.model.request.FootprintRequest
+import com.happy.friendogly.remote.model.request.PlaygroundRequest
 
 interface WoofDataSource {
-    suspend fun postFootprint(request: FootprintRequest): Result<MyPlaygroundDto>
+    suspend fun postPlayground(request: PlaygroundRequest): Result<MyPlaygroundDto>
 
     suspend fun patchFootprintRecentWalkStatusAuto(request: FootprintRecentWalkStatusAutoRequest): Result<FootprintRecentWalkStatusDto>
 

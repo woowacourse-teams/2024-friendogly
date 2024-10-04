@@ -8,7 +8,7 @@ import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 
 interface WoofRepository {
-    suspend fun postFootprint(
+    suspend fun postPlayground(
         latitude: Double,
         longitude: Double,
     ): Result<MyPlayground>

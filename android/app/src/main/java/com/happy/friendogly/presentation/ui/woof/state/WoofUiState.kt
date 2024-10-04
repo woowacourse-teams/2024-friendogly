@@ -5,9 +5,9 @@ sealed interface WoofUiState {
 
     data object LocationPermissionsNotGranted : WoofUiState
 
-    data object FindingFriends : WoofUiState
+    data object FindingPlayground : WoofUiState
 
     data object RegisteringPlayground : WoofUiState
 
-    data object ViewingFootprintInfo : WoofUiState
+    data object ViewingPlaygroundInfo : WoofUiState
 }

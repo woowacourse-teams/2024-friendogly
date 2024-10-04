@@ -2,7 +2,7 @@ package com.happy.friendogly.remote.api
 
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
-import com.happy.friendogly.remote.model.request.FootprintRequest
+import com.happy.friendogly.remote.model.request.PlaygroundRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.FootprintWalkStatusResponse
 import com.happy.friendogly.remote.model.response.MyPlaygroundResponse
@@ -18,9 +18,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface WoofService {
-    @POST(ApiClient.Footprints.POST_FOOTPRINT)
+    @POST(ApiClient.PlayGround.POST_PLAYGROUND)
     suspend fun postFootprint(
-        @Body request: FootprintRequest,
+        @Body request: PlaygroundRequest,
     ): BaseResponse<MyPlaygroundResponse>
 
     @PATCH(ApiClient.Footprints.PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO)

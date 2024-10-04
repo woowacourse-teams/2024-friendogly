@@ -10,7 +10,6 @@ class ApiClient {
 
     object Footprints {
         private const val BASE_URL = "/api/footprints"
-        const val POST_FOOTPRINT = BASE_URL
         const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO = "$BASE_URL/recent/walk-status/auto"
         const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_MANUAL = "$BASE_URL/recent/walk-status/manual"
         const val DELETE_FOOTPRINT = "$BASE_URL/{footprintId}"
@@ -19,6 +18,7 @@ class ApiClient {
     object PlayGround {
 //        private const val BASE_URL = "/api/playgrounds"
         private const val BASE_URL = "/playgrounds"
+        const val POST_PLAYGROUND = BASE_URL
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
         const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
     }

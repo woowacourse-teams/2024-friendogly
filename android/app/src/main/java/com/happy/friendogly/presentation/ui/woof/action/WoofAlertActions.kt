@@ -19,7 +19,7 @@ sealed interface WoofAlertActions {
 
     data object AlertFailToLoadPlaygroundsSnackbar : WoofAlertActions
 
-    data object AlertFailToRegisterFootprintSnackbar : WoofAlertActions
+    data object AlertFailToRegisterPlaygroundSnackbar : WoofAlertActions
 
     data object AlertFailToUpdateFootprintWalkStatusSnackbar : WoofAlertActions
 

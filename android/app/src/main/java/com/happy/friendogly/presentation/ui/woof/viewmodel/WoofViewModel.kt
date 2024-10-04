@@ -13,7 +13,7 @@ import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundsUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusAutoUseCase
 import com.happy.friendogly.domain.usecase.PatchFootprintRecentWalkStatusManualUseCase
-import com.happy.friendogly.domain.usecase.PostFootprintUseCase
+import com.happy.friendogly.domain.usecase.PostPlaygroundUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
@@ -27,9 +27,9 @@ import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.woof.model.FootprintRecentWalkStatus
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
-import com.happy.friendogly.presentation.ui.woof.uimodel.MyFootprintMarkerUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.MyPlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
-import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterFootprintBtnUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterPlaygroundBtnUiModel
 import com.happy.friendogly.presentation.ui.woof.util.ANIMATE_DURATION_MILLIS
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
@@ -54,7 +54,7 @@ class WoofViewModel
     @Inject
     constructor(
         private val analyticsHelper: AnalyticsHelper,
-        private val postFootprintUseCase: PostFootprintUseCase,
+        private val postPlaygroundUseCase: PostPlaygroundUseCase,
         private val patchFootprintRecentWalkStatusAutoUseCase: PatchFootprintRecentWalkStatusAutoUseCase,
         private val patchFootprintRecentWalkStatusManualUseCase: PatchFootprintRecentWalkStatusManualUseCase,
         private val getPlaygroundsUseCase: GetPlaygroundsUseCase,
@@ -68,8 +68,8 @@ class WoofViewModel
         private val _myWalkStatus: MutableLiveData<FootprintRecentWalkStatus?> = MutableLiveData()
         val myWalkStatus: LiveData<FootprintRecentWalkStatus?> get() = _myWalkStatus
 
-        private val _myFootprintMarker: MutableLiveData<MyFootprintMarkerUiModel?> = MutableLiveData()
-        val myFootprintMarker: LiveData<MyFootprintMarkerUiModel?> get() = _myFootprintMarker
+        private val _myPlaygroundMarker: MutableLiveData<MyPlaygroundMarkerUiModel?> = MutableLiveData()
+        val myPlaygroundMarker: LiveData<MyPlaygroundMarkerUiModel?> get() = _myPlaygroundMarker
 
         private val _nearPlaygroundMarkers: MutableLiveData<List<Marker>> =
             MutableLiveData()
@@ -101,9 +101,9 @@ class WoofViewModel
         private val _refreshBtnVisible: MutableLiveData<Boolean> = MutableLiveData(false)
         val refreshBtnVisible: LiveData<Boolean> get() = _refreshBtnVisible
 
-        private val _registerFootprintBtn: MutableLiveData<RegisterFootprintBtnUiModel> =
+        private val _registerPlaygroundBtn: MutableLiveData<RegisterPlaygroundBtnUiModel> =
             MutableLiveData()
-        val registerFootprintBtn: LiveData<RegisterFootprintBtnUiModel> get() = _registerFootprintBtn
+        val registerPlaygroundBtn: LiveData<RegisterPlaygroundBtnUiModel> get() = _registerPlaygroundBtn
 
         fun loadPlaygroundInfo(playgroundId: Long) {
             viewModelScope.launch {
@@ -125,7 +125,7 @@ class WoofViewModel
         override fun clickRegisterMarkerBtn() {
             analyticsHelper.logRegisterMarkerBtnClicked()
             runIfLocationPermissionGranted {
-                _mapActions.emit(WoofMapActions.RegisterMyFootprint)
+                _mapActions.emit(WoofMapActions.RegisterMyPlayground)
             }
         }
 
@@ -139,7 +139,7 @@ class WoofViewModel
         override fun clickMyFootprintBtn() {
             analyticsHelper.logMyFootprintBtnClicked()
             runIfLocationPermissionGranted {
-                val myFootprintMarker = myFootprintMarker.value
+                val myFootprintMarker = myPlaygroundMarker.value
                 if (myFootprintMarker != null) {
                     _mapActions.emit(WoofMapActions.MoveCameraCenterPosition(myFootprintMarker.marker.position))
                     changeTrackingModeToNoFollow()
@@ -164,12 +164,12 @@ class WoofViewModel
 
         override fun clickBackBtn() {
             analyticsHelper.logBackBtnClicked()
-            updateUiState(WoofUiState.FindingFriends)
+            updateUiState(WoofUiState.FindingPlayground)
         }
 
         override fun clickCloseBtn() {
             analyticsHelper.logCloseBtnClicked()
-            updateUiState(WoofUiState.FindingFriends)
+            updateUiState(WoofUiState.FindingPlayground)
         }
 
         override fun clickFootprintMemberName(memberId: Long) {
@@ -231,11 +231,11 @@ class WoofViewModel
 
         private fun endWalk() {
             viewModelScope.launch {
-                val myFootprintMarker = myFootprintMarker.value ?: return@launch
-                deleteFootprintUseCase(footprintId = myFootprintMarker.footprintId).onSuccess {
+                val myFootprintMarker = myPlaygroundMarker.value ?: return@launch
+                deleteFootprintUseCase(footprintId = myFootprintMarker.playgroundId).onSuccess {
                     _alertActions.emit(WoofAlertActions.AlertDeleteMyFootprintMarkerSnackbar)
                     _myWalkStatus.value = null
-                    _myFootprintMarker.value = null
+                    _myPlaygroundMarker.value = null
                 }.onFailure {
                     _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
                 }
@@ -273,16 +273,16 @@ class WoofViewModel
             }
         }
 
-        fun registerMyFootprint(latLng: LatLng) {
-            if (registerFootprintBtn.value?.inKorea == true) {
+        fun registerMyPlayground(latLng: LatLng) {
+            if (registerPlaygroundBtn.value?.inKorea == true) {
                 viewModelScope.launch {
-                    postFootprintUseCase(latLng.latitude, latLng.longitude).onSuccess { myFootprint ->
-                        _mapActions.emit(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myFootprint.toPlayground()))
+                    postPlaygroundUseCase(latLng.latitude, latLng.longitude).onSuccess { myPlayground ->
+                        _mapActions.emit(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground.toPlayground()))
                         _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
-                        _uiState.value = WoofUiState.FindingFriends
+                        _uiState.value = WoofUiState.FindingPlayground
                         scanNearPlaygrounds()
                     }.onFailure {
-                        _alertActions.emit(WoofAlertActions.AlertFailToRegisterFootprintSnackbar)
+                        _alertActions.emit(WoofAlertActions.AlertFailToRegisterPlaygroundSnackbar)
                     }
                 }
             } else {
@@ -309,15 +309,15 @@ class WoofViewModel
             }
         }
 
-        fun loadMyFootprintMarker(marker: Marker) {
-            val makeMarkerActionsValue = mapActions.value?.value
-            val myFootprint =
-                (makeMarkerActionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground
+        fun loadMyPlaygroundMarker(marker: Marker) {
+            val actionsValue = mapActions.value?.value
+            val myPlayground =
+                (actionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground
                     ?: return
 
-            _myFootprintMarker.value =
-                MyFootprintMarkerUiModel(
-                    footprintId = myFootprint.id,
+            _myPlaygroundMarker.value =
+                MyPlaygroundMarkerUiModel(
+                    playgroundId = myPlayground.id,
                     marker = marker,
                 )
         }
@@ -344,7 +344,7 @@ class WoofViewModel
             _nearPlaygroundMarkers.value = markers
             Handler(Looper.getMainLooper()).postDelayed(
                 {
-                    _uiState.value = WoofUiState.FindingFriends
+                    _uiState.value = WoofUiState.FindingPlayground
                 },
                 ANIMATE_DURATION_MILLIS,
             )
@@ -396,12 +396,12 @@ class WoofViewModel
             _refreshBtnVisible.value = visible
         }
 
-        fun updateRegisterFootprintBtnCameraIdle(cameraIdle: Boolean) {
-            _registerFootprintBtn.value = RegisterFootprintBtnUiModel(cameraIdle = cameraIdle)
+        fun updateRegisterPlaygroundBtnCameraIdle(cameraIdle: Boolean) {
+            _registerPlaygroundBtn.value = RegisterPlaygroundBtnUiModel(cameraIdle = cameraIdle)
         }
 
-        fun updateRegisterFootprintBtnInKorea(inKorea: Boolean) {
-            _registerFootprintBtn.postValue(registerFootprintBtn.value?.copy(inKorea = inKorea))
+        fun updateRegisterPlaygroundBtnInKorea(inKorea: Boolean) {
+            _registerPlaygroundBtn.postValue(registerPlaygroundBtn.value?.copy(inKorea = inKorea))
         }
 
         fun changeTrackingModeToNoFollow() {

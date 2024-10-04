@@ -11,18 +11,18 @@ import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusAutoRequest
 import com.happy.friendogly.remote.model.request.FootprintRecentWalkStatusManualRequest
-import com.happy.friendogly.remote.model.request.FootprintRequest
+import com.happy.friendogly.remote.model.request.PlaygroundRequest
 import javax.inject.Inject
 
 class WoofRepositoryImpl
     @Inject
     constructor(private val source: WoofDataSource) : WoofRepository {
-        override suspend fun postFootprint(
+        override suspend fun postPlayground(
             latitude: Double,
             longitude: Double,
         ): Result<MyPlayground> {
-            return source.postFootprint(
-                FootprintRequest(
+            return source.postPlayground(
+                PlaygroundRequest(
                     latitude = latitude,
                     longitude = longitude,
                 ),
