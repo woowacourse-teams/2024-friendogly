@@ -23,6 +23,6 @@ class WoofWalkReceiver(val updateFootprintRecentWalkStatus: (Location) -> Unit) 
 
     companion object {
         const val EXTRA_LOCATION = "location"
-        const val ACTION_LOCATION_UPDATED = "LOCATION_UPDATED"
+        const val ACTION_LOCATION_UPDATE = "LOCATION_UPDATE"
     }
 }

@@ -21,7 +21,7 @@ class WoofWalkLocationManager(
     private val locationRequest =
         LocationRequest.Builder(
             PRIORITY_HIGH_ACCURACY,
-            1000,
+            INTERVAL_MILLIS,
         ).build()
 
     private val locationCallback =
@@ -50,5 +50,9 @@ class WoofWalkLocationManager(
 
     fun stopLocationUpdate() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    companion object {
+        private const val INTERVAL_MILLIS: Long = 10000
     }
 }

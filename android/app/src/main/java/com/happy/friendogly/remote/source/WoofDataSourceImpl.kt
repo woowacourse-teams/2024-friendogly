@@ -16,7 +16,7 @@ class WoofDataSourceImpl
     @Inject
     constructor(private val service: WoofService) : WoofDataSource {
         override suspend fun postPlayground(request: PlaygroundRequest): Result<MyPlaygroundDto> {
-            return runCatching { service.postFootprint(request).data.toData() }
+            return runCatching { service.postPlayground(request).data.toData() }
         }
 
         override suspend fun patchPlaygroundArrival(request: PlaygroundArrivalRequest): Result<PlaygroundArrivalDto> {

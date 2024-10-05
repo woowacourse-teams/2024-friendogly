@@ -249,16 +249,6 @@
     <string name="woof_package">package:%s</string>
     <string name="woof_marker_registered">발자국을 등록했어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
-    <string name="woof_days_ago">%d일 전</string>
-    <string name="woof_hours_ago">%d시간 전</string>
-    <string name="woof_minutes_ago">%d분 전</string>
-    <string name="woof_just_now">방금 전</string>
-    <string name="woof_status_before">가는중</string>
-    <string name="woof_status_ongoing">산책중</string>
-    <string name="woof_status_after">산책 완료</string>
-    <string name="woof_walk_before">%d분 째 가는중</string>
-    <string name="woof_walk_ongoing">%d분 째 산책중</string>
-    <string name="woof_walk_after">%d시 %d분에 왔다감</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
     <string name="woof_not_exist_my_playground">내가 참여한 놀이터가 존재하지 않아요!</string>
@@ -280,7 +270,7 @@
     <string name="playground_participate">놀이터 참여하기</string>
     <string name="playground_exit">놀이터 나가기</string>
     <string name="playground_pet_is_playing">노는중</string>
-    <string name="playground_pet_is_absent">자리비움</string>
+    <string name="playground_pet_is_away">자리비움</string>
 
     <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>

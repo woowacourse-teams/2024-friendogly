@@ -241,7 +241,7 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
         text = resources.getString(R.string.playground_pet_is_playing)
         backgroundTintList = resources.getColorStateList(R.color.green400, null)
     } else {
-        text = resources.getString(R.string.playground_pet_is_absent)
+        text = resources.getString(R.string.playground_pet_is_away)
         backgroundTintList = resources.getColorStateList(R.color.gray400, null)
     }
 }

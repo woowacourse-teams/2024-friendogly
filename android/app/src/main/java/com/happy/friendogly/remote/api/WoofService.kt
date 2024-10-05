@@ -18,7 +18,7 @@ import retrofit2.http.Path
 
 interface WoofService {
     @POST(ApiClient.PlayGround.POST_PLAYGROUND)
-    suspend fun postFootprint(
+    suspend fun postPlayground(
         @Body request: PlaygroundRequest,
     ): BaseResponse<MyPlaygroundResponse>
 

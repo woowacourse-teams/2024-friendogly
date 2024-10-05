@@ -505,7 +505,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             }
         val intentFilter =
             IntentFilter().apply {
-                addAction(WoofWalkReceiver.ACTION_LOCATION_UPDATED)
+                addAction(WoofWalkReceiver.ACTION_LOCATION_UPDATE)
             }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -687,8 +687,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun startWalkService() {
-//        val myPlayStatus = viewModel.myPlayStatus.value ?: return
-//        val walkStatus = myPlayStatus.walkStatus
 //        val now = java.time.LocalDateTime.now()
 //        val duration =
 //            Duration.between(myPlayStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
@@ -696,7 +694,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 //        val myFootprintMarker = viewModel.myPlayground.value ?: return
 //        val position = myFootprintMarker.marker.position
 
-        val intent = WoofWalkService.getIntent(requireContext())
+        val myPlayStatus = viewModel.myPlayStatus.value ?: return
+        val intent = WoofWalkService.getIntent(requireContext(), myPlayStatus)
         requireContext().startForegroundService(intent)
     }
 
@@ -824,7 +823,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 .setBackgroundColorResource(R.color.coral400)
                 .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
                 .build()
-//        balloon?.showAlignTop(binding.btnWoofWalkHelp)
     }
 
     private fun showHelpBalloon(textRestId: Int) {

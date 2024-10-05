@@ -14,13 +14,11 @@ import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.woof.WoofFragment
-import com.happy.friendogly.presentation.ui.woof.model.WalkStatus
-import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver.Companion.ACTION_LOCATION_UPDATED
+import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
+import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver.Companion.ACTION_LOCATION_UPDATE
 
 class WoofWalkService : Service() {
     private lateinit var locationManager: WoofWalkLocationManager
-
-    //    private lateinit var myFootprintMarkerPosition: LatLng
     private var currentLocation: Location? = null
 
     override fun onStartCommand(
@@ -28,17 +26,10 @@ class WoofWalkService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-//        myFootprintMarkerPosition =
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                intent?.getParcelableExtra(EXTRA_MY_FOOTPRINT_MARKER_POSITION, LatLng::class.java)
-//            } else {
-//                intent?.getParcelableExtra(EXTRA_MY_FOOTPRINT_MARKER_POSITION)
-//            } ?: return super.onStartCommand(intent, flags, startId)
-//        val walkStatus = intent?.getSerializableExtra(EXTRA_WALK_STATUS) as WalkStatus
-//        val walkStatusTitle = convertWalkStatusToTitle(walkStatus)
+        val playStatus = intent?.getSerializableExtra(EXTRA_PLAY_STATUS) as PlayStatus
+        val playStatusTitle = convertPlayStatusToTitle(playStatus)
 
-//        val startTimeMillis = intent.getLongExtra(EXTRA_START_MILLIS, 0)
-        startForegroundService()
+        startForegroundService(playStatusTitle)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -52,12 +43,11 @@ class WoofWalkService : Service() {
     }
 
     private fun startForegroundService(
-//        walkStatusTitle: String,
-//        startMillis: Long,
+        playStatusTitle: String,
     ) {
         startLocationUpdate()
         createNotificationChannel()
-        startForeground(SERVICE_ID, createNotification())
+        startForeground(SERVICE_ID, createNotification(playStatusTitle))
     }
 
     private fun startLocationUpdate() {
@@ -82,8 +72,7 @@ class WoofWalkService : Service() {
     }
 
     private fun createNotification(
-//        walkStatusTitle: String,
-//        startMillis: Long,
+        playStatusTitle: String,
     ): Notification {
         val intent =
             MainActivity.getIntent(this).apply {
@@ -99,7 +88,7 @@ class WoofWalkService : Service() {
             )
 
         return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
-//            .setContentTitle(walkStatusTitle)
+            .setContentTitle(playStatusTitle)
             .setContentText(resources.getString(R.string.woof_location_tracking))
             .setSmallIcon(R.mipmap.ic_launcher)
 //            .setUsesChronometer(true).setWhen(startMillis)
@@ -109,42 +98,34 @@ class WoofWalkService : Service() {
 
     private fun sendLocationToBroadcast() {
         val intent =
-            Intent(ACTION_LOCATION_UPDATED).apply {
+            Intent(ACTION_LOCATION_UPDATE).apply {
                 putExtra(WoofWalkReceiver.EXTRA_LOCATION, currentLocation)
             }
         sendBroadcast(intent)
     }
 
-    private fun convertWalkStatusToTitle(walkStatus: WalkStatus): String {
-        return when (walkStatus) {
-            WalkStatus.BEFORE -> return resources.getString(R.string.woof_status_before)
-            WalkStatus.ONGOING -> return resources.getString(R.string.woof_status_ongoing)
-            WalkStatus.AFTER -> return resources.getString(R.string.woof_status_after)
+    private fun convertPlayStatusToTitle(playStatus: PlayStatus): String {
+        return when (playStatus) {
+            PlayStatus.PLAYING -> getString(R.string.playground_pet_is_playing)
+            else -> getString(R.string.playground_pet_is_away)
         }
     }
 
     companion object {
         private const val WALK_SERVICE_CHANNEL_ID = "walk_service_id"
         private const val WALK_SERVICE_CHANNEL_NAME = "Walk Service"
-
-        //        private const val EXTRA_WALK_STATUS = "walkStatus"
-//        private const val EXTRA_START_MILLIS = "startMillis"
-//        private const val EXTRA_MY_FOOTPRINT_MARKER_POSITION = "myFootprintMarkerPosition"
+        private const val EXTRA_PLAY_STATUS = "playStatus"
         private const val REQUEST_CODE_ID = 0
         private const val SERVICE_ID = 1
 
         fun getIntent(
             context: Context,
-//            walkStatus: WalkStatus,
-//            startMillis: Long,
-//            myFootprintMarkerPosition: LatLng,
+            playStatus: PlayStatus
         ): Intent {
             return Intent(context, WoofWalkService::class.java)
-//                .apply {
-//                putExtra(EXTRA_WALK_STATUS, walkStatus)
-//                putExtra(EXTRA_START_MILLIS, startMillis)
-//                putExtra(EXTRA_MY_FOOTPRINT_MARKER_POSITION, myFootprintMarkerPosition)
-//            }
+                .apply {
+                    putExtra(EXTRA_PLAY_STATUS, playStatus)
+                }
         }
     }
 }

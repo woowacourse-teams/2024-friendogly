@@ -248,7 +248,8 @@
             android:padding="6dp"
             android:src="@drawable/ic_help_coral500"
             app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_woof_register_marker"
@@ -261,7 +262,7 @@
             android:paddingHorizontal="6dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_woof_register_walk_area"
