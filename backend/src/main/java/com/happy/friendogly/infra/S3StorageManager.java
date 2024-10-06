@@ -2,6 +2,7 @@ package com.happy.friendogly.infra;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.util.StringUtils.getFilenameExtension;
 
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
@@ -106,22 +107,13 @@ public class S3StorageManager implements FileStorageManager {
     }
 
     private String generateRandomFileName(String fileName) {
-        String fileExtension = parseFileExtension(fileName);
-        return UUID.randomUUID() + fileExtension;
-    }
+        String fileExtension = getFilenameExtension(fileName);
 
-    private String parseFileExtension(String fileName) {
-        if (StringUtils.isBlank(fileName)) {
-            throw new FriendoglyException("파일명이 비어 있습니다.");
+        if (fileExtension == null) {
+            return UUID.randomUUID().toString();
         }
 
-        int dotIndex = fileName.lastIndexOf(".");
-
-        if (dotIndex == -1) {
-            return "";
-        }
-
-        return fileName.substring(dotIndex);
+        return UUID.randomUUID() + "." + fileExtension;
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {
