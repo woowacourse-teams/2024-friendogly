@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.ActivityOtherProfileBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
@@ -16,15 +15,12 @@ import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserMore
 import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserReport
 import com.happy.friendogly.presentation.ui.otherprofile.bottom.UserMoreType
 import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OtherProfileActivity :
     BaseActivity<ActivityOtherProfileBinding>(R.layout.activity_other_profile) {
-    private val viewModel: OtherProfileViewModel by viewModels {
-        OtherProfileViewModel.factory(
-            getPetsUseCase = AppModule.getInstance().getPetsUseCase,
-            getMemberUseCase = AppModule.getInstance().getMemberUseCase,
-        )
-    }
+    private val viewModel: OtherProfileViewModel by viewModels()
 
     private val adapter: OtherPetProfileAdapter by lazy { OtherPetProfileAdapter(viewModel) }
 

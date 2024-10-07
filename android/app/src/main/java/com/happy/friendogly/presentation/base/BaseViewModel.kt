@@ -2,17 +2,19 @@ package com.happy.friendogly.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.firebase.crashlytics.CrashlyticsHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
-    private val crashlyticsHelper by lazy { AppModule.getInstance().crashlyticsHelper }
+    @Inject
+    lateinit var crashlyticsHelper: CrashlyticsHelper
 
     protected fun launch(
         context: CoroutineContext = EmptyCoroutineContext,

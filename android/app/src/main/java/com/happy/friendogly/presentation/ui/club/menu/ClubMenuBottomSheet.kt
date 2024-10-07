@@ -10,14 +10,17 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.databinding.BottomSheetClubMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClubMenuBottomSheet(
     private val clubId: Long,
     private val clubDetailViewType: ClubDetailViewType,
@@ -28,12 +31,7 @@ class ClubMenuBottomSheet(
 
     private var toast: Toast? = null
 
-    private val viewModel: ClubMenuViewModel by viewModels<ClubMenuViewModel> {
-        ClubMenuViewModel.factory(
-            analyticsHelper = AppModule.getInstance().analyticsHelper,
-            deleteClubMemberUseCase = AppModule.getInstance().deleteClubMemberUseCase,
-        )
-    }
+    private val viewModel: ClubMenuViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return SideSheetDialog(requireContext(), R.style.club_detail_side_sheet_dialog)
@@ -83,14 +81,27 @@ class ClubMenuBottomSheet(
                     (activity as ClubDetailNavigation).navigateToPrevWithReload()
                     dismissNow()
                 }
-
-                ClubMenuEvent.FailDelete -> {
-                    makeToast(
-                        requireContext().getString(R.string.club_detail_delete_fail),
-                    )
-                    dismissNow()
-                }
             }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError(
+                sendMessage = { message ->
+                    when (message) {
+                        is MessageHandler.SendSnackBar -> {
+                            makeToast(
+                                requireContext().getString(message.messageId),
+                            )
+                            dismissNow()
+                        }
+
+                        is MessageHandler.SendToast -> {
+                            makeToast(getString(message.messageId))
+                            dismissNow()
+                        }
+                    }
+                },
+            )
         }
     }
 

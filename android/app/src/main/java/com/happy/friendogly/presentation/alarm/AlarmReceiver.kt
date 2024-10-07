@@ -8,10 +8,12 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
+import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
+import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.SaveChatMessageUseCase
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
@@ -21,9 +23,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var saveChatMessageUseCase: SaveChatMessageUseCase
+
+    @Inject
+    lateinit var getWoofAlarmUseCase: GetWoofAlarmUseCase
+
+    @Inject
+    lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -86,7 +98,7 @@ class AlarmReceiver : FirebaseMessagingService() {
                     else -> error("잘못된 타입이 들어왔습니다.")
                 }
 
-            AppModule.getInstance().saveChatMessageUseCase(chatRoomId, message)
+            saveChatMessageUseCase(chatRoomId, message)
         }
 
     private fun showChatAlarm(
@@ -96,7 +108,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (AppModule.getInstance().getChatAlarmUseCase.invoke()
+        if (getChatAlarmUseCase.invoke()
                 .getOrDefault(true) && ChatLifecycleObserver.getInstance().isBackground
         ) {
             createNotificationChannel()
@@ -110,7 +122,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (AppModule.getInstance().getWoofAlarmUseCase.invoke().getOrDefault(true)) {
+        if (getWoofAlarmUseCase.invoke().getOrDefault(true)) {
             createNotificationChannel()
             deliverWoofNotification(title, body)
         }

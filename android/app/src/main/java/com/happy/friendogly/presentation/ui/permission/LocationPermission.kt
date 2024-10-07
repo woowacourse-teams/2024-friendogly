@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.utils.logPermissionLocationDenied
@@ -23,6 +23,7 @@ import java.lang.ref.WeakReference
 
 class LocationPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
+    private val analyticsHelper: AnalyticsHelper,
     private val isPermitted: (Boolean) -> Unit,
 ) : Permission(PermissionType.Location) {
     private val settingStartActivity: ActivityResultLauncher<Intent>
@@ -44,7 +45,7 @@ class LocationPermission private constructor(
                 isPermitted(true)
             } else {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
+                analyticsHelper.logPermissionLocationDenied()
             }
         }
 
@@ -54,7 +55,7 @@ class LocationPermission private constructor(
                 isPermitted(true)
             } else {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
+                analyticsHelper.logPermissionLocationDenied()
             }
         }
 
@@ -95,7 +96,7 @@ class LocationPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
+                analyticsHelper.logPermissionLocationDenied()
             },
             clickToPositive = {
                 val intent =
@@ -115,7 +116,7 @@ class LocationPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionLocationDenied()
+                analyticsHelper.logPermissionLocationDenied()
             },
             clickToPositive = {
                 val intent =
@@ -149,7 +150,8 @@ class LocationPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
+            analyticsHelper: AnalyticsHelper,
             isPermitted: (Boolean) -> Unit,
-        ): LocationPermission = LocationPermission(WeakReference(lifecycleOwner), isPermitted)
+        ): LocationPermission = LocationPermission(WeakReference(lifecycleOwner), analyticsHelper, isPermitted)
     }
 }

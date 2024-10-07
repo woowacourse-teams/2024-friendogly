@@ -34,7 +34,7 @@ file:
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:database
+    url: jdbc:h2:file:/home/ubuntu/h2_test_data
     username: ${H2_CONSOLE_USERNAME}
     password: ${H2_CONSOLE_PASSWORD}
   h2:
@@ -43,4 +43,7 @@ spring:
       path: ${H2_CONSOLE_ENDPOINT}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+  sql:
+    init:
+      data-locations:

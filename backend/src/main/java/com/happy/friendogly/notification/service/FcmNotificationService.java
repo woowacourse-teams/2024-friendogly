@@ -8,7 +8,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
-import com.happy.friendogly.chat.dto.response.ChatMessageResponse;
+import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
@@ -54,13 +54,9 @@ public class FcmNotificationService implements NotificationService {
     }
 
     @Override
-    public void sendChatNotification(Long chatRoomId, ChatMessageResponse response) {
+    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response) {
         List<String> receiverTokens = deviceTokenRepository
                 .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
-
-        if (receiverTokens.isEmpty()) {
-            throw new FriendoglyException("기기 토큰이 비어 있어 알림을 전송할 수 없습니다.", INTERNAL_SERVER_ERROR);
-        }
 
         Map<String, String> data = Map.of(
                 "chatRoomId", chatRoomId.toString(),

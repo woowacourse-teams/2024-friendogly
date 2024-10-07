@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.happy.friendogly.R
-import com.happy.friendogly.application.di.AppModule
+import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.utils.logPermissionAlarmDenied
@@ -23,6 +23,7 @@ import java.lang.ref.WeakReference
 
 class AlarmPermission private constructor(
     private val lifecycleOwnerRef: WeakReference<LifecycleOwner>,
+    private val analyticsHelper: AnalyticsHelper,
     private val isPermitted: (Boolean) -> Unit,
 ) : Permission(PermissionType.Alarm) {
     private lateinit var request: ActivityResultLauncher<String>
@@ -43,7 +44,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -53,7 +54,7 @@ class AlarmPermission private constructor(
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (hasPermissions()) {
                 isPermitted(true)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             } else {
                 isPermitted(false)
             }
@@ -127,7 +128,7 @@ class AlarmPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
@@ -147,7 +148,7 @@ class AlarmPermission private constructor(
                 ),
             clickToNegative = {
                 isPermitted(false)
-                AppModule.getInstance().analyticsHelper.logPermissionAlarmDenied()
+                analyticsHelper?.logPermissionAlarmDenied()
             },
             clickToPositive = {
                 val intent =
@@ -168,8 +169,9 @@ class AlarmPermission private constructor(
     companion object {
         fun from(
             lifecycleOwner: LifecycleOwner,
+            analyticsHelper: AnalyticsHelper,
             isPermitted: (Boolean) -> Unit,
-        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner), isPermitted)
+        ): AlarmPermission = AlarmPermission(WeakReference(lifecycleOwner), analyticsHelper, isPermitted)
 
         fun isValidPermissionSDK(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     }

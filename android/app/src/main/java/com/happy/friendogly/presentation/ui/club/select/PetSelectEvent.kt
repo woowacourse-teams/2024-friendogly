@@ -9,7 +9,7 @@ sealed interface PetSelectEvent {
 
     data class SelectPets(val pets: List<Long>) : PetSelectEvent
 
-    data object FailLoadPet : PetSelectEvent
+    data object EmptyPet : PetSelectEvent
 
     data object PreventCommit : PetSelectEvent
 }

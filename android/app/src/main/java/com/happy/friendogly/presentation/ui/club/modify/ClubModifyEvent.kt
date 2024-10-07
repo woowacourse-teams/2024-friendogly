@@ -8,6 +8,4 @@ sealed interface ClubModifyEvent {
 
         data object NavigateSelectState : Navigation
     }
-
-    data object FailModify : ClubModifyEvent
 }
