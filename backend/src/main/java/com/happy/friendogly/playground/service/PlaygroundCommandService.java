@@ -10,7 +10,6 @@ import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
-import com.happy.friendogly.utils.GeoCalculator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlaygroundCommandService {
 
-    public static final int PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD = 300;
+    private static final int PLAYGROUND_RADIUS = 155;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -56,21 +55,21 @@ public class PlaygroundCommandService {
 
     private void validateOverlapPlayground(double latitude, double longitude) {
         Location location = new Location(latitude, longitude);
-        double startLatitude = GeoCalculator.calculateLatitudeOffset(latitude,
-                -PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD);
-        double endLatitude = GeoCalculator.calculateLatitudeOffset(latitude,
-                PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD);
-        double startLongitude = GeoCalculator.calculateLongitudeOffset(latitude, longitude,
-                -PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD);
-        double endLongitude = GeoCalculator.calculateLongitudeOffset(latitude, longitude,
-                PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD);
+        Location startLatitudeLocation = location.findLocationWithLatitudeDiff(-PLAYGROUND_RADIUS * 2);
+        Location endLatitudeLocation = location.findLocationWithLatitudeDiff(PLAYGROUND_RADIUS * 2);
+        Location startLongitudeLocation = location.findLocationWithLongitudeDiff(latitude, -PLAYGROUND_RADIUS * 2);
+        Location endLongitudeLocation = location.findLocationWithLongitudeDiff(latitude, PLAYGROUND_RADIUS * 2);
 
-        List<Playground> playgrounds = playgroundRepository.
-                findAllByLatitudeBetweenAndLongitudeBetween(startLatitude, endLatitude, startLongitude, endLongitude);
+        List<Playground> playgrounds = playgroundRepository.findAllByLatitudeBetweenAndLongitudeBetween(
+                startLatitudeLocation.getLatitude(),
+                endLatitudeLocation.getLatitude(),
+                startLongitudeLocation.getLongitude(),
+                endLongitudeLocation.getLongitude()
+        );
 
         boolean isExistWithinRadius = playgrounds.stream()
                 .anyMatch(playground -> location.isWithin(playground.getLocation(),
-                        PLAYGROUND_EXCEPTION_DISTANCE_THRESHOLD));
+                        PLAYGROUND_RADIUS));
 
         if (isExistWithinRadius) {
             throw new FriendoglyException("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
