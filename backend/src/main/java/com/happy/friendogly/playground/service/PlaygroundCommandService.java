@@ -45,7 +45,7 @@ public class PlaygroundCommandService {
         );
         playgroundMemberRepository.save(new PlaygroundMember(savedPlayground, member));
 
-        return SavePlaygroundResponse.from(savedPlayground);
+        return new SavePlaygroundResponse(savedPlayground);
     }
 
     private void validateExistParticipatingPlayground(Member member) {

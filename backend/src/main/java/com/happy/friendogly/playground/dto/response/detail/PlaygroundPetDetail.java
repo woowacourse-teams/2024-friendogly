@@ -26,7 +26,7 @@ public record PlaygroundPetDetail(
             boolean isMyPet
     ) {
         return pets.stream()
-                .map(pet -> PlaygroundPetDetail.of(
+                .map(pet -> new PlaygroundPetDetail(
                         playgroundMember.getMember().getId(),
                         pet,
                         playgroundMember.getMessage(),
@@ -36,14 +36,14 @@ public record PlaygroundPetDetail(
                 .toList();
     }
 
-    public static PlaygroundPetDetail of(
+    public PlaygroundPetDetail(
             Long memberId,
             Pet pet,
             String message,
             boolean isArrival,
             boolean isMine
     ) {
-        return new PlaygroundPetDetail(
+        this(
                 memberId,
                 pet.getId(),
                 pet.getName().getValue(),
