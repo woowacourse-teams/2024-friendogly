@@ -103,7 +103,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         assertThat(response.get(0).isParticipating()).isEqualTo(true);
     }
 
-    @DisplayName("놀이터들의 위치를 조회할 때, 내가 참여했는 지 알 수있다(true)")
+    @DisplayName("놀이터들의 위치를 조회할 때, 내가 참여했는 지 알 수있다(false)")
     @Test
     void findLocationsWithIsParticipatingFalse() {
         // given
