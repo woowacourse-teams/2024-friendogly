@@ -4,10 +4,10 @@ import com.rabbitmq.client.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -17,43 +17,24 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
+@EnableRabbit
 public class RabbitMqConfig {
 
-    /**
-     * 지정된 큐 이름으로 Queue 빈을 생성
-     *
-     * @return Queue 빈 객체
-     */
     @Bean
     public Queue queue() {
         return new Queue("topic");
     }
 
-    /**
-     * 지정된 exchange 이름으로 DirectExchange 빈을 생성
-     *
-     * @return TopicExchange 빈 객체
-     */
-//    @Bean
-//    public DirectExchange exchange() {
-//        return new DirectExchange("topic");
-//    }
-
-    /**
-     * 주어진 queue와 exchange를 바인딩하고 라우팅 키를 이용하여 Binding 빈을 생성
-     *
-     * @param queue    바인딩할 Queue
-     * @param exchange 바인딩할 TopicExchange
-     * @return Binding 빈 객체
-     */
     @Bean
-    public Binding binding(Queue queue, FanoutExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange);
+    public TopicExchange topicExchange() {
+        return new TopicExchange("exchange.topic");
     }
 
     @Bean
-    public FanoutExchange pubsubExchange() {
-        return new FanoutExchange("publish");
+    public Binding binding(Queue queue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(queue)
+                .to(topicExchange)
+                .with("publish/#");
     }
 
     /**
@@ -80,8 +61,8 @@ public class RabbitMqConfig {
     @Bean
     public RabbitTemplate rabbitTemplate(
             org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory) {
+
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        // JSON 형식의 메시지를 직렬화하고 역직렬할 수 있도록 설정
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
         return rabbitTemplate;
     }
