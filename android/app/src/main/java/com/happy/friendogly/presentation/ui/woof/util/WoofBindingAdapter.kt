@@ -22,8 +22,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
 
-private const val MARGIN_BOTTOM_DEFAULT = 36
-private const val MARGIN_BOTTOM_PLAYING = 108
+private const val MARGIN_BOTTOM_DEFAULT = 26
+private const val MARGIN_BOTTOM_PLAYING = 106
 
 @BindingAdapter("petAge")
 fun TextView.bindPetAge(petBirthDate: LocalDate?) {

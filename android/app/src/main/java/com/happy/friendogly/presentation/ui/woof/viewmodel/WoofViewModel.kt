@@ -190,6 +190,12 @@ class WoofViewModel
             val playgroundSummary = playgroundSummary.value ?: return
             loadPlaygroundInfo(id = playgroundSummary.id)
             updateUiState(WoofUiState.ViewingPlaygroundInfo)
+//            Handler(Looper.getMainLooper()).postDelayed(
+//                {
+//                    updateUiState(WoofUiState.ViewingPlaygroundInfo)
+//                },
+//                ANIMATE_DURATION_MILLIS,
+//            )
         }
 
         private fun checkPetExistence() {

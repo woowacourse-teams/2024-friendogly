@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -232,6 +233,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             isCompassEnabled = false
             isLocationButtonEnabled = false
             isZoomControlEnabled = false
+            logoGravity = Gravity.TOP or Gravity.START
+            setLogoMargin(20, 20, 0, 0)
         }
         binding.lbvWoofLocation.map = map
         binding.lbvWoofRegisterLocation.map = map
@@ -293,24 +296,15 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun setupObserving() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState as WoofUiState) {
+            when (uiState) {
                 is WoofUiState.LocationPermissionsNotGranted ->
                     locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
                 is WoofUiState.FindingPlayground -> hideRegisterPlaygroundScreen()
-                is WoofUiState.RegisteringPlayground -> {
-                    showRegisterPlaygroundScreen()
-                }
-
-//                is WoofUiState.ViewingPlaygroundInfo -> {
-//                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-//                }
+                is WoofUiState.RegisteringPlayground -> showRegisterPlaygroundScreen()
 
                 else -> return@observe
-            }
-            if (uiState !is WoofUiState.ViewingPlaygroundInfo) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 
@@ -329,6 +323,16 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             petDetailAdapter.submitList(playgroundInfo.petDetails)
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    if (playgroundInfo.petDetails.size <= 2) {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    } else {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                    }
+                },
+                200,
+            )
         }
 
         viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
@@ -375,10 +379,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                        LatLng(
-                                            playground.latitude,
-                                            playground.longitude,
-                                        ),
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
+                                    ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -620,12 +624,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-            changePreviousClickedMarkerSize()
+            changeClickedMarkerSize(marker)
             viewModel.loadRecentlyClickedPlayground(marker)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
             changeClickedMarkerSize(marker)
+
             if (id == viewModel.myPlayground.value?.id) {
                 viewModel.loadPlaygroundInfo(id = id)
                 viewModel.updateUiState(WoofUiState.ViewingPlaygroundInfo)
@@ -633,7 +637,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 viewModel.loadPlaygroundSummary(id = id)
                 viewModel.updateUiState(WoofUiState.ViewingPlaygroundSummary)
             }
-
             true
         }
     }
@@ -650,7 +653,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             pathOverlay.map = null
         }
         setupRegisteringCircleOverlay(map.cameraPosition.target)
-        changePreviousClickedMarkerSize()
         getAddress(map.cameraPosition.target)
 
         Handler(Looper.getMainLooper()).postDelayed(
@@ -667,13 +669,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             myPlayground.marker.map = map
             myPlayground.circleOverlay.center = myPlayground.marker.position
             pathOverlay.map = map
-        } else {
-            registeringCircleOverlay.map = null
         }
-        changePreviousClickedMarkerSize()
+        registeringCircleOverlay.map = null
+        changeRecentlyClickedMarkerSize()
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun changePreviousClickedMarkerSize() {
+    private fun changeRecentlyClickedMarkerSize() {
         val recentlyClickedMarker = viewModel.recentlyClickedPlayground.value ?: return
         recentlyClickedMarker.width = MARKER_DEFAULT_WIDTH
         recentlyClickedMarker.height = MARKER_DEFAULT_HEIGHT
@@ -804,6 +806,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupRecyclerView() {
+        binding.rcvPlaygroundPet.itemAnimator = null
         binding.rcvPlaygroundPet.adapter = petDetailAdapter
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         binding.rcvPlaygroundPet.addItemDecoration(divider)
@@ -842,16 +845,20 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     bottomSheet: View,
                     slideOffset: Float,
                 ) {
+                    if (viewModel.uiState.value == WoofUiState.FindingPlayground && slideOffset >= 0.4f) {
+                        viewModel.updateUiState(WoofUiState.ViewingPlaygroundInfo)
+                    }
+//                    if (viewModel.uiState.value == WoofUiState.ViewingPlaygroundInfo && slideOffset == 0.0f) {
+//                        viewModel.updateUiState(WoofUiState.FindingPlayground)
+//                    }
                 }
 
                 override fun onStateChanged(
                     bottomSheet: View,
                     newState: Int,
                 ) {
-                    if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                        if (viewModel.myPlayground.value != null) {
-                            changePreviousClickedMarkerSize()
-                        }
+                    if (viewModel.uiState.value == WoofUiState.ViewingPlaygroundInfo && newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                        changeRecentlyClickedMarkerSize()
                         binding.rcvPlaygroundPet.smoothScrollToPosition(0)
                     } else {
                         viewModel.updateRefreshBtnVisibility(false)

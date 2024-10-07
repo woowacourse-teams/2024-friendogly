@@ -12,6 +12,7 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         glide="@{petImageUrl}"
+        android:scaleType="centerCrop"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:background="@drawable/circle_gray200"
