@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
+import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
@@ -248,6 +249,53 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         assertThat(response.content().size()).isEqualTo(clubs.size());
         assertThat(response.isLastPage()).isTrue();
+    }
+
+    @DisplayName("필터링 조건에 맞지 않는 모임으로 인해 pageSize를 채우지 못한 경우, 한번 더 조회 쿼리를 날린다.")
+    @Transactional
+    @Test
+    void findSearching_UntilPageSizeReaches() {
+        List<Club> clubs = List.of(
+                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(    // 필터링 조건에 맞지 않는 모임. 결과에서 제외되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() - 1;
+
+        // 두 번째 Club의 상태를 CLOSED로 변경
+        clubs.get(1).update("title", "content", Status.CLOSED.name());
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.OPEN.name(),    // OPEN 상태인 모임만 조회
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(pageSize);
+        assertThat(response.isLastPage()).isTrue(); // 한 번 더 쿼리를 보냈기 때문에 마지막 페이지까지 도달
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")
