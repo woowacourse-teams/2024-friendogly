@@ -42,6 +42,7 @@
     <string name="club_manager">내가 방장인 모임</string>
     <string name="pets_profile">함께하는 반려동물</string>
     <string name="tv_pet_add">강아지를 등록해주세요</string>
+    <string name="recent_pet">최근 본 반려동물</string>
 
     <!--강아지 상세 화면-->
     <string name="neuterd_status">중성화를 했어요</string>

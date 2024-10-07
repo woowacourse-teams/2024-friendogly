@@ -225,6 +225,7 @@
 
 
                 <TextView
+                    android:id="@+id/textView2"
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
                     onSingleClick="@{() -> vm.navigateToMyClubManger()}"
                     android:layout_width="0dp"
@@ -235,6 +236,21 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_logout" />
+
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                    onSingleClick="@{() -> vm.navigateToRecentPet()}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/recent_pet"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

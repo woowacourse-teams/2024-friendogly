@@ -175,6 +175,10 @@ class MyPageViewModel
             _navigateAction.emit(MyPageNavigationAction.NavigateToMyClubManger)
         }
 
+        fun navigateToRecentPet() {
+            _navigateAction.emit(MyPageNavigationAction.NavigateToRecentPet)
+        }
+
         companion object {
             const val MAX_PET_SIZE = 5
         }

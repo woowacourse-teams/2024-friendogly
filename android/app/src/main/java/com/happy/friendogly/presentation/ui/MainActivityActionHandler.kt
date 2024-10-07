@@ -28,4 +28,6 @@ interface MainActivityActionHandler {
     fun navigateToSettingLocation(resultLauncher: ActivityResultLauncher<Intent>)
 
     fun navigateToMyClub(isMyHead: Boolean)
+
+    fun navigateToRecentPet()
 }
