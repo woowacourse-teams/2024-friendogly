@@ -139,6 +139,117 @@ class ClubQueryServiceTest extends ClubServiceTest {
         assertThat(responses.content().isEmpty()).isTrue();
     }
 
+    @DisplayName("페이지 사이즈보다 더 많은 모임이 존재하는 경우, 한번에 페이지 사이즈 만큼의 모임이 조회된다.")
+    @Test
+    void findSearching_MoreThanPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() - 1;
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(pageSize);
+        assertThat(response.isLastPage()).isFalse();
+    }
+
+    @DisplayName("페이지 사이즈보다 더 적은 모임이 존재하는 경우, 존재하는 모임 수 만큼의 모임이 조회된다.")
+    @Test
+    void findSearching_LessThanPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() + 1;
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(clubs.size());
+        assertThat(response.isLastPage()).isTrue();
+    }
+
+    @DisplayName("페이지 사이즈와 같은 수의 모임이 존재하는 경우, 페이지 사이즈 만큼의 모임이 조회되고 다음 페이지는 존재하지 않는다.")
+    @Test
+    void findSearching_EqualToPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size();
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(clubs.size());
+        assertThat(response.isLastPage()).isTrue();
+    }
+
     @DisplayName("내가 방장인 모임을 조회한다.")
     @Transactional
     @Test
