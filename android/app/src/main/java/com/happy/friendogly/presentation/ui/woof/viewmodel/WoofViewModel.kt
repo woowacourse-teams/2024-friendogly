@@ -27,8 +27,8 @@ import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
-import com.happy.friendogly.presentation.ui.woof.uimodel.MyPlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterPlaygroundBtnUiModel
 import com.happy.friendogly.presentation.ui.woof.util.ANIMATE_DURATION_MILLIS
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
@@ -44,6 +44,7 @@ import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -68,11 +69,11 @@ class WoofViewModel
         private val _myPlayStatus: MutableLiveData<PlayStatus> = MutableLiveData()
         val myPlayStatus: LiveData<PlayStatus> get() = _myPlayStatus
 
-        private val _myPlayground: MutableLiveData<MyPlaygroundMarkerUiModel?> = MutableLiveData()
-        val myPlayground: LiveData<MyPlaygroundMarkerUiModel?> get() = _myPlayground
+        private val _myPlayground: MutableLiveData<PlaygroundMarkerUiModel?> = MutableLiveData()
+        val myPlayground: LiveData<PlaygroundMarkerUiModel?> get() = _myPlayground
 
-        private val _nearPlaygrounds: MutableLiveData<List<Marker>> = MutableLiveData()
-        val nearPlaygrounds: LiveData<List<Marker>> get() = _nearPlaygrounds
+        private val _nearPlaygrounds: MutableLiveData<List<PlaygroundMarkerUiModel>> = MutableLiveData()
+        val nearPlaygrounds: LiveData<List<PlaygroundMarkerUiModel>> get() = _nearPlaygrounds
 
         private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
         val recentlyClickedPlayground: LiveData<Marker> get() = _recentlyClickedPlayground
@@ -273,23 +274,29 @@ class WoofViewModel
 
                     val myPlayground =
                         playgrounds.firstOrNull { playground -> playground.isParticipating }
-                    _mapActions.value =
-                        Event(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground))
+                    if (myPlayground != null) {
+                        _mapActions.value =
+                            Event(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground))
+                    }
                 }.onFailure {
                     _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar)
                 }
             }
         }
 
-        fun loadMyPlayground(marker: Marker) {
+        fun loadMyPlayground(
+            marker: Marker,
+            circleOverlay: CircleOverlay,
+        ) {
             val actionsValue = mapActions.value?.value
             val myPlayground =
                 (actionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground ?: return
 
             _myPlayground.value =
-                MyPlaygroundMarkerUiModel(
+                PlaygroundMarkerUiModel(
                     id = myPlayground.id,
                     marker = marker,
+                    circleOverlay = circleOverlay,
                 )
         }
 
@@ -311,7 +318,7 @@ class WoofViewModel
             }
         }
 
-        fun loadNearPlaygrounds(markers: List<Marker>) {
+        fun loadNearPlaygrounds(markers: List<PlaygroundMarkerUiModel>) {
             _nearPlaygrounds.value = markers
             Handler(Looper.getMainLooper()).postDelayed(
                 {

@@ -23,8 +23,8 @@
             tools:layout_editor_absoluteY="0dp" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/layout_playground_detail"
-            playgroundDetailVisibility="@{vm.myPlayground}"
+            android:id="@+id/layout_playground_info"
+            playgroundInfoVisibility="@{vm.myPlayground}"
             uiState="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,19 +188,19 @@
             android:focusable="true"
             android:onClick="@{() -> vm.clickPetExistenceBtn()}"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_mark_footprint_btn"
+            android:src="@drawable/ic_register_playground_btn"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="gone" />
 
         <ImageView
-            android:id="@+id/iv_woof_register_marker"
+            android:id="@+id/iv_playground_register_marker"
             registeringVisibility="@{vm.uiState}"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginBottom="46dp"
-            android:src="@drawable/ic_marker_ongoing_clicked"
+            android:src="@drawable/ic_my_playground_clicked"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

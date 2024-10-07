@@ -4,7 +4,7 @@ import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.naver.maps.geometry.LatLng
 
 sealed interface WoofMapActions {
-    data class MakeMyPlaygroundMarker(val myPlayground: Playground?) : WoofMapActions
+    data class MakeMyPlaygroundMarker(val myPlayground: Playground) : WoofMapActions
 
     data class MakeNearPlaygroundMarkers(val nearPlaygrounds: List<Playground>) : WoofMapActions
 

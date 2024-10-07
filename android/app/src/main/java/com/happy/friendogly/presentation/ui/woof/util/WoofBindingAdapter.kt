@@ -16,8 +16,8 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
-import com.happy.friendogly.presentation.ui.woof.uimodel.MyPlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
+import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundMarkerUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
@@ -115,13 +115,13 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
     }
 }
 
-@BindingAdapter("uiState", "playgroundDetailVisibility")
-fun View.bindPlaygroundDetailVisibility(
+@BindingAdapter("uiState", "playgroundInfoVisibility")
+fun View.bindPlaygroundInfoVisibility(
     uiState: WoofUiState?,
-    myFootprint: MyPlaygroundMarkerUiModel?,
+    myPlayground: PlaygroundMarkerUiModel?,
 ) {
     isVisible =
-        if (myFootprint != null && (uiState == WoofUiState.FindingPlayground || uiState == WoofUiState.ViewingPlaygroundInfo)) {
+        if (myPlayground != null && (uiState == WoofUiState.FindingPlayground || uiState == WoofUiState.ViewingPlaygroundInfo)) {
             bringToFront()
             true
         } else {
@@ -132,13 +132,13 @@ fun View.bindPlaygroundDetailVisibility(
 @BindingAdapter("uiState", "petExistenceBtnVisibility")
 fun View.bindPetExistenceBtnVisibility(
     uiState: WoofUiState?,
-    myPlaygroundMarker: MyPlaygroundMarkerUiModel?,
+    myPlaygroundMarker: PlaygroundMarkerUiModel?,
 ) {
     isVisible =
         if (uiState == WoofUiState.RegisteringPlayground) {
             false
         } else {
-            if (myPlaygroundMarker == null) true else false
+            myPlaygroundMarker == null
         }
 }
 
@@ -156,7 +156,7 @@ fun TextView.bindRefreshBtnVisibility(
 }
 
 @BindingAdapter("uiState", "cameraIdle")
-fun TextView.bindRegisterFootprintBtnClickable(
+fun TextView.bindRegisterPlaygroundBtnClickable(
     uiState: WoofUiState?,
     cameraIdle: Boolean,
 ) {
@@ -169,7 +169,7 @@ fun TextView.bindRegisterFootprintBtnClickable(
 }
 
 @BindingAdapter("locationBtnMargin")
-fun View.bindLocationBtn(myFootprint: MyPlaygroundMarkerUiModel?) {
+fun View.bindLocationBtn(myPlayground: PlaygroundMarkerUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -177,7 +177,7 @@ fun View.bindLocationBtn(myFootprint: MyPlaygroundMarkerUiModel?) {
     }
 
     val marginBottom =
-        if (myFootprint != null) {
+        if (myPlayground != null) {
             MARGIN_BOTTOM_PLAYING
         } else {
             MARGIN_BOTTOM_DEFAULT
@@ -199,9 +199,9 @@ fun View.bindRegisterLocationBtnVisibility(uiState: WoofUiState?) {
 @BindingAdapter("playgroundAction", "playgroundBtn")
 fun AppCompatButton.bindPlaygroundBtn(
     playgroundAction: WoofActionHandler,
-    myFootprint: MyPlaygroundMarkerUiModel?,
+    myPlayground: PlaygroundMarkerUiModel?,
 ) {
-    if (myFootprint == null) {
+    if (myPlayground == null) {
         text = resources.getString(R.string.playground_participate)
         setOnClickListener {
             playgroundAction.clickParticipatePlaygroundBtn()
