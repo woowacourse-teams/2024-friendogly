@@ -11,6 +11,8 @@ import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
 import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -20,16 +22,17 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class ChatSocketController {
 
     private final ChatCommandService chatCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
-    private final SimpMessagingTemplate template;
+    private final RabbitTemplate template;
 
     public ChatSocketController(
             ChatCommandService chatCommandService,
             ChatRoomQueryService chatRoomQueryService,
-            SimpMessagingTemplate template
+            RabbitTemplate template
     ) {
         this.chatCommandService = chatCommandService;
         this.chatRoomQueryService = chatRoomQueryService;
@@ -48,12 +51,13 @@ public class ChatSocketController {
         );
     }
 
-    @MessageMapping("/chat/{chatRoomId}")
+    @MessageMapping("chat.{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageSocketRequest request
     ) {
+        log.info("-------- CHAT -------- {}", request.content());
         chatCommandService.sendChat(memberId, chatRoomId, request);
     }
 

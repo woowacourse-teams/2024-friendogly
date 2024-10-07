@@ -77,7 +77,7 @@ public class ChatCommandService {
         ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember,
                 LocalDateTime.now());
         notificationService.sendChatNotification(chatRoom.getId(), chat);
-        template.convertAndSend("hello.exchange", "hello.key", chat);
+        template.convertAndSend("chat.exchange", "room." + chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }
