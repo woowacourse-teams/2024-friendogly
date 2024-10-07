@@ -23,7 +23,6 @@ public record FindClubByFilterResponse(
         int currentMemberCount,
         String imageUrl,
         List<String> petImageUrls
-
 ) {
 
     public FindClubByFilterResponse(

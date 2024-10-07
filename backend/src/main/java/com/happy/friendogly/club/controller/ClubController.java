@@ -5,8 +5,8 @@ import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.request.UpdateClubRequest;
-import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -18,7 +18,6 @@ import com.happy.friendogly.common.ApiResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +49,7 @@ public class ClubController {
     }
 
     @GetMapping("/searching")
-    public ApiResponse<Slice<FindClubByFilterResponse>> findByFilter(
+    public ApiResponse<FindClubPageByFilterResponse> findByFilter(
             @Auth Long memberId,
             @Valid @ModelAttribute FindClubByFilterRequest request
     ) {

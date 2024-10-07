@@ -5,6 +5,7 @@ import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.repository.ClubRepository;
@@ -21,7 +22,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +45,7 @@ public class ClubQueryService {
         this.petRepository = petRepository;
     }
 
-    public Slice<FindClubByFilterResponse> findByFilter(Long memberId, FindClubByFilterRequest request) {
+    public FindClubPageByFilterResponse findByFilter(Long memberId, FindClubByFilterRequest request) {
         Member member = memberRepository.getById(memberId);
         List<Pet> pets = petRepository.findByMemberId(memberId);
 
@@ -108,8 +108,8 @@ public class ClubQueryService {
         List<FindClubByFilterResponse> response = result.stream()
                 .map(club -> new FindClubByFilterResponse(club, collectOverviewPetImages(club)))
                 .toList();
-
-        return new SliceImpl<>(response, clubSlice.getPageable(), clubSlice.hasNext());
+        
+        return new FindClubPageByFilterResponse(clubSlice.isLast(), response);
     }
 
     private boolean isConditionMatch(Club club, FilterCondition filterCondition, Member member, List<Pet> pets) {

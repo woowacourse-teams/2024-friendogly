@@ -9,6 +9,7 @@ import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.member.domain.Member;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
 
 
 class ClubQueryServiceTest extends ClubServiceTest {
@@ -71,15 +71,15 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 Long.MAX_VALUE
         );
 
-        Slice<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
         List<FindClubByFilterResponse> expectedResponses = List.of(
                 new FindClubByFilterResponse(club2, List.of(petImageUrl)),
                 new FindClubByFilterResponse(club1, List.of(petImageUrl))
         );
 
-        FindClubByFilterResponse actual1 = responses.getContent().get(0);
+        FindClubByFilterResponse actual1 = response.content().get(0);
         FindClubByFilterResponse expected1 = expectedResponses.get(0);
-        FindClubByFilterResponse actual2 = responses.getContent().get(1);
+        FindClubByFilterResponse actual2 = response.content().get(1);
         FindClubByFilterResponse expected2 = expectedResponses.get(1);
 
         assertAll(
@@ -132,9 +132,9 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 0L
         );
 
-        Slice<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        FindClubPageByFilterResponse responses = clubQueryService.findByFilter(savedMember.getId(), request);
 
-        assertThat(responses.getContent().isEmpty()).isTrue();
+        assertThat(responses.content().isEmpty()).isTrue();
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")
