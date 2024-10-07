@@ -81,11 +81,11 @@ public class PlaygroundCommandService {
     public SaveJoinPlaygroundMemberResponse joinPlayground(Long memberId, Long playgroundId) {
         Playground playground = playgroundRepository.getById(playgroundId);
         Member member = memberRepository.getById(memberId);
+
+        validateExistParticipatingPlayground(member);
+
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
-                new PlaygroundMember(
-                        playground,
-                        member
-                )
+                new PlaygroundMember(playground, member)
         );
         return SaveJoinPlaygroundMemberResponse.from(playgroundMember);
     }

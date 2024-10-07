@@ -10,6 +10,7 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.utils.GeoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,28 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         assertThatThrownBy(() -> playgroundCommandService.save(request, member.getId()))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
+    }
+
+    @DisplayName("놀이터 참여시, 이미 참여한 놀이터가 존재하면 예외가 발생한다.")
+    @Test
+    void throwExceptionWhenAlreadyJoinPlayground() {
+        // given
+        Member member = saveMember("김도선");
+        double latitude = 37.516382;
+        double longitude = 127.120040;
+        Playground playground = savePlayground(latitude, longitude);
+        Playground secondPlayground = savePlayground(GeoCalculator.calculateLatitudeOffset(latitude, 500), longitude);
+        playgroundMemberRepository.save(
+                new PlaygroundMember(
+                        playground,
+                        member
+                )
+        );
+
+        // when, then
+        assertThatThrownBy(() -> playgroundCommandService.joinPlayground(member.getId(), secondPlayground.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("이미 참여한 놀이터가 존재합니다.");
     }
 
 }
