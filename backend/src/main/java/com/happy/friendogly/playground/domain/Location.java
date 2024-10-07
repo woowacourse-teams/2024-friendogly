@@ -45,13 +45,21 @@ public class Location {
         return distance <= radius;
     }
 
-    public Location findLocationWithLatitudeDiff(int meter) {
-        double diffLatitude = GeoCalculator.calculateLatitudeOffset(this.latitude, meter);
+    public Location plusLatitudeByMeters(int meters) {
+        double diffLatitude = GeoCalculator.calculateLatitudeOffset(this.latitude, meters);
         return new Location(diffLatitude, this.longitude);
     }
 
-    public Location findLocationWithLongitudeDiff(int meter) {
-        double diffLongitude = GeoCalculator.calculateLongitudeOffset(this.latitude, this.longitude, meter);
+    public Location minusLatitudeByMeters(int meters) {
+        return plusLatitudeByMeters(-meters);
+    }
+
+    public Location plusLongitudeByMeters(int meters) {
+        double diffLongitude = GeoCalculator.calculateLongitudeOffset(this.latitude, this.longitude, meters);
         return new Location(this.latitude, diffLongitude);
+    }
+
+    public Location minusLongitudeByMeters(int meters) {
+        return plusLongitudeByMeters(-meters);
     }
 }
