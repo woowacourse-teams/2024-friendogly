@@ -51,56 +51,18 @@ public class ClubQueryService {
         LocalDateTime lastFoundCreatedAt = request.lastFoundCreatedAt();
         Long lastFoundId = request.lastFoundId();
 
-        // TODO: 중복 코드 제거
         List<Club> result = new ArrayList<>();
-        Slice<Club> clubSlice = clubRepository.findAllBy(
-                request.province(),
-                Gender.toGenders(request.genderParams()),
-                SizeType.toSizeTypes(request.sizeParams()),
-                PageRequest.ofSize(request.pageSize()),
-                lastFoundCreatedAt,
-                lastFoundId
-        );
-
-        List<Club> filteredClubs = clubSlice.getContent()
-                .stream()
-                .filter(club -> isConditionMatch(club, filterCondition, member, pets))
-                .toList();
-
-        for (Club club : filteredClubs) {
-            if (result.size() >= request.pageSize()) {
-                break;
-            }
-            result.add(club);
-        }
+        Slice<Club> clubSlice = fetchClubSlice(request, lastFoundCreatedAt, lastFoundId);
+        List<Club> filteredClubs = filterClubs(clubSlice, filterCondition, member, pets);
+        addFilteredResults(request, filteredClubs, result);
 
         while (result.size() < request.pageSize() && clubSlice.hasNext()) {
-            if (!result.isEmpty()) {
-                lastFoundCreatedAt = result.get(result.size() - 1).getCreatedAt();
-                lastFoundId = result.get(result.size() - 1).getId();
-            }
+            lastFoundCreatedAt = updateLastFoundCreatedAt(lastFoundCreatedAt, result);
+            lastFoundId = updateLastFoundId(lastFoundId, result);
 
-            // TODO: 중복 코드 제거
-            clubSlice = clubRepository.findAllBy(
-                    request.province(),
-                    Gender.toGenders(request.genderParams()),
-                    SizeType.toSizeTypes(request.sizeParams()),
-                    PageRequest.ofSize(request.pageSize()),
-                    lastFoundCreatedAt,
-                    lastFoundId
-            );
-
-            filteredClubs = clubSlice.getContent()
-                    .stream()
-                    .filter(club -> isConditionMatch(club, filterCondition, member, pets))
-                    .toList();
-
-            for (Club club : filteredClubs) {
-                if (result.size() >= request.pageSize()) {
-                    break;
-                }
-                result.add(club);
-            }
+            clubSlice = fetchClubSlice(request, lastFoundCreatedAt, lastFoundId);
+            filteredClubs = filterClubs(clubSlice, filterCondition, member, pets);
+            addFilteredResults(request, filteredClubs, result);
         }
 
         List<FindClubByFilterResponse> response = result.stream()
@@ -108,6 +70,24 @@ public class ClubQueryService {
                 .toList();
 
         return new FindClubPageByFilterResponse(clubSlice.isLast(), response);
+    }
+
+    private Slice<Club> fetchClubSlice(FindClubByFilterRequest request, LocalDateTime lastFoundCreatedAt, Long lastFoundId) {
+        return clubRepository.findAllBy(
+                request.province(),
+                Gender.toGenders(request.genderParams()),
+                SizeType.toSizeTypes(request.sizeParams()),
+                PageRequest.ofSize(request.pageSize()),
+                lastFoundCreatedAt,
+                lastFoundId
+        );
+    }
+
+    private List<Club> filterClubs(Slice<Club> clubSlice, FilterCondition filterCondition, Member member, List<Pet> pets) {
+        return clubSlice.getContent()
+                .stream()
+                .filter(club -> isConditionMatch(club, filterCondition, member, pets))
+                .toList();
     }
 
     private boolean isConditionMatch(Club club, FilterCondition filterCondition, Member member, List<Pet> pets) {
@@ -118,6 +98,29 @@ public class ClubQueryService {
             return club.isOpen();
         }
         return true;
+    }
+
+    private void addFilteredResults(FindClubByFilterRequest request, List<Club> filteredClubs, List<Club> result) {
+        for (Club club : filteredClubs) {
+            if (result.size() >= request.pageSize()) {
+                break;
+            }
+            result.add(club);
+        }
+    }
+
+    private LocalDateTime updateLastFoundCreatedAt(LocalDateTime lastFoundCreatedAt, List<Club> result) {
+        if (result.isEmpty()) {
+            return lastFoundCreatedAt;
+        }
+        return result.get(result.size() - 1).getCreatedAt();
+    }
+
+    private Long updateLastFoundId(Long lastFoundId, List<Club> result) {
+        if (result.isEmpty()) {
+            return lastFoundId;
+        }
+        return result.get(result.size() - 1).getId();
     }
 
     public List<FindClubOwningResponse> findOwning(Long memberId) {
