@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ClubQueryService {
 
-    private static final int PAGE_SIZE = 20;    // TODO: 클라이언트에서 입력받도록 수정
-
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
@@ -59,7 +57,7 @@ public class ClubQueryService {
                 request.province(),
                 Gender.toGenders(request.genderParams()),
                 SizeType.toSizeTypes(request.sizeParams()),
-                PageRequest.ofSize(PAGE_SIZE),
+                PageRequest.ofSize(request.pageSize()),
                 lastFoundCreatedAt,
                 lastFoundId
         );
@@ -70,13 +68,13 @@ public class ClubQueryService {
                 .toList();
 
         for (Club club : filteredClubs) {
-            if (result.size() >= PAGE_SIZE) {
+            if (result.size() >= request.pageSize()) {
                 break;
             }
             result.add(club);
         }
 
-        while (result.size() < PAGE_SIZE && clubSlice.hasNext()) {
+        while (result.size() < request.pageSize() && clubSlice.hasNext()) {
             if (!result.isEmpty()) {
                 lastFoundCreatedAt = result.get(result.size() - 1).getCreatedAt();
                 lastFoundId = result.get(result.size() - 1).getId();
@@ -87,7 +85,7 @@ public class ClubQueryService {
                     request.province(),
                     Gender.toGenders(request.genderParams()),
                     SizeType.toSizeTypes(request.sizeParams()),
-                    PageRequest.ofSize(PAGE_SIZE),
+                    PageRequest.ofSize(request.pageSize()),
                     lastFoundCreatedAt,
                     lastFoundId
             );
@@ -98,7 +96,7 @@ public class ClubQueryService {
                     .toList();
 
             for (Club club : filteredClubs) {
-                if (result.size() >= PAGE_SIZE) {
+                if (result.size() >= request.pageSize()) {
                     break;
                 }
                 result.add(club);
@@ -108,7 +106,7 @@ public class ClubQueryService {
         List<FindClubByFilterResponse> response = result.stream()
                 .map(club -> new FindClubByFilterResponse(club, collectOverviewPetImages(club)))
                 .toList();
-        
+
         return new FindClubPageByFilterResponse(clubSlice.isLast(), response);
     }
 

@@ -67,6 +67,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 null,
                 Set.of(Gender.FEMALE.name()),
                 Set.of(SizeType.SMALL.name()),
+                20,
                 LocalDateTime.of(9999, 12, 31, 23, 59, 59),
                 Long.MAX_VALUE
         );
@@ -128,6 +129,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 village,
                 Set.of(Gender.MALE.name()),
                 Set.of(SizeType.SMALL.name()),
+                20,
                 LocalDateTime.of(1, 1, 1, 0, 0, 0),
                 0L
         );

@@ -78,6 +78,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "신천동",
                 Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
                 Set.of(SizeType.SMALL.name()),
+                20,
                 LocalDateTime.of(1, 1, 1, 0, 0, 0),
                 0L
         );
@@ -127,6 +128,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         .param("village", request.village())
                         .param("genderParams", request.genderParams().toArray(String[]::new))
                         .param("sizeParams", request.sizeParams().toArray(String[]::new))
+                        .param("pageSize", String.valueOf(request.pageSize()))
                         .param("lastFoundCreatedAt", request.lastFoundCreatedAt().toString())
                         .param("lastFoundId", String.valueOf(request.lastFoundId())))
                 .andExpect(status().isOk())
@@ -146,6 +148,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         parameterWithName("village").description("모임의 읍/면/동주소, nullable"),
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
                                         parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"),
+                                        parameterWithName("pageSize").description("한 번에 조회할 페이지 사이즈"),
                                         parameterWithName("lastFoundCreatedAt").description("마지막으로 조회한 모임의 생성시간 (yyyy-MM-dd'T'HH:mm:ss), 첫 페이지 조회 시 9999-12-31T23:59:59"),
                                         parameterWithName("lastFoundId").description("마지막으로 조회한 모임의 id, 첫 페이지 조회 시 0x7fffffffffffffff"))
                                 .responseFields(
