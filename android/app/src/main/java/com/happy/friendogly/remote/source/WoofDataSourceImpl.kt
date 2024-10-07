@@ -5,6 +5,7 @@ import com.happy.friendogly.data.model.PetExistenceDto
 import com.happy.friendogly.data.model.PlaygroundArrivalDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
+import com.happy.friendogly.data.model.PlaygroundSummaryDto
 import com.happy.friendogly.data.source.WoofDataSource
 import com.happy.friendogly.remote.api.WoofService
 import com.happy.friendogly.remote.mapper.toData
@@ -33,6 +34,10 @@ class WoofDataSourceImpl
 
         override suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfoDto> {
             return runCatching { service.getPlaygroundInfo(id).data.toData() }
+        }
+
+        override suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummaryDto> {
+            return runCatching { service.getPlaygroundSummary(id).data.toData() }
         }
 
         override suspend fun deleteFootprint(footprintId: Long): Result<Unit> {

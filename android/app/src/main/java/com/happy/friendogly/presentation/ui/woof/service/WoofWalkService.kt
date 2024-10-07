@@ -42,9 +42,7 @@ class WoofWalkService : Service() {
         return null
     }
 
-    private fun startForegroundService(
-        playStatusTitle: String,
-    ) {
+    private fun startForegroundService(playStatusTitle: String) {
         startLocationUpdate()
         createNotificationChannel()
         startForeground(SERVICE_ID, createNotification(playStatusTitle))
@@ -71,9 +69,7 @@ class WoofWalkService : Service() {
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
-    private fun createNotification(
-        playStatusTitle: String,
-    ): Notification {
+    private fun createNotification(playStatusTitle: String): Notification {
         val intent =
             MainActivity.getIntent(this).apply {
                 putExtra(EXTRA_FRAGMENT, WoofFragment.TAG)
@@ -120,7 +116,7 @@ class WoofWalkService : Service() {
 
         fun getIntent(
             context: Context,
-            playStatus: PlayStatus
+            playStatus: PlayStatus,
         ): Intent {
             return Intent(context, WoofWalkService::class.java)
                 .apply {

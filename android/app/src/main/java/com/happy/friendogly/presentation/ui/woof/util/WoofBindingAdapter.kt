@@ -1,10 +1,6 @@
 package com.happy.friendogly.presentation.ui.woof.util
 
 import android.content.res.Resources
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
@@ -12,7 +8,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView
@@ -29,34 +24,6 @@ import java.time.Period
 
 private const val MARGIN_BOTTOM_DEFAULT = 36
 private const val MARGIN_BOTTOM_PLAYING = 108
-
-@BindingAdapter("memberName")
-fun TextView.bindMemberName(memberName: String) {
-    val spannableString =
-        SpannableString(
-            String.format(
-                resources.getString(R.string.woof_member_name),
-                memberName,
-            ),
-        )
-    val memberNameLength = memberName.length
-    spannableString.apply {
-        setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(context, R.color.coral500)),
-            0,
-            memberNameLength,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-        )
-        setSpan(
-            UnderlineSpan(),
-            0,
-            memberNameLength,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-        )
-    }
-
-    text = spannableString
-}
 
 @BindingAdapter("petAge")
 fun TextView.bindPetAge(petBirthDate: LocalDate?) {
@@ -99,9 +66,16 @@ fun TextView.bindPetGender(petGender: Gender?) {
     }
 }
 
-@BindingAdapter("uiState")
-fun View.bindMyFootprintBtnVisibility(uiState: WoofUiState?) {
-    isVisible = (uiState != WoofUiState.RegisteringPlayground)
+@BindingAdapter("myPlaygroundBtnVisibility")
+fun TextView.bindMyPlaygroundBtnVisibility(uiState: WoofUiState?) {
+    isVisible =
+        (uiState != WoofUiState.RegisteringPlayground && uiState != WoofUiState.ViewingPlaygroundSummary)
+}
+
+@BindingAdapter("playgroundLocationBtnVisibility")
+fun View.bindPlaygroundLocationBtnVisibility(uiState: WoofUiState?) {
+    isVisible =
+        (uiState != WoofUiState.RegisteringPlayground && uiState != WoofUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("registeringVisibility")
@@ -109,9 +83,18 @@ fun View.bindRegisteringVisibility(uiState: WoofUiState?) {
     isVisible = (uiState is WoofUiState.RegisteringPlayground)
 }
 
-@BindingAdapter("registeringVisibilityAnimation")
-fun View.bindRegisteringVisibilityAnimation(uiState: WoofUiState?) {
+@BindingAdapter("registeringPlaygroundAnimation")
+fun View.bindRegisteringAnimation(uiState: WoofUiState?) {
     if (uiState is WoofUiState.RegisteringPlayground) {
+        showViewAnimation()
+    } else {
+        hideViewAnimation()
+    }
+}
+
+@BindingAdapter("viewingPlaygroundSummaryAnimation")
+fun View.bindViewingPlaygroundSummaryAnimation(uiState: WoofUiState?) {
+    if (uiState is WoofUiState.ViewingPlaygroundSummary) {
         showViewAnimation()
     } else {
         hideViewAnimation()
@@ -132,10 +115,13 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
     }
 }
 
-@BindingAdapter("playgroundDetailVisibility")
-fun View.bindPlaygroundDetailVisibility(myFootprint: MyPlaygroundMarkerUiModel?) {
+@BindingAdapter("uiState", "playgroundDetailVisibility")
+fun View.bindPlaygroundDetailVisibility(
+    uiState: WoofUiState?,
+    myFootprint: MyPlaygroundMarkerUiModel?,
+) {
     isVisible =
-        if (myFootprint != null) {
+        if (myFootprint != null && (uiState == WoofUiState.FindingPlayground || uiState == WoofUiState.ViewingPlaygroundInfo)) {
             bringToFront()
             true
         } else {
@@ -218,7 +204,7 @@ fun AppCompatButton.bindPlaygroundBtn(
     if (myFootprint == null) {
         text = resources.getString(R.string.playground_participate)
         setOnClickListener {
-            playgroundAction.clickParticipatePlayground()
+            playgroundAction.clickParticipatePlaygroundBtn()
         }
     } else {
         text = resources.getString(R.string.playground_exit)

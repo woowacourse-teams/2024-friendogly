@@ -9,5 +9,7 @@ sealed interface WoofUiState {
 
     data object RegisteringPlayground : WoofUiState
 
+    data object ViewingPlaygroundSummary : WoofUiState
+
     data object ViewingPlaygroundInfo : WoofUiState
 }

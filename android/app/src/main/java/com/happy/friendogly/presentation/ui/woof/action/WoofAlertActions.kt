@@ -29,5 +29,7 @@ sealed interface WoofAlertActions {
 
     data object AlertFailToLoadPlaygroundInfoSnackbar : WoofAlertActions
 
+    data object AlertFailToLoadPlaygroundSummarySnackbar : WoofAlertActions
+
     data class AlertHelpBalloon(val textResId: Int) : WoofAlertActions
 }

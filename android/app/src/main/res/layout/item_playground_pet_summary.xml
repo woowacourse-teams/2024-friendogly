@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="petImageUrl"
+            type="String" />
+    </data>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        glide="@{petImageUrl}"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/circle_gray200"
+        tools:src="@drawable/ic_default_playground_summary_pet_image"
+        app:shapeAppearanceOverlay="@style/Circle" />
+</layout>

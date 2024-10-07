@@ -28,8 +28,8 @@ private fun View.animateView() {
     animate().translationY(0f).setDuration(ANIMATE_DURATION_MILLIS).setListener(
         object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
-                isVisible = true
                 bringToFront()
+                isVisible = true
             }
         },
     )

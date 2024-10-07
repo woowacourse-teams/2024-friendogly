@@ -271,6 +271,9 @@
     <string name="playground_exit">놀이터 나가기</string>
     <string name="playground_pet_is_playing">노는중</string>
     <string name="playground_pet_is_away">자리비움</string>
+    <string name="playground_look_around">놀이터 구경하기</string>
+    <string name="playground_play_together">만나서 다 같이 놀아요!</string>
+    <string name="playground_participation_status">참여 현황</string>
 
     <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
@@ -279,6 +282,7 @@
     <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
     <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
+    <string name="fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
 
 
     <!--프로필-->

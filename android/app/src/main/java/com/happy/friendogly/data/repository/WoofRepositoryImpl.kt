@@ -8,6 +8,7 @@ import com.happy.friendogly.presentation.ui.woof.model.PetExistence
 import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
 import com.happy.friendogly.remote.model.request.PlaygroundArrivalRequest
 import com.happy.friendogly.remote.model.request.PlaygroundRequest
 import javax.inject.Inject
@@ -58,6 +59,11 @@ class WoofRepositoryImpl
 
         override suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo> {
             return source.getPlaygroundInfo(id)
+                .mapCatching { dto -> dto.toDomain() }
+        }
+
+        override suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummary> {
+            return source.getPlaygroundSummary(id)
                 .mapCatching { dto -> dto.toDomain() }
         }
 

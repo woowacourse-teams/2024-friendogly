@@ -20,6 +20,7 @@ class ApiClient {
         const val PATCH_PLAYGROUND_ARRIVAL = "$BASE_URL/arrival"
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
         const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
+        const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{id}/summary"
     }
 
     object Member {
@@ -42,7 +43,8 @@ class ApiClient {
     }
 
     object Club {
-        private const val BASE_URL = "/api/clubs"
+//        private const val BASE_URL = "/api/clubs"
+        private const val BASE_URL = "/clubs"
         private const val MEMBER_URL = "/members"
         const val POST_CLUB = BASE_URL
         const val GET_CLUB_SEARCHING = "$BASE_URL/searching"

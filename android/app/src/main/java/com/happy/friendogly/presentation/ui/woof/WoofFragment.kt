@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -19,6 +20,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.happy.friendogly.R
@@ -43,6 +45,7 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter
+import com.happy.friendogly.presentation.ui.woof.adapter.PetSummaryAdapter
 import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
 import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.service.WoofWalkReceiver
@@ -104,7 +107,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private val mapView: MapView by lazy { binding.mapView }
 
     //    private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
-    private val adapter by lazy { PetDetailAdapter(viewModel) }
+    private val petDetailAdapter by lazy { PetDetailAdapter(viewModel) }
+    private val petSummaryAdapter by lazy { PetSummaryAdapter() }
 
     private val viewModel by viewModels<WoofViewModel>()
 
@@ -233,7 +237,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
-                if (viewModel.uiState.value is WoofUiState.ViewingPlaygroundInfo) {
+                if (viewModel.uiState.value is WoofUiState.ViewingPlaygroundInfo || viewModel.uiState.value is WoofUiState.ViewingPlaygroundSummary) {
                     viewModel.updateUiState(WoofUiState.FindingPlayground)
                 }
             }
@@ -241,11 +245,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
 
-            if (viewModel.myPlayground.value != null &&
-                viewModel.uiState.value !is WoofUiState.RegisteringPlayground
-            ) {
-                pathOverlay.coords =
-                    listOf(latLng, viewModel.myPlayground.value?.marker?.position)
+            if (viewModel.myPlayground.value != null && viewModel.uiState.value !is WoofUiState.RegisteringPlayground) {
+                pathOverlay.coords = listOf(latLng, viewModel.myPlayground.value?.marker?.position)
             }
         }
 
@@ -253,11 +254,15 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             if (reason == REASON_GESTURE) {
                 viewModel.changeTrackingModeToNoFollow()
 
-                if (viewModel.uiState.value is WoofUiState.FindingPlayground && viewModel.refreshBtnVisible.value == false) {
+                if (viewModel.uiState.value is WoofUiState.FindingPlayground &&
+                    viewModel.refreshBtnVisible.value == false
+                ) {
                     viewModel.updateRefreshBtnVisibility(visible = true)
                 }
 
-                if (viewModel.uiState.value is WoofUiState.ViewingPlaygroundInfo) {
+                if (viewModel.uiState.value is WoofUiState.ViewingPlaygroundInfo ||
+                    viewModel.uiState.value is WoofUiState.ViewingPlaygroundSummary
+                ) {
                     viewModel.updateUiState(WoofUiState.FindingPlayground)
                 }
             }
@@ -305,10 +310,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
-            adapter.submitList(playgroundInfo.petDetails)
-        }
-
         viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
             if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
                 val myPlaygroundMarker = viewModel.myPlayground.value ?: return@observe
@@ -322,6 +323,14 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 //            }
         }
 
+        viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
+            petDetailAdapter.submitList(playgroundInfo.petDetails)
+        }
+
+        viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
+            petSummaryAdapter.submitList(playgroundSummary.petImageUrls)
+        }
+
         viewModel.myPlayground.observe(viewLifecycleOwner) { myPlaygroundMarker ->
             if (myPlaygroundMarker != null) {
                 startWalkService()
@@ -329,7 +338,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                 setUpCircleOverlay(myPlaygroundMarker.marker.position)
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
-                viewModel.loadPlaygroundInfo(myPlaygroundMarker.playgroundId)
+                viewModel.loadPlaygroundInfo(myPlaygroundMarker.id)
                 viewModel.updatePlaygroundArrival(latLng)
             } else {
                 stopWalkService()
@@ -455,7 +464,16 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     )
 
                 is WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar ->
-                    showSnackbar(resources.getString(R.string.fail_to_load_playground_info))
+                    showSnackbar(
+                        resources.getString(
+                            R.string.fail_to_load_playground_info,
+                        ),
+                    )
+
+                is WoofAlertActions.AlertFailToLoadPlaygroundSummarySnackbar ->
+                    showSnackbar(
+                        resources.getString(R.string.fail_to_load_playground_summary),
+                    )
 
                 is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon(event.textResId)
             }
@@ -565,24 +583,30 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             width = MARKER_DEFAULT_WIDTH
             height = MARKER_DEFAULT_HEIGHT
             map = map
-            clickPlaygroundMarker(playgroundId = playground.id, marker = this)
+            clickPlaygroundMarker(id = playground.id, marker = this)
         }
 
         return marker
     }
 
     private fun clickPlaygroundMarker(
-        playgroundId: Long,
+        id: Long,
         marker: Marker,
     ) {
         marker.setOnClickListener {
             changePreviousClickedMarkerSize()
             viewModel.loadRecentlyClickedPlayground(marker)
-            viewModel.loadPlaygroundInfo(playgroundId = playgroundId)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
             changeClickedMarkerSize(marker)
-            viewModel.updateUiState(WoofUiState.ViewingPlaygroundInfo)
+            if (id == viewModel.myPlayground.value?.id) {
+                viewModel.loadPlaygroundInfo(id = id)
+                viewModel.updateUiState(WoofUiState.ViewingPlaygroundInfo)
+            } else {
+                viewModel.loadPlaygroundSummary(id = id)
+                viewModel.updateUiState(WoofUiState.ViewingPlaygroundSummary)
+            }
+
             true
         }
     }
@@ -752,10 +776,29 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupRecyclerView() {
-        binding.rcvPlayground.adapter = adapter
-
+        binding.rcvPlaygroundPet.adapter = petDetailAdapter
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        binding.rcvPlayground.addItemDecoration(divider)
+        binding.rcvPlaygroundPet.addItemDecoration(divider)
+
+        binding.rcvPlaygroundPetSummary.adapter = petSummaryAdapter
+        binding.rcvPlaygroundPetSummary.addItemDecoration(
+            object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State,
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    val position = parent.getChildAdapterPosition(view)
+                    if (position != 0) {
+                        val overlapOffset =
+                            (10f * requireContext().resources.displayMetrics.density).toInt()
+                        outRect.left = overlapOffset * -1
+                    }
+                }
+            },
+        )
     }
 
     private fun setupBottomSheetBehavior() {
@@ -781,7 +824,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         if (viewModel.myPlayground.value != null) {
                             changePreviousClickedMarkerSize()
                         }
-                        binding.rcvPlayground.smoothScrollToPosition(0)
+                        binding.rcvPlaygroundPet.smoothScrollToPosition(0)
                     } else {
                         viewModel.updateRefreshBtnVisibility(false)
                     }

@@ -8,6 +8,7 @@ import com.happy.friendogly.remote.model.response.PetExistenceResponse
 import com.happy.friendogly.remote.model.response.PlaygroundArrivalResponse
 import com.happy.friendogly.remote.model.response.PlaygroundInfoResponse
 import com.happy.friendogly.remote.model.response.PlaygroundResponse
+import com.happy.friendogly.remote.model.response.PlaygroundSummaryResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -37,6 +38,11 @@ interface WoofService {
     suspend fun getPlaygroundInfo(
         @Path("id") id: Long,
     ): BaseResponse<PlaygroundInfoResponse>
+
+    @GET(ApiClient.PlayGround.GET_PLAYGROUND_INFO)
+    suspend fun getPlaygroundSummary(
+        @Path("id") id: Long,
+    ): BaseResponse<PlaygroundSummaryResponse>
 
     @DELETE(ApiClient.Footprints.DELETE_FOOTPRINT)
     suspend fun deleteFootprint(

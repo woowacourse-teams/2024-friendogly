@@ -11,8 +11,6 @@ interface WoofActionHandler {
 
     fun clickRefreshBtn()
 
-    fun clickExitPlaygroundBtn()
-
     fun clickBackBtn()
 
     fun clickCloseBtn()
@@ -23,5 +21,9 @@ interface WoofActionHandler {
 
     fun clickPetImage(petImageUrl: String)
 
-    fun clickParticipatePlayground()
+    fun clickParticipatePlaygroundBtn()
+
+    fun clickExitPlaygroundBtn()
+
+    fun clickLookAroundPlaygroundBtn()
 }

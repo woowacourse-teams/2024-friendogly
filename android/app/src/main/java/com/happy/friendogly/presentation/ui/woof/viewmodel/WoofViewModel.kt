@@ -10,6 +10,7 @@ import com.happy.friendogly.data.mapper.toPlayground
 import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
 import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
+import com.happy.friendogly.domain.usecase.GetPlaygroundSummaryUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundsUseCase
 import com.happy.friendogly.domain.usecase.PatchPlaygroundArrivalUseCase
 import com.happy.friendogly.domain.usecase.PostPlaygroundUseCase
@@ -24,6 +25,7 @@ import com.happy.friendogly.presentation.ui.woof.action.WoofNavigateActions
 import com.happy.friendogly.presentation.ui.woof.action.WoofTrackingModeActions
 import com.happy.friendogly.presentation.ui.woof.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.woof.model.PlayStatus
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
 import com.happy.friendogly.presentation.ui.woof.state.WoofUiState
 import com.happy.friendogly.presentation.ui.woof.uimodel.MyPlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
@@ -57,6 +59,7 @@ class WoofViewModel
         private val getPlaygroundsUseCase: GetPlaygroundsUseCase,
         private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
+        private val getPlaygroundSummaryUseCase: GetPlaygroundSummaryUseCase,
         private val deleteFootprintUseCase: DeleteFootprintUseCase,
     ) : BaseViewModel(), WoofActionHandler {
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
@@ -68,8 +71,7 @@ class WoofViewModel
         private val _myPlayground: MutableLiveData<MyPlaygroundMarkerUiModel?> = MutableLiveData()
         val myPlayground: LiveData<MyPlaygroundMarkerUiModel?> get() = _myPlayground
 
-        private val _nearPlaygrounds: MutableLiveData<List<Marker>> =
-            MutableLiveData()
+        private val _nearPlaygrounds: MutableLiveData<List<Marker>> = MutableLiveData()
         val nearPlaygrounds: LiveData<List<Marker>> get() = _nearPlaygrounds
 
         private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
@@ -78,11 +80,13 @@ class WoofViewModel
         private val _playgroundInfo: MutableLiveData<PlaygroundInfoUiModel> = MutableLiveData()
         val playgroundInfo: LiveData<PlaygroundInfoUiModel> get() = _playgroundInfo
 
+        private val _playgroundSummary: MutableLiveData<PlaygroundSummary> = MutableLiveData()
+        val playgroundSummary: LiveData<PlaygroundSummary> get() = _playgroundSummary
+
         private val _addressLine: MutableLiveData<String> = MutableLiveData()
         val addressLine: LiveData<String> get() = _addressLine
 
-        private val _mapActions: MutableLiveData<Event<WoofMapActions>> =
-            MutableLiveData()
+        private val _mapActions: MutableLiveData<Event<WoofMapActions>> = MutableLiveData()
         val mapActions: LiveData<Event<WoofMapActions>> get() = _mapActions
 
         private val _changeTrackingModeActions: MutableLiveData<Event<WoofTrackingModeActions>> =
@@ -101,16 +105,6 @@ class WoofViewModel
         private val _registerPlaygroundBtn: MutableLiveData<RegisterPlaygroundBtnUiModel> =
             MutableLiveData()
         val registerPlaygroundBtn: LiveData<RegisterPlaygroundBtnUiModel> get() = _registerPlaygroundBtn
-
-        fun loadPlaygroundInfo(playgroundId: Long) {
-            viewModelScope.launch {
-                getPlaygroundInfoUseCase(playgroundId).onSuccess { playgroundInfo ->
-                    _playgroundInfo.value = playgroundInfo.toPresentation()
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar)
-                }
-            }
-        }
 
         override fun clickPetExistenceBtn() {
             analyticsHelper.logPetExistenceBtnClicked()
@@ -154,11 +148,6 @@ class WoofViewModel
             }
         }
 
-        override fun clickExitPlaygroundBtn() {
-            exitPlayground()
-//        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
-        }
-
         override fun clickBackBtn() {
             analyticsHelper.logBackBtnClicked()
             updateUiState(WoofUiState.FindingPlayground)
@@ -188,7 +177,18 @@ class WoofViewModel
             _navigateActions.emit(WoofNavigateActions.NavigateToPetImage(petImageUrl))
         }
 
-        override fun clickParticipatePlayground() {
+        override fun clickParticipatePlaygroundBtn() {
+        }
+
+        override fun clickExitPlaygroundBtn() {
+            exitPlayground()
+//        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
+        }
+
+        override fun clickLookAroundPlaygroundBtn() {
+            val playgroundSummary = playgroundSummary.value ?: return
+            loadPlaygroundInfo(id = playgroundSummary.id)
+            updateUiState(WoofUiState.ViewingPlaygroundInfo)
         }
 
         private fun checkPetExistence() {
@@ -215,7 +215,7 @@ class WoofViewModel
         private fun exitPlayground() {
             viewModelScope.launch {
                 val myFootprintMarker = myPlayground.value ?: return@launch
-                deleteFootprintUseCase(footprintId = myFootprintMarker.playgroundId).onSuccess {
+                deleteFootprintUseCase(footprintId = myFootprintMarker.id).onSuccess {
                     _alertActions.emit(WoofAlertActions.AlertExitMyPlaygroundSnackbar)
                     _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
                     _myPlayground.value = null
@@ -223,22 +223,11 @@ class WoofViewModel
                     _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
                 }
             }
-
-//        viewModelScope.launch {
-//            patchFootprintRecentWalkStatusManualUseCase(walkStatus = WalkStatus.AFTER).onSuccess { footprintRecentWalkStatus ->
-//                _alertActions.emit(WoofAlertActions.AlertEndWalkSnackbar)
-//                _myWalkStatus.value = footprintRecentWalkStatus
-//                _myFootprintMarker.value = null
-//            }.onFailure {
-//                _alertActions.emit(WoofAlertActions.AlertFailToEndWalkSnackbar)
-//            }
-//        }
         }
 
         private fun changeLocationTrackingMode() {
             val changeTrackingModeAction =
-                changeTrackingModeActions.value?.value
-                    ?: WoofTrackingModeActions.FollowTrackingMode
+                changeTrackingModeActions.value?.value ?: WoofTrackingModeActions.FollowTrackingMode
             val trackingMode =
                 if (changeTrackingModeAction is WoofTrackingModeActions.FollowTrackingMode) {
                     WoofTrackingModeActions.FaceTrackingMode
@@ -295,12 +284,11 @@ class WoofViewModel
         fun loadMyPlayground(marker: Marker) {
             val actionsValue = mapActions.value?.value
             val myPlayground =
-                (actionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground
-                    ?: return
+                (actionsValue as? WoofMapActions.MakeMyPlaygroundMarker)?.myPlayground ?: return
 
             _myPlayground.value =
                 MyPlaygroundMarkerUiModel(
-                    playgroundId = myPlayground.id,
+                    id = myPlayground.id,
                     marker = marker,
                 )
         }
@@ -331,6 +319,26 @@ class WoofViewModel
                 },
                 ANIMATE_DURATION_MILLIS,
             )
+        }
+
+        fun loadPlaygroundInfo(id: Long) {
+            viewModelScope.launch {
+                getPlaygroundInfoUseCase(id).onSuccess { playgroundInfo ->
+                    _playgroundInfo.value = playgroundInfo.toPresentation()
+                }.onFailure {
+                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar)
+                }
+            }
+        }
+
+        fun loadPlaygroundSummary(id: Long) {
+            viewModelScope.launch {
+                getPlaygroundSummaryUseCase(id).onSuccess { playgroundSummary ->
+                    _playgroundSummary.value = playgroundSummary
+                }.onFailure {
+                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundSummarySnackbar)
+                }
+            }
         }
 
         fun loadRecentlyClickedPlayground(marker: Marker) {
