@@ -36,7 +36,6 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         );
     }
 
-
     @DisplayName("멤버가 놀이터를 등록하면 해당 멤버는 놀이터에 자동으로 참가")
     @Test
     void autoParticipatePlaygroundWhenCreate() {
@@ -86,5 +85,4 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
     }
-
 }
