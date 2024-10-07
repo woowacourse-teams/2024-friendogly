@@ -92,7 +92,7 @@ public class PetQueryServiceTest extends ServiceTest {
         assertThat(response.isExistPet()).isFalse();
     }
 
-    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : False")
+    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : True")
     @Test
     void existMineTrue() {
         // given
