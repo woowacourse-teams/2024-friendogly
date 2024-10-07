@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlaygroundCommandService {
 
-    private static final int PLAYGROUND_RADIUS = 155;
+    private static final int PLAYGROUND_RADIUS = 150;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -55,10 +55,10 @@ public class PlaygroundCommandService {
 
     private void validateOverlapPlayground(double latitude, double longitude) {
         Location location = new Location(latitude, longitude);
-        Location startLatitudeLocation = location.findLocationWithLatitudeDiff(-PLAYGROUND_RADIUS * 2);
+        Location startLatitudeLocation = location.findLocationWithLatitudeDiff(-(PLAYGROUND_RADIUS * 2));
         Location endLatitudeLocation = location.findLocationWithLatitudeDiff(PLAYGROUND_RADIUS * 2);
-        Location startLongitudeLocation = location.findLocationWithLongitudeDiff(latitude, -PLAYGROUND_RADIUS * 2);
-        Location endLongitudeLocation = location.findLocationWithLongitudeDiff(latitude, PLAYGROUND_RADIUS * 2);
+        Location startLongitudeLocation = location.findLocationWithLongitudeDiff(-(PLAYGROUND_RADIUS * 2));
+        Location endLongitudeLocation = location.findLocationWithLongitudeDiff(PLAYGROUND_RADIUS * 2);
 
         List<Playground> playgrounds = playgroundRepository.findAllByLatitudeBetweenAndLongitudeBetween(
                 startLatitudeLocation.getLatitude(),

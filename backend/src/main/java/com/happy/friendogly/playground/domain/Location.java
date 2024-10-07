@@ -50,8 +50,8 @@ public class Location {
         return new Location(diffLatitude, this.longitude);
     }
 
-    public Location findLocationWithLongitudeDiff(double latitude, int meter) {
-        double diffLongitude = GeoCalculator.calculateLongitudeOffset(latitude, this.longitude, meter);
+    public Location findLocationWithLongitudeDiff(int meter) {
+        double diffLongitude = GeoCalculator.calculateLongitudeOffset(this.latitude, this.longitude, meter);
         return new Location(this.latitude, diffLongitude);
     }
 }
