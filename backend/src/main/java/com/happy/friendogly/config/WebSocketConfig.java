@@ -3,6 +3,7 @@ package com.happy.friendogly.config;
 import com.happy.friendogly.auth.WebSocketArgumentResolver;
 import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -20,6 +21,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final WebSocketErrorHandler webSocketErrorHandler;
     private final JwtProvider jwtProvider;
 
+    @Value("${spring.rabbitmq.host}")
+    private String host;
+
+    @Value("${spring.rabbitmq.username}")
+    private String username;
+
+    @Value("${spring.rabbitmq.password}")
+    private String password;
+
     public WebSocketConfig(WebSocketInterceptor webSocketInterceptor,
             WebSocketErrorHandler webSocketErrorHandler,
             JwtProvider jwtProvider
@@ -34,11 +44,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setPathMatcher(new AntPathMatcher("."));
 
         registry.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
-                .setClientLogin("test")
-                .setClientPasscode("test")
-                .setSystemLogin("test")
-                .setSystemPasscode("test")
-                .setRelayHost("localhost")
+                .setClientLogin(username)
+                .setClientPasscode(password)
+                .setSystemLogin(username)
+                .setSystemPasscode(password)
+                .setRelayHost(host)
                 .setRelayPort(61613)
                 .setVirtualHost("/");
 

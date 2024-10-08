@@ -1,4 +1,8 @@
 spring:
+  rabbitmq:
+    host: "localhost"
+    username: "test"
+    password: "test"
   config:
     activate:
       on-profile: "local"
