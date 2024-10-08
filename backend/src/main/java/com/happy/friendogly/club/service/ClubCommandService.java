@@ -126,7 +126,7 @@ public class ClubCommandService {
         Club club = clubRepository.getById(clubId);
         Member member = memberRepository.getById(memberId);
         Member kickedMember = memberRepository.getById(request.kickedMemberId());
-        validateKick(club, kickedMember, member);
+        validateKick(club, member, kickedMember);
         club.removeClubMember(kickedMember);
         club.removeChatRoomMember(member);
     }
