@@ -52,9 +52,7 @@ public class RabbitMqConfig {
 
     @Bean
     public TopicExchange topicExchange() {
-        TopicExchange topicExchange = new TopicExchange(CHAT_EXCHANGE_NAME, true, false);
-        topicExchange.setShouldDeclare(true);
-        return topicExchange;
+        return new TopicExchange(CHAT_EXCHANGE_NAME, true, false);
     }
 
     @Bean
@@ -64,6 +62,11 @@ public class RabbitMqConfig {
                 .with(ROUTING_KEY);
     }
 
+    /**
+     * RabbitMQ 연결을 위한 ConnectionFactory 빈을 생성하여 반환
+     *
+     * @return ConnectionFactory 객체
+     */
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -75,6 +78,12 @@ public class RabbitMqConfig {
         return connectionFactory.getRabbitConnectionFactory();
     }
 
+    /**
+     * RabbitTemplate을 생성하여 반환
+     *
+     * @param connectionFactory RabbitMQ와의 연결을 위한 ConnectionFactory 객체
+     * @return RabbitTemplate 객체
+     */
     @Bean
     public RabbitTemplate rabbitTemplate(
             org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory) {
@@ -84,6 +93,11 @@ public class RabbitMqConfig {
         return rabbitTemplate;
     }
 
+    /**
+     * Jackson 라이브러리를 사용하여 메시지를 JSON 형식으로 변환하는 MessageConverter 빈을 생성
+     *
+     * @return MessageConverter 객체
+     */
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         ObjectMapper objectMapper = new ObjectMapper();
