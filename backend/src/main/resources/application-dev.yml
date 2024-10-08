@@ -33,10 +33,10 @@ file:
 
 spring:
   rabbitmq:
-    host: ${RABBITMQ_HOST}
+    host: localhost
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    stomp-port: 5959
+    stomp-port: 61613
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:file:/home/ubuntu/h2_test_data
