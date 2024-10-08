@@ -70,7 +70,7 @@ public class PlaygroundCommandService {
 
         boolean isExistWithinRadius = playgrounds.stream()
                 .anyMatch(playground -> location.isWithin(playground.getLocation(),
-                        PLAYGROUND_RADIUS));
+                        MAX_NON_OVERLAP_DISTANCE));
 
         if (isExistWithinRadius) {
             throw new FriendoglyException("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
