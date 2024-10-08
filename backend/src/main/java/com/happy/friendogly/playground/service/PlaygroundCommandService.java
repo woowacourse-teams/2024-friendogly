@@ -92,6 +92,15 @@ public class PlaygroundCommandService {
 
     public void leavePlayground(Long memberId) {
         playgroundMemberRepository.findByMemberId(memberId)
-                .ifPresent(playgroundMemberRepository::delete);
+                .ifPresent(playgroundMember -> {
+                    playgroundMemberRepository.delete(playgroundMember);
+                    deletePlaygroundConditional(playgroundMember.getPlayground());
+                });
+    }
+
+    private void deletePlaygroundConditional(Playground playground) {
+        if (!playgroundMemberRepository.existsByPlaygroundId(playground.getId())) {
+            playgroundRepository.delete(playground);
+        }
     }
 }

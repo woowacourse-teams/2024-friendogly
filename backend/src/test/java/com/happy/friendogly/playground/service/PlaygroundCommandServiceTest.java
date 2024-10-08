@@ -146,4 +146,25 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         // then
         assertThat(isPlaygroundMemberPresent).isFalse();
     }
+
+    @DisplayName("놀이터를 나갔을 때, 놀이터에 참여중인 멤버가 하나도 없으면 놀이터는 삭제된다.")
+    @Test
+    void deletePlaygroundWhenLeavePlaygroundAndNoMemberInPlayground() {
+        // given
+        Member member = saveMember("김도선");
+        Playground playground = savePlayground();
+        PlaygroundMember playgroundMember = playgroundMemberRepository.save(
+                new PlaygroundMember(
+                        playground,
+                        member
+                )
+        );
+
+        // when
+        playgroundCommandService.leavePlayground(member.getId());
+        boolean isExistPlayground = playgroundRepository.existsById(playground.getId());
+
+        // then
+        assertThat(isExistPlayground).isFalse();
+    }
 }

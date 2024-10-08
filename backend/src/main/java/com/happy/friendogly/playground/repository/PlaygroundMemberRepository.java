@@ -16,4 +16,6 @@ public interface PlaygroundMemberRepository extends JpaRepository<PlaygroundMemb
     boolean existsByMemberId(Long memberId);
 
     Optional<PlaygroundMember> findByMemberId(Long memberId);
+
+    boolean existsByPlaygroundId(Long playgroundId);
 }
