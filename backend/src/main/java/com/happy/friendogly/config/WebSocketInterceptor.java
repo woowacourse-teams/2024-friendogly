@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WebSocketInterceptor implements ChannelInterceptor {
 
-    private static final String TOPIC_CHAT_ENDPOINT = "/topic/chat/";
+    private static final String TOPIC_CHAT_ENDPOINT = "/exchange/chat";
     private static final String TOPIC_INVITE_ENDPOINT = "/topic/invite/";
 
     private final ClubRepository clubRepository;
@@ -54,12 +54,13 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         if (accessor.getCommand() == SUBSCRIBE) {
             log.info("------------------- {}", accessor.getDestination());
 
-//            String destination = accessor.getDestination();
-//            validateDestination(destination);
-//
-//            String accessToken = accessor.getFirstNativeHeader(AUTHORIZATION);
-//            long memberId = validateAndExtractMemberIdFrom(accessToken);
-//
+            String destination = accessor.getDestination();
+            validateDestination(destination);
+
+            String accessToken = accessor.getFirstNativeHeader(AUTHORIZATION);
+            long memberId = validateAndExtractMemberIdFrom(accessToken);
+
+            // TODO: 1대1 채팅방을 추가할 때 고려한다.
 //            if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
 //                validateInviteSubscription(memberId, destination);
 //            }
