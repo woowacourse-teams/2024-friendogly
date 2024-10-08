@@ -1,7 +1,6 @@
 package com.happy.friendogly.config;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.messaging.simp.stomp.StompCommand.MESSAGE;
 import static org.springframework.messaging.simp.stomp.StompCommand.SUBSCRIBE;
 
 import com.happy.friendogly.auth.service.jwt.JwtProvider;
@@ -11,16 +10,13 @@ import com.happy.friendogly.chat.repository.ChatRoomRepository;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.exception.FriendoglyWebSocketException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public class WebSocketInterceptor implements ChannelInterceptor {
 
     private static final String TOPIC_CHAT_ENDPOINT = "/exchange/chat";
@@ -47,13 +43,7 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
-        if (accessor.getCommand() == StompCommand.SEND) {
-            log.info("--------- publish to: {}", accessor.getDestination());
-        }
-
         if (accessor.getCommand() == SUBSCRIBE) {
-            log.info("------------------- {}", accessor.getDestination());
-
             String destination = accessor.getDestination();
             validateDestination(destination);
 
