@@ -1,13 +1,7 @@
 package com.happy.friendogly.playground.domain;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.acos;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.toDegrees;
-import static java.lang.Math.toRadians;
-
 import com.happy.friendogly.exception.FriendoglyException;
+import com.happy.friendogly.utils.GeoCalculator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -47,19 +41,25 @@ public class Location {
     }
 
     public boolean isWithin(Location other, int radius) {
-        return calculateDistanceInMeters(other) <= radius;
+        double distance = GeoCalculator.calculateDistanceInMeters(latitude, longitude, other.latitude, other.longitude);
+        return distance <= radius;
     }
 
-    private double calculateDistanceInMeters(Location other) {
-        double theta = this.longitude - other.longitude;
-        double dist = sin(toRadians(this.latitude)) * sin(toRadians(other.latitude)) +
-                cos(toRadians(this.latitude)) * cos(toRadians(other.latitude)) * cos(toRadians(theta));
-
-        dist = toDegrees(acos(dist));
-        return degreeToMeter(dist);
+    public Location plusLatitudeByMeters(int meters) {
+        double diffLatitude = GeoCalculator.calculateLatitudeOffset(this.latitude, meters);
+        return new Location(diffLatitude, this.longitude);
     }
 
-    private double degreeToMeter(double dist) {
-        return abs(dist * 60 * 1.1515 * 1609.344);
+    public Location minusLatitudeByMeters(int meters) {
+        return plusLatitudeByMeters(-meters);
+    }
+
+    public Location plusLongitudeByMeters(int meters) {
+        double diffLongitude = GeoCalculator.calculateLongitudeOffset(this.latitude, this.longitude, meters);
+        return new Location(this.latitude, diffLongitude);
+    }
+
+    public Location minusLongitudeByMeters(int meters) {
+        return plusLongitudeByMeters(-meters);
     }
 }

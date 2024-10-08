@@ -4,7 +4,7 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
 import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
-import com.happy.friendogly.pet.dto.response.FindExistMyPetResponse;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.service.PetCommandService;
@@ -75,8 +75,8 @@ public class PetController {
     }
 
     @GetMapping("/exists/mine")
-    public ApiResponse<FindExistMyPetResponse> existMine(@Auth Long memberId) {
-        FindExistMyPetResponse response = petQueryService.existMine(memberId);
+    public ApiResponse<FindPetExistenceResponse> checkPetExistence(@Auth Long memberId) {
+        FindPetExistenceResponse response = petQueryService.checkPetExistence(memberId);
         return ApiResponse.ofSuccess(response);
     }
 }

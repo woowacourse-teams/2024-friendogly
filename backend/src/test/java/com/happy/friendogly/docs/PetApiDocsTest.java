@@ -19,7 +19,7 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.pet.dto.request.SavePetRequest;
 import com.happy.friendogly.pet.dto.request.UpdatePetRequest;
-import com.happy.friendogly.pet.dto.response.FindExistMyPetResponse;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.dto.response.SavePetResponse;
 import com.happy.friendogly.pet.service.PetCommandService;
@@ -409,9 +409,9 @@ public class PetApiDocsTest extends RestDocsTest {
     @Test
     void findExistMine() throws Exception {
 
-        FindExistMyPetResponse response = new FindExistMyPetResponse(true);
+        FindPetExistenceResponse response = new FindPetExistenceResponse(true);
 
-        Mockito.when(petQueryService.existMine(anyLong()))
+        Mockito.when(petQueryService.checkPetExistence(anyLong()))
                 .thenReturn(response);
 
         mockMvc.perform(RestDocumentationRequestBuilders.get("/pets/exists/mine")

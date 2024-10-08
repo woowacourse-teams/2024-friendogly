@@ -8,7 +8,7 @@ import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
-import com.happy.friendogly.pet.dto.response.FindExistMyPetResponse;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.support.ServiceTest;
@@ -86,13 +86,13 @@ public class PetQueryServiceTest extends ServiceTest {
         );
 
         // when
-        FindExistMyPetResponse response = petQueryService.existMine(member.getId());
+        FindPetExistenceResponse response = petQueryService.checkPetExistence(member.getId());
 
         // then
         assertThat(response.isExistPet()).isFalse();
     }
 
-    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : False")
+    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : True")
     @Test
     void existMineTrue() {
         // given
@@ -112,7 +112,7 @@ public class PetQueryServiceTest extends ServiceTest {
         );
 
         // when
-        FindExistMyPetResponse response = petQueryService.existMine(member.getId());
+        FindPetExistenceResponse response = petQueryService.checkPetExistence(member.getId());
 
         // then
         assertThat(response.isExistPet()).isTrue();
