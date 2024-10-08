@@ -52,7 +52,7 @@ public class RabbitMqConfig {
 
     @Bean
     public TopicExchange topicExchange() {
-        return new TopicExchange(CHAT_EXCHANGE_NAME);
+        return new TopicExchange(CHAT_EXCHANGE_NAME, true, false);
     }
 
     @Bean
