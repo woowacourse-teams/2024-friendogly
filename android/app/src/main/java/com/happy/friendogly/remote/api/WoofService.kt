@@ -39,13 +39,11 @@ interface WoofService {
         @Path("id") id: Long,
     ): BaseResponse<PlaygroundInfoResponse>
 
-    @GET(ApiClient.PlayGround.GET_PLAYGROUND_INFO)
+    @GET(ApiClient.PlayGround.GET_PLAYGROUND_SUMMARY)
     suspend fun getPlaygroundSummary(
         @Path("id") id: Long,
     ): BaseResponse<PlaygroundSummaryResponse>
 
-    @DELETE(ApiClient.Footprints.DELETE_FOOTPRINT)
-    suspend fun deleteFootprint(
-        @Path("footprintId") footprintId: Long,
-    ): Response<Unit>
+    @DELETE(ApiClient.PlayGround.DELETE_PLAYGROUND_LEAVE)
+    suspend fun deletePlaygroundLeave(): Response<Unit>
 }

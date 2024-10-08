@@ -26,5 +26,5 @@ interface WoofRepository {
 
     suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummary>
 
-    suspend fun deleteFootprint(footprintId: Long): Result<Unit>
+    suspend fun deletePlaygroundLeave(): Result<Unit>
 }

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toPlayground
-import com.happy.friendogly.domain.usecase.DeleteFootprintUseCase
+import com.happy.friendogly.domain.usecase.DeletePlaygroundLeaveUseCase
 import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundSummaryUseCase
@@ -61,7 +61,7 @@ class WoofViewModel
         private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
         private val getPlaygroundSummaryUseCase: GetPlaygroundSummaryUseCase,
-        private val deleteFootprintUseCase: DeleteFootprintUseCase,
+        private val deletePlaygroundLeaveUseCase: DeletePlaygroundLeaveUseCase,
     ) : BaseViewModel(), WoofActionHandler {
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
         val uiState: LiveData<WoofUiState> get() = _uiState
@@ -182,7 +182,7 @@ class WoofViewModel
         }
 
         override fun clickExitPlaygroundBtn() {
-            exitPlayground()
+            leavePlayground()
 //        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
         }
 
@@ -219,11 +219,10 @@ class WoofViewModel
             }
         }
 
-        private fun exitPlayground() {
+        private fun leavePlayground() {
             viewModelScope.launch {
-                val myFootprintMarker = myPlayground.value ?: return@launch
-                deleteFootprintUseCase(footprintId = myFootprintMarker.id).onSuccess {
-                    _alertActions.emit(WoofAlertActions.AlertExitMyPlaygroundSnackbar)
+                deletePlaygroundLeaveUseCase().onSuccess {
+                    _alertActions.emit(WoofAlertActions.AlertLeaveMyPlaygroundSnackbar)
                     _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
                     _myPlayground.value = null
                 }.onFailure {

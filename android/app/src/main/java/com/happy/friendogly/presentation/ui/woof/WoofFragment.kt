@@ -379,10 +379,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
-                                    ),
+                                        LatLng(
+                                            playground.latitude,
+                                            playground.longitude,
+                                        ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -436,10 +436,10 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
-                is WoofAlertActions.AlertExitMyPlaygroundSnackbar ->
+                is WoofAlertActions.AlertLeaveMyPlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_exit_my_playground,
+                            R.string.playground_leave_my_playground,
                         ),
                     )
 

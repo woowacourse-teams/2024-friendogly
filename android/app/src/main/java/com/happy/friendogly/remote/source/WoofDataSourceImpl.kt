@@ -40,7 +40,7 @@ class WoofDataSourceImpl
             return runCatching { service.getPlaygroundSummary(id).data.toData() }
         }
 
-        override suspend fun deleteFootprint(footprintId: Long): Result<Unit> {
-            return runCatching { service.deleteFootprint(footprintId) }
+        override suspend fun deletePlaygroundLeave(): Result<Unit> {
+            return runCatching { service.deletePlaygroundLeave() }
         }
     }

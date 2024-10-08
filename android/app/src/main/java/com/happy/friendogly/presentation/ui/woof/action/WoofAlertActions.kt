@@ -11,7 +11,7 @@ sealed interface WoofAlertActions {
 
     data object AlertMarkerRegisteredSnackbar : WoofAlertActions
 
-    data object AlertExitMyPlaygroundSnackbar : WoofAlertActions
+    data object AlertLeaveMyPlaygroundSnackbar : WoofAlertActions
 
     data object AlertEndWalkSnackbar : WoofAlertActions
 

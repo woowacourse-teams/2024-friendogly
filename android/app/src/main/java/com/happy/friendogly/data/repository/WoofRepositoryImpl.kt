@@ -67,7 +67,7 @@ class WoofRepositoryImpl
                 .mapCatching { dto -> dto.toDomain() }
         }
 
-        override suspend fun deleteFootprint(footprintId: Long): Result<Unit> {
-            return source.deleteFootprint(footprintId)
+        override suspend fun deletePlaygroundLeave(): Result<Unit> {
+            return source.deletePlaygroundLeave()
         }
     }

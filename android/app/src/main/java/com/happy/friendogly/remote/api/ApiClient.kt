@@ -8,11 +8,6 @@ class ApiClient {
         const val POST_LOGOUT = "$BASE_URL/kakao/logout"
     }
 
-    object Footprints {
-        private const val BASE_URL = "/api/footprints"
-        const val DELETE_FOOTPRINT = "$BASE_URL/{footprintId}"
-    }
-
     object PlayGround {
         //        private const val BASE_URL = "/api/playgrounds"
         private const val BASE_URL = "/playgrounds"
@@ -21,6 +16,7 @@ class ApiClient {
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
         const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
         const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{id}/summary"
+        const val DELETE_PLAYGROUND_LEAVE = "$BASE_URL/leave"
     }
 
     object Member {
