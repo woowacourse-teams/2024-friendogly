@@ -3,6 +3,7 @@ spring:
     host: "localhost"
     username: "test"
     password: "test"
+    stomp-port: 61613
   config:
     activate:
       on-profile: "local"

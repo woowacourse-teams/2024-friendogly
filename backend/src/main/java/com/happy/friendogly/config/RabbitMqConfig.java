@@ -42,6 +42,9 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.password}")
     private String password;
 
+    @Value("${spring.rabbitmq.stomp-port}")
+    private int port;
+
     @Bean
     public Queue queue() {
         return new Queue(CHAT_QUEUE_NAME, true);
@@ -68,7 +71,7 @@ public class RabbitMqConfig {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost(host);
-        connectionFactory.setPort(61613);
+        connectionFactory.setPort(port);
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost("/");

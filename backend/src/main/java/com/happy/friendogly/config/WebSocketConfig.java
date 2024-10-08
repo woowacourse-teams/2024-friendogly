@@ -30,6 +30,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${spring.rabbitmq.password}")
     private String password;
 
+    @Value("${spring.rabbitmq.stomp-port}")
+    private int port;
+
     public WebSocketConfig(WebSocketInterceptor webSocketInterceptor,
             WebSocketErrorHandler webSocketErrorHandler,
             JwtProvider jwtProvider
@@ -49,7 +52,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setSystemLogin(username)
                 .setSystemPasscode(password)
                 .setRelayHost(host)
-                .setRelayPort(61613)
+                .setRelayPort(port)
                 .setVirtualHost("/");
 
         registry.setApplicationDestinationPrefixes("/publish");
