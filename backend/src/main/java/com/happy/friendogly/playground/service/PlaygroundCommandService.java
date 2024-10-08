@@ -89,4 +89,9 @@ public class PlaygroundCommandService {
         );
         return SaveJoinPlaygroundMemberResponse.from(playgroundMember);
     }
+
+    public void leavePlayground(Long memberId) {
+        playgroundMemberRepository.findByMemberId(memberId)
+                .ifPresent(playgroundMemberRepository::delete);
+    }
 }

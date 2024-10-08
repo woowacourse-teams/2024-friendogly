@@ -6,8 +6,10 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -274,7 +276,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
 
         when(playgroundCommandService.joinPlayground(anyLong(), anyLong()))
                 .thenReturn(response);
-        
+
         mockMvc
                 .perform(post("/playgrounds/{playgroundId}/join", 1)
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
@@ -306,6 +308,30 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                         )
                 ))
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("놀이터를 나간다")
+    @Test
+    void leavePlayground() throws Exception {
+        doNothing().when(playgroundCommandService).leavePlayground(anyLong());
+
+        mockMvc
+                .perform(delete("/playgrounds/leave")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isNoContent())
+                .andDo(document("playgrounds/leavePlayground",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("놀이터 나가기 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .build()
+                        )
+                ))
+                .andExpect(status().isNoContent());
     }
 
     @Override

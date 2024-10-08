@@ -84,11 +84,9 @@ public class PlaygroundController {
         return ApiResponse.ofSuccess(response);
     }
 
-    @DeleteMapping("/{playgroundId}/leave")
-    public ResponseEntity<Void> deleteJoinMember(
-            @Auth Long memberId,
-            @PathVariable Long playgroundId
-    ) {
+    @DeleteMapping("/leave")
+    public ResponseEntity<Void> deleteJoinMember(@Auth Long memberId) {
+        playgroundCommandService.leavePlayground(memberId);
         return ResponseEntity.noContent().build();
     }
 }

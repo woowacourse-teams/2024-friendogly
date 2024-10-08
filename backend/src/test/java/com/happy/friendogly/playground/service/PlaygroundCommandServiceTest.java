@@ -125,4 +125,25 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("이미 참여한 놀이터가 존재합니다.");
     }
+
+    @DisplayName("놀이터를 나갈 수 있다")
+    @Test
+    void leavePlayground() {
+        // given
+        Member member = saveMember("김도선");
+        Playground playground = savePlayground();
+        PlaygroundMember playgroundMember = playgroundMemberRepository.save(
+                new PlaygroundMember(
+                        playground,
+                        member
+                )
+        );
+
+        // when
+        playgroundCommandService.leavePlayground(member.getId());
+        boolean isPlaygroundMemberPresent = playgroundMemberRepository.findById(playgroundMember.getId()).isPresent();
+
+        // then
+        assertThat(isPlaygroundMemberPresent).isFalse();
+    }
 }
