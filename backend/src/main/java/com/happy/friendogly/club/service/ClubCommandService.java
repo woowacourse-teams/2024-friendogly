@@ -128,6 +128,7 @@ public class ClubCommandService {
         Member kickedMember = memberRepository.getById(request.kickedMemberId());
         validateKick(club, kickedMember, member);
         club.removeClubMember(kickedMember);
+        club.removeChatRoomMember(member);
     }
 
     private void validateKick(Club club, Member owner, Member kickedMember) {
