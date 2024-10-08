@@ -10,12 +10,14 @@ import com.rabbitmq.client.ConnectionFactory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,6 +78,13 @@ public class RabbitMqConfig {
         connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost("/");
         return connectionFactory.getRabbitConnectionFactory();
+    }
+
+    @Bean
+    public AmqpAdmin amqpAdmin(RabbitTemplate rabbitTemplate) {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate.getConnectionFactory());
+        rabbitAdmin.declareExchange(topicExchange());
+        return rabbitAdmin;
     }
 
     /**
