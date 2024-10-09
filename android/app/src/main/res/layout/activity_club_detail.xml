@@ -140,7 +140,50 @@
                 android:layout_height="2dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/gray300"
+                app:layout_constraintBottom_toTopOf="@+id/view_club_state_modify"
                 app:layout_constraintTop_toBottomOf="@id/view_club_detail_user_top_bar" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_margin="10dp"
+                android:id="@+id/view_club_state_modify"
+                app:detailViewClubModifyVisible = "@{vm.club.clubDetailViewType}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_club_detail_line"
+                app:layout_constraintBottom_toTopOf="@+id/rcv_club_detail_filter_list"
+                android:layout_width="wrap_content"
+                android:background="@drawable/rect_coral300_fill_20"
+                android:layout_height="48dp">
+                <LinearLayout
+                    android:background="@drawable/ripple_rect_fill20_white"
+                    onSingleClick="@{()->vm.openSelectState()}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    app:selectModifyStateBackground="@{vm.club.clubState}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:clubStateText="@{vm.club.clubState}"
+                        app:selectModifyStateTypeStyle="@{vm.club.clubState}"
+                        tools:style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+                        tools:text="모집중" />
+
+                    <Space
+                        android:layout_width="5dp"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        app:selectModifyStateImageTint="@{vm.club.clubState}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_bottom"
+                        tools:tint="@color/white" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_club_detail_filter_list"
@@ -149,7 +192,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/view_club_detail_line"
+                app:layout_constraintTop_toBottomOf="@id/view_club_state_modify"
                 tools:listitem="@layout/item_filter" />
 
             <TextView
