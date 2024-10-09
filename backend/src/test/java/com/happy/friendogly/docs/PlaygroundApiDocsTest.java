@@ -22,7 +22,6 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
-import com.happy.friendogly.pet.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.controller.PlaygroundController;
 import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
@@ -31,6 +30,7 @@ import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
@@ -292,15 +292,10 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                 )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.playground.id").description("놀이터의 ID"),
-                                        fieldWithPath("data.playground.location.latitude").description("놀이터의 위도"),
-                                        fieldWithPath("data.playground.location.longitude").description("놀이터의 경도"),
-                                        fieldWithPath("data.member.id").description("멤버의 ID"),
-                                        fieldWithPath("data.member.name.value").description("멤버의 이름"),
-                                        fieldWithPath("data.member.tag").description("멤버의 tag"),
-                                        fieldWithPath("data.member.imageUrl").description("멤버의 이미지URL"),
+                                        fieldWithPath("data.playgroundId").description("놀이터의 ID"),
+                                        fieldWithPath("data.memberId").description("멤버의 ID"),
                                         fieldWithPath("data.message").description("멤버의 상태 메세지"),
-                                        fieldWithPath("data.isInside").description("멤버의 놀이터 내부 유무"),
+                                        fieldWithPath("data.isArrived").description("멤버의 놀이터 도착 유무"),
                                         fieldWithPath("data.exitTime").description("멤버의 놀이터 나간 시간")
                                 )
                                 .responseSchema(Schema.schema("SavePlaygroundResponse"))

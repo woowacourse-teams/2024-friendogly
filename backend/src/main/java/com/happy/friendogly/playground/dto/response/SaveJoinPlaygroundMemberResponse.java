@@ -1,21 +1,19 @@
-package com.happy.friendogly.pet.dto.response;
+package com.happy.friendogly.playground.dto.response;
 
-import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import java.time.LocalDateTime;
 
 public record SaveJoinPlaygroundMemberResponse(
-        Playground playground,
-        Member member,
+        Long playgroundId,
+        Long memberId,
         String message,
-        boolean isInside,
+        boolean isArrived,
         LocalDateTime exitTime
 ) {
     public static SaveJoinPlaygroundMemberResponse from(PlaygroundMember playgroundMember) {
         return new SaveJoinPlaygroundMemberResponse(
-                playgroundMember.getPlayground(),
-                playgroundMember.getMember(),
+                playgroundMember.getPlayground().getId(),
+                playgroundMember.getMember().getId(),
                 playgroundMember.getMessage(),
                 playgroundMember.isInside(),
                 playgroundMember.getExitTime()

@@ -2,12 +2,12 @@ package com.happy.friendogly.playground.controller;
 
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
-import com.happy.friendogly.pet.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
+import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
