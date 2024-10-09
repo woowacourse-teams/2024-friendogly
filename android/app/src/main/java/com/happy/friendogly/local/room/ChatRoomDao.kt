@@ -17,53 +17,41 @@ interface ChatRoomDao {
     suspend fun updateChatRoom(chatRoom: ChatRoomEntity)
 
     @Insert
-    suspend fun insert(chatRoom: ChatRoomEntity)
+    suspend fun insertChatRoom(chatRoom: ChatRoomEntity)
+
+    @Insert
+    suspend fun insertChatMessage(message: ChatMessageEntity)
+
+    @Insert
+    suspend fun insertChatMessages(vararg messages: ChatMessageEntity)
 
     @Transaction
-    suspend fun addMessageToChatRoom(
+    suspend fun addNewMessageToChatRoom(
         chatRoomId: Long,
         newMessage: ChatMessageEntity,
     ) {
-        val chatRoom = getChatRoomById(chatRoomId)
-        if (chatRoom != null) {
-            val updatedMessages =
-                chatRoom.messages.toMutableList().apply {
-                    add(newMessage)
-                }
-            val updatedChatRoom = chatRoom.copy(messages = updatedMessages)
-            updateChatRoom(updatedChatRoom)
-        } else {
-            insert(ChatRoomEntity(id = chatRoomId, messages = listOf(newMessage)))
-        }
+        getChatRoomById(chatRoomId) ?: insertChatRoom(ChatRoomEntity(chatRoomId))
+        insertChatMessage(newMessage)
     }
 
     @Transaction
-    suspend fun addMessagesToChatRoom(
+    suspend fun addNewMessagesToChatRoom(
         chatRoomId: Long,
         newMessages: List<ChatMessageEntity>,
     ) {
-        val chatRoom = getChatRoomById(chatRoomId)
-        if (chatRoom != null) {
-            val updatedMessages = chatRoom.messages.toMutableList()
-
-            newMessages.forEach { newMessage ->
-                updatedMessages.find {
-                    it.createdAt == newMessage.createdAt && it.content == newMessage.content
-                } ?: return@forEach
-
-                updatedMessages.add(newMessage)
-            }
-
-            val updatedChatRoom = chatRoom.copy(messages = updatedMessages)
-            updateChatRoom(updatedChatRoom)
-        } else {
-            insert(ChatRoomEntity(id = chatRoomId, messages = newMessages))
-        }
+        getChatRoomById(chatRoomId) ?: insertChatRoom(ChatRoomEntity(chatRoomId))
+        insertChatMessages(*newMessages.toTypedArray())
     }
 
-    @Transaction
-    suspend fun getMessagesByRoomId(chatRoomId: Long): List<ChatMessageEntity> {
-        val chatRoom = getChatRoomById(chatRoomId)
-        return chatRoom?.messages ?: emptyList()
-    }
+    @Query("SELECT * FROM chat_message WHERE id == :chatRoomId")
+    suspend fun getMessagesByRoomId(chatRoomId: Long): List<ChatMessageEntity>
+
+    @Query("SELECT * FROM chat_message WHERE chat_room_id == :chatRoomId ORDER BY created_at DESC LIMIT 1")
+    suspend fun getLatestMessageByRoomId(chatRoomId: Long): ChatMessageEntity?
+
+    @Query("SELECT * FROM chat_message ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
+    suspend fun getMessagesInRange(
+        limit: Int,
+        offset: Int,
+    ): List<ChatMessageEntity>
 }
