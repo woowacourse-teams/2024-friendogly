@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface ChatTemplate {
 
-    void convertAndSend(String destination, Object payload);
+    void convertAndSend(Long chatRoomId, Object payload);
 }

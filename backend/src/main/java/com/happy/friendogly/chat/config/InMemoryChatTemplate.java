@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Profile("local")
 public class InMemoryChatTemplate implements ChatTemplate {
 
+    private static final String TOPIC_CHAT_PREFIX = "/exchange/chat.exchange/room.";
+
     private final SimpMessagingTemplate template;
 
     public InMemoryChatTemplate(SimpMessagingTemplate template) {
@@ -15,7 +17,7 @@ public class InMemoryChatTemplate implements ChatTemplate {
     }
 
     @Override
-    public void convertAndSend(String destination, Object payload) {
-        template.convertAndSend(destination, payload);
+    public void convertAndSend(Long chatRoomId, Object payload) {
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoomId, payload);
     }
 }

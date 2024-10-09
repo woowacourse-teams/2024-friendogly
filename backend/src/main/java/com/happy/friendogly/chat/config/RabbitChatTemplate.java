@@ -15,7 +15,7 @@ public class RabbitChatTemplate implements ChatTemplate {
     }
 
     @Override
-    public void convertAndSend(String destination, Object payload) {
-        rabbitTemplate.convertAndSend(destination, payload);
+    public void convertAndSend(Long chatRoomId, Object payload) {
+        rabbitTemplate.convertAndSend("chat.exchange", "room." + chatRoomId, payload);
     }
 }
