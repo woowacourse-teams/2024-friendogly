@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityChatBinding
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
+import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
 import com.happy.friendogly.presentation.ui.chatlist.chat.adapter.ChatAdapter
 import com.happy.friendogly.presentation.ui.chatlist.chatinfo.ChatInfoSideSheet
@@ -18,6 +20,7 @@ import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.utils.hideKeyboard
 import com.happy.friendogly.presentation.utils.logChatSendMessageClicked
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +37,34 @@ class ChatActivity :
     override fun initCreateView() {
         binding.vm = viewModel
         lifecycle.addObserver(ChatLifecycleObserver.getInstance())
+        val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
         initAdapter()
+
+        binding.rcvChatDetail.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(
+                    recyclerView: RecyclerView,
+                    newState: Int,
+                ) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (!binding.rcvChatDetail.canScrollVertically(-1)) {
+                        viewModel.getChatMessage(
+                            chatRoomId = chatId,
+                            currentPosition = adapter.itemCount - 1,
+                        )
+                    }
+                }
+            },
+        )
+
+        viewModel.newChatEvent.observeEvent(this) {
+            binding.rcvChatDetail.post {
+                binding.rcvChatDetail.smoothScrollToPosition(0)
+            }
+        }
+
         getChatList()
         clickBackBtn()
-        val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
 
         clickChatInfo(chatId)
 
@@ -87,11 +114,8 @@ class ChatActivity :
 
     private fun getChatList() {
         lifecycleScope.launch {
-            viewModel.chats.collect {
+            viewModel.chats.collectLatest {
                 adapter.submitList(it)
-                binding.rcvChatDetail.post {
-                    binding.rcvChatDetail.smoothScrollToPosition(it.size)
-                }
             }
         }
     }

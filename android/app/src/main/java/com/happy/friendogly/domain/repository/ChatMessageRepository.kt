@@ -1,18 +1,18 @@
 package com.happy.friendogly.domain.repository
 
 import com.happy.friendogly.domain.model.ChatComponent
-import java.time.LocalDateTime
+import kotlinx.coroutines.flow.Flow
 
 interface ChatMessageRepository {
-    suspend fun getAllChatMessages(
+    suspend fun getChatMessagesInRange(
         myMemberId: Long,
         chatRoomId: Long,
-    ): Result<List<ChatComponent>>
+        offset: Int,
+        limit: Int,
+    ): Flow<List<ChatComponent>>
 
-    suspend fun getChatMessageByTime(
-        myMemberId: Long,
+    suspend fun saveMessage(
         chatRoomId: Long,
-        since: LocalDateTime,
-        until: LocalDateTime,
-    ): Result<List<ChatComponent>>
+        message: ChatComponent,
+    ): Flow<Unit>
 }
