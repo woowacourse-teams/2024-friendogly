@@ -17,6 +17,11 @@ file:
     path: firebase-friendogly-private-key.json
 
 spring:
+  rabbitmq:
+    host: localhost
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    stomp-port: 61613
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:file:/home/ubuntu/h2_test_data;AUTO_SERVER=true

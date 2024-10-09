@@ -32,6 +32,11 @@ file:
     path: firebase-friendogly-private-key.json
 
 spring:
+  rabbitmq:
+    host: ${RABBITMQ_PROD_HOST} # TODO: 추가
+    username: ${RABBITMQ_PROD_USERNAME}
+    password: ${RABBITMQ_PROD_PASSWORD}
+    stomp-port: 61613
   sql:
     init:
       data-locations:

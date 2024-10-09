@@ -3,7 +3,6 @@ package com.happy.friendogly.chat.controller;
 import com.happy.friendogly.auth.WebSocketAuth;
 import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
-import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.happy.friendogly.chat.service.ChatCommandService;
 import com.happy.friendogly.chat.service.ChatRoomQueryService;
 import com.happy.friendogly.common.ApiResponse;
@@ -16,7 +15,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,55 +22,34 @@ public class ChatSocketController {
 
     private final ChatCommandService chatCommandService;
     private final ChatRoomQueryService chatRoomQueryService;
-    private final SimpMessagingTemplate template;
 
     public ChatSocketController(
             ChatCommandService chatCommandService,
-            ChatRoomQueryService chatRoomQueryService,
-            SimpMessagingTemplate template
+            ChatRoomQueryService chatRoomQueryService
     ) {
         this.chatCommandService = chatCommandService;
         this.chatRoomQueryService = chatRoomQueryService;
-        this.template = template;
     }
 
-    @MessageMapping("/invite")
+    @MessageMapping("/invite") // TODO: 1대1 채팅방 구현 시 수정 필요
     public void invite(
             @WebSocketAuth Long senderMemberId,
             @Payload InviteToChatRoomRequest request
     ) {
         chatRoomQueryService.validateInvitation(senderMemberId, request);
-        template.convertAndSend(
-                "/topic/invite/" + request.receiverMemberId(),
-                new InviteToChatRoomResponse(request.chatRoomId())
-        );
+//        template.convertAndSend(
+//                "/topic/invite/" + request.receiverMemberId(),
+//                new InviteToChatRoomResponse(request.chatRoomId())
+//        );
     }
 
-    @Deprecated
-    @MessageMapping("/enter/{chatRoomId}")
-    public void enter(
-            @WebSocketAuth Long memberId,
-            @DestinationVariable(value = "chatRoomId") Long chatRoomId
-    ) {
-        chatCommandService.sendEnter(memberId, chatRoomId);
-    }
-
-    @MessageMapping("/chat/{chatRoomId}")
+    @MessageMapping("chat.{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
             @DestinationVariable(value = "chatRoomId") Long chatRoomId,
             @Payload ChatMessageSocketRequest request
     ) {
         chatCommandService.sendChat(memberId, chatRoomId, request);
-    }
-
-    @Deprecated
-    @MessageMapping("/leave/{chatRoomId}")
-    public void leave(
-            @WebSocketAuth Long memberId,
-            @DestinationVariable(value = "chatRoomId") Long chatRoomId
-    ) {
-        chatCommandService.sendLeave(memberId, chatRoomId);
     }
 
     @MessageExceptionHandler
