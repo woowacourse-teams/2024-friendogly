@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ChatCommandService {
 
-    private static final String TOPIC_CHAT_PREFIX = "/exchange/chat.exchange/room.";
     private static final String EMPTY_CONTENT = "";
 
     private final MemberRepository memberRepository;
@@ -71,9 +70,10 @@ public class ChatCommandService {
     }
 
     private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
-        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember, LocalDateTime.now());
+        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember,
+                LocalDateTime.now());
         notificationService.sendChatNotification(chatRoom.getId(), chat);
-        chatTemplate.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
+        chatTemplate.convertAndSend(chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }
