@@ -4,6 +4,7 @@ import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.usecase.GetClubUseCase
+import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
@@ -41,6 +42,9 @@ class ClubDetailViewModelTest {
     @MockK
     private lateinit var postClubMemberUseCase: PostClubMemberUseCase
 
+    @MockK
+    private lateinit var patchClubUseCase: PatchClubUseCase
+
     @BeforeEach
     fun setup() {
         analyticsHelper = mockk(relaxed = true)
@@ -65,6 +69,7 @@ class ClubDetailViewModelTest {
                     analyticsHelper = analyticsHelper,
                     getClubUseCase = getClubUseCase,
                     postClubMemberUseCase = postClubMemberUseCase,
+                    patchClubUseCase = patchClubUseCase,
                 )
 
             // when
@@ -88,6 +93,7 @@ class ClubDetailViewModelTest {
                     analyticsHelper = analyticsHelper,
                     getClubUseCase = getClubUseCase,
                     postClubMemberUseCase = postClubMemberUseCase,
+                    patchClubUseCase = patchClubUseCase,
                 )
 
             // when
@@ -126,6 +132,7 @@ class ClubDetailViewModelTest {
                     analyticsHelper = analyticsHelper,
                     getClubUseCase = getClubUseCase,
                     postClubMemberUseCase = postClubMemberUseCase,
+                    patchClubUseCase = patchClubUseCase,
                 )
 
             // when
@@ -163,6 +170,7 @@ class ClubDetailViewModelTest {
                     analyticsHelper = analyticsHelper,
                     getClubUseCase = getClubUseCase,
                     postClubMemberUseCase = postClubMemberUseCase,
+                    patchClubUseCase = patchClubUseCase,
                 )
 
             // when

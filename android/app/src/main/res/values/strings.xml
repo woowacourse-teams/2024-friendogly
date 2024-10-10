@@ -173,17 +173,15 @@
     <string name="club_add_information_main_title">모임을 소개해주세요.</string>
     <string name="club_add_information_main_content">기준으로 모임이 생성돼요.</string>
     <string name="club_add_information_fail_address">모임 생성을 위해서 주소를 등록해주세요!</string>
-    <string name="club_add_dog_size_title">댕댕이 사이즈 선택</string>
-    <string name="club_add_dog_gender_title">댕댕이 성별 선택</string>
+    <string name="club_add_dog_size_title">강아지 사이즈 선택</string>
+    <string name="club_add_dog_gender_title">강아지 성별 선택</string>
     <string name="club_add_club_title">모임 제목</string>
     <string name="club_add_club_number">참여 가능 인원</string>
     <string name="club_add_club_content">모임 소개</string>
-    <string name="club_add_club_my_dog">내 댕댕이</string>
-    <string name="club_add_club_add_my_dog_text">댕댕이 추가</string>
     <string name="club_add_club">등록하기</string>
     <string name="club_add_club_subject_hint">모임명</string>
     <string name="club_add_content_hint">모임을 소개해주세요.</string>
-    <string name="club_add_filter_main_title">모집할 댕댕이를 설정해주세요.</string>
+    <string name="club_add_filter_main_title">모집할 강아지를 설정해주세요.</string>
     <string name="club_add_filter_main_content">사이즈와 성별을 선택할 수 있어요!</string>
     <string name="club_add_filter_all_select">누구나 가능해요!</string>
     <string name="club_add_detail_main_title">모임 정보를 입력해주세요</string>
@@ -212,9 +210,9 @@
     <string name="club_modify_recruitment">모집 여부</string>
     <string name="club_modify_fail">모임 수정에 실패하였습니다..</string>
 
-    <!--댕댕이 선택-->
+    <!--강아지 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
-    <string name="dog_select_content">조건에 맞는 댕댕이만 선택할 수 있어요!</string>
+    <string name="dog_select_content">조건에 맞는 강아지만 선택할 수 있어요!</string>
     <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
     <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
     <string name="dog_select_prevent_select">%s는 모임에 데려갈 수 없어요..</string>

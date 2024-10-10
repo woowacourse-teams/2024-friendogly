@@ -11,253 +11,309 @@
             type="com.happy.friendogly.presentation.ui.club.detail.ClubDetailViewModel" />
     </data>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/view_club_detail_top_bar"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                app:contentInsetStart="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/iv_club_detail_poster"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
                 <ImageView
-                    onSingleClick="@{()->vm.closeDetail()}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:background="@drawable/ripple_circle_white"
-                    android:padding="16dp"
-                    android:src="@drawable/ic_arrow_left"
-                    app:tint="@color/black" />
+                    android:id="@+id/iv_club_detail_poster"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@color/white"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_club_normal"
+                    app:clubGlide="@{vm.club.clubPoster}"
+                    app:layout_constraintBottom_toTopOf="@+id/view_club_detail_user_top_bar"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/view_club_detail_user_top_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    app:layout_constraintTop_toBottomOf="@id/iv_club_detail_poster" />
 
-                <ImageButton
-                    onSingleClick="@{()->vm.openMenu()}"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/ripple_circle_white"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_more_vertical"
-                    app:tint="@color/black" />
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-
-            <ImageView
-                android:id="@+id/iv_club_detail_poster"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/black"
-                android:backgroundTint="@color/coral30"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_club_normal"
-                app:clubGlide="@{vm.club.clubPoster}"
-                app:layout_constraintBottom_toTopOf="@+id/view_club_detail_user_top_bar"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_club_detail_top_bar" />
-
-            <View
-                android:id="@+id/view_club_detail_user_top_bar"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                app:layout_constraintTop_toBottomOf="@id/iv_club_detail_poster" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_club_detail_user_image"
-                glide="@{vm.club.clubLeaderImage}"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/img_profile_normal"
-                app:layout_constraintBottom_toBottomOf="@id/view_club_detail_user_top_bar"
-                app:layout_constraintStart_toStartOf="@id/view_club_detail_user_top_bar"
-                app:layout_constraintTop_toTopOf="@id/view_club_detail_user_top_bar"
-                app:shapeAppearanceOverlay="@style/Circle" />
-
-            <TextView
-                android:id="@+id/tv_club_detail_user_name"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{vm.club.clubLeaderName}"
-                app:layout_constraintBottom_toTopOf="@id/ll_club_detail_club_info"
-                app:layout_constraintStart_toEndOf="@id/iv_club_detail_user_image"
-                app:layout_constraintTop_toTopOf="@id/view_club_detail_user_top_bar"
-                tools:text="이름" />
-
-            <LinearLayout
-                android:id="@+id/ll_club_detail_club_info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@id/view_club_detail_user_top_bar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_club_detail_user_image"
-                app:layout_constraintTop_toBottomOf="@id/tv_club_detail_user_name">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_club_detail_user_image"
+                    glide="@{vm.club.clubLeaderImage}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/img_profile_normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_club_detail_user_top_bar"
+                    app:layout_constraintStart_toStartOf="@id/view_club_detail_user_top_bar"
+                    app:layout_constraintTop_toTopOf="@id/view_club_detail_user_top_bar"
+                    app:shapeAppearanceOverlay="@style/Circle" />
 
                 <TextView
-                    style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.club.clubLocation}"
-                    tools:text="잠실6동" />
-
-                <Space
+                    android:id="@+id/tv_club_detail_user_name"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{vm.club.clubLeaderName}"
+                    app:layout_constraintBottom_toTopOf="@id/ll_club_detail_club_info"
+                    app:layout_constraintStart_toEndOf="@id/iv_club_detail_user_image"
+                    app:layout_constraintTop_toTopOf="@id/view_club_detail_user_top_bar"
+                    tools:text="이름" />
 
-                <TextView
-                    style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_club_detail_club_info"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:clubDateTime="@{vm.club.clubDate}"
-                    tools:text="1일 전" />
-            </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_club_detail_user_top_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_club_detail_user_image"
+                    app:layout_constraintTop_toBottomOf="@id/tv_club_detail_user_name">
 
-            <View
-                android:id="@+id/view_club_detail_line"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray300"
-                app:layout_constraintTop_toBottomOf="@id/view_club_detail_user_top_bar" />
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.club.clubLocation}"
+                        tools:text="잠실6동" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_club_detail_filter_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/view_club_detail_line"
-                tools:listitem="@layout/item_filter" />
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/tv_club_detail_subject"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:paddingTop="10dp"
-                android:text="@{vm.club.title}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rcv_club_detail_filter_list"
-                tools:text="모임 이름이에요~모임 이름이에요~모임 이름이에요~모임 이름이에요~" />
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Medium.Gray07.Size14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:clubDateTime="@{vm.club.clubDate}"
+                        tools:text="1일 전" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_club_detail_content"
-                style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:paddingTop="10dp"
-                android:text="@{vm.club.content}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_club_detail_subject"
-                tools:text="모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다." />
+                <View
+                    android:id="@+id/view_club_detail_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray300"
+                    app:layout_constraintBottom_toTopOf="@+id/view_club_state_modify"
+                    app:layout_constraintTop_toBottomOf="@id/view_club_detail_user_top_bar" />
 
-            <LinearLayout
-                android:id="@+id/ll_club_detail_user_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center|start"
-                android:paddingTop="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_club_detail_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/view_club_state_modify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rect_coral300_fill_20"
+                    app:detailViewClubModifyVisible="@{vm.club.clubDetailViewType}"
+                    app:layout_constraintBottom_toTopOf="@+id/rcv_club_detail_filter_list"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_club_detail_line">
+
+                    <LinearLayout
+                        onSingleClick="@{()->vm.openSelectState()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ripple_rect_fill20_white"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        app:selectModifyStateBackground="@{vm.club.clubState}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:clubStateText="@{vm.club.clubState}"
+                            app:selectModifyStateTypeStyle="@{vm.club.clubState}"
+                            tools:style="@style/Theme.AppCompat.TextView.SemiBold.White.Size16"
+                            tools:text="모집중" />
+
+                        <Space
+                            android:layout_width="5dp"
+                            android:layout_height="wrap_content" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_bottom"
+                            app:selectModifyStateImageTint="@{vm.club.clubState}"
+                            tools:tint="@color/white" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_club_detail_filter_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/view_club_state_modify"
+                    tools:listitem="@layout/item_filter" />
 
                 <TextView
+                    android:id="@+id/tv_club_detail_subject"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@{vm.club.title}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rcv_club_detail_filter_list"
+                    tools:text="모임 이름이에요~모임 이름이에요~모임 이름이에요~모임 이름이에요~" />
+
+                <TextView
+                    android:id="@+id/tv_club_detail_content"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@{vm.club.content}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_club_detail_subject"
+                    tools:text="모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다.모임 내용입니다." />
+
+                <LinearLayout
+                    android:id="@+id/ll_club_detail_user_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center|start"
+                    android:paddingTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_club_detail_content">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/club_user_list_subject" />
+
+                    <ImageView
+                        android:id="@+id/iv_club_list_user_list_icon"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/ic_user_list" />
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@{@string/club_number_of_people(vm.club.currentNumberOfPeople,vm.club.maximumNumberOfPeople)}"
+                        tools:text="2/4명 참여" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_club_detail_user_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/ll_club_detail_user_list"
+                    tools:listitem="@layout/item_detail_profile" />
+
+                <TextView
+                    android:id="@+id/tv_club_list_dog_list_subject"
                     style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/club_user_list_subject" />
+                    android:layout_margin="10dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/club_dog_list_subject"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rcv_club_detail_user_list" />
 
-                <ImageView
-                    android:id="@+id/iv_club_list_user_list_icon"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_club_detail_dog_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/ic_user_list" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="90dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_club_list_dog_list_subject"
+                    tools:listitem="@layout/item_detail_profile" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
-                <TextView
-                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@{@string/club_number_of_people(vm.club.currentNumberOfPeople,vm.club.maximumNumberOfPeople)}"
-                    tools:text="2/4명 참여" />
-            </LinearLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/view_club_detail_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:contentInsetStart="0dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_club_detail_user_list"
-                android:layout_width="match_parent"
+            <ImageView
+                onSingleClick="@{()->vm.closeDetail()}"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/ll_club_detail_user_list"
-                tools:listitem="@layout/item_detail_profile" />
+                android:layout_gravity="start"
+                android:background="@drawable/ripple_circle_white"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_left"
+                app:tint="@color/black" />
 
-            <TextView
-                android:id="@+id/tv_club_list_dog_list_subject"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:paddingTop="10dp"
-                android:text="@string/club_dog_list_subject"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rcv_club_detail_user_list" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_club_detail_dog_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/tv_club_list_dog_list_subject"
-                tools:listitem="@layout/item_detail_profile" />
+            <ImageButton
+                onSingleClick="@{()->vm.openMenu()}"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ripple_circle_white"
+                android:padding="2dp"
+                android:src="@drawable/ic_more_vertical"
+                app:tint="@color/black" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <LinearLayout
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 onSingleClick="@{()->vm.confirmParticipation()}"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="24dp"
                 android:background="@drawable/rect_coral04_fill_16"
                 android:gravity="center"
                 app:detailViewTypeBackground="@{vm.club.clubDetailViewType}"
                 app:detailViewTypeStyle="@{vm.club.clubDetailViewType}"
                 app:detailViewTypeText="@{vm.club.clubDetailViewType}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rcv_club_detail_dog_list"
                 tools:text="참여하기"
                 tools:textColor="@color/white" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

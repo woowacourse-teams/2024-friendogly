@@ -9,7 +9,8 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.ClubState
 
 @BindingAdapter("selectModifyStateBackground")
-fun View.bindSelectModifyStateBackground(clubState: ClubState) {
+fun View.bindSelectModifyStateBackground(clubState: ClubState?) {
+    clubState ?: return
     val backgroundTint =
         if (clubState == ClubState.FULL) {
             ContextCompat.getColorStateList(
@@ -26,7 +27,8 @@ fun View.bindSelectModifyStateBackground(clubState: ClubState) {
 }
 
 @BindingAdapter("selectModifyStateTypeStyle")
-fun TextView.bindSelectModifyStateTypeStyle(clubState: ClubState) {
+fun TextView.bindSelectModifyStateTypeStyle(clubState: ClubState?) {
+    clubState ?: return
     val textStyle =
         if (clubState == ClubState.FULL) {
             R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
@@ -37,7 +39,8 @@ fun TextView.bindSelectModifyStateTypeStyle(clubState: ClubState) {
 }
 
 @BindingAdapter("selectModifyStateImageTint")
-fun ImageView.bindSelectModifyStateImageTint(clubState: ClubState) {
+fun ImageView.bindSelectModifyStateImageTint(clubState: ClubState?) {
+    clubState ?: return
     val backgroundTint =
         if (clubState == ClubState.FULL) {
             ContextCompat.getColorStateList(

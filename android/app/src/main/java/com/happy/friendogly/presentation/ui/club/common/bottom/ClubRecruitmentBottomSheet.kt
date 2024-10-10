@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.modify.bottom
+package com.happy.friendogly.presentation.ui.club.common.bottom
 
 import android.os.Bundle
 import android.view.LayoutInflater
