@@ -7,7 +7,6 @@ import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
 import com.happy.friendogly.local.room.ChatMessageDao
 import com.happy.friendogly.local.room.ChatMessageDatabase
-import com.happy.friendogly.local.room.ChatRoomDao
 import com.happy.friendogly.local.room.MessageTypeEntity
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

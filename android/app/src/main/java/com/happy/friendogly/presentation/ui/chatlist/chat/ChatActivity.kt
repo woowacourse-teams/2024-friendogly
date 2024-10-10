@@ -30,6 +30,9 @@ class ChatActivity :
     ChatNavigationAction {
     private val viewModel: ChatViewModel by viewModels()
     private lateinit var adapter: ChatAdapter
+    private val chatRoomId by lazy {
+        intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
+    }
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -37,45 +40,21 @@ class ChatActivity :
     override fun initCreateView() {
         binding.vm = viewModel
         lifecycle.addObserver(ChatLifecycleObserver.getInstance())
-        val chatId: Long = intent.getLongExtra(EXTRA_CHAT_ID, INVALID_ID)
         initAdapter()
-
-        binding.rcvChatDetail.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(
-                    recyclerView: RecyclerView,
-                    newState: Int,
-                ) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if (!binding.rcvChatDetail.canScrollVertically(-1)) {
-                        viewModel.getChatMessage(
-                            chatRoomId = chatId,
-                            currentPosition = adapter.itemCount - 1,
-                        )
-                    }
-                }
-            },
-        )
-
-        viewModel.newChatEvent.observeEvent(this) {
-            binding.rcvChatDetail.post {
-                binding.rcvChatDetail.smoothScrollToPosition(0)
-            }
-        }
-
+        addScrollListener()
+        scrollTopOnNewChat()
         getChatList()
         clickBackBtn()
-
-        clickChatInfo(chatId)
-
-        clickSendMessage(chatId)
-        viewModel.subscribeMessage(chatId)
+        clickChatInfo()
+        clickSendMessage()
+        viewModel.subscribeMessage(chatRoomId)
         hideMessageKeyBoard()
     }
 
-    private fun clickSendMessage(chatId: Long) {
+
+    private fun clickSendMessage() {
         binding.ibChatSendMessage.setOnClickListener {
-            viewModel.sendMessage(chatId, binding.edtChatSendMessage.text.toString())
+            viewModel.sendMessage(chatRoomId, binding.edtChatSendMessage.text.toString())
             binding.edtChatSendMessage.setText("")
             analyticsHelper.logChatSendMessageClicked()
         }
@@ -90,7 +69,7 @@ class ChatActivity :
         }
     }
 
-    private fun clickChatInfo(chatRoomId: Long) {
+    private fun clickChatInfo() {
         binding.ibChatSideMenu.setOnClickListener {
             val chatInfoSideSheet = ChatInfoSideSheet()
             chatInfoSideSheet.arguments =
@@ -112,10 +91,40 @@ class ChatActivity :
         binding.rcvChatDetail.adapter = adapter
     }
 
+    private fun addScrollListener() {
+        binding.rcvChatDetail.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(
+                    recyclerView: RecyclerView,
+                    newState: Int,
+                ) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    reachEndOfMessages()
+                }
+            },
+        )
+    }
+
+    private fun reachEndOfMessages(){
+        if (!binding.rcvChatDetail.canScrollVertically(-1)) {
+            viewModel.getChatMessage(
+                chatRoomId = chatRoomId,
+                currentPosition = adapter.itemCount - 1,
+            )
+        }
+    }
+
     private fun getChatList() {
         lifecycleScope.launch {
             viewModel.chats.collectLatest {
                 adapter.submitList(it)
+            }
+        }
+    }
+    private fun scrollTopOnNewChat() {
+        viewModel.newChatEvent.observeEvent(this) {
+            binding.rcvChatDetail.post {
+                binding.rcvChatDetail.smoothScrollToPosition(0)
             }
         }
     }

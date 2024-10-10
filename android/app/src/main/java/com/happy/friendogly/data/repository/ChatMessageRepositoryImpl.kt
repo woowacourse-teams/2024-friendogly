@@ -1,20 +1,18 @@
 package com.happy.friendogly.data.repository
 
-import android.util.Log
-import androidx.paging.map
 import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.mapper.toLocalData
+import com.happy.friendogly.data.model.MessageDto
 import com.happy.friendogly.data.source.ChatMessageDataSource
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.repository.ChatMessageRepository
 import com.happy.friendogly.local.mapper.toDomain
 import com.happy.friendogly.local.model.ChatMessageEntity
-import com.happy.friendogly.local.room.ChatRoomDao
+import com.happy.friendogly.local.room.ChatMessageDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -22,7 +20,7 @@ class ChatMessageRepositoryImpl
     @Inject
     constructor(
         private val dataSource: ChatMessageDataSource,
-        private val chatRoomDao: ChatRoomDao,
+        private val chatMessageDao: ChatMessageDao,
     ) : ChatMessageRepository {
         override suspend fun getChatMessagesInRange(
             myMemberId: Long,
@@ -32,7 +30,7 @@ class ChatMessageRepositoryImpl
         ): Flow<List<ChatComponent>> =
             flow {
                 val latestMessage =
-                    chatRoomDao.getLatestMessageByRoomId(chatRoomId)
+                    chatMessageDao.getLatestMessageByRoomId(chatRoomId)
                         ?: return@flow emit(
                             saveAndGetAllChatMessages(
                                 chatRoomId = chatRoomId,
@@ -41,10 +39,7 @@ class ChatMessageRepositoryImpl
                         )
 
                 saveNewMessages(chatRoomId, latestMessage)
-
-                val messages = chatRoomDao.getMessagesInRange(limit = limit, offset = offset).map { it.toDomain(myMemberId) }
-                Log.d("테스트", "db : $messages")
-                emit(messages)
+                emit(chatMessageDao.getMessagesInRange(limit = limit, offset = offset).map { it.toDomain(myMemberId) })
             }
 
         override suspend fun saveMessage(
@@ -52,7 +47,7 @@ class ChatMessageRepositoryImpl
             message: ChatComponent,
         ): Flow<Unit> =
             flow {
-                emit(chatRoomDao.addNewMessageToChatRoom(chatRoomId, message.toData(chatRoomId)))
+                emit(chatMessageDao.insert(message.toData(chatRoomId)))
             }
 
         private suspend fun saveNewMessages(
@@ -64,19 +59,23 @@ class ChatMessageRepositoryImpl
                     chatRoomId = chatRoomId,
                     since = latestMessage.createdAt,
                     until = LocalDateTime.now(),
-                ).last().filterNot { it.createdAt == latestMessage.createdAt && it.content == latestMessage.content }
+                ).last().filterNot { isSameMessage(it, latestMessage) }
 
-            chatRoomDao.addNewMessagesToChatRoom(chatRoomId, newMessages.toLocalData(chatRoomId))
+            chatMessageDao.insertAll(*newMessages.toLocalData(chatRoomId).toTypedArray())
         }
 
-        private suspend fun saveAndGetAllChatMessages(
+    private fun isSameMessage(
+        it: MessageDto,
+        latestMessage: ChatMessageEntity,
+    ) = it.createdAt == latestMessage.createdAt && it.content == latestMessage.content
+
+    private suspend fun saveAndGetAllChatMessages(
             chatRoomId: Long,
             myMemberId: Long,
         ): List<ChatComponent> {
             val newMessages = dataSource.getAllChatMessages(chatRoomId).last().sortedBy { it.createdAt }
-            chatRoomDao.addNewMessagesToChatRoom(
-                chatRoomId,
-                newMessages.toLocalData(chatRoomId),
+            chatMessageDao.insertAll(
+                *newMessages.toLocalData(chatRoomId).toTypedArray(),
             )
             return newMessages.toDomain(myMemberId)
         }
