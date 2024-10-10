@@ -133,13 +133,6 @@ fun View.bindPlaygroundInfoVisibility(
 fun View.bindPetExistenceBtnVisibility(uiState: WoofUiState?) {
     isVisible =
         (uiState != WoofUiState.RegisteringPlayground && uiState != WoofUiState.ViewingPlaygroundSummary)
-
-//    isVisible =
-//        if (uiState == WoofUiState.RegisteringPlayground) {
-//            false
-//        } else {
-//            myPlaygroundMarker == null
-//        }
 }
 
 @BindingAdapter("uiState", "refreshBtnVisibility")
@@ -172,7 +165,8 @@ fun TextView.bindRegisterPlaygroundBtnClickable(
 fun View.bindBtnMargin(myPlayground: PlaygroundMarkerUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
+        return TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
             .toInt()
     }
 
@@ -203,9 +197,9 @@ fun AppCompatButton.bindPlaygroundBtn(
     playgroundId: Long,
 ) {
     if (myPlayground != null && myPlayground.id == playgroundId) {
-        text = resources.getString(R.string.playground_exit)
+        text = resources.getString(R.string.playground_leave)
         setOnClickListener {
-            playgroundAction.clickExitPlaygroundBtn()
+            playgroundAction.clickLeavePlaygroundBtn()
         }
     } else {
         text = resources.getString(R.string.playground_join)

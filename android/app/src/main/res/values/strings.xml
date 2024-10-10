@@ -270,7 +270,7 @@
     <string name="woof_status_all">전체</string>
     <string name="woof_address_korea">대한민국</string>
     <string name="playground_join">놀이터 참여하기</string>
-    <string name="playground_exit">놀이터 나가기</string>
+    <string name="playground_leave">놀이터 나가기</string>
     <string name="playground_pet_is_playing">노는중</string>
     <string name="playground_pet_is_away">자리비움</string>
     <string name="playground_play_together">만나서 다 같이 놀아요!</string>

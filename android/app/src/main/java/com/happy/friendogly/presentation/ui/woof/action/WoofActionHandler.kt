@@ -23,5 +23,5 @@ interface WoofActionHandler {
 
     fun clickJoinPlaygroundBtn(playgroundId: Long)
 
-    fun clickExitPlaygroundBtn()
+    fun clickLeavePlaygroundBtn()
 }

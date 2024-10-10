@@ -80,7 +80,9 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 @AndroidEntryPoint
-class WoofFragment : Fragment(), OnMapReadyCallback {
+class WoofFragment :
+    Fragment(),
+    OnMapReadyCallback {
     private var _binding: FragmentWoofBinding? = null
     private val binding get() = _binding!!
     private var snackbar: Snackbar? = null
@@ -234,7 +236,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             isLocationButtonEnabled = false
             isZoomControlEnabled = false
             logoGravity = Gravity.TOP or Gravity.START
-            setLogoMargin(20, 20, 0, 0)
+            setLogoMargin(MAP_LOGO_MARGIN, MAP_LOGO_MARGIN, 0, 0)
         }
         binding.lbvWoofLocation.map = map
         binding.lbvWoofRegisterLocation.map = map
@@ -252,7 +254,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             latLng = LatLng(location.latitude, location.longitude)
 
             if (viewModel.myPlayground.value != null && viewModel.uiState.value !is WoofUiState.RegisteringPlayground) {
-                pathOverlay.coords = listOf(latLng, viewModel.myPlayground.value?.marker?.position)
+                pathOverlay.coords =
+                    listOf(
+                        latLng,
+                        viewModel.myPlayground.value
+                            ?.marker
+                            ?.position,
+                    )
             }
         }
 
@@ -298,7 +306,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is WoofUiState.LocationPermissionsNotGranted ->
-                    locationPermission.createAlarmDialog()
+                    locationPermission
+                        .createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
                 is WoofUiState.FindingPlayground -> hideRegisterPlaygroundScreen()
@@ -322,17 +331,21 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
-            petDetailAdapter.submitList(playgroundInfo.petDetails)
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    if (playgroundInfo.petDetails.size <= 2) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    } else {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                    }
-                },
-                200,
-            )
+            if (playgroundInfo != null) {
+                petDetailAdapter.submitList(playgroundInfo.petDetails)
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        if (playgroundInfo.petDetails.size <= 2) {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        } else {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                        }
+                    },
+                    200,
+                )
+            } else {
+                petDetailAdapter.submitList(emptyList())
+            }
         }
 
         viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
@@ -417,7 +430,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is WoofAlertActions.AlertHasNotLocationPermissionDialog ->
-                    locationPermission.createAlarmDialog()
+                    locationPermission
+                        .createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
@@ -599,7 +613,13 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
 
     private fun setUpPathOverlay() {
         pathOverlay.apply {
-            coords = listOf(latLng, viewModel.myPlayground.value?.marker?.position)
+            coords =
+                listOf(
+                    latLng,
+                    viewModel.myPlayground.value
+                        ?.marker
+                        ?.position,
+                )
             width = 30
             outlineWidth = 0
             patternImage = OverlayImage.fromResource(R.drawable.ic_path_pattern)
@@ -660,9 +680,8 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun markerIcon(playground: Playground): Int {
-        return if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
-    }
+    private fun markerIcon(playground: Playground): Int =
+        if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
 
     private fun showRegisterPlaygroundScreen() {
         val myPlayground = viewModel.myPlayground.value
@@ -747,7 +766,9 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         if (addresses.isEmpty()) return
         val address = addresses[0]
         val addressLine =
-            address.getAddressLine(0).replace(resources.getString(R.string.woof_address_korea), "")
+            address
+                .getAddressLine(0)
+                .replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
         viewModel.updateAddressLine(addressLine)
 
@@ -756,9 +777,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng {
-        return LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
-    }
+    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startWalkService() {
 //        val now = java.time.LocalDateTime.now()
@@ -914,14 +933,26 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
     private fun showBalloon(text: String) {
         balloon?.dismiss()
         balloon =
-            Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
-                .setTextSize(14f).setMarginBottom(10)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
-                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
+            Balloon
+                .Builder(requireContext())
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setText(text)
+                .setTextColorResource(R.color.white)
+                .setTextSize(14f)
+                .setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowSize(10)
+                .setArrowPosition(0.5f)
+                .setPadding(12)
+                .setFocusable(false)
+                .setCornerRadius(8f)
                 .setBackgroundColorResource(R.color.coral400)
-                .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                .setLifecycleOwner(viewLifecycleOwner)
                 .build()
+
+        balloon?.showAlignTop(binding.btnPlaygroundRegisteringHelp)
     }
 
     private fun showHelpBalloon(textRestId: Int) {
@@ -942,6 +973,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
+        private const val MAP_LOGO_MARGIN = 20
 
         const val TAG = "WoofFragment"
     }

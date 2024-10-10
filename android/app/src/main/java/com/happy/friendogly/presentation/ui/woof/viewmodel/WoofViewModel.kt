@@ -81,8 +81,8 @@ class WoofViewModel
         private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
         val recentlyClickedPlayground: LiveData<Marker> get() = _recentlyClickedPlayground
 
-        private val _playgroundInfo: MutableLiveData<PlaygroundInfoUiModel> = MutableLiveData()
-        val playgroundInfo: LiveData<PlaygroundInfoUiModel> get() = _playgroundInfo
+        private val _playgroundInfo: MutableLiveData<PlaygroundInfoUiModel?> = MutableLiveData()
+        val playgroundInfo: LiveData<PlaygroundInfoUiModel?> get() = _playgroundInfo
 
         private val _playgroundSummary: MutableLiveData<PlaygroundSummary> = MutableLiveData()
         val playgroundSummary: LiveData<PlaygroundSummary> get() = _playgroundSummary
@@ -169,7 +169,6 @@ class WoofViewModel
 
         override fun clickHelpBtn() {
             analyticsHelper.logHelpBtnClicked()
-            // VIEWING 상태일때 help 추가
             if (uiState.value is WoofUiState.RegisteringPlayground) {
                 val textResId = R.string.woof_register_playground_help
                 _alertActions.emit(WoofAlertActions.AlertHelpBalloon(textResId))
@@ -198,8 +197,18 @@ class WoofViewModel
             }
         }
 
-        override fun clickExitPlaygroundBtn() {
-            leavePlayground()
+        override fun clickLeavePlaygroundBtn() {
+            viewModelScope.launch {
+                deletePlaygroundLeaveUseCase()
+                    .onSuccess {
+                        _alertActions.emit(WoofAlertActions.AlertLeaveMyPlaygroundSnackbar)
+                        _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
+                        _myPlayground.value = null
+                        _playgroundInfo.value = null
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
+                    }
+            }
 //        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
         }
 
@@ -223,19 +232,6 @@ class WoofViewModel
                         // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
                         _alertActions.emit(WoofAlertActions.AlertAlreadyParticipatingInPlayground)
                         _alertActions.emit(WoofAlertActions.AlertFailToCheckPetExistence)
-                    }
-            }
-        }
-
-        private fun leavePlayground() {
-            viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
-                        _alertActions.emit(WoofAlertActions.AlertLeaveMyPlaygroundSnackbar)
-                        _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
-                        _myPlayground.value = null
-                    }.onFailure {
-                        _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
                     }
             }
         }
