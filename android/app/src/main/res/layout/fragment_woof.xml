@@ -59,9 +59,9 @@
                     android:id="@+id/btn_playground"
                     style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
                     playgroundAction="@{vm}"
-                    playgroundId="@{vm.playgroundInfo.id}"
                     playgroundBtn="@{vm.myPlayground}"
                     playgroundBtnVisibility="@{vm.playgroundInfo}"
+                    playgroundId="@{vm.playgroundInfo.id}"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="12dp"
@@ -130,7 +130,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_playground_location"
-            locationBtnMargin="@{vm.myPlayground}"
+            btnMargin="@{vm.myPlayground}"
             playgroundLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
 
         <FrameLayout
             android:id="@+id/btn_playground_location"
-            locationBtnMargin="@{vm.myPlayground}"
+            btnMargin="@{vm.myPlayground}"
             playgroundLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -178,12 +178,11 @@
 
         <ImageButton
             android:id="@+id/btn_playground_pet_existence"
-            petExistenceBtnVisibility="@{vm.myPlayground}"
+            btnMargin="@{vm.myPlayground}"
             uiState="@{vm.uiState}"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="20dp"
             android:background="@color/transparent"
             android:clickable="true"
             android:focusable="true"
@@ -412,22 +411,22 @@
                 android:layout_marginBottom="14dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@id/btn_playground_look_around"
+                app:layout_constraintBottom_toTopOf="@id/btn_playground_join"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:itemCount="5"
                 tools:listitem="@layout/item_playground_pet_summary" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_playground_look_around"
+                android:id="@+id/btn_playground_join"
                 style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginHorizontal="14dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"
-                android:onClick="@{() -> vm.clickLookAroundPlaygroundBtn()}"
-                android:text="@string/playground_look_around"
+                android:onClick="@{() -> vm.clickJoinPlaygroundBtn(vm.playgroundSummary.playgroundId)}"
+                android:text="@string/playground_join"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

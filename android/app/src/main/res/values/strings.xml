@@ -265,14 +265,14 @@
     <string name="woof_end_walk">산책 종료하기</string>
     <string name="playground_leave_my_playground">놀이터에서 나갔어요!</string>
     <string name="playground_already_participating_in_playground">이미 참여중인 놀이터가 존재합니다!</string>
+    <string name="playground_overlap_playground_creation">놀이터 등록 범위가 다른 놀이터와 중복됩니다!</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>
     <string name="woof_status_all">전체</string>
     <string name="woof_address_korea">대한민국</string>
-    <string name="playground_participate">놀이터 참여하기</string>
+    <string name="playground_join">놀이터 참여하기</string>
     <string name="playground_exit">놀이터 나가기</string>
     <string name="playground_pet_is_playing">노는중</string>
     <string name="playground_pet_is_away">자리비움</string>
-    <string name="playground_look_around">놀이터 구경하기</string>
     <string name="playground_play_together">만나서 다 같이 놀아요!</string>
     <string name="playground_participation_status">참여 현황</string>
 
@@ -284,6 +284,7 @@
     <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
     <string name="fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
     <string name="fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
+    <string name="fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
 
 
     <!--프로필-->

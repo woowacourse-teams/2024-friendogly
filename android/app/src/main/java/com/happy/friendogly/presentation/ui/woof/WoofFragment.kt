@@ -451,6 +451,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     )
                 }
 
+                is WoofAlertActions.AlertOverlapPlaygroundCreationSnackbar -> {
+                    resources.getString(
+                        R.string.playground_overlap_playground_creation,
+                    )
+                }
+
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
                 is WoofAlertActions.AlertFailToCheckPetExistence ->
                     showSnackbar(
@@ -497,6 +503,12 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                     showSnackbar(
                         resources.getString(R.string.fail_to_load_playground_summary),
                     )
+
+                is WoofAlertActions.AlertFailToJoinPlaygroundSnackbar -> {
+                    showSnackbar(
+                        resources.getString(R.string.fail_to_join_playground),
+                    )
+                }
 
                 is WoofAlertActions.AlertHelpBalloon -> showHelpBalloon(event.textResId)
             }

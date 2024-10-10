@@ -64,7 +64,8 @@ class WoofViewModel
         private val getPlaygroundSummaryUseCase: GetPlaygroundSummaryUseCase,
         private val postPlaygroundJoinUseCase: PostPlaygroundJoinUseCase,
         private val deletePlaygroundLeaveUseCase: DeletePlaygroundLeaveUseCase,
-    ) : BaseViewModel(), WoofActionHandler {
+    ) : BaseViewModel(),
+        WoofActionHandler {
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
         val uiState: LiveData<WoofUiState> get() = _uiState
 
@@ -180,18 +181,20 @@ class WoofViewModel
             _navigateActions.emit(WoofNavigateActions.NavigateToPetImage(petImageUrl))
         }
 
-        override fun clickParticipatePlaygroundBtn(playgroundId: Long) {
+        override fun clickJoinPlaygroundBtn(playgroundId: Long) {
             viewModelScope.launch {
-                postPlaygroundJoinUseCase(playgroundId = playgroundId).onSuccess { playgroundJoin ->
-                    val nearPlaygrounds = nearPlaygrounds.value ?: return@onSuccess
-                    _myPlayground.value =
-                        nearPlaygrounds.first { playground ->
-                            playground.id == playgroundJoin.playgroundId
-                        }
-                }.onFailure {
-                    // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
-                    _alertActions.emit(WoofAlertActions.AlertAlreadyParticipatingInPlayground)
-                }
+                postPlaygroundJoinUseCase(playgroundId = playgroundId)
+                    .onSuccess { playgroundJoin ->
+                        val nearPlaygrounds = nearPlaygrounds.value ?: return@onSuccess
+                        _myPlayground.value =
+                            nearPlaygrounds.first { playground ->
+                                playground.id == playgroundJoin.playgroundId
+                            }
+                    }.onFailure {
+                        // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
+                        _alertActions.emit(WoofAlertActions.AlertAlreadyParticipatingInPlayground)
+                        _alertActions.emit(WoofAlertActions.AlertFailToJoinPlaygroundSnackbar)
+                    }
             }
         }
 
@@ -200,48 +203,40 @@ class WoofViewModel
 //        _mapActions.emit(WoofMapActions.StopWalkTimeChronometer)
         }
 
-        override fun clickLookAroundPlaygroundBtn() {
-            val playgroundSummary = playgroundSummary.value ?: return
-            loadPlaygroundInfo(id = playgroundSummary.playgroundId)
-            updateUiState(WoofUiState.ViewingPlaygroundInfo)
-//            Handler(Looper.getMainLooper()).postDelayed(
-//                {
-//                    updateUiState(WoofUiState.ViewingPlaygroundInfo)
-//                },
-//                ANIMATE_DURATION_MILLIS,
-//            )
-        }
-
         private fun checkPetExistence() {
             viewModelScope.launch {
-                getPetExistenceUseCase().onSuccess { petExistence ->
-                    analyticsHelper.logPetExistence(petExistence.isExistPet)
-                    if (!petExistence.isExistPet) {
-                        _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
-                    } else {
-                        _uiState.value = WoofUiState.Loading
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            {
-                                _uiState.value = WoofUiState.RegisteringPlayground
-                            },
-                            ANIMATE_DURATION_MILLIS,
-                        )
+                getPetExistenceUseCase()
+                    .onSuccess { petExistence ->
+                        analyticsHelper.logPetExistence(petExistence.isExistPet)
+                        if (!petExistence.isExistPet) {
+                            _alertActions.emit(WoofAlertActions.AlertHasNotPetDialog)
+                        } else {
+                            _uiState.value = WoofUiState.Loading
+                            Handler(Looper.getMainLooper()).postDelayed(
+                                {
+                                    _uiState.value = WoofUiState.RegisteringPlayground
+                                },
+                                ANIMATE_DURATION_MILLIS,
+                            )
+                        }
+                    }.onFailure {
+                        // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
+                        _alertActions.emit(WoofAlertActions.AlertAlreadyParticipatingInPlayground)
+                        _alertActions.emit(WoofAlertActions.AlertFailToCheckPetExistence)
                     }
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToCheckPetExistence)
-                }
             }
         }
 
         private fun leavePlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase().onSuccess {
-                    _alertActions.emit(WoofAlertActions.AlertLeaveMyPlaygroundSnackbar)
-                    _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
-                    _myPlayground.value = null
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
-                }
+                deletePlaygroundLeaveUseCase()
+                    .onSuccess {
+                        _alertActions.emit(WoofAlertActions.AlertLeaveMyPlaygroundSnackbar)
+                        _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
+                        _myPlayground.value = null
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToDeleteMyFootprintSnackbar)
+                    }
             }
         }
 
@@ -268,15 +263,17 @@ class WoofViewModel
         fun registerMyPlayground(latLng: LatLng) {
             if (registerPlaygroundBtn.value?.inKorea == true) {
                 viewModelScope.launch {
-                    postPlaygroundUseCase(latLng.latitude, latLng.longitude).onSuccess { myPlayground ->
-                        _mapActions.emit(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground.toPlayground()))
-                        _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
-                        _uiState.value = WoofUiState.FindingPlayground
-                        scanNearPlaygrounds()
-                    }.onFailure {
-                        // 놀이터 반경 겹쳤을 때, 나머지 에러 처리
-                        _alertActions.emit(WoofAlertActions.AlertFailToRegisterPlaygroundSnackbar)
-                    }
+                    postPlaygroundUseCase(latLng.latitude, latLng.longitude)
+                        .onSuccess { myPlayground ->
+                            _mapActions.emit(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground.toPlayground()))
+                            _alertActions.emit(WoofAlertActions.AlertMarkerRegisteredSnackbar)
+                            _uiState.value = WoofUiState.FindingPlayground
+                            scanNearPlaygrounds()
+                        }.onFailure {
+                            // 놀이터 반경 겹쳤을 때, 나머지 에러 처리
+                            _alertActions.emit(WoofAlertActions.AlertOverlapPlaygroundCreationSnackbar)
+                            _alertActions.emit(WoofAlertActions.AlertFailToRegisterPlaygroundSnackbar)
+                        }
                 }
             } else {
                 _alertActions.emit(WoofAlertActions.AlertAddressOutOfKoreaSnackbar)
@@ -285,22 +282,23 @@ class WoofViewModel
 
         fun initPlaygrounds() {
             viewModelScope.launch {
-                getPlaygroundsUseCase().onSuccess { playgrounds ->
-                    analyticsHelper.logPlaygroundSize(playgrounds.size)
-                    val nearPlaygrounds =
-                        playgrounds.filter { playground -> !playground.isParticipating }
-                    _mapActions.value =
-                        Event(WoofMapActions.MakeNearPlaygroundMarkers(nearPlaygrounds = nearPlaygrounds))
-
-                    val myPlayground =
-                        playgrounds.firstOrNull { playground -> playground.isParticipating }
-                    if (myPlayground != null) {
+                getPlaygroundsUseCase()
+                    .onSuccess { playgrounds ->
+                        analyticsHelper.logPlaygroundSize(playgrounds.size)
+                        val nearPlaygrounds =
+                            playgrounds.filter { playground -> !playground.isParticipating }
                         _mapActions.value =
-                            Event(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground))
+                            Event(WoofMapActions.MakeNearPlaygroundMarkers(nearPlaygrounds = nearPlaygrounds))
+
+                        val myPlayground =
+                            playgrounds.firstOrNull { playground -> playground.isParticipating }
+                        if (myPlayground != null) {
+                            _mapActions.value =
+                                Event(WoofMapActions.MakeMyPlaygroundMarker(myPlayground = myPlayground))
+                        }
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar)
                     }
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar)
-                }
             }
         }
 
@@ -323,18 +321,19 @@ class WoofViewModel
         fun scanNearPlaygrounds() {
             _uiState.value = WoofUiState.Loading
             viewModelScope.launch {
-                getPlaygroundsUseCase().onSuccess { playgrounds ->
-                    analyticsHelper.logPlaygroundSize(playgrounds.size)
-                    val nearPlaygrounds =
-                        playgrounds.filter { playground -> !playground.isParticipating }
-                    _mapActions.emit(
-                        WoofMapActions.MakeNearPlaygroundMarkers(
-                            nearPlaygrounds = nearPlaygrounds,
-                        ),
-                    )
-                }.onFailure {
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar)
-                }
+                getPlaygroundsUseCase()
+                    .onSuccess { playgrounds ->
+                        analyticsHelper.logPlaygroundSize(playgrounds.size)
+                        val nearPlaygrounds =
+                            playgrounds.filter { playground -> !playground.isParticipating }
+                        _mapActions.emit(
+                            WoofMapActions.MakeNearPlaygroundMarkers(
+                                nearPlaygrounds = nearPlaygrounds,
+                            ),
+                        )
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundsSnackbar)
+                    }
             }
         }
 
@@ -350,23 +349,23 @@ class WoofViewModel
 
         fun loadPlaygroundInfo(id: Long) {
             viewModelScope.launch {
-                getPlaygroundInfoUseCase(id).onSuccess { playgroundInfo ->
-                    _playgroundInfo.value = playgroundInfo.toPresentation()
-                }.onFailure {
-                    println(it)
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar)
-                }
+                getPlaygroundInfoUseCase(id)
+                    .onSuccess { playgroundInfo ->
+                        _playgroundInfo.value = playgroundInfo.toPresentation()
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar)
+                    }
             }
         }
 
         fun loadPlaygroundSummary(id: Long) {
             viewModelScope.launch {
-                getPlaygroundSummaryUseCase(id).onSuccess { playgroundSummary ->
-                    _playgroundSummary.value = playgroundSummary
-                }.onFailure {
-                    println(it)
-                    _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundSummarySnackbar)
-                }
+                getPlaygroundSummaryUseCase(id)
+                    .onSuccess { playgroundSummary ->
+                        _playgroundSummary.value = playgroundSummary
+                    }.onFailure {
+                        _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundSummarySnackbar)
+                    }
             }
         }
 
@@ -384,8 +383,7 @@ class WoofViewModel
                     latLng.latitude,
                     latLng.longitude,
                 ).onSuccess { playgroundArrival ->
-                    _myPlayStatus.value =
-                        if (playgroundArrival.isArrived) PlayStatus.PLAYING else PlayStatus.AWAY
+                    _myPlayStatus.value = playgroundArrival.toPresentation()
                 }.onFailure {
                     _alertActions.emit(WoofAlertActions.AlertFailToUpdatePlaygroundArrival)
                 }

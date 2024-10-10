@@ -129,17 +129,17 @@ fun View.bindPlaygroundInfoVisibility(
         }
 }
 
-@BindingAdapter("uiState", "petExistenceBtnVisibility")
-fun View.bindPetExistenceBtnVisibility(
-    uiState: WoofUiState?,
-    myPlaygroundMarker: PlaygroundMarkerUiModel?,
-) {
+@BindingAdapter("uiState")
+fun View.bindPetExistenceBtnVisibility(uiState: WoofUiState?) {
     isVisible =
-        if (uiState == WoofUiState.RegisteringPlayground) {
-            false
-        } else {
-            myPlaygroundMarker == null
-        }
+        (uiState != WoofUiState.RegisteringPlayground && uiState != WoofUiState.ViewingPlaygroundSummary)
+
+//    isVisible =
+//        if (uiState == WoofUiState.RegisteringPlayground) {
+//            false
+//        } else {
+//            myPlaygroundMarker == null
+//        }
 }
 
 @BindingAdapter("uiState", "refreshBtnVisibility")
@@ -168,8 +168,8 @@ fun TextView.bindRegisterPlaygroundBtnClickable(
         }
 }
 
-@BindingAdapter("locationBtnMargin")
-fun View.bindLocationBtn(myPlayground: PlaygroundMarkerUiModel?) {
+@BindingAdapter("btnMargin")
+fun View.bindBtnMargin(myPlayground: PlaygroundMarkerUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -208,9 +208,9 @@ fun AppCompatButton.bindPlaygroundBtn(
             playgroundAction.clickExitPlaygroundBtn()
         }
     } else {
-        text = resources.getString(R.string.playground_participate)
+        text = resources.getString(R.string.playground_join)
         setOnClickListener {
-            playgroundAction.clickParticipatePlaygroundBtn(playgroundId)
+            playgroundAction.clickJoinPlaygroundBtn(playgroundId)
         }
     }
 }

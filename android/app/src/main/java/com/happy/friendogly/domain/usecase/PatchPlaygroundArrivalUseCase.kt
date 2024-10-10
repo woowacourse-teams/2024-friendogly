@@ -6,7 +6,9 @@ import javax.inject.Inject
 
 class PatchPlaygroundArrivalUseCase
     @Inject
-    constructor(private val repository: WoofRepository) {
+    constructor(
+        private val repository: WoofRepository,
+    ) {
         suspend operator fun invoke(
             latitude: Double,
             longitude: Double,

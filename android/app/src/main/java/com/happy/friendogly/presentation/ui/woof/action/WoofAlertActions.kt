@@ -15,6 +15,8 @@ sealed interface WoofAlertActions {
 
     data object AlertAlreadyParticipatingInPlayground : WoofAlertActions
 
+    data object AlertOverlapPlaygroundCreationSnackbar : WoofAlertActions
+
     data object AlertEndWalkSnackbar : WoofAlertActions
 
     data object AlertFailToCheckPetExistence : WoofAlertActions
@@ -32,6 +34,8 @@ sealed interface WoofAlertActions {
     data object AlertFailToLoadPlaygroundInfoSnackbar : WoofAlertActions
 
     data object AlertFailToLoadPlaygroundSummarySnackbar : WoofAlertActions
+
+    data object AlertFailToJoinPlaygroundSnackbar : WoofAlertActions
 
     data class AlertHelpBalloon(val textResId: Int) : WoofAlertActions
 }

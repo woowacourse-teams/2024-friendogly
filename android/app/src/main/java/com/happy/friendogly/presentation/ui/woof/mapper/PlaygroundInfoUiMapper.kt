@@ -4,8 +4,8 @@ import com.happy.friendogly.presentation.ui.woof.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundInfoUiModel
 
-fun PlaygroundInfo.toPresentation(): PlaygroundInfoUiModel {
-    return PlaygroundInfoUiModel(
+fun PlaygroundInfo.toPresentation(): PlaygroundInfoUiModel =
+    PlaygroundInfoUiModel(
         id = id,
         totalPetCount = totalPetCount,
         arrivedPetCount = arrivedPetCount,
@@ -17,4 +17,3 @@ fun PlaygroundInfo.toPresentation(): PlaygroundInfoUiModel {
                 petDetail.toPresentation(viewType)
             },
     )
-}

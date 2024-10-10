@@ -21,9 +21,7 @@ interface WoofActionHandler {
 
     fun clickPetImage(petImageUrl: String)
 
-    fun clickParticipatePlaygroundBtn(playgroundId: Long)
+    fun clickJoinPlaygroundBtn(playgroundId: Long)
 
     fun clickExitPlaygroundBtn()
-
-    fun clickLookAroundPlaygroundBtn()
 }
