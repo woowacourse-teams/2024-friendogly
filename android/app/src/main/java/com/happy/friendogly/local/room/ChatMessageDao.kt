@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import com.happy.friendogly.local.model.ChatMessageEntity
 
 @Dao
@@ -24,8 +23,9 @@ interface ChatMessageDao {
     @Query("SELECT * FROM chat_message WHERE chat_room_id == :chatRoomId ORDER BY created_at DESC LIMIT 1")
     suspend fun getLatestMessageByRoomId(chatRoomId: Long): ChatMessageEntity?
 
-    @Query("SELECT * FROM chat_message ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
-    suspend fun getMessagesInRange(
+    @Query("SELECT * FROM chat_message WHERE chat_room_id == :chatRoomId ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
+    suspend fun getMessagesByRoomIdInRange(
+        chatRoomId:Long,
         limit: Int,
         offset: Int,
     ): List<ChatMessageEntity>
