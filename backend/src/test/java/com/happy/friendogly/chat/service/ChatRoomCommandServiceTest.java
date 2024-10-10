@@ -1,13 +1,25 @@
 package com.happy.friendogly.chat.service;
 
+import static com.happy.friendogly.pet.domain.Gender.FEMALE;
+import static com.happy.friendogly.pet.domain.Gender.FEMALE_NEUTERED;
+import static com.happy.friendogly.pet.domain.Gender.MALE;
+import static com.happy.friendogly.pet.domain.Gender.MALE_NEUTERED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
+import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.service.ClubCommandService;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.support.ServiceTest;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +30,9 @@ class ChatRoomCommandServiceTest extends ServiceTest {
 
     @Autowired
     private ChatRoomCommandService chatRoomCommandService;
+
+    @Autowired
+    private ClubCommandService clubCommandService;
 
     private Member member1;
     private Member member2;
@@ -81,5 +96,34 @@ class ChatRoomCommandServiceTest extends ServiceTest {
                 () -> assertThat(foundChatRoom.containsMember(member2)).isFalse(),
                 () -> assertThat(foundChatRoom.containsMember(member3)).isTrue()
         );
+    }
+
+    @DisplayName("채팅방을 나가고 모임을 나가도 예외가 발생하지 않는다.")
+    @Transactional
+    @Test
+    void leaveChatRoom_ThenLeaveClub() {
+        // given
+        Pet pet = petRepository.save(
+                new Pet(member1, "n", "d", LocalDate.of(2020, 1, 1), SizeType.SMALL, MALE, "https://image.com"));
+
+        Club club = clubRepository.save(Club.create(
+                "선릉 강아지 모임",
+                "강아지 모입입니다.",
+                "서울특별시", "강남구", "대치동",
+                5,
+                member1,
+                Set.of(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL, SizeType.MEDIUM, SizeType.LARGE),
+                "https://image.com/image.jpg",
+                List.of(pet)
+        ));
+
+        ChatRoom chatRoom = club.getChatRoom();
+
+        // when
+        chatRoomCommandService.leave(member1.getId(), chatRoom.getId());
+
+        // then
+        assertDoesNotThrow(() -> clubCommandService.deleteClubMember(club.getId(), member1.getId()));
     }
 }

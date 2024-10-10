@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.happy.friendogly.local.room.ChatMessageDao
 import com.happy.friendogly.local.room.ChatMessageDatabase
-import com.happy.friendogly.local.room.ChatRoomDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +24,6 @@ object RoomModule {
             ChatMessageDatabase::class.java,
             "chat",
         ).build()
-
-    @Provides
-    @Singleton
-    fun providesChatRoomDao(chatMessageDatabase: ChatMessageDatabase): ChatRoomDao = chatMessageDatabase.chatRoomDao()
 
     @Provides
     @Singleton

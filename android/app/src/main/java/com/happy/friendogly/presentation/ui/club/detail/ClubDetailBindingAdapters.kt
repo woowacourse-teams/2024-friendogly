@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.club.detail
 
+import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -47,7 +48,14 @@ fun TextView.bindDetailViewTypeStyle(clubDetailViewType: ClubDetailViewType?) {
             ClubDetailViewType.RECRUITMENT,
             ClubDetailViewType.MINE,
             -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
+
             ClubDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
+}
+
+@BindingAdapter("detailViewClubModifyVisible")
+fun View.bindDetailViewClubModifyVisible(clubDetailViewType: ClubDetailViewType?) {
+    clubDetailViewType ?: return
+    this.visibility = if (clubDetailViewType == ClubDetailViewType.MINE) View.VISIBLE else View.GONE
 }

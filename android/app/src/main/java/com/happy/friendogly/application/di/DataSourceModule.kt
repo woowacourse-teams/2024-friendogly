@@ -4,7 +4,8 @@ import com.happy.friendogly.data.source.AddressDataSource
 import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.data.source.AlarmTokenDataSource
 import com.happy.friendogly.data.source.AuthDataSource
-import com.happy.friendogly.data.source.ChatDataSource
+import com.happy.friendogly.data.source.ChatMessageDataSource
+import com.happy.friendogly.data.source.ChatRoomDataSource
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
@@ -21,7 +22,8 @@ import com.happy.friendogly.local.source.AlarmSettingDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
 import com.happy.friendogly.remote.source.AlamTokenDataSourceImpl
 import com.happy.friendogly.remote.source.AuthDataSourceImpl
-import com.happy.friendogly.remote.source.ChatDataSourceImpl
+import com.happy.friendogly.remote.source.ChatMessageDataSourceImpl
+import com.happy.friendogly.remote.source.ChatRoomDataSourceImpl
 import com.happy.friendogly.remote.source.ClubDataSourceImpl
 import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.MyClubDataSourceImpl
@@ -55,7 +57,11 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsChatDataSource(dataSourceImpl: ChatDataSourceImpl): ChatDataSource
+    abstract fun bindsChatRoomDataSource(dataSourceImpl: ChatRoomDataSourceImpl): ChatRoomDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsChatMessageDataSource(dataSourceImpl: ChatMessageDataSourceImpl): ChatMessageDataSource
 
     @Binds
     @Singleton
