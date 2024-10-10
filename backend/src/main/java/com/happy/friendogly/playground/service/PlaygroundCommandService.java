@@ -1,5 +1,8 @@
 package com.happy.friendogly.playground.service;
 
+import static com.happy.friendogly.common.ErrorCode.OVERLAP_PLAYGROUND_CREATION;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -74,7 +77,11 @@ public class PlaygroundCommandService {
                         MAX_NON_OVERLAP_DISTANCE));
 
         if (isExistWithinRadius) {
-            throw new FriendoglyException("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
+            throw new FriendoglyException(
+                    "생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.",
+                    OVERLAP_PLAYGROUND_CREATION,
+                    BAD_REQUEST
+            );
         }
     }
 
