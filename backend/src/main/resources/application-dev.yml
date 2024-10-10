@@ -33,10 +33,11 @@ file:
 
 spring:
   rabbitmq:
-    host: localhost
+    host: ${RABBITMQ_HOST}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    stomp-port: 61613
+    port: 3100 # initial connection port: use 3100 instead of 5672
+    stomp-port: 9100 # STOMP port: use 9100 instead of 61613
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:file:/home/ubuntu/h2_test_data

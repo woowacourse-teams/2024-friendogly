@@ -33,10 +33,11 @@ file:
 
 spring:
   rabbitmq:
-    host: ${RABBITMQ_PROD_HOST} # TODO: 추가
+    host: ${RABBITMQ_PROD_HOST}
     username: ${RABBITMQ_PROD_USERNAME}
     password: ${RABBITMQ_PROD_PASSWORD}
-    stomp-port: 61613
+    port: 3100 # initial connection port: use 3100 instead of 5672
+    stomp-port: 9100 # STOMP port: use 9100 instead of 61613
   sql:
     init:
       data-locations:
