@@ -10,6 +10,7 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.utils.GeoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,6 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 () -> assertThat(response.longitude()).isEqualTo(request.longitude())
         );
     }
-
 
     @DisplayName("멤버가 놀이터를 등록하면 해당 멤버는 놀이터에 자동으로 참가")
     @Test
@@ -70,14 +70,14 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
 
     }
 
-    @DisplayName("놀이터 생성시, 놀이터 범위에 다른 겹치는 놀이터 범위가 존재하면 예외가 발생한다.")
+    @DisplayName("놀이터 생성시, 놀이터 범위에 다른 겹치는 놀이터 범위가 존재하면 예외가 발생한다. : 경도차이")
     @Test
-    void throwExceptionWhenOverlapPlaygroundScope() {
+    void throwExceptionWhenOverlapPlaygroundScopeWithLongitudeDiff() {
         // given
         Member member = saveMember("김도선");
         double latitude = 37.516382;
         double longitudeA = 127.120040;
-        double longitudeFar299mFromA = 127.123430;
+        double longitudeFar299mFromA = GeoCalculator.calculateLongitudeOffset(latitude, longitudeA, 299);
         savePlayground(latitude, longitudeA);
         SavePlaygroundRequest request = new SavePlaygroundRequest(latitude, longitudeFar299mFromA);
 
@@ -87,4 +87,20 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
                 .hasMessage("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
     }
 
+    @DisplayName("놀이터 생성시, 놀이터 범위에 다른 겹치는 놀이터 범위가 존재하면 예외가 발생한다. : 위도차이")
+    @Test
+    void throwExceptionWhenOverlapPlaygroundScopeWithLatitudeDiff() {
+        // given
+        Member member = saveMember("김도선");
+        double latitudeA = 37.516382;
+        double longitude = 127.120040;
+        double latitude299mFromA = GeoCalculator.calculateLatitudeOffset(latitudeA, 299);
+        savePlayground(latitudeA, longitude);
+        SavePlaygroundRequest request = new SavePlaygroundRequest(latitude299mFromA, longitude);
+
+        // when, then
+        assertThatThrownBy(() -> playgroundCommandService.save(request, member.getId()))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("생성할 놀이터 범위내에 겹치는 다른 놀이터 범위가 있습니다.");
+    }
 }

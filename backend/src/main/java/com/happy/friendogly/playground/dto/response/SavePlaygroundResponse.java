@@ -9,8 +9,8 @@ public record SavePlaygroundResponse(
         double longitude
 ) {
 
-    public static SavePlaygroundResponse from(Playground playground) {
-        return new SavePlaygroundResponse(
+    public SavePlaygroundResponse(Playground playground) {
+        this(
                 playground.getId(),
                 playground.getLocation().getLatitude(),
                 playground.getLocation().getLongitude()

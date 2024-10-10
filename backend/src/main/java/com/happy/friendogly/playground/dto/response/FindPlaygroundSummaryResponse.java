@@ -6,4 +6,5 @@ public record FindPlaygroundSummaryResponse(
         int totalPetCount,
         int arrivedPetCount
 ) {
+
 }

@@ -2,6 +2,7 @@ package com.happy.friendogly.pet.service;
 
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.util.List;
@@ -29,5 +30,9 @@ public class PetQueryService {
         return pets.stream()
                 .map(FindPetResponse::new)
                 .toList();
+    }
+
+    public FindPetExistenceResponse checkPetExistence(Long memberId) {
+        return new FindPetExistenceResponse(petRepository.existsByMemberId(memberId));
     }
 }

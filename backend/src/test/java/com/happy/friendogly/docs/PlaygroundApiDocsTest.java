@@ -136,7 +136,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 0,
                 false,
                 List.of(
-                        PlaygroundPetDetail.of(
+                        new PlaygroundPetDetail(
                                 1L,
                                 dummyPet1,
                                 null,
