@@ -65,4 +65,8 @@ public class PlaygroundMember {
     public boolean equalsMemberId(Long memberId) {
         return member.getId().equals(memberId);
     }
+
+    public boolean isSamePlayground(Playground playground) {
+        return this.playground.equals(playground);
+    }
 }

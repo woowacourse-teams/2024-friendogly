@@ -14,6 +14,7 @@ import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,14 +81,18 @@ public class PlaygroundQueryService {
 
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
         List<Playground> playgrounds = playgroundRepository.findAll();
+        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
+
+        if (playgroundMember.isPresent()) {
+            return playgrounds.stream().map(playground -> new FindPlaygroundLocationResponse(
+                    playground,
+                    playgroundMember.get().isSamePlayground(playground)
+            )).toList();
+        }
 
         return playgrounds.stream()
-                .map(playground -> new FindPlaygroundLocationResponse(
-                        playground.getId(),
-                        playground.getLocation().getLatitude(),
-                        playground.getLocation().getLongitude(),
-                        playgroundMemberRepository.existsByPlaygroundIdAndMemberId(playground.getId(), memberId)
-                )).toList();
+                .map(playground -> new FindPlaygroundLocationResponse(playground, false))
+                .toList();
     }
 
     public FindPlaygroundSummaryResponse findSummary(Long playgroundId) {
