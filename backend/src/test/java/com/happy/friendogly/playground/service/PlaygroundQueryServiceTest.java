@@ -150,8 +150,8 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
     @Test
     void limitPetImageIsFiveWhenFindSummary() {
         // given
-        Member member1 = saveMember("김도선");
-        Member member2 = saveMember("김도선");
+        Member member1 = saveMember("김도선1");
+        Member member2 = saveMember("김도선2");
         Pet pet = savePet(member1);
         savePet(member1);
         savePet(member1);
@@ -175,8 +175,8 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
     @Test
     void showArrivedPetImageFirstWhenFindSummary() {
         // given
-        Member member1 = saveMember("김도선");
-        Member member2 = saveMember("김도선");
+        Member member1 = saveMember("김도선1");
+        Member member2 = saveMember("김도선2");
         Pet pet = savePet(member1);
         savePet(member1);
         savePet(member1);
@@ -202,5 +202,54 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
 
         // then
         assertThat(response.petImageUrls().get(0)).isEqualTo("arrivedPetImage");
+    }
+
+    @DisplayName("놀이터의 요약정보를 조회시 도착한 펫우선으로 보여준후, 참여한 펫 우선으로 보여준다.")
+    @Test
+    void showParticipatingPetImageSecondWhenFindSummary() {
+        // given
+        Member member1 = saveMember("김도선");
+        Member member2 = saveMember("이충렬");
+        Member member3 = saveMember("박예찬");
+
+        savePet(member1);
+
+        Pet arrivedPet = petRepository.save(
+                new Pet(
+                        member2,
+                        "name",
+                        "description",
+                        LocalDate.of(2023, 10, 10),
+                        SizeType.LARGE,
+                        Gender.FEMALE,
+                        "arrivedPetImage"
+                )
+        );
+
+        Pet participatingPet = petRepository.save(
+                new Pet(
+                        member3,
+                        "name",
+                        "description",
+                        LocalDate.of(2023, 10, 10),
+                        SizeType.LARGE,
+                        Gender.FEMALE,
+                        "participatingPetImage"
+                )
+        );
+
+        Playground playground = savePlayground();
+        savePlaygroundMember(playground, member3);
+        saveArrivedPlaygroundMember(playground, member2);
+        savePlaygroundMember(playground, member1);
+
+        // when
+        FindPlaygroundSummaryResponse response = playgroundQueryService.findSummary(playground.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.petImageUrls().get(0)).isEqualTo("arrivedPetImage"),
+                () -> assertThat(response.petImageUrls().get(1)).isEqualTo("participatingPetImage")
+        );
     }
 }
