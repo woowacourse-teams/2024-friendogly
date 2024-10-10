@@ -84,10 +84,11 @@ public class PlaygroundQueryService {
         Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
 
         if (playgroundMember.isPresent()) {
-            return playgrounds.stream().map(playground -> new FindPlaygroundLocationResponse(
-                    playground,
-                    playgroundMember.get().isSamePlayground(playground)
-            )).toList();
+            return playgrounds.stream()
+                    .map(playground -> new FindPlaygroundLocationResponse(
+                            playground,
+                            playgroundMember.get().isSamePlayground(playground)
+                    )).toList();
         }
 
         return playgrounds.stream()

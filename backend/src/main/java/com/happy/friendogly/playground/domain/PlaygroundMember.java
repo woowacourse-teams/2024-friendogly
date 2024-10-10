@@ -12,12 +12,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode
 public class PlaygroundMember {
 
     @Id
@@ -67,6 +69,6 @@ public class PlaygroundMember {
     }
 
     public boolean isSamePlayground(Playground playground) {
-        return this.playground.equals(playground);
+        return this.playground.getId().equals(playground.getId());
     }
 }
