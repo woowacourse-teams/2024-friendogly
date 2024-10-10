@@ -311,10 +311,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_chat_leave"
         app:layout_constraintTop_toBottomOf="@id/tv_chat_join_people"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="33dp"
         tools:listitem="@layout/item_chat_join_people" />
+
+    <ImageButton
+        android:id="@+id/btn_chat_leave"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_leave"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

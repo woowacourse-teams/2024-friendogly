@@ -4,6 +4,15 @@ import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatUiModel
 
+fun ChatComponent.toUiModel() =
+    when (this) {
+        is ChatComponent.Date -> this.toUiModel()
+        is ChatComponent.Enter -> this.toUiModel()
+        is ChatComponent.Leave -> this.toUiModel()
+        is Message.Mine -> this.toUiModel()
+        is Message.Other -> this.toUiModel()
+    }
+
 fun ChatComponent.Date.toUiModel() =
     ChatUiModel.Date(
         date = createdAt.toLocalDate(),
