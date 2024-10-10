@@ -71,6 +71,17 @@ class EditPetBirthdayBottomSheet(
                         year.toString() + context.getString(R.string.birthday_year)
                     }.toTypedArray()
         }
+
+        val currentMonth = LocalDateTime.now().monthValue
+
+        yearNumberPicker.setOnValueChangedListener { _, _, curYear ->
+            monthNumberPicker.maxValue = currentMonth
+            if (curYear == currentYear) {
+                monthNumberPicker.maxValue = currentMonth
+            } else {
+                monthNumberPicker.maxValue = MAX_MONTH
+            }
+        }
     }
 
     private fun initMonthPicker(view: View) {
