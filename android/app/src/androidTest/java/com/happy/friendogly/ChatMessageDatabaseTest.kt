@@ -17,7 +17,6 @@ import java.time.LocalDateTime
 
 class ChatMessageDatabaseTest {
     private lateinit var chatMessageDao: ChatMessageDao
-    private lateinit var chatRoomDao: ChatRoomDao
 
     private lateinit var db: ChatMessageDatabase
 
@@ -30,7 +29,6 @@ class ChatMessageDatabaseTest {
             ).build()
 
         chatMessageDao = db.chatMessageDao()
-        chatRoomDao = db.chatRoomDao()
     }
 
     @After
@@ -55,45 +53,32 @@ class ChatMessageDatabaseTest {
     }
 
     @Test
-    fun `can_get_latest_mesage`()  {
+    fun `can_get_latest_mesage`() {
         // when
         runBlocking {
-            chatRoomDao.addNewMessageToChatRoom(2, DUMMY_MY_MESSAGE)
-            chatRoomDao.addNewMessageToChatRoom(2, DUMMY_CHAT_MESSAGE)
-            chatRoomDao.addNewMessageToChatRoom(2, DUMMY_CHAT_MESSAGE2)
+            chatMessageDao.insert(DUMMY_MY_MESSAGE)
+            chatMessageDao.insert(DUMMY_CHAT_MESSAGE)
+            chatMessageDao.insert(DUMMY_CHAT_MESSAGE2)
         }
 
         // then
         runBlocking {
-            val message = chatRoomDao.getLatestMessageByRoomId(2)
+            val message = chatMessageDao.getLatestMessageByRoomId(2)
             assertThat(message).isEqualTo(DUMMY_CHAT_MESSAGE2)
         }
     }
 
-    @Test
-    fun `can_update_chatRoom_message`() {
-        // when
-        runBlocking {
-            chatRoomDao.addNewMessageToChatRoom(2, DUMMY_MY_MESSAGE)
-            chatRoomDao.addNewMessageToChatRoom(2, DUMMY_CHAT_MESSAGE)
-        }
-
-        runBlocking {
-            val messages = chatRoomDao.getMessagesByRoomId(2)
-            assertThat(messages).contains(DUMMY_MY_MESSAGE, DUMMY_CHAT_MESSAGE)
-        }
-    }
 
     companion object {
         private val DUMMY_MY_MESSAGE =
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 6, 12, 14, 2),
                 member =
-                    ChatMemberEntity(
-                        1,
-                        "벼리",
-                        "",
-                    ),
+                ChatMemberEntity(
+                    1,
+                    "벼리",
+                    "",
+                ),
                 content = "",
                 type = MessageTypeEntity.CHAT,
                 id = 1,
@@ -104,11 +89,11 @@ class ChatMessageDatabaseTest {
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 6, 20, 14, 2),
                 member =
-                    ChatMemberEntity(
-                        2,
-                        "벼리",
-                        "",
-                    ),
+                ChatMemberEntity(
+                    2,
+                    "벼리",
+                    "",
+                ),
                 content = "ZZZZZZZZ",
                 type = MessageTypeEntity.CHAT,
                 id = 2,
@@ -119,11 +104,11 @@ class ChatMessageDatabaseTest {
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 7, 12, 14, 2),
                 member =
-                    ChatMemberEntity(
-                        2,
-                        "벼리",
-                        "",
-                    ),
+                ChatMemberEntity(
+                    2,
+                    "벼리",
+                    "",
+                ),
                 content = "ZZZZZZZZ",
                 type = MessageTypeEntity.CHAT,
                 id = 3,
