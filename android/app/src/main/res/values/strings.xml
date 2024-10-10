@@ -42,7 +42,7 @@
     <string name="club_manager">내가 방장인 모임</string>
     <string name="pets_profile">함께하는 반려동물</string>
     <string name="tv_pet_add">강아지를 등록해주세요</string>
-    <string name="recent_pet">최근 본 반려동물</string>
+    <string name="recent_pet">최근 본 강아지</string>
 
     <!--강아지 상세 화면-->
     <string name="neuterd_status">중성화를 했어요</string>
@@ -319,8 +319,8 @@
     <string name="pet_add_alert_positive">등록하기</string>
     <string name="pet_add_alert_negative">다음에 하기</string>
 
-    <!--최근 본 반려동물-->
-    <string name="recent_pet_title">최근 본 반려동물</string>
+    <!--최근 본 강아지-->
+    <string name="recent_pet_title">최근 본 강아지</string>
     <string name="recent_dog_male">#수컷</string>
     <string name="recent_dog_female">#암컷</string>
     <string name="recent_dog_male_neutered">#수컷 중성화</string>
@@ -340,7 +340,7 @@
     <string name="register_friendogly_description">내 반려견의 행복을 위한\n친구 찾기 서비스</string>
 
     <!--empty view-->
-    <string name="empty_view_title">최근에 본 반려동물이 없어요</string>
-    <string name="empty_view_description">주변에 사는 반려동물을 만나봐요</string>
+    <string name="empty_view_title">최근에 본 강아지가 없어요</string>
+    <string name="empty_view_description">주변에 사는 강아지를 만나봐요</string>
 
 </resources>
