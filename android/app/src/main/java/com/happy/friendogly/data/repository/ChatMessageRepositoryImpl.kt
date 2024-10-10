@@ -71,9 +71,9 @@ class ChatMessageRepositoryImpl
         }
 
         private fun isSameMessage(
-            it: MessageDto,
+            newMessage: MessageDto,
             latestMessage: ChatMessageEntity,
-        ) = it.createdAt == latestMessage.createdAt && it.content == latestMessage.content
+        ) = newMessage.createdAt == latestMessage.createdAt && newMessage.content == latestMessage.content
 
         private suspend fun saveAndGetAllChatMessages(
             chatRoomId: Long,
