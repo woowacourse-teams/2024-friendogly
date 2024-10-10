@@ -7,6 +7,7 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
@@ -84,5 +85,28 @@ public class PlaygroundQueryService {
                         playground.getLocation().getLongitude(),
                         playgroundMemberRepository.existsByPlaygroundIdAndMemberId(playground.getId(), memberId)
                 )).toList();
+    }
+
+    public FindPlaygroundSummaryResponse findSummary(Long playgroundId) {
+        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findAllByPlaygroundId(playgroundId);
+
+        int totalPetCount = 0;
+        int arrivedPetCount = 0;
+        List<String> petImageUrls = new ArrayList<>();
+
+        for (PlaygroundMember playgroundMember : playgroundMembers) {
+            List<Pet> pets = petRepository.findByMemberId(playgroundMember.getMember().getId());
+
+            totalPetCount += pets.size();
+            arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
+            petImageUrls.addAll(pets.stream().map(Pet::getImageUrl).toList());
+        }
+
+        return new FindPlaygroundSummaryResponse(
+                playgroundId,
+                totalPetCount,
+                arrivedPetCount,
+                petImageUrls.subList(0, 6)
+        );
     }
 }

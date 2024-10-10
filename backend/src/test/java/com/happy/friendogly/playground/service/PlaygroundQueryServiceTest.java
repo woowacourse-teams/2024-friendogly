@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -117,5 +119,27 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
 
         // then
         assertThat(response.get(0).isParticipating()).isEqualTo(false);
+    }
+
+    @DisplayName("놀이터의 요약정보를 조회한다.")
+    @Test
+    void findSummary() {
+        // given
+        Member member = saveMember("김도선");
+        Pet pet = savePet(member);
+        Playground playground = savePlayground();
+        PlaygroundMember playgroundMember = playgroundMemberRepository.save(
+                new PlaygroundMember(playground, member, "message", true, null)
+        );
+
+        // when
+        FindPlaygroundSummaryResponse response = playgroundQueryService.findSummary(playground.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.arrivedPetCount()).isEqualTo(1),
+                () -> assertThat(response.totalPetCount()).isEqualTo(1),
+                () -> assertThat(response.petImageUrls().get(0)).isEqualTo(pet.getImageUrl())
+        );
     }
 }

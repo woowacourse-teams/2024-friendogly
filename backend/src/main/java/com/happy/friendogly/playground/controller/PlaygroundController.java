@@ -56,9 +56,9 @@ public class PlaygroundController {
         return ApiResponse.ofSuccess(response);
     }
 
-    @GetMapping("/{id}/summary")
-    public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long id) {
-        return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10, 4));
+    @GetMapping("/{playgroundId}/summary")
+    public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long playgroundId) {
+        return ApiResponse.ofSuccess(playgroundQueryService.findSummary(playgroundId));
     }
 
     @GetMapping("/locations")

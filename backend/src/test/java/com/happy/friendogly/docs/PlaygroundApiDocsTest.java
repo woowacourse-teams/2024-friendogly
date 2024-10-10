@@ -30,6 +30,7 @@ import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
@@ -243,8 +244,19 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터의 참여 현황 요약 정보를 조회")
     @Test
     void findSummary() throws Exception {
+
+        FindPlaygroundSummaryResponse response = new FindPlaygroundSummaryResponse(
+                1L,
+                3,
+                1,
+                List.of("url1", "url2", "url3")
+        );
+
+        when(playgroundQueryService.findSummary(anyLong()))
+                .thenReturn(response);
+
         mockMvc
-                .perform(get("/playgrounds/{id}/summary", 1L))
+                .perform(get("/playgrounds/{playgroundId}/summary", 1L))
                 .andDo(document("playgrounds/summary",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -253,9 +265,10 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                 .summary("놀이터 참여 현황 요약 조회 API")
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.id").description("놀이터의 ID"),
+                                        fieldWithPath("data.playgroundId").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("전체 참여 강아지 수"),
-                                        fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수")
+                                        fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수"),
+                                        fieldWithPath("data.petImageUrls").description("참여중인 강아지 이미지 url")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundSummaryResponse"))
                                 .build()
