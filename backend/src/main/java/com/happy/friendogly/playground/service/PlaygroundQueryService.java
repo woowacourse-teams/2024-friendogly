@@ -12,6 +12,7 @@ import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +93,8 @@ public class PlaygroundQueryService {
     public FindPlaygroundSummaryResponse findSummary(Long playgroundId) {
         List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findAllByPlaygroundId(playgroundId);
 
+        playgroundMembers = sortByIsArrived(playgroundMembers);
+
         int totalPetCount = 0;
         int arrivedPetCount = 0;
         List<String> petImages = new ArrayList<>();
@@ -114,9 +117,15 @@ public class PlaygroundQueryService {
         );
     }
 
+    private static List<PlaygroundMember> sortByIsArrived(List<PlaygroundMember> playgroundMembers) {
+        return playgroundMembers.stream()
+                .sorted(Comparator.comparing(PlaygroundMember::isInside).reversed())
+                .toList();
+    }
+
     private List<String> cutPeImagesCount(List<String> petImageUrls) {
         if (petImageUrls.size() > MAX_PET_IMAGE_COUNT) {
-            return petImageUrls.subList(0, MAX_PET_IMAGE_COUNT + 1);
+            return petImageUrls.subList(0, MAX_PET_IMAGE_COUNT);
         }
         return petImageUrls;
     }

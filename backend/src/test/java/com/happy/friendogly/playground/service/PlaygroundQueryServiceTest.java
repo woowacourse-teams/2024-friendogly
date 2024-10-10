@@ -4,12 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -141,5 +144,63 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                 () -> assertThat(response.totalPetCount()).isEqualTo(1),
                 () -> assertThat(response.petImageUrls().get(0)).isEqualTo(pet.getImageUrl())
         );
+    }
+
+    @DisplayName("놀이터의 요약정보를 조회시 펫이미지는 5개까지만 조회된다.")
+    @Test
+    void limitPetImageIsFiveWhenFindSummary() {
+        // given
+        Member member1 = saveMember("김도선");
+        Member member2 = saveMember("김도선");
+        Pet pet = savePet(member1);
+        savePet(member1);
+        savePet(member1);
+
+        savePet(member2);
+        savePet(member2);
+        Pet pet6 = savePet(member2);
+
+        Playground playground = savePlayground();
+        savePlaygroundMember(playground, member1);
+        savePlaygroundMember(playground, member2);
+
+        // when
+        FindPlaygroundSummaryResponse response = playgroundQueryService.findSummary(playground.getId());
+
+        // then
+        assertThat(response.petImageUrls()).hasSize(5);
+    }
+
+    @DisplayName("놀이터의 요약정보를 조회시 도착한 펫우선으로 이미지를 보여준다")
+    @Test
+    void showArrivedPetImageFirstWhenFindSummary() {
+        // given
+        Member member1 = saveMember("김도선");
+        Member member2 = saveMember("김도선");
+        Pet pet = savePet(member1);
+        savePet(member1);
+        savePet(member1);
+
+        Pet arrivedPet = petRepository.save(
+                new Pet(
+                        member2,
+                        "name",
+                        "description",
+                        LocalDate.of(2023, 10, 10),
+                        SizeType.LARGE,
+                        Gender.FEMALE,
+                        "arrivedPetImage"
+                )
+        );
+
+        Playground playground = savePlayground();
+        savePlaygroundMember(playground, member1);
+        saveArrivedPlaygroundMember(playground, member2);
+
+        // when
+        FindPlaygroundSummaryResponse response = playgroundQueryService.findSummary(playground.getId());
+
+        // then
+        assertThat(response.petImageUrls().get(0)).isEqualTo("arrivedPetImage");
     }
 }
