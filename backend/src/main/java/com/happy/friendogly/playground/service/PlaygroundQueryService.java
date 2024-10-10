@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PlaygroundQueryService {
 
+    private static final int MAX_PET_IMAGE_COUNT = 5;
+
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
     private final PetRepository petRepository;
@@ -92,21 +94,30 @@ public class PlaygroundQueryService {
 
         int totalPetCount = 0;
         int arrivedPetCount = 0;
-        List<String> petImageUrls = new ArrayList<>();
+        List<String> petImages = new ArrayList<>();
 
         for (PlaygroundMember playgroundMember : playgroundMembers) {
             List<Pet> pets = petRepository.findByMemberId(playgroundMember.getMember().getId());
 
             totalPetCount += pets.size();
             arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
-            petImageUrls.addAll(pets.stream().map(Pet::getImageUrl).toList());
+            petImages.addAll(pets.stream().map(Pet::getImageUrl).toList());
+
+            petImages = cutPeImagesCount(petImages);
         }
 
         return new FindPlaygroundSummaryResponse(
                 playgroundId,
                 totalPetCount,
                 arrivedPetCount,
-                petImageUrls.subList(0, 6)
+                petImages
         );
+    }
+
+    private List<String> cutPeImagesCount(List<String> petImageUrls) {
+        if (petImageUrls.size() > MAX_PET_IMAGE_COUNT) {
+            return petImageUrls.subList(0, MAX_PET_IMAGE_COUNT + 1);
+        }
+        return petImageUrls;
     }
 }
