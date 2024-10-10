@@ -17,71 +17,72 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class ChatMessageRepositoryImpl
-@Inject
-constructor(
-    private val dataSource: ChatMessageDataSource,
-    private val chatMessageDao: ChatMessageDao,
-) : ChatMessageRepository {
-    override suspend fun getChatMessagesInRange(
-        myMemberId: Long,
-        chatRoomId: Long,
-        offset: Int,
-        limit: Int,
-    ): Flow<List<ChatComponent>> =
-        flow {
-            val latestMessage =
-                chatMessageDao.getLatestMessageByRoomId(chatRoomId)
-                    ?: return@flow emit(
-                        saveAndGetAllChatMessages(
-                            chatRoomId = chatRoomId,
-                            myMemberId = myMemberId,
-                        ),
-                    )
+    @Inject
+    constructor(
+        private val dataSource: ChatMessageDataSource,
+        private val chatMessageDao: ChatMessageDao,
+    ) : ChatMessageRepository {
+        override suspend fun getChatMessagesInRange(
+            myMemberId: Long,
+            chatRoomId: Long,
+            offset: Int,
+            limit: Int,
+        ): Flow<List<ChatComponent>> =
+            flow {
+                val latestMessage =
+                    chatMessageDao.getLatestMessageByRoomId(chatRoomId)
+                        ?: return@flow emit(
+                            saveAndGetAllChatMessages(
+                                chatRoomId = chatRoomId,
+                                myMemberId = myMemberId,
+                            ),
+                        )
 
-            saveNewMessages(chatRoomId, latestMessage)
-            emit(
-                chatMessageDao.getMessagesByRoomIdInRange(
+                saveNewMessages(chatRoomId, latestMessage)
+                emit(
+                    chatMessageDao.getMessagesByRoomIdInRange(
+                        chatRoomId = chatRoomId,
+                        limit = limit,
+                        offset = offset,
+                    ).map { it.toDomain(myMemberId) },
+                )
+            }
+
+        override suspend fun saveMessage(
+            chatRoomId: Long,
+            message: ChatComponent,
+        ): Flow<Unit> =
+            flow {
+                emit(chatMessageDao.insert(message.toData(chatRoomId)))
+            }
+
+        private suspend fun saveNewMessages(
+            chatRoomId: Long,
+            latestMessage: ChatMessageEntity,
+        ) {
+            val newMessages =
+                dataSource.getChatMessagesByTime(
                     chatRoomId = chatRoomId,
-                    limit = limit,
-                    offset = offset
-                ).map { it.toDomain(myMemberId) })
+                    since = latestMessage.createdAt,
+                    until = LocalDateTime.now(),
+                ).last().filterNot { isSameMessage(it, latestMessage) }
+
+            chatMessageDao.insertAll(*newMessages.toLocalData(chatRoomId).toTypedArray())
         }
 
-    override suspend fun saveMessage(
-        chatRoomId: Long,
-        message: ChatComponent,
-    ): Flow<Unit> =
-        flow {
-            emit(chatMessageDao.insert(message.toData(chatRoomId)))
+        private fun isSameMessage(
+            it: MessageDto,
+            latestMessage: ChatMessageEntity,
+        ) = it.createdAt == latestMessage.createdAt && it.content == latestMessage.content
+
+        private suspend fun saveAndGetAllChatMessages(
+            chatRoomId: Long,
+            myMemberId: Long,
+        ): List<ChatComponent> {
+            val newMessages = dataSource.getAllChatMessages(chatRoomId).last().sortedBy { it.createdAt }
+            chatMessageDao.insertAll(
+                *newMessages.toLocalData(chatRoomId).toTypedArray(),
+            )
+            return newMessages.toDomain(myMemberId)
         }
-
-    private suspend fun saveNewMessages(
-        chatRoomId: Long,
-        latestMessage: ChatMessageEntity,
-    ) {
-        val newMessages =
-            dataSource.getChatMessagesByTime(
-                chatRoomId = chatRoomId,
-                since = latestMessage.createdAt,
-                until = LocalDateTime.now(),
-            ).last().filterNot { isSameMessage(it, latestMessage) }
-
-        chatMessageDao.insertAll(*newMessages.toLocalData(chatRoomId).toTypedArray())
     }
-
-    private fun isSameMessage(
-        it: MessageDto,
-        latestMessage: ChatMessageEntity,
-    ) = it.createdAt == latestMessage.createdAt && it.content == latestMessage.content
-
-    private suspend fun saveAndGetAllChatMessages(
-        chatRoomId: Long,
-        myMemberId: Long,
-    ): List<ChatComponent> {
-        val newMessages = dataSource.getAllChatMessages(chatRoomId).last().sortedBy { it.createdAt }
-        chatMessageDao.insertAll(
-            *newMessages.toLocalData(chatRoomId).toTypedArray(),
-        )
-        return newMessages.toDomain(myMemberId)
-    }
-}

@@ -68,17 +68,16 @@ class ChatMessageDatabaseTest {
         }
     }
 
-
     companion object {
         private val DUMMY_MY_MESSAGE =
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 6, 12, 14, 2),
                 member =
-                ChatMemberEntity(
-                    1,
-                    "벼리",
-                    "",
-                ),
+                    ChatMemberEntity(
+                        1,
+                        "벼리",
+                        "",
+                    ),
                 content = "",
                 type = MessageTypeEntity.CHAT,
                 id = 1,
@@ -89,11 +88,11 @@ class ChatMessageDatabaseTest {
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 6, 20, 14, 2),
                 member =
-                ChatMemberEntity(
-                    2,
-                    "벼리",
-                    "",
-                ),
+                    ChatMemberEntity(
+                        2,
+                        "벼리",
+                        "",
+                    ),
                 content = "ZZZZZZZZ",
                 type = MessageTypeEntity.CHAT,
                 id = 2,
@@ -104,11 +103,11 @@ class ChatMessageDatabaseTest {
             ChatMessageEntity(
                 createdAt = LocalDateTime.of(2024, 7, 12, 14, 2),
                 member =
-                ChatMemberEntity(
-                    2,
-                    "벼리",
-                    "",
-                ),
+                    ChatMemberEntity(
+                        2,
+                        "벼리",
+                        "",
+                    ),
                 content = "ZZZZZZZZ",
                 type = MessageTypeEntity.CHAT,
                 id = 3,

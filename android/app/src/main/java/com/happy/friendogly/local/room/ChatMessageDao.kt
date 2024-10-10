@@ -25,9 +25,8 @@ interface ChatMessageDao {
 
     @Query("SELECT * FROM chat_message WHERE chat_room_id == :chatRoomId ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
     suspend fun getMessagesByRoomIdInRange(
-        chatRoomId:Long,
+        chatRoomId: Long,
         limit: Int,
         offset: Int,
     ): List<ChatMessageEntity>
-
 }

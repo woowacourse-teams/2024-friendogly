@@ -43,11 +43,11 @@ fun List<MessageDto>.toLocalData(chatRoomId: Long): List<ChatMessageEntity> =
         ChatMessageEntity(
             createdAt = it.createdAt,
             member =
-            ChatMemberEntity(
-                id = it.senderMemberId,
-                name = it.senderName,
-                profileUrl = it.profilePictureUrl,
-            ),
+                ChatMemberEntity(
+                    id = it.senderMemberId,
+                    name = it.senderName,
+                    profileUrl = it.profilePictureUrl,
+                ),
             content = it.content,
             type = it.messageType.toLocalData(),
             chatRoomId = chatRoomId,
@@ -64,11 +64,11 @@ private fun MessageTypeDto.toLocalData() =
 fun MessageDto.toOther(): Message.Other =
     Message.Other(
         member =
-        ChatMember(
-            id = senderMemberId,
-            name = senderName,
-            profileImageUrl = profilePictureUrl ?: "",
-        ),
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         content = content ?: "",
         createdAt = createdAt,
     )
@@ -76,11 +76,11 @@ fun MessageDto.toOther(): Message.Other =
 fun MessageDto.toMine(): Message.Mine =
     Message.Mine(
         member =
-        ChatMember(
-            id = senderMemberId,
-            name = senderName,
-            profileImageUrl = profilePictureUrl ?: "",
-        ),
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         content = content ?: "",
         createdAt = createdAt,
     )
@@ -88,21 +88,21 @@ fun MessageDto.toMine(): Message.Mine =
 fun MessageDto.toEnter(): ChatComponent.Enter =
     ChatComponent.Enter(
         member =
-        ChatMember(
-            id = senderMemberId,
-            name = senderName,
-            profileImageUrl = profilePictureUrl ?: "",
-        ),
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         createdAt = createdAt,
     )
 
 fun MessageDto.toLeave(): ChatComponent.Leave =
     ChatComponent.Leave(
         member =
-        ChatMember(
-            id = senderMemberId,
-            name = senderName,
-            profileImageUrl = profilePictureUrl ?: "",
-        ),
+            ChatMember(
+                id = senderMemberId,
+                name = senderName,
+                profileImageUrl = profilePictureUrl ?: "",
+            ),
         createdAt = createdAt,
     )

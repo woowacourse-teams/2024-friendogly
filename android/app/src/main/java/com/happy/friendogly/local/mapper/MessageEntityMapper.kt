@@ -31,11 +31,11 @@ fun ChatComponent.Leave.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.LEAVE,
         chatRoomId = chatRoomId,
@@ -45,11 +45,11 @@ fun ChatComponent.Enter.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.ENTER,
         chatRoomId = chatRoomId,
@@ -59,25 +59,25 @@ fun Message.Mine.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = content,
         type = MessageTypeEntity.CHAT,
-        chatRoomId = chatRoomId
+        chatRoomId = chatRoomId,
     )
 
 fun Message.Other.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
-        ChatMemberEntity(
-            id = member.id,
-            name = member.name,
-            profileUrl = member.profileImageUrl,
-        ),
+            ChatMemberEntity(
+                id = member.id,
+                name = member.name,
+                profileUrl = member.profileImageUrl,
+            ),
         content = content,
         type = MessageTypeEntity.CHAT,
         chatRoomId = chatRoomId,

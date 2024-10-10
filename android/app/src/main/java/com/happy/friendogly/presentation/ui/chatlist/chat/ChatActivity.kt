@@ -51,7 +51,6 @@ class ChatActivity :
         hideMessageKeyBoard()
     }
 
-
     private fun clickSendMessage() {
         binding.ibChatSendMessage.setOnClickListener {
             viewModel.sendMessage(chatRoomId, binding.edtChatSendMessage.text.toString())
@@ -105,7 +104,7 @@ class ChatActivity :
         )
     }
 
-    private fun reachEndOfMessages(){
+    private fun reachEndOfMessages() {
         if (!binding.rcvChatDetail.canScrollVertically(-1)) {
             viewModel.getChatMessage(
                 chatRoomId = chatRoomId,
@@ -121,6 +120,7 @@ class ChatActivity :
             }
         }
     }
+
     private fun scrollTopOnNewChat() {
         viewModel.newChatEvent.observeEvent(this) {
             binding.rcvChatDetail.post {
