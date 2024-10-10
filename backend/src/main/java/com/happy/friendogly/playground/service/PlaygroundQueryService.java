@@ -91,9 +91,8 @@ public class PlaygroundQueryService {
     }
 
     public FindPlaygroundSummaryResponse findSummary(Long playgroundId) {
-        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findAllByPlaygroundId(playgroundId);
-
-        playgroundMembers = sortByIsArrived(playgroundMembers);
+        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository
+                .findAllByPlaygroundIdOrderByIsInsideDesc(playgroundId);
 
         int totalPetCount = 0;
         int arrivedPetCount = 0;

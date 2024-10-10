@@ -11,6 +11,9 @@ public interface PlaygroundMemberRepository extends JpaRepository<PlaygroundMemb
     @EntityGraph(attributePaths = "member")
     List<PlaygroundMember> findAllByPlaygroundId(Long playgroundId);
 
+    @EntityGraph(attributePaths = "member")
+    List<PlaygroundMember> findAllByPlaygroundIdOrderByIsInsideDesc(Long playgroundId);
+
     boolean existsByPlaygroundIdAndMemberId(Long playgroundId, Long memberId);
 
     boolean existsByMemberId(Long memberId);
