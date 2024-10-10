@@ -5,7 +5,7 @@ import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
 
 fun PlaygroundSummaryDto.toDomain(): PlaygroundSummary {
     return PlaygroundSummary(
-        id = id,
+        playgroundId = playgroundId,
         totalPetCount = totalPetCount,
         arrivedPetCount = arrivedPetCount,
         petImageUrls = petImageUrls,

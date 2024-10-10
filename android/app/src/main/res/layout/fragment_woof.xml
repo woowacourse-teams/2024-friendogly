@@ -24,7 +24,7 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/layout_playground_info"
-            playgroundInfoVisibility="@{vm.myPlayground}"
+            playgroundInfoVisibility="@{vm.playgroundInfo}"
             uiState="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,6 +59,7 @@
                     android:id="@+id/btn_playground"
                     style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
                     playgroundAction="@{vm}"
+                    playgroundId="@{vm.playgroundInfo.id}"
                     playgroundBtn="@{vm.myPlayground}"
                     playgroundBtnVisibility="@{vm.playgroundInfo}"
                     android:layout_width="match_parent"

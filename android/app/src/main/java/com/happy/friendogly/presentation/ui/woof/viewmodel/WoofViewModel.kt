@@ -13,6 +13,7 @@ import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundSummaryUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundsUseCase
 import com.happy.friendogly.domain.usecase.PatchPlaygroundArrivalUseCase
+import com.happy.friendogly.domain.usecase.PostPlaygroundJoinUseCase
 import com.happy.friendogly.domain.usecase.PostPlaygroundUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -33,13 +34,13 @@ import com.happy.friendogly.presentation.ui.woof.uimodel.RegisterPlaygroundBtnUi
 import com.happy.friendogly.presentation.ui.woof.util.ANIMATE_DURATION_MILLIS
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
-import com.happy.friendogly.presentation.utils.logFootprintMemberNameClicked
 import com.happy.friendogly.presentation.utils.logHelpBtnClicked
 import com.happy.friendogly.presentation.utils.logLocationBtnClicked
 import com.happy.friendogly.presentation.utils.logMyPlaygroundBtnClicked
 import com.happy.friendogly.presentation.utils.logPetExistence
 import com.happy.friendogly.presentation.utils.logPetExistenceBtnClicked
 import com.happy.friendogly.presentation.utils.logPetImageClicked
+import com.happy.friendogly.presentation.utils.logPlaygroundMemberNameClicked
 import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
@@ -61,6 +62,7 @@ class WoofViewModel
         private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
         private val getPlaygroundSummaryUseCase: GetPlaygroundSummaryUseCase,
+        private val postPlaygroundJoinUseCase: PostPlaygroundJoinUseCase,
         private val deletePlaygroundLeaveUseCase: DeletePlaygroundLeaveUseCase,
     ) : BaseViewModel(), WoofActionHandler {
         private val _uiState: MutableLiveData<WoofUiState> = MutableLiveData()
@@ -159,8 +161,8 @@ class WoofViewModel
             updateUiState(WoofUiState.FindingPlayground)
         }
 
-        override fun clickFootprintMemberName(memberId: Long) {
-            analyticsHelper.logFootprintMemberNameClicked()
+        override fun clickPlaygroundMemberName(memberId: Long) {
+            analyticsHelper.logPlaygroundMemberNameClicked()
             _navigateActions.emit(WoofNavigateActions.NavigateToOtherProfile(memberId))
         }
 
@@ -178,7 +180,19 @@ class WoofViewModel
             _navigateActions.emit(WoofNavigateActions.NavigateToPetImage(petImageUrl))
         }
 
-        override fun clickParticipatePlaygroundBtn() {
+        override fun clickParticipatePlaygroundBtn(playgroundId: Long) {
+            viewModelScope.launch {
+                postPlaygroundJoinUseCase(playgroundId = playgroundId).onSuccess { playgroundJoin ->
+                    val nearPlaygrounds = nearPlaygrounds.value ?: return@onSuccess
+                    _myPlayground.value =
+                        nearPlaygrounds.first { playground ->
+                            playground.id == playgroundJoin.playgroundId
+                        }
+                }.onFailure {
+                    // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
+                    _alertActions.emit(WoofAlertActions.AlertAlreadyParticipatingInPlayground)
+                }
+            }
         }
 
         override fun clickExitPlaygroundBtn() {
@@ -188,7 +202,7 @@ class WoofViewModel
 
         override fun clickLookAroundPlaygroundBtn() {
             val playgroundSummary = playgroundSummary.value ?: return
-            loadPlaygroundInfo(id = playgroundSummary.id)
+            loadPlaygroundInfo(id = playgroundSummary.playgroundId)
             updateUiState(WoofUiState.ViewingPlaygroundInfo)
 //            Handler(Looper.getMainLooper()).postDelayed(
 //                {
@@ -260,6 +274,7 @@ class WoofViewModel
                         _uiState.value = WoofUiState.FindingPlayground
                         scanNearPlaygrounds()
                     }.onFailure {
+                        // 놀이터 반경 겹쳤을 때, 나머지 에러 처리
                         _alertActions.emit(WoofAlertActions.AlertFailToRegisterPlaygroundSnackbar)
                     }
                 }
@@ -338,6 +353,7 @@ class WoofViewModel
                 getPlaygroundInfoUseCase(id).onSuccess { playgroundInfo ->
                     _playgroundInfo.value = playgroundInfo.toPresentation()
                 }.onFailure {
+                    println(it)
                     _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundInfoSnackbar)
                 }
             }
@@ -348,6 +364,7 @@ class WoofViewModel
                 getPlaygroundSummaryUseCase(id).onSuccess { playgroundSummary ->
                     _playgroundSummary.value = playgroundSummary
                 }.onFailure {
+                    println(it)
                     _alertActions.emit(WoofAlertActions.AlertFailToLoadPlaygroundSummarySnackbar)
                 }
             }
@@ -367,7 +384,6 @@ class WoofViewModel
                     latLng.latitude,
                     latLng.longitude,
                 ).onSuccess { playgroundArrival ->
-                    // 수정해야함
                     _myPlayStatus.value =
                         if (playgroundArrival.isArrived) PlayStatus.PLAYING else PlayStatus.AWAY
                 }.onFailure {

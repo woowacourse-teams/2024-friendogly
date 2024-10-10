@@ -15,13 +15,13 @@ interface WoofActionHandler {
 
     fun clickCloseBtn()
 
-    fun clickFootprintMemberName(memberId: Long)
+    fun clickPlaygroundMemberName(memberId: Long)
 
     fun clickHelpBtn()
 
     fun clickPetImage(petImageUrl: String)
 
-    fun clickParticipatePlaygroundBtn()
+    fun clickParticipatePlaygroundBtn(playgroundId: Long)
 
     fun clickExitPlaygroundBtn()
 

@@ -13,6 +13,8 @@ sealed interface WoofAlertActions {
 
     data object AlertLeaveMyPlaygroundSnackbar : WoofAlertActions
 
+    data object AlertAlreadyParticipatingInPlayground : WoofAlertActions
+
     data object AlertEndWalkSnackbar : WoofAlertActions
 
     data object AlertFailToCheckPetExistence : WoofAlertActions

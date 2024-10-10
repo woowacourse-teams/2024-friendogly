@@ -15,7 +15,8 @@ class ApiClient {
         const val PATCH_PLAYGROUND_ARRIVAL = "$BASE_URL/arrival"
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
         const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
-        const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{id}/summary"
+        const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{playgroundId}/summary"
+        const val POST_PLAYGROUND_JOIN = "$BASE_URL/{playgroundId}/join"
         const val DELETE_PLAYGROUND_LEAVE = "$BASE_URL/leave"
     }
 
@@ -39,7 +40,7 @@ class ApiClient {
     }
 
     object Club {
-//        private const val BASE_URL = "/api/clubs"
+        //        private const val BASE_URL = "/api/clubs"
         private const val BASE_URL = "/clubs"
         private const val MEMBER_URL = "/members"
         const val POST_CLUB = BASE_URL

@@ -5,6 +5,7 @@ import com.happy.friendogly.presentation.ui.woof.model.PetExistence
 import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundJoin
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
 
 interface WoofRepository {
@@ -24,7 +25,9 @@ interface WoofRepository {
 
     suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo>
 
-    suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummary>
+    suspend fun getPlaygroundSummary(playgroundId: Long): Result<PlaygroundSummary>
+
+    suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoin>
 
     suspend fun deletePlaygroundLeave(): Result<Unit>
 }

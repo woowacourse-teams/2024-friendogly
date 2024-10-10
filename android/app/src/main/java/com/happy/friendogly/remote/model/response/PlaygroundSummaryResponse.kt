@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlaygroundSummaryResponse(
-    val id: Long,
+    val playgroundId: Long,
     val totalPetCount: Int,
     val arrivedPetCount: Int,
-//    val petImageUrls: List<String>
+    val petImageUrls: List<String>,
 )

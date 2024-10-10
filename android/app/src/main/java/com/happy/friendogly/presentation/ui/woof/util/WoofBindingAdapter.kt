@@ -118,10 +118,10 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: WoofUiState?) {
 @BindingAdapter("uiState", "playgroundInfoVisibility")
 fun View.bindPlaygroundInfoVisibility(
     uiState: WoofUiState?,
-    myPlayground: PlaygroundMarkerUiModel?,
+    playgroundInfo: PlaygroundInfoUiModel?,
 ) {
     isVisible =
-        if (myPlayground != null && (uiState == WoofUiState.FindingPlayground || uiState == WoofUiState.ViewingPlaygroundInfo)) {
+        if (playgroundInfo != null && (uiState == WoofUiState.FindingPlayground || uiState == WoofUiState.ViewingPlaygroundInfo)) {
             bringToFront()
             true
         } else {
@@ -196,20 +196,21 @@ fun View.bindRegisterLocationBtnVisibility(uiState: WoofUiState?) {
     isVisible = (uiState == WoofUiState.RegisteringPlayground)
 }
 
-@BindingAdapter("playgroundAction", "playgroundBtn")
+@BindingAdapter("playgroundAction", "playgroundBtn", "playgroundId")
 fun AppCompatButton.bindPlaygroundBtn(
     playgroundAction: WoofActionHandler,
     myPlayground: PlaygroundMarkerUiModel?,
+    playgroundId: Long,
 ) {
-    if (myPlayground == null) {
-        text = resources.getString(R.string.playground_participate)
-        setOnClickListener {
-            playgroundAction.clickParticipatePlaygroundBtn()
-        }
-    } else {
+    if (myPlayground != null && myPlayground.id == playgroundId) {
         text = resources.getString(R.string.playground_exit)
         setOnClickListener {
             playgroundAction.clickExitPlaygroundBtn()
+        }
+    } else {
+        text = resources.getString(R.string.playground_participate)
+        setOnClickListener {
+            playgroundAction.clickParticipatePlaygroundBtn(playgroundId)
         }
     }
 }

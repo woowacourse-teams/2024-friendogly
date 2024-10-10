@@ -8,9 +8,10 @@ import com.happy.friendogly.presentation.ui.woof.model.PetExistence
 import com.happy.friendogly.presentation.ui.woof.model.Playground
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundInfo
+import com.happy.friendogly.presentation.ui.woof.model.PlaygroundJoin
 import com.happy.friendogly.presentation.ui.woof.model.PlaygroundSummary
-import com.happy.friendogly.remote.model.request.PlaygroundArrivalRequest
-import com.happy.friendogly.remote.model.request.PlaygroundRequest
+import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
+import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
 import javax.inject.Inject
 
 class WoofRepositoryImpl
@@ -21,7 +22,7 @@ class WoofRepositoryImpl
             longitude: Double,
         ): Result<MyPlayground> {
             return source.postPlayground(
-                PlaygroundRequest(
+                PostPlaygroundRequest(
                     latitude = latitude,
                     longitude = longitude,
                 ),
@@ -35,7 +36,7 @@ class WoofRepositoryImpl
             longitude: Double,
         ): Result<PlaygroundArrival> {
             return source.patchPlaygroundArrival(
-                PlaygroundArrivalRequest(
+                PatchPlaygroundArrivalRequest(
                     latitude = latitude,
                     longitude = longitude,
                 ),
@@ -62,8 +63,13 @@ class WoofRepositoryImpl
                 .mapCatching { dto -> dto.toDomain() }
         }
 
-        override suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummary> {
-            return source.getPlaygroundSummary(id)
+        override suspend fun getPlaygroundSummary(playgroundId: Long): Result<PlaygroundSummary> {
+            return source.getPlaygroundSummary(playgroundId)
+                .mapCatching { dto -> dto.toDomain() }
+        }
+
+        override suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoin> {
+            return source.postPlaygroundJoin(playgroundId)
                 .mapCatching { dto -> dto.toDomain() }
         }
 

@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetPlaygroundSummaryUseCase
     @Inject
     constructor(private val repository: WoofRepository) {
-        suspend operator fun invoke(id: Long): Result<PlaygroundSummary> = repository.getPlaygroundSummary(id)
+        suspend operator fun invoke(playgroundId: Long): Result<PlaygroundSummary> = repository.getPlaygroundSummary(playgroundId)
     }

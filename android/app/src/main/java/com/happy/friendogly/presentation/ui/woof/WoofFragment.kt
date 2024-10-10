@@ -443,6 +443,14 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
                         ),
                     )
 
+                is WoofAlertActions.AlertAlreadyParticipatingInPlayground -> {
+                    showSnackbar(
+                        resources.getString(
+                            R.string.playground_already_participating_in_playground,
+                        ),
+                    )
+                }
+
                 is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
                 is WoofAlertActions.AlertFailToCheckPetExistence ->
                     showSnackbar(
@@ -628,7 +636,6 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
             viewModel.loadRecentlyClickedPlayground(marker)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
-            changeClickedMarkerSize(marker)
 
             if (id == viewModel.myPlayground.value?.id) {
                 viewModel.loadPlaygroundInfo(id = id)
@@ -690,6 +697,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
         nearPlaygroundMarkers.forEach { playgroundMarker ->
             playgroundMarker.marker.map = null
+            playgroundMarker.circleOverlay.map = null
         }
     }
 
@@ -802,6 +810,7 @@ class WoofFragment : Fragment(), OnMapReadyCallback {
         val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
         nearPlaygroundMarkers.forEach { playgroundMarker ->
             playgroundMarker.marker.map = map
+            playgroundMarker.circleOverlay.map = map
         }
     }
 

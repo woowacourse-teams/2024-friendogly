@@ -5,14 +5,15 @@ import com.happy.friendogly.data.model.PetExistenceDto
 import com.happy.friendogly.data.model.PlaygroundArrivalDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
+import com.happy.friendogly.data.model.PlaygroundJoinDto
 import com.happy.friendogly.data.model.PlaygroundSummaryDto
-import com.happy.friendogly.remote.model.request.PlaygroundArrivalRequest
-import com.happy.friendogly.remote.model.request.PlaygroundRequest
+import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
+import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
 
 interface WoofDataSource {
-    suspend fun postPlayground(request: PlaygroundRequest): Result<MyPlaygroundDto>
+    suspend fun postPlayground(request: PostPlaygroundRequest): Result<MyPlaygroundDto>
 
-    suspend fun patchPlaygroundArrival(request: PlaygroundArrivalRequest): Result<PlaygroundArrivalDto>
+    suspend fun patchPlaygroundArrival(request: PatchPlaygroundArrivalRequest): Result<PlaygroundArrivalDto>
 
     suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto>
 
@@ -20,7 +21,9 @@ interface WoofDataSource {
 
     suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfoDto>
 
-    suspend fun getPlaygroundSummary(id: Long): Result<PlaygroundSummaryDto>
+    suspend fun getPlaygroundSummary(playgroundId: Long): Result<PlaygroundSummaryDto>
+
+    suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoinDto>
 
     suspend fun deletePlaygroundLeave(): Result<Unit>
 }
