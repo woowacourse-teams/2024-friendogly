@@ -11,8 +11,10 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.utils.GeoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -232,6 +234,30 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         assertAll(
                 () -> assertThat(playgroundMember.isInside()).isFalse(),
                 () -> assertThat(response.isArrived()).isFalse()
+        );
+    }
+
+    @DisplayName("놀이터에 참여한 멤버의 상태메세지를 수정할 수 있다.")
+    @Transactional
+    @Test
+    void updateMemberMessage() {
+        // given
+        Member member = saveMember("김도선");
+        Playground playground = savePlayground();
+        PlaygroundMember playgroundMember = savePlaygroundMember(playground, member);
+
+        String changeMessage = "수정된 메세지";
+        UpdatePlaygroundMemberMessageRequest request = new UpdatePlaygroundMemberMessageRequest(changeMessage);
+
+        // when
+        UpdatePlaygroundMemberMessageResponse response = playgroundCommandService.updateMemberMessage(
+                request, member.getId()
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(response.message()).isEqualTo(changeMessage),
+                () -> assertThat(playgroundMember.getMessage()).isEqualTo(changeMessage)
         );
     }
 }

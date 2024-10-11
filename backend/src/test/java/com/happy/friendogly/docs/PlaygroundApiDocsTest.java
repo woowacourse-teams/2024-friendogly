@@ -35,6 +35,7 @@ import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryRespons
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
@@ -351,6 +352,9 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터에 참여한 멤벙 메세지 수정")
     @Test
     void updateMessage() throws Exception {
+
+        when(playgroundCommandService.updateMemberMessage(any(), anyLong()))
+                .thenReturn(new UpdatePlaygroundMemberMessageResponse("update"));
 
         UpdatePlaygroundMemberMessageRequest request = new UpdatePlaygroundMemberMessageRequest("update");
 

@@ -97,6 +97,9 @@ public class PlaygroundController {
             @Auth Long memberId,
             UpdatePlaygroundMemberMessageRequest request
     ) {
-        return ApiResponse.ofSuccess(new UpdatePlaygroundMemberMessageResponse("update"));
+        UpdatePlaygroundMemberMessageResponse response = playgroundCommandService.updateMemberMessage(
+                request, memberId
+        );
+        return ApiResponse.ofSuccess(response);
     }
 }

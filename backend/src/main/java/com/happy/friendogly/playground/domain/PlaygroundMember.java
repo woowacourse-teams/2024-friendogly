@@ -73,4 +73,8 @@ public class PlaygroundMember {
     public void updateIsInside(boolean isInside) {
         this.isInside = isInside;
     }
+
+    public void updateMessage(String message) {
+        this.message = message;
+    }
 }

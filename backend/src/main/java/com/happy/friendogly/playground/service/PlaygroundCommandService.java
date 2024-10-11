@@ -11,9 +11,11 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.List;
@@ -119,5 +121,14 @@ public class PlaygroundCommandService {
         playgroundMember.updateIsInside(isInsideBoundary);
 
         return new UpdatePlaygroundArrivalResponse(isInsideBoundary);
+    }
+
+    public UpdatePlaygroundMemberMessageResponse updateMemberMessage(
+            UpdatePlaygroundMemberMessageRequest request,
+            Long memberId
+    ) {
+        PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
+        playgroundMember.updateMessage(request.message());
+        return new UpdatePlaygroundMemberMessageResponse(playgroundMember.getMessage());
     }
 }
