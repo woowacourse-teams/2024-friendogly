@@ -296,7 +296,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_woof_register_footprint"
                 style="@style/Theme.AppCompat.TextView.SemiBold.White.Size20"
-                cameraIdle="@{vm.registerPlaygroundBtn.cameraIdle}"
+                cameraIdle="@{vm.playgroundRegisterBtn.cameraIdle}"
                 uiState="@{vm.uiState}"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"

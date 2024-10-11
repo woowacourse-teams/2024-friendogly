@@ -13,9 +13,9 @@ import com.happy.friendogly.data.repository.MessagingRepositoryImpl
 import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
+import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
-import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
 import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 import com.happy.friendogly.domain.repository.AlarmTokenRepository
@@ -28,10 +28,10 @@ import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.MessagingRepository
 import com.happy.friendogly.domain.repository.MyClubRepository
 import com.happy.friendogly.domain.repository.PetRepository
+import com.happy.friendogly.domain.repository.PlaygroundRepository
 import com.happy.friendogly.domain.repository.RecentPetsRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WebSocketRepository
-import com.happy.friendogly.domain.repository.PlaygroundRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

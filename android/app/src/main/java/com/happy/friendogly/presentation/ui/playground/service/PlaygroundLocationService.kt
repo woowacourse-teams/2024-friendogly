@@ -26,7 +26,7 @@ class PlaygroundLocationService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        val playStatus = intent?.getSerializableExtra(EXTRA_PLAY_STATUS) as PlayStatus
+        val playStatus = intent?.getSerializableExtra(EXTRA_PLAY_STATUS) as? PlayStatus
         val playStatusTitle = convertPlayStatusToTitle(playStatus)
 
         startForegroundService(playStatusTitle)
@@ -100,7 +100,7 @@ class PlaygroundLocationService : Service() {
         sendBroadcast(intent)
     }
 
-    private fun convertPlayStatusToTitle(playStatus: PlayStatus): String {
+    private fun convertPlayStatusToTitle(playStatus: PlayStatus?): String {
         return when (playStatus) {
             PlayStatus.PLAYING -> getString(R.string.playground_pet_is_playing)
             else -> getString(R.string.playground_pet_is_away)

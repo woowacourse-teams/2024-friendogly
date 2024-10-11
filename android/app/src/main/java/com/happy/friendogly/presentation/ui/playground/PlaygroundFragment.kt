@@ -198,7 +198,8 @@ class PlaygroundFragment :
 
     override fun onDestroy() {
         super.onDestroy()
-        stopWalkService()
+        viewModel.leavePlayground()
+        stopLocationService()
         requireContext().unregisterReceiver(walkReceiver)
     }
 
@@ -333,16 +334,11 @@ class PlaygroundFragment :
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             if (playgroundInfo != null) {
                 petDetailAdapter.submitList(playgroundInfo.petDetails)
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        if (playgroundInfo.petDetails.size <= 2) {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        } else {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                        }
-                    },
-                    200,
-                )
+                if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                } else {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                }
             } else {
                 petDetailAdapter.submitList(emptyList())
             }
@@ -353,15 +349,14 @@ class PlaygroundFragment :
         }
 
         viewModel.myPlayground.observe(viewLifecycleOwner) { myPlaygroundMarker ->
+            stopLocationService()
             if (myPlaygroundMarker != null) {
-                startWalkService()
                 myPlaygroundMarker.marker.map = map
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
-                viewModel.loadPlaygroundInfo(myPlaygroundMarker.id)
                 viewModel.updatePlaygroundArrival(latLng)
+                viewModel.loadPlaygroundInfo(myPlaygroundMarker.id)
             } else {
-                stopWalkService()
                 bottomSheetBehavior.isHideable = true
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
@@ -372,7 +367,7 @@ class PlaygroundFragment :
             markNearPlaygroundMarkers()
         }
 
-        viewModel.mapActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.mapAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is MakeMyPlaygroundMarker -> {
                     val previousMyFootprintMarker = viewModel.myPlayground.value
@@ -392,10 +387,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                        LatLng(
-                                            playground.latitude,
-                                            playground.longitude,
-                                        ),
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
+                                    ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -413,11 +408,13 @@ class PlaygroundFragment :
 
                 is PlaygroundMapAction.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
+                is PlaygroundMapAction.StartLocationService -> startLocationService()
+
 //                is WoofMapActions.StopWalkTimeChronometer -> walkTimeChronometer.stop()
             }
         }
 
-        viewModel.changeTrackingModeActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.changeTrackingModeAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is NoFollowTrackingMode -> map.locationTrackingMode = LocationTrackingMode.NoFollow
 
@@ -427,7 +424,7 @@ class PlaygroundFragment :
             }
         }
 
-        viewModel.alertActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.alertAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is PlaygroundAlertAction.AlertHasNotLocationPermissionDialog ->
                     locationPermission
@@ -534,7 +531,7 @@ class PlaygroundFragment :
             }
         }
 
-        viewModel.navigateActions.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.navigateAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is PlaygroundNavigateAction.NavigateToOtherProfile -> {
                     startActivity(
@@ -574,7 +571,7 @@ class PlaygroundFragment :
         walkReceiver =
             PlaygroundLocationReceiver { location ->
                 latLng = LatLng(location.latitude, location.longitude)
-                monitorDistanceAndManageWalkStatus()
+                monitorDistanceAndManagePlayStatus()
             }
         val intentFilter =
             IntentFilter().apply {
@@ -783,9 +780,10 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng =
+        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
-    private fun startWalkService() {
+    private fun startLocationService() {
 //        val now = java.time.LocalDateTime.now()
 //        val duration =
 //            Duration.between(myPlayStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
@@ -798,7 +796,7 @@ class PlaygroundFragment :
         requireContext().startForegroundService(intent)
     }
 
-    private fun monitorDistanceAndManageWalkStatus() {
+    private fun monitorDistanceAndManagePlayStatus() {
         val distanceResults = FloatArray(1)
         val myFootprintMarker = viewModel.myPlayground.value ?: return
         val position = myFootprintMarker.marker.position
@@ -811,26 +809,22 @@ class PlaygroundFragment :
         )
         val distance = distanceResults[0]
 
-        if (startPlayingIfWithinRange(distance) || endWalkIfOutOfRange(distance)) {
+        if (withinPlaygroundRange(distance) || outOfPlaygroundRange(distance)) {
             viewModel.updatePlaygroundArrival(latLng)
         }
     }
 
-    private fun startPlayingIfWithinRange(distance: Float): Boolean {
+    private fun withinPlaygroundRange(distance: Float): Boolean {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return false
         return myPlayStatus == PlayStatus.AWAY && distance <= PLAYGROUND_RADIUS
     }
 
-    private fun endWalkIfOutOfRange(distance: Float): Boolean {
+    private fun outOfPlaygroundRange(distance: Float): Boolean {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return false
-        if (myPlayStatus == PlayStatus.PLAYING && distance > PLAYGROUND_RADIUS) {
-            stopWalkService()
-            return true
-        }
-        return false
+        return myPlayStatus == PlayStatus.PLAYING && distance > PLAYGROUND_RADIUS
     }
 
-    private fun stopWalkService() {
+    private fun stopLocationService() {
         requireContext().stopService(
             Intent(
                 requireContext(),
@@ -987,6 +981,7 @@ class PlaygroundFragment :
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
         private const val MAP_LOGO_MARGIN = 20
+        private const val EXPANDED_PET_SIZE = 2
 
         const val TAG = "PlaygroundFragment"
     }
