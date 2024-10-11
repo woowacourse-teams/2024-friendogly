@@ -12,7 +12,6 @@ import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -120,12 +119,6 @@ public class PlaygroundQueryService {
                 arrivedPetCount,
                 petImages
         );
-    }
-
-    private static List<PlaygroundMember> sortByIsArrived(List<PlaygroundMember> playgroundMembers) {
-        return playgroundMembers.stream()
-                .sorted(Comparator.comparing(PlaygroundMember::isInside).reversed())
-                .toList();
     }
 
     private List<String> cutPeImagesCount(List<String> petImageUrls) {
