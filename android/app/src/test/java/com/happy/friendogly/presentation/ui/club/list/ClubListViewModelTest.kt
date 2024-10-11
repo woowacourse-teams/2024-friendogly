@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.list
 
 import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubFilterCondition
@@ -13,9 +14,9 @@ import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeType
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
-import com.happy.friendogly.utils.TextFixture
-import com.happy.friendogly.utils.TextFixture.makePet
-import com.happy.friendogly.utils.TextFixture.makeUserAddress
+import com.happy.friendogly.utils.TestFixture
+import com.happy.friendogly.utils.TestFixture.makePet
+import com.happy.friendogly.utils.TestFixture.makeUserAddress
 import com.happy.friendogly.utils.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -53,7 +54,7 @@ class ClubListViewModelTest {
             // given
             val clubs: List<Club> =
                 listOf(
-                    TextFixture.makeClub(),
+                    TestFixture.makeClub(),
                 )
 
             coEvery {
@@ -74,7 +75,7 @@ class ClubListViewModelTest {
                     genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                     sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
                 )
-            } returns Result.success(clubs)
+            } returns DomainResult.Success(clubs)
 
             viewModel =
                 ClubListViewModel(
@@ -142,7 +143,7 @@ class ClubListViewModelTest {
                     genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                     sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
                 )
-            } returns Result.success(emptyList())
+            } returns DomainResult.Success(emptyList())
 
             viewModel =
                 ClubListViewModel(
@@ -183,7 +184,7 @@ class ClubListViewModelTest {
                 genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                 sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
             )
-        } returns Result.failure(Throwable())
+        } returns DomainResult.Error(DataError.Network.UNKNOWN)
 
         viewModel =
             ClubListViewModel(

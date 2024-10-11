@@ -5,19 +5,25 @@ import com.happy.friendogly.remote.model.response.ChatClubMemberResponse
 import com.happy.friendogly.remote.model.response.ChatRoomClubResponse
 import com.happy.friendogly.remote.model.response.ChatRoomListResponse
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface ChatService {
-    @GET(ApiClient.Chat.CHAT_LIST)
+interface ChatRoomService {
+    @GET(ApiClient.ChatRoom.CHAT_LIST)
     suspend fun getChatList(): BaseResponse<ChatRoomListResponse>
 
-    @GET(ApiClient.Chat.MEMBERS)
+    @GET(ApiClient.ChatRoom.MEMBERS)
     suspend fun getChatMembers(
         @Path("chatRoomId") chatRoomId: Long,
     ): BaseResponse<List<ChatClubMemberResponse>>
 
-    @GET(ApiClient.Chat.CLUB)
+    @GET(ApiClient.ChatRoom.CLUB)
     suspend fun getChatClub(
         @Path("chatRoomId") chatRoomId: Long,
     ): BaseResponse<ChatRoomClubResponse>
+
+    @POST(ApiClient.ChatRoom.LEAVE)
+    suspend fun postLeaveChatRoom(
+        @Path("chatRoomId") chatRoomId: Long,
+    )
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.happy.friendogly.local.dao.ChatMessageDao
-import com.happy.friendogly.local.dao.ChatRoomDao
 import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
 import com.happy.friendogly.local.model.MessageTypeEntity
@@ -18,20 +17,19 @@ import java.time.LocalDateTime
 
 class ChatMessageDatabaseTest {
     private lateinit var chatMessageDao: ChatMessageDao
-    private lateinit var chatRoomDao: ChatRoomDao
 
     private lateinit var db: ChatMessageDatabase
 
     @Before
     fun setUp() {
         db =
-            Room.inMemoryDatabaseBuilder(
-                context = ApplicationProvider.getApplicationContext<Context>(),
-                klass = ChatMessageDatabase::class.java,
-            ).build()
+            Room
+                .inMemoryDatabaseBuilder(
+                    context = ApplicationProvider.getApplicationContext<Context>(),
+                    klass = ChatMessageDatabase::class.java,
+                ).build()
 
         chatMessageDao = db.chatMessageDao()
-        chatRoomDao = db.chatRoomDao()
     }
 
     @After
@@ -56,16 +54,18 @@ class ChatMessageDatabaseTest {
     }
 
     @Test
-    fun `can_update_chatRoom_message`() {
+    fun `can_get_latest_mesage`() {
         // when
         runBlocking {
-            chatRoomDao.addMessageToChatRoom(2, DUMMY_MY_MESSAGE)
-            chatRoomDao.addMessageToChatRoom(2, DUMMY_CHAT_MESSAGE)
+            chatMessageDao.insert(DUMMY_MY_MESSAGE)
+            chatMessageDao.insert(DUMMY_CHAT_MESSAGE)
+            chatMessageDao.insert(DUMMY_CHAT_MESSAGE2)
         }
 
+        // then
         runBlocking {
-            val messages = chatRoomDao.getMessagesByRoomId(2)
-            assertThat(messages).contains(DUMMY_MY_MESSAGE, DUMMY_CHAT_MESSAGE)
+            val message = chatMessageDao.getLatestMessageByRoomId(2)
+            assertThat(message).isEqualTo(DUMMY_CHAT_MESSAGE2)
         }
     }
 
@@ -82,11 +82,12 @@ class ChatMessageDatabaseTest {
                 content = "",
                 type = MessageTypeEntity.CHAT,
                 id = 1,
+                chatRoomId = 2,
             )
 
         private val DUMMY_CHAT_MESSAGE =
             ChatMessageEntity(
-                createdAt = LocalDateTime.of(2024, 6, 12, 14, 2),
+                createdAt = LocalDateTime.of(2024, 6, 20, 14, 2),
                 member =
                     ChatMemberEntity(
                         2,
@@ -96,6 +97,22 @@ class ChatMessageDatabaseTest {
                 content = "ZZZZZZZZ",
                 type = MessageTypeEntity.CHAT,
                 id = 2,
+                chatRoomId = 2,
+            )
+
+        private val DUMMY_CHAT_MESSAGE2 =
+            ChatMessageEntity(
+                createdAt = LocalDateTime.of(2024, 7, 12, 14, 2),
+                member =
+                    ChatMemberEntity(
+                        2,
+                        "벼리",
+                        "",
+                    ),
+                content = "ZZZZZZZZ",
+                type = MessageTypeEntity.CHAT,
+                id = 3,
+                chatRoomId = 2,
             )
     }
 }

@@ -4,7 +4,8 @@ import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
-import com.happy.friendogly.data.repository.ChatRepositoryImpl
+import com.happy.friendogly.data.repository.ChatMessageRepositoryImpl
+import com.happy.friendogly.data.repository.ChatRoomRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
@@ -19,7 +20,8 @@ import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 import com.happy.friendogly.domain.repository.AlarmTokenRepository
 import com.happy.friendogly.domain.repository.AuthRepository
-import com.happy.friendogly.domain.repository.ChatRepository
+import com.happy.friendogly.domain.repository.ChatMessageRepository
+import com.happy.friendogly.domain.repository.ChatRoomRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
@@ -57,7 +59,11 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsChatRepository(repositoryImpl: ChatRepositoryImpl): ChatRepository
+    abstract fun bindsChatRoomRepository(repositoryImpl: ChatRoomRepositoryImpl): ChatRoomRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsChatMessageRepository(repositoryImpl: ChatMessageRepositoryImpl): ChatMessageRepository
 
     @Binds
     @Singleton

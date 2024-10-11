@@ -2,12 +2,15 @@ package com.happy.friendogly.pet.service;
 
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class PetQueryService {
 
     private final PetRepository petRepository;
@@ -27,5 +30,9 @@ public class PetQueryService {
         return pets.stream()
                 .map(FindPetResponse::new)
                 .toList();
+    }
+
+    public FindPetExistenceResponse checkPetExistence(Long memberId) {
+        return new FindPetExistenceResponse(petRepository.existsByMemberId(memberId));
     }
 }

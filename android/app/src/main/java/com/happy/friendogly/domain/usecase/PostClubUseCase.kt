@@ -1,5 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
@@ -21,7 +23,7 @@ class PostClubUseCase
             memberCapacity: Int,
             file: MultipartBody.Part?,
             petIds: List<Long>,
-        ): Result<Unit> =
+        ): DomainResult<Unit, DataError.Network> =
             repository.postClub(
                 title = title,
                 content = content,

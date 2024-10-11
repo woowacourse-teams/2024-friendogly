@@ -7,6 +7,7 @@ import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,6 +19,8 @@ class PetSelectViewModel
     constructor(
         private val getPetsMineUseCase: GetPetsMineUseCase,
     ) : BaseViewModel(), PetSelectActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
         private val _pets: MutableLiveData<List<PetSelectUiModel>> = MutableLiveData()
         val pets: LiveData<List<PetSelectUiModel>> get() = _pets
 
@@ -43,15 +46,19 @@ class PetSelectViewModel
             launch {
                 getPetsMineUseCase().fold(
                     onSuccess = { pets ->
-                        _pets.value =
-                            pets.map { pet ->
-                                pet.toPetSelectUiModel().apply {
-                                    initSelectableState(filters)
+                        if (pets.isEmpty()) {
+                            _petSelectEvent.emit(PetSelectEvent.EmptyPet)
+                        } else {
+                            _pets.value =
+                                pets.map { pet ->
+                                    pet.toPetSelectUiModel().apply {
+                                        initSelectableState(filters)
+                                    }
                                 }
-                            }
+                        }
                     },
-                    onError = {
-                        _petSelectEvent.emit(PetSelectEvent.FailLoadPet)
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
                     },
                 )
             }

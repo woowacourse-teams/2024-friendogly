@@ -11,6 +11,8 @@ import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.club.add.ClubAddActivity
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailActivity
 import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubAdapter
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
@@ -64,6 +66,15 @@ class MyClubActivity :
                 MyClubEvent.AddPet.OpenAddClub -> startActivity(ClubAddActivity.getIntent(this))
 
                 MyClubEvent.AddPet.OpenAddPet -> openRegisterPetDialog()
+            }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(this@MyClubActivity) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                }
             }
         }
     }

@@ -7,7 +7,9 @@ import com.happy.friendogly.databinding.FragmentMyClubBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
+import com.happy.friendogly.presentation.ui.club.common.MessageHandler
 import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
+import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
@@ -44,7 +46,10 @@ class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fra
         viewModel.myClubEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 MyClubEvent.Navigation.NavigateToAddClub -> (activity as MyClubActivity).addClub()
-                is MyClubEvent.Navigation.NavigateToClub -> (activity as MyClubActivity).openClub(event.clubId)
+                is MyClubEvent.Navigation.NavigateToClub ->
+                    (activity as MyClubActivity).openClub(
+                        event.clubId,
+                    )
             }
         }
 
@@ -53,6 +58,15 @@ class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fra
                 MyClubUiState.Error -> applyViewState(binding.includeClubError.linearLayoutClubError)
                 MyClubUiState.Init -> applyViewState(binding.includeClubList.rcvClubListClub)
                 MyClubUiState.NotData -> applyViewState(binding.includeClubData.linearLayoutClubNotData)
+            }
+        }
+
+        viewModel.clubErrorHandler.error.observeEvent(viewLifecycleOwner) {
+            it.handleError { message ->
+                when (message) {
+                    is MessageHandler.SendSnackBar -> showSnackbar(getString(message.messageId))
+                    is MessageHandler.SendToast -> showToastMessage(getString(message.messageId))
+                }
             }
         }
     }

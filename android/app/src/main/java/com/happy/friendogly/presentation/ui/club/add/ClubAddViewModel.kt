@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.PostClubUseCase
@@ -15,6 +16,7 @@ import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MAX_PAGE_SIZE
 import com.happy.friendogly.presentation.ui.club.add.adapter.ClubAddAdapter.Companion.MIN_PAGE
 import com.happy.friendogly.presentation.ui.club.add.model.ClubCounter
+import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toDomain
 import com.happy.friendogly.presentation.ui.club.common.mapper.toGenders
 import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeTypes
@@ -38,6 +40,10 @@ class ClubAddViewModel
         private val getAddressUseCase: GetAddressUseCase,
         private val postClubUseCase: PostClubUseCase,
     ) : BaseViewModel(), ClubAddActionHandler, ClubFilterItemActionHandler {
+        val clubErrorHandler = ClubErrorHandler()
+
+        private val clubFilterSelector = ClubFilterSelector()
+
         private val _myAddress: MutableLiveData<UserAddress> = MutableLiveData()
         val myAddress: LiveData<UserAddress> get() = _myAddress
 
@@ -47,8 +53,6 @@ class ClubAddViewModel
 
         private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
         val currentPage: LiveData<Int> get() = _currentPage
-
-        private val clubFilterSelector = ClubFilterSelector()
 
         private val _clubCounter: MutableLiveData<ClubCounter> = MutableLiveData(ClubCounter())
         val clubCounter: LiveData<ClubCounter> get() = _clubCounter
@@ -181,13 +185,14 @@ class ClubAddViewModel
                 memberCapacity = clubCounter.value?.count ?: return@launch,
                 file = file,
                 petIds = dogs,
-            )
-                .onSuccess {
+            ).fold(
+                onSuccess = {
                     _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToHomeWithAdded)
-                }
-                .onFailure {
-                    _clubAddEvent.emit(ClubAddEvent.FailAddClub)
-                }
+                },
+                onError = { error ->
+                    clubErrorHandler.handle(error)
+                },
+            )
         }
 
         override fun navigatePrevPage() {

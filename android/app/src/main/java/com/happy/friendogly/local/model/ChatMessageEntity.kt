@@ -17,9 +17,11 @@ data class ChatMessageEntity(
     @Embedded(prefix = "member_")
     val member: ChatMemberEntity,
     @ColumnInfo(name = "content")
-    val content: String,
+    val content: String?,
     @ColumnInfo(name = "type")
     val type: MessageTypeEntity,
+    @ColumnInfo(name = "chat_room_id")
+    val chatRoomId: Long,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 ) {

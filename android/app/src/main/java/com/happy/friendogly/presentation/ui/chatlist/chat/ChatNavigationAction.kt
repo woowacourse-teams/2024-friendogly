@@ -4,4 +4,6 @@ interface ChatNavigationAction {
     fun navigateToMemberProfile(memberId: Long)
 
     fun navigateToClub(clubId: Long)
+
+    fun leaveChat()
 }

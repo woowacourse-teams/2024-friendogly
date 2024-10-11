@@ -4,6 +4,8 @@ import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
-import java.util.Collections;
-import java.util.List;
 
 // TODO: 적절한 로그 레벨 설정
 @Slf4j
@@ -39,7 +38,7 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -58,11 +57,11 @@ public class GlobalExceptionHandler {
                 detail
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handle(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(HttpMessageNotReadableException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -71,11 +70,11 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handle(HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(HttpRequestMethodNotSupportedException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -84,11 +83,11 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<String> handle(NoResourceFoundException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(NoResourceFoundException exception) {
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -97,19 +96,19 @@ public class GlobalExceptionHandler {
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handle(Exception exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(Exception exception) {
         log.error(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
-                ErrorCode.DEFAULT_ERROR_CODE,
-                exception.getMessage(), // TODO: 처리 필요
+                ErrorCode.UNKNOWN_EXCEPTION,
+                "알 수 없는 예외가 발생했습니다.",
                 Collections.emptyList()
         );
 
-        return new ResponseEntity(ApiResponse.ofError(errorResponse), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ApiResponse.ofError(errorResponse), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

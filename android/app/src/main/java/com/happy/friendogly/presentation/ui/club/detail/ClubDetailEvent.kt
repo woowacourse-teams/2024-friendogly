@@ -8,15 +8,15 @@ sealed interface ClubDetailEvent {
 
     data class OpenDetailMenu(val clubDetailViewType: ClubDetailViewType) : ClubDetailEvent
 
+    data object SaveReLoadState : ClubDetailEvent
+
     sealed interface Navigation : ClubDetailEvent {
         data class NavigateToChat(val chatRoomId: Long) : Navigation
 
         data object NavigateToHome : Navigation
 
         data object NavigateToRegisterPet : Navigation
+
+        data object NavigateSelectState : Navigation
     }
-
-    data object FailLoadDetail : ClubDetailEvent
-
-    data object FailParticipation : ClubDetailEvent
 }
