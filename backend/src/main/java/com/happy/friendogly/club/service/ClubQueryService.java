@@ -73,13 +73,32 @@ public class ClubQueryService {
     }
 
     private Slice<Club> fetchClubSlice(FindClubByFilterRequest request, LocalDateTime lastFoundCreatedAt, Long lastFoundId) {
+        // TODO: ===== 클라이언트 페이징 적용 완료되면 제거 =====
+        int pageSize = request.pageSize();
+        LocalDateTime createdAt = lastFoundCreatedAt;
+        Long id = lastFoundId;
+
+        if (request.pageSize() == null) {
+            pageSize = Integer.MAX_VALUE;
+        }
+        if (lastFoundCreatedAt == null) {
+            createdAt = LocalDateTime.of(9999, 12, 31, 11, 59);
+        }
+        if (lastFoundId == null) {
+            id = Long.MAX_VALUE;
+        }
+        // ==================================================
+
         return clubRepository.findAllBy(
                 request.province(),
                 Gender.toGenders(request.genderParams()),
                 SizeType.toSizeTypes(request.sizeParams()),
-                PageRequest.ofSize(request.pageSize()),
-                lastFoundCreatedAt,
-                lastFoundId
+//                PageRequest.ofSize(request.pageSize()),
+//                lastFoundCreatedAt,
+//                lastFoundId
+                PageRequest.ofSize(pageSize),
+                createdAt,
+                id
         );
     }
 
