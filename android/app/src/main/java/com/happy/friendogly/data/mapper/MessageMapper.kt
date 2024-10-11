@@ -8,7 +8,7 @@ import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.local.mapper.toData
 import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
-import com.happy.friendogly.local.room.MessageTypeEntity
+import com.happy.friendogly.local.model.MessageTypeEntity
 
 fun List<MessageDto>.toDomain(myMemberId: Long): List<ChatComponent> =
     this.map { message ->

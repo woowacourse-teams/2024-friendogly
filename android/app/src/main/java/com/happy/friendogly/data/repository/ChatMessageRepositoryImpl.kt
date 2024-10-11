@@ -7,9 +7,9 @@ import com.happy.friendogly.data.model.MessageDto
 import com.happy.friendogly.data.source.ChatMessageDataSource
 import com.happy.friendogly.domain.model.ChatComponent
 import com.happy.friendogly.domain.repository.ChatMessageRepository
+import com.happy.friendogly.local.dao.ChatMessageDao
 import com.happy.friendogly.local.mapper.toDomain
 import com.happy.friendogly.local.model.ChatMessageEntity
-import com.happy.friendogly.local.room.ChatMessageDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
@@ -40,11 +40,12 @@ class ChatMessageRepositoryImpl
 
                 saveNewMessages(chatRoomId, latestMessage)
                 emit(
-                    chatMessageDao.getMessagesByRoomIdInRange(
-                        chatRoomId = chatRoomId,
-                        limit = limit,
-                        offset = offset,
-                    ).map { it.toDomain(myMemberId) },
+                    chatMessageDao
+                        .getMessagesByRoomIdInRange(
+                            chatRoomId = chatRoomId,
+                            limit = limit,
+                            offset = offset,
+                        ).map { it.toDomain(myMemberId) },
                 )
             }
 
@@ -61,11 +62,13 @@ class ChatMessageRepositoryImpl
             latestMessage: ChatMessageEntity,
         ) {
             val newMessages =
-                dataSource.getChatMessagesByTime(
-                    chatRoomId = chatRoomId,
-                    since = latestMessage.createdAt,
-                    until = LocalDateTime.now(),
-                ).last().filterNot { isSameMessage(it, latestMessage) }
+                dataSource
+                    .getChatMessagesByTime(
+                        chatRoomId = chatRoomId,
+                        since = latestMessage.createdAt,
+                        until = LocalDateTime.now(),
+                    ).last()
+                    .filterNot { isSameMessage(it, latestMessage) }
 
             chatMessageDao.insertAll(*newMessages.toLocalData(chatRoomId).toTypedArray())
         }
