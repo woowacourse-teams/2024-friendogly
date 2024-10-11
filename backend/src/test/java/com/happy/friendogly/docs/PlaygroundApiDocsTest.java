@@ -33,6 +33,7 @@ import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationRespon
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
@@ -97,6 +98,10 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터도착 유무 업데이트")
     @Test
     void updateArrival() throws Exception {
+
+        when(playgroundCommandService.updateArrival(any(), anyLong()))
+                .thenReturn(new UpdatePlaygroundArrivalResponse(true));
+        
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(37.5173316, 127.1011661);
         mockMvc
                 .perform(patch("/playgrounds/arrival")
