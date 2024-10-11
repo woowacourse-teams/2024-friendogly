@@ -505,9 +505,9 @@
         <item name="fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
-    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size28" parent="@style/Widget.AppCompat.TextView">
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size30" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/coral400</item>
-        <item name="android:textSize">28dp</item>
+        <item name="android:textSize">30dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/pretendard_semi_bold</item>
     </style>
@@ -526,6 +526,12 @@
         <item name="fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral300.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral300</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
 
     <!--Profile Edit Text-->
     <style name="Theme.AppCompat.TextView.Profile.EditText.Contents" parent="@style/Widget.AppCompat.EditText">

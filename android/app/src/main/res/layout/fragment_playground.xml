@@ -337,8 +337,8 @@
 
             <View
                 android:id="@+id/layout_playground_summary_pet_count"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginBottom="14dp"
                 android:background="@drawable/circle_coral50"
                 android:paddingTop="20dp"
@@ -348,44 +348,35 @@
 
             <TextView
                 android:id="@+id/tv_playground_arrived_pet_count"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size28"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{String.valueOf(vm.playgroundSummary.arrivedPetCount)}"
-                app:layout_constraintBottom_toBottomOf="@id/tv_playground_divider_pet_count"
-                app:layout_constraintEnd_toStartOf="@id/tv_playground_divider_pet_count"
-                app:layout_constraintTop_toTopOf="@id/tv_playground_divider_pet_count"
-                tools:text="12" />
-
-            <TextView
-                android:id="@+id/tv_playground_divider_pet_count"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Gray500.Size28"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:paddingHorizontal="4dp"
-                android:text="/"
-                app:layout_constraintEnd_toEndOf="@id/layout_playground_summary_pet_count"
-                app:layout_constraintStart_toStartOf="@id/layout_playground_summary_pet_count"
-                app:layout_constraintTop_toBottomOf="@id/tv_playground_participation_status" />
+                android:text="@{String.valueOf(vm.playgroundSummary.arrivedPetCount)}"
+                app:layout_constraintEnd_toStartOf="@id/tv_playground_total_pet_count"
+                app:layout_constraintStart_toStartOf="@id/tv_playground_participation_status"
+                app:layout_constraintTop_toBottomOf="@id/tv_playground_participation_status"
+                tools:text="12" />
 
             <TextView
                 android:id="@+id/tv_playground_total_pet_count"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Gray500.Size24"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Coral300.Size20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(vm.playgroundSummary.totalPetCount)}"
-                app:layout_constraintBottom_toBottomOf="@id/tv_playground_divider_pet_count"
-                app:layout_constraintStart_toEndOf="@id/tv_playground_divider_pet_count"
-                app:layout_constraintTop_toTopOf="@id/tv_playground_divider_pet_count"
-                tools:text="15" />
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/playground_pet_count"
+                app:layout_constraintBottom_toBottomOf="@id/tv_playground_arrived_pet_count"
+                app:layout_constraintEnd_toEndOf="@id/tv_playground_participation_status"
+                app:layout_constraintStart_toEndOf="@id/tv_playground_arrived_pet_count"
+                app:layout_constraintTop_toTopOf="@id/tv_playground_arrived_pet_count" />
 
             <TextView
                 android:id="@+id/tv_playground_participation_status"
-                style="@style/Theme.AppCompat.TextView.SemiBold.Coral300.Size16"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Gray05.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/playground_participation_status"
                 app:layout_constraintEnd_toEndOf="@id/layout_playground_summary_pet_count"
                 app:layout_constraintStart_toStartOf="@id/layout_playground_summary_pet_count"
@@ -396,9 +387,8 @@
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
+                android:layout_marginStart="32dp"
                 android:text="@string/playground_play_together"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iv_playground_summary" />
