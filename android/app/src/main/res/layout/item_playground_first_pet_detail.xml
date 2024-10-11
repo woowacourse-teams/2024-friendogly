@@ -7,11 +7,11 @@
 
         <variable
             name="petDetail"
-            type="com.happy.friendogly.presentation.ui.woof.uimodel.PlaygroundPetDetailUiModel" />
+            type="com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundPetDetailUiModel" />
 
         <variable
             name="actionHandler"
-            type="com.happy.friendogly.presentation.ui.woof.action.WoofActionHandler" />
+            type="com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

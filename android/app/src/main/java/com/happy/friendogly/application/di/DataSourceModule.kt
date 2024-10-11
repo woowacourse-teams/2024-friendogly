@@ -15,7 +15,7 @@ import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.RecentPetsDataSource
 import com.happy.friendogly.data.source.TokenDataSource
 import com.happy.friendogly.data.source.WebSocketDataSource
-import com.happy.friendogly.data.source.WoofDataSource
+import com.happy.friendogly.data.source.PlaygroundDataSource
 import com.happy.friendogly.firebase.source.MessagingDataSourceImpl
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.source.AddressDataSourceImpl
@@ -31,7 +31,7 @@ import com.happy.friendogly.remote.source.MemberDataSourceImpl
 import com.happy.friendogly.remote.source.MyClubDataSourceImpl
 import com.happy.friendogly.remote.source.PetDataSourceImpl
 import com.happy.friendogly.remote.source.WebSocketDataSourceImpl
-import com.happy.friendogly.remote.source.WoofDataSourceImpl
+import com.happy.friendogly.remote.source.PlaygroundDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -99,7 +99,7 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsWoofDataSource(dataSourceImpl: WoofDataSourceImpl): WoofDataSource
+    abstract fun bindsWoofDataSource(dataSourceImpl: PlaygroundDataSourceImpl): PlaygroundDataSource
 
     @Binds
     @Singleton

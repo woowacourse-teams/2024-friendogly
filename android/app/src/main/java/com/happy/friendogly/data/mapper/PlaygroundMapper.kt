@@ -1,7 +1,7 @@
 package com.happy.friendogly.data.mapper
 
 import com.happy.friendogly.data.model.PlaygroundDto
-import com.happy.friendogly.presentation.ui.woof.model.Playground
+import com.happy.friendogly.presentation.ui.playground.model.Playground
 
 fun PlaygroundDto.toDomain(): Playground {
     return Playground(

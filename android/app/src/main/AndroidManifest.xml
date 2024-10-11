@@ -128,13 +128,13 @@
         </service>
 
         <service
-            android:name=".presentation.ui.woof.service.WoofWalkService"
+            android:name=".presentation.ui.playground.service.PlaygroundLocationService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
 
         <receiver
-            android:name=".presentation.ui.woof.service.WoofWalkReceiver"
+            android:name=".presentation.ui.playground.service.PlaygroundLocationReceiver"
             android:enabled="true"
             android:exported="false" />
     </application>

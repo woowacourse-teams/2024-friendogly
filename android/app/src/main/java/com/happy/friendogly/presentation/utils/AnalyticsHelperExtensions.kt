@@ -22,8 +22,8 @@ fun AnalyticsHelper.logClubListFragmentSwitched() {
     logEvent(type = Types.CLUB_LIST_FRAGMENT_SWITCHED)
 }
 
-fun AnalyticsHelper.logWoofFragmentSwitched() {
-    logEvent(type = Types.WOOF_FRAGMENT_SWITCHED)
+fun AnalyticsHelper.logPlaygroundFragmentSwitched() {
+    logEvent(type = Types.PLAYGROUND_FRAGMENT_SWITCHED)
 }
 
 fun AnalyticsHelper.logChatListFragmentSwitched() {

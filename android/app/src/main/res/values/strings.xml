@@ -127,7 +127,7 @@
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
-    <string name="bottom_woof">친구찾기</string>
+    <string name="bottom_playground">놀이터</string>
     <string name="bottom_chat">채팅</string>
     <string name="bottom_my_page">나의 강아지</string>
 
@@ -255,7 +255,7 @@
     <string name="woof_my_footprint">MY</string>
     <string name="woof_register_playground_title">놀이터 등록하기</string>
     <string name="woof_address_out_of_korea">발자국 등록은 한국에서만 가능합니다!</string>
-    <string name="woof_register_playground_help">놀이터에 다른 강아지들도 참여할 수 있어요!
+    <string name="playground_register_help">놀이터에 다른 강아지들도 참여할 수 있어요!
         \n친구들을 만나 반갑게 인사해보세요~</string>
     <string name="woof_register_playground">이 위치에 놀이터 등록</string>
     <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
