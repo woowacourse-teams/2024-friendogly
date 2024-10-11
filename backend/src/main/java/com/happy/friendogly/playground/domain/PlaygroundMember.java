@@ -69,4 +69,8 @@ public class PlaygroundMember {
     public boolean isSamePlayground(Playground playground) {
         return this.playground.getId().equals(playground.getId());
     }
+
+    public void updateIsInside(boolean isInside) {
+        this.isInside = isInside;
+    }
 }

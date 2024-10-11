@@ -71,7 +71,7 @@ public class PlaygroundController {
             @Auth Long memberId,
             @Valid @RequestBody UpdatePlaygroundArrivalRequest request
     ) {
-        return ApiResponse.ofSuccess(new UpdatePlaygroundArrivalResponse(true));
+        return ApiResponse.ofSuccess(playgroundCommandService.updateArrival(request, memberId));
     }
 
     @PostMapping("/{playgroundId}/join")

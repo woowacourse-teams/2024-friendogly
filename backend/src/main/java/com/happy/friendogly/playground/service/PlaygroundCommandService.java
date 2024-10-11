@@ -10,8 +10,10 @@ import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.List;
@@ -21,9 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class PlaygroundCommandService {
-
-    private static final int PLAYGROUND_RADIUS = 150;
-    private static final int MAX_NON_OVERLAP_DISTANCE = PLAYGROUND_RADIUS * 2;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -60,10 +59,10 @@ public class PlaygroundCommandService {
 
     private void validateOverlapPlayground(double latitude, double longitude) {
         Location location = new Location(latitude, longitude);
-        Location startLatitudeLocation = location.minusLatitudeByMeters(MAX_NON_OVERLAP_DISTANCE);
-        Location endLatitudeLocation = location.plusLatitudeByMeters(MAX_NON_OVERLAP_DISTANCE);
-        Location startLongitudeLocation = location.minusLongitudeByMeters(MAX_NON_OVERLAP_DISTANCE);
-        Location endLongitudeLocation = location.plusLongitudeByMeters(MAX_NON_OVERLAP_DISTANCE);
+        Location startLatitudeLocation = location.minusLatitudeByOverlapDistance();
+        Location endLatitudeLocation = location.plusLatitudeByOverlapDistance();
+        Location startLongitudeLocation = location.minusLongitudeByOverlapDistance();
+        Location endLongitudeLocation = location.plusLongitudeByOverlapDistance();
 
         List<Playground> playgrounds = playgroundRepository.findAllByLatitudeBetweenAndLongitudeBetween(
                 startLatitudeLocation.getLatitude(),
@@ -73,8 +72,7 @@ public class PlaygroundCommandService {
         );
 
         boolean isExistWithinRadius = playgrounds.stream()
-                .anyMatch(playground -> location.isWithin(playground.getLocation(),
-                        MAX_NON_OVERLAP_DISTANCE));
+                .anyMatch(playground -> playground.isOverlapLocation(location));
 
         if (isExistWithinRadius) {
             throw new FriendoglyException(
@@ -109,5 +107,17 @@ public class PlaygroundCommandService {
         if (!playgroundMemberRepository.existsByPlaygroundId(playground.getId())) {
             playgroundRepository.delete(playground);
         }
+    }
+
+    public UpdatePlaygroundArrivalResponse updateArrival(UpdatePlaygroundArrivalRequest request, Long memberId) {
+        PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
+        Playground playground = playgroundMember.getPlayground();
+
+        Location location = new Location(request.latitude(), request.longitude());
+        boolean isInsideBoundary = playground.isInsideBoundary(location);
+
+        playgroundMember.updateIsInside(isInsideBoundary);
+
+        return new UpdatePlaygroundArrivalResponse(isInsideBoundary);
     }
 }

@@ -6,14 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
 import com.happy.friendogly.utils.GeoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
 
@@ -94,7 +98,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         Member member = saveMember("김도선");
         double latitudeA = 37.516382;
         double longitude = 127.120040;
-        double latitude299mFromA = GeoCalculator.calculateLatitudeOffset(latitudeA, 299);
+        double latitude299mFromA = GeoCalculator.calculateLatitudeOffset(latitudeA, 1);
         savePlayground(latitudeA, longitude);
         SavePlaygroundRequest request = new SavePlaygroundRequest(latitude299mFromA, longitude);
 
@@ -148,6 +152,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
     }
 
     @DisplayName("놀이터를 나갔을 때, 놀이터에 참여중인 멤버가 하나도 없으면 놀이터는 삭제된다.")
+    @Transactional
     @Test
     void deletePlaygroundWhenLeavePlaygroundAndNoMemberInPlayground() {
         // given
@@ -166,5 +171,67 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
 
         // then
         assertThat(isExistPlayground).isFalse();
+    }
+
+    @DisplayName("놀이터 안에 들어오면 상태가 true가 된다.")
+    @Transactional
+    @Test
+    void updateIsInsideTrue() {
+        // given
+        Member member = saveMember("김도선");
+        double latitude = 37.5173316;
+        double longitude = 127.1011661;
+        Location location = new Location(latitude, longitude);
+        Playground playground = savePlayground(location.getLatitude(), location.getLongitude());
+        PlaygroundMember playgroundMember = savePlaygroundMember(playground, member);
+
+        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 150);
+        Location insideLocation = new Location(insideLatitude, longitude);
+
+        UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(
+                insideLocation.getLatitude(), insideLocation.getLongitude()
+        );
+
+        // when
+        UpdatePlaygroundArrivalResponse response = playgroundCommandService.updateArrival(
+                request, member.getId()
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(playgroundMember.isInside()).isTrue(),
+                () -> assertThat(response.isArrived()).isTrue()
+        );
+    }
+
+    @DisplayName("놀이터 안에 들어오면 상태가 true가 된다.")
+    @Transactional
+    @Test
+    void updateIsInsideFalse() {
+        // given
+        Member member = saveMember("김도선");
+        double latitude = 37.5173316;
+        double longitude = 127.1011661;
+        Location location = new Location(latitude, longitude);
+        Playground playground = savePlayground(location.getLatitude(), location.getLongitude());
+        PlaygroundMember playgroundMember = saveArrivedPlaygroundMember(playground, member);
+
+        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 156);
+        Location insideLocation = new Location(insideLatitude, longitude);
+
+        UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(
+                insideLocation.getLatitude(), insideLocation.getLongitude()
+        );
+
+        // when
+        UpdatePlaygroundArrivalResponse response = playgroundCommandService.updateArrival(
+                request, member.getId()
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(playgroundMember.isInside()).isFalse(),
+                () -> assertThat(response.isArrived()).isFalse()
+        );
     }
 }
