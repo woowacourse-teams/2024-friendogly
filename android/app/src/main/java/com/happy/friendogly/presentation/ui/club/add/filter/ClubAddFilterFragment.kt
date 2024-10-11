@@ -5,7 +5,6 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubAddFilterBinding
 import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.ui.club.add.ClubAddEvent
 import com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
@@ -30,7 +29,7 @@ class ClubAddFilterFragment :
         binding.vm = viewModel
     }
 
-    private fun observe(){
+    private fun observe() {
         viewModel.clubSizeGuideEvent.observeEvent(viewLifecycleOwner) {
             showSizeGuide()
         }
@@ -61,5 +60,4 @@ class ClubAddFilterFragment :
                 .build()
         balloon?.showAlignTop(binding.btnSizeGuide)
     }
-
 }

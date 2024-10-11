@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.filter.bottom
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +29,7 @@ class ParticipationFilterBottomSheet(
 
     private val viewModel: ClubFilterViewModel by viewModels()
 
-    private var balloon : Balloon? = null
+    private var balloon: Balloon? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,7 +96,7 @@ class ParticipationFilterBottomSheet(
         }
     }
 
-    private fun showSizeGuide(){
+    private fun showSizeGuide() {
         balloon?.dismiss()
         balloon =
             Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)

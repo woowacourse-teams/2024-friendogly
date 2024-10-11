@@ -35,7 +35,7 @@ class ClubFilterBottomSheet(
 
     private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel>()
 
-    private var balloon : Balloon? = null
+    private var balloon: Balloon? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -150,7 +150,7 @@ class ClubFilterBottomSheet(
         }
     }
 
-    private fun showSizeGuide(){
+    private fun showSizeGuide() {
         balloon?.dismiss()
         balloon =
             Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)

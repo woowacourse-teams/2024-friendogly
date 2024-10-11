@@ -53,10 +53,11 @@ class PetSelectBottomSheet(
         dlg.setOnShowListener {
             val bottomSheet =
                 dlg.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            bottomSheet.background = ContextCompat.getDrawable(
-                requireContext(),
-                R.drawable.shape_white_fill_bottom_radius_24
-            )
+            bottomSheet.background =
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.shape_white_fill_bottom_radius_24,
+                )
             val behavior = BottomSheetBehavior.from(bottomSheet)
             behavior.isDraggable = false
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
