@@ -56,7 +56,15 @@ public class ClubQueryService {
         List<Club> filteredClubs = filterClubs(clubSlice, filterCondition, member, pets);
         addFilteredResults(request, filteredClubs, result);
 
-        while (result.size() < request.pageSize() && clubSlice.hasNext()) {
+        // TODO: =========== 클라이언트 페이징 반영되면 삭제 ============
+        Integer pageSize = request.pageSize();
+        if (pageSize == null) {
+            pageSize = 100000000;
+        }
+        // =========================================================
+
+//        while (result.size() < request.pageSize() && clubSlice.hasNext()) {
+        while (result.size() < pageSize && clubSlice.hasNext()) {
             lastFoundCreatedAt = updateLastFoundCreatedAt(lastFoundCreatedAt, result);
             lastFoundId = updateLastFoundId(lastFoundId, result);
 
@@ -79,7 +87,7 @@ public class ClubQueryService {
         Long id = lastFoundId;
 
         if (pageSize == null) {
-            pageSize = Integer.MAX_VALUE;
+            pageSize = 100000000;
         }
         if (createdAt == null) {
             createdAt = LocalDateTime.of(9999, 12, 31, 11, 59);
@@ -120,8 +128,16 @@ public class ClubQueryService {
     }
 
     private void addFilteredResults(FindClubByFilterRequest request, List<Club> filteredClubs, List<Club> result) {
+        // TODO: =========== 클라이언트 페이징 반영되면 삭제 ============
+        Integer pageSize = request.pageSize();
+        if (pageSize == null) {
+            pageSize = 100000000;
+        }
+        // =========================================================
+
         for (Club club : filteredClubs) {
-            if (result.size() >= request.pageSize()) {
+//            if (result.size() >= request.pageSize()) {
+            if (result.size() >= pageSize) {
                 break;
             }
             result.add(club);
