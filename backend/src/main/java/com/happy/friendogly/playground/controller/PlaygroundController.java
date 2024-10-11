@@ -4,12 +4,14 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
 import jakarta.validation.Valid;
@@ -88,5 +90,13 @@ public class PlaygroundController {
     public ResponseEntity<Void> deleteJoinMember(@Auth Long memberId) {
         playgroundCommandService.leavePlayground(memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/message")
+    public ApiResponse<UpdatePlaygroundMemberMessageResponse> updateMessage(
+            @Auth Long memberId,
+            UpdatePlaygroundMemberMessageRequest request
+    ) {
+        return ApiResponse.ofSuccess(new UpdatePlaygroundMemberMessageResponse("update"));
     }
 }

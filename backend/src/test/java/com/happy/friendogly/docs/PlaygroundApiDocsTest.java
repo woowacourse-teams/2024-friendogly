@@ -28,6 +28,7 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -101,7 +102,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
 
         when(playgroundCommandService.updateArrival(any(), anyLong()))
                 .thenReturn(new UpdatePlaygroundArrivalResponse(true));
-        
+
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(37.5173316, 127.1011661);
         mockMvc
                 .perform(patch("/playgrounds/arrival")
@@ -345,6 +346,38 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                         )
                 ))
                 .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("놀이터에 참여한 멤벙 메세지 수정")
+    @Test
+    void updateMessage() throws Exception {
+
+        UpdatePlaygroundMemberMessageRequest request = new UpdatePlaygroundMemberMessageRequest("update");
+
+        mockMvc
+                .perform(patch("/playgrounds/message")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("playgrounds/message",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("멤버 메세지 수정 API")
+                                .requestFields(
+                                        fieldWithPath("message").description("수정할 메세지")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.message").description("수정된 메세지")
+                                )
+                                .responseSchema(Schema.schema("UpdatePlaygroundMemberMessageResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
     }
 
     @Override
