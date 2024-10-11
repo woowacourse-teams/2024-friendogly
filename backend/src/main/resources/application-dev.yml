@@ -35,6 +35,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
+      max-request-size: 5MB
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:file:/home/ubuntu/h2_test_data
