@@ -23,11 +23,17 @@ fun saveBitmapToFile(
     if (!directory.exists()) {
         directory.mkdirs()
     }
-    val file = File(directory, "image.jpg")
-    val outputStream = FileOutputStream(file)
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-    outputStream.flush()
-    outputStream.close()
+    val file = File(directory, "image.webp")
+    FileOutputStream(file).use { outputStream ->
+        val format =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Bitmap.CompressFormat.WEBP_LOSSLESS
+            } else {
+                Bitmap.CompressFormat.JPEG
+            }
+        bitmap.compress(format, 100, outputStream)
+    }
+
     return file
 }
 
@@ -44,6 +50,4 @@ fun Uri.toBitmap(context: Context): Bitmap =
         ImageDecoder.decodeBitmap(source)
     }
 
-fun Bitmap.toSoftwareBitmap(): Bitmap {
-    return copy(Bitmap.Config.ARGB_8888, true)
-}
+fun Bitmap.toSoftwareBitmap(): Bitmap = copy(Bitmap.Config.ARGB_8888, true)
