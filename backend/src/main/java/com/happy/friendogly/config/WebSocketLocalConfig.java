@@ -15,13 +15,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Profile("local")
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketLocalConfig implements WebSocketMessageBrokerConfigurer {
 
     private final WebSocketInterceptor webSocketInterceptor;
     private final WebSocketErrorHandler webSocketErrorHandler;
     private final JwtProvider jwtProvider;
 
-    public WebSocketConfig(
+    public WebSocketLocalConfig(
             WebSocketInterceptor webSocketInterceptor,
             WebSocketErrorHandler webSocketErrorHandler,
             JwtProvider jwtProvider
