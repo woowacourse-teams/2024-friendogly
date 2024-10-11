@@ -164,6 +164,8 @@
     <string name="club_state_open">모집중</string>
     <string name="club_state_closed">모집종료</string>
     <string name="club_state_full">모집완료</string>
+    <string name="dog_size_guide">소형: 10kg 미만\n중형: 25kg 미만\n대형: 25kg 이상</string>
+    <string name="participation_guide">참여가능: 내 강아지가 참여 가능한 모임을 볼 수 있어요!</string>
 
     <!--멍개 생성-->
     <string name="club_list_add_title">모임 생성하기</string>

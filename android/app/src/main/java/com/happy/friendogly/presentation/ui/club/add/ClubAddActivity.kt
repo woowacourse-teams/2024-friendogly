@@ -26,6 +26,10 @@ import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileIma
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 
