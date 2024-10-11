@@ -33,6 +33,14 @@
         <item name="android:background">@drawable/rect_white_fill_30</item>
     </style>
 
+    <style name="RoundTopCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundTopCornerModalStyle</item>
+    </style>
+
+    <style name="RoundTopCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_white_fill_bottom_radius_24</item>
+    </style>
+
     <!-- Bold -->
     <style name="Theme.AppCompat.TextView.Bold.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray900</item>

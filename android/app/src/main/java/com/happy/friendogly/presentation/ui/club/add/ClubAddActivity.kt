@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.fragment.app.DialogFragment
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -26,10 +25,6 @@ import com.happy.friendogly.presentation.ui.profilesetting.bottom.EditProfileIma
 import com.happy.friendogly.presentation.utils.saveBitmapToFile
 import com.happy.friendogly.presentation.utils.toBitmap
 import com.happy.friendogly.presentation.utils.toMultipartBody
-import com.skydoves.balloon.ArrowPositionRules
-import com.skydoves.balloon.Balloon
-import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 
@@ -143,10 +138,6 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 )
             }
         bottomSheet.show(supportFragmentManager, "TAG")
-        bottomSheet.setStyle(
-            DialogFragment.STYLE_NORMAL,
-            R.style.RoundCornerBottomSheetDialogTheme,
-        )
     }
 
     private fun makePartImage(): MultipartBody.Part? {
