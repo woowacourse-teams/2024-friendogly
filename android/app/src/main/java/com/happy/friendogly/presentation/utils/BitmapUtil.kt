@@ -50,4 +50,9 @@ fun Uri.toBitmap(context: Context): Bitmap =
         ImageDecoder.decodeBitmap(source)
     }
 
-fun Bitmap.toSoftwareBitmap(): Bitmap = copy(Bitmap.Config.ARGB_8888, true)
+fun Bitmap.toSoftwareBitmap(): Bitmap =
+    if (config == Bitmap.Config.ARGB_8888) {
+        this
+    } else {
+        copy(Bitmap.Config.ARGB_8888, true)
+    }
