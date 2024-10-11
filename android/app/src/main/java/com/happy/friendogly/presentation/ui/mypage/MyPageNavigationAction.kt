@@ -19,4 +19,6 @@ sealed interface MyPageNavigationAction {
     data object NavigateToMyParticipation : MyPageNavigationAction
 
     data object NavigateToMyClubManger : MyPageNavigationAction
+
+    data object NavigateToRecentPet : MyPageNavigationAction
 }

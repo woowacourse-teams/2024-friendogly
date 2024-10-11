@@ -20,6 +20,7 @@ import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.recentpet.RecentPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
@@ -186,6 +187,10 @@ class MainActivity :
     override fun navigateToMyClub(isMyHead: Boolean) {
         analyticsHelper.logMyClubClick()
         startActivity(MyClubActivity.getIntent(this, isMyHead))
+    }
+
+    override fun navigateToRecentPet() {
+        startActivity(RecentPetActivity.getIntent(this))
     }
 
     companion object {

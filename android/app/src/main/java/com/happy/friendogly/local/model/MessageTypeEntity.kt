@@ -1,4 +1,4 @@
-package com.happy.friendogly.local.room
+package com.happy.friendogly.local.model
 
 enum class MessageTypeEntity {
     DATE,

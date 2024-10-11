@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="recentPetView"
+            type="com.happy.friendogly.presentation.ui.recentpet.RecentPetView" />
+
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.recentpet.RecentPetActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="@{recentPetView.last == true ? 150 : 0}">
+
+        <View
+            roundedView="@{recentPetView}"
+            android:layout_width="12dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ic_recent_pet_dot"
+            app:layout_constraintStart_toStartOf="@+id/ic_recent_pet_dot"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/ic_recent_pet_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_recent_pet_dot"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_recent_pet"
+            onSingleClick="@{() -> actionHandler.navigateToProfile(recentPetView.memberId)}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rect_white_fill_radius16"
+            android:backgroundTint="@color/gray100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ic_recent_pet_dot"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_recent_pet_profile_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/rect_gary03_fill_12"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_club_normal"
+                app:clubGlide="@{recentPetView.imageUrl}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundSmall" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_recent_pet_profile_image"
+                app:layout_constraintStart_toEndOf="@+id/iv_recent_pet_profile_image"
+                app:layout_constraintTop_toTopOf="@+id/iv_recent_pet_profile_image">
+
+
+                <TextView
+                    android:id="@+id/tv_recent_pet_name"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{recentPetView.name}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="땡이" />
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:age="@{recentPetView.age}"
+                    app:isAtLeastOneYearOld="@{recentPetView.isAtLeastOneYearOld}"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_recent_pet_name"
+                    app:layout_constraintStart_toEndOf="@+id/tv_recent_pet_name"
+                    app:layout_constraintTop_toTopOf="@+id/tv_recent_pet_name"
+                    tools:text="(9개월)" />
+
+                <TextView
+                    android:id="@+id/tv_recent_pet_size"
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_recent_pet_name"
+                    app:recentDogSize="@{recentPetView.sizeType}"
+                    tools:text="#소형견" />
+
+
+                <TextView
+                    style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintStart_toEndOf="@+id/tv_recent_pet_size"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_recent_pet_name"
+                    app:recentDogGender="@{recentPetView.gender}"
+                    tools:text="#암컷" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout_recent_pet" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

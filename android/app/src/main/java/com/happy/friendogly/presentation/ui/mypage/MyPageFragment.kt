@@ -62,6 +62,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
                 is MyPageNavigationAction.NavigateToPetEdit ->
                     (activity as MainActivityActionHandler).navigateToRegisterPet(action.petProfile)
+
+                is MyPageNavigationAction.NavigateToRecentPet -> (activity as MainActivityActionHandler).navigateToRecentPet()
             }
         }
 

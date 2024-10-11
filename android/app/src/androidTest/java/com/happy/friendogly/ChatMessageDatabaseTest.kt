@@ -3,11 +3,11 @@ package com.happy.friendogly
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.happy.friendogly.local.dao.ChatMessageDao
 import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
-import com.happy.friendogly.local.room.ChatMessageDao
+import com.happy.friendogly.local.model.MessageTypeEntity
 import com.happy.friendogly.local.room.ChatMessageDatabase
-import com.happy.friendogly.local.room.MessageTypeEntity
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -23,10 +23,11 @@ class ChatMessageDatabaseTest {
     @Before
     fun setUp() {
         db =
-            Room.inMemoryDatabaseBuilder(
-                context = ApplicationProvider.getApplicationContext<Context>(),
-                klass = ChatMessageDatabase::class.java,
-            ).build()
+            Room
+                .inMemoryDatabaseBuilder(
+                    context = ApplicationProvider.getApplicationContext<Context>(),
+                    klass = ChatMessageDatabase::class.java,
+                ).build()
 
         chatMessageDao = db.chatMessageDao()
     }
