@@ -32,7 +32,7 @@ public class PlaygroundMember {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "message")
+    @Column(name = "message", nullable = false)
     private String message;
 
     @Column(name = "is_inside", nullable = false)
@@ -59,7 +59,7 @@ public class PlaygroundMember {
             Playground playground,
             Member member
     ) {
-        this(playground, member, null, false, null);
+        this(playground, member, "", false, null);
     }
 
     public boolean equalsMemberId(Long memberId) {
