@@ -16,6 +16,4 @@ sealed interface PlaygroundMapAction {
     data object ScanNearPlaygrounds : PlaygroundMapAction
 
     data object StartLocationService : PlaygroundMapAction
-
-//    data object StopWalkTimeChronometer : WoofMapActions
 }

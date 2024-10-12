@@ -258,7 +258,7 @@
     <string name="playground_register_help">놀이터에 다른 강아지들도 참여할 수 있어요!
         \n친구들을 만나 반갑게 인사해보세요~</string>
     <string name="woof_register_playground">이 위치에 놀이터 등록</string>
-    <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
+    <string name="woof_location_tracking">실시간으로 위치를 추적 중입니다.</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
     <string name="woof_footprint_refresh">새로고침</string>

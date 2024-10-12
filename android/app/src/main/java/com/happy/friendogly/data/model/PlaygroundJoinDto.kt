@@ -7,5 +7,5 @@ data class PlaygroundJoinDto(
     val memberId: Long,
     val message: String,
     val isArrived: Boolean,
-    val exitTime: LocalDateTime,
+    val exitTime: LocalDateTime?,
 )

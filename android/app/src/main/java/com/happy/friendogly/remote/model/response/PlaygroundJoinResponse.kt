@@ -11,5 +11,5 @@ data class PlaygroundJoinResponse(
     val message: String,
     val isArrived: Boolean,
     @Serializable(with = LocalDateTimeSerializer::class)
-    val exitTime: LocalDateTime,
+    val exitTime: LocalDateTime?,
 )

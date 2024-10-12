@@ -15,7 +15,8 @@ import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment
 import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
-import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver.Companion.ACTION_LOCATION_UPDATE
+import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver.Companion.ACTION_LEAVE_PLAYGROUND
+import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver.Companion.ACTION_UPDATE_LOCATION
 
 class PlaygroundLocationService : Service() {
     private lateinit var locationManager: PlaygroundLocationManager
@@ -26,11 +27,20 @@ class PlaygroundLocationService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        val playStatus = intent?.getSerializableExtra(EXTRA_PLAY_STATUS) as? PlayStatus
-        val playStatusTitle = convertPlayStatusToTitle(playStatus)
+        when (intent?.action) {
+            ACTION_START -> {
+                val playStatus = intent.getSerializableExtra(EXTRA_PLAY_STATUS) as? PlayStatus
+                val playStatusTitle = convertPlayStatusToTitle(playStatus)
+                startForegroundService(playStatusTitle)
+            }
 
-        startForegroundService(playStatusTitle)
-        return super.onStartCommand(intent, flags, startId)
+            ACTION_STOP -> {
+                sendLeavePlaygroundBroadcast()
+                stopSelf()
+            }
+        }
+
+        return START_STICKY
     }
 
     override fun onDestroy() {
@@ -43,16 +53,16 @@ class PlaygroundLocationService : Service() {
     }
 
     private fun startForegroundService(playStatusTitle: String) {
-        startLocationUpdate()
         createNotificationChannel()
         startForeground(SERVICE_ID, createNotification(playStatusTitle))
+        startLocationUpdate()
     }
 
     private fun startLocationUpdate() {
         locationManager =
             PlaygroundLocationManager(this) { location ->
                 currentLocation = location
-                sendLocationToBroadcast()
+                sendLocationUpdateBroadcast()
             }
         locationManager.startLocationUpdate()
     }
@@ -83,20 +93,44 @@ class PlaygroundLocationService : Service() {
                 PendingIntent.FLAG_IMMUTABLE,
             )
 
+        val stopIntent =
+            PendingIntent.getService(
+                this,
+                REQUEST_CODE_ID,
+                Intent(this, PlaygroundLocationService::class.java).apply { action = ACTION_STOP },
+                PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+
+        val stopAction =
+            NotificationCompat.Action(
+                R.drawable.ic_stop,
+                resources.getString(R.string.playground_leave),
+                stopIntent,
+            )
+
         return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
             .setContentTitle(playStatusTitle)
             .setContentText(resources.getString(R.string.woof_location_tracking))
-            .setSmallIcon(R.mipmap.ic_launcher)
-//            .setUsesChronometer(true).setWhen(startMillis)
-            .setContentIntent(pendingIntent).setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(false).setDefaults(NotificationCompat.DEFAULT_ALL).build()
+            .setSmallIcon(R.drawable.ic_footprint)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(stopAction)
+            .setAutoCancel(false)
+            .setShowWhen(false)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .build()
     }
 
-    private fun sendLocationToBroadcast() {
+    private fun sendLocationUpdateBroadcast() {
         val intent =
-            Intent(ACTION_LOCATION_UPDATE).apply {
+            Intent(ACTION_UPDATE_LOCATION).apply {
                 putExtra(PlaygroundLocationReceiver.EXTRA_LOCATION, currentLocation)
             }
+        sendBroadcast(intent)
+    }
+
+    private fun sendLeavePlaygroundBroadcast() {
+        val intent = Intent(ACTION_LEAVE_PLAYGROUND)
         sendBroadcast(intent)
     }
 
@@ -113,6 +147,9 @@ class PlaygroundLocationService : Service() {
         private const val EXTRA_PLAY_STATUS = "playStatus"
         private const val REQUEST_CODE_ID = 0
         private const val SERVICE_ID = 1
+
+        const val ACTION_START = "PLAY"
+        const val ACTION_STOP = "STOP"
 
         fun getIntent(
             context: Context,

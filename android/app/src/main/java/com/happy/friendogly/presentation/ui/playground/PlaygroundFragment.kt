@@ -51,6 +51,7 @@ import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService
+import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService.Companion.ACTION_START
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.playground.viewmodel.PlaygroundViewModel
@@ -110,7 +111,6 @@ class PlaygroundFragment :
 
     private val mapView: MapView by lazy { binding.mapView }
 
-    //    private val walkTimeChronometer: Chronometer by lazy { binding.chronometerWoofWalkTime }
     private val petDetailAdapter by lazy { PetDetailAdapter(viewModel) }
     private val petSummaryAdapter by lazy { PetSummaryAdapter() }
 
@@ -326,19 +326,22 @@ class PlaygroundFragment :
                 pathOverlay.map = null
                 balloon?.dismiss()
             }
-//            else {
-//                startWalkStatusChronometer(myPlayStatus.changedWalkStatusTime)
-//            }
         }
 
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             if (playgroundInfo != null) {
                 petDetailAdapter.submitList(playgroundInfo.petDetails)
-                if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                } else {
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                }
+
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        } else {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                        }
+                    },
+                    DELAY_MILLIS,
+                )
             } else {
                 petDetailAdapter.submitList(emptyList())
             }
@@ -387,10 +390,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
-                                    ),
+                                        LatLng(
+                                            playground.latitude,
+                                            playground.longitude,
+                                        ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -409,8 +412,6 @@ class PlaygroundFragment :
                 is PlaygroundMapAction.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
                 is PlaygroundMapAction.StartLocationService -> startLocationService()
-
-//                is WoofMapActions.StopWalkTimeChronometer -> walkTimeChronometer.stop()
             }
         }
 
@@ -569,13 +570,11 @@ class PlaygroundFragment :
 
     private fun setupBroadCastReceiver() {
         walkReceiver =
-            PlaygroundLocationReceiver { location ->
-                latLng = LatLng(location.latitude, location.longitude)
-                monitorDistanceAndManagePlayStatus()
-            }
+            PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
         val intentFilter =
             IntentFilter().apply {
-                addAction(PlaygroundLocationReceiver.ACTION_LOCATION_UPDATE)
+                addAction(PlaygroundLocationReceiver.ACTION_UPDATE_LOCATION)
+                addAction(PlaygroundLocationReceiver.ACTION_LEAVE_PLAYGROUND)
             }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -585,7 +584,7 @@ class PlaygroundFragment :
                 RECEIVER_NOT_EXPORTED,
             )
         } else {
-            requireContext().registerReceiver(walkReceiver, intentFilter)
+            requireContext().registerReceiver(walkReceiver, intentFilter, RECEIVER_NOT_EXPORTED)
         }
     }
 
@@ -594,7 +593,7 @@ class PlaygroundFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.initPlaygrounds()
+            viewModel.updatePlaygrounds()
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
@@ -625,7 +624,7 @@ class PlaygroundFragment :
                 )
             width = 30
             outlineWidth = 0
-            patternImage = OverlayImage.fromResource(R.drawable.ic_path_pattern)
+            patternImage = OverlayImage.fromResource(R.drawable.ic_footprint)
             patternInterval = 60
             color = resources.getColor(R.color.blue, null)
             map = map
@@ -644,9 +643,9 @@ class PlaygroundFragment :
             icon = OverlayImage.fromResource(markerIcon(playground))
             width = MARKER_DEFAULT_WIDTH
             height = MARKER_DEFAULT_HEIGHT
-            map = map
             clickPlaygroundMarker(id = playground.id, marker = this)
         }
+        marker.map = map
 
         return marker
     }
@@ -780,20 +779,24 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng =
-        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
-//        val now = java.time.LocalDateTime.now()
-//        val duration =
-//            Duration.between(myPlayStatus.changedWalkStatusTime.toJavaLocalDateTime(), now)
-//        val startMillis = System.currentTimeMillis() - duration.toMillis()
-//        val myFootprintMarker = viewModel.myPlayground.value ?: return
-//        val position = myFootprintMarker.marker.position
-
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
-        val intent = PlaygroundLocationService.getIntent(requireContext(), myPlayStatus)
+        val intent =
+            PlaygroundLocationService.getIntent(requireContext(), myPlayStatus).apply {
+                action = ACTION_START
+            }
         requireContext().startForegroundService(intent)
+    }
+
+    private fun updateLocation(location: Location) {
+        latLng = LatLng(location.latitude, location.longitude)
+        monitorDistanceAndManagePlayStatus()
+    }
+
+    private fun leavePlayground() {
+        viewModel.leavePlayground()
     }
 
     private fun monitorDistanceAndManagePlayStatus() {
@@ -811,6 +814,8 @@ class PlaygroundFragment :
 
         if (withinPlaygroundRange(distance) || outOfPlaygroundRange(distance)) {
             viewModel.updatePlaygroundArrival(latLng)
+            val myPlayground = viewModel.myPlayground.value ?: return
+            viewModel.loadPlaygroundInfo(myPlayground.id)
         }
     }
 
@@ -832,15 +837,6 @@ class PlaygroundFragment :
             ),
         )
     }
-
-//    private fun startWalkStatusChronometer(changedWalkStatusTime: LocalDateTime) {
-//        val now = java.time.LocalDateTime.now()
-//        val duration = Duration.between(changedWalkStatusTime.toJavaLocalDateTime(), now)
-//        val startMillis = System.currentTimeMillis() - duration.toMillis()
-//        val elapsedRealtimeOffset = System.currentTimeMillis() - SystemClock.elapsedRealtime()
-//        walkTimeChronometer.base = startMillis - elapsedRealtimeOffset
-//        walkTimeChronometer.start()
-//    }
 
     private fun markNearPlaygroundMarkers() {
         val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
@@ -893,9 +889,6 @@ class PlaygroundFragment :
                     if (viewModel.uiState.value == PlaygroundUiState.FindingPlayground && slideOffset >= 0.4f) {
                         viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
-//                    if (viewModel.uiState.value == WoofUiState.ViewingPlaygroundInfo && slideOffset == 0.0f) {
-//                        viewModel.updateUiState(WoofUiState.FindingPlayground)
-//                    }
                 }
 
                 override fun onStateChanged(
