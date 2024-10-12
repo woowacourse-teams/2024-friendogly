@@ -57,9 +57,12 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_alart" />
+                android:id="@+id/btn_size_guide"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                onSingleClick="@{() -> vm.selectSizeGuide()}"
+                app:tint="@color/gray800"
+                android:src="@drawable/ic_help_coral500" />
         </LinearLayout>
 
         <Space

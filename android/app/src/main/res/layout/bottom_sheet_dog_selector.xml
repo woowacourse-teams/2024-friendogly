@@ -10,16 +10,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/white"
-        style="@style/Widget.Material3.BottomSheet"
+        style="@style/RoundTopCornerBottomSheetDialogTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".presentation.ui.club.select.PetSelectBottomSheet">
-        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-            android:id="@+id/drag_handle_woof_foot_print"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view_club_select_top_bar"

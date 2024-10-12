@@ -5,8 +5,8 @@ import android.content.Intent
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubListBinding
 import com.happy.friendogly.presentation.base.BaseFragment
@@ -110,8 +110,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
-                        DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme,
+                        BottomSheetDialogFragment.STYLE_NORMAL,
+                        R.style.RoundTopCornerBottomSheetDialogTheme,
                     )
                 }
 
@@ -125,8 +125,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                         }
                     bottomSheet.show(parentFragmentManager, tag)
                     bottomSheet.setStyle(
-                        DialogFragment.STYLE_NORMAL,
-                        R.style.RoundCornerBottomSheetDialogTheme,
+                        BottomSheetDialogFragment.STYLE_NORMAL,
+                        R.style.RoundTopCornerBottomSheetDialogTheme,
                     )
                 }
 
