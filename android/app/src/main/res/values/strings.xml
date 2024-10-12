@@ -276,6 +276,7 @@
     <string name="playground_play_together">만나서 함께 놀아요!</string>
     <string name="playground_participation_status">참여 현황</string>
     <string name="playground_pet_count">마리</string>
+    <string name="playground_please_input_message">상태메시지를 입력해주세요.</string>
 
     <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>

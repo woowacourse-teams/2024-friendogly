@@ -98,7 +98,7 @@
             tools:text="암컷" />
 
         <EditText
-            android:id="@+id/tv_playground_pet_description"
+            android:id="@+id/tv_playground_pet_message"
             style="@style/Theme.AppCompat.TextView.Regular.Gray09.Size12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -106,6 +106,7 @@
             android:background="@drawable/rect_gray150_fill_10"
             android:drawableEnd="@drawable/ic_pen"
             android:gravity="center_vertical"
+            android:hint="@string/playground_please_input_message"
             android:maxLines="1"
             android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
