@@ -19,6 +19,7 @@ import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalRespo
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,6 +119,10 @@ public class PlaygroundCommandService {
 
         Location location = new Location(request.latitude(), request.longitude());
         boolean isInsideBoundary = playground.isInsideBoundary(location);
+
+        if (!isInsideBoundary) {
+            playgroundMember.updateExitTime(LocalDateTime.now()); // todo: response에 exitTime도 추가
+        }
 
         playgroundMember.updateIsInside(isInsideBoundary);
 

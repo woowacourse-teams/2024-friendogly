@@ -77,4 +77,8 @@ public class PlaygroundMember {
     public void updateMessage(String message) {
         this.message = message;
     }
+
+    public void updateExitTime(LocalDateTime exitTime) {
+        this.exitTime = exitTime;
+    }
 }
