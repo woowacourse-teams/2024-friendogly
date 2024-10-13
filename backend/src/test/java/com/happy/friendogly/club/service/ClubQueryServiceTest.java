@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
+import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.member.domain.Member;
@@ -16,6 +18,7 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,18 +67,21 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 city,
                 null,
                 Set.of(Gender.FEMALE.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                20,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
         );
 
-        List<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
         List<FindClubByFilterResponse> expectedResponses = List.of(
                 new FindClubByFilterResponse(club2, List.of(petImageUrl)),
                 new FindClubByFilterResponse(club1, List.of(petImageUrl))
         );
 
-        FindClubByFilterResponse actual1 = responses.get(0);
+        FindClubByFilterResponse actual1 = response.content().get(0);
         FindClubByFilterResponse expected1 = expectedResponses.get(0);
-        FindClubByFilterResponse actual2 = responses.get(1);
+        FindClubByFilterResponse actual2 = response.content().get(1);
         FindClubByFilterResponse expected2 = expectedResponses.get(1);
 
         assertAll(
@@ -123,12 +129,173 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 city,
                 village,
                 Set.of(Gender.MALE.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                20,
+                LocalDateTime.of(1, 1, 1, 0, 0, 0),
+                0L
         );
 
-        List<FindClubByFilterResponse> responses = clubQueryService.findByFilter(savedMember.getId(), request);
+        FindClubPageByFilterResponse responses = clubQueryService.findByFilter(savedMember.getId(), request);
 
-        assertThat(responses.isEmpty()).isTrue();
+        assertThat(responses.content().isEmpty()).isTrue();
+    }
+
+    @DisplayName("페이지 사이즈보다 더 많은 모임이 존재하는 경우, 한번에 페이지 사이즈 만큼의 모임이 조회된다.")
+    @Test
+    void findSearching_MoreThanPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() - 1;
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(pageSize);
+        assertThat(response.isLastPage()).isFalse();
+    }
+
+    @DisplayName("페이지 사이즈보다 더 적은 모임이 존재하는 경우, 존재하는 모임 수 만큼의 모임이 조회된다.")
+    @Test
+    void findSearching_LessThanPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() + 1;
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(clubs.size());
+        assertThat(response.isLastPage()).isTrue();
+    }
+
+    @DisplayName("페이지 사이즈와 같은 수의 모임이 존재하는 경우, 페이지 사이즈 만큼의 모임이 조회되고 다음 페이지는 존재하지 않는다.")
+    @Test
+    void findSearching_EqualToPageSize() {
+        List<Club> clubs = List.of(
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size();
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ALL.name(),
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(clubs.size());
+        assertThat(response.isLastPage()).isTrue();
+    }
+
+    @DisplayName("필터링 조건에 맞지 않는 모임으로 인해 pageSize를 채우지 못한 경우, 한번 더 조회 쿼리를 날린다.")
+    @Transactional
+    @Test
+    void findSearching_UntilPageSizeReaches() {
+        List<Club> clubs = List.of(
+                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(    // 필터링 조건에 맞지 않는 모임. 결과에서 제외되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ),
+                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
+                        savedMember,
+                        List.of(savedPet),
+                        Set.of(Gender.values()),
+                        Set.of(SizeType.values())
+                ));
+
+        int pageSize = clubs.size() - 1;
+
+        // 두 번째 Club의 상태를 CLOSED로 변경
+        clubs.get(1).update("title", "content", Status.CLOSED.name());
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.OPEN.name(),    // OPEN 상태인 모임만 조회
+                province,
+                null,
+                null,
+                Set.of(Gender.FEMALE.name()),
+                Set.of(SizeType.SMALL.name()),
+                pageSize,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                Long.MAX_VALUE
+        );
+
+        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
+
+        assertThat(response.content().size()).isEqualTo(pageSize);
+        assertThat(response.isLastPage()).isTrue(); // 한 번 더 쿼리를 보냈기 때문에 마지막 페이지까지 도달
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")
@@ -257,6 +424,14 @@ class ClubQueryServiceTest extends ClubServiceTest {
 
         FindClubResponse response = clubQueryService.findById(savedMember.getId(), club.getId());
 
-        assertThat(response.id()).isEqualTo(club.getId());
+        assertAll(
+                () -> assertThat(response.id()).isEqualTo(club.getId()),
+                () -> assertThat(response.memberDetails().size()).isEqualTo(1),
+                () -> assertThat(response.memberDetails().get(0).id()).isEqualTo(savedMember.getId()),
+                () -> assertThat(response.petDetails().size()).isEqualTo(1),
+                () -> assertThat(response.petDetails().get(0).id()).isEqualTo(savedPet.getId()),
+                () -> assertThat(response.allowedGender()).containsExactlyInAnyOrder(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                () -> assertThat(response.allowedSize()).containsExactlyInAnyOrder(SizeType.SMALL)
+        );
     }
 }
