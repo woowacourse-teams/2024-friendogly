@@ -31,6 +31,7 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
+import com.happy.friendogly.presentation.ui.message.MessageActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
@@ -545,11 +546,29 @@ class PlaygroundFragment :
             }
 
             when (event) {
+                is PlaygroundNavigateAction.NavigateToOtherProfile -> {
+                    startActivity(
+                        OtherProfileActivity.getIntent(
+                            requireContext(),
+                            event.memberId,
+                        ),
+                    )
+                }
+
                 is PlaygroundNavigateAction.NavigateToPetImage -> {
                     startActivity(
                         PetImageActivity.getIntent(
                             requireContext(),
                             event.petImageUrl,
+                        ),
+                    )
+                }
+
+                is PlaygroundNavigateAction.NavigateToPlaygroundMessage -> {
+                    startActivity(
+                        MessageActivity.getIntent(
+                            requireContext(),
+                            event.message,
                         ),
                     )
                 }

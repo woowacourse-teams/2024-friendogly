@@ -18,6 +18,7 @@
         android:id="@+id/layout_playground_pet_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> actionHandler.clickPlaygroundPetDetail(petDetail.memberId)}"
         android:paddingVertical="14dp">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -101,14 +102,12 @@
         <TextView
             android:id="@+id/tv_playground_pet_message"
             style="@style/Theme.AppCompat.TextView.Regular.Gray09.Size12"
-            messageVisibility="@{petDetail.message}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/rect_gray150_fill_10"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
             android:text="@{petDetail.message}"
             android:textColor="@color/black"

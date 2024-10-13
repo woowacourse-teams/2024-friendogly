@@ -288,6 +288,8 @@
     <string name="fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
     <string name="fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
 
+    <string name="message_length">%d / 20</string>
+
 
     <!--프로필-->
     <string name="male">남</string>

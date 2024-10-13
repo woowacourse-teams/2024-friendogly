@@ -1,12 +1,12 @@
 package com.happy.friendogly.presentation.ui.playground.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.happy.friendogly.databinding.ItemPlaygroundFirstPetDetailBinding
+import com.happy.friendogly.databinding.ItemPlaygroundMyPetDetailBinding
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundPetDetailUiModel
 
-class FirstPetDetailViewHolder(
-    private val binding: ItemPlaygroundFirstPetDetailBinding,
+class MyPetDetailViewHolder(
+    private val binding: ItemPlaygroundMyPetDetailBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
         petDetail: PlaygroundPetDetailUiModel,

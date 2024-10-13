@@ -83,7 +83,11 @@ class MainActivity :
                         ClubListFragment.TAG,
                     )
 
-                R.id.playgroundFragment -> switchFragment(PlaygroundFragment::class.java, PlaygroundFragment.TAG)
+                R.id.playgroundFragment ->
+                    switchFragment(
+                        PlaygroundFragment::class.java,
+                        PlaygroundFragment.TAG,
+                    )
 
                 R.id.chatListFragment ->
                     switchFragment(

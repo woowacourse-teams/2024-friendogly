@@ -18,7 +18,7 @@
         android:id="@+id/layout_playground_pet_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="14dp">
+        android:paddingVertical="20dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_playground_pet"
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tv_playground_pet_name"
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Coral500.Size18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_playground_pet_name"
             tools:text="암컷" />
 
-        <EditText
+        <TextView
             android:id="@+id/tv_playground_pet_message"
             style="@style/Theme.AppCompat.TextView.Regular.Gray09.Size12"
             android:layout_width="0dp"
@@ -108,6 +108,7 @@
             android:gravity="center_vertical"
             android:hint="@string/playground_please_input_message"
             android:maxLines="1"
+            android:onClick="@{() -> actionHandler.clickPlaygroundMessage(petDetail.message)}"
             android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
             android:text="@{petDetail.message}"

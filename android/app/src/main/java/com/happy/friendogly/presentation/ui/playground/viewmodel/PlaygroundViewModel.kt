@@ -40,7 +40,7 @@ import com.happy.friendogly.presentation.utils.logMyPlaygroundBtnClicked
 import com.happy.friendogly.presentation.utils.logPetExistence
 import com.happy.friendogly.presentation.utils.logPetExistenceBtnClicked
 import com.happy.friendogly.presentation.utils.logPetImageClicked
-import com.happy.friendogly.presentation.utils.logPlaygroundMemberNameClicked
+import com.happy.friendogly.presentation.utils.logPlaygroundPetDetailClicked
 import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
@@ -165,8 +165,8 @@ class PlaygroundViewModel
             updateUiState(PlaygroundUiState.FindingPlayground)
         }
 
-        override fun clickPlaygroundMemberName(memberId: Long) {
-            analyticsHelper.logPlaygroundMemberNameClicked()
+        override fun clickPlaygroundPetDetail(memberId: Long) {
+            analyticsHelper.logPlaygroundPetDetailClicked()
             _navigateAction.emit(PlaygroundNavigateAction.NavigateToOtherProfile(memberId))
         }
 
@@ -181,6 +181,10 @@ class PlaygroundViewModel
         override fun clickPetImage(petImageUrl: String) {
             analyticsHelper.logPetImageClicked()
             _navigateAction.emit(PlaygroundNavigateAction.NavigateToPetImage(petImageUrl))
+        }
+
+        override fun clickPlaygroundMessage(message: String) {
+            _navigateAction.emit(PlaygroundNavigateAction.NavigateToPlaygroundMessage(message))
         }
 
         override fun clickJoinPlaygroundBtn(playgroundId: Long) {

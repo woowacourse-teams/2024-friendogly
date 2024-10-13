@@ -231,11 +231,6 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
     }
 }
 
-@BindingAdapter("messageVisibility")
-fun TextView.bindPetIsArrival(message: String?) {
-    isVisible = message != null
-}
-
 @BindingAdapter("helpBtnVisibility")
 fun ImageButton.bindHelpBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible = uiState == PlaygroundUiState.RegisteringPlayground

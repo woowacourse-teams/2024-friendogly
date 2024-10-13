@@ -62,8 +62,8 @@ fun AnalyticsHelper.logCloseBtnClicked() {
     logEvent(type = Types.CLOSE_BTN_CLICKED)
 }
 
-fun AnalyticsHelper.logPlaygroundMemberNameClicked() {
-    logEvent(type = Types.PLAYGROUND_MEMBER_NAME_CLICKED)
+fun AnalyticsHelper.logPlaygroundPetDetailClicked() {
+    logEvent(type = Types.PLAYGROUND_PET_DETAIL_CLICKED)
 }
 
 fun AnalyticsHelper.logHelpBtnClicked() {

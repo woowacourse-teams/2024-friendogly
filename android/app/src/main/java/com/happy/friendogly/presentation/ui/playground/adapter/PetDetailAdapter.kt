@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.happy.friendogly.databinding.ItemPlaygroundFirstPetDetailBinding
+import com.happy.friendogly.databinding.ItemPlaygroundMyPetDetailBinding
 import com.happy.friendogly.databinding.ItemPlaygroundPetDetailBinding
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundPetDetailUiModel
@@ -22,14 +22,14 @@ class PetDetailAdapter(private val actionHandler: PlaygroundActionHandler) :
     ): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        return if (viewType == FIRST_PET_DETAIL_VIEW_TYPE) {
+        return if (viewType == MY_PET_DETAIL_VIEW_TYPE) {
             val binding =
-                ItemPlaygroundFirstPetDetailBinding.inflate(
+                ItemPlaygroundMyPetDetailBinding.inflate(
                     inflater,
                     parent,
                     false,
                 )
-            FirstPetDetailViewHolder(binding)
+            MyPetDetailViewHolder(binding)
         } else {
             val binding =
                 ItemPlaygroundPetDetailBinding.inflate(
@@ -45,7 +45,7 @@ class PetDetailAdapter(private val actionHandler: PlaygroundActionHandler) :
         holder: ViewHolder,
         position: Int,
     ) {
-        if (holder is FirstPetDetailViewHolder) {
+        if (holder is MyPetDetailViewHolder) {
             holder.bind(petDetail = getItem(position), actionHandler = actionHandler)
         }
 
@@ -72,7 +72,7 @@ class PetDetailAdapter(private val actionHandler: PlaygroundActionHandler) :
                 }
             }
 
-        const val FIRST_PET_DETAIL_VIEW_TYPE = 1
+        const val MY_PET_DETAIL_VIEW_TYPE = 1
         const val PET_DETAIL_VIEW_TYPE = 2
     }
 }

@@ -11,9 +11,9 @@ fun PlaygroundInfo.toPresentation(): PlaygroundInfoUiModel =
         arrivedPetCount = arrivedPetCount,
         isParticipating = isParticipating,
         petDetails =
-            playgroundPetDetails.mapIndexed { index, petDetail ->
+            playgroundPetDetails.map { petDetail ->
                 val viewType =
-                    if (index == 0) PetDetailAdapter.FIRST_PET_DETAIL_VIEW_TYPE else PetDetailAdapter.PET_DETAIL_VIEW_TYPE
+                    if (petDetail.isMine) PetDetailAdapter.MY_PET_DETAIL_VIEW_TYPE else PetDetailAdapter.PET_DETAIL_VIEW_TYPE
                 petDetail.toPresentation(viewType)
             },
     )

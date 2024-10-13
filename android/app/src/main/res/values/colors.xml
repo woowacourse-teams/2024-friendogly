@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="black50">#80000000</color>
+
     <color name="transparent">#00000000</color>
     <color name="transparent_gray">#66000000</color>
     <color name="red">#CD3838</color>

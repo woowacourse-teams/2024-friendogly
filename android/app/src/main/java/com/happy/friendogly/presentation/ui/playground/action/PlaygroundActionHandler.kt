@@ -15,11 +15,13 @@ interface PlaygroundActionHandler {
 
     fun clickCloseBtn()
 
-    fun clickPlaygroundMemberName(memberId: Long)
+    fun clickPlaygroundPetDetail(memberId: Long)
 
     fun clickHelpBtn()
 
     fun clickPetImage(petImageUrl: String)
+
+    fun clickPlaygroundMessage(message: String)
 
     fun clickJoinPlaygroundBtn(playgroundId: Long)
 

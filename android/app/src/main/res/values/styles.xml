@@ -142,6 +142,13 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.SemiBold.White.Size20" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">20dp</item>
         <item name="android:includeFontPadding">false</item>
@@ -387,6 +394,20 @@
         <item name="fontFamily">@font/pretendard_regular</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Regular.White.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.White.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.Regular.Size12" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textSize">12dp</item>
         <item name="android:includeFontPadding">false</item>
@@ -459,6 +480,13 @@
     <style name="Theme.AppCompat.TextView.SemiBold.Coral300.Size16" parent="@style/Widget.AppCompat.TextView">
         <item name="android:textColor">@color/coral300</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral500.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">18dp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="fontFamily">@font/pretendard_semi_bold</item>
     </style>
@@ -627,6 +655,13 @@
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TransparentActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/black50</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
     <!-- bottom sheet 키보드 설정 -->

@@ -118,6 +118,12 @@
                     android:scheme="@string/KAKAO_OAUTH_HOST" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.ui.message.MessageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentActivityTheme"
+            android:windowSoftInputMode="stateVisible" />
 
         <service
             android:name=".presentation.alarm.AlarmReceiver"
