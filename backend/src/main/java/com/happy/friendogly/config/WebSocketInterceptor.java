@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebSocketInterceptor implements ChannelInterceptor {
 
-    private static final String TOPIC_CHAT_ENDPOINT = "/topic/chat/";
-    private static final String TOPIC_INVITE_ENDPOINT = "/topic/invite/";
+    private static final String TOPIC_CHAT_ENDPOINT = "/exchange/chat.exchange/room.";
+//    private static final String TOPIC_INVITE_ENDPOINT = "/topic/invite/";
 
     private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -50,9 +50,10 @@ public class WebSocketInterceptor implements ChannelInterceptor {
             String accessToken = accessor.getFirstNativeHeader(AUTHORIZATION);
             long memberId = validateAndExtractMemberIdFrom(accessToken);
 
-            if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
-                validateInviteSubscription(memberId, destination);
-            }
+            // TODO: 1대1 채팅방 구현할 때 고려하기
+//            if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
+//                validateInviteSubscription(memberId, destination);
+//            }
 
             if (destination.startsWith(TOPIC_CHAT_ENDPOINT)) {
                 validateChatSubscription(memberId, destination);
@@ -68,9 +69,9 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         if (destination.startsWith(TOPIC_CHAT_ENDPOINT)) {
             return;
         }
-        if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
-            return;
-        }
+//        if (destination.startsWith(TOPIC_INVITE_ENDPOINT)) {
+//            return;
+//        }
         throw new FriendoglyWebSocketException(String.format("%s는 올바른 sub 경로가 아닙니다.", destination));
     }
 
@@ -88,14 +89,14 @@ public class WebSocketInterceptor implements ChannelInterceptor {
         }
     }
 
-    private void validateInviteSubscription(long memberId, String destination) {
-        String rawMemberIdToSubscribe = destination.substring(TOPIC_INVITE_ENDPOINT.length());
-        long memberIdToSubscribe = convertToLong(rawMemberIdToSubscribe);
-
-        if (memberId != memberIdToSubscribe) {
-            throw new FriendoglyWebSocketException("자신의 초대 endpoint만 구독할 수 있습니다.");
-        }
-    }
+//    private void validateInviteSubscription(long memberId, String destination) {
+//        String rawMemberIdToSubscribe = destination.substring(TOPIC_INVITE_ENDPOINT.length());
+//        long memberIdToSubscribe = convertToLong(rawMemberIdToSubscribe);
+//
+//        if (memberId != memberIdToSubscribe) {
+//            throw new FriendoglyWebSocketException("자신의 초대 endpoint만 구독할 수 있습니다.");
+//        }
+//    }
 
     private void validateChatSubscription(long memberId, String destination) {
         String rawChatRoomId = destination.substring(TOPIC_CHAT_ENDPOINT.length());
