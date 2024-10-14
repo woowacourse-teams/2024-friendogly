@@ -13,9 +13,9 @@ sealed interface PlaygroundAlertAction {
 
     data object AlertLeaveMyPlaygroundSnackbar : PlaygroundAlertAction
 
-    data object AlertAlreadyParticipatingInPlayground : PlaygroundAlertAction
-
     data object AlertOverlapPlaygroundCreationSnackbar : PlaygroundAlertAction
+
+    data object AlertAlreadyParticipatePlaygroundSnackbar : PlaygroundAlertAction
 
     data object AlertEndWalkSnackbar : PlaygroundAlertAction
 

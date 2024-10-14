@@ -8,7 +8,8 @@ import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.data.model.PlaygroundJoinDto
 import com.happy.friendogly.data.model.PlaygroundSummaryDto
 import com.happy.friendogly.data.source.PlaygroundDataSource
-import com.happy.friendogly.remote.api.WoofService
+import com.happy.friendogly.remote.api.PlaygroundService
+import com.happy.friendogly.remote.error.ApiExceptionResponse
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
 import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
@@ -16,9 +17,15 @@ import javax.inject.Inject
 
 class PlaygroundDataSourceImpl
     @Inject
-    constructor(private val service: WoofService) : PlaygroundDataSource {
+    constructor(private val service: PlaygroundService) : PlaygroundDataSource {
         override suspend fun postPlayground(request: PostPlaygroundRequest): Result<MyPlaygroundDto> {
-            return runCatching { service.postPlayground(request).data.toData() }
+            val result = runCatching { service.postPlayground(request).data.toData() }
+
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> Result.failure(exception.toData())
+                else -> Result.failure(exception)
+            }
         }
 
         override suspend fun patchPlaygroundArrival(request: PatchPlaygroundArrivalRequest): Result<PlaygroundArrivalDto> {

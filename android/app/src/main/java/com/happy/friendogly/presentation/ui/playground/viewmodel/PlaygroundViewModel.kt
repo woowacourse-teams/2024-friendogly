@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.R
 import com.happy.friendogly.data.mapper.toPlayground
+import com.happy.friendogly.domain.error.DataError
+import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeletePlaygroundLeaveUseCase
 import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
@@ -194,7 +196,7 @@ class PlaygroundViewModel
                         updatePlaygrounds()
                     }.onFailure {
                         // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
-                        _alertAction.emit(PlaygroundAlertAction.AlertAlreadyParticipatingInPlayground)
+                        _alertAction.emit(PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar)
                         _alertAction.emit(PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar)
                     }
             }
@@ -222,7 +224,7 @@ class PlaygroundViewModel
                         }
                     }.onFailure {
                         // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
-                        _alertAction.emit(PlaygroundAlertAction.AlertAlreadyParticipatingInPlayground)
+                        _alertAction.emit(PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar)
                         _alertAction.emit(PlaygroundAlertAction.AlertFailToCheckPetExistence)
                     }
             }
@@ -252,17 +254,29 @@ class PlaygroundViewModel
         fun registerMyPlayground(latLng: LatLng) {
             if (playgroundRegisterBtn.value?.inKorea == true) {
                 viewModelScope.launch {
-                    postPlaygroundUseCase(latLng.latitude, latLng.longitude)
-                        .onSuccess { myPlayground ->
+                    postPlaygroundUseCase(latLng.latitude, latLng.longitude).fold(
+                        onSuccess = { myPlayground ->
                             _mapAction.emit(PlaygroundMapAction.MakeMyPlaygroundMarker(myPlayground = myPlayground.toPlayground()))
                             _alertAction.emit(PlaygroundAlertAction.AlertMarkerRegisteredSnackbar)
                             _uiState.value = PlaygroundUiState.FindingPlayground
                             scanNearPlaygrounds()
-                        }.onFailure {
-                            // 놀이터 반경 겹쳤을 때, 나머지 에러 처리
-                            _alertAction.emit(PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar)
-                            _alertAction.emit(PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar)
-                        }
+                        },
+                        onError = { error ->
+                            when (error) {
+                                DataError.Network.OVERLAP_PLAYGROUND_CREATION ->
+                                    _alertAction.emit(
+                                        PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar,
+                                    )
+
+                                DataError.Network.ALREADY_PARTICIPATE_PLAYGROUND ->
+                                    _alertAction.emit(
+                                        PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar,
+                                    )
+
+                                else -> _alertAction.emit(PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar)
+                            }
+                        },
+                    )
                 }
             } else {
                 _alertAction.emit(PlaygroundAlertAction.AlertAddressOutOfKoreaSnackbar)

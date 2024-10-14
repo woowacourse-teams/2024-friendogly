@@ -18,7 +18,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface WoofService {
+interface PlaygroundService {
     @POST(ApiClient.PlayGround.POST_PLAYGROUND)
     suspend fun postPlayground(
         @Body request: PostPlaygroundRequest,

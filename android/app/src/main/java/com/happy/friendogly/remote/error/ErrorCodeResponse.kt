@@ -10,4 +10,10 @@ enum class ErrorCodeResponse {
 
     @SerializedName("FILE_SIZE_EXCEED")
     FILE_SIZE_EXCEED,
+
+    @SerializedName("OVERLAP_PLAYGROUND_CREATION")
+    OVERLAP_PLAYGROUND_CREATION,
+
+    @SerializedName("ALREADY_PARTICIPATE_PLAYGROUND")
+    ALREADY_PARTICIPATE_PLAYGROUND,
 }

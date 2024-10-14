@@ -456,17 +456,19 @@ class PlaygroundFragment :
                         ),
                     )
 
-                is PlaygroundAlertAction.AlertAlreadyParticipatingInPlayground -> {
+                is PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar -> {
                     showSnackbar(
                         resources.getString(
-                            R.string.playground_already_participating_in_playground,
+                            R.string.playground_overlap_playground_creation,
                         ),
                     )
                 }
 
-                is PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar -> {
-                    resources.getString(
-                        R.string.playground_overlap_playground_creation,
+                is PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar -> {
+                    showSnackbar(
+                        resources.getString(
+                            R.string.playground_already_participate_playground,
+                        ),
                     )
                 }
 

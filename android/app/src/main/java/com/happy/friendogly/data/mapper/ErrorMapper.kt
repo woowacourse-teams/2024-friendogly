@@ -7,6 +7,8 @@ fun ErrorCodeDto?.toDomain(): DataError.Network {
     return when (this) {
         ErrorCodeDto.DEFAULT_ERROR_CODE -> DataError.Network.SERVER_ERROR
         ErrorCodeDto.FILE_SIZE_EXCEED -> DataError.Network.FILE_SIZE_EXCEED
+        ErrorCodeDto.OVERLAP_PLAYGROUND_CREATION -> DataError.Network.OVERLAP_PLAYGROUND_CREATION
+        ErrorCodeDto.ALREADY_PARTICIPATE_PLAYGROUND -> DataError.Network.ALREADY_PARTICIPATE_PLAYGROUND
         null -> DataError.Network.UNKNOWN
     }
 }

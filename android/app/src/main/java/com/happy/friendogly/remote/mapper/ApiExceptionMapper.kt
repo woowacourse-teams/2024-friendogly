@@ -37,5 +37,7 @@ fun ErrorCodeResponse.toData(): ErrorCodeDto {
     return when (this) {
         ErrorCodeResponse.DEFAULT_ERROR_CODE -> ErrorCodeDto.DEFAULT_ERROR_CODE
         ErrorCodeResponse.FILE_SIZE_EXCEED -> ErrorCodeDto.FILE_SIZE_EXCEED
+        ErrorCodeResponse.OVERLAP_PLAYGROUND_CREATION -> ErrorCodeDto.OVERLAP_PLAYGROUND_CREATION
+        ErrorCodeResponse.ALREADY_PARTICIPATE_PLAYGROUND -> ErrorCodeDto.ALREADY_PARTICIPATE_PLAYGROUND
     }
 }

@@ -1,5 +1,7 @@
 package com.happy.friendogly.domain.repository
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.presentation.ui.playground.model.MyPlayground
 import com.happy.friendogly.presentation.ui.playground.model.PetExistence
 import com.happy.friendogly.presentation.ui.playground.model.Playground
@@ -12,7 +14,7 @@ interface PlaygroundRepository {
     suspend fun postPlayground(
         latitude: Double,
         longitude: Double,
-    ): Result<MyPlayground>
+    ): DomainResult<MyPlayground, DataError.Network>
 
     suspend fun patchPlaygroundArrival(
         latitude: Double,
