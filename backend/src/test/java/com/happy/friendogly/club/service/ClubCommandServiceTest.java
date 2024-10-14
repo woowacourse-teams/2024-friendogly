@@ -366,7 +366,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
         );
     }
 
-    @DisplayName("모임에서 강퇴한다.")
+    @DisplayName("강퇴 권한이 없으면 예외가 발생한다.")
     @Transactional
     @Test
     void kickMember_FailForbidden() {

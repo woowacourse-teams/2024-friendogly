@@ -680,7 +680,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("모임 방장이 특정 회원을 강퇴한다.")
     @Test
     void kick_204() throws Exception {
-        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest( 2L);
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(2L);
         doNothing()
                 .when(clubCommandService)
                 .kickMember(1L, 1L, request);
@@ -712,7 +712,7 @@ public class ClubApiDocsTest extends RestDocsTest {
     @DisplayName("방장 권한이 없으면 403을 응답한다.")
     @Test
     void kick_403() throws Exception {
-        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest( 2L);
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(2L);
         doThrow(new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN))
                 .when(clubCommandService)
                 .kickMember(1L, 1L, request);
