@@ -269,8 +269,8 @@ class RegisterPetViewModelTest {
                 name = "Buddy",
                 description = "A friendly and playful dog.",
                 birthDate = LocalDate(2020, 5, 15),
-                sizeType = SizeType.MEDIUM, // SizeType은 미리 정의된 enum 클래스라고 가정
-                gender = Gender.MALE, // Gender도 미리 정의된 enum 클래스라고 가정
+                sizeType = SizeType.MEDIUM,
+                gender = Gender.MALE,
                 imageUrl = "https://example.com/images/buddy.jpg",
             )
     }
