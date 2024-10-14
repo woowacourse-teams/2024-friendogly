@@ -135,7 +135,8 @@ public class ClubCommandService {
         if (!club.isOwner(owner)) {
             throw new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        if (club.isOwner(memberToKick)) {
+        //TODO: member Method로 위임
+        if (owner.getId().equals(memberToKick.getId())) {
             throw new FriendoglyException("자기 자신은 강퇴할 수 없습니다.");
         }
     }
