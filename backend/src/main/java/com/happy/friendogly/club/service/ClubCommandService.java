@@ -3,6 +3,7 @@ package com.happy.friendogly.club.service;
 
 import com.happy.friendogly.chat.service.ChatCommandService;
 import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.request.UpdateClubRequest;
@@ -119,5 +120,24 @@ public class ClubCommandService {
             return new UpdateClubResponse(club);
         }
         throw new FriendoglyException("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+    }
+
+    public void kickMember(Long clubId, Long memberId, DeleteKickedMemberRequest request) {
+        Club club = clubRepository.getById(clubId);
+        Member member = memberRepository.getById(memberId);
+        Member kickedMember = memberRepository.getById(request.kickedMemberId());
+        validateKick(club, member, kickedMember);
+        club.removeClubMember(kickedMember);
+        club.removeChatRoomMember(member);
+    }
+
+    private void validateKick(Club club, Member owner, Member memberToKick) {
+        if (!club.isOwner(owner)) {
+            throw new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        //TODO: member Method로 위임
+        if (owner.getId().equals(memberToKick.getId())) {
+            throw new FriendoglyException("자기 자신은 강퇴할 수 없습니다.");
+        }
     }
 }

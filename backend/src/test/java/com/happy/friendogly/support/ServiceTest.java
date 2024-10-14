@@ -73,6 +73,7 @@ public abstract class ServiceTest {
                 DELETE FROM kakao_member;
                 DELETE FROM member;
                 DELETE FROM pet;
+                DELETE FROM chat_message;
                                 
                 SET REFERENTIAL_INTEGRITY TRUE;
                 """);
