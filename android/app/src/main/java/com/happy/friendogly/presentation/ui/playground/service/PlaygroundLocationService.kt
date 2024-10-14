@@ -19,7 +19,12 @@ import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocatio
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver.Companion.ACTION_UPDATE_LOCATION
 
 class PlaygroundLocationService : Service() {
-    private lateinit var locationManager: PlaygroundLocationManager
+    private val locationManager: PlaygroundLocationManager by lazy {
+        PlaygroundLocationManager(this) { location ->
+            currentLocation = location
+            sendLocationUpdateBroadcast()
+        }
+    }
     private var currentLocation: Location? = null
 
     override fun onStartCommand(
@@ -55,15 +60,6 @@ class PlaygroundLocationService : Service() {
     private fun startForegroundService(playStatusTitle: String) {
         createNotificationChannel()
         startForeground(SERVICE_ID, createNotification(playStatusTitle))
-        startLocationUpdate()
-    }
-
-    private fun startLocationUpdate() {
-        locationManager =
-            PlaygroundLocationManager(this) { location ->
-                currentLocation = location
-                sendLocationUpdateBroadcast()
-            }
         locationManager.startLocationUpdate()
     }
 
@@ -111,13 +107,9 @@ class PlaygroundLocationService : Service() {
         return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
             .setContentTitle(playStatusTitle)
             .setContentText(resources.getString(R.string.woof_location_tracking))
-            .setSmallIcon(R.drawable.ic_footprint)
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .addAction(stopAction)
-            .setAutoCancel(false)
-            .setShowWhen(false)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setSmallIcon(R.drawable.ic_footprint).setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(stopAction)
+            .setAutoCancel(false).setShowWhen(false).setDefaults(NotificationCompat.DEFAULT_ALL)
             .build()
     }
 
@@ -155,10 +147,9 @@ class PlaygroundLocationService : Service() {
             context: Context,
             playStatus: PlayStatus,
         ): Intent {
-            return Intent(context, PlaygroundLocationService::class.java)
-                .apply {
-                    putExtra(EXTRA_PLAY_STATUS, playStatus)
-                }
+            return Intent(context, PlaygroundLocationService::class.java).apply {
+                putExtra(EXTRA_PLAY_STATUS, playStatus)
+            }
         }
     }
 }

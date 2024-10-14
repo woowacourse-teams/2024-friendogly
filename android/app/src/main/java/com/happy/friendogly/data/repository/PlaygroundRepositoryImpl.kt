@@ -37,26 +37,15 @@ class PlaygroundRepositoryImpl
                 onSuccess = { dto ->
                     DomainResult.Success(dto.toDomain())
                 },
-                onFailure = { e ->
-                    when (e) {
-                        is ApiExceptionDto -> DomainResult.Error(e.error.data.errorCode.toDomain())
+                onFailure = { throwable ->
+                    when (throwable) {
+                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
                         is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
                     }
                 },
             )
-
-//        return source
-//            .postPlayground(
-//                PostPlaygroundRequest(
-//                    latitude = latitude,
-//                    longitude = longitude,
-//                ),
-//            ).mapCatching { dto ->
-//                dto.toDomain()
-//
-//            }
         }
 
         override suspend fun patchPlaygroundArrival(
@@ -95,10 +84,21 @@ class PlaygroundRepositoryImpl
                 .getPlaygroundSummary(playgroundId)
                 .mapCatching { dto -> dto.toDomain() }
 
-        override suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoin> =
-            source
-                .postPlaygroundJoin(playgroundId)
-                .mapCatching { dto -> dto.toDomain() }
+        override suspend fun postPlaygroundJoin(playgroundId: Long): DomainResult<PlaygroundJoin, DataError.Network> {
+            return source.postPlaygroundJoin(playgroundId).fold(
+                onSuccess = { dto ->
+                    DomainResult.Success(dto.toDomain())
+                },
+                onFailure = { throwable ->
+                    when (throwable) {
+                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                    }
+                },
+            )
+        }
 
         override suspend fun deletePlaygroundLeave(): Result<Unit> = source.deletePlaygroundLeave()
     }

@@ -191,14 +191,21 @@ class PlaygroundViewModel
 
         override fun clickJoinPlaygroundBtn(playgroundId: Long) {
             viewModelScope.launch {
-                postPlaygroundJoinUseCase(playgroundId = playgroundId)
-                    .onSuccess {
+                postPlaygroundJoinUseCase(playgroundId = playgroundId).fold(
+                    onSuccess = {
                         updatePlaygrounds()
-                    }.onFailure {
-                        // 이미 참여한 놀이터 있을 때, 나머지 에러 처리
-                        _alertAction.emit(PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar)
-                        _alertAction.emit(PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar)
-                    }
+                    },
+                    onError = { error ->
+                        when (error) {
+                            DataError.Network.ALREADY_PARTICIPATE_PLAYGROUND ->
+                                _alertAction.emit(
+                                    PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar,
+                                )
+
+                            else -> _alertAction.emit(PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar)
+                        }
+                    },
+                )
             }
         }
 

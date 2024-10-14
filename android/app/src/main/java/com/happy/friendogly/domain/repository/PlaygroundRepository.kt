@@ -29,7 +29,7 @@ interface PlaygroundRepository {
 
     suspend fun getPlaygroundSummary(playgroundId: Long): Result<PlaygroundSummary>
 
-    suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoin>
+    suspend fun postPlaygroundJoin(playgroundId: Long): DomainResult<PlaygroundJoin, DataError.Network>
 
     suspend fun deletePlaygroundLeave(): Result<Unit>
 }

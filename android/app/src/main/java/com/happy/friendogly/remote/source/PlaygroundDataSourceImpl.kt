@@ -49,7 +49,13 @@ class PlaygroundDataSourceImpl
         }
 
         override suspend fun postPlaygroundJoin(playgroundId: Long): Result<PlaygroundJoinDto> {
-            return runCatching { service.postPlaygroundJoin(playgroundId).data.toData() }
+            val result = runCatching { service.postPlaygroundJoin(playgroundId).data.toData() }
+
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> Result.failure(exception.toData())
+                else -> Result.failure(exception)
+            }
         }
 
         override suspend fun deletePlaygroundLeave(): Result<Unit> {
