@@ -16,11 +16,10 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDate
 
 @ExperimentalCoroutinesApi
 @ExtendWith(
@@ -213,7 +212,7 @@ class OtherProfileViewModelTest {
                     memberId = 101L,
                     name = "Buddy",
                     description = "A friendly and playful dog.",
-                    birthDate = LocalDate.of(2020, 5, 10).toKotlinLocalDate(),
+                    birthDate = LocalDate(2020, 5, 10),
                     sizeType = SizeType.SMALL,
                     gender = Gender.MALE,
                     imageUrl = "https://example.com/images/buddy.jpg",
@@ -223,7 +222,7 @@ class OtherProfileViewModelTest {
                     memberId = 102L,
                     name = "Mittens",
                     description = "A curious cat who loves to explore.",
-                    birthDate = LocalDate.of(2018, 3, 22).toKotlinLocalDate(),
+                    birthDate = LocalDate(2018, 3, 22),
                     sizeType = SizeType.MEDIUM,
                     gender = Gender.FEMALE,
                     imageUrl = "https://example.com/images/mittens.jpg",
@@ -233,7 +232,7 @@ class OtherProfileViewModelTest {
                     memberId = 103L,
                     name = "Charlie",
                     description = "A gentle giant with a calm demeanor.",
-                    birthDate = LocalDate.of(2019, 8, 15).toKotlinLocalDate(),
+                    birthDate = LocalDate(2019, 8, 15),
                     sizeType = SizeType.LARGE,
                     gender = Gender.MALE,
                     imageUrl = "https://example.com/images/char",
