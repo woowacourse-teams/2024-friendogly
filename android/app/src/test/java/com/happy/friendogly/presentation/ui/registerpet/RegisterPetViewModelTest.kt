@@ -40,7 +40,7 @@ class RegisterPetViewModelTest {
     private lateinit var patchPetUseCase: PatchPetUseCase
 
     @Test
-    fun `애완동물 정보를 정상적으로 등록할 수 있다`() =
+    fun `강아지 정보를 정상적으로 등록할 수 있다`() =
         runTest {
             // given
             savedStateHandle =
@@ -75,7 +75,7 @@ class RegisterPetViewModelTest {
         }
 
     @Test
-    fun `애완동물 등록 시 네트워크 오류가 발생하면 적절한 메시지가 전송된다`() =
+    fun `강아지 등록 시 네트워크 오류가 발생하면 적절한 메시지가 전송된다`() =
         runTest {
             // given
             savedStateHandle =
@@ -110,7 +110,7 @@ class RegisterPetViewModelTest {
         }
 
     @Test
-    fun `애완동물 등록 시 이미지 크기가 5MB보다 크면 이미지 크기 오류 메시지가 전송된다`() =
+    fun `강아지 등록 시 이미지 크기가 5MB보다 크면 이미지 크기 오류 메시지가 전송된다`() =
         runTest {
             // given
             savedStateHandle =
@@ -145,7 +145,7 @@ class RegisterPetViewModelTest {
         }
 
     @Test
-    fun `애완동물 정보를 수정할 수 있다`() =
+    fun `강아지 정보를 수정할 수 있다`() =
         runTest {
             // given
             savedStateHandle =
@@ -180,7 +180,7 @@ class RegisterPetViewModelTest {
         }
 
     @Test
-    fun `애완동물 수정 시 네트워크 오류가 발생하면 적절한 메시지가 전송된다`() =
+    fun `강아지 수정 시 네트워크 오류가 발생하면 적절한 메시지가 전송된다`() =
         runTest {
             // given
             savedStateHandle =
@@ -216,7 +216,7 @@ class RegisterPetViewModelTest {
         }
 
     @Test
-    fun `애완동물 수정 시 이미지 크기가 5MB보다 크면 이미지 크기 오류 메시지가 전송된다`() =
+    fun `강아지 수정 시 이미지 크기가 5MB보다 크면 이미지 크기 오류 메시지가 전송된다`() =
         runTest {
             // given
             savedStateHandle =
