@@ -12,8 +12,10 @@ import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundJoin
+import com.happy.friendogly.presentation.ui.playground.model.PlaygroundMessage
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundSummary
 import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
+import com.happy.friendogly.remote.model.request.PatchPlaygroundMessageRequest
 import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -111,4 +113,11 @@ class PlaygroundRepositoryImpl
         }
 
         override suspend fun deletePlaygroundLeave(): Result<Unit> = source.deletePlaygroundLeave()
+
+        override suspend fun patchPlaygroundMessage(message: String): Result<PlaygroundMessage> =
+            source.patchPlaygroundMessage(
+                PatchPlaygroundMessageRequest(message),
+            ).mapCatching { dto ->
+                dto.toDomain()
+            }
     }

@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.playground
 
+import android.app.Activity
 import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
@@ -18,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -95,7 +98,9 @@ class PlaygroundFragment :
     private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var playgroundReceiver: PlaygroundLocationReceiver
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
+    private val mapView: MapView by lazy { binding.mapView }
     private val registeringCircleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val pathOverlay: PathOverlay by lazy { PathOverlay() }
     private val locationSource: FusedLocationSource by lazy {
@@ -109,8 +114,6 @@ class PlaygroundFragment :
             binding.bottomSheetPlayground,
         )
     }
-
-    private val mapView: MapView by lazy { binding.mapView }
 
     private val petDetailAdapter by lazy { PetDetailAdapter(viewModel) }
     private val petSummaryAdapter by lazy { PetSummaryAdapter() }
@@ -157,6 +160,7 @@ class PlaygroundFragment :
         setupObserving()
         setupRecyclerView()
         setupBottomSheetBehavior()
+        setupActivityResultLauncher()
     }
 
     override fun onStart() {
@@ -386,10 +390,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
-                                    ),
+                                        LatLng(
+                                            playground.latitude,
+                                            playground.longitude,
+                                        ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -540,30 +544,18 @@ class PlaygroundFragment :
         viewModel.navigateAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is PlaygroundNavigateAction.NavigateToOtherProfile -> {
-                    startActivity(
-                        OtherProfileActivity.getIntent(
-                            requireContext(),
-                            event.memberId,
-                        )
-                    )
+                    val intent = OtherProfileActivity.getIntent(requireContext(), event.memberId)
+                    startActivity(intent)
                 }
 
                 is PlaygroundNavigateAction.NavigateToPetImage -> {
-                    startActivity(
-                        PetImageActivity.getIntent(
-                            requireContext(),
-                            event.petImageUrl,
-                        ),
-                    )
+                    val intent = PetImageActivity.getIntent(requireContext(), event.petImageUrl)
+                    startActivity(intent)
                 }
 
                 is PlaygroundNavigateAction.NavigateToPlaygroundMessage -> {
-                    startActivity(
-                        MessageActivity.getIntent(
-                            requireContext(),
-                            event.message,
-                        ),
-                    )
+                    val intent = MessageActivity.getIntent(requireContext(), event.message)
+                    activityResultLauncher.launch(intent)
                 }
             }
         }
@@ -599,7 +591,7 @@ class PlaygroundFragment :
             requireContext().registerReceiver(
                 playgroundReceiver,
                 intentFilter,
-                RECEIVER_NOT_EXPORTED
+                RECEIVER_NOT_EXPORTED,
             )
         }
     }
@@ -803,8 +795,7 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng =
-        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -814,7 +805,6 @@ class PlaygroundFragment :
             }
         requireContext().startForegroundService(intent)
     }
-
 
     private fun updateLocation(location: Location) {
         latLng = LatLng(location.latitude, location.longitude)
@@ -897,6 +887,23 @@ class PlaygroundFragment :
                 }
             },
         )
+    }
+
+    private fun setupActivityResultLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val messageUpdated =
+                        result.data?.getBooleanExtra(EXTRA_MESSAGE_UPDATED, DEFAULT_MESSAGE_UPDATED)
+                            ?: return@registerForActivityResult
+
+                    if (messageUpdated) {
+                        val myPlayground =
+                            viewModel.myPlayground.value ?: return@registerForActivityResult
+                        viewModel.loadPlaygroundInfo(myPlayground.id)
+                    }
+                }
+            }
     }
 
     private fun setupBottomSheetBehavior() {
@@ -1001,7 +1008,9 @@ class PlaygroundFragment :
         private const val MAX_KOREA_LONGITUDE = 132.0
         private const val MAP_LOGO_MARGIN = 20
         private const val EXPANDED_PET_SIZE = 2
+        private const val DEFAULT_MESSAGE_UPDATED = false
 
+        const val EXTRA_MESSAGE_UPDATED = "messageUpdated"
         const val TAG = "PlaygroundFragment"
     }
 }

@@ -1,6 +1,8 @@
 package com.happy.friendogly.remote.api
 
+import com.happy.friendogly.remote.model.PlaygroundMessageResponse
 import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
+import com.happy.friendogly.remote.model.request.PatchPlaygroundMessageRequest
 import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
 import com.happy.friendogly.remote.model.response.BaseResponse
 import com.happy.friendogly.remote.model.response.MyPlaygroundResponse
@@ -52,4 +54,9 @@ interface PlaygroundService {
 
     @DELETE(ApiClient.PlayGround.DELETE_PLAYGROUND_LEAVE)
     suspend fun deletePlaygroundLeave(): Response<Unit>
+
+    @PATCH(ApiClient.PlayGround.PATCH_PLAYGROUND_MESSAGE)
+    suspend fun patchPlaygroundMessage(
+        @Body request: PatchPlaygroundMessageRequest,
+    ): BaseResponse<PlaygroundMessageResponse>
 }

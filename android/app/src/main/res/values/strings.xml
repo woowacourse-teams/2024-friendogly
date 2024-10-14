@@ -289,7 +289,11 @@
     <string name="fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
     <string name="fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
 
+    <string name="message_title">상태메시지</string>
+    <string name="message_cancel">취소</string>
+    <string name="message_confirm">확인</string>
     <string name="message_length">%d / 20</string>
+    <string name="fail_to_patch_message">상태메시지 설정에 실패했습니다!</string>
 
 
     <!--프로필-->

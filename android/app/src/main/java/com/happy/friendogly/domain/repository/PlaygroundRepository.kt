@@ -8,6 +8,7 @@ import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundArrival
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundJoin
+import com.happy.friendogly.presentation.ui.playground.model.PlaygroundMessage
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundSummary
 
 interface PlaygroundRepository {
@@ -32,4 +33,6 @@ interface PlaygroundRepository {
     suspend fun postPlaygroundJoin(playgroundId: Long): DomainResult<PlaygroundJoin, DataError.Network>
 
     suspend fun deletePlaygroundLeave(): Result<Unit>
+
+    suspend fun patchPlaygroundMessage(message: String): Result<PlaygroundMessage>
 }

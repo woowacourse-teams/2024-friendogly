@@ -6,12 +6,14 @@ import com.happy.friendogly.data.model.PlaygroundArrivalDto
 import com.happy.friendogly.data.model.PlaygroundDto
 import com.happy.friendogly.data.model.PlaygroundInfoDto
 import com.happy.friendogly.data.model.PlaygroundJoinDto
+import com.happy.friendogly.data.model.PlaygroundMessageDto
 import com.happy.friendogly.data.model.PlaygroundSummaryDto
 import com.happy.friendogly.data.source.PlaygroundDataSource
 import com.happy.friendogly.remote.api.PlaygroundService
 import com.happy.friendogly.remote.error.ApiExceptionResponse
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
+import com.happy.friendogly.remote.model.request.PatchPlaygroundMessageRequest
 import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
 import javax.inject.Inject
 
@@ -66,5 +68,9 @@ class PlaygroundDataSourceImpl
 
         override suspend fun deletePlaygroundLeave(): Result<Unit> {
             return runCatching { service.deletePlaygroundLeave() }
+        }
+
+        override suspend fun patchPlaygroundMessage(request: PatchPlaygroundMessageRequest): Result<PlaygroundMessageDto> {
+            return runCatching { service.patchPlaygroundMessage(request).data.toData() }
         }
     }

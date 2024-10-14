@@ -18,6 +18,7 @@ class ApiClient {
         const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{playgroundId}/summary"
         const val POST_PLAYGROUND_JOIN = "$BASE_URL/{playgroundId}/join"
         const val DELETE_PLAYGROUND_LEAVE = "$BASE_URL/leave"
+        const val PATCH_PLAYGROUND_MESSAGE = "$BASE_URL/message"
     }
 
     object Member {
