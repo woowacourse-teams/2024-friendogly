@@ -132,11 +132,11 @@ public class ClubCommandService {
     }
 
     private void validateKick(Club club, Member owner, Member kickedMember) {
-        if (club.isOwner(kickedMember)) {
-            throw new FriendoglyException("자기 자신은 강퇴할 수 없습니다.");
-        }
         if (!club.isOwner(owner)) {
             throw new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        if (club.isOwner(kickedMember)) {
+            throw new FriendoglyException("자기 자신은 강퇴할 수 없습니다.");
         }
     }
 }
