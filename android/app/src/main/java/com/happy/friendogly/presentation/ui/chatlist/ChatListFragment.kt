@@ -59,7 +59,7 @@ class ChatListFragment :
                 ActivityResultContracts.StartActivityForResult(),
             ) { result ->
 
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == LEAVE_CHAT_CODE) {
                     viewModel.getChats()
                 }
             }
