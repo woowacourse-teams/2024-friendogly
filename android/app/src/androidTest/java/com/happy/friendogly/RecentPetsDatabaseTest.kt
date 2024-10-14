@@ -14,6 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDateTime
 
 class RecentPetsDatabaseTest {
     private lateinit var dao: RecentPetsDao
@@ -23,10 +24,11 @@ class RecentPetsDatabaseTest {
     @Before
     fun setUp() {
         db =
-            Room.inMemoryDatabaseBuilder(
-                context = ApplicationProvider.getApplicationContext<Context>(),
-                klass = RecentPetsDatabase::class.java,
-            ).build()
+            Room
+                .inMemoryDatabaseBuilder(
+                    context = ApplicationProvider.getApplicationContext<Context>(),
+                    klass = RecentPetsDatabase::class.java,
+                ).build()
 
         dao = db.recentPetDao()
     }
@@ -75,6 +77,7 @@ class RecentPetsDatabaseTest {
                 birthday = LocalDate(2024, 10, 2),
                 gender = GenderEntity.FEMALE,
                 sizeType = SizeTypeEntity.SMALL,
+                createdAt = LocalDateTime.now(),
             )
 
         private val DUMMY_RECENT_PETS =
