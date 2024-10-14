@@ -45,7 +45,7 @@ class ChatMessageRepositoryImpl
                             chatRoomId = chatRoomId,
                             limit = limit,
                             offset = offset,
-                        ).map { it.toDomain(myMemberId) },
+                        ).map { it.toDomain(myMemberId) }
                 )
             }
 
@@ -86,6 +86,6 @@ class ChatMessageRepositoryImpl
             chatMessageDao.insertAll(
                 *newMessages.toLocalData(chatRoomId).toTypedArray(),
             )
-            return newMessages.toDomain(myMemberId)
+            return newMessages.toDomain(myMemberId).sortedByDescending { it.createdAt }
         }
     }
