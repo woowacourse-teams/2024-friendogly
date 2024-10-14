@@ -94,7 +94,7 @@ class PlaygroundFragment :
     private lateinit var latLng: LatLng
     private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private lateinit var walkReceiver: PlaygroundLocationReceiver
+    private lateinit var playgroundReceiver: PlaygroundLocationReceiver
 
     private val registeringCircleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val pathOverlay: PathOverlay by lazy { PathOverlay() }
@@ -201,7 +201,7 @@ class PlaygroundFragment :
         super.onDestroy()
         viewModel.leavePlayground()
         stopLocationService()
-        requireContext().unregisterReceiver(walkReceiver)
+        requireContext().unregisterReceiver(playgroundReceiver)
     }
 
     override fun onDetach() {
@@ -321,11 +321,7 @@ class PlaygroundFragment :
 
         viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
             if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
-                val myPlaygroundMarker = viewModel.myPlayground.value ?: return@observe
-                myPlaygroundMarker.marker.map = null
-                myPlaygroundMarker.circleOverlay.map = null
-                pathOverlay.map = null
-                balloon?.dismiss()
+                clearMyPlayground()
             }
         }
 
@@ -359,7 +355,6 @@ class PlaygroundFragment :
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
                 viewModel.updatePlaygroundArrival(latLng)
-                viewModel.loadPlaygroundInfo(myPlaygroundMarker.id)
             } else {
                 bottomSheetBehavior.isHideable = true
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -391,10 +386,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                        LatLng(
-                                            playground.latitude,
-                                            playground.longitude,
-                                        ),
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
+                                    ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -549,18 +544,7 @@ class PlaygroundFragment :
                         OtherProfileActivity.getIntent(
                             requireContext(),
                             event.memberId,
-                        ),
-                    )
-                }
-            }
-
-            when (event) {
-                is PlaygroundNavigateAction.NavigateToOtherProfile -> {
-                    startActivity(
-                        OtherProfileActivity.getIntent(
-                            requireContext(),
-                            event.memberId,
-                        ),
+                        )
                     )
                 }
 
@@ -597,7 +581,7 @@ class PlaygroundFragment :
     }
 
     private fun setupBroadCastReceiver() {
-        walkReceiver =
+        playgroundReceiver =
             PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
         val intentFilter =
             IntentFilter().apply {
@@ -607,12 +591,16 @@ class PlaygroundFragment :
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(
-                walkReceiver,
+                playgroundReceiver,
                 intentFilter,
                 RECEIVER_NOT_EXPORTED,
             )
         } else {
-            requireContext().registerReceiver(walkReceiver, intentFilter, RECEIVER_NOT_EXPORTED)
+            requireContext().registerReceiver(
+                playgroundReceiver,
+                intentFilter,
+                RECEIVER_NOT_EXPORTED
+            )
         }
     }
 
@@ -773,6 +761,14 @@ class PlaygroundFragment :
         return LatLng(latitude, longitude)
     }
 
+    private fun clearMyPlayground() {
+        val myPlaygroundMarker = viewModel.myPlayground.value ?: return
+        myPlaygroundMarker.marker.map = null
+        myPlaygroundMarker.circleOverlay.map = null
+        pathOverlay.map = null
+        balloon?.dismiss()
+    }
+
     private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
         val addressLatLng = convertLtnLng(position)
@@ -807,7 +803,8 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng =
+        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -818,12 +815,14 @@ class PlaygroundFragment :
         requireContext().startForegroundService(intent)
     }
 
+
     private fun updateLocation(location: Location) {
         latLng = LatLng(location.latitude, location.longitude)
         monitorDistanceAndManagePlayStatus()
     }
 
     private fun leavePlayground() {
+        clearMyPlayground()
         viewModel.leavePlayground()
     }
 
@@ -839,7 +838,6 @@ class PlaygroundFragment :
             distanceResults,
         )
         val distance = distanceResults[0]
-
         if (withinPlaygroundRange(distance) || outOfPlaygroundRange(distance)) {
             viewModel.updatePlaygroundArrival(latLng)
             val myPlayground = viewModel.myPlayground.value ?: return

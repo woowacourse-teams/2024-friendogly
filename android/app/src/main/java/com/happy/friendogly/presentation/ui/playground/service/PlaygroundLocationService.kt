@@ -94,7 +94,7 @@ class PlaygroundLocationService : Service() {
                 this,
                 REQUEST_CODE_ID,
                 Intent(this, PlaygroundLocationService::class.java).apply { action = ACTION_STOP },
-                PendingIntent.FLAG_UPDATE_CURRENT,
+                PendingIntent.FLAG_IMMUTABLE,
             )
 
         val stopAction =

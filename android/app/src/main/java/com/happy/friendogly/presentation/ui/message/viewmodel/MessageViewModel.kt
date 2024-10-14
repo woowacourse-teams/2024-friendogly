@@ -20,6 +20,9 @@ class MessageViewModel : ViewModel(), MessageActionHandler {
     }
 
     override fun clickConfirmBtn(message: String) {
+        // message 업데이트
+        // playgroundInfo 업데이트
+        _navigateAction.emit(MessageNavigateAction.FinishMessageActivity)
     }
 
     override fun clearMessageBtn() {
