@@ -131,11 +131,11 @@ public class ClubCommandService {
         club.removeChatRoomMember(member);
     }
 
-    private void validateKick(Club club, Member owner, Member kickedMember) {
+    private void validateKick(Club club, Member owner, Member memberToKick) {
         if (!club.isOwner(owner)) {
             throw new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        if (club.isOwner(kickedMember)) {
+        if (club.isOwner(memberToKick)) {
             throw new FriendoglyException("자기 자신은 강퇴할 수 없습니다.");
         }
     }
