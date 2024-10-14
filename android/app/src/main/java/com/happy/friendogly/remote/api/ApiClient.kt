@@ -68,13 +68,13 @@ class ApiClient {
     }
 
     object WebSocket {
-        fun publishEnter(chatRoomId: Long) = "/publish/enter/$chatRoomId"
+        fun publishEnter(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun publishMessage(chatRoomId: Long) = "/publish/chat/$chatRoomId"
+        fun publishMessage(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun publishLeave(chatRoomId: Long) = "/publish/leave/$chatRoomId"
+        fun publishLeave(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun subscribeChat(chatRoomId: Long) = "/topic/chat/$chatRoomId"
+        fun subscribeChat(chatRoomId: Long) = "/exchange/chat.exchange/room.$chatRoomId"
     }
 
     object AlarmToken {
