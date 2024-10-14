@@ -39,5 +39,6 @@ fun ErrorCodeResponse.toData(): ErrorCodeDto {
         ErrorCodeResponse.FILE_SIZE_EXCEED -> ErrorCodeDto.FILE_SIZE_EXCEED
         ErrorCodeResponse.OVERLAP_PLAYGROUND_CREATION -> ErrorCodeDto.OVERLAP_PLAYGROUND_CREATION
         ErrorCodeResponse.ALREADY_PARTICIPATE_PLAYGROUND -> ErrorCodeDto.ALREADY_PARTICIPATE_PLAYGROUND
+        ErrorCodeResponse.NO_PARTICIPATING_PLAYGROUND -> ErrorCodeDto.NO_PARTICIPATING_PLAYGROUND
     }
 }

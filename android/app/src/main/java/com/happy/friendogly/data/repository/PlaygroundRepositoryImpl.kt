@@ -51,16 +51,26 @@ class PlaygroundRepositoryImpl
         override suspend fun patchPlaygroundArrival(
             latitude: Double,
             longitude: Double,
-        ): Result<PlaygroundArrival> =
-            source
-                .patchPlaygroundArrival(
-                    PatchPlaygroundArrivalRequest(
-                        latitude = latitude,
-                        longitude = longitude,
-                    ),
-                ).mapCatching { dto ->
-                    dto.toDomain()
-                }
+        ): DomainResult<PlaygroundArrival, DataError.Network> {
+            return source.patchPlaygroundArrival(
+                PatchPlaygroundArrivalRequest(
+                    latitude = latitude,
+                    longitude = longitude,
+                ),
+            ).fold(
+                onSuccess = { dto ->
+                    DomainResult.Success(dto.toDomain())
+                },
+                onFailure = { throwable ->
+                    when (throwable) {
+                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                    }
+                },
+            )
+        }
 
         override suspend fun getFootprintMarkBtnInfo(): Result<PetExistence> =
             source.getFootprintMarkBtnInfo().mapCatching { dto ->

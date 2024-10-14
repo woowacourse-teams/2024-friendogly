@@ -9,6 +9,7 @@ fun ErrorCodeDto?.toDomain(): DataError.Network {
         ErrorCodeDto.FILE_SIZE_EXCEED -> DataError.Network.FILE_SIZE_EXCEED
         ErrorCodeDto.OVERLAP_PLAYGROUND_CREATION -> DataError.Network.OVERLAP_PLAYGROUND_CREATION
         ErrorCodeDto.ALREADY_PARTICIPATE_PLAYGROUND -> DataError.Network.ALREADY_PARTICIPATE_PLAYGROUND
+        ErrorCodeDto.NO_PARTICIPATING_PLAYGROUND -> DataError.Network.NO_PARTICIPATING_PLAYGROUND
         null -> DataError.Network.UNKNOWN
     }
 }

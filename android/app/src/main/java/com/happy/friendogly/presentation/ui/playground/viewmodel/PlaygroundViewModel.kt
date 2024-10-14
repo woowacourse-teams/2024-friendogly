@@ -392,17 +392,28 @@ class PlaygroundViewModel
                 patchPlaygroundArrivalUseCase(
                     latLng.latitude,
                     latLng.longitude,
-                ).onSuccess { playgroundArrival ->
-                    val previousPlayStatus = myPlayStatus.value
-                    val currentPlayStatus = playgroundArrival.toPresentation()
-                    _myPlayStatus.value = currentPlayStatus
-                    if (previousPlayStatus == PlayStatus.NO_PLAYGROUND) {
-                        _mapAction.emit(PlaygroundMapAction.StartLocationService)
-                    }
-                }.onFailure {
-                    // 2시간 이후 삭제 됐을때 에러 처리
-                    _alertAction.emit(PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival)
-                }
+                ).fold(
+                    onSuccess = { playgroundArrival ->
+                        val previousPlayStatus = myPlayStatus.value
+                        val currentPlayStatus = playgroundArrival.toPresentation()
+                        _myPlayStatus.value = currentPlayStatus
+                        if (previousPlayStatus == PlayStatus.NO_PLAYGROUND) {
+                            _mapAction.emit(PlaygroundMapAction.StartLocationService)
+                        }
+                    },
+                    onError = { error ->
+                        when (error) {
+                            DataError.Network.NO_PARTICIPATING_PLAYGROUND -> {
+                                _alertAction.emit(PlaygroundAlertAction.AlertAutoLeavePlaygroundSnackbar)
+                                _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
+                                _myPlayground.value = null
+                                _playgroundInfo.value = null
+                            }
+
+                            else -> _alertAction.emit(PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival)
+                        }
+                    },
+                )
             }
         }
 

@@ -29,7 +29,13 @@ class PlaygroundDataSourceImpl
         }
 
         override suspend fun patchPlaygroundArrival(request: PatchPlaygroundArrivalRequest): Result<PlaygroundArrivalDto> {
-            return runCatching { service.patchPlaygroundArrival(request).data.toData() }
+            val result = kotlin.runCatching { service.patchPlaygroundArrival(request).data.toData() }
+
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> Result.failure(exception.toData())
+                else -> Result.failure(exception)
+            }
         }
 
         override suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto> {

@@ -19,7 +19,7 @@ interface PlaygroundRepository {
     suspend fun patchPlaygroundArrival(
         latitude: Double,
         longitude: Double,
-    ): Result<PlaygroundArrival>
+    ): DomainResult<PlaygroundArrival, DataError.Network>
 
     suspend fun getFootprintMarkBtnInfo(): Result<PetExistence>
 

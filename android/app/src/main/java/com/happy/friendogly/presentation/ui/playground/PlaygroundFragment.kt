@@ -456,6 +456,13 @@ class PlaygroundFragment :
                         ),
                     )
 
+                is PlaygroundAlertAction.AlertAutoLeavePlaygroundSnackbar ->
+                    showSnackbar(
+                        resources.getString(
+                            R.string.playground_leave_my_playground,
+                        ),
+                    )
+
                 is PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar -> {
                     showSnackbar(
                         resources.getString(

@@ -1,5 +1,7 @@
 package com.happy.friendogly.domain.usecase
 
+import com.happy.friendogly.domain.DomainResult
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.repository.PlaygroundRepository
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundArrival
 import javax.inject.Inject
@@ -12,5 +14,9 @@ class PatchPlaygroundArrivalUseCase
         suspend operator fun invoke(
             latitude: Double,
             longitude: Double,
-        ): Result<PlaygroundArrival> = repository.patchPlaygroundArrival(latitude = latitude, longitude = longitude)
+        ): DomainResult<PlaygroundArrival, DataError.Network> =
+            repository.patchPlaygroundArrival(
+                latitude = latitude,
+                longitude = longitude,
+            )
     }

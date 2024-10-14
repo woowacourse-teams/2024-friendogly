@@ -263,7 +263,8 @@
     <string name="woof_description">소개</string>
     <string name="woof_footprint_refresh">새로고침</string>
     <string name="woof_end_walk">산책 종료하기</string>
-    <string name="playground_leave_my_playground">놀이터에서 나갔어요!</string>
+    <string name="playground_leave_my_playground">놀이터에서 나갔습니다!</string>
+    <string name="playground_auto_leave_my_playground">오랜 시간 자리를 비워 자동으로 놀이터에서 나갔습니다!</string>
     <string name="playground_already_participate_playground">이미 참여중인 놀이터가 존재합니다!</string>
     <string name="playground_overlap_playground_creation">놀이터 등록 범위가 다른 놀이터와 중복됩니다!</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>
