@@ -12,6 +12,7 @@ import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
+import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -62,6 +63,39 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                 () -> assertThat(response.totalPetCount()).isEqualTo(4),
                 () -> assertThat(response.arrivedPetCount()).isEqualTo(3),
                 () -> assertThat(response.playgroundPetDetails().size()).isEqualTo(4)
+        );
+    }
+
+    @DisplayName("놀이터 상세정보 펫의 정렬조건은 내강아지우선->도착한강아지 순서이다.")
+    @Test
+    void findSortedDetailPlaygrounds() {
+        // given
+        Member me = saveMember("김도선");
+        Member notArrivedMember = saveMember("이충렬");
+        Member arrivedMember = saveMember("이충렬");
+        savePet(me);
+        savePet(notArrivedMember);
+        savePet(arrivedMember);
+        Playground playground = savePlayground();
+        playgroundMemberRepository.save(new PlaygroundMember(
+                playground,
+                arrivedMember,
+                "도착",
+                true,
+                null
+        ));
+        savePlaygroundMember(playground, me);
+        savePlaygroundMember(playground, notArrivedMember);
+
+        // when
+        List<PlaygroundPetDetail> detail = playgroundQueryService.findDetail(me.getId(), playground.getId())
+                .playgroundPetDetails();
+
+        // when
+        assertAll(
+                () -> assertThat(detail.get(0).memberId()).isEqualTo(me.getId()),
+                () -> assertThat(detail.get(1).memberId()).isEqualTo(arrivedMember.getId()),
+                () -> assertThat(detail.get(2).memberId()).isEqualTo(notArrivedMember.getId())
         );
     }
 

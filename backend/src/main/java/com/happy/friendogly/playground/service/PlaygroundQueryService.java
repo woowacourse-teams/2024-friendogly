@@ -12,6 +12,7 @@ import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaygroundQueryService {
 
     private static final int MAX_PET_IMAGE_COUNT = 5;
+    private static final int NOT_SORT = 0;
+    private static final int HIGH_PRIORITY = 1;
+    private static final int LOW_PRIORITY = 2;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -58,6 +62,11 @@ public class PlaygroundQueryService {
                     PlaygroundPetDetail.getListOf(pets, playgroundMember, isMyPet)
             );
         }
+
+        playgroundPetDetails.sort(Comparator
+                .comparing(PlaygroundPetDetail::isMine).reversed()
+                .thenComparing(Comparator.comparing(PlaygroundPetDetail::isArrival).reversed())
+        );
 
         boolean isParticipating = playgroundMembers.stream()
                 .anyMatch(playgroundMember -> playgroundMember.equalsMemberId(callMemberId));
@@ -108,7 +117,11 @@ public class PlaygroundQueryService {
 
             totalPetCount += pets.size();
             arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
-            petImages.addAll(pets.stream().map(Pet::getImageUrl).toList());
+            petImages.addAll(
+                    pets.stream()
+                            .map(Pet::getImageUrl)
+                            .toList()
+            );
 
             petImages = cutPeImagesCount(petImages);
         }
