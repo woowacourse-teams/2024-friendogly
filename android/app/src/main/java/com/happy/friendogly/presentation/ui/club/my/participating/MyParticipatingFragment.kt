@@ -8,19 +8,20 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
-import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
+import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
+import com.happy.friendogly.presentation.ui.club.my.adapter.MyClubListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyParticipatingFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
     private val viewModel: MyParticipatingClubViewModel by viewModels()
 
-    private val adapter: ClubListAdapter by lazy {
-        ClubListAdapter(viewModel as ClubItemActionHandler)
+    private val adapter: MyClubListAdapter by lazy {
+        MyClubListAdapter(viewModel as ClubItemActionHandler)
     }
 
     override fun initViewCreated() {
