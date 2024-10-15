@@ -95,7 +95,7 @@ public class PlaygroundController {
     @PatchMapping("/message")
     public ApiResponse<UpdatePlaygroundMemberMessageResponse> updateMessage(
             @Auth Long memberId,
-            UpdatePlaygroundMemberMessageRequest request
+            @RequestBody UpdatePlaygroundMemberMessageRequest request
     ) {
         UpdatePlaygroundMemberMessageResponse response = playgroundCommandService.updateMemberMessage(
                 request, memberId
