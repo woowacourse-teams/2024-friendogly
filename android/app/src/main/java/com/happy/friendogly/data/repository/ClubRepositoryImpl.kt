@@ -6,10 +6,8 @@ import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.ClubDataSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
-import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
-import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.Gender
@@ -45,27 +43,6 @@ class ClubRepositoryImpl
             ).fold(
                 onSuccess = { result ->
                     DomainResult.Success(result)
-                },
-                onFailure = { error ->
-                    error.toDomainError()
-                },
-            )
-        }
-
-        override suspend fun getSearchingClubs(
-            filterCondition: ClubFilterCondition,
-            address: ClubAddress,
-            genderParams: List<Gender>,
-            sizeParams: List<SizeType>,
-        ): DomainResult<List<Club>, DataError.Network> {
-            return source.getSearchingClubs(
-                filterCondition = filterCondition.toData(),
-                address = address.toData(),
-                genderParams = genderParams.map { it.toData() },
-                sizeParams = sizeParams.map { it.toData() },
-            ).fold(
-                onSuccess = { clubs ->
-                    DomainResult.Success(clubs.toDomain())
                 },
                 onFailure = { error ->
                     error.toDomainError()
