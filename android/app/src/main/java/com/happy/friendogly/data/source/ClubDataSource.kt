@@ -22,13 +22,6 @@ interface ClubDataSource {
         petIds: List<Long>,
     ): Result<Unit>
 
-    suspend fun getSearchingClubs(
-        filterCondition: ClubFilterConditionDto,
-        address: ClubAddressDto,
-        genderParams: List<GenderDto>,
-        sizeParams: List<SizeTypeDto>,
-    ): Result<List<ClubDto>>
-
     suspend fun getClub(clubId: Long): Result<ClubDetailDto>
 
     suspend fun postClubMember(
