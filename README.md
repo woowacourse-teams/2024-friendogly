@@ -68,7 +68,7 @@
   <tr>
     <td>
       <a href="https://github.com/ehtjsv2">
-        <img src="https://private-user-images.githubusercontent.com/79188587/355340441-28ead7be-31e6-4e9a-8adf-afebe11ce7c9.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjI5MjY5NDIsIm5iZiI6MTcyMjkyNjY0MiwicGF0aCI6Ii83OTE4ODU4Ny8zNTUzNDA0NDEtMjhlYWQ3YmUtMzFlNi00ZTlhLThhZGYtYWZlYmUxMWNlN2M5LmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA4MDYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwODA2VDA2NDQwMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTk0YzI2NDc1YmNlNWFlNTc0NTdhYWJmOWE5ZjUyNGJjODI0ODljMTY1ZTljNWQwM2E5YjcyMTU0ZTE3ZThiMzQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.fb4ewBV5Jy_zW0u0D0lAdtvj6jMkRzy6VI2Qtufu8l4" width="150" style="max-width: 100%;">
+        <img src="https://avatars.githubusercontent.com/u/79188587?v=4" width="150" style="max-width: 100%;">
       </a>
     </td>
     <td>
