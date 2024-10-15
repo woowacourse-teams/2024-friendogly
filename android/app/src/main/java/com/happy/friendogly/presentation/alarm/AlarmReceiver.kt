@@ -14,9 +14,8 @@ import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
-import com.happy.friendogly.presentation.ui.woof.WoofFragment
-import dagger.hilt.android.AndroidEntryPoint
 import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -12,8 +12,8 @@ import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.MessagingRepositoryImpl
 import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
-import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
 import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
+import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
 import com.happy.friendogly.domain.repository.AddressRepository
