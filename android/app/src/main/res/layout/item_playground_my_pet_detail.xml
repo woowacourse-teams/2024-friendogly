@@ -18,7 +18,7 @@
         android:id="@+id/layout_playground_pet_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp">
+        android:paddingVertical="10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_playground_pet"

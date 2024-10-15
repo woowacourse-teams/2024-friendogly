@@ -9,8 +9,7 @@ class ApiClient {
     }
 
     object PlayGround {
-        //        private const val BASE_URL = "/api/playgrounds"
-        private const val BASE_URL = "/playgrounds"
+        private const val BASE_URL = "/api/playgrounds"
         const val POST_PLAYGROUND = BASE_URL
         const val PATCH_PLAYGROUND_ARRIVAL = "$BASE_URL/arrival"
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
@@ -22,8 +21,7 @@ class ApiClient {
     }
 
     object Member {
-        //        private const val BASE_URL = "/api/members"
-        private const val BASE_URL = "/members"
+        private const val BASE_URL = "/api/members"
         const val POST_MEMBER = BASE_URL
         const val GET_MEMBER_MINE = "$BASE_URL/mine"
         const val GET_MEMBER = "$BASE_URL/{id}"
@@ -32,8 +30,7 @@ class ApiClient {
     }
 
     object Pet {
-        //        private const val BASE_URL = "/api/pets"
-        private const val BASE_URL = "/pets"
+        private const val BASE_URL = "/api/pets"
         const val GET_PETS_MINE = "$BASE_URL/mine"
         const val POST_PET = BASE_URL
         const val GET_PETS = BASE_URL
@@ -42,8 +39,7 @@ class ApiClient {
     }
 
     object Club {
-        //        private const val BASE_URL = "/api/clubs"
-        private const val BASE_URL = "/clubs"
+        private const val BASE_URL = "/api/clubs"
         private const val MEMBER_URL = "/members"
         const val POST_CLUB = BASE_URL
         const val GET_CLUB_SEARCHING = "$BASE_URL/searching"

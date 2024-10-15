@@ -157,7 +157,6 @@ class PlaygroundFragment :
         setupLocationPermission()
         setupBroadCastReceiver()
         setupDataBinding()
-        setupObserving()
         setupRecyclerView()
         setupBottomSheetBehavior()
         setupActivityResultLauncher()
@@ -326,6 +325,7 @@ class PlaygroundFragment :
         viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
             if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
                 clearMyPlayground()
+                viewModel.updatePlaygrounds()
             }
         }
 
@@ -601,7 +601,7 @@ class PlaygroundFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            viewModel.updatePlaygrounds()
+            setupObserving()
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
@@ -755,10 +755,8 @@ class PlaygroundFragment :
 
     private fun clearMyPlayground() {
         val myPlaygroundMarker = viewModel.myPlayground.value ?: return
-        myPlaygroundMarker.marker.map = null
         myPlaygroundMarker.circleOverlay.map = null
         pathOverlay.map = null
-        balloon?.dismiss()
     }
 
     private fun getAddress(position: LatLng) {
@@ -814,6 +812,7 @@ class PlaygroundFragment :
     private fun leavePlayground() {
         clearMyPlayground()
         viewModel.leavePlayground()
+        viewModel.updatePlaygrounds()
     }
 
     private fun monitorDistanceAndManagePlayStatus() {

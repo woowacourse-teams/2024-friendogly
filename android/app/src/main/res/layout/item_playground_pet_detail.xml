@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> actionHandler.clickPlaygroundPetDetail(petDetail.memberId)}"
-        android:paddingVertical="14dp">
+        android:paddingVertical="10dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_playground_pet"
