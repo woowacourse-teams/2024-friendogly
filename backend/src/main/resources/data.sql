@@ -99,10 +99,15 @@ VALUES (1, 6),
        (2, 7);
 
 INSERT INTO playground (latitude, longitude)
-VALUES (37.514062, 127.100972),
+VALUES (37.516448, 127.120100),
         (37.520740, 127.121328);
 
 INSERT INTO playground_member (playground_id, member_id, message, is_inside, exit_time)
-VALUES (1, 2, '강아지 3마리 보유', true, null),
-        (1, 1, '강아지 2마리 보유', false, null),
-        (2, 3, '강아지 1마리 보유' ,true, null);
+VALUES (1, 7, '7시에 같이 산책할 사람 구해요' ,false, null),
+       (1, 5, '작은 강아지 모임 찾아요!' ,true, null),
+       (1, 1, '매일 7시에 산책해용', true, null),
+       (1, 3, '같이 산책하실 분!!' ,true, null),
+       (1, 4, '미니 개껌 필요하신 분 있나요??' ,true, null),
+       (1, 6, '6시30분안에 가요' ,true, null),
+       (1, 2, '1시간 이내로 갈게요!', true, null),
+       (2, 8, '1시간 이내로 갈게요!', true, null);
