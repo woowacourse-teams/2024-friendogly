@@ -37,7 +37,7 @@ VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SM
        (2, '치오', '간식 주면 달려가요', '2015-04-01', 'SMALL', 'FEMALE',
         'https://i.pinimg.com/564x/d1/62/cb/d162cb12dfa0011a7bd67188a14d661c.jpg'),
        (3, '치즈', '첫째!', '2011-05-01', 'MEDIUM', 'FEMALE',
-        'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg'),
+        'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMTU5/MDAxNDkzMzQzOTgwNjI2.Da3oF-lT1Tq8Y2zhYhlGi6kvIjZa6YOgYy-zVWfjwBkg.r-zq73hAyuL5rkP1B8J2qveAQLapdfGiuNlxEDlVH84g.PNG.fjvfeewt/20170428_104410.png?type=w800'),
        (4, '진돌이', '둘째!', '2019-06-01', 'MEDIUM', 'MALE',
         'https://i.pinimg.com/564x/96/d4/43/96d443c92059f2b3a240a7ff74692bbf.jpg'),
        (5, '진솔이', '셋째!', '2020-07-01', 'MEDIUM', 'MALE',
