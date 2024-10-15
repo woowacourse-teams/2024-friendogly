@@ -45,7 +45,7 @@ VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SM
        (6, '라떼', '겁이 많아요! 개껌 좋아해요', '2021-11-01', 'LARGE', 'MALE_NEUTERED',
         'https://shop.peopet.co.kr/data/goods/388/2022/06/_temp_16557127733930view.jpg'),
        (6, '누누', '완전E에요 친구만들고싶어해요!', '2013-08-01', 'SMALL', 'MALE',
-        'https://shop.peopet.co.kr/data/goods/388/2022/06/_temp_16557127733930view.jpg'),
+        'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg'),
        (6, '푸푸', '가끔 빤히 쳐다봐요', '2016-08-01', 'SMALL', 'MALE_NEUTERED',
         'https://i.pinimg.com/564x/f0/82/3c/f0823c54bb92aec76f2959d88a0c42a5.jpg'),
        (6, '두부', '만나면 인사해주세요!', '2014-09-01', 'MEDIUM', 'FEMALE_NEUTERED',
