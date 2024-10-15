@@ -17,32 +17,34 @@ import com.happy.friendogly.remote.paging.SearchingClubPagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SearchClubRepositoryImpl @Inject constructor(
-    private val service: SearchingClubService,
-) : SearchClubRepository {
-
-    override suspend fun getSearchingClubs(
-        searchClubPageInfo: SearchClubPageInfo,
-        filterCondition: ClubFilterCondition,
-        address: ClubAddress,
-        genderParams: List<Gender>,
-        sizeParams: List<SizeType>,
-    ): Flow<PagingData<Club>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = searchClubPageInfo.pageSize,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                SearchingClubPagingSource(
-                    service = service,
-                    searchClubPageInfoDto = searchClubPageInfo.toData(),
-                    filterCondition = filterCondition.toData(),
-                    address = address.toData(),
-                    genderParams = genderParams.map { it.toData() },
-                    sizeParams = sizeParams.map { it.toData() },
-                )
-            }
-        ).flow.toDomain()
+class SearchClubRepositoryImpl
+    @Inject
+    constructor(
+        private val service: SearchingClubService,
+    ) : SearchClubRepository {
+        override suspend fun getSearchingClubs(
+            searchClubPageInfo: SearchClubPageInfo,
+            filterCondition: ClubFilterCondition,
+            address: ClubAddress,
+            genderParams: List<Gender>,
+            sizeParams: List<SizeType>,
+        ): Flow<PagingData<Club>> {
+            return Pager(
+                config =
+                    PagingConfig(
+                        pageSize = searchClubPageInfo.pageSize,
+                        enablePlaceholders = false,
+                    ),
+                pagingSourceFactory = {
+                    SearchingClubPagingSource(
+                        service = service,
+                        searchClubPageInfoDto = searchClubPageInfo.toData(),
+                        filterCondition = filterCondition.toData(),
+                        address = address.toData(),
+                        genderParams = genderParams.map { it.toData() },
+                        sizeParams = sizeParams.map { it.toData() },
+                    )
+                },
+            ).flow.toDomain()
+        }
     }
-}

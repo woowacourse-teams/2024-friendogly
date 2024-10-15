@@ -2,7 +2,6 @@ package com.happy.friendogly.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.happy.friendogly.data.error.toDomainError
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDto
 import com.happy.friendogly.data.model.ClubFilterConditionDto
@@ -24,9 +23,7 @@ class SearchingClubPagingSource(
 ) : PagingSource<Int, ClubDto>() {
     private var isLastPage: Boolean = false
 
-    override suspend fun load(
-        params: LoadParams<Int>
-    ): LoadResult<Int, ClubDto> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ClubDto> {
         val page = params.key ?: STARTING_PAGE_IDX
         val prevKey = if (page == STARTING_PAGE_IDX) null else page - PAGE_INDEX_SIZE
         var nextKey = if (isLastPage) null else page + PAGE_INDEX_SIZE
@@ -45,7 +42,7 @@ class SearchingClubPagingSource(
             LoadResult.Page(
                 prevKey = prevKey,
                 nextKey = nextKey,
-                data = results.content.toData()
+                data = results.content.toData(),
             )
         }.getOrElse { e ->
             LoadResult.Error(e)
@@ -60,7 +57,7 @@ class SearchingClubPagingSource(
         }
     }
 
-    private fun lastPageUpdate(hasLastPage: Boolean){
+    private fun lastPageUpdate(hasLastPage: Boolean) {
         isLastPage = hasLastPage
     }
 

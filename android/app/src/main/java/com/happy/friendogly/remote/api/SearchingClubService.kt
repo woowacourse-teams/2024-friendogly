@@ -15,8 +15,8 @@ interface SearchingClubService {
         @Query("village") village: String?,
         @Query("genderParams") genderParams: List<String>,
         @Query("sizeParams") sizeParams: List<String>,
-        @Query("pageSize") pageSize : String,
-        @Query("lastFoundId") lastFoundId : String,
+        @Query("pageSize") pageSize: String,
+        @Query("lastFoundId") lastFoundId: String,
         @Query("lastFoundCreatedAt") lastFoundCreatedAt: String,
     ): BaseResponse<SearchingClubResponse>
 }

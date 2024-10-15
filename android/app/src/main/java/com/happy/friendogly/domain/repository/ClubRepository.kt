@@ -2,10 +2,8 @@ package com.happy.friendogly.domain.repository
 
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
-import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
-import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.Gender

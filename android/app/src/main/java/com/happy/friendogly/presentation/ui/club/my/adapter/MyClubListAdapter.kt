@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemClubBinding
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
-import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubViewHolder
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
+import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubViewHolder
 
 class MyClubListAdapter(
     private val actionHandler: ClubItemActionHandler,

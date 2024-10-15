@@ -41,7 +41,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesSearchingClubService(retrofit: Retrofit) : SearchingClubService = retrofit.create(SearchingClubService::class.java)
+    fun providesSearchingClubService(retrofit: Retrofit): SearchingClubService = retrofit.create(SearchingClubService::class.java)
 
     @Provides
     @Singleton

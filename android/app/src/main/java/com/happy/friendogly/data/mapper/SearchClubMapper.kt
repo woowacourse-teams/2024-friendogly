@@ -9,7 +9,7 @@ import com.happy.friendogly.domain.model.SearchClubPageInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun SearchClubPageInfo.toData(): SearchClubPageInfoDto{
+fun SearchClubPageInfo.toData(): SearchClubPageInfoDto {
     return SearchClubPageInfoDto(
         pageSize = pageSize,
         lastFoundId = lastFoundId.toString(),
@@ -17,7 +17,7 @@ fun SearchClubPageInfo.toData(): SearchClubPageInfoDto{
     )
 }
 
-fun Flow<PagingData<ClubDto>>.toDomain(): Flow<PagingData<Club>>{
+fun Flow<PagingData<ClubDto>>.toDomain(): Flow<PagingData<Club>> {
     return this.map { pagingData ->
         pagingData.map { it.toDomain() }
     }

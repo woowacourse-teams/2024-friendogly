@@ -2,7 +2,6 @@ package com.happy.friendogly.presentation.ui.club.list
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.paging.map
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubListBinding
@@ -23,10 +21,10 @@ import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
-import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
+import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -97,13 +95,13 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             }
         }
         clubAdapter.addLoadStateListener { loadState ->
-            if(loadState.hasError) {
+            if (loadState.hasError) {
                 handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
             }
         }
     }
 
-    private fun handleLoadStateErrors(vararg states: LoadState){
+    private fun handleLoadStateErrors(vararg states: LoadState) {
         states.forEach { state ->
             if (state is LoadState.Error) {
                 viewModel.handleDomainError(state.error)
@@ -112,7 +110,6 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun initObserver() {
-
         viewModel.clubFilterSelector.currentSelectedFilters.observe(viewLifecycleOwner) { filters ->
             filterAdapter.submitList(filters)
         }

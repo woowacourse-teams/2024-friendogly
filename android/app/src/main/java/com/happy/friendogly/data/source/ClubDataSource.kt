@@ -2,8 +2,6 @@ package com.happy.friendogly.data.source
 
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
-import com.happy.friendogly.data.model.ClubDto
-import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.ClubParticipationDto
 import com.happy.friendogly.data.model.ClubStateDto
 import com.happy.friendogly.data.model.GenderDto
