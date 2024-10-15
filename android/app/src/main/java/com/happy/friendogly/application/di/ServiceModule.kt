@@ -7,6 +7,7 @@ import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.MyClubService
 import com.happy.friendogly.remote.api.PetService
+import com.happy.friendogly.remote.api.SearchingClubService
 import com.happy.friendogly.remote.api.WoofService
 import dagger.Module
 import dagger.Provides
@@ -36,6 +37,10 @@ object ServiceModule {
     @Provides
     @Singleton
     fun providesClubService(retrofit: Retrofit): ClubService = retrofit.create(ClubService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesSearchingClubService(retrofit: Retrofit) : SearchingClubService = retrofit.create(SearchingClubService::class.java)
 
     @Provides
     @Singleton

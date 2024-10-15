@@ -24,13 +24,6 @@ interface ClubRepository {
         petIds: List<Long>,
     ): DomainResult<Unit, DataError.Network>
 
-    suspend fun getSearchingClubs(
-        filterCondition: ClubFilterCondition,
-        address: ClubAddress,
-        genderParams: List<Gender>,
-        sizeParams: List<SizeType>,
-    ): DomainResult<List<Club>, DataError.Network>
-
     suspend fun getClub(clubId: Long): DomainResult<ClubDetail, DataError.Network>
 
     suspend fun postClubMember(
