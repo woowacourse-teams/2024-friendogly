@@ -37,7 +37,7 @@ VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SM
        (2, '치오', '간식 주면 달려가요', '2015-04-01', 'SMALL', 'FEMALE',
         'https://i.pinimg.com/564x/d1/62/cb/d162cb12dfa0011a7bd67188a14d661c.jpg'),
        (3, '치즈', '첫째!', '2011-05-01', 'MEDIUM', 'FEMALE',
-        'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMTU5/MDAxNDkzMzQzOTgwNjI2.Da3oF-lT1Tq8Y2zhYhlGi6kvIjZa6YOgYy-zVWfjwBkg.r-zq73hAyuL5rkP1B8J2qveAQLapdfGiuNlxEDlVH84g.PNG.fjvfeewt/20170428_104410.png?type=w800'),
+        'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMjg5/MDAxNDkzMzQzOTgxMDQy.4u283s2rrib7xSWR5IdL1r_yiipEITnM6VofjaJsZPUg.oTUM6w8LeF-orpapq_S8j45mjRxjofwrpq8jhQ5LC5Eg.PNG.fjvfeewt/20170428_104509.png?type=w800'),
        (4, '진돌이', '둘째!', '2019-06-01', 'MEDIUM', 'MALE',
         'https://i.pinimg.com/564x/96/d4/43/96d443c92059f2b3a240a7ff74692bbf.jpg'),
        (5, '진솔이', '셋째!', '2020-07-01', 'MEDIUM', 'MALE',
@@ -109,5 +109,5 @@ VALUES (1, 1, '7시에 같이 산책할 사람 구해요' ,true, null),
        (1, 4, '같이 산책하실 분!!' ,false, null),
        (1, 5, '미니 개껌 필요하신 분 있나요??' ,false, null),
        (2, 6, '6시30분안에 가요' ,false, null),
-       (2, 7, '1시간 이내로 갈게요!', false, null),
-       (2, 8, '1시간 이내로 갈게요!', true, null);
+       (2, 7, '6시30분안에 가요' ,false, null),
+       (2, 8, '6시30분안에 가요' ,false, null);
