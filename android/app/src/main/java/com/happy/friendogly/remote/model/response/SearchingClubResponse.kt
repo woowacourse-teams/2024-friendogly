@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchingClubResponse(
-    val isLastPage : Boolean,
+    val isLastPage: Boolean,
     val content: List<ClubResponse>,
 )

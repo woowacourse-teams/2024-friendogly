@@ -11,7 +11,6 @@ import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 class ClubListAdapter(
     private val actionHandler: ClubItemActionHandler,
 ) : PagingDataAdapter<ClubItemUiModel, ClubViewHolder>(diffCallback) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -29,20 +28,21 @@ class ClubListAdapter(
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<ClubItemUiModel>() {
-            override fun areItemsTheSame(
-                oldItem: ClubItemUiModel,
-                newItem: ClubItemUiModel,
-            ): Boolean {
-                return oldItem.clubId == newItem.clubId
-            }
+        private val diffCallback =
+            object : DiffUtil.ItemCallback<ClubItemUiModel>() {
+                override fun areItemsTheSame(
+                    oldItem: ClubItemUiModel,
+                    newItem: ClubItemUiModel,
+                ): Boolean {
+                    return oldItem.clubId == newItem.clubId
+                }
 
-            override fun areContentsTheSame(
-                oldItem: ClubItemUiModel,
-                newItem: ClubItemUiModel,
-            ): Boolean {
-                return oldItem == newItem
+                override fun areContentsTheSame(
+                    oldItem: ClubItemUiModel,
+                    newItem: ClubItemUiModel,
+                ): Boolean {
+                    return oldItem == newItem
+                }
             }
-        }
     }
 }

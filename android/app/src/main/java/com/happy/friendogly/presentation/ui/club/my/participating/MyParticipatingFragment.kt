@@ -8,7 +8,6 @@ import com.happy.friendogly.presentation.base.BaseFragment
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
-import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent

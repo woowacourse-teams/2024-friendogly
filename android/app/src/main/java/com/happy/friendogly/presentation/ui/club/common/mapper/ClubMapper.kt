@@ -10,7 +10,7 @@ fun List<Club>.toPresentation(): List<ClubItemUiModel> {
     return this.map { it.toPresentation() }
 }
 
-fun PagingData<Club>.toPresentation() : PagingData<ClubItemUiModel>{
+fun PagingData<Club>.toPresentation(): PagingData<ClubItemUiModel> {
     return this.map { it.toPresentation() }
 }
 
