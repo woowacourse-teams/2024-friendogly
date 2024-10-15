@@ -58,7 +58,7 @@ VALUES (1, '피스타', '곰돌이 컷 원조가 저에요~!', '2010-04-01', 'SM
         'https://i.pinimg.com/564x/6e/a1/27/6ea127df2927d71a4224a04e3da882fc.jpg'),
        (8, '모카', '어려서 여러강아지 만나고싶어요', '2022-11-01', 'SMALL', 'MALE_NEUTERED',
         'https://mblogthumb-phinf.pstatic.net/MjAxNzA0MjhfMjg5/MDAxNDkzMzQzOTgxMDQy.4u283s2rrib7xSWR5IdL1r_yiipEITnM6VofjaJsZPUg.oTUM6w8LeF-orpapq_S8j45mjRxjofwrpq8jhQ5LC5Eg.PNG.fjvfeewt/20170428_104509.png?type=w800'),
-       (9, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE',
+       (8, '초코', '매일 저녁에 나와요!', '2017-12-01', 'MEDIUM', 'FEMALE',
         'https://cdn.pixabay.com/photo/2019/12/08/21/09/animal-4682251_960_720.jpg');
 
 INSERT INTO chat_room (member_capacity, chat_room_type)
