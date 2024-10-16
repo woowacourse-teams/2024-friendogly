@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.ui.club.detail.ClubDetailActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scaleType="centerCrop"
+            android:background="@color/gray200"
+            app:layout_constraintDimensionRatio="1:1" />
+
+        <LinearLayout
+            android:id="@+id/view_club_detail_user_top_bar"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_club_detail_poster">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/shape_skeleton"
+                app:shapeAppearanceOverlay="@style/Circle" />
+            <LinearLayout
+                android:paddingStart="10dp"
+                android:paddingEnd="70dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:background="@color/gray200"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+                <View
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray200"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/gray300"
+            app:layout_constraintBottom_toTopOf="@+id/view_club_state_modify"
+            app:layout_constraintTop_toBottomOf="@id/view_club_detail_user_top_bar" />
+
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rect_gray03_fill_16"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/gray200"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/gray200"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/gray200"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/gray200"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</layout>
