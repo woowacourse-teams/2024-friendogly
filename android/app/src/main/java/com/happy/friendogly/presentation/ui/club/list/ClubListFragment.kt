@@ -91,6 +91,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.clubs.collectLatest {
                     clubAdapter.submitData(it)
+                    updateClubCountState()
                 }
             }
         }
@@ -98,6 +99,12 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             if (loadState.hasError) {
                 handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
             }
+        }
+    }
+
+    private fun updateClubCountState(){
+        if(clubAdapter.itemCount == NOT_DATA_SIZE){
+            viewModel.updateNotDataState()
         }
     }
 
@@ -209,14 +216,6 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     companion object {
         const val TAG = "ClubListFragment"
-    }
-
-    fun ClubErrorEvent.handleError(messageHandler: (MessageHandler) -> Unit) {
-        when (this) {
-            ClubErrorEvent.FileSizeError -> messageHandler(MessageHandler.SendToast(R.string.file_size_exceed_message))
-            ClubErrorEvent.ServerError -> MessageHandler.SendToast(R.string.server_error_message)
-            ClubErrorEvent.UnKnownError -> MessageHandler.SendToast(R.string.default_error_message)
-            ClubErrorEvent.InternetError -> MessageHandler.SendSnackBar(R.string.no_internet_message)
-        }
+        private const val NOT_DATA_SIZE = 0
     }
 }
