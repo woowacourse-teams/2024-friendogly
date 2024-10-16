@@ -61,17 +61,19 @@ fun View.bindDetailViewClubModifyVisible(clubDetailViewType: ClubDetailViewType?
 }
 
 @BindingAdapter("detailViewLoadingState")
-fun View.bindDetailLoadingVisible(clubDetailUiState: ClubDetailUiState){
-    this.visibility = when(clubDetailUiState){
-        ClubDetailUiState.Init -> View.GONE
-        ClubDetailUiState.Loading -> View.VISIBLE
-    }
+fun View.bindDetailLoadingVisible(clubDetailUiState: ClubDetailUiState) {
+    this.visibility =
+        when (clubDetailUiState) {
+            ClubDetailUiState.Init -> View.GONE
+            ClubDetailUiState.Loading -> View.VISIBLE
+        }
 }
 
 @BindingAdapter("detailViewUnLoadingState")
-fun View.bindDetailUnLoadingVisible(clubDetailUiState: ClubDetailUiState){
-    this.visibility = when(clubDetailUiState){
-        ClubDetailUiState.Init -> View.VISIBLE
-        ClubDetailUiState.Loading -> View.GONE
-    }
+fun View.bindDetailUnLoadingVisible(clubDetailUiState: ClubDetailUiState) {
+    this.visibility =
+        when (clubDetailUiState) {
+            ClubDetailUiState.Init -> View.VISIBLE
+            ClubDetailUiState.Loading -> View.GONE
+        }
 }
