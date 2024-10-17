@@ -187,7 +187,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         Playground playground = savePlayground(location.getLatitude(), location.getLongitude());
         PlaygroundMember playgroundMember = savePlaygroundMember(playground, member);
 
-        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 150);
+        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 149);
         Location insideLocation = new Location(insideLatitude, longitude);
 
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(
@@ -206,7 +206,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         );
     }
 
-    @DisplayName("놀이터 안에 들어오면 상태가 true가 된다.")
+    @DisplayName("놀이터 밖으로 가면 상태가 false가 된다.")
     @Transactional
     @Test
     void updateIsInsideFalse() {
@@ -218,7 +218,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         Playground playground = savePlayground(location.getLatitude(), location.getLongitude());
         PlaygroundMember playgroundMember = saveArrivedPlaygroundMember(playground, member);
 
-        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 156);
+        double insideLatitude = GeoCalculator.calculateLatitudeOffset(latitude, 151);
         Location insideLocation = new Location(insideLatitude, longitude);
 
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(
