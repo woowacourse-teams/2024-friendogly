@@ -14,6 +14,7 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.utils.logParticipateClick
@@ -38,11 +39,15 @@ class ClubDetailViewModel
         private val _clubDetailEvent: MutableLiveData<Event<ClubDetailEvent>> = MutableLiveData()
         val clubDetailEvent: LiveData<Event<ClubDetailEvent>> get() = _clubDetailEvent
 
+        private val _clubDetailUiState: MutableLiveData<ClubDetailUiState> = MutableLiveData(ClubDetailUiState.Loading)
+        val clubDetailUiState: LiveData<ClubDetailUiState> = _clubDetailUiState
+
         fun loadClub(clubId: Long) =
             viewModelScope.launch {
                 getClubUseCase(clubId).fold(
                     onSuccess = { club ->
                         _club.value = club.toPresentation()
+                        _clubDetailUiState.value = ClubDetailUiState.Init
                     },
                     onError = { error ->
                         clubErrorHandler.handle(error)

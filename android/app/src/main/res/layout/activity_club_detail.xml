@@ -15,7 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            app:detailViewLoadingState = "@{vm.clubDetailUiState}"
+            layout="@layout/include_skeleton_club_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <ScrollView
+            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -28,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="60dp"
-                    android:background="@color/white"
+                    android:background="@color/gray200"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_club_normal"
                     app:clubGlide="@{vm.club.clubPoster}"
@@ -47,8 +54,8 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_club_detail_user_image"
                     glide="@{vm.club.clubLeaderImage}"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="10dp"
                     android:src="@drawable/img_profile_normal"
                     app:layout_constraintBottom_toBottomOf="@id/view_club_detail_user_top_bar"
@@ -295,6 +302,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <LinearLayout
+            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="80dp"
