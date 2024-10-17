@@ -21,6 +21,7 @@ import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlaygroundCommandService {
 
+    public static final int OUTSIDE_MEMBER_KEEP_TIME = 2;
+    public static final String EVERY_HOUR = "0 0 * * * *";
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
     private final MemberRepository memberRepository;
@@ -136,5 +139,13 @@ public class PlaygroundCommandService {
         PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
         playgroundMember.updateMessage(request.message());
         return new UpdatePlaygroundMemberMessageResponse(playgroundMember.getMessage());
+    }
+
+    @Scheduled(cron = EVERY_HOUR)
+    public void deleteJoinMemberIntervalTime() {
+        playgroundMemberRepository.deleteAllByIsInsideAndExitTimeBefore(
+                false,
+                LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_TIME)
+        );
     }
 }
