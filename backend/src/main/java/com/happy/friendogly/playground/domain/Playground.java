@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Playground {
 
-    protected static final int PLAYGROUND_RADIUS = 155;
+    protected static final int PLAYGROUND_RADIUS = 150;
     protected static final int MAX_OVERLAP_DISTANCE = PLAYGROUND_RADIUS * 2;
 
     @Id
