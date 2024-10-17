@@ -14,7 +14,6 @@ import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
