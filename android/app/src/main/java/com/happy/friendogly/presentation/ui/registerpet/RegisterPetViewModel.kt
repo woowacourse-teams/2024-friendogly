@@ -50,13 +50,13 @@ class RegisterPetViewModel
         private var _profileImageUrl: String? = null
         val profileImageUrl: String? get() = _profileImageUrl
 
-        private var _neutering = MutableLiveData(true)
+        private val _neutering = MutableLiveData(true)
         val neutering: LiveData<Boolean> get() = _neutering
 
-        private var _petSize = MutableLiveData(PetSize.SMALL)
+        private val _petSize = MutableLiveData(PetSize.SMALL)
         val petSize: LiveData<PetSize> get() = _petSize
 
-        private var _petGender = MutableLiveData(PetGender.MAIL)
+        private val _petGender = MutableLiveData(PetGender.MAIL)
         val petGender: LiveData<PetGender> get() = _petGender
 
         private val _navigateAction: MutableLiveData<Event<RegisterPetNavigationAction>> =
