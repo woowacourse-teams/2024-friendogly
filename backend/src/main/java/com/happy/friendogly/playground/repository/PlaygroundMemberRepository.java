@@ -3,6 +3,7 @@ package com.happy.friendogly.playground.repository;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -36,4 +37,6 @@ public interface PlaygroundMemberRepository extends JpaRepository<PlaygroundMemb
     }
 
     boolean existsByPlaygroundId(Long playgroundId);
+
+    void deleteAllByIsInsideAndExitTimeBefore(boolean isInside, LocalDateTime exitTime);
 }
