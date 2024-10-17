@@ -14,6 +14,7 @@ import com.happy.friendogly.presentation.ui.club.my.MyClubActivity
 import com.happy.friendogly.presentation.ui.club.my.MyClubEvent
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment_my_club) {
@@ -58,6 +59,7 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
                 MyClubUiState.Error -> applyViewState(binding.includeClubError.linearLayoutClubError)
                 MyClubUiState.Init -> applyViewState(binding.includeClubList.rcvClubListClub)
                 MyClubUiState.NotData -> applyViewState(binding.includeClubData.linearLayoutClubNotData)
+                MyClubUiState.Loading -> applyViewState(binding.includeClubLoading.linearLayoutClubLoading)
             }
         }
 
@@ -75,6 +77,7 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubError.linearLayoutClubError.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
+        binding.includeClubLoading.linearLayoutClubLoading.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
 }
