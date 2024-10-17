@@ -121,7 +121,7 @@ public class PlaygroundCommandService {
         boolean isInsideBoundary = playground.isInsideBoundary(location);
 
         if (!isInsideBoundary) {
-            playgroundMember.updateExitTime(LocalDateTime.now()); // todo: response에 exitTime도 추가
+            playgroundMember.updateExitTime(LocalDateTime.now());
         }
 
         playgroundMember.updateIsInside(isInsideBoundary);

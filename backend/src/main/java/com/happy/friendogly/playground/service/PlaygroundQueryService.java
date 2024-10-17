@@ -23,9 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaygroundQueryService {
 
     private static final int MAX_PET_IMAGE_COUNT = 5;
-    private static final int NOT_SORT = 0;
-    private static final int HIGH_PRIORITY = 1;
-    private static final int LOW_PRIORITY = 2;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
