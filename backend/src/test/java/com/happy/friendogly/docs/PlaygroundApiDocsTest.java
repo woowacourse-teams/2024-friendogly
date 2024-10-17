@@ -292,7 +292,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 new Playground(new Location(37.5173316, 127.1011661)),
                 new Member("name", "tag", "imageUrl")
         );
-        SaveJoinPlaygroundMemberResponse response = SaveJoinPlaygroundMemberResponse.from(playgroundMember);
+        SaveJoinPlaygroundMemberResponse response = new SaveJoinPlaygroundMemberResponse(playgroundMember);
 
         when(playgroundCommandService.joinPlayground(anyLong(), anyLong()))
                 .thenReturn(response);

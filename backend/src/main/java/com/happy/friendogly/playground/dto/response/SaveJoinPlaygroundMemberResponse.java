@@ -10,8 +10,8 @@ public record SaveJoinPlaygroundMemberResponse(
         boolean isArrived,
         LocalDateTime exitTime
 ) {
-    public static SaveJoinPlaygroundMemberResponse from(PlaygroundMember playgroundMember) {
-        return new SaveJoinPlaygroundMemberResponse(
+    public SaveJoinPlaygroundMemberResponse(PlaygroundMember playgroundMember) {
+        this(
                 playgroundMember.getPlayground().getId(),
                 playgroundMember.getMember().getId(),
                 playgroundMember.getMessage(),

@@ -96,7 +96,7 @@ public class PlaygroundCommandService {
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
                 new PlaygroundMember(playground, member)
         );
-        return SaveJoinPlaygroundMemberResponse.from(playgroundMember);
+        return new SaveJoinPlaygroundMemberResponse(playgroundMember);
     }
 
     public void leavePlayground(Long memberId) {
