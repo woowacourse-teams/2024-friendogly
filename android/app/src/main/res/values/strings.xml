@@ -113,7 +113,7 @@
     <string name="description_title">한 줄 소개</string>
     <string name="description_hint">한 줄 소개를 입력해주세요</string>
     <string name="camera_select_photo">카메라 실행하기</string>
-    <string name="birthday_title">댕댕이가 태어난 달</string>
+    <string name="birthday_title">내 강아지가 태어난 달</string>
     <string name="birthday">%d년 %02d월</string>
     <string name="birthday_year">년</string>
     <string name="birthday_month">%02d월</string>
@@ -144,8 +144,8 @@
 
     <!--멍개-->
     <string name="club_user_list_subject">참여 견주</string>
-    <string name="club_dog_list_subject">댕댕이들</string>
-    <string name="club_select_dog_subject">내 댕댕이 선택</string>
+    <string name="club_dog_list_subject">강아지들</string>
+    <string name="club_select_dog_subject">내 강아지 선택</string>
     <string name="club_select_commit">선택완료</string>
     <string name="club_list_date_days">%d일 전</string>
     <string name="club_list_date_hours">%d시간 전</string>
@@ -216,10 +216,10 @@
     <!--강아지 선택-->
     <string name="dog_selector_title">모임에 참여할 강아지를 선택해주세요.</string>
     <string name="dog_select_content">조건에 맞는 강아지만 선택할 수 있어요!</string>
-    <string name="dog_select_prevent_message">%s는 모임에 참여할 수 없어요..</string>
+    <string name="dog_select_prevent_message">%s은/는 모임에 참여할 수 없어요..</string>
     <string name="dog_select_load_fail">강아지를 등록해야 모임에 참여할 수 있어요!</string>
-    <string name="dog_select_prevent_select">%s는 모임에 데려갈 수 없어요..</string>
-    <string name="dog_select_can_select">%s는 모임에 데려갈 수 있어요!</string>
+    <string name="dog_select_prevent_select">%s은/는 모임에 데려갈 수 없어요..</string>
+    <string name="dog_select_can_select">%s은/는 모임에 데려갈 수 있어요!</string>
 
     <!--채팅-->
     <string name="chat_list_title">채팅</string>
@@ -232,7 +232,7 @@
     <string name="chat_out_message">%s님이 나갔습니다.</string>
     <string name="chat_setting">설정</string>
     <string name="chat_group_info">모임 정보</string>
-    <string name="chat_group_dog_size">댕댕이 사이즈</string>
+    <string name="chat_group_dog_size">강아지 사이즈</string>
     <string name="chat_group_dog_gender">성별</string>
     <string name="chat_group_join_people">참여 중인 견주</string>
     <string name="chat_setting_alarm">채팅방 알림</string>
@@ -243,7 +243,6 @@
     <string name="chat_leave_negative">머무르기</string>
 
     <!--멍멍 짓기-->
-    <string name="woof_member_name">%s\'s 댕댕이</string>
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
