@@ -1,6 +1,6 @@
 package com.happy.friendogly.presentation.alarm
 
-import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,10 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -111,32 +107,29 @@ class AlarmReceiver : FirebaseMessagingService() {
     private fun showChatNotification(
         chatRoomId: Long?,
         chatRoomName: String?,
-        chatRoomImage:String?,
+        chatRoomImage: String?,
         senderName: String?,
         messageContent: String?,
         senderProfile: String?,
     ) {
 
-        val contentIntent =
+        val contentChatIntent =
             if (chatRoomId == null) {
                 MainActivity.getIntent(this)
             } else {
                 ChatActivity.getIntent(this, chatRoomId)
             }
 
-        val contentPendingIntent =
+        val contentChatPendingIntent =
             PendingIntent.getActivity(
                 this,
                 0,
-                contentIntent,
+                contentChatIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
             )
 
         val person =
-            Person.Builder()
-                .setName(senderName)
-                .setIcon(IconCompat.createWithBitmap(createRoundedBitmap(senderProfile!!)))
-                .build()
+            createPerson(senderName, senderProfile)
 
         val messagingStyle =
             NotificationCompat.MessagingStyle(person)
@@ -147,9 +140,92 @@ class AlarmReceiver : FirebaseMessagingService() {
                     person
                 )
 
+        pushShortCutInfo(chatRoomId, contentChatIntent, chatRoomName, chatRoomImage)
 
-        val shotCutInfo =
-            ShortcutInfoCompat.Builder(this@AlarmReceiver.applicationContext, chatRoomId.toString())
+
+        val notification =
+            createNotification(
+                chatRoomName,
+                messageContent,
+                messagingStyle,
+                contentChatPendingIntent,
+                chatRoomId
+            )
+
+
+        val groupNotification = createGroupNotifyNotification(chatRoomName, messagingStyle, chatRoomId)
+        notificationManager.apply {
+            notify(GROUP_KEY.hashCode(), groupNotification)
+            notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, notification)
+        }
+
+    }
+
+    private fun createPerson(
+        senderName: String?,
+        senderProfile: String?
+    ) = Person.Builder()
+        .setName(senderName)
+        .setIcon(IconCompat.createWithBitmap(createRoundedBitmap(senderProfile!!)))
+        .build()
+
+    private fun createNotification(
+        chatRoomName: String?,
+        messageContent: String?,
+        messagingStyle: NotificationCompat.MessagingStyle,
+        contentPendingIntent: PendingIntent?,
+        chatRoomId: Long?
+    ): Notification {
+        return NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(chatRoomName)
+                .setContentText(messageContent)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setStyle(
+                    messagingStyle,
+                )
+                .setContentIntent(contentPendingIntent)
+                .setAutoCancel(true)
+                .setGroup(GROUP_KEY)
+                .setShortcutId(chatRoomId?.toString())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build()
+    }
+
+    private fun createGroupNotifyNotification(
+        chatRoomName: String?,
+        messagingStyle: NotificationCompat.MessagingStyle,
+        chatRoomId: Long?
+    ): Notification {
+
+        val contentPendingIntent = PendingIntent.getActivity(
+            this,
+            REQUEST_CODE,
+            MainActivity.getIntent(this),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
+        )
+
+        return NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
+            .setGroup(GROUP_KEY)
+            .setGroupSummary(true)
+            .setOnlyAlertOnce(true)
+            .setAutoCancel(true)
+            .setStyle(messagingStyle.setConversationTitle(chatRoomName))
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setContentIntent(contentPendingIntent)
+            .setShortcutId(chatRoomId?.toString())
+            .setPriority(NotificationCompat.PRIORITY_HIGH).build()
+    }
+
+    private fun pushShortCutInfo(
+        chatRoomId: Long?,
+        contentIntent: Intent,
+        chatRoomName: String?,
+        chatRoomImage: String?
+    ) {
+        val shortCutInfo =
+            ShortcutInfoCompat.Builder(this@AlarmReceiver, chatRoomId.toString())
                 .setIntent(contentIntent).setShortLabel(chatRoomName!!)
                 .setIcon(
                     IconCompat.createWithBitmap(
@@ -168,52 +244,17 @@ class AlarmReceiver : FirebaseMessagingService() {
                 .setAlwaysBadged()
                 .setLongLived(true).build()
 
-        val notification =
-            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(chatRoomName)
-                .setContentText(messageContent)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setStyle(
-                    messagingStyle,
-                )
-                .setContentIntent(contentPendingIntent)
-                .setAutoCancel(true)
-                .setGroup(GROUP_KEY)
-                .setShortcutId(chatRoomId?.toString())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .build()
-
-        val groupNotification =
-            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
-                .setGroup(GROUP_KEY)
-                .setGroupSummary(true)
-                .setOnlyAlertOnce(true)
-                .setAutoCancel(true)
-                .setStyle(messagingStyle.setConversationTitle(chatRoomName))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setContentIntent(contentPendingIntent)
-                .setShortcutId(chatRoomId?.toString())
-                .setPriority(NotificationCompat.PRIORITY_HIGH).build()
-
         ShortcutManagerCompat.pushDynamicShortcut(
             this@AlarmReceiver,
-            shotCutInfo
+            shortCutInfo
         )
-
-        notificationManager.apply {
-            notify(GROUP_KEY.hashCode(), groupNotification)
-            notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, notification)
-        }
-
     }
 
     private fun createRoundedBitmap(imageUrl: String): Bitmap {
         val url = URL(imageUrl)
         val bitmap = BitmapFactory.decodeStream(url.openStream())
 
-        return getRoundedCornerBitmap(bitmap, cornerRadius = 70f)
+        return getRoundedCornerBitmap(bitmap, cornerRadius = IMAGE_CORNER_ROUND)
     }
 
     private fun getRoundedCornerBitmap(bitmap: Bitmap, cornerRadius: Float): Bitmap {
@@ -284,6 +325,10 @@ class AlarmReceiver : FirebaseMessagingService() {
         private const val ALARM_TYPE = "type"
         private const val INVALID_CHAT_ROOM_ID = -1
         private const val GROUP_KEY = "chat"
+
+        private const val REQUEST_CODE = 0
+
+        private const val IMAGE_CORNER_ROUND = 70f
 
         const val NOTIFICATION_ID = 0
         const val DEFAULT_INTENT_ID = 1
