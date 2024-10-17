@@ -1,20 +1,24 @@
 package com.happy.friendogly.remote.mapper
 
-import com.happy.friendogly.data.model.PetDetailDto
-import com.happy.friendogly.remote.model.response.PetDetailResponse
+import com.happy.friendogly.data.model.PlaygroundPetDetailDto
+import com.happy.friendogly.remote.model.response.PlaygroundPetDetailResponse
 
-fun PetDetailResponse.toData(): PetDetailDto {
-    return PetDetailDto(
+fun PlaygroundPetDetailResponse.toData(): PlaygroundPetDetailDto {
+    return PlaygroundPetDetailDto(
+        memberId = memberId,
+        petId = petId,
         name = name,
-        description = description,
         birthDate = birthDate,
         sizeType = sizeType.toData(),
         gender = gender.toData(),
         imageUrl = imageUrl,
+        message = message,
+        isArrival = isArrival,
+        isMine = isMine,
     )
 }
 
-fun List<PetDetailResponse>.toData(): List<PetDetailDto> {
+fun List<PlaygroundPetDetailResponse>.toData(): List<PlaygroundPetDetailDto> {
     return map { response ->
         response.toData()
     }

@@ -102,7 +102,7 @@
             app:lottie_loop="true" />
         <ImageView
             app:myLocationIcon = "@{vm.userAddress}"
-            android:src="@drawable/ic_marker_mine_clicked"
+            android:src="@drawable/ic_register_playground_clicked"
             app:layout_constraintBottom_toTopOf="@+id/linear_layout_my_location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

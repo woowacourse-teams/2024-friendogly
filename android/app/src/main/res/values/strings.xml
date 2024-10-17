@@ -127,7 +127,7 @@
 
     <!--내비게이션 메뉴-->
     <string name="bottom_home">홈</string>
-    <string name="bottom_woof">친구찾기</string>
+    <string name="bottom_playground">놀이터</string>
     <string name="bottom_chat">채팅</string>
     <string name="bottom_my_page">나의 강아지</string>
 
@@ -247,45 +247,54 @@
     <string name="woof_permission">위치 권한이 필요합니다.</string>
     <string name="woof_setting">설정</string>
     <string name="woof_package">package:%s</string>
-    <string name="woof_cant_mark">%d초 후에 발자국을 남길 수 있어요!</string>
     <string name="woof_marker_registered">발자국을 등록했어요!</string>
     <string name="woof_has_not_pet">강아지를 등록해야 발자국을 남길 수 있어요!</string>
-    <string name="woof_days_ago">%d일 전</string>
-    <string name="woof_hours_ago">%d시간 전</string>
-    <string name="woof_minutes_ago">%d분 전</string>
-    <string name="woof_just_now">방금 전</string>
-    <string name="woof_status_before">가는중</string>
-    <string name="woof_status_ongoing">산책중</string>
-    <string name="woof_status_after">산책 완료</string>
-    <string name="woof_walk_before">%d분 째 가는중</string>
-    <string name="woof_walk_ongoing">%d분 째 산책중</string>
-    <string name="woof_walk_after">%d시 %d분에 왔다감</string>
     <string name="woof_age_year">%d살</string>
     <string name="woof_age_month">%d개월</string>
-    <string name="woof_not_exist_my_footprint">등록된 나의 발자국이 존재하지 않아요!</string>
+    <string name="woof_not_exist_my_playground">내가 참여한 놀이터가 존재하지 않아요!</string>
     <string name="woof_my_footprint">MY</string>
-    <string name="woof_register_walk_area">발자국 등록</string>
+    <string name="woof_register_playground_title">놀이터 등록하기</string>
     <string name="woof_address_out_of_korea">발자국 등록은 한국에서만 가능합니다!</string>
-    <string name="woof_register_help">발자국은 10초마다 새로 등록할 수 있으며\n기존 발자국은 삭제됩니다!</string>
-    <string name="woof_walk_before_help">발자국 반경(1km) 이내에 도착하면\n산책이 시작됩니다!</string>
-    <string name="woof_walk_ongoing_help">발자국 반경(1km)을 벗어나면\n산책이 종료됩니다!</string>
-    <string name="woof_fail_to_load_footprint_mark_btn_info">발자국 등록을 위한 정보를 불러오지 못했습니다!</string>
-    <string name="woof_fail_to_load_near_footprints">주변 발자국을 불러오지 못했습니다!</string>
-    <string name="woof_fail_to_register_footprint">발자국 등록에 실패했습니다!</string>
-    <string name="woof_fail_to_load_footprint_info">발자국 정보를 불러오지 못했습니다!</string>
-    <string name="woof_fail_to_update_footprint_walk_status">산책 상태를 업데이트하지 못했습니다!</string>
-    <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
-    <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
-    <string name="woof_register_footprint">이 위치에 발자국 등록</string>
-    <string name="woof_location_tracking">실시간 위치를 추적 중입니다.</string>
+    <string name="playground_register_help">놀이터에 다른 강아지들도 참여할 수 있어요!
+        \n친구들을 만나 반갑게 인사해보세요~</string>
+    <string name="woof_register_playground">이 위치에 놀이터 등록</string>
+    <string name="woof_location_tracking">실시간으로 위치를 추적 중입니다.</string>
     <string name="woof_information">정보</string>
     <string name="woof_description">소개</string>
     <string name="woof_footprint_refresh">새로고침</string>
     <string name="woof_end_walk">산책 종료하기</string>
-    <string name="woof_delete_my_footprint_marker">발자국을 삭제했어요!</string>
+    <string name="playground_leave_my_playground">놀이터에서 나갔습니다!</string>
+    <string name="playground_auto_leave_my_playground">오랜 시간 자리를 비워 자동으로 놀이터에서 나갔습니다!</string>
+    <string name="playground_already_participate_playground">이미 참여중인 놀이터가 존재합니다!</string>
+    <string name="playground_overlap_playground_creation">놀이터 등록 범위가 다른 놀이터와 중복됩니다!</string>
     <string name="woof_stop_walk">산책을 종료했어요!</string>
     <string name="woof_status_all">전체</string>
     <string name="woof_address_korea">대한민국</string>
+    <string name="playground_join">놀이터 참여하기</string>
+    <string name="playground_leave">놀이터 나가기</string>
+    <string name="playground_pet_is_playing">노는중</string>
+    <string name="playground_pet_is_away">자리비움</string>
+    <string name="playground_play_together">만나서 함께 놀아요!</string>
+    <string name="playground_participation_status">참여 현황</string>
+    <string name="playground_pet_count">마리</string>
+    <string name="playground_please_input_message">상태메시지를 입력해주세요.</string>
+
+    <string name="woof_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
+    <string name="woof_fail_to_load_near_footprints">놀이터들을 불러오지 못했습니다!</string>
+    <string name="woof_fail_to_register_playground">놀이터 등록에 실패했습니다!</string>
+    <string name="woof_fail_to_update_playground_arrival">놀이터 도착 여부를 업데이트하지 못했습니다!</string>
+    <string name="woof_fail_to_end_walk">산책 종료에 실패했습니다!</string>
+    <string name="woof_fail_to_delete_my_footprint">발자국 삭제에 실패했습니다!</string>
+    <string name="fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
+    <string name="fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
+    <string name="fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
+
+    <string name="message_title">상태메시지</string>
+    <string name="message_cancel">취소</string>
+    <string name="message_confirm">확인</string>
+    <string name="message_length">%d / 20</string>
+    <string name="fail_to_patch_message">상태메시지 설정에 실패했습니다!</string>
+
 
     <!--프로필-->
     <string name="male">남</string>

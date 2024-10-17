@@ -7,7 +7,7 @@ import com.happy.friendogly.remote.api.ClubService
 import com.happy.friendogly.remote.api.MemberService
 import com.happy.friendogly.remote.api.MyClubService
 import com.happy.friendogly.remote.api.PetService
-import com.happy.friendogly.remote.api.WoofService
+import com.happy.friendogly.remote.api.PlaygroundService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,5 +51,5 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesWoofService(retrofit: Retrofit): WoofService = retrofit.create(WoofService::class.java)
+    fun providesWoofService(retrofit: Retrofit): PlaygroundService = retrofit.create(PlaygroundService::class.java)
 }
