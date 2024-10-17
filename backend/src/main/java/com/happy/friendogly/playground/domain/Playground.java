@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Playground {
 
+    protected static final int PLAYGROUND_RADIUS = 150;
+    protected static final int MAX_OVERLAP_DISTANCE = PLAYGROUND_RADIUS * 2;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,5 +26,13 @@ public class Playground {
 
     public Playground(Location location) {
         this.location = location;
+    }
+
+    public boolean isInsideBoundary(Location location) {
+        return this.location.isWithin(location, PLAYGROUND_RADIUS);
+    }
+
+    public boolean isOverlapLocation(Location location) {
+        return this.location.isWithin(location, MAX_OVERLAP_DISTANCE);
     }
 }

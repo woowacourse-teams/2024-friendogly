@@ -1,5 +1,7 @@
 package com.happy.friendogly.playground.domain;
 
+import static com.happy.friendogly.playground.domain.Playground.MAX_OVERLAP_DISTANCE;
+
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.utils.GeoCalculator;
 import jakarta.persistence.Column;
@@ -45,21 +47,23 @@ public class Location {
         return distance <= radius;
     }
 
-    public Location plusLatitudeByMeters(int meters) {
-        double diffLatitude = GeoCalculator.calculateLatitudeOffset(this.latitude, meters);
-        return new Location(diffLatitude, this.longitude);
+    public Location plusLatitudeByOverlapDistance() {
+        double diffLatitude = GeoCalculator.calculateLatitudeOffset(latitude, MAX_OVERLAP_DISTANCE);
+        return new Location(diffLatitude, longitude);
     }
 
-    public Location minusLatitudeByMeters(int meters) {
-        return plusLatitudeByMeters(-meters);
+    public Location minusLatitudeByOverlapDistance() {
+        double diffLatitude = GeoCalculator.calculateLatitudeOffset(latitude, -MAX_OVERLAP_DISTANCE);
+        return new Location(diffLatitude, longitude);
     }
 
-    public Location plusLongitudeByMeters(int meters) {
-        double diffLongitude = GeoCalculator.calculateLongitudeOffset(this.latitude, this.longitude, meters);
-        return new Location(this.latitude, diffLongitude);
+    public Location plusLongitudeByOverlapDistance() {
+        double diffLongitude = GeoCalculator.calculateLongitudeOffset(latitude, longitude, MAX_OVERLAP_DISTANCE);
+        return new Location(latitude, diffLongitude);
     }
 
-    public Location minusLongitudeByMeters(int meters) {
-        return plusLongitudeByMeters(-meters);
+    public Location minusLongitudeByOverlapDistance() {
+        double diffLongitude = GeoCalculator.calculateLongitudeOffset(latitude, longitude, -MAX_OVERLAP_DISTANCE);
+        return new Location(latitude, diffLongitude);
     }
 }

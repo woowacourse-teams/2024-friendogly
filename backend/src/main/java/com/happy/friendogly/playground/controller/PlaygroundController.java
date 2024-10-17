@@ -4,17 +4,21 @@ import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
+import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
 import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,9 +58,9 @@ public class PlaygroundController {
         return ApiResponse.ofSuccess(response);
     }
 
-    @GetMapping("/{id}/summary")
-    public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long id) {
-        return ApiResponse.ofSuccess(new FindPlaygroundSummaryResponse(1L, 10, 4));
+    @GetMapping("/{playgroundId}/summary")
+    public ApiResponse<FindPlaygroundSummaryResponse> findSummaryById(@PathVariable Long playgroundId) {
+        return ApiResponse.ofSuccess(playgroundQueryService.findSummary(playgroundId));
     }
 
     @GetMapping("/locations")
@@ -69,6 +73,33 @@ public class PlaygroundController {
             @Auth Long memberId,
             @Valid @RequestBody UpdatePlaygroundArrivalRequest request
     ) {
-        return ApiResponse.ofSuccess(new UpdatePlaygroundArrivalResponse(true));
+        return ApiResponse.ofSuccess(playgroundCommandService.updateArrival(request, memberId));
+    }
+
+    @PostMapping("/{playgroundId}/join")
+    public ApiResponse<SaveJoinPlaygroundMemberResponse> saveJoinMember(
+            @Auth Long memberId,
+            @PathVariable Long playgroundId
+    ) {
+        SaveJoinPlaygroundMemberResponse response = playgroundCommandService
+                .joinPlayground(memberId, playgroundId);
+        return ApiResponse.ofSuccess(response);
+    }
+
+    @DeleteMapping("/leave")
+    public ResponseEntity<Void> deleteJoinMember(@Auth Long memberId) {
+        playgroundCommandService.leavePlayground(memberId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/message")
+    public ApiResponse<UpdatePlaygroundMemberMessageResponse> updateMessage(
+            @Auth Long memberId,
+            @RequestBody UpdatePlaygroundMemberMessageRequest request
+    ) {
+        UpdatePlaygroundMemberMessageResponse response = playgroundCommandService.updateMemberMessage(
+                request, memberId
+        );
+        return ApiResponse.ofSuccess(response);
     }
 }
