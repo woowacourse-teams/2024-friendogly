@@ -14,7 +14,7 @@ import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatLifecycleObserver
-import com.happy.friendogly.presentation.ui.woof.WoofFragment
+import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +122,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) {
         val contentIntent =
             MainActivity.getIntent(this).apply {
-                putExtra(EXTRA_FRAGMENT, WoofFragment.TAG)
+                putExtra(EXTRA_FRAGMENT, PlaygroundFragment.TAG)
             }
 
         val contentPendingIntent =
