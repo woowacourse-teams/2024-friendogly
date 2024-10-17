@@ -1,11 +1,16 @@
 package com.happy.friendogly.presentation.alarm
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -14,10 +19,8 @@ import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
@@ -32,10 +35,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 import javax.inject.Inject
 
 @AndroidEntryPoint
-@RequiresApi(Build.VERSION_CODES.Q)
 class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
 
@@ -45,6 +48,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     @Inject
     lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if (message.data[ALARM_TYPE] == "CHAT") {
@@ -66,13 +70,13 @@ class AlarmReceiver : FirebaseMessagingService() {
                     .getOrDefault(true) && ChatLifecycleObserver.getInstance().isBackground
             ) {
                 createNotificationChannel(AlarmType.CHAT)
-                showBubbleNotification(
+                showChatNotification(
                     chatRoomId = message.data["chatRoomId"]?.toLongOrNull(),
                     chatRoomName = message.data["chatRoomName"],
+                    chatRoomImage = message.data["chatRoomImage"],
                     senderName = message.data["senderName"],
                     messageContent = message.data["content"],
                     senderProfile = message.data["profilePictureUrl"],
-                    isGroupChat = true,
                 )
             }
         }
@@ -97,30 +101,21 @@ class AlarmReceiver : FirebaseMessagingService() {
                 NotificationManager.IMPORTANCE_HIGH,
             )
         notificationChannel.enableVibration(true)
+        notificationChannel.setShowBadge(true)
         notificationManager.createNotificationChannel(
             notificationChannel,
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun showBubbleNotification(
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun showChatNotification(
         chatRoomId: Long?,
         chatRoomName: String?,
+        chatRoomImage:String?,
         senderName: String?,
         messageContent: String?,
         senderProfile: String?,
-        isGroupChat: Boolean,
     ) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel =
-                NotificationChannel(
-                    "chat_bubble_channel",
-                    "Chat Bubbles",
-                    NotificationManager.IMPORTANCE_HIGH,
-                )
-            notificationManager.createNotificationChannel(channel)
-        }
 
         val contentIntent =
             if (chatRoomId == null) {
@@ -137,196 +132,99 @@ class AlarmReceiver : FirebaseMessagingService() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
             )
 
-        // Glide를 사용하여 프로필 이미지 로드 후 아이콘 설정
-        Glide.with(this)
-            .asBitmap()
-            .load(senderProfile)
-            .transform(RoundedCorners(30))
-            .into(
-                object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?,
-                    ) {
-                        val person =
-                            Person.Builder()
-                                .setName(senderName)
-                                .setIcon(IconCompat.createWithBitmap(resource))
-                                .build()
-
-                        val messagingStyle =
-                            NotificationCompat.MessagingStyle(person)
-                                .setGroupConversation(true)
-                                .addMessage(
-                                    messageContent ?: "",
-                                    System.currentTimeMillis(),
-                                    person
-                                )
-
-
-                        val notificationTitle =
-                            if (isGroupChat && !chatRoomName.isNullOrEmpty()) {
-                                chatRoomName
-                            } else {
-                                senderName
-                            }
-
-                        val notification =
-                            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle(notificationTitle)
-                                .setContentText(messageContent)
-                                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                .setStyle(
-                                    messagingStyle,
-                                )
-                                .setContentIntent(contentPendingIntent)
-                                .setAutoCancel(true)
-                                .setGroup(GROUP_KEY)
-
-                                .setShortcutId(chatRoomId?.toString())
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .build()
-
-                        val groupNotification =
-                            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
-                                .setGroup(GROUP_KEY)
-                                .setGroupSummary(true)
-                                .setOnlyAlertOnce(true)
-                                .setAutoCancel(true)
-                                .setStyle(messagingStyle.setConversationTitle(chatRoomName))
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                .setContentIntent(contentPendingIntent)
-                                .setShortcutId(chatRoomId?.toString())
-                                .setPriority(NotificationCompat.PRIORITY_HIGH).build()
-
-                        ShortcutManagerCompat.pushDynamicShortcut(
-                            this@AlarmReceiver,
-                            ShortcutInfoCompat.Builder(this@AlarmReceiver, chatRoomId.toString())
-                                .setIntent(contentIntent).setShortLabel(chatRoomName!!)
-                                .setLongLabel(chatRoomName)
-                                .setIntent(
-                                    contentIntent.setAction(
-                                        Intent.ACTION_MAIN,
-                                    ),
-                                )
-                                .setLongLived(true).setPerson(person).build(),
-                        )
-
-                        notificationManager.apply {
-                            notify(GROUP_KEY.hashCode(), groupNotification)
-                            notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, notification)
-                        }
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-                },
-            )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun deliverChatNotification(
-        chatRoomId: Long?,
-        chatRoomImage: String?,
-        chatRoomName: String?,
-        senderName: String?,
-        messageContent: String?,
-        senderProfile: String?,
-    ) {
-        val contentIntent =
-            if (chatRoomId == null) {
-                MainActivity.getIntent(this)
-            } else {
-                ChatActivity.getIntent(this, chatRoomId)
-            }
-
-        val contentPendingIntent =
-            PendingIntent.getActivity(
-                this,
-                DEFAULT_INTENT_ID,
-                contentIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
-            )
-
-        val person = Person.Builder().setName(senderName).build()
-
-//        Glide.with(this)
-//            .asBitmap()
-//            .load(senderProfile)
-//            .into(object : CustomTarget<Bitmap>() {
-//                override fun onResourceReady(
-//                    resource: Bitmap,
-//                    transition: Transition<in Bitmap>?
-//                ) {
-//                    person.setIcon(IconCompat.createWithBitmap(resource))
-//                }
-//
-//                override fun onLoadCleared(placeholder: Drawable?) {
-//                }
-//
-//            })
-
-        val message =
-            NotificationCompat.MessagingStyle.Message(
-                messageContent,
-                System.currentTimeMillis(),
-                person,
-            )
-
-        val bubbleData =
-            NotificationCompat.BubbleMetadata.Builder(chatRoomId.toString())
-                .setAutoExpandBubble(true)
-                .setSuppressNotification(true)
+        val person =
+            Person.Builder()
+                .setName(senderName)
+                .setIcon(IconCompat.createWithBitmap(createRoundedBitmap(senderProfile!!)))
                 .build()
 
-        val builder =
-            NotificationCompat.Builder(this, CHAT_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(chatRoomName)
-                .setContentText(messageContent)
-                .setBubbleMetadata(bubbleData)
-                .setGroup(GROUP_KEY)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setContentIntent(contentPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setStyle(
-                    NotificationCompat.MessagingStyle(person).addMessage(message),
+        val messagingStyle =
+            NotificationCompat.MessagingStyle(person)
+                .setGroupConversation(true)
+                .addMessage(
+                    messageContent ?: "",
+                    System.currentTimeMillis(),
+                    person
                 )
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
 
-        val groupNotification =
-            NotificationCompat.Builder(this, CHAT_CHANNEL_ID)
-                .setGroup(GROUP_KEY)
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setStyle(NotificationCompat.InboxStyle())
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setContentIntent(contentPendingIntent)
-                .setContentText("새로운 알림이 왔습니다.")
-                .setShortcutId(chatRoomId?.toString())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        ShortcutManagerCompat.pushDynamicShortcut(
-            this,
-            ShortcutInfoCompat.Builder(this, chatRoomId.toString())
-                .setIntent(contentIntent).setShortLabel(chatRoomName!!).setLongLabel(chatRoomName)
+        val shotCutInfo =
+            ShortcutInfoCompat.Builder(this@AlarmReceiver.applicationContext, chatRoomId.toString())
+                .setIntent(contentIntent).setShortLabel(chatRoomName!!)
+                .setIcon(
+                    IconCompat.createWithBitmap(
+                        createRoundedBitmap(
+                            chatRoomImage!!
+                        )
+                    )
+                )
+                .setLongLabel(chatRoomName)
+                .setAlwaysBadged()
                 .setIntent(
                     contentIntent.setAction(
                         Intent.ACTION_MAIN,
                     ),
                 )
-                .setLongLived(true).setPerson(person).build(),
+                .setAlwaysBadged()
+                .setLongLived(true).build()
+
+        val notification =
+            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(chatRoomName)
+                .setContentText(messageContent)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setStyle(
+                    messagingStyle,
+                )
+                .setContentIntent(contentPendingIntent)
+                .setAutoCancel(true)
+                .setGroup(GROUP_KEY)
+                .setShortcutId(chatRoomId?.toString())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build()
+
+        val groupNotification =
+            NotificationCompat.Builder(this@AlarmReceiver, CHAT_CHANNEL_ID)
+                .setGroup(GROUP_KEY)
+                .setGroupSummary(true)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .setStyle(messagingStyle.setConversationTitle(chatRoomName))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setContentIntent(contentPendingIntent)
+                .setShortcutId(chatRoomId?.toString())
+                .setPriority(NotificationCompat.PRIORITY_HIGH).build()
+
+        ShortcutManagerCompat.pushDynamicShortcut(
+            this@AlarmReceiver,
+            shotCutInfo
         )
 
         notificationManager.apply {
-            notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, builder.build())
-            notify(GROUP_KEY, chatRoomId!!.toInt(), groupNotification.build())
+            notify(GROUP_KEY.hashCode(), groupNotification)
+            notify(chatRoomId?.toInt() ?: INVALID_CHAT_ROOM_ID, notification)
         }
+
     }
+
+    private fun createRoundedBitmap(imageUrl: String): Bitmap {
+        val url = URL(imageUrl)
+        val bitmap = BitmapFactory.decodeStream(url.openStream())
+
+        return getRoundedCornerBitmap(bitmap, cornerRadius = 70f)
+    }
+
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, cornerRadius: Float): Bitmap {
+
+        val round = RoundedBitmapDrawableFactory.create(resources, bitmap)
+
+        round.cornerRadius = cornerRadius
+        round.setAntiAlias(true)
+        return round.toBitmap()
+    }
+
 
     private fun deliverWoofNotification(
         title: String?,
