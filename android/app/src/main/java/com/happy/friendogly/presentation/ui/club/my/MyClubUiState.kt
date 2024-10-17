@@ -6,4 +6,6 @@ sealed interface MyClubUiState {
     data object NotData : MyClubUiState
 
     data object Error : MyClubUiState
+
+    data object Loading : MyClubUiState
 }

@@ -29,7 +29,7 @@ class MyParticipatingClubViewModel
         private val _myClubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
         val myClubs: LiveData<List<ClubItemUiModel>> get() = _myClubs
 
-        private val _myClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData()
+        private val _myClubUiState: MutableLiveData<MyClubUiState> = MutableLiveData(MyClubUiState.Loading)
         val myClubUiState: LiveData<MyClubUiState> get() = _myClubUiState
 
         private val _myClubEvent: MutableLiveData<Event<MyClubEvent.Navigation>> = MutableLiveData()
