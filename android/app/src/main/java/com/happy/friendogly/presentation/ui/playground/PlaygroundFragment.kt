@@ -251,6 +251,7 @@ class PlaygroundFragment :
 
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
+                reduceMarkerSize()
                 if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo ||
                     viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundSummary
                 ) {
@@ -274,6 +275,7 @@ class PlaygroundFragment :
 
         map.addOnCameraChangeListener { reason, _ ->
             if (reason == REASON_GESTURE) {
+                reduceMarkerSize()
                 viewModel.changeTrackingModeToNoFollow()
 
                 if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
@@ -355,10 +357,11 @@ class PlaygroundFragment :
             petSummaryAdapter.submitList(playgroundSummary.petImageUrls)
         }
 
-        viewModel.myPlayground.observe(viewLifecycleOwner) { myPlaygroundMarker ->
+        viewModel.myPlayground.observe(viewLifecycleOwner) { myPlayground ->
             stopLocationService()
-            if (myPlaygroundMarker != null) {
-                myPlaygroundMarker.marker.map = map
+            if (myPlayground != null) {
+                enlargeMarkerSize(myPlayground.marker)
+                myPlayground.marker.map = map
                 setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
                 viewModel.updatePlaygroundArrival(latLng)
@@ -393,10 +396,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                        LatLng(
-                                            playground.latitude,
-                                            playground.longitude,
-                                        ),
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
+                                    ),
                                 )
                             PlaygroundMarkerUiModel(
                                 id = playground.id,
@@ -595,7 +598,6 @@ class PlaygroundFragment :
     }
 
     private fun activateMap() {
-        viewModel.updateUiState(PlaygroundUiState.Loading)
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
@@ -621,21 +623,19 @@ class PlaygroundFragment :
 
     private fun setUpPathOverlay() {
         pathOverlay.apply {
-            coords =
-                listOf(
-                    latLng,
-                    viewModel.myPlayground.value
-                        ?.marker
-                        ?.position,
-                )
-            width = 30
-            outlineWidth = 0
+            coords = listOf(
+                latLng,
+                viewModel.myPlayground.value?.marker?.position,
+            )
+            width = PATH_OVERLAY_WIDTH
+            outlineWidth = PATH_OVERLAY_OUTLINE_WIDTH
             patternImage = OverlayImage.fromResource(R.drawable.ic_footprint)
-            patternInterval = 60
+            patternInterval = PATH_OVERLAY_PATTERN_INTERVAL
             color = resources.getColor(R.color.blue, null)
             map = map
         }
     }
+
 
     private fun moveCameraCenterPosition(position: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
@@ -672,18 +672,12 @@ class PlaygroundFragment :
         marker: Marker,
     ) {
         marker.setOnClickListener {
-            changeClickedMarkerSize(marker)
+            reduceMarkerSize()
+            enlargeMarkerSize(marker)
             viewModel.loadRecentlyClickedPlayground(marker)
             val position = adjustPosition(marker)
             moveCameraCenterPosition(position)
-
-            if (id == viewModel.myPlayground.value?.id) {
-                viewModel.loadPlaygroundInfo(id = id)
-                viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
-            } else {
-                viewModel.loadPlaygroundSummary(id = id)
-                viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundSummary)
-            }
+            viewModel.handlePlaygroundInfo(id)
             true
         }
     }
@@ -718,17 +712,16 @@ class PlaygroundFragment :
             pathOverlay.map = map
         }
         registeringCircleOverlay.map = null
-        changeRecentlyClickedMarkerSize()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun changeRecentlyClickedMarkerSize() {
+    private fun reduceMarkerSize() {
         val recentlyClickedMarker = viewModel.recentlyClickedPlayground.value ?: return
         recentlyClickedMarker.width = MARKER_DEFAULT_WIDTH
         recentlyClickedMarker.height = MARKER_DEFAULT_HEIGHT
     }
 
-    private fun changeClickedMarkerSize(marker: Marker) {
+    private fun enlargeMarkerSize(marker: Marker) {
         marker.width = MARKER_CLICKED_WIDTH
         marker.height = MARKER_CLICKED_HEIGHT
     }
@@ -753,8 +746,9 @@ class PlaygroundFragment :
     }
 
     private fun clearMyPlayground() {
-        val myPlaygroundMarker = viewModel.myPlayground.value ?: return
-        myPlaygroundMarker.circleOverlay.map = null
+        val myPlayground = viewModel.myPlayground.value ?: return
+        myPlayground.marker.map = null
+        myPlayground.circleOverlay.map = null
         pathOverlay.map = null
     }
 
@@ -792,7 +786,8 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng =
+        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -896,9 +891,7 @@ class PlaygroundFragment :
                             ?: return@registerForActivityResult
 
                     if (messageUpdated) {
-                        val myPlayground =
-                            viewModel.myPlayground.value ?: return@registerForActivityResult
-                        viewModel.loadPlaygroundInfo(myPlayground.id)
+                        viewModel.playgroundMessageUpdated()
                     }
                 }
             }
@@ -929,7 +922,7 @@ class PlaygroundFragment :
                     if (viewModel.uiState.value == PlaygroundUiState.ViewingPlaygroundInfo &&
                         newState == BottomSheetBehavior.STATE_COLLAPSED
                     ) {
-                        changeRecentlyClickedMarkerSize()
+                        reduceMarkerSize()
                         binding.rcvPlaygroundPet.smoothScrollToPosition(0)
                     } else {
                         viewModel.updateRefreshBtnVisibility(false)
@@ -1007,6 +1000,11 @@ class PlaygroundFragment :
         private const val MAP_LOGO_MARGIN = 20
         private const val EXPANDED_PET_SIZE = 2
         private const val DEFAULT_MESSAGE_UPDATED = false
+
+        // New constants
+        private const val PATH_OVERLAY_WIDTH = 30
+        private const val PATH_OVERLAY_OUTLINE_WIDTH = 0
+        private const val PATH_OVERLAY_PATTERN_INTERVAL = 60
 
         const val EXTRA_MESSAGE_UPDATED = "messageUpdated"
         const val TAG = "PlaygroundFragment"
