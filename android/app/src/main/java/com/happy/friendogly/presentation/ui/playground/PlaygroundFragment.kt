@@ -59,6 +59,7 @@ import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocatio
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.playground.viewmodel.PlaygroundViewModel
+import com.happy.friendogly.presentation.utils.isSystemInDarkMode
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraAnimation
@@ -226,6 +227,8 @@ class PlaygroundFragment :
 
     private fun initMap(naverMap: NaverMap) {
         map = naverMap
+        map.mapType = NaverMap.MapType.Navi
+        map.isNightModeEnabled = isSystemInDarkMode()
         map.locationSource = locationSource
         map.extent =
             LatLngBounds(
