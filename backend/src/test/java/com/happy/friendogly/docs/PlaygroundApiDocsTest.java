@@ -256,7 +256,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 1L,
                 3,
                 1,
-                List.of("url1", "url2", "url3")
+                List.of("http://image1.jpg", "http://image2.jpg", "http://image3.jpg")
         );
 
         when(playgroundQueryService.findSummary(anyLong()))
