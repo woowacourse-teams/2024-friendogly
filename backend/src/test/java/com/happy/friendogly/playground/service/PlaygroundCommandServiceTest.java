@@ -147,10 +147,9 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
 
         // when
         playgroundCommandService.leavePlayground(member.getId());
-        boolean isPlaygroundMemberPresent = playgroundMemberRepository.findById(playgroundMember.getId()).isPresent();
 
         // then
-        assertThat(isPlaygroundMemberPresent).isFalse();
+        assertThat(playgroundMemberRepository.findById(playgroundMember.getId())).isEmpty();
     }
 
     @DisplayName("놀이터를 나갔을 때, 놀이터에 참여중인 멤버가 하나도 없으면 놀이터는 삭제된다.")
