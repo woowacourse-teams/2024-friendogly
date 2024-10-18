@@ -1,5 +1,6 @@
 package com.happy.friendogly.data.repository
 
+import android.util.Log
 import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.mapper.toLocalData
