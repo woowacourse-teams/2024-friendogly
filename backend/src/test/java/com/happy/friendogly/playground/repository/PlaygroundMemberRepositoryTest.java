@@ -48,6 +48,7 @@ class PlaygroundMemberRepositoryTest {
                         member,
                         "message",
                         isInside,
+                        LocalDateTime.now().minusHours(4),
                         LocalDateTime.now().minusHours(3)
                 )
         );
