@@ -349,7 +349,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 .andExpect(status().isNoContent());
     }
 
-    @DisplayName("놀이터에 참여한 멤벙 메세지 수정")
+    @DisplayName("놀이터에 참여한 멤버 메세지 수정")
     @Test
     void updateMessage() throws Exception {
 
