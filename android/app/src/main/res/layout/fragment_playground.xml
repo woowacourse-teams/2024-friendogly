@@ -352,7 +352,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{String.valueOf(vm.playgroundSummary.arrivedPetCount)}"
+                android:text="@{String.valueOf(vm.playgroundSummary.totalPetCount)}"
                 app:layout_constraintEnd_toStartOf="@id/tv_playground_total_pet_count"
                 app:layout_constraintStart_toStartOf="@id/tv_playground_participation_status"
                 app:layout_constraintTop_toBottomOf="@id/tv_playground_participation_status"
@@ -383,7 +383,7 @@
                 app:layout_constraintTop_toTopOf="@id/layout_playground_summary_pet_count" />
 
             <TextView
-                android:id="@+id/tv_playground_play_together"
+                android:id="@+id/tv_playground_title"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

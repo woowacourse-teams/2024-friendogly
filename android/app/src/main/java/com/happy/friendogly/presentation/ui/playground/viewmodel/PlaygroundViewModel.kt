@@ -341,7 +341,7 @@ constructor(
     }
 
     fun scanNearPlaygrounds() {
-//        _uiState.value = PlaygroundUiState.Loading
+        _uiState.value = PlaygroundUiState.Loading
         viewModelScope.launch {
             getPlaygroundsUseCase()
                 .onSuccess { playgrounds ->

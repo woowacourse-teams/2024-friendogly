@@ -122,9 +122,9 @@ fun View.bindPlaygroundInfoVisibility(
 ) {
     isVisible =
         if (playgroundInfo != null && (
-                uiState == PlaygroundUiState.FindingPlayground ||
-                    uiState == PlaygroundUiState.ViewingPlaygroundInfo
-            )
+                    uiState == PlaygroundUiState.FindingPlayground ||
+                            uiState == PlaygroundUiState.ViewingPlaygroundInfo
+                    )
         ) {
             bringToFront()
             true
