@@ -6,7 +6,7 @@ sealed interface Message : ChatComponent {
     val content: String
 
     class Mine(
-         content: String,
+        content: String,
         val member: ChatMember,
         override val createdAt: LocalDateTime,
     ) : Message {
@@ -17,7 +17,7 @@ sealed interface Message : ChatComponent {
         content: String,
         val member: ChatMember,
         override val createdAt: LocalDateTime,
-    ) : Message{
+    ) : Message {
         override val content: String = content.trim()
     }
 }

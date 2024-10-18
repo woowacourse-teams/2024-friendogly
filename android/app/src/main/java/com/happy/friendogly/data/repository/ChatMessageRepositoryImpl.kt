@@ -1,6 +1,5 @@
 package com.happy.friendogly.data.repository
 
-import android.util.Log
 import com.happy.friendogly.data.mapper.toData
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.mapper.toLocalData
@@ -46,7 +45,7 @@ class ChatMessageRepositoryImpl
                             chatRoomId = chatRoomId,
                             limit = limit,
                             offset = offset,
-                        ).map { it.toDomain(myMemberId) }
+                        ).map { it.toDomain(myMemberId) },
                 )
             }
 

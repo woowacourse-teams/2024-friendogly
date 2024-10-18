@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
-import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
