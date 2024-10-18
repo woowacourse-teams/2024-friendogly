@@ -119,9 +119,9 @@ public class PlaygroundQueryService {
                             .map(Pet::getImageUrl)
                             .toList()
             );
-
-            petImages = cutPetImagesCount(petImages);
         }
+
+        petImages = cutPetImagesCount(petImages);
 
         return new FindPlaygroundSummaryResponse(
                 playgroundId,
