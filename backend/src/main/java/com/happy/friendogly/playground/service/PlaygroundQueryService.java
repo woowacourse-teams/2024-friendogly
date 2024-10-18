@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PlaygroundQueryService {
 
-    private static final int MAX_PET_IMAGE_COUNT = 5;
+    private static final int MAX_PET_PREVIEW_IMAGE_COUNT = 5;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -132,8 +132,8 @@ public class PlaygroundQueryService {
     }
 
     private List<String> cutPetImagesCount(List<String> petImageUrls) {
-        if (petImageUrls.size() > MAX_PET_IMAGE_COUNT) {
-            return petImageUrls.subList(0, MAX_PET_IMAGE_COUNT);
+        if (petImageUrls.size() > MAX_PET_PREVIEW_IMAGE_COUNT) {
+            return petImageUrls.subList(0, MAX_PET_PREVIEW_IMAGE_COUNT);
         }
         return petImageUrls;
     }
