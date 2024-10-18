@@ -7,10 +7,12 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class PlaygroundQueryService {
+
+    private static final int MAX_PET_PREVIEW_IMAGE_COUNT = 5;
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -56,6 +60,11 @@ public class PlaygroundQueryService {
             );
         }
 
+        playgroundPetDetails.sort(Comparator
+                .comparing(PlaygroundPetDetail::isMine).reversed()
+                .thenComparing(Comparator.comparing(PlaygroundPetDetail::isArrival).reversed())
+        );
+
         boolean isParticipating = playgroundMembers.stream()
                 .anyMatch(playgroundMember -> playgroundMember.equalsMemberId(callMemberId));
 
@@ -90,5 +99,42 @@ public class PlaygroundQueryService {
         return playgrounds.stream()
                 .map(playground -> new FindPlaygroundLocationResponse(playground, false))
                 .toList();
+    }
+
+    public FindPlaygroundSummaryResponse findSummary(Long playgroundId) {
+        List<PlaygroundMember> playgroundMembers = playgroundMemberRepository
+                .findAllByPlaygroundIdOrderByIsInsideDesc(playgroundId);
+
+        int totalPetCount = 0;
+        int arrivedPetCount = 0;
+        List<String> petImages = new ArrayList<>();
+
+        for (PlaygroundMember playgroundMember : playgroundMembers) {
+            List<Pet> pets = petRepository.findByMemberId(playgroundMember.getMember().getId());
+
+            totalPetCount += pets.size();
+            arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
+            petImages.addAll(
+                    pets.stream()
+                            .map(Pet::getImageUrl)
+                            .toList()
+            );
+        }
+
+        petImages = cutPetImagesCount(petImages);
+
+        return new FindPlaygroundSummaryResponse(
+                playgroundId,
+                totalPetCount,
+                arrivedPetCount,
+                petImages
+        );
+    }
+
+    private List<String> cutPetImagesCount(List<String> petImageUrls) {
+        if (petImageUrls.size() > MAX_PET_PREVIEW_IMAGE_COUNT) {
+            return petImageUrls.subList(0, MAX_PET_PREVIEW_IMAGE_COUNT);
+        }
+        return petImageUrls;
     }
 }
