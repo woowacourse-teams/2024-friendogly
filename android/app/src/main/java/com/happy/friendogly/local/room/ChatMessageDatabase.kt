@@ -11,7 +11,7 @@ import com.happy.friendogly.local.model.ChatMessageEntity
 
 @Database(
     entities = [ChatMessageEntity::class, ChatMemberEntity::class],
-    version = 1,
+    version = 2,
 )
 @TypeConverters(value = [LocalDateTimeConverter::class, MessageTypeConverter::class])
 abstract class ChatMessageDatabase : RoomDatabase() {

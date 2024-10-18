@@ -96,13 +96,13 @@ fun ChatMessageEntity.toDomain(myMemberId: Long): ChatComponent =
         MessageTypeEntity.CHAT -> {
             if (myMemberId == member.id) {
                 Message.Mine(
-                    content = content!!,
+                    content = content ?: throw IllegalArgumentException("message content가 null 입니다."),
                     member = member.toDomain(),
                     createdAt = createdAt,
                 )
             } else {
                 Message.Other(
-                    content = content!!,
+                    content = content ?: throw IllegalArgumentException("message content가 null 입니다."),
                     member = member.toDomain(),
                     createdAt = createdAt,
                 )
