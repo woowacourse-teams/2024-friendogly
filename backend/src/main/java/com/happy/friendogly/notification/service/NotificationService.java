@@ -10,4 +10,6 @@ public interface NotificationService {
     void sendFootprintNotification(String title, String content, List<String> receiverTokens);
 
     void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response);
+
+    void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens);
 }

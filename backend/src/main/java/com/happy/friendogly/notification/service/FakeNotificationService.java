@@ -23,4 +23,9 @@ public class FakeNotificationService implements NotificationService {
     public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response) {
 
     }
+
+    @Override
+    public void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens) {
+
+    }
 }
