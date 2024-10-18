@@ -39,4 +39,6 @@ public interface PlaygroundMemberRepository extends JpaRepository<PlaygroundMemb
     boolean existsByPlaygroundId(Long playgroundId);
 
     void deleteAllByIsInsideAndExitTimeBefore(boolean isInside, LocalDateTime exitTime);
+
+    List<PlaygroundMember> findAllByIsInside(boolean isInside);
 }
