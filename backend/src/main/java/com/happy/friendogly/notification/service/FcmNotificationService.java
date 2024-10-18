@@ -2,6 +2,7 @@ package com.happy.friendogly.notification.service;
 
 import static com.happy.friendogly.notification.domain.NotificationType.CHAT;
 import static com.happy.friendogly.notification.domain.NotificationType.FOOTPRINT;
+import static com.happy.friendogly.notification.domain.NotificationType.PLAYGROUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.google.firebase.FirebaseApp;
@@ -69,6 +70,15 @@ public class FcmNotificationService implements NotificationService {
         );
 
         sendNotificationWithType(CHAT, "채팅", data, receiverTokens);
+    }
+
+    @Override
+    public void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens) {
+        Map<String, String> data = Map.of(
+                "body", content
+        );
+
+        sendNotificationWithType(PLAYGROUND, title, data, receiverTokens);
     }
 
     private void sendNotificationWithType(

@@ -38,6 +38,9 @@ public class PlaygroundMember {
     @Column(name = "is_inside", nullable = false)
     private boolean isInside;
 
+    @Column(name = "participate_time")
+    private LocalDateTime participateTime;
+
     @Column(name = "exit_time")
     private LocalDateTime exitTime;
 
@@ -46,12 +49,14 @@ public class PlaygroundMember {
             Member member,
             String message,
             boolean isInside,
+            LocalDateTime participateTime,
             LocalDateTime exitTime
     ) {
         this.playground = playground;
         this.member = member;
         this.message = message;
         this.isInside = isInside;
+        this.participateTime = participateTime;
         this.exitTime = exitTime;
     }
 
@@ -59,7 +64,7 @@ public class PlaygroundMember {
             Playground playground,
             Member member
     ) {
-        this(playground, member, "", false, null);
+        this(playground, member, "", false, LocalDateTime.now(), null);
     }
 
     public boolean equalsMemberId(Long memberId) {

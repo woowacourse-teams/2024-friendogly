@@ -14,6 +14,7 @@ import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationRespon
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                         member1,
                         "message",
                         true,
+                        LocalDateTime.now(),
                         null
                 )
         );
@@ -50,6 +52,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                         member2,
                         "message",
                         false,
+                        LocalDateTime.now(),
                         null
                 )
         );
@@ -82,6 +85,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                 arrivedMember,
                 "도착",
                 true,
+                LocalDateTime.now(),
                 null
         ));
         savePlaygroundMember(playground, me);
@@ -131,6 +135,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
                         member1,
                         "message",
                         false,
+                        LocalDateTime.now(),
                         null
                 )
         );
@@ -166,7 +171,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         Pet pet = savePet(member);
         Playground playground = savePlayground();
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
-                new PlaygroundMember(playground, member, "message", true, null)
+                new PlaygroundMember(playground, member, "message", true, LocalDateTime.now(), null)
         );
 
         // when

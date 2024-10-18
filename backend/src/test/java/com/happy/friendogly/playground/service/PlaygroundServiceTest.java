@@ -9,6 +9,7 @@ import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.support.ServiceTest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public abstract class PlaygroundServiceTest extends ServiceTest {
 
@@ -60,6 +61,7 @@ public abstract class PlaygroundServiceTest extends ServiceTest {
                         member,
                         "message",
                         true,
+                        LocalDateTime.now(),
                         null
                 )
         );
