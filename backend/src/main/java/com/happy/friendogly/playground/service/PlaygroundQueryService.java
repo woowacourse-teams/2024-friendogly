@@ -120,7 +120,7 @@ public class PlaygroundQueryService {
                             .toList()
             );
 
-            petImages = cutPeImagesCount(petImages);
+            petImages = cutPetImagesCount(petImages);
         }
 
         return new FindPlaygroundSummaryResponse(
@@ -131,7 +131,7 @@ public class PlaygroundQueryService {
         );
     }
 
-    private List<String> cutPeImagesCount(List<String> petImageUrls) {
+    private List<String> cutPetImagesCount(List<String> petImageUrls) {
         if (petImageUrls.size() > MAX_PET_IMAGE_COUNT) {
             return petImageUrls.subList(0, MAX_PET_IMAGE_COUNT);
         }
