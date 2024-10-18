@@ -132,15 +132,17 @@ public class PlaygroundCommandService {
         Playground playground = playgroundMember.getPlayground();
 
         Location location = new Location(request.latitude(), request.longitude());
-        boolean isInsideBoundary = playground.isInsideBoundary(location);
 
-        if (!isInsideBoundary) {
+        boolean pastIsInsideBoundary = playgroundMember.isInside();
+        boolean changedIsInsideBoundary = playground.isInsideBoundary(location);
+
+        if (pastIsInsideBoundary && !changedIsInsideBoundary) {
             playgroundMember.updateExitTime(LocalDateTime.now());
         }
 
-        playgroundMember.updateIsInside(isInsideBoundary);
+        playgroundMember.updateIsInside(changedIsInsideBoundary);
 
-        return new UpdatePlaygroundArrivalResponse(isInsideBoundary);
+        return new UpdatePlaygroundArrivalResponse(changedIsInsideBoundary);
     }
 
     public UpdatePlaygroundMemberMessageResponse updateMemberMessage(
@@ -154,6 +156,14 @@ public class PlaygroundCommandService {
 
     @Scheduled(cron = EVERY_HOUR)
     public void deleteJoinMemberIntervalTime() {
+        LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
+
+        List<PlaygroundMember> deletePlaygroundMembers = playgroundMemberRepository.findAllByIsInside(false).stream()
+                .filter(p -> p.getExitTime() == null && p.getParticipateTime().isBefore(twoHoursAgo))
+                .toList();
+
+        playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
+
         playgroundMemberRepository.deleteAllByIsInsideAndExitTimeBefore(
                 false,
                 LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_TIME)
