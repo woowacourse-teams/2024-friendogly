@@ -713,6 +713,7 @@ class PlaygroundFragment :
         val myPlayground = viewModel.myPlayground.value
         if (myPlayground != null) {
             myPlayground.marker.map = map
+            myPlayground.circleOverlay.map = map
             myPlayground.circleOverlay.center = myPlayground.marker.position
             pathOverlay.map = map
         }
