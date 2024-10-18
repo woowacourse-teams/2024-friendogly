@@ -7,9 +7,12 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.Location
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
@@ -59,7 +62,16 @@ class PlaygroundLocationService : Service() {
 
     private fun startForegroundService(playStatusTitle: String) {
         createNotificationChannel()
-        startForeground(SERVICE_ID, createNotification(playStatusTitle))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ServiceCompat.startForeground(
+                this,
+                SERVICE_ID,
+                createNotification(playStatusTitle),
+                FOREGROUND_SERVICE_TYPE_LOCATION,
+            )
+        } else {
+            startForeground(SERVICE_ID, createNotification(playStatusTitle))
+        }
         locationManager.startLocationUpdate()
     }
 

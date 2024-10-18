@@ -2,7 +2,7 @@ package com.happy.friendogly.presentation.ui.playground
 
 import android.app.Activity
 import android.content.Context
-import android.content.Context.RECEIVER_NOT_EXPORTED
+import android.content.Context.RECEIVER_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Rect
@@ -583,19 +583,14 @@ class PlaygroundFragment :
                 addAction(PlaygroundLocationReceiver.ACTION_UPDATE_LOCATION)
                 addAction(PlaygroundLocationReceiver.ACTION_LEAVE_PLAYGROUND)
             }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(
                 playgroundReceiver,
                 intentFilter,
-                RECEIVER_NOT_EXPORTED,
+                RECEIVER_EXPORTED,
             )
         } else {
-            requireContext().registerReceiver(
-                playgroundReceiver,
-                intentFilter,
-                RECEIVER_NOT_EXPORTED,
-            )
+            requireContext().registerReceiver(playgroundReceiver, intentFilter)
         }
     }
 
