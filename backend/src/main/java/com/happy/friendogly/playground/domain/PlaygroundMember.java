@@ -56,6 +56,7 @@ public class PlaygroundMember {
         this.member = member;
         this.message = message;
         this.isInside = isInside;
+        this.participateTime = participateTime;
         this.exitTime = exitTime;
     }
 
