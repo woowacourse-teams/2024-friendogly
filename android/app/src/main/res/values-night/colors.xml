@@ -32,8 +32,8 @@
     <color name="coral10">#FFF5F3</color>
     <color name="coral05">#FFF9F8</color>
 
-
-    <color name="blue">#4D6FFF</color>
-    <color name="map_circle">#4D8DFF</color>
-    <color name="lottie_layout">#4D4D4D</color>
+    <color name="green400">#009724</color>
+    <color name="blue">#4A69CC</color>
+    <color name="map_circle">#336083E6</color>
+    <color name="lottie_layout">#33757575</color>
 </resources>
