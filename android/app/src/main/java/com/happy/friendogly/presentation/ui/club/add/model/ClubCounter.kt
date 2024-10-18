@@ -6,7 +6,7 @@ class ClubCounter(val count: Int = MAX_COUNT) {
     }
 
     companion object {
-        const val MAX_COUNT = 5
+        const val MAX_COUNT = 10
         const val MIN_COUNT = 1
     }
 }
