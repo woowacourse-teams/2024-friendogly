@@ -100,7 +100,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
         Member member = saveMember("김도선");
         double latitudeA = 37.516382;
         double longitude = 127.120040;
-        double latitude299mFromA = GeoCalculator.calculateLatitudeOffset(latitudeA, 1);
+        double latitude299mFromA = GeoCalculator.calculateLatitudeOffset(latitudeA, 299);
         savePlayground(latitudeA, longitude);
         SavePlaygroundRequest request = new SavePlaygroundRequest(latitude299mFromA, longitude);
 
