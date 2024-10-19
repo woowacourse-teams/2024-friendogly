@@ -9,7 +9,6 @@ import com.happy.friendogly.remote.api.MyClubService
 import com.happy.friendogly.remote.api.PetService
 import com.happy.friendogly.remote.api.PlaygroundService
 import com.happy.friendogly.remote.api.SearchingClubService
-import com.happy.friendogly.remote.api.WoofService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
