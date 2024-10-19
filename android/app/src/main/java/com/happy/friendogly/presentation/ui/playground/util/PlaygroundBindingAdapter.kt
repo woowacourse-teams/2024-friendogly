@@ -69,13 +69,13 @@ fun TextView.bindPetGender(petGender: Gender?) {
 @BindingAdapter("myPlaygroundBtnVisibility")
 fun TextView.bindMyPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("playgroundLocationBtnVisibility")
 fun View.bindPlaygroundLocationBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("registeringVisibility")
@@ -113,7 +113,8 @@ fun View.bindPlaygroundInfoVisibility(
 ) {
     isVisible =
         if (playgroundInfo != null && (
-                uiState is PlaygroundUiState.FindingPlayground ||
+                uiState is PlaygroundUiState.Loading ||
+                    uiState is PlaygroundUiState.FindingPlayground ||
                     uiState is PlaygroundUiState.ViewingPlaygroundInfo
             )
         ) {
@@ -127,7 +128,7 @@ fun View.bindPlaygroundInfoVisibility(
 @BindingAdapter("uiState")
 fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("uiState", "refreshBtnVisibility")
@@ -160,8 +161,7 @@ fun TextView.bindRegisterPlaygroundBtnClickable(
 fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
-        return TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
             .toInt()
     }
 

@@ -379,13 +379,13 @@ class PlaygroundFragment :
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                    createCircleOverlay(
-                                        position =
-                                            LatLng(
-                                                playground.latitude,
-                                                playground.longitude,
-                                            ),
+                                createCircleOverlay(
+                                    position =
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
                                     ),
+                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearFootprintMarkers)
@@ -751,7 +751,8 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng =
+        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -875,7 +876,7 @@ class PlaygroundFragment :
                     bottomSheet: View,
                     newState: Int,
                 ) {
-                    if (viewModel.uiState.value == PlaygroundUiState.ViewingPlaygroundInfo &&
+                    if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo &&
                         newState == BottomSheetBehavior.STATE_COLLAPSED
                     ) {
                         reduceMarkerSize()
