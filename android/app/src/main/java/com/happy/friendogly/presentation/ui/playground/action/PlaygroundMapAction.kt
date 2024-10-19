@@ -15,5 +15,15 @@ sealed interface PlaygroundMapAction {
 
     data object ScanNearPlaygrounds : PlaygroundMapAction
 
+    data object ShowRegisteringPlaygroundScreen : PlaygroundMapAction
+
+    data object HideRegisteringPlaygroundScreen : PlaygroundMapAction
+
     data object StartLocationService : PlaygroundMapAction
+
+    data object NoFollowTrackingMode : PlaygroundMapAction
+
+    data object FollowTrackingMode : PlaygroundMapAction
+
+    data object FaceTrackingMode : PlaygroundMapAction
 }

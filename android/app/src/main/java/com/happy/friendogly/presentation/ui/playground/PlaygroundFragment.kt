@@ -46,9 +46,6 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlaygroundMarker
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeNearPlaygroundMarkers
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundTrackingModeAction.FaceTrackingMode
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundTrackingModeAction.FollowTrackingMode
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundTrackingModeAction.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.playground.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.playground.adapter.PetSummaryAdapter
 import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
@@ -58,6 +55,9 @@ import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocatio
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService.Companion.ACTION_START
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundUiModel
+import com.happy.friendogly.presentation.ui.playground.util.ANIMATE_DURATION_MILLIS
+import com.happy.friendogly.presentation.ui.playground.util.hideViewAnimation
+import com.happy.friendogly.presentation.ui.playground.util.showViewAnimation
 import com.happy.friendogly.presentation.ui.playground.viewmodel.PlaygroundViewModel
 import com.happy.friendogly.presentation.utils.isSystemInDarkMode
 import com.naver.maps.geometry.LatLng
@@ -66,6 +66,7 @@ import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
 import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.LocationTrackingMode.Face
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -127,9 +128,7 @@ class PlaygroundFragment :
         onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground) {
-                        requireActivity().finish()
-                    } else {
+                    if (viewModel.uiState.value !is PlaygroundUiState.FindingPlayground) {
                         viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
                     }
                 }
@@ -295,9 +294,10 @@ class PlaygroundFragment :
         }
 
         map.addOnCameraIdleListener {
-            if (viewModel.uiState.value is PlaygroundUiState.RegisteringPlayground) {
+            val uiState = viewModel.uiState.value ?: return@addOnCameraIdleListener
+            if (uiState is PlaygroundUiState.RegisteringPlayground) {
                 viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = true)
-                getAddress(map.cameraPosition.target)
+                getAddress(uiState, map.cameraPosition.target)
             }
         }
     }
@@ -315,17 +315,16 @@ class PlaygroundFragment :
                         .createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
-                is PlaygroundUiState.FindingPlayground -> hideRegisterPlaygroundScreen()
-                is PlaygroundUiState.RegisteringPlayground -> showRegisterPlaygroundScreen(uiState)
+                is PlaygroundUiState.FindingPlayground -> {
+                    viewModel.showMyPlayground(map)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+
+                is PlaygroundUiState.RegisteringPlayground -> {
+                    setUpRegisteringCircleOverlay(uiState, map.cameraPosition.target)
+                }
 
                 else -> return@observe
-            }
-        }
-
-        viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
-            if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
-                viewModel.hideMyPlayground()
-                viewModel.updatePlaygrounds()
             }
         }
 
@@ -364,19 +363,9 @@ class PlaygroundFragment :
             }
         }
 
-        viewModel.nearPlaygrounds.observe(viewLifecycleOwner) {
-            clearNearPlaygroundMarkers()
-            markNearPlaygroundMarkers()
-        }
-
         viewModel.mapAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is MakeMyPlaygroundMarker -> {
-                    val previousMyFootprintMarker = viewModel.myPlayground.value
-                    if (previousMyFootprintMarker != null) {
-                        previousMyFootprintMarker.marker.map = null
-                    }
-
                     val marker = createMarker(playground = event.myPlayground)
                     val circleOverlay = createCircleOverlay(position = marker.position)
                     val pathOverlay = createPathOverlay(marker.position)
@@ -386,22 +375,19 @@ class PlaygroundFragment :
                 is MakeNearPlaygroundMarkers -> {
                     val nearFootprintMarkers =
                         event.nearPlaygrounds.map { playground ->
-                            val marker = createMarker(playground = playground)
-                            val circleOverlay =
-                                createCircleOverlay(
-                                    position =
-                                        LatLng(
-                                            playground.latitude,
-                                            playground.longitude,
-                                        ),
-                                )
                             PlaygroundUiModel(
                                 id = playground.id,
-                                marker = marker,
-                                circleOverlay = circleOverlay,
+                                marker = createMarker(playground = playground),
+                                circleOverlay =
+                                    createCircleOverlay(
+                                        position =
+                                            LatLng(
+                                                playground.latitude,
+                                                playground.longitude,
+                                            ),
+                                    ),
                             )
                         }
-                    clearNearPlaygroundMarkers()
                     viewModel.loadNearPlaygrounds(nearFootprintMarkers)
                 }
 
@@ -411,17 +397,34 @@ class PlaygroundFragment :
 
                 is PlaygroundMapAction.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
+                is PlaygroundMapAction.ShowRegisteringPlaygroundScreen -> {
+                    val uiState =
+                        (viewModel.uiState.value) as PlaygroundUiState.RegisteringPlayground
+                    getAddress(uiState, map.cameraPosition.target)
+                    binding.layoutWoofRegisterMarker.showViewAnimation()
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            showHelpBalloon(textRestId = R.string.playground_register_help)
+                        },
+                        DELAY_MILLIS,
+                    )
+                }
+
+                is PlaygroundMapAction.HideRegisteringPlaygroundScreen -> {
+                    binding.layoutWoofRegisterMarker.hideViewAnimation()
+                }
+
                 is PlaygroundMapAction.StartLocationService -> startLocationService()
-            }
-        }
 
-        viewModel.changeTrackingModeAction.observeEvent(viewLifecycleOwner) { event ->
-            when (event) {
-                is NoFollowTrackingMode -> map.locationTrackingMode = LocationTrackingMode.NoFollow
+                is PlaygroundMapAction.NoFollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.NoFollow
 
-                is FollowTrackingMode -> map.locationTrackingMode = LocationTrackingMode.Follow
+                is PlaygroundMapAction.FollowTrackingMode ->
+                    map.locationTrackingMode =
+                        LocationTrackingMode.Follow
 
-                is FaceTrackingMode -> map.locationTrackingMode = LocationTrackingMode.Face
+                is PlaygroundMapAction.FaceTrackingMode -> map.locationTrackingMode = Face
             }
         }
 
@@ -595,14 +598,15 @@ class PlaygroundFragment :
         locationSource.activate { location ->
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-            setupObserving()
             moveCameraCenterPosition(latLng)
             Handler(Looper.getMainLooper()).postDelayed(
                 {
                     map.locationTrackingMode = LocationTrackingMode.Follow
                 },
-                DELAY_MILLIS,
+                ANIMATE_DURATION_MILLIS,
             )
+            setupObserving()
+            viewModel.updatePlaygrounds()
         }
     }
 
@@ -685,24 +689,6 @@ class PlaygroundFragment :
     private fun markerIcon(playground: Playground): Int =
         if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
 
-    private fun showRegisterPlaygroundScreen(uiState: PlaygroundUiState.RegisteringPlayground) {
-        viewModel.hideMyPlayground()
-        setUpRegisteringCircleOverlay(uiState, map.cameraPosition.target)
-        getAddress(map.cameraPosition.target)
-
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                showHelpBalloon(textRestId = R.string.playground_register_help)
-            },
-            DELAY_MILLIS,
-        )
-    }
-
-    private fun hideRegisterPlaygroundScreen() {
-        viewModel.showMyPlayground(map)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
     private fun reduceMarkerSize() {
         val recentlyClickedMarker = viewModel.recentlyClickedPlayground.value ?: return
         recentlyClickedMarker.width = MARKER_DEFAULT_WIDTH
@@ -712,14 +698,6 @@ class PlaygroundFragment :
     private fun enlargeMarkerSize(marker: Marker) {
         marker.width = MARKER_CLICKED_WIDTH
         marker.height = MARKER_CLICKED_HEIGHT
-    }
-
-    private fun clearNearPlaygroundMarkers() {
-        val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
-        nearPlaygroundMarkers.forEach { playgroundMarker ->
-            playgroundMarker.marker.map = null
-            playgroundMarker.circleOverlay.map = null
-        }
     }
 
     private fun adjustPosition(marker: Marker): LatLng {
@@ -733,7 +711,10 @@ class PlaygroundFragment :
         return LatLng(latitude, longitude)
     }
 
-    private fun getAddress(position: LatLng) {
+    private fun getAddress(
+        uiState: PlaygroundUiState.RegisteringPlayground,
+        position: LatLng,
+    ) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
         val addressLatLng = convertLtnLng(position)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -742,27 +723,30 @@ class PlaygroundFragment :
                 addressLatLng.longitude,
                 1,
             ) { addresses ->
-                showAddress(addresses)
+                updateAddress(uiState, addresses)
             }
         } else {
             val addresses =
                 geocoder.getFromLocation(addressLatLng.latitude, addressLatLng.longitude, 1)
                     ?: return
-            showAddress(addresses)
+            updateAddress(uiState, addresses)
         }
     }
 
-    private fun showAddress(addresses: List<Address>) {
+    private fun updateAddress(
+        uiState: PlaygroundUiState.RegisteringPlayground,
+        addresses: List<Address>,
+    ) {
         if (addresses.isEmpty()) return
-        val address = addresses[0]
-        val addressLine =
-            address
+        val firstAddress = addresses[0]
+        val address =
+            firstAddress
                 .getAddressLine(0)
                 .replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
-        viewModel.updateAddressLine(addressLine)
+        viewModel.updateAddress(uiState.copy(address = address))
 
-        val countryName = address.countryName
+        val countryName = firstAddress.countryName
         val inKorea = countryName == resources.getString(R.string.woof_address_korea)
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
@@ -827,14 +811,6 @@ class PlaygroundFragment :
         )
     }
 
-    private fun markNearPlaygroundMarkers() {
-        val nearPlaygroundMarkers = viewModel.nearPlaygrounds.value ?: return
-        nearPlaygroundMarkers.forEach { playgroundMarker ->
-            playgroundMarker.marker.map = map
-            playgroundMarker.circleOverlay.map = map
-        }
-    }
-
     private fun setupRecyclerView() {
         binding.rcvPlaygroundPet.itemAnimator = null
         binding.rcvPlaygroundPet.adapter = petDetailAdapter
@@ -890,7 +866,7 @@ class PlaygroundFragment :
                     bottomSheet: View,
                     slideOffset: Float,
                 ) {
-                    if (viewModel.uiState.value == PlaygroundUiState.FindingPlayground && slideOffset >= 0.4f) {
+                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground && slideOffset >= 0.4f) {
                         viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
                 }
@@ -977,14 +953,12 @@ class PlaygroundFragment :
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
-        private const val MAP_LOGO_MARGIN = 20
+        private const val MAP_LOGO_MARGIN = 30
         private const val EXPANDED_PET_SIZE = 2
-        private const val DEFAULT_MESSAGE_UPDATED = false
-
-        // New constants
         private const val PATH_OVERLAY_WIDTH = 30
         private const val PATH_OVERLAY_OUTLINE_WIDTH = 0
         private const val PATH_OVERLAY_PATTERN_INTERVAL = 60
+        private const val DEFAULT_MESSAGE_UPDATED = false
 
         const val EXTRA_MESSAGE_UPDATED = "messageUpdated"
         const val TAG = "PlaygroundFragment"

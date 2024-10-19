@@ -9,8 +9,10 @@ sealed interface PlaygroundUiState {
 
     data object FindingPlayground : PlaygroundUiState
 
-    data class RegisteringPlayground(val circleOverlay: CircleOverlay = CircleOverlay()) :
-        PlaygroundUiState
+    data class RegisteringPlayground(
+        val circleOverlay: CircleOverlay = CircleOverlay(),
+        var address: String? = null,
+    ) : PlaygroundUiState
 
     data object ViewingPlaygroundSummary : PlaygroundUiState
 

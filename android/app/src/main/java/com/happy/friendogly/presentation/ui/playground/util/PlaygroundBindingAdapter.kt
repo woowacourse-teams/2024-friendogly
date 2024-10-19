@@ -80,16 +80,7 @@ fun View.bindPlaygroundLocationBtnVisibility(uiState: PlaygroundUiState?) {
 
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState is PlaygroundUiState.RegisteringPlayground)
-}
-
-@BindingAdapter("registeringPlaygroundAnimation")
-fun View.bindRegisteringAnimation(uiState: PlaygroundUiState?) {
-    if (uiState is PlaygroundUiState.RegisteringPlayground) {
-        showViewAnimation()
-    } else {
-        hideViewAnimation()
-    }
+    isVisible = uiState is PlaygroundUiState.RegisteringPlayground
 }
 
 @BindingAdapter("viewingPlaygroundSummaryAnimation")
@@ -234,4 +225,9 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
 @BindingAdapter("helpBtnVisibility")
 fun ImageButton.bindHelpBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible = uiState is PlaygroundUiState.RegisteringPlayground
+}
+
+@BindingAdapter("addressText")
+fun TextView.bindAddressText(uiState: PlaygroundUiState?) {
+    if (uiState is PlaygroundUiState.RegisteringPlayground) text = uiState.address
 }
