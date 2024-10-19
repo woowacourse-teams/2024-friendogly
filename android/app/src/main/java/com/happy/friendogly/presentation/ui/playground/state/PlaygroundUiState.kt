@@ -1,5 +1,7 @@
 package com.happy.friendogly.presentation.ui.playground.state
 
+import com.naver.maps.map.overlay.CircleOverlay
+
 sealed interface PlaygroundUiState {
     data object Loading : PlaygroundUiState
 
@@ -7,7 +9,8 @@ sealed interface PlaygroundUiState {
 
     data object FindingPlayground : PlaygroundUiState
 
-    data object RegisteringPlayground : PlaygroundUiState
+    data class RegisteringPlayground(val circleOverlay: CircleOverlay = CircleOverlay()) :
+        PlaygroundUiState
 
     data object ViewingPlaygroundSummary : PlaygroundUiState
 

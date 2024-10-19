@@ -69,13 +69,13 @@ fun TextView.bindPetGender(petGender: Gender?) {
 @BindingAdapter("myPlaygroundBtnVisibility")
 fun TextView.bindMyPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("playgroundLocationBtnVisibility")
 fun View.bindPlaygroundLocationBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("registeringVisibility")
@@ -103,12 +103,12 @@ fun View.bindViewingPlaygroundSummaryAnimation(uiState: PlaygroundUiState?) {
 
 @BindingAdapter("loadingVisibility")
 fun FrameLayout.bindLoadingVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState == PlaygroundUiState.Loading)
+    isVisible = (uiState is PlaygroundUiState.Loading)
 }
 
 @BindingAdapter("loadingAnimation")
 fun LottieAnimationView.bindLoadingAnimation(uiState: PlaygroundUiState?) {
-    if (uiState == PlaygroundUiState.Loading) {
+    if (uiState is PlaygroundUiState.Loading) {
         playAnimation()
     } else {
         pauseAnimation()
@@ -122,9 +122,9 @@ fun View.bindPlaygroundInfoVisibility(
 ) {
     isVisible =
         if (playgroundInfo != null && (
-                    uiState == PlaygroundUiState.FindingPlayground ||
-                            uiState == PlaygroundUiState.ViewingPlaygroundInfo
-                    )
+                uiState is PlaygroundUiState.FindingPlayground ||
+                    uiState is PlaygroundUiState.ViewingPlaygroundInfo
+            )
         ) {
             bringToFront()
             true
@@ -136,7 +136,7 @@ fun View.bindPlaygroundInfoVisibility(
 @BindingAdapter("uiState")
 fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState != PlaygroundUiState.RegisteringPlayground() && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("uiState", "refreshBtnVisibility")
@@ -191,7 +191,7 @@ fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
 
 @BindingAdapter("registerLocationBtnVisibility")
 fun View.bindRegisterLocationBtnVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState == PlaygroundUiState.RegisteringPlayground)
+    isVisible = (uiState is PlaygroundUiState.RegisteringPlayground)
 }
 
 @BindingAdapter("playgroundAction", "playgroundBtn", "playgroundId")
@@ -233,5 +233,5 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
 
 @BindingAdapter("helpBtnVisibility")
 fun ImageButton.bindHelpBtnVisibility(uiState: PlaygroundUiState?) {
-    isVisible = uiState == PlaygroundUiState.RegisteringPlayground
+    isVisible = uiState is PlaygroundUiState.RegisteringPlayground
 }

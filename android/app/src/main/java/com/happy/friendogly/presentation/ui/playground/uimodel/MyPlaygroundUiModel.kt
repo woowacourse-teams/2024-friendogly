@@ -8,5 +8,5 @@ data class MyPlaygroundUiModel(
     val id: Long,
     val marker: Marker,
     val circleOverlay: CircleOverlay,
-    val pathOverlay: PathOverlay
+    val pathOverlay: PathOverlay,
 )

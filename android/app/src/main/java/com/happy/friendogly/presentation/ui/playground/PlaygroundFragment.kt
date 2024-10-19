@@ -105,7 +105,6 @@ class PlaygroundFragment :
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     private val mapView: MapView by lazy { binding.mapView }
-    private val registeringCircleOverlay: CircleOverlay by lazy { CircleOverlay() }
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -267,28 +266,31 @@ class PlaygroundFragment :
         }
 
         map.addOnCameraChangeListener { reason, _ ->
+            val uiState = viewModel.uiState.value ?: return@addOnCameraChangeListener
             if (reason == REASON_GESTURE) {
                 reduceMarkerSize()
                 viewModel.changeTrackingModeToNoFollow()
 
-                if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
-                    viewModel.refreshBtnVisible.value == false
-                ) {
-                    viewModel.updateRefreshBtnVisibility(visible = true)
-                }
+                when (uiState) {
+                    is PlaygroundUiState.FindingPlayground -> {
+                        if (viewModel.refreshBtnVisible.value == false) {
+                            viewModel.updateRefreshBtnVisibility(
+                                visible = true,
+                            )
+                        }
+                    }
 
-                if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo ||
-                    viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundSummary
-                ) {
-                    viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
-                }
-            }
+                    is PlaygroundUiState.RegisteringPlayground -> {
+                        uiState.circleOverlay.center = map.cameraPosition.target
+                        viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = false)
+                    }
 
-            if (viewModel.uiState.value is PlaygroundUiState.RegisteringPlayground) {
-                registeringCircleOverlay.center = map.cameraPosition.target
-                viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = false)
-            } else {
-                registeringCircleOverlay.map = null
+                    PlaygroundUiState.ViewingPlaygroundSummary, PlaygroundUiState.ViewingPlaygroundInfo -> {
+                        viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
+                    }
+
+                    else -> return@addOnCameraChangeListener
+                }
             }
         }
 
@@ -314,7 +316,7 @@ class PlaygroundFragment :
                         .show(parentFragmentManager, tag)
 
                 is PlaygroundUiState.FindingPlayground -> hideRegisterPlaygroundScreen()
-                is PlaygroundUiState.RegisteringPlayground -> showRegisterPlaygroundScreen()
+                is PlaygroundUiState.RegisteringPlayground -> showRegisterPlaygroundScreen(uiState)
 
                 else -> return@observe
             }
@@ -388,10 +390,10 @@ class PlaygroundFragment :
                             val circleOverlay =
                                 createCircleOverlay(
                                     position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
-                                    ),
+                                        LatLng(
+                                            playground.latitude,
+                                            playground.longitude,
+                                        ),
                                 )
                             PlaygroundUiModel(
                                 id = playground.id,
@@ -604,22 +606,26 @@ class PlaygroundFragment :
         }
     }
 
-    private fun setupRegisteringCircleOverlay(position: LatLng) {
-        registeringCircleOverlay.apply {
+    private fun setUpRegisteringCircleOverlay(
+        uiState: PlaygroundUiState.RegisteringPlayground,
+        position: LatLng,
+    ) {
+        uiState.circleOverlay.apply {
             center = position
             radius = PLAYGROUND_RADIUS
             color = resources.getColor(R.color.map_circle, null)
         }
-        registeringCircleOverlay.map = map
+        uiState.circleOverlay.map = map
     }
 
     private fun createPathOverlay(position: LatLng): PathOverlay {
         val pathOverlay = PathOverlay()
         pathOverlay.apply {
-            coords = listOf(
-                latLng,
-                position
-            )
+            coords =
+                listOf(
+                    latLng,
+                    position,
+                )
             width = PATH_OVERLAY_WIDTH
             outlineWidth = PATH_OVERLAY_OUTLINE_WIDTH
             patternImage = OverlayImage.fromResource(R.drawable.ic_footprint)
@@ -630,7 +636,6 @@ class PlaygroundFragment :
 
         return pathOverlay
     }
-
 
     private fun moveCameraCenterPosition(position: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
@@ -680,9 +685,9 @@ class PlaygroundFragment :
     private fun markerIcon(playground: Playground): Int =
         if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
 
-    private fun showRegisterPlaygroundScreen() {
+    private fun showRegisterPlaygroundScreen(uiState: PlaygroundUiState.RegisteringPlayground) {
         viewModel.hideMyPlayground()
-        setupRegisteringCircleOverlay(map.cameraPosition.target)
+        setUpRegisteringCircleOverlay(uiState, map.cameraPosition.target)
         getAddress(map.cameraPosition.target)
 
         Handler(Looper.getMainLooper()).postDelayed(
@@ -695,7 +700,6 @@ class PlaygroundFragment :
 
     private fun hideRegisterPlaygroundScreen() {
         viewModel.showMyPlayground(map)
-        registeringCircleOverlay.map = null
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
@@ -763,8 +767,7 @@ class PlaygroundFragment :
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng =
-        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
