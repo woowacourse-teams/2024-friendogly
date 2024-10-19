@@ -57,7 +57,7 @@ import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocatio
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService.Companion.ACTION_START
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
+import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.viewmodel.PlaygroundViewModel
 import com.happy.friendogly.presentation.utils.isSystemInDarkMode
 import com.naver.maps.geometry.LatLng
@@ -89,6 +89,9 @@ import kotlin.math.sin
 class PlaygroundFragment :
     Fragment(),
     OnMapReadyCallback {
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
     private var _binding: FragmentPlaygroundBinding? = null
     private val binding get() = _binding!!
     private var snackbar: Snackbar? = null
@@ -103,7 +106,6 @@ class PlaygroundFragment :
 
     private val mapView: MapView by lazy { binding.mapView }
     private val registeringCircleOverlay: CircleOverlay by lazy { CircleOverlay() }
-    private val pathOverlay: PathOverlay by lazy { PathOverlay() }
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(
             this,
@@ -120,9 +122,6 @@ class PlaygroundFragment :
     private val petSummaryAdapter by lazy { PetSummaryAdapter() }
 
     private val viewModel by viewModels<PlaygroundViewModel>()
-
-    @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -219,13 +218,13 @@ class PlaygroundFragment :
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        initMap(naverMap)
+        setUpMap(naverMap)
         if (locationPermission.hasPermissions()) {
             activateMap()
         }
     }
 
-    private fun initMap(naverMap: NaverMap) {
+    private fun setUpMap(naverMap: NaverMap) {
         map = naverMap
         map.mapType = NaverMap.MapType.Navi
         map.isNightModeEnabled = isSystemInDarkMode()
@@ -263,13 +262,7 @@ class PlaygroundFragment :
             latLng = LatLng(location.latitude, location.longitude)
 
             if (viewModel.myPlayground.value != null && viewModel.uiState.value !is PlaygroundUiState.RegisteringPlayground) {
-                pathOverlay.coords =
-                    listOf(
-                        latLng,
-                        viewModel.myPlayground.value
-                            ?.marker
-                            ?.position,
-                    )
+                viewModel.updatePathOverlay(latLng)
             }
         }
 
@@ -329,7 +322,7 @@ class PlaygroundFragment :
 
         viewModel.myPlayStatus.observe(viewLifecycleOwner) { myPlayStatus ->
             if (myPlayStatus == PlayStatus.NO_PLAYGROUND) {
-                clearMyPlayground()
+                viewModel.hideMyPlayground()
                 viewModel.updatePlaygrounds()
             }
         }
@@ -361,8 +354,6 @@ class PlaygroundFragment :
             stopLocationService()
             if (myPlayground != null) {
                 enlargeMarkerSize(myPlayground.marker)
-                myPlayground.marker.map = map
-                setUpPathOverlay()
                 bottomSheetBehavior.isHideable = false
                 viewModel.updatePlaygroundArrival(latLng)
             } else {
@@ -386,7 +377,8 @@ class PlaygroundFragment :
 
                     val marker = createMarker(playground = event.myPlayground)
                     val circleOverlay = createCircleOverlay(position = marker.position)
-                    viewModel.loadMyPlayground(marker, circleOverlay)
+                    val pathOverlay = createPathOverlay(marker.position)
+                    viewModel.loadMyPlayground(marker, circleOverlay, pathOverlay)
                 }
 
                 is MakeNearPlaygroundMarkers -> {
@@ -401,7 +393,7 @@ class PlaygroundFragment :
                                         playground.longitude,
                                     ),
                                 )
-                            PlaygroundMarkerUiModel(
+                            PlaygroundUiModel(
                                 id = playground.id,
                                 marker = marker,
                                 circleOverlay = circleOverlay,
@@ -621,19 +613,22 @@ class PlaygroundFragment :
         registeringCircleOverlay.map = map
     }
 
-    private fun setUpPathOverlay() {
+    private fun createPathOverlay(position: LatLng): PathOverlay {
+        val pathOverlay = PathOverlay()
         pathOverlay.apply {
             coords = listOf(
                 latLng,
-                viewModel.myPlayground.value?.marker?.position,
+                position
             )
             width = PATH_OVERLAY_WIDTH
             outlineWidth = PATH_OVERLAY_OUTLINE_WIDTH
             patternImage = OverlayImage.fromResource(R.drawable.ic_footprint)
             patternInterval = PATH_OVERLAY_PATTERN_INTERVAL
             color = resources.getColor(R.color.blue, null)
-            map = map
         }
+        pathOverlay.map = map
+
+        return pathOverlay
     }
 
 
@@ -686,12 +681,7 @@ class PlaygroundFragment :
         if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
 
     private fun showRegisterPlaygroundScreen() {
-        val myPlayground = viewModel.myPlayground.value
-        if (myPlayground != null) {
-            myPlayground.marker.map = null
-            myPlayground.circleOverlay.map = null
-            pathOverlay.map = null
-        }
+        viewModel.hideMyPlayground()
         setupRegisteringCircleOverlay(map.cameraPosition.target)
         getAddress(map.cameraPosition.target)
 
@@ -704,13 +694,7 @@ class PlaygroundFragment :
     }
 
     private fun hideRegisterPlaygroundScreen() {
-        val myPlayground = viewModel.myPlayground.value
-        if (myPlayground != null) {
-            myPlayground.marker.map = map
-            myPlayground.circleOverlay.map = map
-            myPlayground.circleOverlay.center = myPlayground.marker.position
-            pathOverlay.map = map
-        }
+        viewModel.showMyPlayground(map)
         registeringCircleOverlay.map = null
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
@@ -743,13 +727,6 @@ class PlaygroundFragment :
         val longitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
 
         return LatLng(latitude, longitude)
-    }
-
-    private fun clearMyPlayground() {
-        val myPlayground = viewModel.myPlayground.value ?: return
-        myPlayground.marker.map = null
-        myPlayground.circleOverlay.map = null
-        pathOverlay.map = null
     }
 
     private fun getAddress(position: LatLng) {
@@ -804,7 +781,7 @@ class PlaygroundFragment :
     }
 
     private fun leavePlayground() {
-        clearMyPlayground()
+        viewModel.hideMyPlayground()
         viewModel.leavePlayground()
         viewModel.updatePlaygrounds()
     }

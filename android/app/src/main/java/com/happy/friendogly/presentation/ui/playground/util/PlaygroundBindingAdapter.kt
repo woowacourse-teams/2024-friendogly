@@ -16,8 +16,8 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
+import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundInfoUiModel
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
@@ -166,7 +166,7 @@ fun TextView.bindRegisterPlaygroundBtnClickable(
 }
 
 @BindingAdapter("btnMargin")
-fun View.bindBtnMargin(myPlayground: PlaygroundMarkerUiModel?) {
+fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue
@@ -197,7 +197,7 @@ fun View.bindRegisterLocationBtnVisibility(uiState: PlaygroundUiState?) {
 @BindingAdapter("playgroundAction", "playgroundBtn", "playgroundId")
 fun AppCompatButton.bindPlaygroundBtn(
     playgroundAction: PlaygroundActionHandler,
-    myPlayground: PlaygroundMarkerUiModel?,
+    myPlayground: MyPlaygroundUiModel?,
     playgroundId: Long,
 ) {
     if (myPlayground != null && myPlayground.id == playgroundId) {

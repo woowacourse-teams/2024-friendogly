@@ -30,9 +30,10 @@ import com.happy.friendogly.presentation.ui.playground.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundSummary
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
+import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundInfoUiModel
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundRegisterBtnUiModel
+import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.util.ANIMATE_DURATION_MILLIS
 import com.happy.friendogly.presentation.utils.logBackBtnClicked
 import com.happy.friendogly.presentation.utils.logCloseBtnClicked
@@ -47,8 +48,10 @@ import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRefreshBtnClicked
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,11 +79,11 @@ constructor(
         MutableLiveData(PlayStatus.NO_PLAYGROUND)
     val myPlayStatus: LiveData<PlayStatus> get() = _myPlayStatus
 
-    private val _myPlayground: MutableLiveData<PlaygroundMarkerUiModel?> = MutableLiveData()
-    val myPlayground: LiveData<PlaygroundMarkerUiModel?> get() = _myPlayground
+    private val _myPlayground: MutableLiveData<MyPlaygroundUiModel?> = MutableLiveData()
+    val myPlayground: LiveData<MyPlaygroundUiModel?> get() = _myPlayground
 
-    private val _nearPlaygrounds: MutableLiveData<List<PlaygroundMarkerUiModel>> = MutableLiveData()
-    val nearPlaygrounds: LiveData<List<PlaygroundMarkerUiModel>> get() = _nearPlaygrounds
+    private val _nearPlaygrounds: MutableLiveData<List<PlaygroundUiModel>> = MutableLiveData()
+    val nearPlaygrounds: LiveData<List<PlaygroundUiModel>> get() = _nearPlaygrounds
 
     private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
     val recentlyClickedPlayground: LiveData<Marker> get() = _recentlyClickedPlayground
@@ -326,16 +329,18 @@ constructor(
     fun loadMyPlayground(
         marker: Marker,
         circleOverlay: CircleOverlay,
+        pathOverlay: PathOverlay
     ) {
         val actionsValue = mapAction.value?.value
         val playground =
             (actionsValue as? PlaygroundMapAction.MakeMyPlaygroundMarker)?.myPlayground ?: return
 
         _myPlayground.value =
-            PlaygroundMarkerUiModel(
+            MyPlaygroundUiModel(
                 id = playground.id,
                 marker = marker,
                 circleOverlay = circleOverlay,
+                pathOverlay = pathOverlay
             )
         _recentlyClickedPlayground.value = myPlayground.value?.marker
     }
@@ -359,7 +364,7 @@ constructor(
         }
     }
 
-    fun loadNearPlaygrounds(markers: List<PlaygroundMarkerUiModel>) {
+    fun loadNearPlaygrounds(markers: List<PlaygroundUiModel>) {
         _nearPlaygrounds.value = markers
         Handler(Looper.getMainLooper()).postDelayed(
             {
@@ -378,6 +383,21 @@ constructor(
                     _alertAction.emit(PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar)
                 }
         }
+    }
+
+    fun showMyPlayground(map: NaverMap) {
+        val myPlayground = myPlayground.value ?: return
+        myPlayground.marker.map = map
+        myPlayground.circleOverlay.map = map
+        myPlayground.circleOverlay.center = myPlayground.marker.position
+        myPlayground.pathOverlay.map = map
+    }
+
+    fun hideMyPlayground() {
+        val myPlayground = myPlayground.value ?: return
+        myPlayground.marker.map = null
+        myPlayground.circleOverlay.map = null
+        myPlayground.pathOverlay.map = null
     }
 
     fun playgroundMessageUpdated() {
@@ -403,6 +423,15 @@ constructor(
 
     fun updateUiState(uiState: PlaygroundUiState) {
         _uiState.value = uiState
+    }
+
+    fun updatePathOverlay(latLng: LatLng) {
+        val myPlayground = myPlayground.value ?: return
+        myPlayground.pathOverlay.coords =
+            listOf(
+                latLng,
+                myPlayground.marker.position
+            )
     }
 
     fun updatePlaygroundArrival(latLng: LatLng) {
@@ -446,6 +475,7 @@ constructor(
         viewModelScope.launch {
             deletePlaygroundLeaveUseCase()
                 .onSuccess {
+                    hideMyPlayground()
                     _myPlayStatus.value = PlayStatus.NO_PLAYGROUND
                     _myPlayground.value = null
                     _playgroundInfo.value = null
@@ -454,6 +484,10 @@ constructor(
                     _alertAction.emit(PlaygroundAlertAction.AlertFailToDeleteMyFootprintSnackbar)
                 }
         }
+    }
+
+    fun clearMyPlayground() {
+
     }
 
     fun updateAddressLine(addressLine: String) {
