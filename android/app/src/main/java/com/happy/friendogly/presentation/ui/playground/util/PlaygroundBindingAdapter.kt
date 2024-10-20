@@ -15,6 +15,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
+import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundInfoUiModel
@@ -109,10 +110,10 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: PlaygroundUiState?) {
 @BindingAdapter("playgroundInfoUiState", "playgroundInfoVisibility")
 fun View.bindPlaygroundInfoVisibility(
     uiState: PlaygroundUiState?,
-    playgroundInfo: PlaygroundInfoUiModel?,
+    playStatus: PlayStatus?,
 ) {
     isVisible =
-        if (playgroundInfo != null && (
+        if (playStatus != PlayStatus.NO_PLAYGROUND && (
                 uiState is PlaygroundUiState.Loading ||
                     uiState is PlaygroundUiState.FindingPlayground ||
                     uiState is PlaygroundUiState.ViewingPlaygroundInfo
@@ -174,8 +175,8 @@ fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
     this.layoutParams = layoutParams
 }
 
-@BindingAdapter("registerLocationBtnVisibility")
-fun View.bindRegisterLocationBtnVisibility(uiState: PlaygroundUiState?) {
+@BindingAdapter("registeringPlaygroundVisibility")
+fun View.bindRegisteringPlaygroundVisibility(uiState: PlaygroundUiState?) {
     isVisible = (uiState is PlaygroundUiState.RegisteringPlayground)
 }
 

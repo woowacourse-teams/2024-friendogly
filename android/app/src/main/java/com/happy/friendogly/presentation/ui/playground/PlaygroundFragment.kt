@@ -150,7 +150,14 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (viewModel.uiState.value !is PlaygroundUiState.FindingPlayground) {
+                    val currentState = viewModel.uiState.value
+                    if (currentState is PlaygroundUiState.RegisteringPlayground) {
+                        balloon?.dismiss()
+                        currentState.circleOverlay.map = null
+                        binding.layoutPlaygroundRegisterMarker.hideViewAnimation()
+                    }
+
+                    if (currentState !is PlaygroundUiState.FindingPlayground) {
                         viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
                     } else {
                         requireActivity().finish()
@@ -289,13 +296,15 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         map.addOnCameraChangeListener { reason, _ ->
             val currentState = viewModel.uiState.value
             if (reason == REASON_GESTURE) {
-                reduceMarkerSize()
-                viewModel.changeTrackingModeToNoFollow()
-                viewModel.handleUiStateByCameraChange()
-
-                if (currentState is PlaygroundUiState.RegisteringPlayground) {
-                    currentState.circleOverlay.center = map.cameraPosition.target
+                if (map.locationTrackingMode != LocationTrackingMode.NoFollow) {
+                    viewModel.changeTrackingModeToNoFollow()
                 }
+                reduceMarkerSize()
+                viewModel.handleUiStateByCameraChange()
+            }
+
+            if (currentState is PlaygroundUiState.RegisteringPlayground) {
+                currentState.circleOverlay.center = map.cameraPosition.target
             }
         }
 
@@ -382,13 +391,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                createCircleOverlay(
-                                    position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
+                                    createCircleOverlay(
+                                        position =
+                                            LatLng(
+                                                playground.latitude,
+                                                playground.longitude,
+                                            ),
                                     ),
-                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearPlaygrounds)
@@ -418,8 +427,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is StartLocationService -> startLocationService()
 
                 is NoFollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.NoFollow
+                    map.locationTrackingMode = LocationTrackingMode.NoFollow
 
                 is FollowTrackingMode ->
                     map.locationTrackingMode =
@@ -754,24 +762,25 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun showSnackbarForEvent(event: PlaygroundAlertAction) {
-        val messageResId = when (event) {
-            is AlertAddressOutOfKoreaSnackbar -> R.string.playground_address_out_of_korea
-            is AlertMarkerRegisteredSnackbar -> R.string.playground_marker_registered
-            is AlertNotExistMyPlaygroundSnackbar -> R.string.playground_not_exist_my_playground
-            is AlertLeaveMyPlaygroundSnackbar -> R.string.playground_leave_my_playground
-            is AlertAutoLeavePlaygroundSnackbar -> R.string.playground_leave_my_playground
-            is AlertOverlapPlaygroundCreationSnackbar -> R.string.playground_overlap_playground_creation
-            is AlertAlreadyParticipatePlaygroundSnackbar -> R.string.playground_already_participate_playground
-            is AlertFailToCheckPetExistence -> R.string.playground_fail_to_load_pet_existence_btn
-            is AlertFailToLoadPlaygroundsSnackbar -> R.string.playground_fail_to_load_near_playgrounds
-            is AlertFailToRegisterPlaygroundSnackbar -> R.string.playground_fail_to_register_playground
-            is AlertFailToUpdatePlaygroundArrival -> R.string.playground_fail_to_update_playground_arrival
-            is AlertFailToLeavePlaygroundSnackbar -> R.string.playground_fail_to_leave
-            is AlertFailToLoadPlaygroundInfoSnackbar -> R.string.playground_fail_to_load_playground_info
-            is AlertFailToLoadPlaygroundSummarySnackbar -> R.string.playground_fail_to_load_playground_summary
-            is AlertFailToJoinPlaygroundSnackbar -> R.string.playground_fail_to_join_playground
-            else -> null
-        }
+        val messageResId =
+            when (event) {
+                is AlertAddressOutOfKoreaSnackbar -> R.string.playground_address_out_of_korea
+                is AlertMarkerRegisteredSnackbar -> R.string.playground_marker_registered
+                is AlertNotExistMyPlaygroundSnackbar -> R.string.playground_not_exist_my_playground
+                is AlertLeaveMyPlaygroundSnackbar -> R.string.playground_leave_my_playground
+                is AlertAutoLeavePlaygroundSnackbar -> R.string.playground_leave_my_playground
+                is AlertOverlapPlaygroundCreationSnackbar -> R.string.playground_overlap_playground_creation
+                is AlertAlreadyParticipatePlaygroundSnackbar -> R.string.playground_already_participate_playground
+                is AlertFailToCheckPetExistence -> R.string.playground_fail_to_load_pet_existence_btn
+                is AlertFailToLoadPlaygroundsSnackbar -> R.string.playground_fail_to_load_near_playgrounds
+                is AlertFailToRegisterPlaygroundSnackbar -> R.string.playground_fail_to_register_playground
+                is AlertFailToUpdatePlaygroundArrival -> R.string.playground_fail_to_update_playground_arrival
+                is AlertFailToLeavePlaygroundSnackbar -> R.string.playground_fail_to_leave
+                is AlertFailToLoadPlaygroundInfoSnackbar -> R.string.playground_fail_to_load_playground_info
+                is AlertFailToLoadPlaygroundSummarySnackbar -> R.string.playground_fail_to_load_playground_summary
+                is AlertFailToJoinPlaygroundSnackbar -> R.string.playground_fail_to_join_playground
+                else -> null
+            }
         messageResId?.let { showSnackbar(resources.getString(it)) }
     }
 
