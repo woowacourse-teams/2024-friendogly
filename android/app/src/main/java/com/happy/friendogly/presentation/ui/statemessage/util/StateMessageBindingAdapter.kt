@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.message.util
+package com.happy.friendogly.presentation.ui.statemessage.util
 
 import android.widget.ImageView
 import android.widget.TextView

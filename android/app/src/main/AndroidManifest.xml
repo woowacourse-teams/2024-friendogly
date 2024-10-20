@@ -119,7 +119,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.message.MessageActivity"
+            android:name=".presentation.ui.statemessage.StateMessageActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentActivityTheme"

@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.message.viewmodel.MessageViewModel" />
+            type="com.happy.friendogly.presentation.ui.statemessage.viewmodel.StateViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

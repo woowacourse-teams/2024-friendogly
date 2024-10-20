@@ -34,7 +34,6 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
-import com.happy.friendogly.presentation.ui.message.MessageActivity
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
@@ -58,6 +57,7 @@ import com.happy.friendogly.presentation.ui.playground.util.ANIMATE_DURATION_MIL
 import com.happy.friendogly.presentation.ui.playground.util.hideViewAnimation
 import com.happy.friendogly.presentation.ui.playground.util.showViewAnimation
 import com.happy.friendogly.presentation.ui.playground.viewmodel.PlaygroundViewModel
+import com.happy.friendogly.presentation.ui.statemessage.StateMessageActivity
 import com.happy.friendogly.presentation.utils.isSystemInDarkMode
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -344,12 +344,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                         }
                     },
-                    DELAY_MILLIS,
+                    ANIMATE_DURATION_MILLIS,
                 )
             }
-//            else {
-//                petDetailAdapter.submitList(emptyList())
-//            }
         }
 
         viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
@@ -384,13 +381,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                    createCircleOverlay(
-                                        position =
-                                            LatLng(
-                                                playground.latitude,
-                                                playground.longitude,
-                                            ),
+                                createCircleOverlay(
+                                    position =
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
                                     ),
+                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearPlaygrounds)
@@ -409,7 +406,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                         {
                             showHelpBalloon(textRestId = R.string.playground_register_help)
                         },
-                        DELAY_MILLIS,
+                        ANIMATE_DURATION_MILLIS,
                     )
                 }
 
@@ -551,7 +548,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 is PlaygroundNavigateAction.NavigateToPlaygroundMessage -> {
-                    val intent = MessageActivity.getIntent(requireContext(), event.message)
+                    val intent = StateMessageActivity.getIntent(requireContext(), event.message)
                     activityResultLauncher.launch(intent)
                 }
             }
@@ -734,7 +731,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         viewModel.updateAddressAndInKorea(address = address, inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng =
+        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -922,7 +920,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         private const val MARKER_DEFAULT_HEIGHT = 128
         private const val MARKER_CLICKED_WIDTH = 144
         private const val MARKER_CLICKED_HEIGHT = 192
-        private const val DELAY_MILLIS = 300L
         private const val MIN_KOREA_LATITUDE = 33.0
         private const val MAX_KOREA_LATITUDE = 39.0
         private const val MIN_KOREA_LONGITUDE = 125.0
