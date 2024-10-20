@@ -105,10 +105,6 @@ constructor(
         MutableLiveData()
     val navigateAction: LiveData<Event<PlaygroundNavigateAction>> get() = _navigateAction
 
-//    private val _playgroundRegisterBtn: MutableLiveData<PlaygroundRegisterBtnUiModel> =
-//        MutableLiveData()
-//    val playgroundRegisterBtn: LiveData<PlaygroundRegisterBtnUiModel> get() = _playgroundRegisterBtn
-
     override fun clickPetExistenceBtn() {
         analyticsHelper.logPetExistenceBtnClicked()
         runIfLocationPermissionGranted {
