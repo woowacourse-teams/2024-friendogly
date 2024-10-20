@@ -38,12 +38,38 @@ import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAddressOutOfKoreaSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAutoLeavePlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToCheckPetExistence
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLeavePlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundSummarySnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotLocationPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHelpBalloon
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertLeaveMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertMarkerRegisteredSnackbar
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FaceTrackingMode
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FollowTrackingMode
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlaygroundMarker
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeNearPlaygroundMarkers
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.NoFollowTrackingMode
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ScanNearPlaygrounds
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPetImage
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPlaygroundMessage
 import com.happy.friendogly.presentation.ui.playground.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.playground.adapter.PetSummaryAdapter
 import com.happy.friendogly.presentation.ui.playground.model.Playground
@@ -356,25 +382,25 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                    createCircleOverlay(
-                                        position =
-                                            LatLng(
-                                                playground.latitude,
-                                                playground.longitude,
-                                            ),
+                                createCircleOverlay(
+                                    position =
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
                                     ),
+                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearPlaygrounds)
                 }
 
-                is PlaygroundMapAction.RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
+                is RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
 
-                is PlaygroundMapAction.MoveCameraCenterPosition -> moveCameraCenterPosition(event.position)
+                is MoveCameraCenterPosition -> moveCameraCenterPosition(event.position)
 
-                is PlaygroundMapAction.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
+                is ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
-                is PlaygroundMapAction.ShowRegisteringPlaygroundScreen -> {
+                is ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
                     binding.layoutPlaygroundRegisterMarker.showViewAnimation()
                     Handler(Looper.getMainLooper()).postDelayed(
@@ -385,144 +411,51 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     )
                 }
 
-                is PlaygroundMapAction.HideRegisteringPlaygroundScreen -> {
+                is HideRegisteringPlaygroundScreen -> {
                     binding.layoutPlaygroundRegisterMarker.hideViewAnimation()
                 }
 
-                is PlaygroundMapAction.StartLocationService -> startLocationService()
+                is StartLocationService -> startLocationService()
 
-                is PlaygroundMapAction.NoFollowTrackingMode ->
+                is NoFollowTrackingMode ->
                     map.locationTrackingMode =
                         LocationTrackingMode.NoFollow
 
-                is PlaygroundMapAction.FollowTrackingMode ->
+                is FollowTrackingMode ->
                     map.locationTrackingMode =
                         LocationTrackingMode.Follow
 
-                is PlaygroundMapAction.FaceTrackingMode -> map.locationTrackingMode = Face
+                is FaceTrackingMode -> map.locationTrackingMode = Face
             }
         }
 
         viewModel.alertAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is PlaygroundAlertAction.AlertHasNotLocationPermissionDialog ->
-                    locationPermission.createAlarmDialog()
-                        .show(parentFragmentManager, tag)
+                is AlertHasNotLocationPermissionDialog ->
+                    locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
-                is PlaygroundAlertAction.AlertAddressOutOfKoreaSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_address_out_of_korea,
-                        ),
-                    )
 
-                is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.playground_marker_registered))
-                is PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_not_exist_my_playground,
-                        ),
-                    )
+                is AlertHelpBalloon ->
+                    showHelpBalloon(event.textResId)
 
-                is PlaygroundAlertAction.AlertLeaveMyPlaygroundSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_leave_my_playground,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertAutoLeavePlaygroundSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_leave_my_playground,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar -> {
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_overlap_playground_creation,
-                        ),
-                    )
-                }
-
-                is PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar -> {
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_already_participate_playground,
-                        ),
-                    )
-                }
-
-                is PlaygroundAlertAction.AlertFailToCheckPetExistence ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_fail_to_load_pet_existence_btn,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_fail_to_load_near_playgrounds,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_fail_to_register_playground,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival ->
-                    showSnackbar(
-                        resources.getString(R.string.playground_fail_to_update_playground_arrival),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToLeavePlaygroundSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_fail_to_leave,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.playground_fail_to_load_playground_info,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToLoadPlaygroundSummarySnackbar ->
-                    showSnackbar(
-                        resources.getString(R.string.playground_fail_to_load_playground_summary),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar -> {
-                    showSnackbar(
-                        resources.getString(R.string.playground_fail_to_join_playground),
-                    )
-                }
-
-                is PlaygroundAlertAction.AlertHelpBalloon -> showHelpBalloon(event.textResId)
+                else -> showSnackbarForEvent(event)
             }
         }
 
         viewModel.navigateAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is PlaygroundNavigateAction.NavigateToOtherProfile -> {
+                is NavigateToOtherProfile -> {
                     val intent = OtherProfileActivity.getIntent(requireContext(), event.memberId)
                     startActivity(intent)
                 }
 
-                is PlaygroundNavigateAction.NavigateToPetImage -> {
+                is NavigateToPetImage -> {
                     val intent = PetImageActivity.getIntent(requireContext(), event.petImageUrl)
                     startActivity(intent)
                 }
 
-                is PlaygroundNavigateAction.NavigateToPlaygroundMessage -> {
+                is NavigateToPlaygroundMessage -> {
                     val intent = StateMessageActivity.getIntent(requireContext(), event.message)
                     activityResultLauncher.launch(intent)
                 }
@@ -818,6 +751,28 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 }
             },
         )
+    }
+
+    private fun showSnackbarForEvent(event: PlaygroundAlertAction) {
+        val messageResId = when (event) {
+            is AlertAddressOutOfKoreaSnackbar -> R.string.playground_address_out_of_korea
+            is AlertMarkerRegisteredSnackbar -> R.string.playground_marker_registered
+            is AlertNotExistMyPlaygroundSnackbar -> R.string.playground_not_exist_my_playground
+            is AlertLeaveMyPlaygroundSnackbar -> R.string.playground_leave_my_playground
+            is AlertAutoLeavePlaygroundSnackbar -> R.string.playground_leave_my_playground
+            is AlertOverlapPlaygroundCreationSnackbar -> R.string.playground_overlap_playground_creation
+            is AlertAlreadyParticipatePlaygroundSnackbar -> R.string.playground_already_participate_playground
+            is AlertFailToCheckPetExistence -> R.string.playground_fail_to_load_pet_existence_btn
+            is AlertFailToLoadPlaygroundsSnackbar -> R.string.playground_fail_to_load_near_playgrounds
+            is AlertFailToRegisterPlaygroundSnackbar -> R.string.playground_fail_to_register_playground
+            is AlertFailToUpdatePlaygroundArrival -> R.string.playground_fail_to_update_playground_arrival
+            is AlertFailToLeavePlaygroundSnackbar -> R.string.playground_fail_to_leave
+            is AlertFailToLoadPlaygroundInfoSnackbar -> R.string.playground_fail_to_load_playground_info
+            is AlertFailToLoadPlaygroundSummarySnackbar -> R.string.playground_fail_to_load_playground_summary
+            is AlertFailToJoinPlaygroundSnackbar -> R.string.playground_fail_to_join_playground
+            else -> null
+        }
+        messageResId?.let { showSnackbar(resources.getString(it)) }
     }
 
     private fun showRegisterPetDialog() {
