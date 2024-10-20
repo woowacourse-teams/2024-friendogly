@@ -11,10 +11,10 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMessageBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment.Companion.EXTRA_MESSAGE_UPDATED
 import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageAlertAction
 import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageNavigateAction
 import com.happy.friendogly.presentation.ui.statemessage.viewmodel.StateViewModel
-import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment.Companion.EXTRA_MESSAGE_UPDATED
 import com.happy.friendogly.presentation.utils.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 

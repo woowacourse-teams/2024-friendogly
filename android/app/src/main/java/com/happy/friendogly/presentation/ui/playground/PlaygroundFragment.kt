@@ -46,7 +46,6 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction
 import com.happy.friendogly.presentation.ui.playground.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.playground.adapter.PetSummaryAdapter
-import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService
@@ -240,7 +239,12 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             isLocationButtonEnabled = false
             isZoomControlEnabled = false
             logoGravity = Gravity.TOP or Gravity.START
-            setLogoMargin(MAP_LOGO_MARGIN, MAP_LOGO_MARGIN, 0, 0)
+            setLogoMargin(
+                MAP_LOGO_MARGIN,
+                MAP_LOGO_MARGIN,
+                MAP_LOGO_DEFAULT_MARGIN,
+                MAP_LOGO_DEFAULT_MARGIN,
+            )
         }
         binding.lbvPlaygroundLocation.map = map
         binding.lbvPlaygroundRegisterLocation.map = map
@@ -248,21 +252,12 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
                 reduceMarkerSize()
-                if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo ||
-                    viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundSummary
-                ) {
-                    viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
-                }
+                viewModel.updateUiStateIfViewingPlayground()
             }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
-
-            if (viewModel.myPlayStatus.value != PlayStatus.NO_PLAYGROUND &&
-                viewModel.uiState.value !is PlaygroundUiState.RegisteringPlayground
-            ) {
-                viewModel.updatePathOverlay(latLng)
-            }
+            viewModel.updatePathOverlayByLocationChange(latLng)
         }
 
         map.addOnCameraChangeListener { reason, _ ->
@@ -270,30 +265,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             if (reason == REASON_GESTURE) {
                 reduceMarkerSize()
                 viewModel.changeTrackingModeToNoFollow()
+                viewModel.handleUiStateByCameraChange()
 
-                when (currentState) {
-                    is PlaygroundUiState.FindingPlayground -> {
-                        if (!currentState.refreshBtnVisible) {
-                            viewModel.updateRefreshBtnVisibility(
-                                refreshBtnVisible = true,
-                            )
-                        }
-                    }
-
-                    is PlaygroundUiState.RegisteringPlayground -> {
-                        currentState.circleOverlay.center = map.cameraPosition.target
-                        viewModel.updateCameraIdle(cameraIdle = false)
-                    }
-
-                    is PlaygroundUiState.ViewingPlaygroundSummary, PlaygroundUiState.ViewingPlaygroundInfo -> {
-                        viewModel.updateUiState(
-                            PlaygroundUiState.FindingPlayground(
-                                refreshBtnVisible = true,
-                            ),
-                        )
-                    }
-
-                    else -> return@addOnCameraChangeListener
+                if (currentState is PlaygroundUiState.RegisteringPlayground) {
+                    currentState.circleOverlay.center = map.cameraPosition.target
                 }
             }
         }
@@ -381,13 +356,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                createCircleOverlay(
-                                    position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
+                                    createCircleOverlay(
+                                        position =
+                                            LatLng(
+                                                playground.latitude,
+                                                playground.longitude,
+                                            ),
                                     ),
-                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearPlaygrounds)
@@ -693,7 +668,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     private fun adjustPosition(marker: Marker): LatLng {
         val bearingRadians = Math.toRadians(map.cameraPosition.bearing)
         val offsetDistance =
-            (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / 8.0
+            (map.contentBounds.northLatitude - map.contentBounds.southLatitude) / OFFSET_DIVISOR
 
         val latitude = marker.position.latitude - offsetDistance * cos(bearingRadians)
         val longitude = marker.position.longitude - offsetDistance * sin(bearingRadians)
@@ -708,7 +683,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             geocoder.getFromLocation(
                 addressLatLng.latitude,
                 addressLatLng.longitude,
-                1,
+                ADDRESS_MAX_RESULT,
             ) { addresses ->
                 updateAddress(addresses)
             }
@@ -732,7 +707,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun convertLtnLng(latLng: LatLng): LatLng =
-        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+        LatLng(
+            floor(latLng.latitude * LAT_LNG_ROUNDING_FACTOR) / LAT_LNG_ROUNDING_FACTOR,
+            floor(latLng.longitude * LAT_LNG_ROUNDING_FACTOR) / LAT_LNG_ROUNDING_FACTOR,
+        )
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -782,7 +760,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     val position = parent.getChildAdapterPosition(view)
                     if (position != 0) {
                         val overlapOffset =
-                            (10f * requireContext().resources.displayMetrics.density).toInt()
+                            (ITEM_OFFSET_DP * requireContext().resources.displayMetrics.density).toInt()
                         outRect.left = overlapOffset * -1
                     }
                 }
@@ -809,8 +787,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.isHideable = false
         bottomSheetBehavior.isFitToContents = false
-        bottomSheetBehavior.expandedOffset = 50
-        bottomSheetBehavior.peekHeight = 250
+        bottomSheetBehavior.expandedOffset = BEHAVIOR_EXPANDED_OFFSET
+        bottomSheetBehavior.peekHeight = BEHAVIOR_PEEK_HEIGHT
 
         bottomSheetBehavior.addBottomSheetCallback(
             object : BottomSheetBehavior.BottomSheetCallback() {
@@ -869,9 +847,11 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         balloon =
             Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
                 .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
-                .setTextSize(14f).setMarginBottom(10)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
-                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
+                .setTextSize(BALLOON_TEXT_SIZE).setMarginBottom(BALLOON_MARGIN_BOTTOM)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowSize(BALLOON_ARROW_SIZE)
+                .setArrowPosition(BALLOON_ARROW_POSITION).setPadding(BALLOON_PADDING)
+                .setFocusable(false).setCornerRadius(BALLOON_CORNER_RADIUS)
                 .setBackgroundColorResource(R.color.coral400)
                 .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
                 .build()
@@ -897,10 +877,23 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         private const val MIN_KOREA_LONGITUDE = 125.0
         private const val MAX_KOREA_LONGITUDE = 132.0
         private const val MAP_LOGO_MARGIN = 30
+        private const val MAP_LOGO_DEFAULT_MARGIN = 0
         private const val EXPANDED_PET_SIZE = 2
         private const val PATH_OVERLAY_WIDTH = 30
         private const val PATH_OVERLAY_OUTLINE_WIDTH = 0
         private const val PATH_OVERLAY_PATTERN_INTERVAL = 60
+        private const val ADDRESS_MAX_RESULT = 1
+        private const val OFFSET_DIVISOR = 8.0
+        private const val ITEM_OFFSET_DP = 10
+        private const val LAT_LNG_ROUNDING_FACTOR = 100
+        private const val BEHAVIOR_EXPANDED_OFFSET = 50
+        private const val BEHAVIOR_PEEK_HEIGHT = 250
+        private const val BALLOON_TEXT_SIZE = 14f
+        private const val BALLOON_MARGIN_BOTTOM = 10
+        private const val BALLOON_ARROW_SIZE = 10
+        private const val BALLOON_ARROW_POSITION = 0.5f
+        private const val BALLOON_PADDING = 12
+        private const val BALLOON_CORNER_RADIUS = 8f
         private const val DEFAULT_MESSAGE_UPDATED = false
 
         const val EXTRA_MESSAGE_UPDATED = "messageUpdated"
