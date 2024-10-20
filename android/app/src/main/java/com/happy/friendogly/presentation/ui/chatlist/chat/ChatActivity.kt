@@ -108,7 +108,7 @@ class ChatActivity :
         if (!binding.rcvChatDetail.canScrollVertically(-1)) {
             viewModel.getChatMessage(
                 chatRoomId = chatRoomId,
-                currentPosition = adapter.itemCount - 1,
+                currentPosition = adapter.itemCount,
             )
         }
     }

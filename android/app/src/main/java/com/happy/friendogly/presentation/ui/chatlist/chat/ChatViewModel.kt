@@ -44,6 +44,8 @@ class ChatViewModel
         private val _newChatEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
         val newChatEvent: LiveData<Event<Unit>> get() = _newChatEvent
 
+        private var newChatMessageCount: Int = 0
+
         private var myMemberId: Long = DEFAULT_MEMBER_ID
 
         val isCanSend =
@@ -63,6 +65,7 @@ class ChatViewModel
                     _chats.value = listOf(newMessage.toUiModel()) + _chats.value
                     _newChatEvent.emit()
                     launch {
+                        newChatMessageCount += 1
                         saveChatMessageUseCase(chatRoomId, newMessage)
                     }
                 }

@@ -5,15 +5,19 @@ import java.time.LocalDateTime
 sealed interface Message : ChatComponent {
     val content: String
 
-    data class Mine(
-        override val content: String,
+    class Mine(
+        content: String,
         val member: ChatMember,
         override val createdAt: LocalDateTime,
-    ) : Message
+    ) : Message {
+        override val content: String = content.trim()
+    }
 
-    data class Other(
+    class Other(
+        content: String,
         val member: ChatMember,
-        override val content: String,
         override val createdAt: LocalDateTime,
-    ) : Message
+    ) : Message {
+        override val content: String = content.trim()
+    }
 }
