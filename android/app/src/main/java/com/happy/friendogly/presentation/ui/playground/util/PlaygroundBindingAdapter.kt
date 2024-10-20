@@ -106,7 +106,7 @@ fun LottieAnimationView.bindLoadingAnimation(uiState: PlaygroundUiState?) {
     }
 }
 
-@BindingAdapter("uiState", "playgroundInfoVisibility")
+@BindingAdapter("playgroundInfoUiState", "playgroundInfoVisibility")
 fun View.bindPlaygroundInfoVisibility(
     uiState: PlaygroundUiState?,
     playgroundInfo: PlaygroundInfoUiModel?,
@@ -125,13 +125,13 @@ fun View.bindPlaygroundInfoVisibility(
         }
 }
 
-@BindingAdapter("uiState")
+@BindingAdapter("petExistenceBtnUiState")
 fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
         (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
-@BindingAdapter("uiState")
+@BindingAdapter("refreshBtnUiState")
 fun TextView.bindRefreshBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
         if (uiState is PlaygroundUiState.FindingPlayground) {
@@ -141,14 +141,11 @@ fun TextView.bindRefreshBtnVisibility(uiState: PlaygroundUiState?) {
         }
 }
 
-@BindingAdapter("uiState", "cameraIdle")
-fun TextView.bindRegisterPlaygroundBtnClickable(
-    uiState: PlaygroundUiState?,
-    cameraIdle: Boolean,
-) {
+@BindingAdapter("registerPlaygroundBtnUiState")
+fun TextView.bindRegisterPlaygroundBtnClickable(uiState: PlaygroundUiState?) {
     isClickable =
         if (uiState is PlaygroundUiState.RegisteringPlayground) {
-            cameraIdle
+            uiState.playgroundRegisterBtnClickable.cameraIdle
         } else {
             false
         }

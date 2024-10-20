@@ -269,14 +269,14 @@ class PlaygroundFragment :
         }
 
         map.addOnCameraChangeListener { reason, _ ->
-            val uiState = viewModel.uiState.value ?: return@addOnCameraChangeListener
+            val currentState = viewModel.uiState.value
             if (reason == REASON_GESTURE) {
                 reduceMarkerSize()
                 viewModel.changeTrackingModeToNoFollow()
 
-                when (uiState) {
+                when (currentState) {
                     is PlaygroundUiState.FindingPlayground -> {
-                        if (!uiState.refreshBtnVisible) {
+                        if (!currentState.refreshBtnVisible) {
                             viewModel.updateRefreshBtnVisibility(
                                 refreshBtnVisible = true,
                             )
@@ -284,8 +284,8 @@ class PlaygroundFragment :
                     }
 
                     is PlaygroundUiState.RegisteringPlayground -> {
-                        uiState.circleOverlay.center = map.cameraPosition.target
-                        viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = false)
+                        currentState.circleOverlay.center = map.cameraPosition.target
+                        viewModel.updateCameraIdle(cameraIdle = false)
                     }
 
                     is PlaygroundUiState.ViewingPlaygroundSummary, PlaygroundUiState.ViewingPlaygroundInfo -> {
@@ -302,10 +302,10 @@ class PlaygroundFragment :
         }
 
         map.addOnCameraIdleListener {
-            val uiState = viewModel.uiState.value ?: return@addOnCameraIdleListener
-            if (uiState is PlaygroundUiState.RegisteringPlayground) {
-                viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = true)
-                getAddress(uiState, map.cameraPosition.target)
+            val currentState = viewModel.uiState.value
+            if (currentState is PlaygroundUiState.RegisteringPlayground) {
+                viewModel.updateCameraIdle(cameraIdle = true)
+                getAddress(map.cameraPosition.target)
             }
         }
     }
@@ -317,7 +317,6 @@ class PlaygroundFragment :
 
     private fun setupObserving() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            println(uiState)
             when (uiState) {
                 is PlaygroundUiState.LocationPermissionsNotGranted ->
                     locationPermission
@@ -408,9 +407,7 @@ class PlaygroundFragment :
                 is PlaygroundMapAction.ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
                 is PlaygroundMapAction.ShowRegisteringPlaygroundScreen -> {
-                    val uiState =
-                        (viewModel.uiState.value) as PlaygroundUiState.RegisteringPlayground
-                    getAddress(uiState, map.cameraPosition.target)
+                    getAddress(map.cameraPosition.target)
                     binding.layoutWoofRegisterMarker.showViewAnimation()
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
@@ -721,10 +718,7 @@ class PlaygroundFragment :
         return LatLng(latitude, longitude)
     }
 
-    private fun getAddress(
-        uiState: PlaygroundUiState.RegisteringPlayground,
-        position: LatLng,
-    ) {
+    private fun getAddress(position: LatLng) {
         val geocoder = Geocoder(requireContext(), Locale.KOREA)
         val addressLatLng = convertLtnLng(position)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -733,20 +727,17 @@ class PlaygroundFragment :
                 addressLatLng.longitude,
                 1,
             ) { addresses ->
-                updateAddress(uiState, addresses)
+                updateAddress(addresses)
             }
         } else {
             val addresses =
                 geocoder.getFromLocation(addressLatLng.latitude, addressLatLng.longitude, 1)
                     ?: return
-            updateAddress(uiState, addresses)
+            updateAddress(addresses)
         }
     }
 
-    private fun updateAddress(
-        uiState: PlaygroundUiState.RegisteringPlayground,
-        addresses: List<Address>,
-    ) {
+    private fun updateAddress(addresses: List<Address>) {
         if (addresses.isEmpty()) return
         val firstAddress = addresses[0]
         val address =
@@ -754,11 +745,9 @@ class PlaygroundFragment :
                 .getAddressLine(0)
                 .replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
-        viewModel.updateAddress(address)
-
         val countryName = firstAddress.countryName
         val inKorea = countryName == resources.getString(R.string.woof_address_korea)
-        viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
+        viewModel.updateAddressAndInKorea(address = address, inKorea = inKorea)
     }
 
     private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
