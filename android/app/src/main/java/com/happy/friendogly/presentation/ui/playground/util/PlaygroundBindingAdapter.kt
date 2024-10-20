@@ -131,14 +131,11 @@ fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
         (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
-@BindingAdapter("uiState", "refreshBtnVisibility")
-fun TextView.bindRefreshBtnVisibility(
-    uiState: PlaygroundUiState?,
-    refreshBtnVisible: Boolean,
-) {
+@BindingAdapter("uiState")
+fun TextView.bindRefreshBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
         if (uiState is PlaygroundUiState.FindingPlayground) {
-            refreshBtnVisible
+            uiState.refreshBtnVisible
         } else {
             false
         }

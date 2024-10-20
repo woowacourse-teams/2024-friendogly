@@ -75,7 +75,6 @@
         <TextView
             android:id="@+id/btn_woof_footprint_refresh"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
-            refreshBtnVisibility="@{vm.refreshBtnVisible}"
             uiState="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -282,11 +281,11 @@
             <TextView
                 android:id="@+id/tv_woof_address"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                addressText="@{vm.uiState}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="10dp"
-                addressText="@{vm.uiState}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_woof_register_walk_area"

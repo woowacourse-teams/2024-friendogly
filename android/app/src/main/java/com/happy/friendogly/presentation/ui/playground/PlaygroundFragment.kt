@@ -129,7 +129,9 @@ class PlaygroundFragment :
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (viewModel.uiState.value !is PlaygroundUiState.FindingPlayground) {
-                        viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
+                        viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
+                    } else {
+                        requireActivity().finish()
                     }
                 }
             }
@@ -252,14 +254,16 @@ class PlaygroundFragment :
                 if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo ||
                     viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundSummary
                 ) {
-                    viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
+                    viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
                 }
             }
 
         map.addOnLocationChangeListener { location ->
             latLng = LatLng(location.latitude, location.longitude)
 
-            if (viewModel.myPlayground.value != null && viewModel.uiState.value !is PlaygroundUiState.RegisteringPlayground) {
+            if (viewModel.myPlayStatus.value != PlayStatus.NO_PLAYGROUND &&
+                viewModel.uiState.value !is PlaygroundUiState.RegisteringPlayground
+            ) {
                 viewModel.updatePathOverlay(latLng)
             }
         }
@@ -272,9 +276,9 @@ class PlaygroundFragment :
 
                 when (uiState) {
                     is PlaygroundUiState.FindingPlayground -> {
-                        if (viewModel.refreshBtnVisible.value == false) {
+                        if (!uiState.refreshBtnVisible) {
                             viewModel.updateRefreshBtnVisibility(
-                                visible = true,
+                                refreshBtnVisible = true,
                             )
                         }
                     }
@@ -284,8 +288,12 @@ class PlaygroundFragment :
                         viewModel.updateRegisterPlaygroundBtnCameraIdle(cameraIdle = false)
                     }
 
-                    PlaygroundUiState.ViewingPlaygroundSummary, PlaygroundUiState.ViewingPlaygroundInfo -> {
-                        viewModel.updateUiState(PlaygroundUiState.FindingPlayground)
+                    is PlaygroundUiState.ViewingPlaygroundSummary, PlaygroundUiState.ViewingPlaygroundInfo -> {
+                        viewModel.updateUiState(
+                            PlaygroundUiState.FindingPlayground(
+                                refreshBtnVisible = true,
+                            ),
+                        )
                     }
 
                     else -> return@addOnCameraChangeListener
@@ -309,6 +317,7 @@ class PlaygroundFragment :
 
     private fun setupObserving() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            println(uiState)
             when (uiState) {
                 is PlaygroundUiState.LocationPermissionsNotGranted ->
                     locationPermission
@@ -342,9 +351,10 @@ class PlaygroundFragment :
                     },
                     DELAY_MILLIS,
                 )
-            } else {
-                petDetailAdapter.submitList(emptyList())
             }
+//            else {
+//                petDetailAdapter.submitList(emptyList())
+//            }
         }
 
         viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
@@ -379,13 +389,13 @@ class PlaygroundFragment :
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                createCircleOverlay(
-                                    position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
+                                    createCircleOverlay(
+                                        position =
+                                            LatLng(
+                                                playground.latitude,
+                                                playground.longitude,
+                                            ),
                                     ),
-                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearFootprintMarkers)
@@ -744,15 +754,14 @@ class PlaygroundFragment :
                 .getAddressLine(0)
                 .replace(resources.getString(R.string.woof_address_korea), "")
                 .trimStart()
-        viewModel.updateAddress(uiState.copy(address = address))
+        viewModel.updateAddress(address)
 
         val countryName = firstAddress.countryName
         val inKorea = countryName == resources.getString(R.string.woof_address_korea)
         viewModel.updateRegisterPlaygroundBtnInKorea(inKorea = inKorea)
     }
 
-    private fun convertLtnLng(latLng: LatLng): LatLng =
-        LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
+    private fun convertLtnLng(latLng: LatLng): LatLng = LatLng(floor(latLng.latitude * 100) / 100, floor(latLng.longitude * 100) / 100)
 
     private fun startLocationService() {
         val myPlayStatus = viewModel.myPlayStatus.value ?: return
@@ -867,9 +876,6 @@ class PlaygroundFragment :
                     bottomSheet: View,
                     slideOffset: Float,
                 ) {
-                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground && slideOffset >= 0.4f) {
-                        viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
-                    }
                 }
 
                 override fun onStateChanged(
@@ -881,8 +887,13 @@ class PlaygroundFragment :
                     ) {
                         reduceMarkerSize()
                         binding.rcvPlaygroundPet.smoothScrollToPosition(0)
-                    } else {
-                        viewModel.updateRefreshBtnVisibility(false)
+                        viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
+                    }
+
+                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
+                        (newState == BottomSheetBehavior.STATE_HALF_EXPANDED || newState == BottomSheetBehavior.STATE_EXPANDED)
+                    ) {
+                        viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
                 }
             },
