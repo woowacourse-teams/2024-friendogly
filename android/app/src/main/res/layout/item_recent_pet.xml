@@ -29,7 +29,6 @@
             app:layout_constraintStart_toStartOf="@+id/ic_recent_pet_dot"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <ImageView
             android:id="@+id/ic_recent_pet_dot"
             android:layout_width="wrap_content"
@@ -63,6 +62,7 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/rect_gary03_fill_12"
                 android:scaleType="centerCrop"
+                android:onClick="@{() -> actionHandler.navigateToPetImage(recentPetView.imageUrl)}"
                 android:src="@drawable/ic_club_normal"
                 app:clubGlide="@{recentPetView.imageUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -70,9 +70,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/RoundSmall" />
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -80,7 +78,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/iv_recent_pet_profile_image"
                 app:layout_constraintStart_toEndOf="@+id/iv_recent_pet_profile_image"
                 app:layout_constraintTop_toTopOf="@+id/iv_recent_pet_profile_image">
-
 
                 <TextView
                     android:id="@+id/tv_recent_pet_name"
@@ -96,6 +93,7 @@
                     style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     app:age="@{recentPetView.age}"
                     app:isAtLeastOneYearOld="@{recentPetView.isAtLeastOneYearOld}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_recent_pet_name"
@@ -108,17 +106,18 @@
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_recent_pet_name"
                     app:recentDogSize="@{recentPetView.sizeType}"
                     tools:text="#소형견" />
-
 
                 <TextView
                     style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toEndOf="@+id/tv_recent_pet_size"
                     app:layout_constraintTop_toBottomOf="@+id/tv_recent_pet_name"
                     app:recentDogGender="@{recentPetView.gender}"
@@ -127,9 +126,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <Space
             android:layout_width="match_parent"

@@ -11,7 +11,8 @@ interface RecentPetsDataSource {
     suspend fun getAllRecentPet(): Result<List<RecentPetDto>>
 
     suspend fun insertRecentPet(
-        id: Long,
+        memberId: Long,
+        petId: Long,
         name: String,
         imgUrl: String,
         birthday: LocalDate,

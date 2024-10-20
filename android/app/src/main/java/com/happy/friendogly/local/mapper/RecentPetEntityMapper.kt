@@ -5,7 +5,8 @@ import com.happy.friendogly.local.model.RecentPetEntity
 
 fun RecentPetEntity.toData(): RecentPetDto =
     RecentPetDto(
-        memberId = id,
+        memberId = memberId,
+        petId = petId,
         name = name,
         imgUrl = imgUrl,
         birthday = birthday,

@@ -12,40 +12,42 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RecentPetsDataSourceImpl
-    @Inject
-    constructor(
-        private val dao: RecentPetsDao,
-    ) : RecentPetsDataSource {
-        override suspend fun getRecentPetById(id: Long): Result<RecentPetDto> =
-            runCatching {
-                dao.getRecentPetById(id = id)?.toData()
-                    ?: throw IllegalArgumentException("존재하지 않는 최근 본 강아지 id 입니다.")
-            }
+@Inject
+constructor(
+    private val dao: RecentPetsDao,
+) : RecentPetsDataSource {
+    override suspend fun getRecentPetById(id: Long): Result<RecentPetDto> =
+        runCatching {
+            dao.getRecentPetById(id = id)?.toData()
+                ?: throw IllegalArgumentException("존재하지 않는 최근 본 강아지 id 입니다.")
+        }
 
-        override suspend fun getAllRecentPet(): Result<List<RecentPetDto>> =
-            runCatching {
-                dao.getAllRecentPet().map { result -> result.toData() }
-            }
+    override suspend fun getAllRecentPet(): Result<List<RecentPetDto>> =
+        runCatching {
+            dao.getAllRecentPet().map { result -> result.toData() }
+        }
 
-        override suspend fun insertRecentPet(
-            id: Long,
-            name: String,
-            imgUrl: String,
-            birthday: LocalDate,
-            gender: GenderDto,
-            sizeType: SizeTypeDto,
-        ): Result<Unit> =
-            runCatching {
-                val recentPetDto =
-                    RecentPetDto(
-                        memberId = id,
-                        imgUrl = imgUrl,
-                        name = name,
-                        birthday = birthday,
-                        gender = gender,
-                        sizeType = sizeType,
-                        createAt = LocalDateTime.now(),
-                    )
-                dao.insertRecentPet(recentPetEntity = recentPetDto.toLocal())
-            }
-    }
+    override suspend fun insertRecentPet(
+        memberId: Long,
+        petId: Long,
+        name: String,
+        imgUrl: String,
+        birthday: LocalDate,
+        gender: GenderDto,
+        sizeType: SizeTypeDto,
+    ): Result<Unit> =
+        runCatching {
+            val recentPetDto =
+                RecentPetDto(
+                    memberId = memberId,
+                    petId = petId,
+                    imgUrl = imgUrl,
+                    name = name,
+                    birthday = birthday,
+                    gender = gender,
+                    sizeType = sizeType,
+                    createAt = LocalDateTime.now(),
+                )
+            dao.insertRecentPet(recentPetEntity = recentPetDto.toLocal())
+        }
+}

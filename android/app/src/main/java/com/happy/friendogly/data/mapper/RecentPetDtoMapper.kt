@@ -7,7 +7,8 @@ import com.happy.friendogly.remote.mapper.toLocal
 
 fun RecentPetDto.toLocal(): RecentPetEntity =
     RecentPetEntity(
-        memberId = id,
+        memberId = memberId,
+        petId = petId,
         name = name,
         imgUrl = imgUrl,
         birthday = birthday,
@@ -18,7 +19,7 @@ fun RecentPetDto.toLocal(): RecentPetEntity =
 
 fun RecentPetDto.toDomain(): RecentPet =
     RecentPet(
-        memberId = id,
+        memberId = memberId,
         name = name,
         imgUrl = imgUrl,
         birthday = birthday,
