@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetPetExistenceUseCase
     @Inject
     constructor(private val repository: PlaygroundRepository) {
-        suspend operator fun invoke(): Result<PetExistence> = repository.getFootprintMarkBtnInfo()
+        suspend operator fun invoke(): Result<PetExistence> = repository.getPetExistence()
     }

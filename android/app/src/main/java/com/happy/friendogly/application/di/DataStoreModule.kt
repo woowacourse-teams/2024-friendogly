@@ -4,8 +4,8 @@ import android.content.Context
 import com.happy.friendogly.local.di.AddressModule
 import com.happy.friendogly.local.di.AlarmTokenModule
 import com.happy.friendogly.local.di.ChatAlarmModule
+import com.happy.friendogly.local.di.PlaygroundAlarmModule
 import com.happy.friendogly.local.di.TokenManager
-import com.happy.friendogly.local.di.WoofAlarmModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,7 +42,7 @@ object DataStoreModule {
 
     @Provides
     @Singleton
-    fun providesWoofAlarmModule(
+    fun providesPlaygroundAlarmModule(
         @ApplicationContext appContext: Context,
-    ): WoofAlarmModule = WoofAlarmModule(appContext)
+    ): PlaygroundAlarmModule = PlaygroundAlarmModule(appContext)
 }

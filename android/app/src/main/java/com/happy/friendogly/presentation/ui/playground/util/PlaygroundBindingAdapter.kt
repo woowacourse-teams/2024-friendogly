@@ -34,9 +34,9 @@ fun TextView.bindPetAge(petBirthDate: LocalDate?) {
 
         text =
             if (years < 1) {
-                resources.getString(R.string.woof_age_month, months)
+                resources.getString(R.string.playground_age_month, months)
             } else {
-                resources.getString(R.string.woof_age_year, years)
+                resources.getString(R.string.playground_age_year, years)
             }
     }
 }

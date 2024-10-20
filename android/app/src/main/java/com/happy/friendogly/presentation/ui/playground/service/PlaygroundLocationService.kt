@@ -78,8 +78,8 @@ class PlaygroundLocationService : Service() {
     private fun createNotificationChannel() {
         val notificationChannel =
             NotificationChannel(
-                WALK_SERVICE_CHANNEL_ID,
-                WALK_SERVICE_CHANNEL_NAME,
+                PLAYGROUND_SERVICE_CHANNEL_ID,
+                PLAYGROUND_SERVICE_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT,
             )
         val notificationManager =
@@ -116,9 +116,9 @@ class PlaygroundLocationService : Service() {
                 stopIntent,
             )
 
-        return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
+        return NotificationCompat.Builder(this, PLAYGROUND_SERVICE_CHANNEL_ID)
             .setContentTitle(playStatusTitle)
-            .setContentText(resources.getString(R.string.woof_location_tracking))
+            .setContentText(resources.getString(R.string.playground_location_tracking))
             .setSmallIcon(R.drawable.ic_footprint).setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(stopAction)
             .setAutoCancel(false).setShowWhen(false).setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -146,8 +146,8 @@ class PlaygroundLocationService : Service() {
     }
 
     companion object {
-        private const val WALK_SERVICE_CHANNEL_ID = "walk_service_id"
-        private const val WALK_SERVICE_CHANNEL_NAME = "Walk Service"
+        private const val PLAYGROUND_SERVICE_CHANNEL_ID = "playground_service_id"
+        private const val PLAYGROUND_SERVICE_CHANNEL_NAME = "Playground Service"
         private const val EXTRA_PLAY_STATUS = "playStatus"
         private const val REQUEST_CODE_ID = 0
         private const val SERVICE_ID = 1

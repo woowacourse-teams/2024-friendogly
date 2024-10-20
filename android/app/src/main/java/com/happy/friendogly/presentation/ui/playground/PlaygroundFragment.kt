@@ -39,7 +39,6 @@ import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
 import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertEndWalkSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertMarkerRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction
@@ -87,9 +86,7 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 @AndroidEntryPoint
-class PlaygroundFragment :
-    Fragment(),
-    OnMapReadyCallback {
+class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
@@ -245,8 +242,8 @@ class PlaygroundFragment :
             logoGravity = Gravity.TOP or Gravity.START
             setLogoMargin(MAP_LOGO_MARGIN, MAP_LOGO_MARGIN, 0, 0)
         }
-        binding.lbvWoofLocation.map = map
-        binding.lbvWoofRegisterLocation.map = map
+        binding.lbvPlaygroundLocation.map = map
+        binding.lbvPlaygroundRegisterLocation.map = map
 
         map.onMapClickListener =
             NaverMap.OnMapClickListener { _, _ ->
@@ -319,8 +316,7 @@ class PlaygroundFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is PlaygroundUiState.LocationPermissionsNotGranted ->
-                    locationPermission
-                        .createAlarmDialog()
+                    locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
                 is PlaygroundUiState.FindingPlayground -> {
@@ -382,7 +378,7 @@ class PlaygroundFragment :
                 }
 
                 is MakeNearPlaygroundMarkers -> {
-                    val nearFootprintMarkers =
+                    val nearPlaygrounds =
                         event.nearPlaygrounds.map { playground ->
                             PlaygroundUiModel(
                                 id = playground.id,
@@ -397,7 +393,7 @@ class PlaygroundFragment :
                                     ),
                             )
                         }
-                    viewModel.loadNearPlaygrounds(nearFootprintMarkers)
+                    viewModel.loadNearPlaygrounds(nearPlaygrounds)
                 }
 
                 is PlaygroundMapAction.RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
@@ -408,7 +404,7 @@ class PlaygroundFragment :
 
                 is PlaygroundMapAction.ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
-                    binding.layoutWoofRegisterMarker.showViewAnimation()
+                    binding.layoutPlaygroundRegisterMarker.showViewAnimation()
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             showHelpBalloon(textRestId = R.string.playground_register_help)
@@ -418,7 +414,7 @@ class PlaygroundFragment :
                 }
 
                 is PlaygroundMapAction.HideRegisteringPlaygroundScreen -> {
-                    binding.layoutWoofRegisterMarker.hideViewAnimation()
+                    binding.layoutPlaygroundRegisterMarker.hideViewAnimation()
                 }
 
                 is PlaygroundMapAction.StartLocationService -> startLocationService()
@@ -438,23 +434,22 @@ class PlaygroundFragment :
         viewModel.alertAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
                 is PlaygroundAlertAction.AlertHasNotLocationPermissionDialog ->
-                    locationPermission
-                        .createAlarmDialog()
+                    locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
                 is PlaygroundAlertAction.AlertAddressOutOfKoreaSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_address_out_of_korea,
+                            R.string.playground_address_out_of_korea,
                         ),
                     )
 
-                is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.woof_marker_registered))
+                is AlertMarkerRegisteredSnackbar -> showSnackbar(resources.getString(R.string.playground_marker_registered))
                 is PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_not_exist_my_playground,
+                            R.string.playground_not_exist_my_playground,
                         ),
                     )
 
@@ -488,62 +483,54 @@ class PlaygroundFragment :
                     )
                 }
 
-                is AlertEndWalkSnackbar -> showSnackbar(resources.getString(R.string.woof_stop_walk))
                 is PlaygroundAlertAction.AlertFailToCheckPetExistence ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_fail_to_load_pet_existence_btn,
+                            R.string.playground_fail_to_load_pet_existence_btn,
                         ),
                     )
 
                 is PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_fail_to_load_near_footprints,
+                            R.string.playground_fail_to_load_near_playgrounds,
                         ),
                     )
 
                 is PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_fail_to_register_playground,
+                            R.string.playground_fail_to_register_playground,
                         ),
                     )
 
                 is PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival ->
                     showSnackbar(
-                        resources.getString(R.string.woof_fail_to_update_playground_arrival),
+                        resources.getString(R.string.playground_fail_to_update_playground_arrival),
                     )
 
-                is PlaygroundAlertAction.AlertFailToEndWalkSnackbar ->
+                is PlaygroundAlertAction.AlertFailToLeavePlaygroundSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.woof_fail_to_end_walk,
-                        ),
-                    )
-
-                is PlaygroundAlertAction.AlertFailToDeleteMyFootprintSnackbar ->
-                    showSnackbar(
-                        resources.getString(
-                            R.string.woof_fail_to_delete_my_footprint,
+                            R.string.playground_fail_to_leave,
                         ),
                     )
 
                 is PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar ->
                     showSnackbar(
                         resources.getString(
-                            R.string.fail_to_load_playground_info,
+                            R.string.playground_fail_to_load_playground_info,
                         ),
                     )
 
                 is PlaygroundAlertAction.AlertFailToLoadPlaygroundSummarySnackbar ->
                     showSnackbar(
-                        resources.getString(R.string.fail_to_load_playground_summary),
+                        resources.getString(R.string.playground_fail_to_load_playground_summary),
                     )
 
                 is PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar -> {
                     showSnackbar(
-                        resources.getString(R.string.fail_to_join_playground),
+                        resources.getString(R.string.playground_fail_to_join_playground),
                     )
                 }
 
@@ -583,8 +570,7 @@ class PlaygroundFragment :
     }
 
     private fun setupBroadCastReceiver() {
-        playgroundReceiver =
-            PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
+        playgroundReceiver = PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
         val intentFilter =
             IntentFilter().apply {
                 addAction(PlaygroundLocationReceiver.ACTION_UPDATE_LOCATION)
@@ -741,12 +727,10 @@ class PlaygroundFragment :
         if (addresses.isEmpty()) return
         val firstAddress = addresses[0]
         val address =
-            firstAddress
-                .getAddressLine(0)
-                .replace(resources.getString(R.string.woof_address_korea), "")
-                .trimStart()
+            firstAddress.getAddressLine(0)
+                .replace(resources.getString(R.string.playground_address_korea), "").trimStart()
         val countryName = firstAddress.countryName
-        val inKorea = countryName == resources.getString(R.string.woof_address_korea)
+        val inKorea = countryName == resources.getString(R.string.playground_address_korea)
         viewModel.updateAddressAndInKorea(address = address, inKorea = inKorea)
     }
 
@@ -774,8 +758,8 @@ class PlaygroundFragment :
 
     private fun monitorDistanceAndManagePlayStatus() {
         val distanceResults = FloatArray(1)
-        val myFootprintMarker = viewModel.myPlayground.value ?: return
-        val position = myFootprintMarker.marker.position
+        val myPlayground = viewModel.myPlayground.value ?: return
+        val position = myPlayground.marker.position
         Location.distanceBetween(
             latLng.latitude,
             latLng.longitude,
@@ -786,7 +770,6 @@ class PlaygroundFragment :
         val distance = distanceResults[0]
         if (withinPlaygroundRange(distance) || outOfPlaygroundRange(distance)) {
             viewModel.updatePlaygroundArrival(latLng)
-            val myPlayground = viewModel.myPlayground.value ?: return
             viewModel.loadPlaygroundInfo(myPlayground.id)
         }
     }
@@ -914,23 +897,13 @@ class PlaygroundFragment :
     private fun showBalloon(text: String) {
         balloon?.dismiss()
         balloon =
-            Balloon
-                .Builder(requireContext())
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setText(text)
-                .setTextColorResource(R.color.white)
-                .setTextSize(14f)
-                .setMarginBottom(10)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-                .setArrowSize(10)
-                .setArrowPosition(0.5f)
-                .setPadding(12)
-                .setFocusable(false)
-                .setCornerRadius(8f)
+            Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP).setText(text).setTextColorResource(R.color.white)
+                .setTextSize(14f).setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
+                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
                 .setBackgroundColorResource(R.color.coral400)
-                .setBalloonAnimation(BalloonAnimation.ELASTIC)
-                .setLifecycleOwner(viewLifecycleOwner)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
                 .build()
 
         balloon?.showAlignTop(binding.btnPlaygroundRegisteringHelp)

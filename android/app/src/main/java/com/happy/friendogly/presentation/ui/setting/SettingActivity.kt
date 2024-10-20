@@ -48,7 +48,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 ).show()
                 with(binding) {
                     alarmSettingsChattingPushSwitch.isChecked = false
-                    alarmSettingsWoofPushSwitch.isChecked = false
+                    alarmSettingsPlaygroundPushSwitch.isChecked = false
                 }
             }
         }
@@ -66,11 +66,11 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                     } else {
                         uiState.chattingAlarmPushPermitted
                     }
-                alarmSettingsWoofPushSwitch.isChecked =
+                alarmSettingsPlaygroundPushSwitch.isChecked =
                     if (isValidSDK) {
-                        uiState.woofAlarmPushPermitted && hasPermission
+                        uiState.playgroundAlarmPushPermitted && hasPermission
                     } else {
-                        uiState.woofAlarmPushPermitted
+                        uiState.playgroundAlarmPushPermitted
                     }
             }
         }
@@ -84,11 +84,11 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 }
                 viewModel.saveChattingAlarmSetting(isChecked)
             }
-            alarmSettingsWoofPushSwitch.setOnCheckedChangeListener { _, isChecked ->
+            alarmSettingsPlaygroundPushSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     requestNotificationPermission()
                 }
-                viewModel.saveWoofAlarmSetting(isChecked)
+                viewModel.savePlaygroundAlarmSetting(isChecked)
             }
         }
     }

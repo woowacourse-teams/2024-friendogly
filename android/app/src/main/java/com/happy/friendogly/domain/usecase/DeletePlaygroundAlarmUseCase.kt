@@ -3,10 +3,10 @@ package com.happy.friendogly.domain.usecase
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 import javax.inject.Inject
 
-class DeleteWoofAlarmUseCase
+class DeletePlaygroundAlarmUseCase
     @Inject
     constructor(
         private val repository: AlarmSettingRepository,
     ) {
-        suspend operator fun invoke(): Result<Unit> = repository.deleteWoofSetting()
+        suspend operator fun invoke(): Result<Unit> = repository.deletePlaygroundSetting()
     }

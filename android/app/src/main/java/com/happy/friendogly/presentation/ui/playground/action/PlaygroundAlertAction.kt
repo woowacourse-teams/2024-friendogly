@@ -19,8 +19,6 @@ sealed interface PlaygroundAlertAction {
 
     data object AlertAlreadyParticipatePlaygroundSnackbar : PlaygroundAlertAction
 
-    data object AlertEndWalkSnackbar : PlaygroundAlertAction
-
     data object AlertFailToCheckPetExistence : PlaygroundAlertAction
 
     data object AlertFailToLoadPlaygroundsSnackbar : PlaygroundAlertAction
@@ -29,9 +27,7 @@ sealed interface PlaygroundAlertAction {
 
     data object AlertFailToUpdatePlaygroundArrival : PlaygroundAlertAction
 
-    data object AlertFailToEndWalkSnackbar : PlaygroundAlertAction
-
-    data object AlertFailToDeleteMyFootprintSnackbar : PlaygroundAlertAction
+    data object AlertFailToLeavePlaygroundSnackbar : PlaygroundAlertAction
 
     data object AlertFailToLoadPlaygroundInfoSnackbar : PlaygroundAlertAction
 

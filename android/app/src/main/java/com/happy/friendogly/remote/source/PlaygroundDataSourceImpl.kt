@@ -40,11 +40,11 @@ class PlaygroundDataSourceImpl
             }
         }
 
-        override suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto> {
+        override suspend fun getPetExistence(): Result<PetExistenceDto> {
             return runCatching { service.getPetExistence().data.toData() }
         }
 
-        override suspend fun getNearFootprints(): Result<List<PlaygroundDto>> {
+        override suspend fun getNearPlaygrounds(): Result<List<PlaygroundDto>> {
             return runCatching { service.getPlaygrounds().data.toData() }
         }
 

@@ -30,7 +30,7 @@ object Types {
     const val KAKAO_LOGIN_CLICKED = "kakao_login_clicked"
     const val GOOGLE_LOGIN_CLICKED = "google_login_clicked"
     const val GROUP_LIST_FRAGMENT = "group_list_fragment"
-    const val WOOF_FRAGMENT = "woof_fragment"
+    const val PLAYGROUND_FRAGMENT = "playground_fragment"
     const val CHAT_LIST_FRAGMENT = "chat_list_fragment"
     const val MY_PAGE_FRAGMENT = "my_page_fragment"
     const val CLUB_LIST_FRAGMENT_SWITCHED = "group_list_fragment_switched"

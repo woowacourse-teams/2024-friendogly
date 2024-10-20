@@ -99,7 +99,7 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsWoofDataSource(dataSourceImpl: PlaygroundDataSourceImpl): PlaygroundDataSource
+    abstract fun bindsPlaygroundDataSource(dataSourceImpl: PlaygroundDataSourceImpl): PlaygroundDataSource
 
     @Binds
     @Singleton

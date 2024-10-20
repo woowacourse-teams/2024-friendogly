@@ -75,12 +75,12 @@ fun AnalyticsHelper.logPetImageClicked() {
 }
 
 fun AnalyticsHelper.logPlaygroundSize(size: Int) {
-    logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
+    logEvent(type = Types.PLAYGROUND_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
 }
 
 fun AnalyticsHelper.logPetExistence(isExistPet: Boolean) {
     logEvent(
-        type = Types.WOOF_FRAGMENT,
+        type = Types.PLAYGROUND_FRAGMENT,
         ParamKeys.PET_EXISTENCE to isExistPet,
     )
 }

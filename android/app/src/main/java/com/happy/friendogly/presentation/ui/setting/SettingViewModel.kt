@@ -7,10 +7,10 @@ import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
-import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.GetPlaygroundAlarmUseCase
 import com.happy.friendogly.domain.usecase.PostLogoutUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
-import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.SavePlaygroundAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
@@ -23,9 +23,9 @@ class SettingViewModel
     constructor(
         private val deleteTokenUseCase: DeleteTokenUseCase,
         private val getChatAlarmUseCase: GetChatAlarmUseCase,
-        private val getWoofAlarmUseCase: GetWoofAlarmUseCase,
+        private val getPlaygroundAlarmUseCase: GetPlaygroundAlarmUseCase,
         private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
-        private val saveWoofAlarmUseCase: SaveWoofAlarmUseCase,
+        private val savePlaygroundAlarmUseCase: SavePlaygroundAlarmUseCase,
         private val deleteMemberUseCase: DeleteMemberUseCase,
         private val postLogoutUseCase: PostLogoutUseCase,
     ) : BaseViewModel() {
@@ -60,10 +60,10 @@ class SettingViewModel
             }
 
             launch {
-                getWoofAlarmUseCase().onSuccess {
+                getPlaygroundAlarmUseCase().onSuccess {
                     _uiState.value =
                         _uiState.value?.copy(
-                            woofAlarmPushPermitted = it,
+                            playgroundAlarmPushPermitted = it,
                         )
                 }.onFailure {
                     // TODO 에러핸들링
@@ -77,9 +77,9 @@ class SettingViewModel
             }
         }
 
-        fun saveWoofAlarmSetting(checked: Boolean) {
+        fun savePlaygroundAlarmSetting(checked: Boolean) {
             launch {
-                saveWoofAlarmUseCase(checked)
+                savePlaygroundAlarmUseCase(checked)
             }
         }
 

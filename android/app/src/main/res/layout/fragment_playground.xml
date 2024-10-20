@@ -73,7 +73,7 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <TextView
-            android:id="@+id/btn_woof_playground_refresh"
+            android:id="@+id/btn_playground_refresh"
             style="@style/Theme.AppCompat.TextView.SemiBold.Coral400.Size14"
             refreshBtnUiState="@{vm.uiState}"
             android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             android:onClick="@{() -> vm.clickRefreshBtn()}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:text="@string/woof_footprint_refresh"
+            android:text="@string/playground_refresh"
             android:visibility="invisible"
             app:drawableStartCompat="@drawable/ic_refresh"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btn_woof_back"
+            android:id="@+id/btn_playground_back"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
             registeringVisibility="@{vm.uiState}"
             android:layout_width="46dp"
@@ -111,7 +111,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btn_woof_close"
+            android:id="@+id/btn_playground_close"
             style="@style/Theme.AppCompat.TextView.SemiBold.White.Size14"
             registeringVisibility="@{vm.uiState}"
             android:layout_width="46dp"
@@ -139,7 +139,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.naver.maps.map.widget.LocationButtonView
-                android:id="@+id/lbv_woof_location"
+                android:id="@+id/lbv_playground_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -169,7 +169,7 @@
             android:background="@drawable/rect_coral400_fill_12"
             android:gravity="center"
             android:onClick="@{() -> vm.clickMyPlaygroundBtn()}"
-            android:text="@string/woof_my_footprint"
+            android:text="@string/playground_my"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/btn_playground_location"
             app:layout_constraintStart_toStartOf="parent"
@@ -207,18 +207,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_woof_register_location"
+            android:id="@+id/layout_playground_register_location"
             registerLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="12dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.naver.maps.map.widget.LocationButtonView
-                android:id="@+id/lbv_woof_register_location"
+                android:id="@+id/lbv_playground_register_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -226,7 +226,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:id="@+id/btn_woof_register_location"
+            android:id="@+id/btn_playground_register_location"
             registerLocationBtnVisibility="@{vm.uiState}"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -234,7 +234,7 @@
             android:layout_marginBottom="12dp"
             android:onClick="@{() -> vm.clickLocationBtn()}"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
             app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -251,12 +251,12 @@
             android:onClick="@{() -> vm.clickHelpBtn()}"
             android:padding="6dp"
             android:src="@drawable/ic_help_coral500"
-            app:layout_constraintBottom_toTopOf="@id/layout_woof_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_woof_register_marker"
+            android:id="@+id/layout_playground_register_marker"
             android:layout_width="match_parent"
             android:layout_height="208dp"
             android:layout_margin="12dp"
@@ -268,18 +268,18 @@
             tools:visibility="gone">
 
             <TextView
-                android:id="@+id/tv_woof_register_walk_area"
+                android:id="@+id/tv_playground_register"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Orange.Size26"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/woof_register_playground_title"
+                android:text="@string/playground_register_playground_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_woof_address"
+                android:id="@+id/tv_playground_address"
                 style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
                 addressText="@{vm.uiState}"
                 android:layout_width="0dp"
@@ -288,7 +288,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_woof_register_walk_area"
+                app:layout_constraintTop_toBottomOf="@id/tv_playground_register"
                 tools:text="서울 송파구 올림픽로35다길 42서울 송파구 올림픽로35다길 42" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -301,7 +301,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"
                 android:onClick="@{() -> vm.clickRegisterMarkerBtn()}"
-                android:text="@string/woof_register_playground"
+                android:text="@string/playground_register_playground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -421,7 +421,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:id="@+id/layout_woof_loading"
+            android:id="@+id/layout_playground_loading"
             loadingVisibility="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -436,7 +436,7 @@
             app:layout_constraintVertical_bias="0.0">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie_woof_loading"
+                android:id="@+id/lottie_playground_loading"
                 loadingAnimation="@{vm.uiState}"
                 android:layout_width="200dp"
                 android:layout_height="200dp"

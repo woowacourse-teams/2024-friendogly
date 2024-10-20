@@ -74,14 +74,14 @@ class PlaygroundRepositoryImpl
             )
         }
 
-        override suspend fun getFootprintMarkBtnInfo(): Result<PetExistence> =
-            source.getFootprintMarkBtnInfo().mapCatching { dto ->
+        override suspend fun getPetExistence(): Result<PetExistence> =
+            source.getPetExistence().mapCatching { dto ->
                 dto.toDomain()
             }
 
         override suspend fun getPlaygrounds(): Result<List<Playground>> =
             source
-                .getNearFootprints()
+                .getNearPlaygrounds()
                 .mapCatching { dto ->
                     dto.toDomain()
                 }
