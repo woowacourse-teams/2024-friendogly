@@ -745,41 +745,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
     private fun updateLocation(location: Location) {
         latLng = LatLng(location.latitude, location.longitude)
-        monitorDistanceAndManagePlayStatus()
+        viewModel.monitorDistanceAndManagePlayStatus(latLng)
     }
 
     private fun leavePlayground() {
         viewModel.hideMyPlayground()
         viewModel.leavePlayground()
         viewModel.updatePlaygrounds()
-    }
-
-    private fun monitorDistanceAndManagePlayStatus() {
-        val distanceResults = FloatArray(1)
-        val myPlayground = viewModel.myPlayground.value ?: return
-        val position = myPlayground.marker.position
-        Location.distanceBetween(
-            latLng.latitude,
-            latLng.longitude,
-            position.latitude,
-            position.longitude,
-            distanceResults,
-        )
-        val distance = distanceResults[0]
-        if (withinPlaygroundRange(distance) || outOfPlaygroundRange(distance)) {
-            viewModel.updatePlaygroundArrival(latLng)
-            viewModel.loadPlaygroundInfo(myPlayground.id)
-        }
-    }
-
-    private fun withinPlaygroundRange(distance: Float): Boolean {
-        val myPlayStatus = viewModel.myPlayStatus.value ?: return false
-        return myPlayStatus == PlayStatus.AWAY && distance <= PLAYGROUND_RADIUS
-    }
-
-    private fun outOfPlaygroundRange(distance: Float): Boolean {
-        val myPlayStatus = viewModel.myPlayStatus.value ?: return false
-        return myPlayStatus == PlayStatus.PLAYING && distance > PLAYGROUND_RADIUS
     }
 
     private fun stopLocationService() {
