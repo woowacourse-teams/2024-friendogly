@@ -7,6 +7,7 @@ import com.happy.friendogly.pet.domain.SizeType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record SaveClubResponse(
         Long id,
@@ -35,8 +36,12 @@ public record SaveClubResponse(
                 new AddressDetailResponse(club.getAddress()),
                 club.getStatus(),
                 club.getCreatedAt(),
-                club.getAllowedGenders(),
-                club.getAllowedSizes(),
+                club.getAllowedGenders().stream()
+                        .map(clubGender -> clubGender.getClubGenderId().getAllowedGender())
+                        .collect(Collectors.toSet()),
+                club.getAllowedSizes().stream()
+                        .map(clubSize -> clubSize.getClubSizeId().getAllowedSize())
+                        .collect(Collectors.toSet()),
                 club.getMemberCapacity().getValue(),
                 club.countClubMember(),
                 club.getImageUrl(),

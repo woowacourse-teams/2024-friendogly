@@ -6,8 +6,8 @@ import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.request.UpdateClubRequest;
-import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -50,7 +50,7 @@ public class ClubController {
     }
 
     @GetMapping("/searching")
-    public ApiResponse<List<FindClubByFilterResponse>> findByFilter(
+    public ApiResponse<FindClubPageByFilterResponse> findByFilter(
             @Auth Long memberId,
             @Valid @ModelAttribute FindClubByFilterRequest request
     ) {

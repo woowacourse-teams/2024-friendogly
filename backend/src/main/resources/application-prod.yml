@@ -50,7 +50,9 @@ spring:
         read-only: true
         username: ${MYSQL_USERNAME}
         password: ${MYSQL_PASSWORD}
-
   jpa:
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100

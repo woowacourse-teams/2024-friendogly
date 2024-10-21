@@ -27,7 +27,7 @@ public class ClubPet {
 
     private void validateClub(Club club) {
         if (club == null) {
-            throw new FriendoglyException("모임에 참여하는 회원 정보는 필수입니다.");
+            throw new FriendoglyException("모임 정보는 필수입니다.");
         }
     }
 
