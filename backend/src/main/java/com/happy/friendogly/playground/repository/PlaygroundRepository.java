@@ -45,6 +45,4 @@ public interface PlaygroundRepository extends JpaRepository<Playground, Long> {
             )
             """)
     void deleteAllHasNotMemberByIdIn(List<Long> deletePlaygroundCandidate);
-
-
 }
