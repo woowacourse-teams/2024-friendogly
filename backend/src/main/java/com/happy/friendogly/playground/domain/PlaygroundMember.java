@@ -38,7 +38,7 @@ public class PlaygroundMember {
     @Column(name = "is_inside", nullable = false)
     private boolean isInside;
 
-    @Column(name = "participate_time")
+    @Column(name = "participate_time", nullable = false)
     private LocalDateTime participateTime;
 
     @Column(name = "exit_time")
@@ -75,6 +75,14 @@ public class PlaygroundMember {
         return this.playground.getId().equals(playground.getId());
     }
 
+    public boolean hasEverArrived() {
+        return this.exitTime != null;
+    }
+
+    public boolean hasNeverArrived() {
+        return this.exitTime == null;
+    }
+
     public void updateIsInside(boolean isInside) {
         this.isInside = isInside;
     }
@@ -85,5 +93,13 @@ public class PlaygroundMember {
 
     public void updateExitTime(LocalDateTime exitTime) {
         this.exitTime = exitTime;
+    }
+
+    public boolean isParticipateTimeBefore(LocalDateTime localDateTime) {
+        return this.participateTime.isBefore(localDateTime);
+    }
+
+    public boolean isExitTimeBefore(LocalDateTime localDateTime) {
+        return this.exitTime.isBefore(localDateTime);
     }
 }

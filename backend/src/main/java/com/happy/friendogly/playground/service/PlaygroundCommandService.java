@@ -31,8 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlaygroundCommandService {
 
-    public static final int OUTSIDE_MEMBER_KEEP_TIME = 2;
-    public static final String EVERY_30_MINUTE = "0 0/30 * * * *";
+    private static final int OUTSIDE_MEMBER_KEEP_HOURS = 2;
+    private static final String EVERY_30_MINUTE = "0 0/30 * * * *";
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -156,12 +156,12 @@ public class PlaygroundCommandService {
 
     @Scheduled(cron = EVERY_30_MINUTE)
     public void deleteJoinMemberIntervalTime() {
-        LocalDateTime outsideMemberKeepTime = LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_TIME);
+        LocalDateTime outsideMemberKeepTime = LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_HOURS);
 
         List<PlaygroundMember> deletePlaygroundMembers = playgroundMemberRepository.findAllByIsInside(false).stream()
                 .filter(
-                        p -> (p.getExitTime() == null && p.getParticipateTime().isBefore(outsideMemberKeepTime))
-                                || (p.getExitTime() != null && p.getExitTime().isBefore(outsideMemberKeepTime))
+                        pm -> (pm.hasNeverArrived() && pm.isParticipateTimeBefore(outsideMemberKeepTime))
+                                || (pm.hasEverArrived() && pm.isExitTimeBefore(outsideMemberKeepTime))
                 ).toList();
 
         playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
@@ -171,6 +171,5 @@ public class PlaygroundCommandService {
                 .toList();
 
         playgroundRepository.deleteAllHasNotMemberByIdIn(deletePlaygroundCandidate);
-
     }
 }
