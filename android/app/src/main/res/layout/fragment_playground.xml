@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/bottom_sheet_playground"
@@ -39,9 +39,27 @@
                 android:paddingHorizontal="14dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-                <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/btn_playground_info_refresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:padding="4dp"
+                        android:onClick="@{() -> vm.clickPlaygroundInfoRefreshBtn(vm.myPlayground.id)}"
+                        android:clickable="true"
+                        android:src="@drawable/ic_refresh_gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_playground_pet"
@@ -80,12 +98,12 @@
             android:drawablePadding="6dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:onClick="@{() -> vm.clickRefreshBtn()}"
+            android:onClick="@{() -> vm.clickPlaygroundRefreshBtn()}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="@string/playground_refresh"
             android:visibility="invisible"
-            app:drawableStartCompat="@drawable/ic_refresh"
+            app:drawableStartCompat="@drawable/ic_refresh_coral"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -259,7 +277,7 @@
             android:paddingHorizontal="6dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_playground_register"

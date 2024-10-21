@@ -9,7 +9,9 @@ interface PlaygroundActionHandler {
 
     fun clickMyPlaygroundBtn()
 
-    fun clickRefreshBtn()
+    fun clickPlaygroundRefreshBtn()
+
+    fun clickPlaygroundInfoRefreshBtn(playgroundId: Long)
 
     fun clickBackBtn()
 
