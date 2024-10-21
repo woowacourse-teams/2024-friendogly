@@ -34,7 +34,7 @@ public class ClubGender {
         }
     }
 
-    public boolean isSameGenderWith(Gender gender) {
+    public boolean hasGender(Gender gender) {
         return this.getClubGenderId().getAllowedGender() == gender;
     }
 }

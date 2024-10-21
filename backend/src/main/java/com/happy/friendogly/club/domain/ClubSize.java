@@ -34,7 +34,7 @@ public class ClubSize {
         }
     }
 
-    public boolean isSameSizeWith(SizeType sizeType) {
+    public boolean hasSize(SizeType sizeType) {
         return this.getClubSizeId().getAllowedSize() == sizeType;
     }
 }

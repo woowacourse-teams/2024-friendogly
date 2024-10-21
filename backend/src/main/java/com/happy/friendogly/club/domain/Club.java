@@ -189,9 +189,9 @@ public class Club {
 
     private boolean canJoinWith(Pet pet) {
         boolean isGenderMatch = allowedGenders.stream()
-                .anyMatch(clubGender -> clubGender.isSameGenderWith(pet.getGender()));
+                .anyMatch(clubGender -> clubGender.hasGender(pet.getGender()));
         boolean isSizeMatch = allowedSizes.stream()
-                .anyMatch(clubSize -> clubSize.isSameSizeWith(pet.getSizeType()));
+                .anyMatch(clubSize -> clubSize.hasSize(pet.getSizeType()));
 
         return isGenderMatch && isSizeMatch;
     }
