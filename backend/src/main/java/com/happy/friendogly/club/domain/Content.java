@@ -16,7 +16,6 @@ public class Content {
 
     private static final int MAX_CONTENT_LENGTH = 1000;
 
-    @Lob
     @Column(name = "content", nullable = false)
     private String value;
 
