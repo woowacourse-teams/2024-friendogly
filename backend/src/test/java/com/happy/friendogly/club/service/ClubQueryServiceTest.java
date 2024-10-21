@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.FilterCondition;
-import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
@@ -214,7 +213,8 @@ class ClubQueryServiceTest extends ClubServiceTest {
         assertThat(response.isLastPage()).isTrue();
     }
 
-    @DisplayName("페이지 사이즈와 같은 수의 모임이 존재하는 경우, 페이지 사이즈 만큼의 모임이 조회되고 다음 페이지는 존재하지 않는다.")
+    // 다음 페이지가 있는지 없는지 DB입장에서 알 수 없기 때문에 일단 다음 페이지가 있는 것으로 응답하고, 클라이언트가 다시 요청하도록 하기 위함
+    @DisplayName("페이지 사이즈와 같은 수의 모임이 존재하는 경우, 페이지 사이즈 만큼의 모임이 조회되고 다음 페이지는 존재하는 것으로 한다.")
     @Test
     void findSearching_EqualToPageSize() {
         List<Club> clubs = List.of(
@@ -248,54 +248,7 @@ class ClubQueryServiceTest extends ClubServiceTest {
         FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
 
         assertThat(response.content().size()).isEqualTo(clubs.size());
-        assertThat(response.isLastPage()).isTrue();
-    }
-
-    @DisplayName("필터링 조건에 맞지 않는 모임으로 인해 pageSize를 채우지 못한 경우, 한번 더 조회 쿼리를 날린다.")
-    @Transactional
-    @Test
-    void findSearching_UntilPageSizeReaches() {
-        List<Club> clubs = List.of(
-                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
-                        savedMember,
-                        List.of(savedPet),
-                        Set.of(Gender.values()),
-                        Set.of(SizeType.values())
-                ),
-                createSavedClub(    // 필터링 조건에 맞지 않는 모임. 결과에서 제외되어야 함
-                        savedMember,
-                        List.of(savedPet),
-                        Set.of(Gender.values()),
-                        Set.of(SizeType.values())
-                ),
-                createSavedClub(    // 필터링 조건에 맞는 모임. 결과에 포함되어야 함
-                        savedMember,
-                        List.of(savedPet),
-                        Set.of(Gender.values()),
-                        Set.of(SizeType.values())
-                ));
-
-        int pageSize = clubs.size() - 1;
-
-        // 두 번째 Club의 상태를 CLOSED로 변경
-        clubs.get(1).update("title", "content", Status.CLOSED.name());
-
-        FindClubByFilterRequest request = new FindClubByFilterRequest(
-                FilterCondition.OPEN.name(),    // OPEN 상태인 모임만 조회
-                province,
-                null,
-                null,
-                Set.of(Gender.FEMALE.name()),
-                Set.of(SizeType.SMALL.name()),
-                pageSize,
-                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
-                Long.MAX_VALUE
-        );
-
-        FindClubPageByFilterResponse response = clubQueryService.findByFilter(savedMember.getId(), request);
-
-        assertThat(response.content().size()).isEqualTo(pageSize);
-        assertThat(response.isLastPage()).isTrue(); // 한 번 더 쿼리를 보냈기 때문에 마지막 페이지까지 도달
+        assertThat(response.isLastPage()).isFalse();
     }
 
     @DisplayName("내가 방장인 모임을 조회한다.")

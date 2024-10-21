@@ -81,7 +81,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                 Set.of(SizeType.SMALL.name()),
                 20,
                 LocalDateTime.of(1, 1, 1, 0, 0, 0),
-                0L
+                1L
         );
 
         FindClubPageByFilterResponse responses = new FindClubPageByFilterResponse(
