@@ -166,9 +166,11 @@ public class PlaygroundCommandService {
 
         playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
 
-        playgroundMemberRepository.deleteAllByIsInsideAndExitTimeBefore(
-                false,
-                LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_TIME)
-        );
+        List<Long> deletePlaygroundCandidate = deletePlaygroundMembers.stream()
+                .map(playgroundMember -> playgroundMember.getPlayground().getId())
+                .toList();
+
+        playgroundRepository.deleteAllHasNotMemberByIdIn(deletePlaygroundCandidate);
+
     }
 }
