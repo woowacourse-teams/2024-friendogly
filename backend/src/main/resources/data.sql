@@ -102,7 +102,7 @@ INSERT INTO playground (latitude, longitude)
 VALUES (37.514062, 127.100972),
         (37.520740, 127.121328);
 
-INSERT INTO playground_member (playground_id, member_id, message, is_inside, exit_time)
-VALUES (1, 2, '강아지 3마리 보유', true, null),
-        (1, 1, '강아지 2마리 보유', false, null),
-        (2, 3, '강아지 1마리 보유' ,true, null);
+INSERT INTO playground_member (playground_id, member_id, message, is_inside, participate_time, exit_time)
+VALUES (1, 2, '강아지 3마리 보유', true, '2023-07-31 01:00:00', null),
+        (1, 1, '강아지 2마리 보유', false, '2023-07-31 01:00:00', null),
+        (2, 3, '강아지 1마리 보유' ,true, '2023-07-31 01:00:00', null);

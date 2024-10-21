@@ -7,6 +7,7 @@ import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.service.PlaygroundNotificationService;
 import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
@@ -21,6 +22,7 @@ import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,17 +30,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlaygroundCommandService {
 
+    private static final int OUTSIDE_MEMBER_KEEP_HOURS = 2;
+    private static final String EVERY_30_MINUTE = "0 0/30 * * * *";
+
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
     private final MemberRepository memberRepository;
+    private final PlaygroundNotificationService playgroundNotificationService;
 
     public PlaygroundCommandService(
             PlaygroundRepository playgroundRepository,
             PlaygroundMemberRepository playgroundMemberRepository,
-            MemberRepository memberRepository) {
+            MemberRepository memberRepository,
+            PlaygroundNotificationService playgroundNotificationService) {
         this.playgroundRepository = playgroundRepository;
         this.playgroundMemberRepository = playgroundMemberRepository;
         this.memberRepository = memberRepository;
+        this.playgroundNotificationService = playgroundNotificationService;
     }
 
     public SavePlaygroundResponse save(SavePlaygroundRequest request, Long memberId) {
@@ -90,12 +98,17 @@ public class PlaygroundCommandService {
     public SaveJoinPlaygroundMemberResponse joinPlayground(Long memberId, Long playgroundId) {
         Playground playground = playgroundRepository.getById(playgroundId);
         Member member = memberRepository.getById(memberId);
+        List<PlaygroundMember> existingPlaygroundMembers = playgroundMemberRepository
+                .findAllByPlaygroundId(playgroundId);
 
         validateExistParticipatingPlayground(member);
 
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
                 new PlaygroundMember(playground, member)
         );
+
+        playgroundNotificationService.sendJoinNotification(member.getName().getValue(), existingPlaygroundMembers);
+
         return new SaveJoinPlaygroundMemberResponse(playgroundMember);
     }
 
@@ -118,15 +131,17 @@ public class PlaygroundCommandService {
         Playground playground = playgroundMember.getPlayground();
 
         Location location = new Location(request.latitude(), request.longitude());
-        boolean isInsideBoundary = playground.isInsideBoundary(location);
 
-        if (!isInsideBoundary) {
+        boolean pastIsInsideBoundary = playgroundMember.isInside();
+        boolean changedIsInsideBoundary = playground.isInsideBoundary(location);
+
+        if (pastIsInsideBoundary && !changedIsInsideBoundary) {
             playgroundMember.updateExitTime(LocalDateTime.now());
         }
 
-        playgroundMember.updateIsInside(isInsideBoundary);
+        playgroundMember.updateIsInside(changedIsInsideBoundary);
 
-        return new UpdatePlaygroundArrivalResponse(isInsideBoundary);
+        return new UpdatePlaygroundArrivalResponse(changedIsInsideBoundary);
     }
 
     public UpdatePlaygroundMemberMessageResponse updateMemberMessage(
@@ -136,5 +151,24 @@ public class PlaygroundCommandService {
         PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
         playgroundMember.updateMessage(request.message());
         return new UpdatePlaygroundMemberMessageResponse(playgroundMember.getMessage());
+    }
+
+    @Scheduled(cron = EVERY_30_MINUTE)
+    public void deleteJoinMemberIntervalTime() {
+        LocalDateTime outsideMemberKeepTime = LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_HOURS);
+
+        List<PlaygroundMember> deletePlaygroundMembers = playgroundMemberRepository.findAllByIsInside(false).stream()
+                .filter(
+                        pm -> (pm.hasNeverArrived() && pm.isParticipateTimeBefore(outsideMemberKeepTime))
+                                || (pm.hasEverArrived() && pm.isExitTimeBefore(outsideMemberKeepTime))
+                ).toList();
+
+        playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
+
+        List<Long> deletePlaygroundCandidate = deletePlaygroundMembers.stream()
+                .map(playgroundMember -> playgroundMember.getPlayground().getId())
+                .toList();
+
+        playgroundRepository.deleteAllHasNotMemberByIdIn(deletePlaygroundCandidate);
     }
 }
