@@ -8,7 +8,7 @@ import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import com.happy.friendogly.R
-import com.happy.friendogly.databinding.ActivityMessageBinding
+import com.happy.friendogly.databinding.ActivityStateMessageBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment.Companion.EXTRA_MESSAGE_UPDATED
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class StateMessageActivity :
-    BaseActivity<ActivityMessageBinding>(R.layout.activity_message) {
+    BaseActivity<ActivityStateMessageBinding>(R.layout.activity_state_message) {
     private val viewModel by viewModels<StateViewModel>()
 
     override fun initCreateView() {

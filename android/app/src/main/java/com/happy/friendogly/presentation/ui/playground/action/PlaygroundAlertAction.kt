@@ -9,7 +9,7 @@ sealed interface PlaygroundAlertAction {
 
     data object AlertNotExistMyPlaygroundSnackbar : PlaygroundAlertAction
 
-    data object AlertMarkerRegisteredSnackbar : PlaygroundAlertAction
+    data object AlertPlaygroundRegisteredSnackbar : PlaygroundAlertAction
 
     data object AlertLeaveMyPlaygroundSnackbar : PlaygroundAlertAction
 

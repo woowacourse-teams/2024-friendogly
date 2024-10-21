@@ -53,9 +53,9 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHelpBalloon
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertLeaveMyPlaygroundSnackbar
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertMarkerRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertPlaygroundRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FaceTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FollowTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
@@ -64,7 +64,6 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ScanNearPlaygrounds
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
@@ -344,8 +343,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             if (playgroundInfo != null) {
-                petDetailAdapter.submitList(playgroundInfo.petDetails)
-
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
                         if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
@@ -356,6 +353,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     },
                     ANIMATE_DURATION_MILLIS,
                 )
+                petDetailAdapter.submitList(playgroundInfo.petDetails)
+            } else {
+                petDetailAdapter.submitList(emptyList())
             }
         }
 
@@ -406,8 +406,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
 
                 is MoveCameraCenterPosition -> moveCameraCenterPosition(event.position)
-
-                is ScanNearPlaygrounds -> viewModel.scanNearPlaygrounds()
 
                 is ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
@@ -668,9 +666,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun leavePlayground() {
-        viewModel.hideMyPlayground()
         viewModel.leavePlayground()
-        viewModel.updatePlaygrounds()
     }
 
     private fun stopLocationService() {
@@ -765,7 +761,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         val messageResId =
             when (event) {
                 is AlertAddressOutOfKoreaSnackbar -> R.string.playground_address_out_of_korea
-                is AlertMarkerRegisteredSnackbar -> R.string.playground_marker_registered
+                is AlertPlaygroundRegisteredSnackbar -> R.string.playground_marker_registered
                 is AlertNotExistMyPlaygroundSnackbar -> R.string.playground_not_exist_my_playground
                 is AlertLeaveMyPlaygroundSnackbar -> R.string.playground_leave_my_playground
                 is AlertAutoLeavePlaygroundSnackbar -> R.string.playground_leave_my_playground

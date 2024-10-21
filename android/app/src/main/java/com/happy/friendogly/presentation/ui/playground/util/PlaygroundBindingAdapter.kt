@@ -18,7 +18,6 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHa
 import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiModel
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundInfoUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
@@ -113,17 +112,11 @@ fun View.bindPlaygroundInfoVisibility(
     playStatus: PlayStatus?,
 ) {
     isVisible =
-        if (playStatus != PlayStatus.NO_PLAYGROUND && (
-                uiState is PlaygroundUiState.Loading ||
-                    uiState is PlaygroundUiState.FindingPlayground ||
-                    uiState is PlaygroundUiState.ViewingPlaygroundInfo
-            )
-        ) {
-            bringToFront()
-            true
-        } else {
-            false
-        }
+        playStatus != PlayStatus.NO_PLAYGROUND && (
+            uiState is PlaygroundUiState.Loading ||
+                uiState is PlaygroundUiState.FindingPlayground ||
+                uiState is PlaygroundUiState.ViewingPlaygroundInfo
+        )
 }
 
 @BindingAdapter("petExistenceBtnUiState")
@@ -153,7 +146,7 @@ fun TextView.bindRegisterPlaygroundBtnClickable(uiState: PlaygroundUiState?) {
 }
 
 @BindingAdapter("btnMargin")
-fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
+fun View.bindBtnMargin(playStatus: PlayStatus?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
@@ -161,7 +154,7 @@ fun View.bindBtnMargin(myPlayground: MyPlaygroundUiModel?) {
     }
 
     val marginBottom =
-        if (myPlayground != null) {
+        if (playStatus != PlayStatus.NO_PLAYGROUND) {
             MARGIN_BOTTOM_PLAYING
         } else {
             MARGIN_BOTTOM_DEFAULT
@@ -199,11 +192,16 @@ fun AppCompatButton.bindPlaygroundBtn(
     }
 }
 
+// @BindingAdapter("playgroundBtnVisibility")
+// fun AppCompatButton.bindPlaygroundBtnVisibility(playgroundInfo: PlaygroundInfoUiModel?) {
+//    if (playgroundInfo != null) {
+//        visibility = if (playgroundInfo.petDetails.isNotEmpty()) View.VISIBLE else View.GONE
+//    }
+// }
+
 @BindingAdapter("playgroundBtnVisibility")
-fun AppCompatButton.bindPlaygroundBtnVisibility(playgroundInfo: PlaygroundInfoUiModel?) {
-    if (playgroundInfo != null) {
-        visibility = if (playgroundInfo.petDetails.isNotEmpty()) View.VISIBLE else View.GONE
-    }
+fun AppCompatButton.bindPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
+    visibility = if (uiState is PlaygroundUiState.ViewingPlaygroundInfo) View.VISIBLE else View.INVISIBLE
 }
 
 @BindingAdapter("petIsArrival")

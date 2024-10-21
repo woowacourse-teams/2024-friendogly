@@ -13,8 +13,6 @@ sealed interface PlaygroundMapAction {
 
     data object RegisterMyPlayground : PlaygroundMapAction
 
-    data object ScanNearPlaygrounds : PlaygroundMapAction
-
     data object ShowRegisteringPlaygroundScreen : PlaygroundMapAction
 
     data object HideRegisteringPlaygroundScreen : PlaygroundMapAction
