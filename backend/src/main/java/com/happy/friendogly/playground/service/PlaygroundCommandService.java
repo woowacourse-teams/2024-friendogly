@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaygroundCommandService {
 
     public static final int OUTSIDE_MEMBER_KEEP_TIME = 2;
-    public static final String EVERY_HOUR = "0 0 * * * *";
+    public static final String EVERY_30_MINUTE = "0 0/30 * * * *";
 
     private final PlaygroundRepository playgroundRepository;
     private final PlaygroundMemberRepository playgroundMemberRepository;
@@ -154,13 +154,15 @@ public class PlaygroundCommandService {
         return new UpdatePlaygroundMemberMessageResponse(playgroundMember.getMessage());
     }
 
-    @Scheduled(cron = EVERY_HOUR)
+    @Scheduled(cron = EVERY_30_MINUTE)
     public void deleteJoinMemberIntervalTime() {
-        LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
+        LocalDateTime outsideMemberKeepTime = LocalDateTime.now().minusHours(OUTSIDE_MEMBER_KEEP_TIME);
 
         List<PlaygroundMember> deletePlaygroundMembers = playgroundMemberRepository.findAllByIsInside(false).stream()
-                .filter(p -> p.getExitTime() == null && p.getParticipateTime().isBefore(twoHoursAgo))
-                .toList();
+                .filter(
+                        p -> (p.getExitTime() == null && p.getParticipateTime().isBefore(outsideMemberKeepTime))
+                                || (p.getExitTime() != null && p.getExitTime().isBefore(outsideMemberKeepTime))
+                ).toList();
 
         playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
 
