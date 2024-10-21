@@ -32,7 +32,7 @@ class PlaygroundRepositoryTest {
                 .findAllByLocation_LatitudeBetweenAndLocation_LongitudeBetween(9, 11, 9, 11);
 
         // then
-        assertThat(playgrounds.size()).isOne();
+        assertThat(playgrounds).hasSize(1);
     }
 
 }

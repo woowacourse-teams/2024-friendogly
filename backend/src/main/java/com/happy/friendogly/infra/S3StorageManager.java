@@ -2,6 +2,7 @@ package com.happy.friendogly.infra;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.util.StringUtils.getFilenameExtension;
 
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
@@ -27,7 +28,8 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Profile("!local")
 public class S3StorageManager implements FileStorageManager {
 
-    private static final int FILE_SIZE_LIMIT = 1;
+    private static final String IMAGE_MIME_TYPE_PREFIX = "image/";
+    private static final int FILE_SIZE_LIMIT = 5;
     private static final int MB = 1_048_576;
 
     @Value("${aws.s3.bucket-name}")
@@ -51,10 +53,39 @@ public class S3StorageManager implements FileStorageManager {
 
     @Override
     public String uploadFile(MultipartFile file) {
+        validateNullOrEmpty(file);
+        validateFileSize(file);
+
+        String fileName = file.getOriginalFilename();
+        String contentType = file.getContentType();
+        validateImageType(contentType);
+
+        String newFilename = generateRandomFileName(fileName);
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(KEY_PREFIX + newFilename)
+                .contentType(contentType)
+                .build();
+
+        RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
+
+        try {
+            s3Client.putObject(putObjectRequest, requestBody);
+        } catch (SdkException e) {
+            throw new FriendoglyException("s3전송 과정중에 에러 발생", INTERNAL_SERVER_ERROR);
+        }
+
+        return S3_ENDPOINT + newFilename;
+    }
+
+    private void validateNullOrEmpty(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new FriendoglyException("이미지 파일은 비어 있을 수 없습니다.");
         }
+    }
 
+    private void validateFileSize(MultipartFile file) {
         if (file.getSize() > FILE_SIZE_LIMIT * MB) {
             throw new FriendoglyException(
                     String.format("%dMB 미만의 사진만 업로드 가능합니다.", FILE_SIZE_LIMIT),
@@ -62,24 +93,27 @@ public class S3StorageManager implements FileStorageManager {
                     BAD_REQUEST
             );
         }
+    }
 
-        // TODO: 실제 파일명에서 확장자 가져오기
-        // TODO: jpg 이외의 이미지 파일도 가져올 수 있도록 수정하기
-//        String fileName = file.getOriginalFilename();
-        String newFilename = UUID.randomUUID() + ".jpg";
-
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(BUCKET_NAME)
-                .key(KEY_PREFIX + newFilename)
-                .contentType("image/jpg")
-                .build();
-        RequestBody requestBody = RequestBody.fromFile(convertMultiPartFileToFile(file));
-        try {
-            s3Client.putObject(putObjectRequest, requestBody);
-        } catch (SdkException e) {
-            throw new FriendoglyException("s3전송 과정중에 에러 발생", INTERNAL_SERVER_ERROR);
+    private void validateImageType(String contentType) {
+        if (StringUtils.isBlank(contentType)) {
+            throw new FriendoglyException("업로드한 파일의 Content-Type을 알 수 없습니다.");
         }
-        return S3_ENDPOINT + newFilename;
+
+        if (!contentType.startsWith(IMAGE_MIME_TYPE_PREFIX)) {
+            throw new FriendoglyException(
+                    String.format("이미지 파일만 업로드할 수 있습니다. %s는 이미지 Content-Type이 아닙니다.", contentType));
+        }
+    }
+
+    private String generateRandomFileName(String fileName) {
+        String fileExtension = getFilenameExtension(fileName);
+
+        if (fileExtension == null) {
+            return UUID.randomUUID().toString();
+        }
+
+        return UUID.randomUUID() + "." + fileExtension;
     }
 
     private File convertMultiPartFileToFile(MultipartFile multipartFile) {

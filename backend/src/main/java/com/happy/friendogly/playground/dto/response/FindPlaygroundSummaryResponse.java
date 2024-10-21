@@ -1,9 +1,13 @@
 package com.happy.friendogly.playground.dto.response;
 
+import java.util.List;
+
 public record FindPlaygroundSummaryResponse(
 
-        Long id,
+        Long playgroundId,
         int totalPetCount,
-        int arrivedPetCount
+        int arrivedPetCount,
+        List<String> petImageUrls
 ) {
+
 }

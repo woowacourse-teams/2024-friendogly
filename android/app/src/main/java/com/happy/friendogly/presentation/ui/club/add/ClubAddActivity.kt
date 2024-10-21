@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.fragment.app.DialogFragment
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -139,10 +138,6 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
                 )
             }
         bottomSheet.show(supportFragmentManager, "TAG")
-        bottomSheet.setStyle(
-            DialogFragment.STYLE_NORMAL,
-            R.style.RoundCornerBottomSheetDialogTheme,
-        )
     }
 
     private fun makePartImage(): MultipartBody.Part? {

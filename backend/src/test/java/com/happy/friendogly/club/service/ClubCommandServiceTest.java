@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
 import com.happy.friendogly.club.dto.request.UpdateClubRequest;
@@ -259,7 +260,7 @@ class ClubCommandServiceTest extends ClubServiceTest {
 
     @DisplayName("Full 상태에서 회원이 모임에서 탈퇴하면 Open으로 바꾼다.")
     @Test
-    void deleteClubMember_WhenFull(){
+    void deleteClubMember_WhenFull() {
         Club club = Club.create(
                 "강아지 산책시키실 분 모아요.",
                 "매주 주말에 정기적으로 산책 모임하실분만",
@@ -329,5 +330,67 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThatThrownBy(() -> clubCommandService.update(club.getId(), savedMember2.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("수정 권한이 없습니다.");
+    }
+
+    @DisplayName("모임에서 강퇴한다.")
+    @Transactional
+    @Test
+    void kickMember() {
+        Club club = createSavedClub(
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED, Gender.MALE, Gender.MALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        //member2 참여
+        Member savedMember2 = createSavedMember();
+        Pet savedPet2 = createSavedPet(savedMember2);
+        clubCommandService.joinClub(club.getId(), savedMember2.getId(),
+                new SaveClubMemberRequest(List.of(savedPet2.getId())));
+        //member3 참여
+        Member savedMember3 = createSavedMember();
+        Pet savedPet3 = createSavedPet(savedMember3);
+        clubCommandService.joinClub(club.getId(), savedMember3.getId(),
+                new SaveClubMemberRequest(List.of(savedPet3.getId())));
+
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(savedMember2.getId());
+        clubCommandService.kickMember(club.getId(), savedMember.getId(), request);
+
+        List<Member> actual = club.getClubMembers().stream()
+                .map(clubMember -> clubMember.getClubMemberId().getMember())
+                .toList();
+
+        assertAll(
+                () -> assertThat(actual).hasSize(2),
+                () -> assertThat(actual.contains(savedMember2)).isFalse()
+        );
+    }
+
+    @DisplayName("강퇴 권한이 없으면 예외가 발생한다.")
+    @Transactional
+    @Test
+    void kickMember_FailForbidden() {
+        Club club = createSavedClub(
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED, Gender.MALE, Gender.MALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        //member2 참여
+        Member savedMember2 = createSavedMember();
+        Pet savedPet2 = createSavedPet(savedMember2);
+        clubCommandService.joinClub(club.getId(), savedMember2.getId(),
+                new SaveClubMemberRequest(List.of(savedPet2.getId())));
+        //member3 참여
+        Member savedMember3 = createSavedMember();
+        Pet savedPet3 = createSavedPet(savedMember3);
+        clubCommandService.joinClub(club.getId(), savedMember3.getId(),
+                new SaveClubMemberRequest(List.of(savedPet3.getId())));
+
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(savedMember2.getId());
+
+        assertThatThrownBy(() ->clubCommandService.kickMember(club.getId(), savedMember2.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("강퇴 권한이 없습니다.");
     }
 }

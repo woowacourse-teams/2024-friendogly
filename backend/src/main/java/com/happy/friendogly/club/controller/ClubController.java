@@ -1,6 +1,7 @@
 package com.happy.friendogly.club.controller;
 
 import com.happy.friendogly.auth.Auth;
+import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
@@ -104,5 +105,15 @@ public class ClubController {
     ) {
         UpdateClubResponse response = clubCommandService.update(clubId, memberId, request);
         return ResponseEntity.ok(ApiResponse.ofSuccess(response));
+    }
+
+    @DeleteMapping("/{clubId}/members/kick")
+    public ResponseEntity<Void> kickMember(
+            @Auth Long memberId,
+            @PathVariable Long clubId,
+            @RequestBody DeleteKickedMemberRequest request
+    ) {
+        clubCommandService.kickMember(clubId, memberId, request);
+        return ResponseEntity.noContent().build();
     }
 }

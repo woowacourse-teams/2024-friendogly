@@ -38,7 +38,8 @@ fun TextView.bindMyLocation(userAddress: UserAddress?) {
 }
 
 @BindingAdapter("clubStateTextStyle")
-fun TextView.bindClubStateTextStyle(clubState: ClubState) {
+fun TextView.bindClubStateTextStyle(clubState: ClubState?) {
+    clubState ?: return
     val textStyle =
         when (clubState) {
             ClubState.OPEN -> context.getColor(R.color.coral500)
@@ -48,7 +49,8 @@ fun TextView.bindClubStateTextStyle(clubState: ClubState) {
 }
 
 @BindingAdapter("clubStateText")
-fun TextView.bindClubStateText(clubState: ClubState) {
+fun TextView.bindClubStateText(clubState: ClubState?) {
+    clubState ?: return
     this.text =
         when (clubState) {
             ClubState.OPEN -> context.getString(R.string.club_state_open)

@@ -17,3 +17,7 @@ sealed interface ClubAddEvent {
 
     data object FailLoadAddress : ClubAddEvent
 }
+
+sealed interface ClubSizeGuideEvent {
+    data object OpenSizeGuide : ClubSizeGuideEvent
+}

@@ -26,6 +26,7 @@ import com.epages.restdocs.apispec.SimpleType;
 import com.happy.friendogly.club.controller.ClubController;
 import com.happy.friendogly.club.domain.FilterCondition;
 import com.happy.friendogly.club.domain.Status;
+import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.FindClubByFilterRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
@@ -685,6 +686,71 @@ public class ClubApiDocsTest extends RestDocsTest {
                                 )
                                 .requestSchema(Schema.schema("UpdateClubRequest"))
                                 .responseSchema(Schema.schema("UpdateClubResponse"))
+                                .build())
+                ));
+    }
+
+    @DisplayName("모임 방장이 특정 회원을 강퇴한다.")
+    @Test
+    void kick_204() throws Exception {
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(2L);
+        doNothing()
+                .when(clubCommandService)
+                .kickMember(1L, 1L, request);
+
+        mockMvc.perform(delete("/clubs/{clubId}/members/kick", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent())
+                .andDo(document("clubs/{clubId}/members/kick/204",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 강퇴 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .pathParameters(
+                                        parameterWithName("clubId").description("모임 Id")
+                                )
+                                .requestFields(
+                                        fieldWithPath("kickedMemberId").type(JsonFieldType.NUMBER).description("강퇴 대상 회원 Id")
+                                )
+                                .build())
+                ));
+    }
+
+    @DisplayName("방장 권한이 없으면 403을 응답한다.")
+    @Test
+    void kick_403() throws Exception {
+        DeleteKickedMemberRequest request = new DeleteKickedMemberRequest(2L);
+        doThrow(new FriendoglyException("강퇴 권한이 없습니다.", HttpStatus.FORBIDDEN))
+                .when(clubCommandService)
+                .kickMember(1L, 1L, request);
+
+
+        mockMvc.perform(delete("/clubs/{clubId}/members/kick", 1L)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden())
+                .andDo(document("clubs/{clubId}/members/kick/403",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Club API")
+                                .summary("모임 강퇴 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .pathParameters(
+                                        parameterWithName("clubId").description("모임 Id")
+                                )
+                                .requestFields(
+                                        fieldWithPath("kickedMemberId").type(JsonFieldType.NUMBER).description("강퇴 대상 회원 Id")
+                                )
                                 .build())
                 ));
     }

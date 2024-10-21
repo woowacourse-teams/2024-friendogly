@@ -8,15 +8,16 @@ class ApiClient {
         const val POST_LOGOUT = "$BASE_URL/kakao/logout"
     }
 
-    object Footprints {
-        private const val BASE_URL = "/api/footprints"
-        const val POST_FOOTPRINT = BASE_URL
-        const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_AUTO = "$BASE_URL/recent/walk-status/auto"
-        const val PATCH_FOOTPRINT_RECENT_WALK_STATUS_MANUAL = "$BASE_URL/recent/walk-status/manual"
-        const val GET_FOOTPRINTS_NEAR = "$BASE_URL/near"
-        const val GET_FOOTPRINT_INFO = "$BASE_URL/{footprintId}"
-        const val GET_FOOTPRINT_MINE_LATEST = "$BASE_URL/mine/latest"
-        const val DELETE_FOOTPRINT = "$BASE_URL/{footprintId}"
+    object PlayGround {
+        private const val BASE_URL = "/api/playgrounds"
+        const val POST_PLAYGROUND = BASE_URL
+        const val PATCH_PLAYGROUND_ARRIVAL = "$BASE_URL/arrival"
+        const val GET_PLAYGROUNDS = "$BASE_URL/locations"
+        const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
+        const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{playgroundId}/summary"
+        const val POST_PLAYGROUND_JOIN = "$BASE_URL/{playgroundId}/join"
+        const val DELETE_PLAYGROUND_LEAVE = "$BASE_URL/leave"
+        const val PATCH_PLAYGROUND_MESSAGE = "$BASE_URL/message"
     }
 
     object Member {
@@ -33,6 +34,7 @@ class ApiClient {
         const val GET_PETS_MINE = "$BASE_URL/mine"
         const val POST_PET = BASE_URL
         const val GET_PETS = BASE_URL
+        const val GET_PET_EXISTENCE = "$BASE_URL/exists/mine"
         const val PATCH_PETS = "${BASE_URL}/{id}"
     }
 
@@ -53,21 +55,28 @@ class ApiClient {
         const val PARTICIPATING = "$BASE_URL/participating"
     }
 
-    object Chat {
+    object ChatRoom {
         private const val BASE_URL = "/api/chat-rooms"
         const val CHAT_LIST = "$BASE_URL/mine"
         const val MEMBERS = "$BASE_URL/{chatRoomId}"
         const val CLUB = "$BASE_URL/{chatRoomId}/club"
+        const val LEAVE = "$BASE_URL/leave/{chatRoomId}"
+    }
+
+    object ChatMessage {
+        private const val BASE_URL = "/api/chat-messages"
+        const val ALL = "$BASE_URL/{chatRoomId}"
+        const val TIMES = "$BASE_URL/{chatRoomId}/times"
     }
 
     object WebSocket {
-        fun publishEnter(chatRoomId: Long) = "/publish/enter/$chatRoomId"
+        fun publishEnter(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun publishMessage(chatRoomId: Long) = "/publish/chat/$chatRoomId"
+        fun publishMessage(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun publishLeave(chatRoomId: Long) = "/publish/leave/$chatRoomId"
+        fun publishLeave(chatRoomId: Long) = "/publish/chat.$chatRoomId"
 
-        fun subscribeChat(chatRoomId: Long) = "/topic/chat/$chatRoomId"
+        fun subscribeChat(chatRoomId: Long) = "/exchange/chat.exchange/room.$chatRoomId"
     }
 
     object AlarmToken {

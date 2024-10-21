@@ -13,6 +13,7 @@
 
 
     <LinearLayout
+        style="@style/RoundTopCornerBottomSheetDialogTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,16 +51,6 @@
                 app:filterName="@{ClubFilter.MALE_NAME}" />
 
             <include
-                android:id="@+id/include_filter_neutralizing_female"
-                layout="@layout/include_pet_filter_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                app:actionHandler="@{vm}"
-                app:filterName="@{ClubFilter.NEUTRALIZING_FEMALE_NAME}" />
-
-            <include
                 android:id="@+id/include_filter_female"
                 layout="@layout/include_pet_filter_menu"
                 android:layout_width="wrap_content"
@@ -78,6 +69,16 @@
                 android:layout_marginBottom="5dp"
                 app:actionHandler="@{vm}"
                 app:filterName="@{ClubFilter.NEUTRALIZING_MALE_NAME}" />
+
+            <include
+                android:id="@+id/include_filter_neutralizing_female"
+                layout="@layout/include_pet_filter_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                app:actionHandler="@{vm}"
+                app:filterName="@{ClubFilter.NEUTRALIZING_FEMALE_NAME}" />
         </com.google.android.flexbox.FlexboxLayout>
 
         <TextView

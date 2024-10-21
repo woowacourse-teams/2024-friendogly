@@ -33,7 +33,7 @@ public record SaveClubRequest(
         Set<String> allowedSizes,
 
         @Min(value = 1, message = "모임 최대 인원은 1명 이상입니다.")
-        @Max(value = 5, message = "모임 최대 인원은 5명 이하입니다.")
+        @Max(value = 10, message = "모임 최대 인원은 10명 이하입니다.")
         int memberCapacity,
 
         @NotEmpty(message = "모임에 참여할 반려견을 선택해주세요.")

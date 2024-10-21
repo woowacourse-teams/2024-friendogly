@@ -8,4 +8,6 @@ interface ClubFilterActionHandler {
     fun selectFilters()
 
     fun selectParticipationFilter()
+
+    fun selectSizeGuide()
 }

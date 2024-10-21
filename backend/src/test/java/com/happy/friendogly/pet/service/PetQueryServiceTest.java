@@ -8,6 +8,7 @@ import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
+import com.happy.friendogly.pet.dto.response.FindPetExistenceResponse;
 import com.happy.friendogly.pet.dto.response.FindPetResponse;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.support.ServiceTest;
@@ -74,5 +75,46 @@ public class PetQueryServiceTest extends ServiceTest {
                 () -> assertThat(responses.size()).isEqualTo(1),
                 () -> assertThat(responses.get(0).id()).isEqualTo(pet.getId())
         );
+    }
+
+    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : False")
+    @Test
+    void existMineFalse() {
+        // given
+        Member member = memberRepository.save(
+                new Member("김도선", "tag1", "imageUrl")
+        );
+
+        // when
+        FindPetExistenceResponse response = petQueryService.checkPetExistence(member.getId());
+
+        // then
+        assertThat(response.isExistPet()).isFalse();
+    }
+
+    @DisplayName("멤버가 가진 펫이 한마리라도 있는 지 알 수 있다 : True")
+    @Test
+    void existMineTrue() {
+        // given
+        Member member = memberRepository.save(
+                new Member("김도선", "tag1", "imageUrl")
+        );
+        petRepository.save(
+                new Pet(
+                        member,
+                        "petName",
+                        "description",
+                        LocalDate.of(2023, 10, 4),
+                        SizeType.LARGE,
+                        Gender.FEMALE,
+                        "imgaeUrl"
+                )
+        );
+
+        // when
+        FindPetExistenceResponse response = petQueryService.checkPetExistence(member.getId());
+
+        // then
+        assertThat(response.isExistPet()).isTrue();
     }
 }

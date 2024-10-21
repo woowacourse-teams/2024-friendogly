@@ -1,5 +1,8 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentChatListBinding
@@ -12,11 +15,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChatListFragment :
     BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list),
     ChatListNavigationAction {
+    private lateinit var chatRegisterLauncher: ActivityResultLauncher<Intent>
+
     private val viewModel: ChatListViewModel by viewModels()
     private lateinit var adapter: ChatListAdapter
 
     override fun initViewCreated() {
         initAdapter()
+        initChatResultLauncher()
         binding.vm = viewModel
     }
 
@@ -43,10 +49,23 @@ class ChatListFragment :
     }
 
     override fun navigateToChat(chatId: Long) {
-        startActivity(ChatActivity.getIntent(requireContext(), chatId))
+        chatRegisterLauncher.launch(ChatActivity.getIntent(requireContext(), chatId))
+    }
+
+    private fun initChatResultLauncher() {
+        chatRegisterLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+
+                if (result.resultCode == LEAVE_CHAT_CODE) {
+                    viewModel.getChats()
+                }
+            }
     }
 
     companion object {
         const val TAG = "ChatListFragment"
+        const val LEAVE_CHAT_CODE = 204
     }
 }

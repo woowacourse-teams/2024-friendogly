@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.domain.usecase.GetChatMemberUseCase
 import com.happy.friendogly.domain.usecase.GetChatRoomClubUseCase
+import com.happy.friendogly.domain.usecase.LeaveChatRoomUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ class ChatInfoViewModel
         private val getChatMemberUseCase: GetChatMemberUseCase,
         private val getChatAlarmUseCase: GetChatAlarmUseCase,
         private val saveChatAlarmUseCase: SaveChatAlarmUseCase,
+        private val leaveChatRoomUseCase: LeaveChatRoomUseCase,
     ) : BaseViewModel() {
         private val _clubInfo: MutableLiveData<ChatInfoUiModel> = MutableLiveData()
         val clubInfo: LiveData<ChatInfoUiModel> get() = _clubInfo
@@ -41,7 +43,7 @@ class ChatInfoViewModel
                         dogSize = clubInfo.allowedSize,
                         dogGender = clubInfo.allowedGender,
                     )
-                return@async clubInfo.clubId
+                return@async clubInfo.myMemberId
             }
 
         fun getChatMember(chatRoomId: Long) {
@@ -69,6 +71,12 @@ class ChatInfoViewModel
                 saveChatAlarmUseCase(isChecked).onFailure {
                     // TODO 에러 처리
                 }
+            }
+        }
+
+        fun leaveChatRoom(chatRoomId: Long) {
+            launch {
+                leaveChatRoomUseCase(chatRoomId)
             }
         }
     }

@@ -68,12 +68,10 @@ public class ChatRoom {
     }
 
     public void removeMember(Member member) {
-        ChatRoomMember chatRoomMember = chatRoomMembers.stream()
+        chatRoomMembers.stream()
                 .filter(row -> row.hasMember(member))
                 .findAny()
-                .orElseThrow(() -> new FriendoglyException("자신이 참여한 채팅방만 나갈 수 있습니다."));
-
-        chatRoomMembers.remove(chatRoomMember);
+                .ifPresent(found -> chatRoomMembers.remove(found));
     }
 
     public boolean containsMember(Member member) {
