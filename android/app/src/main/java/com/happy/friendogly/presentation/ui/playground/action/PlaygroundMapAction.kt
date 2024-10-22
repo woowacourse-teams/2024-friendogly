@@ -4,12 +4,10 @@ import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.naver.maps.geometry.LatLng
 
 sealed interface PlaygroundMapAction {
-    data class MakeMyPlaygroundMarker(val myPlayground: Playground) : PlaygroundMapAction
-
-    data class MakeNearPlaygroundMarkers(val nearPlaygrounds: List<Playground>) :
-        PlaygroundMapAction
-
-    data class MoveCameraCenterPosition(val position: LatLng) : PlaygroundMapAction
+    data class MakePlaygrounds(
+        val myPlayground: Playground?,
+        val nearPlaygrounds: List<Playground>,
+    ) : PlaygroundMapAction
 
     data object RegisterMyPlayground : PlaygroundMapAction
 
@@ -17,7 +15,9 @@ sealed interface PlaygroundMapAction {
 
     data object HideRegisteringPlaygroundScreen : PlaygroundMapAction
 
-    data object StartLocationService : PlaygroundMapAction
+    data class MoveCameraCenterPosition(val position: LatLng) : PlaygroundMapAction
 
     data object ChangeTrackingMode : PlaygroundMapAction
+
+    data object StartLocationService : PlaygroundMapAction
 }

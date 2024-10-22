@@ -58,8 +58,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertPlaygroundRegisteredSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlaygroundMarker
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeNearPlaygroundMarkers
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakePlaygrounds
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
@@ -371,39 +370,14 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        viewModel.mapAction.observeEvent(viewLifecycleOwner) { event ->
+        viewModel.mapAction.observe(viewLifecycleOwner) { event ->
             when (event) {
-                is MakeMyPlaygroundMarker -> {
-                    val marker = createMarker(playground = event.myPlayground)
-                    val circleOverlay = createCircleOverlay(position = marker.position)
-                    val pathOverlay = createPathOverlay(marker.position)
-                    viewModel.loadMyPlayground(marker, circleOverlay, pathOverlay)
-                }
-
-                is MakeNearPlaygroundMarkers -> {
-                    val nearPlaygrounds =
-                        event.nearPlaygrounds.map { playground ->
-                            PlaygroundUiModel(
-                                id = playground.id,
-                                marker = createMarker(playground = playground),
-                                circleOverlay =
-                                createCircleOverlay(
-                                    position =
-                                    LatLng(
-                                        playground.latitude,
-                                        playground.longitude,
-                                    ),
-                                ),
-                            )
-                        }
-                    viewModel.loadNearPlaygrounds(nearPlaygrounds)
+                is MakePlaygrounds -> {
+                    makeMyPlayground(event.myPlayground)
+                    makeNearPlaygrounds(event.nearPlaygrounds)
                 }
 
                 is RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
-
-                is MoveCameraCenterPosition -> {
-                    moveCameraCenterPosition(event.position)
-                }
 
                 is ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
@@ -420,7 +394,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     binding.layoutPlaygroundRegisterMarker.hideViewAnimation()
                 }
 
-                is StartLocationService -> startLocationService()
+                is MoveCameraCenterPosition -> {
+                    moveCameraCenterPosition(event.position)
+                }
 
                 is ChangeTrackingMode -> {
                     if (map.locationTrackingMode == LocationTrackingMode.Follow) {
@@ -429,6 +405,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                         map.locationTrackingMode = LocationTrackingMode.Follow
                     }
                 }
+
+                is StartLocationService -> startLocationService()
             }
         }
 
@@ -440,8 +418,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
 
-                is AlertHelpBalloon ->
-                    showHelpBalloon(event.textResId)
+                is AlertHelpBalloon -> showHelpBalloon(event.textResId)
 
                 else -> showSnackbarForEvent(event)
             }
@@ -545,6 +522,39 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     private fun moveCameraCenterPosition(position: LatLng) {
         val cameraUpdate = CameraUpdate.scrollTo(position).animate(CameraAnimation.Easing)
         map.moveCamera(cameraUpdate)
+    }
+
+    private fun makeMyPlayground(myPlayground: Playground?) {
+        if (myPlayground != null) {
+            val marker = createMarker(playground = myPlayground)
+            val circleOverlay = createCircleOverlay(position = marker.position)
+            val pathOverlay = createPathOverlay(marker.position)
+            viewModel.loadMyPlayground(
+                playgroundId = myPlayground.id,
+                marker = marker,
+                circleOverlay = circleOverlay,
+                pathOverlay = pathOverlay,
+            )
+        }
+    }
+
+    private fun makeNearPlaygrounds(nearPlaygrounds: List<Playground>) {
+        val playgrounds =
+            nearPlaygrounds.map { playground ->
+                PlaygroundUiModel(
+                    id = playground.id,
+                    marker = createMarker(playground = playground),
+                    circleOverlay =
+                    createCircleOverlay(
+                        position =
+                        LatLng(
+                            playground.latitude,
+                            playground.longitude,
+                        ),
+                    ),
+                )
+            }
+        viewModel.loadNearPlaygrounds(playgrounds)
     }
 
     private fun createMarker(playground: Playground): Marker {
@@ -736,17 +746,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     bottomSheet: View,
                     newState: Int,
                 ) {
-                    if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo &&
-                        newState == BottomSheetBehavior.STATE_COLLAPSED
-                    ) {
+                    if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo && newState == BottomSheetBehavior.STATE_COLLAPSED) {
                         reduceMarkerSize()
                         binding.rcvPlaygroundPet.smoothScrollToPosition(0)
                         viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
                     }
 
-                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
-                        (newState == BottomSheetBehavior.STATE_HALF_EXPANDED || newState == BottomSheetBehavior.STATE_EXPANDED)
-                    ) {
+                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground && (newState == BottomSheetBehavior.STATE_HALF_EXPANDED || newState == BottomSheetBehavior.STATE_EXPANDED)) {
                         viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
                 }
