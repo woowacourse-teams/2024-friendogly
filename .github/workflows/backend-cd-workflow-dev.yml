@@ -44,38 +44,6 @@ jobs:
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
       - name: Deploy
-        env:
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          JWT_ACCESS_EXPIRATION_TIME: ${{ secrets.JWT_ACCESS_EXPIRATION_TIME }}
-          JWT_REFRESH_EXPIRATION_TIME: ${{ secrets.JWT_REFRESH_EXPIRATION_TIME }}
-          KAKAO_ADMIN_KEY: ${{ secrets.KAKAO_ADMIN_KEY }}
-          H2_CONSOLE_USERNAME: ${{ secrets.H2_CONSOLE_USERNAME }}
-          H2_CONSOLE_PASSWORD: ${{ secrets.H2_CONSOLE_PASSWORD }}
-          H2_CONSOLE_ENDPOINT: ${{ secrets.H2_CONSOLE_ENDPOINT }}
         run: |
           sudo chmod +x /home/ubuntu/deploy/deploy.sh
           sudo /home/ubuntu/deploy/deploy.sh
-      
-
-      # - name: Find Java Application PID And Kill PID
-      #   id: find_pid
-      #   run: |
-      #     sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
-
-      # - name: Check if room-esc server is running on port 8080 after stop
-      #   run: |
-      #     PID=$(lsof -t -i:8080 || true)
-      #     if [ -n "$PID" ]; then
-      #       echo "Server is still running with PID: $PID"
-      #       exit 1
-      #     else
-      #       echo "Server successfully stopped."
-      #     fi
-
-      # - name: Start server
-      #   run: |
-      #     cd backend/build/libs
-      #     echo "File creation time(KR-09:00):"
-      #     ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
-      #     sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} --spring.datasource.username=${{ secrets.H2_CONSOLE_USERNAME }} --spring.datasource.password=${{ secrets.H2_CONSOLE_PASSWORD }} --spring.h2.console.path=${{ secrets.H2_CONSOLE_ENDPOINT }} &
-      #     echo "start backend server"
