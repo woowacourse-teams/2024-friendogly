@@ -12,21 +12,6 @@ jwt:
 kakao:
   admin-key: ${KAKAO_ADMIN_KEY}
 
-management:
-  endpoint:
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-  server:
-    port: 8081
-
 file:
   firebase:
     path: firebase-friendogly-private-key.json
