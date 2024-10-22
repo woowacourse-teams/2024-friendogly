@@ -3,8 +3,8 @@ name: deploy
 on:
   push:
     branches: ["test/dev-cd"]
-    paths:
-      - "backend/**"
+    # paths:
+      # - "backend/**"
 
 jobs:
   build:
