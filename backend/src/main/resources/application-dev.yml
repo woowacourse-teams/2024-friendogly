@@ -12,21 +12,6 @@ jwt:
 kakao:
   admin-key: ${KAKAO_ADMIN_KEY}
 
-management:
-  endpoint:
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-  server:
-    port: 8081
-
 file:
   firebase:
     path: firebase-friendogly-private-key.json
@@ -34,7 +19,7 @@ file:
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:/home/ubuntu/h2_test_data
+    url: jdbc:h2:file:/home/ubuntu/h2_test_data;AUTO_SERVER=true
     username: ${H2_CONSOLE_USERNAME}
     password: ${H2_CONSOLE_PASSWORD}
   h2:
