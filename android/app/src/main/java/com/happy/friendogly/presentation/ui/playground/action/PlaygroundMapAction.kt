@@ -19,9 +19,5 @@ sealed interface PlaygroundMapAction {
 
     data object StartLocationService : PlaygroundMapAction
 
-    data object NoFollowTrackingMode : PlaygroundMapAction
-
-    data object FollowTrackingMode : PlaygroundMapAction
-
-    data object FaceTrackingMode : PlaygroundMapAction
+    data object ChangeTrackingMode : PlaygroundMapAction
 }

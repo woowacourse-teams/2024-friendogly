@@ -56,13 +56,11 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertPlaygroundRegisteredSnackbar
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FaceTrackingMode
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.FollowTrackingMode
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlaygroundMarker
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeNearPlaygroundMarkers
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.NoFollowTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
@@ -89,7 +87,6 @@ import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.CameraUpdate.REASON_GESTURE
 import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.LocationTrackingMode.Face
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -297,9 +294,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         map.addOnCameraChangeListener { reason, _ ->
             val currentState = viewModel.uiState.value
             if (reason == REASON_GESTURE) {
-                if (map.locationTrackingMode != LocationTrackingMode.NoFollow) {
-                    viewModel.changeTrackingModeToNoFollow()
-                }
                 reduceMarkerSize()
                 viewModel.handleUiStateByCameraChange()
             }
@@ -393,13 +387,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                                 id = playground.id,
                                 marker = createMarker(playground = playground),
                                 circleOverlay =
-                                    createCircleOverlay(
-                                        position =
-                                            LatLng(
-                                                playground.latitude,
-                                                playground.longitude,
-                                            ),
+                                createCircleOverlay(
+                                    position =
+                                    LatLng(
+                                        playground.latitude,
+                                        playground.longitude,
                                     ),
+                                ),
                             )
                         }
                     viewModel.loadNearPlaygrounds(nearPlaygrounds)
@@ -407,7 +401,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                 is RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
 
-                is MoveCameraCenterPosition -> moveCameraCenterPosition(event.position)
+                is MoveCameraCenterPosition -> {
+                    moveCameraCenterPosition(event.position)
+                }
 
                 is ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
@@ -426,14 +422,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                 is StartLocationService -> startLocationService()
 
-                is NoFollowTrackingMode ->
-                    map.locationTrackingMode = LocationTrackingMode.NoFollow
-
-                is FollowTrackingMode ->
-                    map.locationTrackingMode =
-                        LocationTrackingMode.Follow
-
-                is FaceTrackingMode -> map.locationTrackingMode = Face
+                is ChangeTrackingMode -> {
+                    if (map.locationTrackingMode == LocationTrackingMode.Follow) {
+                        map.locationTrackingMode = LocationTrackingMode.Face
+                    } else {
+                        map.locationTrackingMode = LocationTrackingMode.Follow
+                    }
+                }
             }
         }
 
