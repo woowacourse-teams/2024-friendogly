@@ -44,9 +44,6 @@ jobs:
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
       - name: Deploy
-        run: |
-          sudo chmod +x /home/ubuntu/deploy/deploy.sh
-          sudo /home/ubuntu/deploy/deploy.sh
         env:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           JWT_ACCESS_EXPIRATION_TIME: ${{ secrets.JWT_ACCESS_EXPIRATION_TIME }}
@@ -55,6 +52,11 @@ jobs:
           H2_CONSOLE_USERNAME: ${{ secrets.H2_CONSOLE_USERNAME }}
           H2_CONSOLE_PASSWORD: ${{ secrets.H2_CONSOLE_PASSWORD }}
           H2_CONSOLE_ENDPOINT: ${{ secrets.H2_CONSOLE_ENDPOINT }}
+        run: |
+          sudo chmod +x /home/ubuntu/deploy/deploy.sh
+          sudo /home/ubuntu/deploy/deploy.sh
+
+        
       # - name: Find Java Application PID And Kill PID
       #   id: find_pid
       #   run: |
