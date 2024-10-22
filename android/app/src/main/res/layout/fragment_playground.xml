@@ -398,9 +398,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:padding="4dp"
-                        android:onClick="@{() -> vm.clickPlaygroundInfoRefreshBtn(vm.myPlayground.id)}"
                         android:clickable="true"
+                        android:onClick="@{() -> vm.clickPlaygroundInfoRefreshBtn(vm.myPlayground.id)}"
+                        android:padding="4dp"
                         android:src="@drawable/ic_refresh_gray"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />

@@ -122,7 +122,7 @@ fun View.bindPlaygroundInfoVisibility(
 @BindingAdapter("petExistenceBtnUiState")
 fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
+        !(uiState is PlaygroundUiState.RegisteringPlayground || uiState is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("refreshBtnUiState")
@@ -201,7 +201,8 @@ fun AppCompatButton.bindPlaygroundBtn(
 
 @BindingAdapter("playgroundBtnVisibility")
 fun AppCompatButton.bindPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
-    visibility = if (uiState is PlaygroundUiState.ViewingPlaygroundInfo) View.VISIBLE else View.INVISIBLE
+    visibility =
+        if (uiState is PlaygroundUiState.ViewingPlaygroundInfo) View.VISIBLE else View.INVISIBLE
 }
 
 @BindingAdapter("petIsArrival")

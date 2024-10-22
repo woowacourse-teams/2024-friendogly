@@ -188,6 +188,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         setupRecyclerView()
         setupBottomSheetBehavior()
         setupActivityResultLauncher()
+        setupObserving()
     }
 
     override fun onStart() {
@@ -199,6 +200,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         super.onResume()
         mapView.onResume()
         if (locationPermission.hasPermissions() && viewModel.uiState.value is PlaygroundUiState.LocationPermissionsNotGranted) {
+            viewModel.updateUiState(PlaygroundUiState.Loading)
             activateMap()
         }
 
@@ -437,8 +439,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.alertAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                is AlertHasNotLocationPermissionDialog ->
+                is AlertHasNotLocationPermissionDialog -> {
                     locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
+                }
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
 
@@ -509,7 +512,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 },
                 ANIMATE_DURATION_MILLIS,
             )
-            setupObserving()
             viewModel.updatePlaygrounds()
         }
     }
