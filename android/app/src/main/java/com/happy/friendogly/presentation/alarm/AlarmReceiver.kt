@@ -265,7 +265,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ): Bitmap {
         val round = RoundedBitmapDrawableFactory.create(resources, bitmap)
 
-        round.cornerRadius = IMAGE_CORNER_ROUND
+        round.isCircular = true
         round.setAntiAlias(true)
         return round.toBitmap()
     }
@@ -329,8 +329,6 @@ class AlarmReceiver : FirebaseMessagingService() {
         private const val GROUP_KEY = "chat"
 
         private const val REQUEST_CODE = 0
-
-        private const val IMAGE_CORNER_ROUND = 70f
 
         const val NOTIFICATION_ID = 0
         const val DEFAULT_INTENT_ID = 1
