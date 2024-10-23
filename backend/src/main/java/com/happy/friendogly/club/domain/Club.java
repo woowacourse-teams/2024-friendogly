@@ -267,7 +267,7 @@ public class Club {
     }
 
     private void updateStatus(String status) {
-        if (this.status.isFull() && Status.toStatus(status).isOpen()) {
+        if (memberCapacity.isCapacityReached(countClubMember()) && Status.toStatus(status).isOpen()) {
             throw new FriendoglyException("인원이 가득찬 모임은 다시 OPEN 상태로 변경할 수 없습니다.");
         }
         this.status = Status.toStatus(status);
