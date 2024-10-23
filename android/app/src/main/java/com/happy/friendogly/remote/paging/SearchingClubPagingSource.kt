@@ -1,5 +1,6 @@
 package com.happy.friendogly.remote.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.happy.friendogly.data.model.ClubAddressDto
@@ -11,6 +12,7 @@ import com.happy.friendogly.data.model.SizeTypeDto
 import com.happy.friendogly.remote.api.SearchingClubService
 import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.mapper.toRemote
+import com.happy.friendogly.remote.model.response.ClubResponse
 import com.happy.friendogly.remote.model.response.SearchingClubResponse
 
 class SearchingClubPagingSource(
@@ -22,9 +24,16 @@ class SearchingClubPagingSource(
     private val sizeParams: List<SizeTypeDto>,
 ) : PagingSource<Int, ClubDto>() {
     private var isLastPage: Boolean = false
+    private var recentlyItem: ClubResponse? = null
+    private var lastPage = STARTING_PAGE_IDX
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ClubDto> {
+
         val page = params.key ?: STARTING_PAGE_IDX
+        if (lastPage>=page){
+            initPageState()
+        }
+        lastPage = page
         val prevKey = if (page == STARTING_PAGE_IDX) null else page - PAGE_INDEX_SIZE
         var nextKey = if (isLastPage) null else page + PAGE_INDEX_SIZE
 
@@ -35,8 +44,17 @@ class SearchingClubPagingSource(
             }
 
             val results = loadSearchData()
+            val lastItem = results.content.lastOrNull()
 
-            if (results.content.isEmpty()) nextKey = null
+            if (lastItem == null) {
+                nextKey = null
+            } else {
+                recentlyItem = lastItem
+            }
+
+            if (lastItem == null && page == STARTING_PAGE_IDX)
+                return LoadResult.Error(NullPointerException())
+
             lastPageUpdate(results.isLastPage)
 
             LoadResult.Page(
@@ -70,9 +88,16 @@ class SearchingClubPagingSource(
             genderParams = genderParams.map { it.toRemote().name },
             sizeParams = sizeParams.map { it.toRemote().name },
             pageSize = searchClubPageInfoDto.pageSize.toString(),
-            lastFoundCreatedAt = searchClubPageInfoDto.lastFoundCreatedAt,
-            lastFoundId = searchClubPageInfoDto.lastFoundId,
+            lastFoundCreatedAt = recentlyItem?.createdAt?.toString()
+                ?: searchClubPageInfoDto.lastFoundCreatedAt,
+            lastFoundId = recentlyItem?.id?.toString()
+                ?: searchClubPageInfoDto.lastFoundId,
         ).data
+    }
+
+    private fun initPageState(){
+        isLastPage = false
+        recentlyItem = null
     }
 
     companion object {

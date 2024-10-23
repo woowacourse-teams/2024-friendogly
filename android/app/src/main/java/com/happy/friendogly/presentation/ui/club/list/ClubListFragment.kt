@@ -18,7 +18,6 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
-import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
 import com.happy.friendogly.presentation.ui.club.common.handleError
@@ -27,6 +26,7 @@ import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilt
 import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,9 +39,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as ClubListActionHandler)
     }
-    private val clubAdapter: ClubListAdapter by lazy {
-        ClubListAdapter(viewModel as ClubItemActionHandler)
-    }
+    private lateinit var clubAdapter: ClubListAdapter
 
     override fun initViewCreated() {
         initDataBinding()
@@ -64,8 +62,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun initAdapter() {
+        initClubAdapter()
         binding.rcvClubListFilter.adapter = filterAdapter
-        binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
     private fun initClubListResultLauncher() {
@@ -86,25 +84,24 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             }
     }
 
+    private fun resetPaging() {
+        initClubAdapter()
+        initCollect()
+    }
+
     private fun initCollect() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.clubs.collectLatest {
                     clubAdapter.submitData(it)
-                    updateClubCountState()
                 }
             }
         }
         clubAdapter.addLoadStateListener { loadState ->
+            viewModel.updateInitState()
             if (loadState.hasError) {
                 handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
             }
-        }
-    }
-
-    private fun updateClubCountState(){
-        if(clubAdapter.itemCount == NOT_DATA_SIZE){
-            viewModel.updateNotDataState()
         }
     }
 
@@ -114,6 +111,11 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 viewModel.handleDomainError(state.error)
             }
         }
+    }
+
+    private fun initClubAdapter() {
+        clubAdapter = ClubListAdapter(viewModel as ClubItemActionHandler)
+        binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
     private fun initObserver() {
@@ -168,6 +170,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
                 ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
                 ClubListEvent.OpenAddPet -> openRegisterPetDialog()
+                ClubListEvent.ResetPaging -> resetPaging()
             }
         }
 
@@ -202,6 +205,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 ClubListUiState.NotData -> applyViewVisibility(binding.includeClubData.linearLayoutClubNotData)
 
                 ClubListUiState.Error -> applyViewVisibility(binding.includeClubError.linearLayoutClubError)
+
+                ClubListUiState.Loading -> applyViewVisibility(binding.includeClubLoading.nestedViewLayoutClubLoading)
             }
         }
     }
@@ -211,6 +216,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
+        binding.includeClubLoading.nestedViewLayoutClubLoading.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
 

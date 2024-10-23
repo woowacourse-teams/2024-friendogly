@@ -15,6 +15,8 @@ sealed interface ClubListEvent {
 
     data object OpenAddPet : ClubListEvent
 
+    data object ResetPaging : ClubListEvent
+
     sealed interface Navigation : ClubListEvent {
         data object NavigateToAddClub : Navigation
 

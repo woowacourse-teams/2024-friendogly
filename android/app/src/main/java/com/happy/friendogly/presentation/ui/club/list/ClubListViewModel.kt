@@ -1,9 +1,11 @@
 package com.happy.friendogly.presentation.ui.club.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Pet
@@ -30,8 +32,9 @@ import com.happy.friendogly.presentation.utils.logClubDetailClick
 import com.happy.friendogly.presentation.utils.logListAddClubClick
 import com.happy.friendogly.presentation.utils.logUpdateUserLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.net.ConnectException
@@ -50,7 +53,7 @@ constructor(
     val clubErrorHandler = ClubErrorHandler()
 
     private val _uiState: MutableLiveData<ClubListUiState> =
-        MutableLiveData(ClubListUiState.Init)
+        MutableLiveData(ClubListUiState.Loading)
     val uiState: LiveData<ClubListUiState> get() = _uiState
 
     private val _myAddress: MutableLiveData<UserAddress> =
@@ -65,7 +68,7 @@ constructor(
 
     private val _clubs: MutableStateFlow<PagingData<ClubItemUiModel>> =
         MutableStateFlow(PagingData.empty())
-    val clubs: Flow<PagingData<ClubItemUiModel>> get() = _clubs
+    val clubs: StateFlow<PagingData<ClubItemUiModel>> get() = _clubs
 
     private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
     val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
@@ -79,7 +82,7 @@ constructor(
 
     fun loadClubWithAddress() =
         viewModelScope.launch {
-            _uiState.value = ClubListUiState.Init
+            _uiState.value = ClubListUiState.Loading
             getAddressUseCase()
                 .onSuccess {
                     _myAddress.value = it
@@ -105,22 +108,30 @@ constructor(
         }
 
     private fun loadClubs() =
-        viewModelScope.launch {
+        launch {
             val currentFilterCondition = participationFilter.value ?: return@launch
             val currentAddress = myAddress.value ?: return@launch
-
+            _clubListEvent.emit(ClubListEvent.ResetPaging)
             searchingClubsUseCase(
                 searchClubPageInfo = searchClubPageInfo,
                 filterCondition = currentFilterCondition.toDomain(),
                 address = currentAddress.toDomain(),
                 genderParams = clubFilterSelector.selectGenderFilters().toGenders(),
                 sizeParams = clubFilterSelector.selectSizeFilters().toSizeTypes(),
-            ).collectLatest { result ->
-                _clubs.value = result.toPresentation()
-            }
+            )
+                .cachedIn(viewModelScope)
+                .collectLatest { result ->
+
+                    _clubs.value = result.toPresentation()
+                }
         }
 
     fun handleDomainError(throwable: Throwable) {
+        if (throwable is NullPointerException){
+            _uiState.value = ClubListUiState.NotData
+            return
+        }
+
         clubErrorHandler.handle(
             when (throwable) {
                 is ConnectException, is UnknownHostException -> DataError.Network.NO_INTERNET
@@ -140,9 +151,10 @@ constructor(
         loadClubWithAddress()
     }
 
-    fun updateNotDataState() {
-        _uiState.value = ClubListUiState.NotData
+    fun updateInitState() {
+        _uiState.value = ClubListUiState.Init
     }
+
 
     override fun loadClub(clubId: Long) {
         analyticsHelper.logClubDetailClick()

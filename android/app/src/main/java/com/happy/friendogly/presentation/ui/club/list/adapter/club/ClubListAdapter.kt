@@ -11,12 +11,13 @@ import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 class ClubListAdapter(
     private val actionHandler: ClubItemActionHandler,
 ) : PagingDataAdapter<ClubItemUiModel, ClubViewHolder>(diffCallback) {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): ClubViewHolder {
-        val binding = ItemClubBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ClubViewHolder(binding)
+        val inflater = LayoutInflater.from(parent.context)
+        return ClubViewHolder(ItemClubBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindViewHolder(

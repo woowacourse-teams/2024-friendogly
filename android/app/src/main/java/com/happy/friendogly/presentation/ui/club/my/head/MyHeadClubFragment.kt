@@ -58,7 +58,7 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
                 MyClubUiState.Error -> applyViewState(binding.includeClubError.linearLayoutClubError)
                 MyClubUiState.Init -> applyViewState(binding.includeClubList.rcvClubListClub)
                 MyClubUiState.NotData -> applyViewState(binding.includeClubData.linearLayoutClubNotData)
-                MyClubUiState.Loading -> applyViewState(binding.includeClubLoading.linearLayoutClubLoading)
+                MyClubUiState.Loading -> applyViewState(binding.includeClubLoading.nestedViewLayoutClubLoading)
             }
         }
 
@@ -76,7 +76,7 @@ class MyHeadClubFragment : BaseFragment<FragmentMyClubBinding>(R.layout.fragment
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubError.linearLayoutClubError.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
-        binding.includeClubLoading.linearLayoutClubLoading.visibility = View.GONE
+        binding.includeClubLoading.nestedViewLayoutClubLoading.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
 }
