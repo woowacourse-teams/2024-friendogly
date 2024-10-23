@@ -115,7 +115,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         clubAdapter.addLoadStateListener { loadState ->
             if (loadState.hasError) {
                 handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
-            }else {
+            } else {
                 handleLoadStateLoadings(loadState.append, loadState.prepend, loadState.refresh)
             }
         }
