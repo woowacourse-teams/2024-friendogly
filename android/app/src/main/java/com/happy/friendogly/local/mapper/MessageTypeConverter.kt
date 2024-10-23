@@ -1,7 +1,7 @@
 package com.happy.friendogly.local.mapper
 
 import androidx.room.TypeConverter
-import com.happy.friendogly.local.room.MessageTypeEntity
+import com.happy.friendogly.local.model.MessageTypeEntity
 
 class MessageTypeConverter {
     @TypeConverter

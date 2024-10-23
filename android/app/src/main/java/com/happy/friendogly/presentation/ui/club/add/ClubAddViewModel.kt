@@ -51,6 +51,10 @@ class ClubAddViewModel
             MutableLiveData()
         val clubAddEvent: LiveData<Event<ClubAddEvent>> get() = _clubAddEvent
 
+        private val _clubSizeGuideEvent: MutableLiveData<Event<ClubSizeGuideEvent>> =
+            MutableLiveData()
+        val clubSizeGuideEvent: LiveData<Event<ClubSizeGuideEvent>> get() = _clubSizeGuideEvent
+
         private val _currentPage: MutableLiveData<Int> = MutableLiveData(MIN_PAGE)
         val currentPage: LiveData<Int> get() = _currentPage
 
@@ -222,6 +226,10 @@ class ClubAddViewModel
 
         override fun selectClubImage() {
             _clubAddEvent.emit(ClubAddEvent.Navigation.NavigateToSelectClubPoster)
+        }
+
+        override fun selectSizeGuide() {
+            _clubSizeGuideEvent.emit(ClubSizeGuideEvent.OpenSizeGuide)
         }
 
         companion object {

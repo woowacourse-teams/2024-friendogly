@@ -18,17 +18,18 @@ import com.happy.friendogly.presentation.ui.mypage.MyPageFragment
 import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
+import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
+import com.happy.friendogly.presentation.ui.recentpet.RecentPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import com.happy.friendogly.presentation.ui.registerpet.model.PetProfile
 import com.happy.friendogly.presentation.ui.setting.SettingActivity
-import com.happy.friendogly.presentation.ui.woof.WoofFragment
 import com.happy.friendogly.presentation.utils.logChatListFragmentSwitched
 import com.happy.friendogly.presentation.utils.logClubListFragmentSwitched
 import com.happy.friendogly.presentation.utils.logMyClubClick
 import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
-import com.happy.friendogly.presentation.utils.logWoofFragmentSwitched
+import com.happy.friendogly.presentation.utils.logPlaygroundFragmentSwitched
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -61,9 +62,9 @@ class MainActivity :
     private fun navigateToFragment(intent: Intent) {
         val fragmentTag = intent.getStringExtra(EXTRA_FRAGMENT)
         when (fragmentTag) {
-            WoofFragment.TAG -> {
-                binding.bottomNavi.selectedItemId = R.id.woofFragment
-                switchFragment(WoofFragment::class.java, WoofFragment.TAG)
+            PlaygroundFragment.TAG -> {
+                binding.bottomNavi.selectedItemId = R.id.playgroundFragment
+                switchFragment(PlaygroundFragment::class.java, PlaygroundFragment.TAG)
             }
         }
     }
@@ -82,7 +83,11 @@ class MainActivity :
                         ClubListFragment.TAG,
                     )
 
-                R.id.woofFragment -> switchFragment(WoofFragment::class.java, WoofFragment.TAG)
+                R.id.playgroundFragment ->
+                    switchFragment(
+                        PlaygroundFragment::class.java,
+                        PlaygroundFragment.TAG,
+                    )
 
                 R.id.chatListFragment ->
                     switchFragment(
@@ -135,8 +140,8 @@ class MainActivity :
                 analyticsHelper.logClubListFragmentSwitched()
             }
 
-            WoofFragment::class.simpleName -> {
-                analyticsHelper.logWoofFragmentSwitched()
+            PlaygroundFragment::class.simpleName -> {
+                analyticsHelper.logPlaygroundFragmentSwitched()
             }
 
             ChatListFragment::class.simpleName -> {
@@ -186,6 +191,10 @@ class MainActivity :
     override fun navigateToMyClub(isMyHead: Boolean) {
         analyticsHelper.logMyClubClick()
         startActivity(MyClubActivity.getIntent(this, isMyHead))
+    }
+
+    override fun navigateToRecentPet() {
+        startActivity(RecentPetActivity.getIntent(this))
     }
 
     companion object {

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class MemberCapacity {
 
     private static final int MIN_CAPACITY_SIZE = 1;
-    private static final int MAX_CAPACITY_SIZE = 5;
+    private static final int MAX_CAPACITY_SIZE = 10;
 
     @Column(name = "member_capacity", nullable = false)
     private int value = 0;

@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:padding="16dp"
-                android:src="@drawable/ic_side_menu" />
+                android:src="@drawable/ic_more_vertical" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

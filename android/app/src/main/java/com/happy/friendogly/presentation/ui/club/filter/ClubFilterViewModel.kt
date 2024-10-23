@@ -54,6 +54,10 @@ class ClubFilterViewModel
             _clubFilterEvent.emit(ClubFilterEvent.SelectParticipation(participationFilter))
         }
 
+        override fun selectSizeGuide() {
+            _clubFilterEvent.emit(ClubFilterEvent.OpenSizeGuide)
+        }
+
         override fun selectClubFilter(
             filterName: String,
             isSelected: Boolean,

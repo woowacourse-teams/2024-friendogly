@@ -81,6 +81,13 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".presentation.ui.recentpet.RecentPetActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true"
@@ -111,6 +118,12 @@
                     android:scheme="@string/KAKAO_OAUTH_HOST" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.ui.message.MessageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentActivityTheme"
+            android:windowSoftInputMode="stateVisible" />
 
         <service
             android:name=".presentation.alarm.AlarmReceiver"
@@ -121,13 +134,13 @@
         </service>
 
         <service
-            android:name=".presentation.ui.woof.service.WoofWalkService"
+            android:name=".presentation.ui.playground.service.PlaygroundLocationService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
 
         <receiver
-            android:name=".presentation.ui.woof.service.WoofWalkReceiver"
+            android:name=".presentation.ui.playground.service.PlaygroundLocationReceiver"
             android:enabled="true"
             android:exported="false" />
     </application>

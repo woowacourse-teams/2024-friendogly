@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.happy.friendogly.R
 import com.happy.friendogly.databinding.BottomSheetFilterSizeSelectorBinding
 import com.happy.friendogly.databinding.BottomSheetGenderFilterSelectorBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterEvent
 import com.happy.friendogly.presentation.ui.club.filter.ClubFilterViewModel
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +34,8 @@ class ClubFilterBottomSheet(
         get() = _genderBinding!!
 
     private val viewModel: ClubFilterViewModel by viewModels<ClubFilterViewModel>()
+
+    private var balloon: Balloon? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +98,7 @@ class ClubFilterBottomSheet(
                 }
 
                 is ClubFilterEvent.SelectParticipation -> {}
+                ClubFilterEvent.OpenSizeGuide -> showSizeGuide()
             }
         }
     }
@@ -140,5 +148,21 @@ class ClubFilterBottomSheet(
                 else -> {}
             }
         }
+    }
+
+    private fun showSizeGuide() {
+        balloon?.dismiss()
+        balloon =
+            Balloon.Builder(requireContext()).setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setText(getString(R.string.dog_size_guide))
+                .setTextColorResource(R.color.white)
+                .setTextSize(14f).setMarginBottom(10)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR).setArrowSize(10)
+                .setArrowPosition(0.5f).setPadding(12).setFocusable(false).setCornerRadius(8f)
+                .setBackgroundColorResource(R.color.coral400)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC).setLifecycleOwner(viewLifecycleOwner)
+                .build()
+        balloon?.showAlignTop(sizeBinding.btnSizeGuide)
     }
 }

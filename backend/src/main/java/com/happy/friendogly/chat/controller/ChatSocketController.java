@@ -3,6 +3,7 @@ package com.happy.friendogly.chat.controller;
 import com.happy.friendogly.auth.WebSocketAuth;
 import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.request.InviteToChatRoomRequest;
+import com.happy.friendogly.chat.dto.response.InviteToChatRoomResponse;
 import com.happy.friendogly.chat.service.ChatCommandService;
 import com.happy.friendogly.chat.service.ChatRoomQueryService;
 import com.happy.friendogly.common.ApiResponse;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="recentPetDateView"
+            type="com.happy.friendogly.presentation.ui.recentpet.RecentPetDateView" />
+
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <View
+            roundedView="@{recentPetDateView}"
+            android:layout_width="12dp"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ic_recent_pet_dot"
+            app:layout_constraintStart_toStartOf="@+id/ic_recent_pet_dot"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/ic_recent_pet_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_recent_pet_dot"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_gray03_fill_16"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="11dp"
+            android:text="@{recentPetDateView.date.toString()}"
+            app:drawableStartCompat="@drawable/ic_calander"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2024년 7월 7일" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

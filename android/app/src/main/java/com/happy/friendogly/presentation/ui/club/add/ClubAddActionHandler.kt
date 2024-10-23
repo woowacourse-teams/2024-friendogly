@@ -8,4 +8,6 @@ interface ClubAddActionHandler {
     fun navigateNextPage()
 
     fun selectClubImage()
+
+    fun selectSizeGuide()
 }

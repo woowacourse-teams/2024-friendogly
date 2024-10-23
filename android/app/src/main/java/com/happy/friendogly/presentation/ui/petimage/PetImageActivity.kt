@@ -8,7 +8,7 @@ import com.happy.friendogly.presentation.base.BaseActivity
 
 class PetImageActivity : BaseActivity<ActivityPetImageBinding>(R.layout.activity_pet_image) {
     private val petImageUrl: String by lazy {
-        intent.getStringExtra(PUT_EXTRA_PET_IMAGE_URL) ?: ""
+        intent.getStringExtra(EXTRA_PET_IMAGE_URL) ?: DEFAULT_PET_IMAGE_URL
     }
 
     override fun initCreateView() {
@@ -19,14 +19,15 @@ class PetImageActivity : BaseActivity<ActivityPetImageBinding>(R.layout.activity
     }
 
     companion object {
-        const val PUT_EXTRA_PET_IMAGE_URL = "petImageUrl"
+        private const val DEFAULT_PET_IMAGE_URL = ""
+        const val EXTRA_PET_IMAGE_URL = "petImageUrl"
 
         fun getIntent(
             context: Context,
             petImageUrl: String,
         ): Intent {
             return Intent(context, PetImageActivity::class.java).apply {
-                putExtra(PUT_EXTRA_PET_IMAGE_URL, petImageUrl)
+                putExtra(EXTRA_PET_IMAGE_URL, petImageUrl)
             }
         }
     }

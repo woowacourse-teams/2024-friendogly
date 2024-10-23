@@ -9,6 +9,9 @@ sealed interface DataError : Error {
         SERVER_ERROR,
         FILE_SIZE_EXCEED,
         SERIALIZATION,
+        OVERLAP_PLAYGROUND_CREATION,
+        ALREADY_PARTICIPATE_PLAYGROUND,
+        NO_PARTICIPATING_PLAYGROUND,
         UNKNOWN,
     }
 

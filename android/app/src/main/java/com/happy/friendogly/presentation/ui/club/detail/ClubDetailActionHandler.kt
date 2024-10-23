@@ -6,4 +6,6 @@ interface ClubDetailActionHandler {
     fun closeDetail()
 
     fun openMenu()
+
+    fun openSelectState()
 }

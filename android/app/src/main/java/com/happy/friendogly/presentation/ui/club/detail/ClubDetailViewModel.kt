@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.fold
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.usecase.GetClubUseCase
+import com.happy.friendogly.domain.usecase.PatchClubUseCase
 import com.happy.friendogly.domain.usecase.PostClubMemberUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseViewModel
@@ -12,6 +14,7 @@ import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
 import com.happy.friendogly.presentation.ui.club.common.ClubErrorHandler
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
+import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.utils.logParticipateClick
@@ -26,6 +29,7 @@ class ClubDetailViewModel
         private val analyticsHelper: AnalyticsHelper,
         private val getClubUseCase: GetClubUseCase,
         private val postClubMemberUseCase: PostClubMemberUseCase,
+        private val patchClubUseCase: PatchClubUseCase,
     ) : BaseViewModel(), ClubDetailActionHandler {
         val clubErrorHandler = ClubErrorHandler()
 
@@ -35,11 +39,15 @@ class ClubDetailViewModel
         private val _clubDetailEvent: MutableLiveData<Event<ClubDetailEvent>> = MutableLiveData()
         val clubDetailEvent: LiveData<Event<ClubDetailEvent>> get() = _clubDetailEvent
 
+        private val _clubDetailUiState: MutableLiveData<ClubDetailUiState> = MutableLiveData(ClubDetailUiState.Loading)
+        val clubDetailUiState: LiveData<ClubDetailUiState> = _clubDetailUiState
+
         fun loadClub(clubId: Long) =
             viewModelScope.launch {
                 getClubUseCase(clubId).fold(
                     onSuccess = { club ->
                         _club.value = club.toPresentation()
+                        _clubDetailUiState.value = ClubDetailUiState.Init
                     },
                     onError = { error ->
                         clubErrorHandler.handle(error)
@@ -75,6 +83,10 @@ class ClubDetailViewModel
             _clubDetailEvent.emit(ClubDetailEvent.OpenDetailMenu(detailViewType))
         }
 
+        override fun openSelectState() {
+            _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateSelectState)
+        }
+
         fun joinClub(dogs: List<Long>) =
             viewModelScope.launch {
                 analyticsHelper.logParticipateClick()
@@ -89,6 +101,25 @@ class ClubDetailViewModel
                                 clubParticipation.chatRoomId,
                             ),
                         )
+                    },
+                    onError = { error ->
+                        clubErrorHandler.handle(error)
+                    },
+                )
+            }
+
+        fun submitClubStateModify(newState: ClubState) =
+            viewModelScope.launch {
+                val club = club.value ?: return@launch
+                patchClubUseCase(
+                    clubId = club.clubId,
+                    title = club.title,
+                    content = club.content,
+                    state = newState,
+                ).fold(
+                    onSuccess = {
+                        _club.value = club.copy(clubState = newState)
+                        _clubDetailEvent.emit(ClubDetailEvent.SaveReLoadState)
                     },
                     onError = { error ->
                         clubErrorHandler.handle(error)

@@ -4,30 +4,34 @@ import com.happy.friendogly.data.repository.AddressRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmSettingRepositoryImpl
 import com.happy.friendogly.data.repository.AlarmTokenRepositoryImpl
 import com.happy.friendogly.data.repository.AuthRepositoryImpl
-import com.happy.friendogly.data.repository.ChatRepositoryImpl
+import com.happy.friendogly.data.repository.ChatMessageRepositoryImpl
+import com.happy.friendogly.data.repository.ChatRoomRepositoryImpl
 import com.happy.friendogly.data.repository.ClubRepositoryImpl
 import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.MessagingRepositoryImpl
 import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
+import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
+import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
-import com.happy.friendogly.data.repository.WoofRepositoryImpl
 import com.happy.friendogly.domain.repository.AddressRepository
 import com.happy.friendogly.domain.repository.AlarmSettingRepository
 import com.happy.friendogly.domain.repository.AlarmTokenRepository
 import com.happy.friendogly.domain.repository.AuthRepository
-import com.happy.friendogly.domain.repository.ChatRepository
+import com.happy.friendogly.domain.repository.ChatMessageRepository
+import com.happy.friendogly.domain.repository.ChatRoomRepository
 import com.happy.friendogly.domain.repository.ClubRepository
 import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.MessagingRepository
 import com.happy.friendogly.domain.repository.MyClubRepository
 import com.happy.friendogly.domain.repository.PetRepository
+import com.happy.friendogly.domain.repository.PlaygroundRepository
+import com.happy.friendogly.domain.repository.RecentPetsRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WebSocketRepository
-import com.happy.friendogly.domain.repository.WoofRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -55,7 +59,11 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsChatRepository(repositoryImpl: ChatRepositoryImpl): ChatRepository
+    abstract fun bindsChatRoomRepository(repositoryImpl: ChatRoomRepositoryImpl): ChatRoomRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsChatMessageRepository(repositoryImpl: ChatMessageRepositoryImpl): ChatMessageRepository
 
     @Binds
     @Singleton
@@ -91,5 +99,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsWoofRepository(repositoryImpl: WoofRepositoryImpl): WoofRepository
+    abstract fun bindsWoofRepository(repositoryImpl: PlaygroundRepositoryImpl): PlaygroundRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsRecentPetsRepository(repositoryImpl: RecentPetsRepositoryImpl): RecentPetsRepository
 }

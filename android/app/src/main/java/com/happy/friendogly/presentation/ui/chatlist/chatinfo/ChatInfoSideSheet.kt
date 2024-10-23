@@ -17,6 +17,8 @@ import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
+import com.happy.friendogly.presentation.dialog.AlertDialogModel
+import com.happy.friendogly.presentation.dialog.DefaultRedAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatNavigationAction
 import com.happy.friendogly.presentation.ui.permission.AlarmPermission
@@ -65,6 +67,9 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
         initChatInfo()
         setChatAlarm()
         clickAlarmSetting()
+        binding.btnChatLeave.setOnClickListener {
+            leaveChatRoom()
+        }
     }
 
     private fun initAlamPermission() =
@@ -166,6 +171,27 @@ class ChatInfoSideSheet : BottomSheetDialogFragment() {
     private fun initAdapter() {
         adapter = JoinPeopleAdapter((requireActivity() as ChatNavigationAction))
         binding.rcvChatJoinPeople.adapter = adapter
+    }
+
+    private fun leaveChatRoom() {
+        val chatRoomId = requireNotNull(arguments?.getLong(EXTRA_CHAT_ROOM_ID, INVALID_ID))
+        val res =
+            AlertDialogModel(
+                title = getString(R.string.chat_leave_title),
+                description = getString(R.string.user_delete_description),
+                positiveContents = getString(R.string.chat_leave_positive),
+                negativeContents = getString(R.string.chat_leave_negative),
+            )
+        val dialog =
+            DefaultRedAlertDialog(
+                alertDialogModel = res,
+                clickToPositive = {
+                    viewModel.leaveChatRoom(chatRoomId)
+                    (requireActivity() as ChatActivity).leaveChat()
+                },
+                clickToNegative = {},
+            )
+        dialog.show(parentFragmentManager, "TAG")
     }
 
     override fun onDestroyView() {

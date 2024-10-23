@@ -5,17 +5,29 @@ import com.happy.friendogly.domain.model.ChatMember
 import com.happy.friendogly.domain.model.Message
 import com.happy.friendogly.local.model.ChatMemberEntity
 import com.happy.friendogly.local.model.ChatMessageEntity
-import com.happy.friendogly.local.room.MessageTypeEntity
+import com.happy.friendogly.local.model.MessageTypeEntity
 
-fun ChatComponent.Date.toData(): ChatMessageEntity =
+fun List<ChatComponent>.toData(chatRoomId: Long): List<ChatMessageEntity> =
+    this.map { chat ->
+        when (chat) {
+            is ChatComponent.Date -> chat.toData(chatRoomId)
+            is ChatComponent.Enter -> chat.toData(chatRoomId)
+            is ChatComponent.Leave -> chat.toData(chatRoomId)
+            is Message.Mine -> chat.toData(chatRoomId)
+            is Message.Other -> chat.toData(chatRoomId)
+        }
+    }
+
+fun ChatComponent.Date.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member = ChatMemberEntity.noChatMember(),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.DATE,
+        chatRoomId = chatRoomId,
     )
 
-fun ChatComponent.Leave.toData(): ChatMessageEntity =
+fun ChatComponent.Leave.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
@@ -26,9 +38,10 @@ fun ChatComponent.Leave.toData(): ChatMessageEntity =
             ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.LEAVE,
+        chatRoomId = chatRoomId,
     )
 
-fun ChatComponent.Enter.toData(): ChatMessageEntity =
+fun ChatComponent.Enter.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
@@ -39,9 +52,10 @@ fun ChatComponent.Enter.toData(): ChatMessageEntity =
             ),
         content = ChatMessageEntity.NOT_CONTENT,
         type = MessageTypeEntity.ENTER,
+        chatRoomId = chatRoomId,
     )
 
-fun Message.Mine.toData(): ChatMessageEntity =
+fun Message.Mine.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
@@ -52,9 +66,10 @@ fun Message.Mine.toData(): ChatMessageEntity =
             ),
         content = content,
         type = MessageTypeEntity.CHAT,
+        chatRoomId = chatRoomId,
     )
 
-fun Message.Other.toData(): ChatMessageEntity =
+fun Message.Other.toData(chatRoomId: Long): ChatMessageEntity =
     ChatMessageEntity(
         createdAt = createdAt,
         member =
@@ -65,13 +80,14 @@ fun Message.Other.toData(): ChatMessageEntity =
             ),
         content = content,
         type = MessageTypeEntity.CHAT,
+        chatRoomId = chatRoomId,
     )
 
 fun ChatMemberEntity.toDomain(): ChatMember =
     ChatMember(
         id = id,
         name = name,
-        profileImageUrl = profileUrl,
+        profileImageUrl = profileUrl ?: "",
     )
 
 fun ChatMessageEntity.toDomain(myMemberId: Long): ChatComponent =
@@ -80,13 +96,13 @@ fun ChatMessageEntity.toDomain(myMemberId: Long): ChatComponent =
         MessageTypeEntity.CHAT -> {
             if (myMemberId == member.id) {
                 Message.Mine(
-                    content = content,
+                    content = content ?: throw IllegalArgumentException("message content가 null 입니다."),
                     member = member.toDomain(),
                     createdAt = createdAt,
                 )
             } else {
                 Message.Other(
-                    content = content,
+                    content = content ?: throw IllegalArgumentException("message content가 null 입니다."),
                     member = member.toDomain(),
                     createdAt = createdAt,
                 )

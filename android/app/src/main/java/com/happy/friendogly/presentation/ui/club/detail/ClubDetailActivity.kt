@@ -15,6 +15,7 @@ import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
+import com.happy.friendogly.presentation.ui.club.common.bottom.ClubRecruitmentBottomSheet
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.presentation.ui.club.detail.adapter.DetailProfileAdapter
@@ -136,6 +137,9 @@ class ClubDetailActivity :
                 }
 
                 ClubDetailEvent.Navigation.NavigateToRegisterPet -> openRegisterPetDialog()
+
+                ClubDetailEvent.Navigation.NavigateSelectState -> openSelectState()
+                ClubDetailEvent.SaveReLoadState -> putLoadState()
             }
         }
 
@@ -176,6 +180,14 @@ class ClubDetailActivity :
                 chatId = chatRoomId,
             ),
         )
+    }
+
+    private fun openSelectState() {
+        val bottomSheet =
+            ClubRecruitmentBottomSheet { state ->
+                viewModel.submitClubStateModify(state)
+            }
+        bottomSheet.show(supportFragmentManager, "TAG")
     }
 
     private fun openDogSelector(filters: List<ClubFilter>) {

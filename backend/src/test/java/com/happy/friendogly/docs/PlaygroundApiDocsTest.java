@@ -1,12 +1,15 @@
 package com.happy.friendogly.docs;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -20,11 +23,19 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.controller.PlaygroundController;
+import com.happy.friendogly.playground.domain.Location;
+import com.happy.friendogly.playground.domain.Playground;
+import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
+import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
+import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
+import com.happy.friendogly.playground.dto.response.SaveJoinPlaygroundMemberResponse;
 import com.happy.friendogly.playground.dto.response.SavePlaygroundResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundArrivalResponse;
+import com.happy.friendogly.playground.dto.response.UpdatePlaygroundMemberMessageResponse;
 import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.service.PlaygroundCommandService;
 import com.happy.friendogly.playground.service.PlaygroundQueryService;
@@ -89,6 +100,10 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터도착 유무 업데이트")
     @Test
     void updateArrival() throws Exception {
+
+        when(playgroundCommandService.updateArrival(any(), anyLong()))
+                .thenReturn(new UpdatePlaygroundArrivalResponse(true));
+
         UpdatePlaygroundArrivalRequest request = new UpdatePlaygroundArrivalRequest(37.5173316, 127.1011661);
         mockMvc
                 .perform(patch("/playgrounds/arrival")
@@ -136,7 +151,7 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 0,
                 false,
                 List.of(
-                        PlaygroundPetDetail.of(
+                        new PlaygroundPetDetail(
                                 1L,
                                 dummyPet1,
                                 null,
@@ -236,8 +251,19 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @DisplayName("놀이터의 참여 현황 요약 정보를 조회")
     @Test
     void findSummary() throws Exception {
+
+        FindPlaygroundSummaryResponse response = new FindPlaygroundSummaryResponse(
+                1L,
+                3,
+                1,
+                List.of("http://image1.jpg", "http://image2.jpg", "http://image3.jpg")
+        );
+
+        when(playgroundQueryService.findSummary(anyLong()))
+                .thenReturn(response);
+
         mockMvc
-                .perform(get("/playgrounds/{id}/summary", 1L))
+                .perform(get("/playgrounds/{playgroundId}/summary", 1L))
                 .andDo(document("playgrounds/summary",
                         getDocumentRequest(),
                         getDocumentResponse(),
@@ -246,11 +272,112 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                 .summary("놀이터 참여 현황 요약 조회 API")
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
-                                        fieldWithPath("data.id").description("놀이터의 ID"),
+                                        fieldWithPath("data.playgroundId").description("놀이터의 ID"),
                                         fieldWithPath("data.totalPetCount").description("전체 참여 강아지 수"),
-                                        fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수")
+                                        fieldWithPath("data.arrivedPetCount").description("현재 홯성화 강아지 수"),
+                                        fieldWithPath("data.petImageUrls").description("참여중인 강아지 이미지 url")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundSummaryResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("놀이터 참여합니다.")
+    @Test
+    void joinPlayground() throws Exception {
+
+        PlaygroundMember playgroundMember = new PlaygroundMember(
+                new Playground(new Location(37.5173316, 127.1011661)),
+                new Member("name", "tag", "imageUrl")
+        );
+        SaveJoinPlaygroundMemberResponse response = new SaveJoinPlaygroundMemberResponse(playgroundMember);
+
+        when(playgroundCommandService.joinPlayground(anyLong(), anyLong()))
+                .thenReturn(response);
+
+        mockMvc
+                .perform(post("/playgrounds/{playgroundId}/join", 1)
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isOk())
+                .andDo(document("playgrounds/saveJoinPlaygroundMember",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("놀이터 참여 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.playgroundId").description("놀이터의 ID"),
+                                        fieldWithPath("data.memberId").description("멤버의 ID"),
+                                        fieldWithPath("data.message").description("멤버의 상태 메세지"),
+                                        fieldWithPath("data.isArrived").description("멤버의 놀이터 도착 유무"),
+                                        fieldWithPath("data.exitTime").description("멤버의 놀이터 나간 시간")
+                                )
+                                .responseSchema(Schema.schema("SavePlaygroundResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("놀이터를 나간다")
+    @Test
+    void leavePlayground() throws Exception {
+        doNothing().when(playgroundCommandService).leavePlayground(anyLong());
+
+        mockMvc
+                .perform(delete("/playgrounds/leave")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken()))
+                .andExpect(status().isNoContent())
+                .andDo(document("playgrounds/leavePlayground",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("놀이터 나가기 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .build()
+                        )
+                ))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("놀이터에 참여한 멤버 메세지 수정")
+    @Test
+    void updateMessage() throws Exception {
+
+        when(playgroundCommandService.updateMemberMessage(any(), anyLong()))
+                .thenReturn(new UpdatePlaygroundMemberMessageResponse("update"));
+
+        UpdatePlaygroundMemberMessageRequest request = new UpdatePlaygroundMemberMessageRequest("update");
+
+        mockMvc
+                .perform(patch("/playgrounds/message")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("playgrounds/message",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("멤버 메세지 수정 API")
+                                .requestFields(
+                                        fieldWithPath("message").description("수정할 메세지")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.message").description("수정된 메세지")
+                                )
+                                .responseSchema(Schema.schema("UpdatePlaygroundMemberMessageResponse"))
                                 .build()
                         )
                 ))

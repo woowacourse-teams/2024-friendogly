@@ -18,8 +18,7 @@ class EditPetBirthdayBottomSheet(
     private val birthdayYear: Int,
     private val birthdayMonth: Int,
     private val clickSubmit: (year: Int, month: Int) -> Unit,
-) :
-    BottomSheetDialogFragment() {
+) : BottomSheetDialogFragment() {
     private lateinit var dlg: BottomSheetDialog
 
     private lateinit var yearNumberPicker: NumberPicker
@@ -44,9 +43,7 @@ class EditPetBirthdayBottomSheet(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.bottom_sheet_dog_edit_birthday, container, false)
-    }
+    ): View? = inflater.inflate(R.layout.bottom_sheet_dog_edit_birthday, container, false)
 
     override fun onViewCreated(
         view: View,
@@ -69,23 +66,38 @@ class EditPetBirthdayBottomSheet(
             maxValue = currentYear
             value = birthdayYear
             displayedValues =
-                (MIN_YEAR..currentYear).map { year ->
-                    year.toString() + context.getString(R.string.birthday_year)
-                }.toTypedArray()
+                (MIN_YEAR..currentYear)
+                    .map { year ->
+                        year.toString() + context.getString(R.string.birthday_year)
+                    }.toTypedArray()
+        }
+
+        val currentMonth = LocalDateTime.now().monthValue
+
+        yearNumberPicker.setOnValueChangedListener { _, _, curYear ->
+            monthNumberPicker.maxValue = currentMonth
+            if (curYear == currentYear) {
+                monthNumberPicker.maxValue = currentMonth
+            } else {
+                monthNumberPicker.maxValue = MAX_MONTH
+            }
         }
     }
 
     private fun initMonthPicker(view: View) {
+        val currentMonth = LocalDateTime.now().monthValue
+
         monthNumberPicker = view.findViewById(R.id.monthpicker_datepicker)
         monthNumberPicker.apply {
             descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
             minValue = MIN_MONTH
-            maxValue = MAX_MONTH
+            maxValue = currentMonth
             value = birthdayMonth
             displayedValues =
-                (MIN_MONTH..MAX_MONTH).map { month ->
-                    context.getString(R.string.birthday_month).format(month)
-                }.toTypedArray()
+                (MIN_MONTH..MAX_MONTH)
+                    .map { month ->
+                        context.getString(R.string.birthday_month).format(month)
+                    }.toTypedArray()
         }
     }
 
