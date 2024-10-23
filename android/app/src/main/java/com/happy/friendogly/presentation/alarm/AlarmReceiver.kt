@@ -115,7 +115,6 @@ class AlarmReceiver : FirebaseMessagingService() {
         messageContent: String,
         senderProfile: String?,
     ) {
-
         val contentChatPendingIntent =
             PendingIntent.getActivity(
                 this,
@@ -140,7 +139,7 @@ class AlarmReceiver : FirebaseMessagingService() {
             chatRoomId,
             ChatActivity.getIntent(this, chatRoomId),
             chatRoomName,
-            chatRoomImage
+            chatRoomImage,
         )
 
         val notification =
@@ -165,9 +164,11 @@ class AlarmReceiver : FirebaseMessagingService() {
         senderProfile: String?,
     ) = Person.Builder()
         .setName(senderName)
-        .setIcon(senderProfile?.let {
-            IconCompat.createWithBitmap(createRoundedBitmap(it))
-        } ?: IconCompat.createWithResource(this, R.drawable.ic_normal_profile))
+        .setIcon(
+            senderProfile?.let {
+                IconCompat.createWithBitmap(createRoundedBitmap(it))
+            } ?: IconCompat.createWithResource(this, R.drawable.ic_normal_profile),
+        )
         .build()
 
     private fun createNotification(
@@ -260,9 +261,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         return getRoundedCornerBitmap(bitmap)
     }
 
-    private fun getRoundedCornerBitmap(
-        bitmap: Bitmap,
-    ): Bitmap {
+    private fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
         val round = RoundedBitmapDrawableFactory.create(resources, bitmap)
 
         round.isCircular = true
