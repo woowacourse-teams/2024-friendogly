@@ -86,6 +86,6 @@ class ChatMessageRepositoryImpl
             chatMessageDao.insertAll(
                 *newMessages.toLocalData(chatRoomId).toTypedArray(),
             )
-            return newMessages.toDomain(myMemberId)
+            return newMessages.toDomain(myMemberId).sortedByDescending { it.createdAt }
         }
     }

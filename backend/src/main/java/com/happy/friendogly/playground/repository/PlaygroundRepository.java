@@ -4,6 +4,8 @@ import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.playground.domain.Playground;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface PlaygroundRepository extends JpaRepository<Playground, Long> {
 
@@ -31,4 +33,16 @@ public interface PlaygroundRepository extends JpaRepository<Playground, Long> {
             double startLongitude,
             double endLongitude
     );
+
+    @Modifying
+    @Query(value = """
+            DELETE FROM Playground p
+            WHERE p.id IN :deletePlaygroundCandidate
+            AND NOT EXISTS (
+                SELECT 1
+                FROM PlaygroundMember pm
+                WHERE pm.playground.id = p.id
+            )
+            """)
+    void deleteAllHasNotMemberByIdIn(List<Long> deletePlaygroundCandidate);
 }

@@ -32,11 +32,14 @@ public class PlaygroundMember {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "message")
+    @Column(name = "message", nullable = false)
     private String message;
 
     @Column(name = "is_inside", nullable = false)
     private boolean isInside;
+
+    @Column(name = "participate_time", nullable = false)
+    private LocalDateTime participateTime;
 
     @Column(name = "exit_time")
     private LocalDateTime exitTime;
@@ -46,12 +49,14 @@ public class PlaygroundMember {
             Member member,
             String message,
             boolean isInside,
+            LocalDateTime participateTime,
             LocalDateTime exitTime
     ) {
         this.playground = playground;
         this.member = member;
         this.message = message;
         this.isInside = isInside;
+        this.participateTime = participateTime;
         this.exitTime = exitTime;
     }
 
@@ -59,7 +64,7 @@ public class PlaygroundMember {
             Playground playground,
             Member member
     ) {
-        this(playground, member, null, false, null);
+        this(playground, member, "", false, LocalDateTime.now(), null);
     }
 
     public boolean equalsMemberId(Long memberId) {
@@ -68,5 +73,33 @@ public class PlaygroundMember {
 
     public boolean isSamePlayground(Playground playground) {
         return this.playground.getId().equals(playground.getId());
+    }
+
+    public boolean hasEverArrived() {
+        return this.exitTime != null;
+    }
+
+    public boolean hasNeverArrived() {
+        return this.exitTime == null;
+    }
+
+    public void updateIsInside(boolean isInside) {
+        this.isInside = isInside;
+    }
+
+    public void updateMessage(String message) {
+        this.message = message;
+    }
+
+    public void updateExitTime(LocalDateTime exitTime) {
+        this.exitTime = exitTime;
+    }
+
+    public boolean isParticipateTimeBefore(LocalDateTime localDateTime) {
+        return this.participateTime.isBefore(localDateTime);
+    }
+
+    public boolean isExitTimeBefore(LocalDateTime localDateTime) {
+        return this.exitTime.isBefore(localDateTime);
     }
 }

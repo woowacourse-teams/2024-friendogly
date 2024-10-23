@@ -16,10 +16,14 @@ public enum Status {
     }
 
     public boolean isOpen() {
-        return this == Status.OPEN;
+        return this == OPEN;
+    }
+
+    public boolean isClosed() {
+        return this == CLOSED;
     }
 
     public boolean isFull() {
-        return this == Status.FULL;
+        return this == FULL;
     }
 }

@@ -8,6 +8,9 @@ VALUES ('도도', '4e52d416', 'https://avatars.githubusercontent.com/u/79188587?
        ('채드', '114d8979', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
        ('에디', 'c065a053', '');
 
+INSERT INTO kakao_member(member_id, kakao_member_id, refresh_token)
+VALUES (1, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoiOTk5OTk5OTk5OSJ9.0lNgUDZHHwkyJRDYMdIZ4qVt8I4TpF7MbeGPILekBt0');
+
 INSERT INTO device_token(member_id, device_token)
 VALUES (1,'a'),
        (2,'a'),
@@ -102,7 +105,7 @@ INSERT INTO playground (latitude, longitude)
 VALUES (37.514062, 127.100972),
         (37.520740, 127.121328);
 
-INSERT INTO playground_member (playground_id, member_id, message, is_inside, exit_time)
-VALUES (1, 2, '강아지 3마리 보유', true, null),
-        (1, 1, '강아지 2마리 보유', false, null),
-        (2, 3, '강아지 1마리 보유' ,true, null);
+INSERT INTO playground_member (playground_id, member_id, message, is_inside, participate_time, exit_time)
+VALUES (1, 2, '강아지 3마리 보유', true, '2023-07-31 01:00:00', null),
+        (1, 1, '강아지 2마리 보유', false, '2023-07-31 01:00:00', null),
+        (2, 3, '강아지 1마리 보유' ,true, '2023-07-31 01:00:00', null);

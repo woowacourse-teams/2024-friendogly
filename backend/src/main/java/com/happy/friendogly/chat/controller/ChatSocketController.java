@@ -48,6 +48,15 @@ public class ChatSocketController {
         );
     }
 
+    @Deprecated
+    @MessageMapping("/enter/{chatRoomId}")
+    public void enter(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId
+    ) {
+        chatCommandService.sendEnter(memberId, chatRoomId);
+    }
+
     @MessageMapping("/chat/{chatRoomId}")
     public void sendMessage(
             @WebSocketAuth Long memberId,
@@ -55,6 +64,15 @@ public class ChatSocketController {
             @Payload ChatMessageSocketRequest request
     ) {
         chatCommandService.sendChat(memberId, chatRoomId, request);
+    }
+
+    @Deprecated
+    @MessageMapping("/leave/{chatRoomId}")
+    public void leave(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId
+    ) {
+        chatCommandService.sendLeave(memberId, chatRoomId);
     }
 
     @MessageExceptionHandler

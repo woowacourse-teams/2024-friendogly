@@ -2,51 +2,49 @@ package com.happy.friendogly;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.happy.friendogly.config.datasource.DataSourceType;
-import com.happy.friendogly.config.datasource.ReplicationRoutingDataSource;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+@DataJpaTest
+@Import(TestDataSourceConfig.class)
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("testMultiDataSource")
 public class DataSourceRoutingTest {
 
-    private static final String TEST_METHOD_NAME = "determineCurrentLookupKey";
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @DisplayName("읽기 전용 트랜잭션이 아니면, Writer DB 데이터소스가 바운딩된다.")
     @Test
-    @DisplayName("쓰기전용 트랜잭션이면 Writer 데이터소스가 바운딩된다.")
-    @Transactional
-    void writeOnlyTransactionTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        ReplicationRoutingDataSource replicationRoutingDataSource = new ReplicationRoutingDataSource();
-
-        Method determineCurrentLookupKey = ReplicationRoutingDataSource.class.getDeclaredMethod(TEST_METHOD_NAME);
-        determineCurrentLookupKey.setAccessible(true);
-
-        DataSourceType dataSourceType = (DataSourceType) determineCurrentLookupKey
-                .invoke(replicationRoutingDataSource);
-
-        assertThat(dataSourceType).isEqualTo(DataSourceType.WRITER);
+    @Transactional(readOnly = false)
+    void writeOnlyTransactionTest() throws SQLException {
+        DataSource dataSource = applicationContext.getBean(DataSource.class);
+        try (Connection connection = dataSource.getConnection()) {
+            String actual = connection.getMetaData().getURL();
+            assertThat(actual).contains("writer");
+        }
     }
 
     @Test
-    @DisplayName("readOnly 트랜잭션이면 redaer 데이터소스가 바운딩된다.")
+    @DisplayName("읽기전용 트랜잭션이면 reader DB 데이터소스가 바운딩된다.")
     @Transactional(readOnly = true)
-    void readOnlyTransactionTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        ReplicationRoutingDataSource replicationRoutingDataSource = new ReplicationRoutingDataSource();
-
-        Method determineCurrentLookupKey = ReplicationRoutingDataSource.class.getDeclaredMethod(TEST_METHOD_NAME);
-        determineCurrentLookupKey.setAccessible(true);
-
-        DataSourceType dataSourceType = (DataSourceType) determineCurrentLookupKey
-                .invoke(replicationRoutingDataSource);
-
-        assertThat(dataSourceType).isEqualTo(DataSourceType.READER);
+    void readOnlyTransactionTest() throws SQLException {
+        DataSource dataSource = applicationContext.getBean(DataSource.class);
+        try (Connection connection = dataSource.getConnection()) {
+            String actual = connection.getMetaData().getURL();
+            assertThat(actual).contains("reader");
+        }
     }
 }

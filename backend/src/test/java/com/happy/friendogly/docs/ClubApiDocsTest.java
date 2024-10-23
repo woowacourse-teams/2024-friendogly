@@ -36,6 +36,7 @@ import com.happy.friendogly.club.dto.response.ClubMemberDetailResponse;
 import com.happy.friendogly.club.dto.response.ClubPetDetailResponse;
 import com.happy.friendogly.club.dto.response.FindClubByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubOwningResponse;
+import com.happy.friendogly.club.dto.response.FindClubPageByFilterResponse;
 import com.happy.friendogly.club.dto.response.FindClubParticipatingResponse;
 import com.happy.friendogly.club.dto.response.FindClubResponse;
 import com.happy.friendogly.club.dto.response.SaveClubMemberResponse;
@@ -77,10 +78,15 @@ public class ClubApiDocsTest extends RestDocsTest {
                 "송파구",
                 "신천동",
                 Set.of(Gender.FEMALE.name(), Gender.FEMALE_NEUTERED.name()),
-                Set.of(SizeType.SMALL.name())
+                Set.of(SizeType.SMALL.name()),
+                20,
+                LocalDateTime.of(1, 1, 1, 0, 0, 0),
+                1L
         );
 
-        List<FindClubByFilterResponse> responses = List.of(new FindClubByFilterResponse(
+        FindClubPageByFilterResponse responses = new FindClubPageByFilterResponse(
+                true, List.of(
+                new FindClubByFilterResponse(
                         1L,
                         "모임 제목1",
                         "모임 본문 내용1",
@@ -109,7 +115,7 @@ public class ClubApiDocsTest extends RestDocsTest {
                         1,
                         "https:/clubImage2.com",
                         List.of("https://petImage1.com")
-                )
+                ))
         );
 
         when(clubQueryService.findByFilter(anyLong(), any()))
@@ -122,7 +128,10 @@ public class ClubApiDocsTest extends RestDocsTest {
                         .param("city", request.city())
                         .param("village", request.village())
                         .param("genderParams", request.genderParams().toArray(String[]::new))
-                        .param("sizeParams", request.sizeParams().toArray(String[]::new)))
+                        .param("sizeParams", request.sizeParams().toArray(String[]::new))
+                        .param("pageSize", String.valueOf(request.pageSize()))
+                        .param("lastFoundCreatedAt", request.lastFoundCreatedAt().toString())
+                        .param("lastFoundId", String.valueOf(request.lastFoundId())))
                 .andExpect(status().isOk())
                 .andDo(document("clubs/findSearching/200",
                         getDocumentRequest(),
@@ -139,24 +148,28 @@ public class ClubApiDocsTest extends RestDocsTest {
                                         parameterWithName("city").description("모임의 시/군/구 주소, nullable"),
                                         parameterWithName("village").description("모임의 읍/면/동주소, nullable"),
                                         parameterWithName("genderParams").description("모임에 참여가능한 팻 성별"),
-                                        parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"))
+                                        parameterWithName("sizeParams").description("모임에 참여가능한 팻 크기"),
+                                        parameterWithName("pageSize").description("한 번에 조회할 페이지 사이즈"),
+                                        parameterWithName("lastFoundCreatedAt").description("마지막으로 조회한 모임의 생성시간 (yyyy-MM-dd'T'HH:mm:ss), 첫 페이지 조회 시 9999-12-31T23:59:59"),
+                                        parameterWithName("lastFoundId").description("마지막으로 조회한 모임의 id, 첫 페이지 조회 시 0x7fffffffffffffff"))
                                 .responseFields(
                                         fieldWithPath("isSuccess").type(JsonFieldType.BOOLEAN).description("요청 성공 여부"),
-                                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("모임 식별자"),
-                                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("모임 제목"),
-                                        fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("모임 본문"),
-                                        fieldWithPath("data.[].ownerMemberName").type(JsonFieldType.STRING).description("모임 방장 이름"),
-                                        fieldWithPath("data.[].address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
-                                        fieldWithPath("data.[].address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소, nullable"),
-                                        fieldWithPath("data.[].address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소, nullable"),
-                                        fieldWithPath("data.[].status").type(JsonFieldType.STRING).description("모임 상태(OPEN, CLOSED, FULL)"),
-                                        fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
-                                        fieldWithPath("data.[].allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
-                                        fieldWithPath("data.[].allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
-                                        fieldWithPath("data.[].memberCapacity").type(JsonFieldType.NUMBER).description("모임 최대 인원"),
-                                        fieldWithPath("data.[].currentMemberCount").type(JsonFieldType.NUMBER).description("모임 현재 인원"),
-                                        fieldWithPath("data.[].imageUrl").type(JsonFieldType.STRING).description("모임 프로필 사진"),
-                                        fieldWithPath("data.[].petImageUrls").type(JsonFieldType.ARRAY).description("모임 리스트에 나오는 팻 사진 url 리스트"))
+                                        fieldWithPath("data.isLastPage").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("data.content.[].id").type(JsonFieldType.NUMBER).description("모임 식별자"),
+                                        fieldWithPath("data.content.[].title").type(JsonFieldType.STRING).description("모임 제목"),
+                                        fieldWithPath("data.content.[].content").type(JsonFieldType.STRING).description("모임 본문"),
+                                        fieldWithPath("data.content.[].ownerMemberName").type(JsonFieldType.STRING).description("모임 방장 이름"),
+                                        fieldWithPath("data.content.[].address.province").type(JsonFieldType.STRING).description("모임의 도/광역시/특별시 주소"),
+                                        fieldWithPath("data.content.[].address.city").type(JsonFieldType.STRING).description("모임의 시/군/구 주소, nullable"),
+                                        fieldWithPath("data.content.[].address.village").type(JsonFieldType.STRING).description("모임의 읍/면/동 주소, nullable"),
+                                        fieldWithPath("data.content.[].status").type(JsonFieldType.STRING).description("모임 상태(OPEN, CLOSED, FULL)"),
+                                        fieldWithPath("data.content.[].createdAt").type(JsonFieldType.STRING).description("모임 생성 시간(LocalDateTime)"),
+                                        fieldWithPath("data.content.[].allowedGender").type(JsonFieldType.ARRAY).description("허용되는 팻 성별(MALE, FEMALE, MALE_NEUTERED, FEMALE_NEUTERED)"),
+                                        fieldWithPath("data.content.[].allowedSize").type(JsonFieldType.ARRAY).description("허용되는 팻 크기(SMALL,MEDIUM,LARGE)"),
+                                        fieldWithPath("data.content.[].memberCapacity").type(JsonFieldType.NUMBER).description("모임 최대 인원"),
+                                        fieldWithPath("data.content.[].currentMemberCount").type(JsonFieldType.NUMBER).description("모임 현재 인원"),
+                                        fieldWithPath("data.content.[].imageUrl").type(JsonFieldType.STRING).description("모임 프로필 사진"),
+                                        fieldWithPath("data.content.[].petImageUrls").type(JsonFieldType.ARRAY).description("모임 리스트에 나오는 팻 사진 url 리스트"))
                                 .responseSchema(Schema.schema("FindSearchingClubResponse"))
                                 .build()))
                 );
