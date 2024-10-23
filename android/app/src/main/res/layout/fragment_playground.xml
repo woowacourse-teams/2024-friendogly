@@ -210,7 +210,7 @@
             android:paddingHorizontal="6dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_playground_register"
@@ -358,7 +358,7 @@
                 android:layout_marginHorizontal="14dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rect_coral400_fill_16"
-                android:onClick="@{() -> vm.clickJoinPlaygroundBtn(vm.playgroundSummary.playgroundId)}"
+                android:onClick="@{() -> vm.clickJoinPlaygroundBtn()}"
                 android:text="@string/playground_join"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -372,7 +372,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/bottom_sheet_playground"

@@ -187,17 +187,10 @@ fun AppCompatButton.bindPlaygroundBtn(
     } else {
         text = resources.getString(R.string.playground_join)
         setOnClickListener {
-            playgroundAction.clickJoinPlaygroundBtn(playgroundId)
+            playgroundAction.clickJoinPlaygroundBtn()
         }
     }
 }
-
-// @BindingAdapter("playgroundBtnVisibility")
-// fun AppCompatButton.bindPlaygroundBtnVisibility(playgroundInfo: PlaygroundInfoUiModel?) {
-//    if (playgroundInfo != null) {
-//        visibility = if (playgroundInfo.petDetails.isNotEmpty()) View.VISIBLE else View.GONE
-//    }
-// }
 
 @BindingAdapter("playgroundBtnVisibility")
 fun AppCompatButton.bindPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {

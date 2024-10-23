@@ -31,6 +31,8 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentPlaygroundBinding
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.observeEvent
+import com.happy.friendogly.presentation.dialog.AlertDialogModel
+import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
@@ -39,7 +41,6 @@ import com.happy.friendogly.presentation.ui.permission.LocationPermission
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAddressOutOfKoreaSnackbar
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAlreadyParticipatePlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertAutoLeavePlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToCheckPetExistence
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar
@@ -52,10 +53,14 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotLocationPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHelpBalloon
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertJoinPlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertLeaveAndJoinPlaygroundDialog
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertLeaveAndRegisterPlaygroundDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertLeaveMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertNotExistMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertOverlapPlaygroundCreationSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertPlaygroundRegisteredSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeBottomSheetBehavior
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakePlaygrounds
@@ -65,7 +70,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPetImage
-import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPlaygroundMessage
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToStateMessage
 import com.happy.friendogly.presentation.ui.playground.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.playground.adapter.PetSummaryAdapter
 import com.happy.friendogly.presentation.ui.playground.model.Playground
@@ -338,35 +343,21 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             if (playgroundInfo != null) {
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                        } else {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                        }
-                    },
-                    ANIMATE_DURATION_MILLIS,
-                )
                 petDetailAdapter.submitList(playgroundInfo.petDetails)
-            } else {
-                petDetailAdapter.submitList(emptyList())
+//                changeBottomSheetBehavior()
             }
         }
 
         viewModel.playgroundSummary.observe(viewLifecycleOwner) { playgroundSummary ->
-            petSummaryAdapter.submitList(playgroundSummary.petImageUrls)
+            if (playgroundSummary != null) {
+                petSummaryAdapter.submitList(playgroundSummary.petImageUrls)
+            }
         }
 
         viewModel.myPlayground.observe(viewLifecycleOwner) { myPlayground ->
             stopLocationService()
             if (myPlayground != null) {
-                enlargeMarkerSize(myPlayground.marker)
-                bottomSheetBehavior.isHideable = false
                 viewModel.updatePlaygroundArrival(latLng)
-            } else {
-                bottomSheetBehavior.isHideable = true
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
 
@@ -381,6 +372,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                 is ShowRegisteringPlaygroundScreen -> {
                     getAddress(map.cameraPosition.target)
+
                     binding.layoutPlaygroundRegisterMarker.showViewAnimation()
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
@@ -397,6 +389,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is MoveCameraCenterPosition -> {
                     moveCameraCenterPosition(event.position)
                 }
+
+                is ChangeBottomSheetBehavior -> changeBottomSheetBehavior()
 
                 is ChangeTrackingMode -> {
                     if (map.locationTrackingMode == LocationTrackingMode.Follow) {
@@ -418,6 +412,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                 is AlertHasNotPetDialog -> showRegisterPetDialog()
 
+                is AlertLeaveAndRegisterPlaygroundDialog -> showSwitchPlaygroundDialog { viewModel.leaveAndRegisterPlayground() }
+
+                is AlertLeaveAndJoinPlaygroundDialog -> showSwitchPlaygroundDialog { viewModel.leaveAndJoinPlayground() }
+
                 is AlertHelpBalloon -> showHelpBalloon(event.textResId)
 
                 else -> showSnackbarForEvent(event)
@@ -436,7 +434,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     startActivity(intent)
                 }
 
-                is NavigateToPlaygroundMessage -> {
+                is NavigateToStateMessage -> {
                     val intent = StateMessageActivity.getIntent(requireContext(), event.message)
                     activityResultLauncher.launch(intent)
                 }
@@ -484,7 +482,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 },
                 ANIMATE_DURATION_MILLIS,
             )
-            viewModel.updatePlaygrounds()
+            viewModel.loadPlaygrounds()
         }
     }
 
@@ -545,13 +543,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     id = playground.id,
                     marker = createMarker(playground = playground),
                     circleOverlay =
-                    createCircleOverlay(
-                        position =
-                        LatLng(
-                            playground.latitude,
-                            playground.longitude,
+                        createCircleOverlay(
+                            position =
+                                LatLng(
+                                    playground.latitude,
+                                    playground.longitude,
+                                ),
                         ),
-                    ),
                 )
             }
         viewModel.loadNearPlaygrounds(playgrounds)
@@ -594,6 +592,22 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             moveCameraCenterPosition(position)
             viewModel.handlePlaygroundInfo(id)
             true
+        }
+    }
+
+    private fun changeBottomSheetBehavior() {
+        val myPlayground = viewModel.myPlayground.value
+        val playgroundInfo = viewModel.playgroundInfo.value ?: return
+        if (myPlayground != null) {
+            bottomSheetBehavior.isHideable = false
+            if (playgroundInfo.petDetails.size <= EXPANDED_PET_SIZE) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            }
+        } else {
+            bottomSheetBehavior.isHideable = true
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -746,13 +760,20 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     bottomSheet: View,
                     newState: Int,
                 ) {
-                    if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo && newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    if (viewModel.uiState.value is PlaygroundUiState.ViewingPlaygroundInfo &&
+                        newState == BottomSheetBehavior.STATE_COLLAPSED
+                    ) {
                         reduceMarkerSize()
                         binding.rcvPlaygroundPet.smoothScrollToPosition(0)
                         viewModel.updateUiState(PlaygroundUiState.FindingPlayground())
                     }
 
-                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground && (newState == BottomSheetBehavior.STATE_HALF_EXPANDED || newState == BottomSheetBehavior.STATE_EXPANDED)) {
+                    if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
+                        (
+                            newState == BottomSheetBehavior.STATE_HALF_EXPANDED ||
+                                newState == BottomSheetBehavior.STATE_EXPANDED
+                        )
+                    ) {
                         viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
                 }
@@ -766,10 +787,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is AlertAddressOutOfKoreaSnackbar -> R.string.playground_address_out_of_korea
                 is AlertPlaygroundRegisteredSnackbar -> R.string.playground_marker_registered
                 is AlertNotExistMyPlaygroundSnackbar -> R.string.playground_not_exist_my_playground
+                is AlertJoinPlaygroundSnackbar -> R.string.playground_join_complete
                 is AlertLeaveMyPlaygroundSnackbar -> R.string.playground_leave_my_playground
                 is AlertAutoLeavePlaygroundSnackbar -> R.string.playground_leave_my_playground
                 is AlertOverlapPlaygroundCreationSnackbar -> R.string.playground_overlap_playground_creation
-                is AlertAlreadyParticipatePlaygroundSnackbar -> R.string.playground_already_participate_playground
                 is AlertFailToCheckPetExistence -> R.string.playground_fail_to_load_pet_existence_btn
                 is AlertFailToLoadPlaygroundsSnackbar -> R.string.playground_fail_to_load_near_playgrounds
                 is AlertFailToRegisterPlaygroundSnackbar -> R.string.playground_fail_to_register_playground
@@ -825,6 +846,24 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     private fun showHelpBalloon(textRestId: Int) {
         val text = resources.getString(textRestId)
         showBalloon(text)
+    }
+
+    private fun showSwitchPlaygroundDialog(action: () -> Unit) {
+        val dialog =
+            DefaultCoralAlertDialog(
+                alertDialogModel =
+                    AlertDialogModel(
+                        title = requireContext().getString(R.string.playground_dialog_title),
+                        description = requireContext().getString(R.string.playground_dialog_description),
+                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                    ),
+                clickToNegative = { },
+                clickToPositive = {
+                    action()
+                },
+            )
+        dialog.show(parentFragmentManager, tag)
     }
 
     companion object {

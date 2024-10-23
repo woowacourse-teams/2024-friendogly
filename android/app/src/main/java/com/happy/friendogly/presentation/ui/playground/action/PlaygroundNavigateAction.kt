@@ -5,5 +5,5 @@ interface PlaygroundNavigateAction {
 
     data class NavigateToPetImage(val petImageUrl: String) : PlaygroundNavigateAction
 
-    data class NavigateToPlaygroundMessage(val message: String) : PlaygroundNavigateAction
+    data class NavigateToStateMessage(val message: String) : PlaygroundNavigateAction
 }

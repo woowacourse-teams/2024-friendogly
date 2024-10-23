@@ -53,6 +53,6 @@ class PlaygroundLocationManager(
     }
 
     companion object {
-        private const val INTERVAL_MILLIS: Long = 10000
+        private const val INTERVAL_MILLIS: Long = 6000
     }
 }

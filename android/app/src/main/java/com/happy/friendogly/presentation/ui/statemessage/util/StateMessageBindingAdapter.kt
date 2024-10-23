@@ -8,7 +8,7 @@ import com.happy.friendogly.R
 
 @BindingAdapter("messageLength")
 fun TextView.bindMessageLength(message: String) {
-    text = resources.getString(R.string.message_length, message.length)
+    text = resources.getString(R.string.state_message_length, message.length)
 }
 
 @BindingAdapter("clearBtnVisibility")

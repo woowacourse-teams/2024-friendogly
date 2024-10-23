@@ -17,6 +17,8 @@ sealed interface PlaygroundMapAction {
 
     data class MoveCameraCenterPosition(val position: LatLng) : PlaygroundMapAction
 
+    data object ChangeBottomSheetBehavior : PlaygroundMapAction
+
     data object ChangeTrackingMode : PlaygroundMapAction
 
     data object StartLocationService : PlaygroundMapAction

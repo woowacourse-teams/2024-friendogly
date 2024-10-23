@@ -46,7 +46,7 @@ class StateMessageActivity :
         viewModel.alertAction.observeEvent(this) { event ->
             when (event) {
                 is StateMessageAlertAction.AlertFailToPatchPlaygroundStateMessage -> {
-                    showSnackbar(getString(R.string.fail_to_patch_message))
+                    showSnackbar(getString(R.string.fail_to_patch_state_message))
                 }
             }
         }

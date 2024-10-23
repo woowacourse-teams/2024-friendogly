@@ -24,7 +24,7 @@
             android:clickable="true"
             android:onClick="@{() -> vm.clickCancelBtn()}"
             android:padding="6dp"
-            android:text="@string/message_cancel"
+            android:text="@string/state_message_cancel"
             app:layout_constraintBottom_toBottomOf="@id/tv_message_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_message_title" />
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/message_title"
+            android:text="@string/state_message_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,7 @@
             android:clickable="true"
             android:onClick="@{() -> vm.clickConfirmBtn()}"
             android:padding="6dp"
-            android:text="@string/message_confirm"
+            android:text="@string/state_message_confirm"
             app:layout_constraintBottom_toBottomOf="@id/tv_message_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_message_title" />

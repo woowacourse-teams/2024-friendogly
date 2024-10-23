@@ -263,9 +263,9 @@
     <string name="playground_information">정보</string>
     <string name="playground_description">소개</string>
     <string name="playground_refresh">새로고침</string>
+    <string name="playground_join_complete">놀이터에 참여했어요!</string>
     <string name="playground_leave_my_playground">놀이터에서 나갔습니다!</string>
     <string name="playground_auto_leave_my_playground">오랜 시간 자리를 비워 자동으로 놀이터에서 나갔습니다!</string>
-    <string name="playground_already_participate_playground">이미 참여중인 놀이터가 존재합니다!</string>
     <string name="playground_overlap_playground_creation">놀이터 등록 범위가 다른 놀이터와 중복됩니다!</string>
     <string name="playground_status_all">전체</string>
     <string name="playground_address_korea">대한민국</string>
@@ -277,6 +277,8 @@
     <string name="playground_participation_status">참여 현황</string>
     <string name="playground_pet_count">마리</string>
     <string name="playground_please_input_message">상태메시지를 입력해주세요.</string>
+    <string name="playground_dialog_title">새로운 놀이터 참여</string>
+    <string name="playground_dialog_description">현재 참여 중인 놀이터에서 나가고,\n새로운 놀이터에 참여하시겠습니까?</string>
 
     <string name="playground_fail_to_load_pet_existence_btn">강아지 등록 여부를 확인하지 못했습니다!</string>
     <string name="playground_fail_to_load_near_playgrounds">놀이터들을 불러오지 못했습니다!</string>
@@ -287,12 +289,12 @@
     <string name="playground_fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
     <string name="playground_fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
 
-    <string name="message_title">상태메시지</string>
-    <string name="message_cancel">취소</string>
-    <string name="message_confirm">확인</string>
-    <string name="message_length">%d / 20</string>
-    <string name="fail_to_patch_message">상태메시지 설정에 실패했습니다!</string>
-
+    <!--상태메시지-->
+    <string name="state_message_title">상태메시지</string>
+    <string name="state_message_cancel">취소</string>
+    <string name="state_message_confirm">확인</string>
+    <string name="state_message_length">%d / 20</string>
+    <string name="fail_to_patch_state_message">상태메시지 설정에 실패했습니다!</string>
 
     <!--프로필-->
     <string name="male">남</string>
