@@ -138,11 +138,6 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
-
-        <receiver
-            android:name=".presentation.ui.playground.service.PlaygroundLocationReceiver"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
 </manifest>
