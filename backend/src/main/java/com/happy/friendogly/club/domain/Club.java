@@ -8,9 +8,7 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,15 +17,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -36,15 +31,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NamedEntityGraph(
-        name = "graph.Club",
-        attributeNodes = {
-                @NamedAttributeNode("clubMembers"),
-                @NamedAttributeNode("clubPets"),
-                @NamedAttributeNode("allowedSizes"),
-                @NamedAttributeNode("allowedGenders"),
-        }
-)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Club {
@@ -62,18 +48,6 @@ public class Club {
     @Embedded
     private MemberCapacity memberCapacity;
 
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "club_gender", joinColumns = @JoinColumn(name = "club_id"))
-    @Column(name = "allowed_gender", nullable = false)
-    private Set<Gender> allowedGenders;
-
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "club_size", joinColumns = @JoinColumn(name = "club_id"))
-    @Column(name = "allowed_size", nullable = false)
-    private Set<SizeType> allowedSizes;
-
     @Embedded
     private Address address;
 
@@ -87,13 +61,18 @@ public class Club {
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @OneToMany(mappedBy = "clubGenderId.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ClubGender> allowedGenders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "clubSizeId.club", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ClubSize> allowedSizes = new ArrayList<>();
+
     @OneToMany(mappedBy = "clubMemberId.club", orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderBy("createdAt")
-    private Set<ClubMember> clubMembers = new HashSet<>();
+    private List<ClubMember> clubMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "clubPetId.club", orphanRemoval = true, cascade = CascadeType.ALL)
-    @OrderBy
-    private Set<ClubPet> clubPets = new HashSet<>();
+    private List<ClubPet> clubPets = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private ChatRoom chatRoom;
@@ -117,8 +96,8 @@ public class Club {
         this.content = new Content(content);
         this.address = new Address(province, city, village);
         this.memberCapacity = new MemberCapacity(memberCapacity);
-        this.allowedGenders = allowedGenders;
-        this.allowedSizes = allowedSizes;
+        this.allowedGenders = allowedGenders.stream().map(gender -> new ClubGender(this, gender)).toList();
+        this.allowedSizes = allowedSizes.stream().map(sizeType -> new ClubSize(this, sizeType)).toList();
         this.imageUrl = imageUrl;
         this.status = status;
         this.createdAt = createdAt;
@@ -209,15 +188,19 @@ public class Club {
     }
 
     private boolean canJoinWith(Pet pet) {
-        return allowedGenders.contains(pet.getGender()) && allowedSizes.contains(pet.getSizeType());
+        boolean isGenderMatch = allowedGenders.stream()
+                .anyMatch(clubGender -> clubGender.hasGender(pet.getGender()));
+        boolean isSizeMatch = allowedSizes.stream()
+                .anyMatch(clubSize -> clubSize.hasSize(pet.getSizeType()));
+
+        return isGenderMatch && isSizeMatch;
     }
 
     public boolean isJoinable(Member member, List<Pet> pets) {
         boolean hasJoinablePet = pets.stream()
                 .anyMatch(this::canJoinWith);
-        boolean isNotFull = !this.memberCapacity.isCapacityReached(countClubMember());
 
-        return hasJoinablePet && isNotFull && !isAlreadyJoined(member) && isOpen();
+        return hasJoinablePet && !isAlreadyJoined(member) && isOpen();
     }
 
     public void removeClubMember(Member member) {

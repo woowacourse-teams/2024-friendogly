@@ -27,4 +27,8 @@ spring:
           read-only: true
           username: sa
           password:
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
 
