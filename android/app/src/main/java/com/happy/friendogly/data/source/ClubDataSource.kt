@@ -2,8 +2,6 @@ package com.happy.friendogly.data.source
 
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
-import com.happy.friendogly.data.model.ClubDto
-import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.ClubParticipationDto
 import com.happy.friendogly.data.model.ClubStateDto
 import com.happy.friendogly.data.model.GenderDto
@@ -21,13 +19,6 @@ interface ClubDataSource {
         file: MultipartBody.Part?,
         petIds: List<Long>,
     ): Result<Unit>
-
-    suspend fun getSearchingClubs(
-        filterCondition: ClubFilterConditionDto,
-        address: ClubAddressDto,
-        genderParams: List<GenderDto>,
-        sizeParams: List<SizeTypeDto>,
-    ): Result<List<ClubDto>>
 
     suspend fun getClub(clubId: Long): Result<ClubDetailDto>
 

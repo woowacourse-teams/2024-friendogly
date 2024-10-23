@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.common.adapter.club
+package com.happy.friendogly.presentation.ui.club.list.adapter.club
 
 import androidx.recyclerview.widget.RecyclerView
 import com.happy.friendogly.databinding.ItemClubBinding

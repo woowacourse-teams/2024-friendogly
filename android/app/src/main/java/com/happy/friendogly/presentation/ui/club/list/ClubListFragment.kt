@@ -6,6 +6,10 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.FragmentClubListBinding
@@ -14,15 +18,16 @@ import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.MainActivityActionHandler
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
-import com.happy.friendogly.presentation.ui.club.common.ClubErrorEvent
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
-import com.happy.friendogly.presentation.ui.club.common.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ClubFilterBottomSheet
 import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilterBottomSheet
+import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment_club_list) {
@@ -33,14 +38,13 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     private val filterAdapter: SelectFilterAdapter by lazy {
         SelectFilterAdapter(viewModel as ClubListActionHandler)
     }
-    private val clubAdapter: ClubListAdapter by lazy {
-        ClubListAdapter(viewModel as ClubItemActionHandler)
-    }
+    private lateinit var clubAdapter: ClubListAdapter
 
     override fun initViewCreated() {
         initDataBinding()
         initAdapter()
         initStateObserver()
+        initCollect()
         initObserver()
         initClubListResultLauncher()
     }
@@ -57,8 +61,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun initAdapter() {
+        setClubAdapter()
         binding.rcvClubListFilter.adapter = filterAdapter
-        binding.includeClubList.rcvClubListClub.adapter = clubAdapter
     }
 
     private fun initClubListResultLauncher() {
@@ -79,11 +83,36 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             }
     }
 
-    private fun initObserver() {
-        viewModel.clubs.observe(viewLifecycleOwner) { clubs ->
-            clubAdapter.submitList(clubs)
+    private fun initCollect() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.clubs.collectLatest {
+                    clubAdapter.submitData(it)
+                }
+            }
         }
+    }
 
+    private fun handleLoadStateErrors(vararg states: LoadState) {
+        states.forEach { state ->
+            if (state is LoadState.Error) {
+                viewModel.handleDomainError(state.error)
+            }
+        }
+    }
+
+    private fun setClubAdapter() {
+        clubAdapter = ClubListAdapter(viewModel as ClubItemActionHandler)
+        binding.includeClubList.rcvClubListClub.adapter = clubAdapter
+        clubAdapter.addLoadStateListener { loadState ->
+            viewModel.updateInitState()
+            if (loadState.hasError) {
+                handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
+            }
+        }
+    }
+
+    private fun initObserver() {
         viewModel.clubFilterSelector.currentSelectedFilters.observe(viewLifecycleOwner) { filters ->
             filterAdapter.submitList(filters)
         }
@@ -135,6 +164,10 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
                 ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
                 ClubListEvent.OpenAddPet -> openRegisterPetDialog()
+                ClubListEvent.ResetPaging -> {
+                    setClubAdapter()
+                    viewModel.loadClubs()
+                }
             }
         }
 
@@ -169,6 +202,8 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
                 ClubListUiState.NotData -> applyViewVisibility(binding.includeClubData.linearLayoutClubNotData)
 
                 ClubListUiState.Error -> applyViewVisibility(binding.includeClubError.linearLayoutClubError)
+
+                ClubListUiState.Loading -> applyViewVisibility(binding.includeClubLoading.nestedViewLayoutClubLoading)
             }
         }
     }
@@ -178,19 +213,11 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
+        binding.includeClubLoading.nestedViewLayoutClubLoading.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
 
     companion object {
         const val TAG = "ClubListFragment"
-    }
-
-    fun ClubErrorEvent.handleError(messageHandler: (MessageHandler) -> Unit) {
-        when (this) {
-            ClubErrorEvent.FileSizeError -> messageHandler(MessageHandler.SendToast(R.string.file_size_exceed_message))
-            ClubErrorEvent.ServerError -> MessageHandler.SendToast(R.string.server_error_message)
-            ClubErrorEvent.UnKnownError -> MessageHandler.SendToast(R.string.default_error_message)
-            ClubErrorEvent.InternetError -> MessageHandler.SendSnackBar(R.string.no_internet_message)
-        }
     }
 }

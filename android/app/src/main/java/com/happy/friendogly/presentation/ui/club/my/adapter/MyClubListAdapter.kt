@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.club.common.adapter.club
+package com.happy.friendogly.presentation.ui.club.my.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import com.happy.friendogly.databinding.ItemClubBinding
 import com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
+import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubViewHolder
 
-class ClubListAdapter(
+class MyClubListAdapter(
     private val actionHandler: ClubItemActionHandler,
 ) : ListAdapter<ClubItemUiModel, ClubViewHolder>(ClubDiffCallback()) {
     class ClubDiffCallback : DiffUtil.ItemCallback<ClubItemUiModel>() {

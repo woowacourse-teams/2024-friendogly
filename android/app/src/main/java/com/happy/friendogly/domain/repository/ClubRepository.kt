@@ -2,10 +2,8 @@ package com.happy.friendogly.domain.repository
 
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.error.DataError
-import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.model.ClubAddress
 import com.happy.friendogly.domain.model.ClubDetail
-import com.happy.friendogly.domain.model.ClubFilterCondition
 import com.happy.friendogly.domain.model.ClubParticipation
 import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.domain.model.Gender
@@ -23,13 +21,6 @@ interface ClubRepository {
         file: MultipartBody.Part?,
         petIds: List<Long>,
     ): DomainResult<Unit, DataError.Network>
-
-    suspend fun getSearchingClubs(
-        filterCondition: ClubFilterCondition,
-        address: ClubAddress,
-        genderParams: List<Gender>,
-        sizeParams: List<SizeType>,
-    ): DomainResult<List<Club>, DataError.Network>
 
     suspend fun getClub(clubId: Long): DomainResult<ClubDetail, DataError.Network>
 

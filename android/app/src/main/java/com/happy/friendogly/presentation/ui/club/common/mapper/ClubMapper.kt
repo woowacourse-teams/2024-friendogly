@@ -1,10 +1,16 @@
 package com.happy.friendogly.presentation.ui.club.common.mapper
 
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.ClubPet
 
 fun List<Club>.toPresentation(): List<ClubItemUiModel> {
+    return this.map { it.toPresentation() }
+}
+
+fun PagingData<Club>.toPresentation(): PagingData<ClubItemUiModel> {
     return this.map { it.toPresentation() }
 }
 

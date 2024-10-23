@@ -14,6 +14,7 @@ import com.happy.friendogly.data.repository.MyClubRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
 import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
+import com.happy.friendogly.data.repository.SearchClubRepositoryImpl
 import com.happy.friendogly.data.repository.TokenRepositoryImpl
 import com.happy.friendogly.data.repository.WebSocketRepositoryImpl
 import com.happy.friendogly.domain.repository.AddressRepository
@@ -30,6 +31,7 @@ import com.happy.friendogly.domain.repository.MyClubRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.PlaygroundRepository
 import com.happy.friendogly.domain.repository.RecentPetsRepository
+import com.happy.friendogly.domain.repository.SearchClubRepository
 import com.happy.friendogly.domain.repository.TokenRepository
 import com.happy.friendogly.domain.repository.WebSocketRepository
 import dagger.Binds
@@ -68,6 +70,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsClubRepository(repositoryImpl: ClubRepositoryImpl): ClubRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchClubRepository(repositoryImpl: SearchClubRepositoryImpl): SearchClubRepository
 
     @Binds
     @Singleton

@@ -3,8 +3,12 @@ package com.happy.friendogly.presentation.ui.club.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.model.Pet
+import com.happy.friendogly.domain.model.SearchClubPageInfo
 import com.happy.friendogly.domain.model.UserAddress
 import com.happy.friendogly.domain.usecase.GetAddressUseCase
 import com.happy.friendogly.domain.usecase.GetPetsMineUseCase
@@ -27,7 +31,13 @@ import com.happy.friendogly.presentation.utils.logClubDetailClick
 import com.happy.friendogly.presentation.utils.logListAddClubClick
 import com.happy.friendogly.presentation.utils.logUpdateUserLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.net.ConnectException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +52,7 @@ class ClubListViewModel
         val clubErrorHandler = ClubErrorHandler()
 
         private val _uiState: MutableLiveData<ClubListUiState> =
-            MutableLiveData(ClubListUiState.Init)
+            MutableLiveData(ClubListUiState.Loading)
         val uiState: LiveData<ClubListUiState> get() = _uiState
 
         private val _myAddress: MutableLiveData<UserAddress> =
@@ -55,11 +65,14 @@ class ClubListViewModel
 
         val clubFilterSelector = ClubFilterSelector()
 
-        private val _clubs: MutableLiveData<List<ClubItemUiModel>> = MutableLiveData()
-        val clubs: LiveData<List<ClubItemUiModel>> get() = _clubs
+        private val _clubs: MutableStateFlow<PagingData<ClubItemUiModel>> =
+            MutableStateFlow(PagingData.empty())
+        val clubs: StateFlow<PagingData<ClubItemUiModel>> = _clubs.asStateFlow()
 
         private val _clubListEvent: MutableLiveData<Event<ClubListEvent>> = MutableLiveData()
         val clubListEvent: LiveData<Event<ClubListEvent>> get() = _clubListEvent
+
+        private var searchClubPageInfo: SearchClubPageInfo = SearchClubPageInfo()
 
         init {
             initPetState()
@@ -68,11 +81,11 @@ class ClubListViewModel
 
         fun loadClubWithAddress() =
             viewModelScope.launch {
-                _uiState.value = ClubListUiState.Init
+                _uiState.value = ClubListUiState.Loading
                 getAddressUseCase()
                     .onSuccess {
                         _myAddress.value = it
-                        loadClubs()
+                        _clubListEvent.emit(ClubListEvent.ResetPaging)
                     }
                     .onFailure {
                         _uiState.value = ClubListUiState.NotAddress
@@ -93,28 +106,38 @@ class ClubListViewModel
                 )
             }
 
-        private fun loadClubs() =
-            viewModelScope.launch {
+        fun loadClubs() =
+            launch {
+                val currentFilterCondition = participationFilter.value ?: return@launch
+                val currentAddress = myAddress.value ?: return@launch
                 searchingClubsUseCase(
-                    filterCondition = participationFilter.value?.toDomain() ?: return@launch,
-                    address = myAddress.value?.toDomain() ?: return@launch,
+                    searchClubPageInfo = searchClubPageInfo,
+                    filterCondition = currentFilterCondition.toDomain(),
+                    address = currentAddress.toDomain(),
                     genderParams = clubFilterSelector.selectGenderFilters().toGenders(),
                     sizeParams = clubFilterSelector.selectSizeFilters().toSizeTypes(),
-                ).fold(
-                    onSuccess = { clubs ->
-                        if (clubs.isEmpty()) {
-                            _uiState.value = ClubListUiState.NotData
-                        } else {
-                            _uiState.value = ClubListUiState.Init
-                        }
-                        _clubs.value = clubs.toPresentation()
-                    },
-                    onError = { error ->
-                        clubErrorHandler.handle(error)
-                        _uiState.value = ClubListUiState.Error
-                    },
                 )
+                    .cachedIn(viewModelScope)
+                    .collectLatest { result ->
+
+                        _clubs.value = result.toPresentation()
+                    }
             }
+
+        fun handleDomainError(throwable: Throwable) {
+            if (throwable is NullPointerException) {
+                _uiState.value = ClubListUiState.NotData
+                return
+            }
+
+            clubErrorHandler.handle(
+                when (throwable) {
+                    is ConnectException, is UnknownHostException -> DataError.Network.NO_INTERNET
+                    else -> DataError.Network.SERVER_ERROR
+                },
+            )
+            _uiState.value = ClubListUiState.Error
+        }
 
         fun updateClubFilter(filters: List<ClubFilter>) {
             clubFilterSelector.initClubFilter(filters)
@@ -124,6 +147,10 @@ class ClubListViewModel
         fun updateParticipationFilter(participationFilter: ParticipationFilter) {
             _participationFilter.value = participationFilter
             loadClubWithAddress()
+        }
+
+        fun updateInitState() {
+            _uiState.value = ClubListUiState.Init
         }
 
         override fun loadClub(clubId: Long) {

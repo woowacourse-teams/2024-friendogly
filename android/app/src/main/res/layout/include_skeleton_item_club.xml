@@ -43,21 +43,20 @@
             app:layout_constraintTop_toTopOf="@+id/constraintLayout_club_main" >
             <View
                 android:layout_marginEnd="20dp"
-                android:background="@color/gray300"
+                android:background="@drawable/rect_gray03_fill_8"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"/>
             <View
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/gray300"
+                android:background="@drawable/rect_gray03_fill_8"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="25dp"/>
             <View
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@color/gray300"
+                android:background="@drawable/rect_gray03_fill_8"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"/>
+                android:layout_height="30dp"/>
         </LinearLayout>
 
 

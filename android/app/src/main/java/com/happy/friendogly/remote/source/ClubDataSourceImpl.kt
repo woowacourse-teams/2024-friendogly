@@ -3,8 +3,6 @@ package com.happy.friendogly.remote.source
 import com.happy.friendogly.data.error.ApiExceptionDto.Companion.FileSizeExceedExceptionDto
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
-import com.happy.friendogly.data.model.ClubDto
-import com.happy.friendogly.data.model.ClubFilterConditionDto
 import com.happy.friendogly.data.model.ClubParticipationDto
 import com.happy.friendogly.data.model.ClubStateDto
 import com.happy.friendogly.data.model.GenderDto
@@ -59,23 +57,6 @@ class ClubDataSourceImpl
                 else -> Result.failure(exception)
             }
         }
-
-        override suspend fun getSearchingClubs(
-            filterCondition: ClubFilterConditionDto,
-            address: ClubAddressDto,
-            genderParams: List<GenderDto>,
-            sizeParams: List<SizeTypeDto>,
-        ): Result<List<ClubDto>> =
-            runCatching {
-                service.getSearchingClubs(
-                    filterCondition = filterCondition.toRemote(),
-                    province = address.province,
-                    city = address.city,
-                    village = address.village,
-                    genderParams = genderParams.map { it.toRemote().name },
-                    sizeParams = sizeParams.map { it.toRemote().name },
-                ).data.toData()
-            }
 
         override suspend fun getClub(clubId: Long): Result<ClubDetailDto> =
             runCatching {
