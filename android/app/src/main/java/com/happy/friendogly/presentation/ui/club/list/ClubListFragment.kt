@@ -61,7 +61,7 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun initAdapter() {
-        initClubAdapter()
+        setClubAdapter()
         binding.rcvClubListFilter.adapter = filterAdapter
     }
 
@@ -83,26 +83,16 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
             }
     }
 
-    private fun resetPaging() {
-        initClubAdapter()
-        initCollect()
-    }
-
     private fun initCollect() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.clubs.collectLatest {
                     clubAdapter.submitData(it)
                 }
             }
         }
-        clubAdapter.addLoadStateListener { loadState ->
-            viewModel.updateInitState()
-            if (loadState.hasError) {
-                handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
-            }
-        }
     }
+
 
     private fun handleLoadStateErrors(vararg states: LoadState) {
         states.forEach { state ->
@@ -112,9 +102,16 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         }
     }
 
-    private fun initClubAdapter() {
+    private fun setClubAdapter() {
+        applyViewVisibility(binding.includeClubLoading.nestedViewLayoutClubLoading)
         clubAdapter = ClubListAdapter(viewModel as ClubItemActionHandler)
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
+        clubAdapter.addLoadStateListener { loadState ->
+            viewModel.updateInitState()
+            if (loadState.hasError) {
+                handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
+            }
+        }
     }
 
     private fun initObserver() {
@@ -169,7 +166,10 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
                 ClubListEvent.FailLocation -> showSnackbar(getString(R.string.club_add_information_fail_address))
                 ClubListEvent.OpenAddPet -> openRegisterPetDialog()
-                ClubListEvent.ResetPaging -> resetPaging()
+                ClubListEvent.ResetPaging -> {
+                    setClubAdapter()
+                    viewModel.loadClubs()
+                }
             }
         }
 
