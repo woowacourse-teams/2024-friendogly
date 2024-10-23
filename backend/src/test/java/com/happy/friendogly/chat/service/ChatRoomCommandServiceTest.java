@@ -12,8 +12,10 @@ import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.service.ClubCommandService;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.support.ServiceTest;
@@ -79,12 +81,22 @@ class ChatRoomCommandServiceTest extends ServiceTest {
     @Test
     void leave() {
         // given
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
-        Member member3 = memberRepository.save(new Member("john", "aaa111ab", "https://image.com"));
+        Pet pet = petRepository.save(
+                new Pet(member1, "asda", "asfdfdsa", LocalDate.now().minusYears(1), SizeType.SMALL, Gender.MALE,
+                        "https://image.com"));
 
-        chatRoom.addMember(member1);
-        chatRoom.addMember(member2);
-        chatRoom.addMember(member3);
+        Club club = clubRepository.save(Club.create(
+                "모임", "모임입니다.", "서울특별시", "구구구", "동동동",
+                5, member1, Set.of(Gender.MALE), Set.of(SizeType.SMALL), "https://image.com", List.of(pet)
+        ));
+
+        Pet pet2 = petRepository.save(
+                new Pet(member2, "asda", "asfdfdsa", LocalDate.now().minusYears(1), SizeType.SMALL, Gender.MALE,
+                        "https://image.com"));
+
+        clubCommandService.joinClub(club.getId(), member2.getId(), new SaveClubMemberRequest(List.of(pet2.getId())));
+
+        ChatRoom chatRoom = club.getChatRoom();
 
         // when
         chatRoomCommandService.leave(member2.getId(), chatRoom.getId());
@@ -93,8 +105,7 @@ class ChatRoomCommandServiceTest extends ServiceTest {
         ChatRoom foundChatRoom = chatRoomRepository.getById(chatRoom.getId());
         assertAll(
                 () -> assertThat(foundChatRoom.containsMember(member1)).isTrue(),
-                () -> assertThat(foundChatRoom.containsMember(member2)).isFalse(),
-                () -> assertThat(foundChatRoom.containsMember(member3)).isTrue()
+                () -> assertThat(foundChatRoom.containsMember(member2)).isFalse()
         );
     }
 

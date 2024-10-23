@@ -12,6 +12,8 @@ import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.chat.repository.ChatMessageRepository;
 import com.happy.friendogly.chat.repository.ChatRoomRepository;
+import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
@@ -27,6 +29,7 @@ public class ChatCommandService {
     private static final String EMPTY_CONTENT = "";
 
     private final MemberRepository memberRepository;
+    private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
@@ -34,12 +37,14 @@ public class ChatCommandService {
 
     public ChatCommandService(
             MemberRepository memberRepository,
+            ClubRepository clubRepository,
             ChatRoomRepository chatRoomRepository,
             ChatMessageRepository chatMessageRepository,
             NotificationService notificationService,
             ChatTemplate chatTemplate
     ) {
         this.memberRepository = memberRepository;
+        this.clubRepository = clubRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.notificationService = notificationService;
@@ -70,10 +75,12 @@ public class ChatCommandService {
     }
 
     private void sendAndSave(MessageType messageType, String content, ChatRoom chatRoom, Member senderMember) {
-        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(messageType, content, senderMember,
-                LocalDateTime.now());
-        notificationService.sendChatNotification(chatRoom.getId(), chat);
-        chatTemplate.convertAndSend(chatRoom.getId(), chat);
+        ChatMessageSocketResponse chat = new ChatMessageSocketResponse(
+                messageType, content, senderMember, LocalDateTime.now());
+        Club club = clubRepository.getByChatRoomId(chatRoom.getId());
+
+        notificationService.sendChatNotification(chatRoom.getId(), chat, club);
+        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }
