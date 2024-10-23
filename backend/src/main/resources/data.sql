@@ -8,6 +8,9 @@ VALUES ('도도', '4e52d416', 'https://avatars.githubusercontent.com/u/79188587?
        ('채드', '114d8979', 'https://avatars.githubusercontent.com/u/102402485?v=4'),
        ('에디', 'c065a053', '');
 
+INSERT INTO kakao_member(member_id, kakao_member_id, refresh_token)
+VALUES (1, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoiOTk5OTk5OTk5OSJ9.0lNgUDZHHwkyJRDYMdIZ4qVt8I4TpF7MbeGPILekBt0');
+
 INSERT INTO device_token(member_id, device_token)
 VALUES (1,'a'),
        (2,'a'),
