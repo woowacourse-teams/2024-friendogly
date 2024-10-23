@@ -1,5 +1,7 @@
-package com.happy.friendogly.config.datasource;
+package com.happy.friendogly;
 
+import com.happy.friendogly.config.datasource.DataSourceType;
+import com.happy.friendogly.config.datasource.ReplicationRoutingDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,15 +9,15 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
-@Profile("prod")
-@Configuration
-public class DataSourceConfig {
+@Profile({"testMultiDataSource"})
+@TestConfiguration
+public class TestDataSourceConfig {
 
     private static final String WRITER_DATA_SOURCE_BEAN_NAME = "writerDataSource";
     private static final String READER_DATA_SOURCE_BEAN_NAME = "readerDataSource";

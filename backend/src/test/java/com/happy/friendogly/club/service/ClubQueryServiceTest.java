@@ -29,7 +29,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 class ClubQueryServiceTest extends ClubServiceTest {
 
     @Autowired
@@ -430,7 +429,8 @@ class ClubQueryServiceTest extends ClubServiceTest {
                 () -> assertThat(response.memberDetails().get(0).id()).isEqualTo(savedMember.getId()),
                 () -> assertThat(response.petDetails().size()).isEqualTo(1),
                 () -> assertThat(response.petDetails().get(0).id()).isEqualTo(savedPet.getId()),
-                () -> assertThat(response.allowedGender()).containsExactlyInAnyOrder(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                () -> assertThat(response.allowedGender()).containsExactlyInAnyOrder(Gender.FEMALE,
+                        Gender.FEMALE_NEUTERED),
                 () -> assertThat(response.allowedSize()).containsExactlyInAnyOrder(SizeType.SMALL)
         );
     }
