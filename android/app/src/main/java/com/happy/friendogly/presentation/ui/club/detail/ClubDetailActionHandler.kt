@@ -8,4 +8,6 @@ interface ClubDetailActionHandler {
     fun openMenu()
 
     fun openSelectState()
+
+    fun openUserDetail()
 }

@@ -39,7 +39,8 @@ class ClubDetailViewModel
         private val _clubDetailEvent: MutableLiveData<Event<ClubDetailEvent>> = MutableLiveData()
         val clubDetailEvent: LiveData<Event<ClubDetailEvent>> get() = _clubDetailEvent
 
-        private val _clubDetailUiState: MutableLiveData<ClubDetailUiState> = MutableLiveData(ClubDetailUiState.Loading)
+        private val _clubDetailUiState: MutableLiveData<ClubDetailUiState> =
+            MutableLiveData(ClubDetailUiState.Loading)
         val clubDetailUiState: LiveData<ClubDetailUiState> = _clubDetailUiState
 
         fun loadClub(clubId: Long) =
@@ -85,6 +86,18 @@ class ClubDetailViewModel
 
         override fun openSelectState() {
             _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateSelectState)
+        }
+
+        override fun openUserDetail() {
+            val currentClub = club.value ?: return
+
+            val leader =
+                currentClub.userProfiles.firstOrNull {
+                    it.name == currentClub.clubLeaderName &&
+                        it.imageUrl == currentClub.clubLeaderImage
+                } ?: return
+
+            _clubDetailEvent.emit(ClubDetailEvent.Navigation.NavigateProfileDetail(leader))
         }
 
         fun joinClub(dogs: List<Long>) =

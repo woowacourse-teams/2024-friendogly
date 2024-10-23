@@ -140,6 +140,7 @@ class ClubDetailActivity :
 
                 ClubDetailEvent.Navigation.NavigateSelectState -> openSelectState()
                 ClubDetailEvent.SaveReLoadState -> putLoadState()
+                is ClubDetailEvent.Navigation.NavigateProfileDetail -> navigateToProfile(event.clubDetailProfileUiModel)
             }
         }
 

@@ -75,6 +75,7 @@
     <string name="user_report_edit_hint">직접 작성하기</string>
     <string name="user_report_save">신고하기</string>
     <string name="user_report_message">유저를 신고했어요</string>
+    <string name="club_report_message">모임을 신고했어요</string>
 
     <!--설정-->
     <string name="alarm_settings_total_push">반갑개에서 보내는 소식</string>
@@ -206,6 +207,7 @@
     <string name="club_detail_delete_title">모임에서 나가겠습니까?</string>
     <string name="club_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
     <string name="club_detail_delete_fail">방 나가기에 실패하였습니다.</string>
+    <string name="club_detail_subject">모임 상세</string>
 
     <!--모임 수정 -->
     <string name="club_modify_title">모임 수정하기</string>
@@ -347,6 +349,8 @@
     <string name="default_error_message">알 수 없는 에러가 발생했어요</string>
     <string name="kakao_login_error_message">카카오 로그인을 실패했어요</string>
     <string name="chat_go_club_detail">모임 상세 바로가기</string>
+    <string name="club_participation_error_message">더 이상 참가할 수 없는 모임이에요</string>
+    <string name="club_open_error_message">더 이상 모집할 수 없는 모임이에요</string>
     <string name="no_internet_message">네트워크 상태가 좋지 않아요\n연결 상태를 확인하고 다시 시도해주세요</string>
     <string name="chat_no_chat_description">현재 참여한 모임이 없어요</string>
     <string name="register_friendogly_description">내 반려견의 행복을 위한\n친구 찾기 서비스</string>

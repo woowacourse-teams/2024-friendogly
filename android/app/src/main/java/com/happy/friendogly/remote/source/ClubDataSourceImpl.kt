@@ -1,5 +1,7 @@
 package com.happy.friendogly.remote.source
 
+import com.happy.friendogly.data.error.ApiExceptionDto.Companion.ClubParticipationExceptionDto
+import com.happy.friendogly.data.error.ApiExceptionDto.Companion.ClubSizeExceptionDto
 import com.happy.friendogly.data.error.ApiExceptionDto.Companion.FileSizeExceedExceptionDto
 import com.happy.friendogly.data.model.ClubAddressDto
 import com.happy.friendogly.data.model.ClubDetailDto
@@ -66,14 +68,28 @@ class ClubDataSourceImpl
         override suspend fun postClubMember(
             clubId: Long,
             participatingPetsId: List<Long>,
-        ): Result<ClubParticipationDto> =
-            runCatching {
-                val request = PostClubMemberRequest(participatingPetsId = participatingPetsId)
-                service.postClubMember(
-                    clubId = clubId,
-                    request = request,
-                ).data.toData()
+        ): Result<ClubParticipationDto> {
+            val result =
+                runCatching {
+                    val request = PostClubMemberRequest(participatingPetsId = participatingPetsId)
+                    service.postClubMember(
+                        clubId = clubId,
+                        request = request,
+                    ).data.toData()
+                }
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> {
+                    if (exception.httpCode == 400) {
+                        Result.failure(ClubParticipationExceptionDto)
+                    } else {
+                        Result.failure(exception.toData())
+                    }
+                }
+
+                else -> Result.failure(exception)
             }
+        }
 
         override suspend fun deleteClubMember(clubId: Long): Result<Unit> =
             runCatching {
@@ -85,17 +101,31 @@ class ClubDataSourceImpl
             title: String,
             content: String,
             state: ClubStateDto,
-        ): Result<Unit> =
-            runCatching {
-                val request =
-                    ClubModifyRequest(
-                        title = title,
-                        content = content,
-                        status = state.toRemote(),
-                    )
-                service.patchClub(
-                    clubId = clubId,
-                    request = request,
-                )
+        ): Result<Unit> {
+            val result =
+                runCatching {
+                    val request =
+                        ClubModifyRequest(
+                            title = title,
+                            content = content,
+                            status = state.toRemote(),
+                        )
+                    service.patchClub(
+                        clubId = clubId,
+                        request = request,
+                    ).data
+                }
+            return when (val exception = result.exceptionOrNull()) {
+                null -> result
+                is ApiExceptionResponse -> {
+                    if (exception.httpCode == 400) {
+                        Result.failure(ClubSizeExceptionDto)
+                    } else {
+                        Result.failure(exception.toData())
+                    }
+                }
+
+                else -> Result.failure(exception)
             }
+        }
     }

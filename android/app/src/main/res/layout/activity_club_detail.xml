@@ -16,15 +16,15 @@
         android:layout_height="match_parent">
 
         <include
-            app:detailViewLoadingState = "@{vm.clubDetailUiState}"
             layout="@layout/include_skeleton_club_detail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:detailViewLoadingState="@{vm.clubDetailUiState}" />
 
         <ScrollView
-            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:detailViewUnLoadingState="@{vm.clubDetailUiState}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -46,6 +46,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
+                    onSingleClick="@{() -> vm.openUserDetail()}"
                     android:id="@+id/view_club_detail_user_top_bar"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
@@ -126,8 +127,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/rect_coral300_fill_20"
+                    app:selectModifyStateBackground="@{vm.club.clubState}"
                     app:detailViewClubModifyVisible="@{vm.club.clubDetailViewType}"
+                    android:background="@drawable/rect_coral300_fill_20"
                     app:layout_constraintBottom_toTopOf="@+id/rcv_club_detail_filter_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_club_detail_line">
@@ -139,8 +141,7 @@
                         android:background="@drawable/ripple_rect_fill20_white"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="15dp"
-                        app:selectModifyStateBackground="@{vm.club.clubState}">
+                        android:paddingHorizontal="15dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -287,7 +288,6 @@
                 android:src="@drawable/ic_arrow_left"
                 app:tint="@color/black" />
 
-
             <ImageButton
                 onSingleClick="@{()->vm.openMenu()}"
                 android:layout_width="24dp"
@@ -301,13 +301,27 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            tools:text="모임인데용"
+            android:paddingHorizontal="65dp"
+            android:text="@{vm.club.title}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
-            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingTop="10dp"
+            app:detailViewUnLoadingState="@{vm.clubDetailUiState}"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView

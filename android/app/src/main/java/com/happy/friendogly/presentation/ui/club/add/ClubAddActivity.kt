@@ -150,7 +150,9 @@ class ClubAddActivity : BaseActivity<ActivityClubAddBinding>(R.layout.activity_c
         val dialog =
             EditProfileImageBottomSheet(
                 clickGallery = { imagePickerLauncher.launch("image/*") },
-                clickDefaultImage = { viewModel.updateClubPoster() },
+                clickDefaultImage = {
+                    viewModel.updateClubPoster()
+                },
             )
 
         dialog.show(supportFragmentManager, "TAG")

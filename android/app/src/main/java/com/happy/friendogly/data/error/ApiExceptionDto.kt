@@ -24,5 +24,33 @@ data class ApiExceptionDto(
                             ),
                     ),
             )
+        val ClubSizeExceptionDto =
+            ApiExceptionDto(
+                httpCode = 400,
+                error =
+                    ErrorDto(
+                        isSuccess = false,
+                        data =
+                            ErrorDataDto(
+                                errorCode = ErrorCodeDto.CLUB_SIZE_EXCEED,
+                                errorMessage = "",
+                                detail = emptyList(),
+                            ),
+                    ),
+            )
+        val ClubParticipationExceptionDto =
+            ApiExceptionDto(
+                httpCode = 400,
+                error =
+                    ErrorDto(
+                        isSuccess = false,
+                        data =
+                            ErrorDataDto(
+                                errorCode = ErrorCodeDto.CLUB_PARTICIPATION_EXCEED,
+                                errorMessage = "",
+                                detail = emptyList(),
+                            ),
+                    ),
+            )
     }
 }

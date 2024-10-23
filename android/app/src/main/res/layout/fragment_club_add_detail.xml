@@ -39,25 +39,28 @@
         <Space
             android:layout_width="wrap_content"
             android:layout_height="50dp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="150dp"
             onSingleClick="@{()->actionHandler.selectClubImage()}"
-            android:layout_gravity="center"
-            android:layout_height="150dp">
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center">
+
             <com.google.android.material.imageview.ShapeableImageView
-                app:clubPoster="@{vm.clubPoster}"
                 android:id="@+id/iv_club_add_poster"
-                app:shapeAppearanceOverlay="@style/RoundSmall"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_club_normal" />
+                android:src="@drawable/ic_club_normal"
+                app:clubPoster="@{vm.clubPoster}"
+                app:shapeAppearanceOverlay="@style/RoundSmall" />
+
             <ImageView
-                android:layout_margin="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/ic_user_profile_set_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_user_profile_set_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
@@ -78,45 +81,47 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/club_add_club_number" />
 
             <TextView
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/club_add_club_number"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:text="@{@string/club_counter_count(vm.clubCounter.count)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="최대 5명" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <View
-            android:layout_marginTop="10dp"
-            android:background="@color/gray300"
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/gray300" />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="20dp" />
 
-            <NumberPicker
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:id="@+id/number_picker_club_add_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:value="@{vm.clubCounter.count}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <NumberPicker
+            android:id="@+id/number_picker_club_add_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:value="@{vm.clubCounter.count}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </LinearLayout>

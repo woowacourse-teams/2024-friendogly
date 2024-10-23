@@ -10,6 +10,8 @@ fun ErrorCodeDto?.toDomain(): DataError.Network {
         ErrorCodeDto.OVERLAP_PLAYGROUND_CREATION -> DataError.Network.OVERLAP_PLAYGROUND_CREATION
         ErrorCodeDto.ALREADY_PARTICIPATE_PLAYGROUND -> DataError.Network.ALREADY_PARTICIPATE_PLAYGROUND
         ErrorCodeDto.NO_PARTICIPATING_PLAYGROUND -> DataError.Network.NO_PARTICIPATING_PLAYGROUND
+        ErrorCodeDto.CLUB_SIZE_EXCEED -> DataError.Network.CLUB_OPEN_EXCEED
+        ErrorCodeDto.CLUB_PARTICIPATION_EXCEED -> DataError.Network.CLUB_PARTICIPATION_EXCEED
         null -> DataError.Network.UNKNOWN
     }
 }

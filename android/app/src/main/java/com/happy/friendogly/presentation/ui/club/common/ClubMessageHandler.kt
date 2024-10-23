@@ -14,5 +14,7 @@ fun ClubErrorEvent.handleError(sendMessage: (MessageHandler) -> Unit) {
         ClubErrorEvent.ServerError -> sendMessage(MessageHandler.SendToast(R.string.server_error_message))
         ClubErrorEvent.UnKnownError -> sendMessage(MessageHandler.SendToast(R.string.default_error_message))
         ClubErrorEvent.InternetError -> sendMessage(MessageHandler.SendSnackBar(R.string.no_internet_message))
+        ClubErrorEvent.OpenError -> sendMessage(MessageHandler.SendToast(R.string.club_open_error_message))
+        ClubErrorEvent.ParticipationError -> sendMessage(MessageHandler.SendToast(R.string.club_participation_error_message))
     }
 }

@@ -19,15 +19,16 @@ fun ProgressBar.bindProgress(currentPage: Int) {
 
 @BindingAdapter("clubPoster")
 fun ImageView.bindClubPoster(bitmap: Bitmap?) {
-    if (bitmap == null) return
-
-    val softwareBitmap = bitmap.toSoftwareBitmap()
-
-    Glide.with(context)
-        .asBitmap()
-        .load(softwareBitmap)
-        .centerCrop()
-        .into(this)
+    val softwareBitmap = bitmap?.toSoftwareBitmap()
+    if (softwareBitmap == null) {
+        this.setImageResource(R.drawable.ic_club_normal)
+    } else {
+        Glide.with(context)
+            .asBitmap()
+            .load(softwareBitmap)
+            .centerCrop()
+            .into(this)
+    }
 }
 
 @BindingAdapter("contentCount")
