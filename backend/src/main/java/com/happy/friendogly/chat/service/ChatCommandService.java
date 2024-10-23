@@ -4,6 +4,7 @@ import static com.happy.friendogly.chat.domain.MessageType.CHAT;
 import static com.happy.friendogly.chat.domain.MessageType.ENTER;
 import static com.happy.friendogly.chat.domain.MessageType.LEAVE;
 
+import com.happy.friendogly.chat.config.ChatTemplate;
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.domain.MessageType;
@@ -18,7 +19,6 @@ import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
 import com.happy.friendogly.notification.service.NotificationService;
 import java.time.LocalDateTime;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ChatCommandService {
 
-    private static final String TOPIC_CHAT_PREFIX = "/topic/chat/";
     private static final String EMPTY_CONTENT = "";
 
     private final MemberRepository memberRepository;
@@ -34,7 +33,7 @@ public class ChatCommandService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final NotificationService notificationService;
-    private final SimpMessagingTemplate template;
+    private final ChatTemplate template;
 
     public ChatCommandService(
             MemberRepository memberRepository,
@@ -42,7 +41,7 @@ public class ChatCommandService {
             ChatRoomRepository chatRoomRepository,
             ChatMessageRepository chatMessageRepository,
             NotificationService notificationService,
-            SimpMessagingTemplate template
+            ChatTemplate template
     ) {
         this.memberRepository = memberRepository;
         this.clubRepository = clubRepository;
@@ -81,7 +80,7 @@ public class ChatCommandService {
         Club club = clubRepository.getByChatRoomId(chatRoom.getId());
 
         notificationService.sendChatNotification(chatRoom.getId(), chat, club);
-        template.convertAndSend(TOPIC_CHAT_PREFIX + chatRoom.getId(), chat);
+        template.convertAndSend(chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }
