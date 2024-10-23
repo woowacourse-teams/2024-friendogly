@@ -12,15 +12,15 @@ import com.happy.friendogly.domain.model.ClubState
 fun View.bindSelectModifyStateBackground(clubState: ClubState?) {
     clubState ?: return
     val backgroundTint =
-        if (clubState == ClubState.FULL) {
+        if (clubState == ClubState.OPEN) {
             ContextCompat.getColorStateList(
                 context,
-                R.color.gray300,
+                R.color.coral300,
             )
         } else {
             ContextCompat.getColorStateList(
                 context,
-                R.color.coral300,
+                R.color.gray300,
             )
         }
     this.backgroundTintList = backgroundTint
@@ -30,10 +30,10 @@ fun View.bindSelectModifyStateBackground(clubState: ClubState?) {
 fun TextView.bindSelectModifyStateTypeStyle(clubState: ClubState?) {
     clubState ?: return
     val textStyle =
-        if (clubState == ClubState.FULL) {
-            R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
-        } else {
+        if (clubState == ClubState.OPEN) {
             R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
+        } else {
+            R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
 }
@@ -42,15 +42,15 @@ fun TextView.bindSelectModifyStateTypeStyle(clubState: ClubState?) {
 fun ImageView.bindSelectModifyStateImageTint(clubState: ClubState?) {
     clubState ?: return
     val backgroundTint =
-        if (clubState == ClubState.FULL) {
+        if (clubState == ClubState.OPEN) {
             ContextCompat.getColorStateList(
                 context,
-                R.color.gray700,
+                R.color.white,
             )
         } else {
             ContextCompat.getColorStateList(
                 context,
-                R.color.white,
+                R.color.gray700,
             )
         }
     this.imageTintList = backgroundTint

@@ -43,6 +43,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:background="@drawable/rect_coral300_fill_20"
+                    app:selectModifyStateBackground="@{vm.clubState}"
                     android:layout_height="48dp">
                     <LinearLayout
                         android:background="@drawable/ripple_rect_fill20_white"

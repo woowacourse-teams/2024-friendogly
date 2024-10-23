@@ -127,8 +127,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_margin="10dp"
+                    app:selectModifyStateBackground="@{vm.club.clubState}"
                     android:background="@drawable/rect_coral300_fill_20"
-                    app:detailViewClubModifyVisible="@{vm.club.clubDetailViewType}"
                     app:layout_constraintBottom_toTopOf="@+id/rcv_club_detail_filter_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_club_detail_line">
@@ -140,8 +140,7 @@
                         android:background="@drawable/ripple_rect_fill20_white"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="15dp"
-                        app:selectModifyStateBackground="@{vm.club.clubState}">
+                        android:paddingHorizontal="15dp">
 
                         <TextView
                             android:layout_width="wrap_content"
