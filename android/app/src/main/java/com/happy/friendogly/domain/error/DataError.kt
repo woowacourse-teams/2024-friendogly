@@ -13,6 +13,8 @@ sealed interface DataError : Error {
         ALREADY_PARTICIPATE_PLAYGROUND,
         NO_PARTICIPATING_PLAYGROUND,
         UNKNOWN,
+        CLUB_PARTICIPATION_EXCEED,
+        CLUB_OPEN_EXCEED,
     }
 
     enum class Local : DataError {
