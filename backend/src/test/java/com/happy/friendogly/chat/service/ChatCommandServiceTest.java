@@ -8,9 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.happy.friendogly.chat.domain.ChatMessage;
 import com.happy.friendogly.chat.domain.ChatRoom;
 import com.happy.friendogly.chat.dto.request.ChatMessageSocketRequest;
+import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.member.domain.Member;
+import com.happy.friendogly.pet.domain.Gender;
+import com.happy.friendogly.pet.domain.Pet;
+import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.support.ServiceTest;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +34,14 @@ class ChatCommandServiceTest extends ServiceTest {
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("트레", "abcdef12", "https://image.com/image.jpg"));
-        chatRoom = chatRoomRepository.save(ChatRoom.createGroup(5));
-        chatRoom.addMember(member);
+        Pet pet = petRepository.save(
+                new Pet(member, "asda", "asfdfdsa", LocalDate.now().minusYears(1), SizeType.SMALL, Gender.MALE,
+                        "https://image.com"));
+        Club club = clubRepository.save(Club.create(
+                "모임", "모임입니다.", "서울특별시", "구구구", "동동동",
+                5, member, Set.of(Gender.MALE), Set.of(SizeType.SMALL), "https://image.com", List.of(pet)
+        ));
+        chatRoom = club.getChatRoom();
     }
 
     @DisplayName("채팅 입장 메시지를 DB에 저장한다.")
