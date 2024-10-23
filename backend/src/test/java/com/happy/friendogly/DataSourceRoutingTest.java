@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest
 @Import(DataSourceConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles("prod")
+@ActiveProfiles("multiDataSource")
 public class DataSourceRoutingTest {
 
 
