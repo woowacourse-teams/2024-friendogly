@@ -165,9 +165,11 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = Person.Builder()
         .setName(senderName)
         .setIcon(
-            senderProfile?.let {
-                IconCompat.createWithBitmap(createRoundedBitmap(it))
-            } ?: IconCompat.createWithResource(this, R.drawable.ic_normal_profile),
+            if (senderProfile.isNullOrBlank()) {
+                IconCompat.createWithResource(this, R.drawable.ic_normal_profile)
+            } else {
+                IconCompat.createWithBitmap(createRoundedBitmap(senderProfile))
+            }
         )
         .build()
 
@@ -230,13 +232,16 @@ class AlarmReceiver : FirebaseMessagingService() {
             ShortcutInfoCompat.Builder(this@AlarmReceiver, chatRoomId.toString())
                 .setIntent(contentIntent).setShortLabel(chatRoomName)
                 .setIcon(
-                    chatRoomImage?.let {
+                    if (chatRoomImage.isNullOrBlank()) {
+                        IconCompat.createWithResource(this, R.mipmap.ic_launcher)
+                    } else {
                         IconCompat.createWithBitmap(
                             createRoundedBitmap(
-                                it,
+                                chatRoomImage,
                             ),
                         )
-                    } ?: IconCompat.createWithResource(this, R.mipmap.ic_launcher),
+                    }
+
                 )
                 .setLongLabel(chatRoomName)
                 .setAlwaysBadged()
