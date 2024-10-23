@@ -221,6 +221,5 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
 
     companion object {
         const val TAG = "ClubListFragment"
-        private const val NOT_DATA_SIZE = 0
     }
 }
