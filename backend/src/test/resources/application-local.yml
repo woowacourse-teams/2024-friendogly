@@ -9,4 +9,8 @@ jwt:
 kakao:
   admin-key: sdfsdfsdfdsfsdfsdf
 
-
+spring:
+    jpa:
+      properties:
+        hibernate:
+          default_batch_fetch_size: 100
