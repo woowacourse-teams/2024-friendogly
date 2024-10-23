@@ -2,7 +2,6 @@ package com.happy.friendogly;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.happy.friendogly.config.datasource.DataSourceConfig;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -18,9 +17,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
-@Import(DataSourceConfig.class)
+@Import(TestDataSourceConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles("multiDataSource")
+@ActiveProfiles("testMultiDataSource")
 public class DataSourceRoutingTest {
 
 
