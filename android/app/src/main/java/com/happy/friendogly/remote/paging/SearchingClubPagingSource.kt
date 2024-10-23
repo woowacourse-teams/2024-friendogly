@@ -1,6 +1,5 @@
 package com.happy.friendogly.remote.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.happy.friendogly.data.model.ClubAddressDto
@@ -28,9 +27,8 @@ class SearchingClubPagingSource(
     private var lastPage = STARTING_PAGE_IDX
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ClubDto> {
-
         val page = params.key ?: STARTING_PAGE_IDX
-        if (lastPage>=page){
+        if (lastPage >= page) {
             initPageState()
         }
         lastPage = page
@@ -52,8 +50,9 @@ class SearchingClubPagingSource(
                 recentlyItem = lastItem
             }
 
-            if (lastItem == null && page == STARTING_PAGE_IDX)
+            if (lastItem == null && page == STARTING_PAGE_IDX) {
                 return LoadResult.Error(NullPointerException())
+            }
 
             lastPageUpdate(results.isLastPage)
 
@@ -88,14 +87,16 @@ class SearchingClubPagingSource(
             genderParams = genderParams.map { it.toRemote().name },
             sizeParams = sizeParams.map { it.toRemote().name },
             pageSize = searchClubPageInfoDto.pageSize.toString(),
-            lastFoundCreatedAt = recentlyItem?.createdAt?.toString()
-                ?: searchClubPageInfoDto.lastFoundCreatedAt,
-            lastFoundId = recentlyItem?.id?.toString()
-                ?: searchClubPageInfoDto.lastFoundId,
+            lastFoundCreatedAt =
+                recentlyItem?.createdAt?.toString()
+                    ?: searchClubPageInfoDto.lastFoundCreatedAt,
+            lastFoundId =
+                recentlyItem?.id?.toString()
+                    ?: searchClubPageInfoDto.lastFoundId,
         ).data
     }
 
-    private fun initPageState(){
+    private fun initPageState() {
         isLastPage = false
         recentlyItem = null
     }

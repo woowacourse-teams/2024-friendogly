@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.club.list
 
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import com.happy.friendogly.domain.DomainResult
 import com.happy.friendogly.domain.model.Club
@@ -13,7 +12,6 @@ import com.happy.friendogly.domain.usecase.GetSearchingClubsUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.ui.club.common.mapper.toGender
 import com.happy.friendogly.presentation.ui.club.common.mapper.toSizeType
-import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
@@ -81,19 +79,20 @@ class ClubListViewModelTest {
                     searchClubPageInfo = searchClubPageInfo,
                     filterCondition = ClubFilterCondition.ALL,
                     address =
-                    ClubAddress(
-                        province = "서울특별시", null, null,
-                    ),
+                        ClubAddress(
+                            province = "서울특별시", null, null,
+                        ),
                     genderParams = ClubFilter.makeGenderFilterEntry().mapNotNull { it.toGender() },
                     sizeParams = ClubFilter.makeSizeFilterEntry().mapNotNull { it.toSizeType() },
                 )
-            } returns flow {
-                PagingSource.LoadResult.Page(
-                    data = clubs,
-                    prevKey = null,
-                    nextKey = null
-                )
-            }
+            } returns
+                flow {
+                    PagingSource.LoadResult.Page(
+                        data = clubs,
+                        prevKey = null,
+                        nextKey = null,
+                    )
+                }
 
             viewModel =
                 ClubListViewModel(

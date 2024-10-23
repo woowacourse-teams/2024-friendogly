@@ -1,6 +1,5 @@
 package com.happy.friendogly.data.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData

@@ -11,7 +11,6 @@ import com.happy.friendogly.presentation.ui.club.common.model.ClubItemUiModel
 class ClubListAdapter(
     private val actionHandler: ClubItemActionHandler,
 ) : PagingDataAdapter<ClubItemUiModel, ClubViewHolder>(diffCallback) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,

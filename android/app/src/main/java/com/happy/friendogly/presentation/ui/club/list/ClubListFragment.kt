@@ -26,7 +26,6 @@ import com.happy.friendogly.presentation.ui.club.filter.bottom.ParticipationFilt
 import com.happy.friendogly.presentation.ui.club.list.adapter.club.ClubListAdapter
 import com.happy.friendogly.presentation.ui.club.list.adapter.selectfilter.SelectFilterAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
