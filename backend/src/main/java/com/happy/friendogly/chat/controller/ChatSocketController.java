@@ -66,4 +66,22 @@ public class ChatSocketController {
         );
         return new ResponseEntity<>(ApiResponse.ofError(errorResponse), exception.getHttpStatus());
     }
+
+    // TODO: 다음 릴리즈에서 제거한다.
+    @MessageMapping("/enter/{chatRoomId}")
+    public void enter(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId
+    ) {
+        chatCommandService.sendEnter(memberId, chatRoomId);
+    }
+
+    // TODO: 다음 릴리즈에서 제거한다.
+    @MessageMapping("/leave/{chatRoomId}")
+    public void leave(
+            @WebSocketAuth Long memberId,
+            @DestinationVariable(value = "chatRoomId") Long chatRoomId
+    ) {
+        chatCommandService.sendLeave(memberId, chatRoomId);
+    }
 }
