@@ -1,6 +1,7 @@
 package com.happy.friendogly.notification.service;
 
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
+import com.happy.friendogly.club.domain.Club;
 import java.util.List;
 
 public interface NotificationService {
@@ -9,7 +10,7 @@ public interface NotificationService {
 
     void sendFootprintNotification(String title, String content, List<String> receiverTokens);
 
-    void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response);
+    void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club);
 
     void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens);
 }

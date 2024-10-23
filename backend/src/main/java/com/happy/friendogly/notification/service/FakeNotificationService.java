@@ -1,6 +1,7 @@
 package com.happy.friendogly.notification.service;
 
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
+import com.happy.friendogly.club.domain.Club;
 import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class FakeNotificationService implements NotificationService {
     }
 
     @Override
-    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response) {
+    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club) {
 
     }
 

@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
+import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
@@ -55,7 +56,7 @@ public class FcmNotificationService implements NotificationService {
     }
 
     @Override
-    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response) {
+    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club) {
         List<String> receiverTokens = deviceTokenRepository
                 .findAllByChatRoomIdWithoutMine(chatRoomId, response.senderMemberId());
 
@@ -66,7 +67,9 @@ public class FcmNotificationService implements NotificationService {
                 "senderName", response.senderName(),
                 "content", response.content(),
                 "createdAt", response.createdAt().toString(),
-                "profilePictureUrl", response.profilePictureUrl()
+                "profilePictureUrl", response.profilePictureUrl(),
+                "clubPictureUrl", club.getImageUrl(),
+                "clubTitle", club.getTitle().getValue()
         );
 
         sendNotificationWithType(CHAT, "채팅", data, receiverTokens);
