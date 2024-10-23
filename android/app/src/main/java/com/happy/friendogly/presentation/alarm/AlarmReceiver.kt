@@ -51,7 +51,7 @@ class AlarmReceiver : FirebaseMessagingService() {
             showChatAlarm(
                 message,
             )
-        } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
+        } else if (message.data[ALARM_TYPE] == "PLAYGROUND") {
             showPlaygroundAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
     }
@@ -86,7 +86,7 @@ class AlarmReceiver : FirebaseMessagingService() {
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (getPlaygroundAlarmUseCase.invoke().getOrDefault(true)) {
+        if (getPlaygroundAlarmUseCase().getOrDefault(true)) {
             createNotificationChannel(AlarmType.PLAYGROUND)
             deliverPlaygroundNotification(title, body)
         }
@@ -325,7 +325,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         private const val CHAT_CHANNEL_ID = "chat_channel"
         private const val CHAT_CHANNEL_NAME = "채팅"
         private const val PLAYGROUND_CHANNEL_ID = "playground_channel"
-        private const val PLAYGROUND_CHANNEL_NAME = "친구 찾기"
+        private const val PLAYGROUND_CHANNEL_NAME = "놀이터"
         private const val ALARM_TITLE = "title"
         private const val ALARM_BODY = "body"
         private const val ALARM_TYPE = "type"

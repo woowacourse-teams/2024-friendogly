@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.naver.maps.map.widget.LocationButtonView
@@ -180,7 +180,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="12dp"
             android:onClick="@{() -> vm.clickLocationBtn()}"
-            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
@@ -196,19 +196,19 @@
             android:onClick="@{() -> vm.clickHelpBtn()}"
             android:padding="6dp"
             android:src="@drawable/ic_help_coral500"
-            app:layout_constraintBottom_toTopOf="@id/layout_playground_register_marker"
+            app:layout_constraintBottom_toTopOf="@id/layout_playground_register"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_playground_register_marker"
+            android:id="@+id/layout_playground_register"
+            registeringPlaygroundVisibility="@{vm.uiState}"
             android:layout_width="match_parent"
             android:layout_height="208dp"
             android:layout_margin="12dp"
             android:background="@drawable/rect_white_fill_30"
             android:elevation="10dp"
             android:paddingHorizontal="6dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible">
 
