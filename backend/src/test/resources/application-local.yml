@@ -9,22 +9,3 @@ jwt:
 kakao:
   admin-key: sdfsdfsdfdsfsdfsdf
 
-
-# DataSource 라우팅 테스트
-spring:
-  datasource:
-    writer:
-      hikari:
-        driver-class-name: org.h2.Driver
-        jdbc-url: jdbc:h2:mem:database
-        read-only: false
-        username: sa
-        password:
-    reader:
-        hikari:
-          driver-class-name: org.h2.Driver
-          jdbc-url: jdbc:h2:mem:database
-          read-only: true
-          username: sa
-          password:
-
