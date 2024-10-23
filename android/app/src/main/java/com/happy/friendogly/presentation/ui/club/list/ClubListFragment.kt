@@ -101,13 +101,22 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         }
     }
 
+    private fun handleLoadStateLoadings(vararg states: LoadState) {
+        states.forEach { state ->
+            if (state.endOfPaginationReached) {
+                viewModel.updateInitState()
+            }
+        }
+    }
+
     private fun setClubAdapter() {
         clubAdapter = ClubListAdapter(viewModel as ClubItemActionHandler)
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
         clubAdapter.addLoadStateListener { loadState ->
-            viewModel.updateInitState()
             if (loadState.hasError) {
                 handleLoadStateErrors(loadState.append, loadState.prepend, loadState.refresh)
+            } else {
+                handleLoadStateLoadings(loadState.append, loadState.prepend, loadState.refresh)
             }
         }
     }
@@ -209,11 +218,11 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun applyViewVisibility(currentView: View) {
+        binding.includeClubLoading.nestedViewLayoutClubLoading.visibility = View.GONE
         binding.includeClubError.linearLayoutClubError.visibility = View.GONE
         binding.includeClubData.linearLayoutClubNotData.visibility = View.GONE
         binding.includeClubAddress.linearLayoutClubNotAddress.visibility = View.GONE
         binding.includeClubList.rcvClubListClub.visibility = View.GONE
-        binding.includeClubLoading.nestedViewLayoutClubLoading.visibility = View.GONE
         currentView.visibility = View.VISIBLE
     }
 
