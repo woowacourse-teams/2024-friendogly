@@ -26,7 +26,7 @@ public class DataSourceConfig {
 
     @Primary
     @Bean(name = "dataSource")
-    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSourceType) throws SQLException {
+    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSourceType) {
         return new LazyConnectionDataSourceProxy(routingDataSourceType);
     }
 
