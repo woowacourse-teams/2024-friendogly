@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubRequest;
@@ -144,6 +145,27 @@ class ClubCommandServiceTest extends ClubServiceTest {
         assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedMember.getId(), request))
                 .isInstanceOf(FriendoglyException.class)
                 .hasMessage("이미 참여 중인 모임입니다.");
+    }
+
+    @DisplayName("CLOSED 상태인 모임에 참여 시도하면 예외가 발생한다.")
+    @Transactional
+    @Test
+    void joinClub_ClosedFail() {
+        Club savedClub = createSavedClub(
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+        Member savedNewMember = memberRepository.save(new Member("name", "sdhfidf1", "imageUrl"));
+        Pet savedNewMemberPet = createSavedPet(savedNewMember);
+
+        savedClub.update("title", "content", Status.CLOSED.name());
+
+        SaveClubMemberRequest request = new SaveClubMemberRequest(List.of(savedNewMemberPet.getId()));
+        assertThatThrownBy(() -> clubCommandService.joinClub(savedClub.getId(), savedNewMember.getId(), request))
+                .isInstanceOf(FriendoglyException.class)
+                .hasMessage("최대 인원을 초과했거나, 더이상 모임에 참여할 수 없는 상태입니다.");
     }
 
     @DisplayName("참여 가능한 강아지가 없다면 참여할 수 없다.")
