@@ -543,13 +543,13 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     id = playground.id,
                     marker = createMarker(playground = playground),
                     circleOverlay =
-                    createCircleOverlay(
-                        position =
-                        LatLng(
-                            playground.latitude,
-                            playground.longitude,
+                        createCircleOverlay(
+                            position =
+                                LatLng(
+                                    playground.latitude,
+                                    playground.longitude,
+                                ),
                         ),
-                    ),
                 )
             }
         viewModel.loadNearPlaygrounds(playgrounds)
@@ -770,9 +770,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
                     if (viewModel.uiState.value is PlaygroundUiState.FindingPlayground &&
                         (
-                                newState == BottomSheetBehavior.STATE_HALF_EXPANDED ||
-                                        newState == BottomSheetBehavior.STATE_EXPANDED
-                                )
+                            newState == BottomSheetBehavior.STATE_HALF_EXPANDED ||
+                                newState == BottomSheetBehavior.STATE_EXPANDED
+                        )
                     ) {
                         viewModel.updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
@@ -852,12 +852,12 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         val dialog =
             DefaultCoralAlertDialog(
                 alertDialogModel =
-                AlertDialogModel(
-                    title = requireContext().getString(R.string.playground_dialog_title),
-                    description = requireContext().getString(R.string.playground_dialog_description),
-                    negativeContents = requireContext().getString(R.string.dialog_negative_default),
-                    positiveContents = requireContext().getString(R.string.dialog_positive_default),
-                ),
+                    AlertDialogModel(
+                        title = requireContext().getString(R.string.playground_dialog_title),
+                        description = requireContext().getString(R.string.playground_dialog_description),
+                        negativeContents = requireContext().getString(R.string.dialog_negative_default),
+                        positiveContents = requireContext().getString(R.string.dialog_positive_default),
+                    ),
                 clickToNegative = { },
                 clickToPositive = {
                     action()
