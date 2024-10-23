@@ -16,15 +16,15 @@
         android:layout_height="match_parent">
 
         <include
-            app:detailViewLoadingState = "@{vm.clubDetailUiState}"
             layout="@layout/include_skeleton_club_detail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:detailViewLoadingState="@{vm.clubDetailUiState}" />
 
         <ScrollView
-            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:detailViewUnLoadingState="@{vm.clubDetailUiState}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -287,7 +287,6 @@
                 android:src="@drawable/ic_arrow_left"
                 app:tint="@color/black" />
 
-
             <ImageButton
                 onSingleClick="@{()->vm.openMenu()}"
                 android:layout_width="24dp"
@@ -301,13 +300,27 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <TextView
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            tools:text="모임인데용"
+            android:paddingHorizontal="65dp"
+            android:text="@{vm.club.title}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
-            app:detailViewUnLoadingState = "@{vm.clubDetailUiState}"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingTop="10dp"
+            app:detailViewUnLoadingState="@{vm.clubDetailUiState}"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView

@@ -206,6 +206,7 @@
     <string name="club_detail_delete_title">모임에서 나가겠습니까?</string>
     <string name="club_detail_participate_fail">모임에 참가하지 못하였습니다.</string>
     <string name="club_detail_delete_fail">방 나가기에 실패하였습니다.</string>
+    <string name="club_detail_subject">모임 상세</string>
 
     <!--모임 수정 -->
     <string name="club_modify_title">모임 수정하기</string>
