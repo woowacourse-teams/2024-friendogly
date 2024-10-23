@@ -11,8 +11,6 @@ import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityClubDetailBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.dialog.AlertDialogModel
-import com.happy.friendogly.presentation.dialog.DefaultRedAlertDialog
 import com.happy.friendogly.presentation.dialog.PetAddAlertDialog
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
 import com.happy.friendogly.presentation.ui.club.common.ClubChangeStateIntent
@@ -28,7 +26,6 @@ import com.happy.friendogly.presentation.ui.club.modify.ClubModifyActivity
 import com.happy.friendogly.presentation.ui.club.modify.ClubModifyUiModel
 import com.happy.friendogly.presentation.ui.club.select.PetSelectBottomSheet
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
-import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserReport
 import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.registerpet.RegisterPetActivity
 import dagger.hilt.android.AndroidEntryPoint

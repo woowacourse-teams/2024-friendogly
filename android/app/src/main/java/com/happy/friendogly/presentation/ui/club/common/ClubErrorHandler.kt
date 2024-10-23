@@ -33,7 +33,7 @@ class ClubErrorHandler {
                         DataError.Network.FILE_SIZE_EXCEED -> ClubErrorEvent.FileSizeError
                         DataError.Network.UNKNOWN -> ClubErrorEvent.UnKnownError
                         DataError.Network.CLUB_OPEN_EXCEED -> ClubErrorEvent.OpenError
-                        DataError.Network.CLUB_PARTICIPATION_EXCEED  -> ClubErrorEvent.ParticipationError
+                        DataError.Network.CLUB_PARTICIPATION_EXCEED -> ClubErrorEvent.ParticipationError
                         else -> ClubErrorEvent.ServerError
                     }
                 }

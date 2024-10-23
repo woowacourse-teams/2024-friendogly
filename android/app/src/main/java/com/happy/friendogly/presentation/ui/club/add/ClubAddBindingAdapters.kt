@@ -20,7 +20,7 @@ fun ProgressBar.bindProgress(currentPage: Int) {
 @BindingAdapter("clubPoster")
 fun ImageView.bindClubPoster(bitmap: Bitmap?) {
     val softwareBitmap = bitmap?.toSoftwareBitmap()
-    if (softwareBitmap == null){
+    if (softwareBitmap == null) {
         this.setImageResource(R.drawable.ic_club_normal)
     } else {
         Glide.with(context)

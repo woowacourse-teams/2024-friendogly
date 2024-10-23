@@ -158,5 +158,4 @@ class ClubMenuBottomSheet(
             BottomUserReport(onSaved = { reportType -> makeToast(getString(R.string.club_report_message)) })
         bottomSheet.show(parentFragmentManager, "TAG")
     }
-
 }
