@@ -147,7 +147,7 @@ public class Club {
 
     public void addClubMember(Member member) {
         validateAlreadyExists(member);
-        validateMemberCapacity();
+        validateStatus();
 
         ClubMember clubMember = ClubMember.create(this, member);
         clubMembers.add(clubMember);
@@ -167,9 +167,9 @@ public class Club {
                 .anyMatch(clubMember -> clubMember.isSameMember(member));
     }
 
-    private void validateMemberCapacity() {
-        if (memberCapacity.isCapacityReached(countClubMember())) {
-            throw new FriendoglyException("최대 인원을 초과하여 모임에 참여할 수 없습니다.");
+    private void validateStatus() {
+        if (status.isFull() || status.isClosed()) {
+            throw new FriendoglyException("최대 인원을 초과했거나, 더이상 모임에 참여할 수 없는 상태입니다.");
         }
     }
 
@@ -267,8 +267,8 @@ public class Club {
     }
 
     private void updateStatus(String status) {
-        if (this.status.isFull()) {
-            return;
+        if (this.status.isFull() && Status.toStatus(status).isOpen()) {
+            throw new FriendoglyException("인원이 가득찬 모임은 다시 OPEN 상태로 변경할 수 없습니다.");
         }
         this.status = Status.toStatus(status);
     }
