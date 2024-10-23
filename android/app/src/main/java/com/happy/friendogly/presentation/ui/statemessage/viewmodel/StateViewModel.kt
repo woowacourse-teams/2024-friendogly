@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.message.viewmodel
+package com.happy.friendogly.presentation.ui.statemessage.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,39 +7,39 @@ import androidx.lifecycle.viewModelScope
 import com.happy.friendogly.domain.usecase.PathPlaygroundMessageUseCase
 import com.happy.friendogly.presentation.base.Event
 import com.happy.friendogly.presentation.base.emit
-import com.happy.friendogly.presentation.ui.message.action.MessageActionHandler
-import com.happy.friendogly.presentation.ui.message.action.MessageAlertAction
-import com.happy.friendogly.presentation.ui.message.action.MessageNavigateAction
+import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageActionHandler
+import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageAlertAction
+import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageNavigateAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MessageViewModel
+class StateViewModel
     @Inject
     constructor(
         private val patchPlaygroundMessageUseCase: PathPlaygroundMessageUseCase,
-    ) : ViewModel(), MessageActionHandler {
+    ) : ViewModel(), StateMessageActionHandler {
         private val _message: MutableLiveData<String> = MutableLiveData()
         val message: LiveData<String> get() = _message
 
-        private val _alertAction: MutableLiveData<Event<MessageAlertAction>> = MutableLiveData()
-        val alertAction: LiveData<Event<MessageAlertAction>> get() = _alertAction
+        private val _alertAction: MutableLiveData<Event<StateMessageAlertAction>> = MutableLiveData()
+        val alertAction: LiveData<Event<StateMessageAlertAction>> get() = _alertAction
 
-        private val _navigateAction: MutableLiveData<Event<MessageNavigateAction>> = MutableLiveData()
-        val navigateAction: LiveData<Event<MessageNavigateAction>> get() = _navigateAction
+        private val _navigateAction: MutableLiveData<Event<StateMessageNavigateAction>> = MutableLiveData()
+        val navigateAction: LiveData<Event<StateMessageNavigateAction>> get() = _navigateAction
 
         override fun clickCancelBtn() {
-            _navigateAction.emit(MessageNavigateAction.FinishMessageActivity(messageUpdated = false))
+            _navigateAction.emit(StateMessageNavigateAction.FinishStateMessageActivity(messageUpdated = false))
         }
 
         override fun clickConfirmBtn() {
             viewModelScope.launch {
                 val newMessage = message.value ?: return@launch
                 patchPlaygroundMessageUseCase(newMessage).onSuccess {
-                    _navigateAction.emit(MessageNavigateAction.FinishMessageActivity(messageUpdated = true))
+                    _navigateAction.emit(StateMessageNavigateAction.FinishStateMessageActivity(messageUpdated = true))
                 }.onFailure {
-                    _alertAction.emit(MessageAlertAction.AlertFailToPatchPlaygroundMessage)
+                    _alertAction.emit(StateMessageAlertAction.AlertFailToPatchPlaygroundStateMessage)
                 }
             }
         }

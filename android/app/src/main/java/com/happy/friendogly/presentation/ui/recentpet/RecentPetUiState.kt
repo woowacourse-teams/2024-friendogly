@@ -78,13 +78,13 @@ data class RecentPetView(
         ): RecentPetView {
             return RecentPetView(
                 index = index,
+                last = last,
                 memberId = recentPet.memberId,
                 imageUrl = recentPet.imgUrl,
                 name = recentPet.name,
                 birthday = recentPet.birthday,
                 gender = recentPet.gender,
                 sizeType = recentPet.sizeType,
-                last = last,
             )
         }
     }

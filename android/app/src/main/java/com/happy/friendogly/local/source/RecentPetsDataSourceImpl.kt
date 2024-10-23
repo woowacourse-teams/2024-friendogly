@@ -28,7 +28,8 @@ class RecentPetsDataSourceImpl
             }
 
         override suspend fun insertRecentPet(
-            id: Long,
+            memberId: Long,
+            petId: Long,
             name: String,
             imgUrl: String,
             birthday: LocalDate,
@@ -38,7 +39,8 @@ class RecentPetsDataSourceImpl
             runCatching {
                 val recentPetDto =
                     RecentPetDto(
-                        memberId = id,
+                        memberId = memberId,
+                        petId = petId,
                         imgUrl = imgUrl,
                         name = name,
                         birthday = birthday,
@@ -46,6 +48,6 @@ class RecentPetsDataSourceImpl
                         sizeType = sizeType,
                         createAt = LocalDateTime.now(),
                     )
-                dao.insertRecentPet(recentPetEntity = recentPetDto.toLocal())
+                dao.insertOrUpdateRecentPet(recentPetEntity = recentPetDto.toLocal())
             }
     }

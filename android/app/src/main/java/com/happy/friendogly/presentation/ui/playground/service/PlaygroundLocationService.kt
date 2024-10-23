@@ -7,9 +7,12 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.Location
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import com.happy.friendogly.R
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
@@ -59,15 +62,24 @@ class PlaygroundLocationService : Service() {
 
     private fun startForegroundService(playStatusTitle: String) {
         createNotificationChannel()
-        startForeground(SERVICE_ID, createNotification(playStatusTitle))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ServiceCompat.startForeground(
+                this,
+                SERVICE_ID,
+                createNotification(playStatusTitle),
+                FOREGROUND_SERVICE_TYPE_LOCATION,
+            )
+        } else {
+            startForeground(SERVICE_ID, createNotification(playStatusTitle))
+        }
         locationManager.startLocationUpdate()
     }
 
     private fun createNotificationChannel() {
         val notificationChannel =
             NotificationChannel(
-                WALK_SERVICE_CHANNEL_ID,
-                WALK_SERVICE_CHANNEL_NAME,
+                PLAYGROUND_SERVICE_CHANNEL_ID,
+                PLAYGROUND_SERVICE_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT,
             )
         val notificationManager =
@@ -104,9 +116,9 @@ class PlaygroundLocationService : Service() {
                 stopIntent,
             )
 
-        return NotificationCompat.Builder(this, WALK_SERVICE_CHANNEL_ID)
+        return NotificationCompat.Builder(this, PLAYGROUND_SERVICE_CHANNEL_ID)
             .setContentTitle(playStatusTitle)
-            .setContentText(resources.getString(R.string.woof_location_tracking))
+            .setContentText(resources.getString(R.string.playground_location_tracking))
             .setSmallIcon(R.drawable.ic_footprint).setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(stopAction)
             .setAutoCancel(false).setShowWhen(false).setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -134,8 +146,8 @@ class PlaygroundLocationService : Service() {
     }
 
     companion object {
-        private const val WALK_SERVICE_CHANNEL_ID = "walk_service_id"
-        private const val WALK_SERVICE_CHANNEL_NAME = "Walk Service"
+        private const val PLAYGROUND_SERVICE_CHANNEL_ID = "playground_service_id"
+        private const val PLAYGROUND_SERVICE_CHANNEL_NAME = "Playground Service"
         private const val EXTRA_PLAY_STATUS = "playStatus"
         private const val REQUEST_CODE_ID = 0
         private const val SERVICE_ID = 1

@@ -15,9 +15,9 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.model.Gender
 import com.happy.friendogly.domain.model.SizeType
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundActionHandler
+import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundInfoUiModel
-import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundMarkerUiModel
+import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
@@ -34,9 +34,9 @@ fun TextView.bindPetAge(petBirthDate: LocalDate?) {
 
         text =
             if (years < 1) {
-                resources.getString(R.string.woof_age_month, months)
+                resources.getString(R.string.playground_age_month, months)
             } else {
-                resources.getString(R.string.woof_age_year, years)
+                resources.getString(R.string.playground_age_year, years)
             }
     }
 }
@@ -69,27 +69,18 @@ fun TextView.bindPetGender(petGender: Gender?) {
 @BindingAdapter("myPlaygroundBtnVisibility")
 fun TextView.bindMyPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("playgroundLocationBtnVisibility")
 fun View.bindPlaygroundLocationBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        (uiState !is PlaygroundUiState.RegisteringPlayground && uiState !is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
 @BindingAdapter("registeringVisibility")
 fun View.bindRegisteringVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState is PlaygroundUiState.RegisteringPlayground)
-}
-
-@BindingAdapter("registeringPlaygroundAnimation")
-fun View.bindRegisteringAnimation(uiState: PlaygroundUiState?) {
-    if (uiState is PlaygroundUiState.RegisteringPlayground) {
-        showViewAnimation()
-    } else {
-        hideViewAnimation()
-    }
+    isVisible = uiState is PlaygroundUiState.RegisteringPlayground
 }
 
 @BindingAdapter("viewingPlaygroundSummaryAnimation")
@@ -103,79 +94,67 @@ fun View.bindViewingPlaygroundSummaryAnimation(uiState: PlaygroundUiState?) {
 
 @BindingAdapter("loadingVisibility")
 fun FrameLayout.bindLoadingVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState == PlaygroundUiState.Loading)
+    isVisible = (uiState is PlaygroundUiState.Loading)
 }
 
 @BindingAdapter("loadingAnimation")
 fun LottieAnimationView.bindLoadingAnimation(uiState: PlaygroundUiState?) {
-    if (uiState == PlaygroundUiState.Loading) {
+    if (uiState is PlaygroundUiState.Loading) {
         playAnimation()
     } else {
         pauseAnimation()
     }
 }
 
-@BindingAdapter("uiState", "playgroundInfoVisibility")
+@BindingAdapter("playgroundInfoUiState", "playgroundInfoVisibility")
 fun View.bindPlaygroundInfoVisibility(
     uiState: PlaygroundUiState?,
-    playgroundInfo: PlaygroundInfoUiModel?,
+    playStatus: PlayStatus?,
 ) {
     isVisible =
-        if (playgroundInfo != null && (
-                uiState == PlaygroundUiState.FindingPlayground ||
-                    uiState == PlaygroundUiState.ViewingPlaygroundInfo
-            )
-        ) {
-            bringToFront()
-            true
-        } else {
-            false
-        }
+        playStatus != PlayStatus.NO_PLAYGROUND && (
+            uiState is PlaygroundUiState.Loading ||
+                uiState is PlaygroundUiState.FindingPlayground ||
+                uiState is PlaygroundUiState.ViewingPlaygroundInfo
+        )
 }
 
-@BindingAdapter("uiState")
+@BindingAdapter("petExistenceBtnUiState")
 fun View.bindPetExistenceBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
-        (uiState != PlaygroundUiState.RegisteringPlayground && uiState != PlaygroundUiState.ViewingPlaygroundSummary)
+        !(uiState is PlaygroundUiState.RegisteringPlayground || uiState is PlaygroundUiState.ViewingPlaygroundSummary)
 }
 
-@BindingAdapter("uiState", "refreshBtnVisibility")
-fun TextView.bindRefreshBtnVisibility(
-    uiState: PlaygroundUiState?,
-    refreshBtnVisible: Boolean,
-) {
+@BindingAdapter("refreshBtnUiState")
+fun TextView.bindRefreshBtnVisibility(uiState: PlaygroundUiState?) {
     isVisible =
         if (uiState is PlaygroundUiState.FindingPlayground) {
-            refreshBtnVisible
+            uiState.refreshBtnVisible
         } else {
             false
         }
 }
 
-@BindingAdapter("uiState", "cameraIdle")
-fun TextView.bindRegisterPlaygroundBtnClickable(
-    uiState: PlaygroundUiState?,
-    cameraIdle: Boolean,
-) {
+@BindingAdapter("registerPlaygroundBtnUiState")
+fun TextView.bindRegisterPlaygroundBtnClickable(uiState: PlaygroundUiState?) {
     isClickable =
         if (uiState is PlaygroundUiState.RegisteringPlayground) {
-            cameraIdle
+            uiState.playgroundRegisterBtnClickable.cameraIdle
         } else {
             false
         }
 }
 
 @BindingAdapter("btnMargin")
-fun View.bindBtnMargin(myPlayground: PlaygroundMarkerUiModel?) {
+fun View.bindBtnMargin(playStatus: PlayStatus?) {
     fun Int.dp(): Int {
         val metrics = Resources.getSystem().displayMetrics
-        return TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
             .toInt()
     }
 
     val marginBottom =
-        if (myPlayground != null) {
+        if (playStatus != PlayStatus.NO_PLAYGROUND) {
             MARGIN_BOTTOM_PLAYING
         } else {
             MARGIN_BOTTOM_DEFAULT
@@ -189,15 +168,15 @@ fun View.bindBtnMargin(myPlayground: PlaygroundMarkerUiModel?) {
     this.layoutParams = layoutParams
 }
 
-@BindingAdapter("registerLocationBtnVisibility")
-fun View.bindRegisterLocationBtnVisibility(uiState: PlaygroundUiState?) {
-    isVisible = (uiState == PlaygroundUiState.RegisteringPlayground)
+@BindingAdapter("registeringPlaygroundVisibility")
+fun View.bindRegisteringPlaygroundVisibility(uiState: PlaygroundUiState?) {
+    isVisible = (uiState is PlaygroundUiState.RegisteringPlayground)
 }
 
 @BindingAdapter("playgroundAction", "playgroundBtn", "playgroundId")
 fun AppCompatButton.bindPlaygroundBtn(
     playgroundAction: PlaygroundActionHandler,
-    myPlayground: PlaygroundMarkerUiModel?,
+    myPlayground: MyPlaygroundUiModel?,
     playgroundId: Long,
 ) {
     if (myPlayground != null && myPlayground.id == playgroundId) {
@@ -208,16 +187,15 @@ fun AppCompatButton.bindPlaygroundBtn(
     } else {
         text = resources.getString(R.string.playground_join)
         setOnClickListener {
-            playgroundAction.clickJoinPlaygroundBtn(playgroundId)
+            playgroundAction.clickJoinPlaygroundBtn()
         }
     }
 }
 
 @BindingAdapter("playgroundBtnVisibility")
-fun AppCompatButton.bindPlaygroundBtnVisibility(playgroundInfo: PlaygroundInfoUiModel?) {
-    if (playgroundInfo != null) {
-        visibility = if (playgroundInfo.petDetails.isNotEmpty()) View.VISIBLE else View.GONE
-    }
+fun AppCompatButton.bindPlaygroundBtnVisibility(uiState: PlaygroundUiState?) {
+    visibility =
+        if (uiState is PlaygroundUiState.ViewingPlaygroundInfo) View.VISIBLE else View.INVISIBLE
 }
 
 @BindingAdapter("petIsArrival")
@@ -233,5 +211,10 @@ fun TextView.bindPetIsArrival(isArrival: Boolean) {
 
 @BindingAdapter("helpBtnVisibility")
 fun ImageButton.bindHelpBtnVisibility(uiState: PlaygroundUiState?) {
-    isVisible = uiState == PlaygroundUiState.RegisteringPlayground
+    isVisible = uiState is PlaygroundUiState.RegisteringPlayground
+}
+
+@BindingAdapter("addressText")
+fun TextView.bindAddressText(uiState: PlaygroundUiState?) {
+    if (uiState is PlaygroundUiState.RegisteringPlayground) text = uiState.address
 }

@@ -14,9 +14,9 @@ class AlarmSettingRepositoryImpl
 
         override suspend fun deleteChatSetting(): Result<Unit> = source.deleteChatSetting()
 
-        override suspend fun saveWoofSetting(isSet: Boolean): Result<Unit> = source.saveWoofSetting(isSet)
+        override suspend fun savePlaygroundSetting(isSet: Boolean): Result<Unit> = source.savePlaygroundSetting(isSet)
 
-        override suspend fun getWoofSetting(): Result<Boolean> = source.getWoofSetting()
+        override suspend fun getPlaygroundSetting(): Result<Boolean> = source.getPlaygroundSetting()
 
-        override suspend fun deleteWoofSetting(): Result<Unit> = source.deleteWoofSetting()
+        override suspend fun deletePlaygroundSetting(): Result<Unit> = source.deletePlaygroundSetting()
     }

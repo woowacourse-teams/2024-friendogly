@@ -1,4 +1,4 @@
-package com.happy.friendogly.presentation.ui.message
+package com.happy.friendogly.presentation.ui.statemessage
 
 import android.app.Activity
 import android.content.Context
@@ -8,20 +8,20 @@ import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import com.happy.friendogly.R
-import com.happy.friendogly.databinding.ActivityMessageBinding
+import com.happy.friendogly.databinding.ActivityStateMessageBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
-import com.happy.friendogly.presentation.ui.message.action.MessageAlertAction
-import com.happy.friendogly.presentation.ui.message.action.MessageNavigateAction
-import com.happy.friendogly.presentation.ui.message.viewmodel.MessageViewModel
 import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment.Companion.EXTRA_MESSAGE_UPDATED
+import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageAlertAction
+import com.happy.friendogly.presentation.ui.statemessage.action.StateMessageNavigateAction
+import com.happy.friendogly.presentation.ui.statemessage.viewmodel.StateViewModel
 import com.happy.friendogly.presentation.utils.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MessageActivity :
-    BaseActivity<ActivityMessageBinding>(R.layout.activity_message) {
-    private val viewModel by viewModels<MessageViewModel>()
+class StateMessageActivity :
+    BaseActivity<ActivityStateMessageBinding>(R.layout.activity_state_message) {
+    private val viewModel by viewModels<StateViewModel>()
 
     override fun initCreateView() {
         binding.etMessage.requestFocus()
@@ -45,15 +45,15 @@ class MessageActivity :
     private fun setupObserving() {
         viewModel.alertAction.observeEvent(this) { event ->
             when (event) {
-                is MessageAlertAction.AlertFailToPatchPlaygroundMessage -> {
-                    showSnackbar(getString(R.string.fail_to_patch_message))
+                is StateMessageAlertAction.AlertFailToPatchPlaygroundStateMessage -> {
+                    showSnackbar(getString(R.string.fail_to_patch_state_message))
                 }
             }
         }
 
         viewModel.navigateAction.observeEvent(this) { event ->
             when (event) {
-                is MessageNavigateAction.FinishMessageActivity -> {
+                is StateMessageNavigateAction.FinishStateMessageActivity -> {
                     val resultIntent =
                         Intent().apply {
                             putExtra(EXTRA_MESSAGE_UPDATED, event.messageUpdated)
@@ -109,7 +109,7 @@ class MessageActivity :
             context: Context,
             message: String,
         ): Intent {
-            return Intent(context, MessageActivity::class.java).apply {
+            return Intent(context, StateMessageActivity::class.java).apply {
                 putExtra(PUT_EXTRA_MESSAGE, message)
             }
         }

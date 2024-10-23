@@ -14,7 +14,8 @@ class InsertRecentPetUseCase
         val repository: RecentPetsRepository,
     ) {
         suspend operator fun invoke(
-            id: Long,
+            memberId: Long,
+            petId: Long,
             name: String,
             imgUrl: String,
             birthday: LocalDate,
@@ -22,9 +23,10 @@ class InsertRecentPetUseCase
             sizeType: SizeType,
         ): DomainResult<Unit, DataError.Local> =
             repository.insertRecentPet(
+                memberId = memberId,
+                petId = petId,
                 imgUrl = imgUrl,
                 name = name,
-                id = id,
                 birthday = birthday,
                 gender = gender,
                 sizeType = sizeType,

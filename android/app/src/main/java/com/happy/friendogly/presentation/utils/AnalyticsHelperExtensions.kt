@@ -50,8 +50,12 @@ fun AnalyticsHelper.logMyPlaygroundBtnClicked() {
     logEvent(type = Types.MY_PLAYGROUND_BTN_CLICKED)
 }
 
-fun AnalyticsHelper.logRefreshBtnClicked() {
-    logEvent(type = Types.REFRESH_BTN_CLICKED)
+fun AnalyticsHelper.logPlaygroundRefreshBtnClicked() {
+    logEvent(type = Types.PLAYGROUND_REFRESH_BTN_CLICKED)
+}
+
+fun AnalyticsHelper.logPlaygroundInfoRefreshBtnClicked() {
+    logEvent(type = Types.PLAYGROUND_INFO_REFRESH_BTN_CLICKED)
 }
 
 fun AnalyticsHelper.logBackBtnClicked() {
@@ -74,13 +78,29 @@ fun AnalyticsHelper.logPetImageClicked() {
     logEvent(type = Types.PET_IMAGE_CLICKED)
 }
 
+fun AnalyticsHelper.logStateMessageClicked() {
+    logEvent(type = Types.STATE_MESSAGE_CLICKED)
+}
+
+fun AnalyticsHelper.logJoinPlaygroundClicked() {
+    logEvent(type = Types.JOIN_PLAYGROUND_CLICKED)
+}
+
+fun AnalyticsHelper.logLeavePlaygroundClicked() {
+    logEvent(type = Types.LEAVE_PLAYGROUND_CLICKED)
+}
+
+fun AnalyticsHelper.logCheckPetExistenceClicked() {
+    logEvent(type = Types.CHECK_PET_EXISTENCE_CLICKED)
+}
+
 fun AnalyticsHelper.logPlaygroundSize(size: Int) {
-    logEvent(type = Types.WOOF_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
+    logEvent(type = Types.PLAYGROUND_FRAGMENT, ParamKeys.PLAYGROUND_SIZE to size)
 }
 
 fun AnalyticsHelper.logPetExistence(isExistPet: Boolean) {
     logEvent(
-        type = Types.WOOF_FRAGMENT,
+        type = Types.PLAYGROUND_FRAGMENT,
         ParamKeys.PET_EXISTENCE to isExistPet,
     )
 }

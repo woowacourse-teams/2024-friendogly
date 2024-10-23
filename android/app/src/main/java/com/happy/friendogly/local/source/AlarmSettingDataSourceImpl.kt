@@ -2,7 +2,7 @@ package com.happy.friendogly.local.source
 
 import com.happy.friendogly.data.source.AlarmSettingDataSource
 import com.happy.friendogly.local.di.ChatAlarmModule
-import com.happy.friendogly.local.di.WoofAlarmModule
+import com.happy.friendogly.local.di.PlaygroundAlarmModule
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -10,7 +10,7 @@ class AlarmSettingDataSourceImpl
     @Inject
     constructor(
         private val chatAlarmModule: ChatAlarmModule,
-        private val woofAlarmModule: WoofAlarmModule,
+        private val playgroundAlarmModule: PlaygroundAlarmModule,
     ) : AlarmSettingDataSource {
         override suspend fun saveChatSetting(isSet: Boolean): Result<Unit> =
             runCatching {
@@ -27,18 +27,18 @@ class AlarmSettingDataSourceImpl
                 chatAlarmModule.deleteSetting()
             }
 
-        override suspend fun saveWoofSetting(isSet: Boolean): Result<Unit> =
+        override suspend fun savePlaygroundSetting(isSet: Boolean): Result<Unit> =
             runCatching {
-                woofAlarmModule.saveSetting(isSet)
+                playgroundAlarmModule.saveSetting(isSet)
             }
 
-        override suspend fun getWoofSetting(): Result<Boolean> =
+        override suspend fun getPlaygroundSetting(): Result<Boolean> =
             runCatching {
-                woofAlarmModule.isSet.first()
+                playgroundAlarmModule.isSet.first()
             }
 
-        override suspend fun deleteWoofSetting(): Result<Unit> =
+        override suspend fun deletePlaygroundSetting(): Result<Unit> =
             runCatching {
-                woofAlarmModule.deleteSetting()
+                playgroundAlarmModule.deleteSetting()
             }
     }

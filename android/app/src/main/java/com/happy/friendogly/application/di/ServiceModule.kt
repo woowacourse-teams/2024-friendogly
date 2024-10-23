@@ -56,5 +56,5 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesWoofService(retrofit: Retrofit): PlaygroundService = retrofit.create(PlaygroundService::class.java)
+    fun providesPlaygroundService(retrofit: Retrofit): PlaygroundService = retrofit.create(PlaygroundService::class.java)
 }

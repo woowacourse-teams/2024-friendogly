@@ -7,9 +7,9 @@ interface AlarmSettingDataSource {
 
     suspend fun deleteChatSetting(): Result<Unit>
 
-    suspend fun saveWoofSetting(isSet: Boolean): Result<Unit>
+    suspend fun savePlaygroundSetting(isSet: Boolean): Result<Unit>
 
-    suspend fun getWoofSetting(): Result<Boolean>
+    suspend fun getPlaygroundSetting(): Result<Boolean>
 
-    suspend fun deleteWoofSetting(): Result<Unit>
+    suspend fun deletePlaygroundSetting(): Result<Unit>
 }

@@ -87,7 +87,7 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        
+
         <activity
             android:name=".presentation.ui.register.RegisterActivity"
             android:exported="true"
@@ -119,7 +119,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.message.MessageActivity"
+            android:name=".presentation.ui.statemessage.StateMessageActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentActivityTheme"

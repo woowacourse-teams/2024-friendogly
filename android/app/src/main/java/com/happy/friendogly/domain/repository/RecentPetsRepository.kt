@@ -13,7 +13,8 @@ interface RecentPetsRepository {
     suspend fun getAllRecentPet(): DomainResult<List<RecentPet>, DataError.Local>
 
     suspend fun insertRecentPet(
-        id: Long,
+        memberId: Long,
+        petId: Long,
         name: String,
         imgUrl: String,
         birthday: LocalDate,

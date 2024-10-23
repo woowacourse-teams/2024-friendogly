@@ -14,6 +14,8 @@ import java.time.LocalDateTime
 data class RecentPetEntity(
     @ColumnInfo(name = "memberId")
     val memberId: Long,
+    @ColumnInfo(name = "petId")
+    val petId: Long,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "imgUrl")

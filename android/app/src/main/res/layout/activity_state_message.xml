@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.happy.friendogly.presentation.ui.message.viewmodel.MessageViewModel" />
+            type="com.happy.friendogly.presentation.ui.statemessage.viewmodel.StateViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             android:clickable="true"
             android:onClick="@{() -> vm.clickCancelBtn()}"
             android:padding="6dp"
-            android:text="@string/message_cancel"
+            android:text="@string/state_message_cancel"
             app:layout_constraintBottom_toBottomOf="@id/tv_message_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_message_title" />
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/message_title"
+            android:text="@string/state_message_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,7 @@
             android:clickable="true"
             android:onClick="@{() -> vm.clickConfirmBtn()}"
             android:padding="6dp"
-            android:text="@string/message_confirm"
+            android:text="@string/state_message_confirm"
             app:layout_constraintBottom_toBottomOf="@id/tv_message_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_message_title" />
@@ -64,13 +64,13 @@
             android:backgroundTint="@color/gray600"
             android:focusableInTouchMode="true"
             android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:maxLength="20"
             android:maxLines="1"
             android:paddingBottom="18dp"
             android:singleLine="true"
-            android:inputType="text"
             android:text="@{vm.message}"
-            android:imeOptions="actionDone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +101,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_message" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

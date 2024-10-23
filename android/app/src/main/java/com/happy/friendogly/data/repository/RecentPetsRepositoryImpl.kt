@@ -38,7 +38,8 @@ class RecentPetsRepositoryImpl
             )
 
         override suspend fun insertRecentPet(
-            id: Long,
+            memberId: Long,
+            petId: Long,
             name: String,
             imgUrl: String,
             birthday: LocalDate,
@@ -46,7 +47,8 @@ class RecentPetsRepositoryImpl
             sizeType: SizeType,
         ): DomainResult<Unit, DataError.Local> {
             return dataSource.insertRecentPet(
-                id = id,
+                memberId = memberId,
+                petId = petId,
                 name = name,
                 imgUrl = imgUrl,
                 birthday = birthday,

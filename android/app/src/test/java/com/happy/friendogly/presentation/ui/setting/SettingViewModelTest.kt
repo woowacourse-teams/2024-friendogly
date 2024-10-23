@@ -5,10 +5,10 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.usecase.DeleteMemberUseCase
 import com.happy.friendogly.domain.usecase.DeleteTokenUseCase
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
-import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.GetPlaygroundAlarmUseCase
 import com.happy.friendogly.domain.usecase.PostLogoutUseCase
 import com.happy.friendogly.domain.usecase.SaveChatAlarmUseCase
-import com.happy.friendogly.domain.usecase.SaveWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.SavePlaygroundAlarmUseCase
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
 import io.mockk.coEvery
@@ -38,13 +38,13 @@ class SettingViewModelTest {
     private lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
 
     @MockK
-    private lateinit var getWoofAlarmUseCase: GetWoofAlarmUseCase
+    private lateinit var getPlaygroundAlarmUseCase: GetPlaygroundAlarmUseCase
 
     @MockK
     private lateinit var saveChatAlarmUseCase: SaveChatAlarmUseCase
 
     @MockK
-    private lateinit var saveWoofAlarmUseCase: SaveWoofAlarmUseCase
+    private lateinit var savePlaygroundAlarmUseCase: SavePlaygroundAlarmUseCase
 
     @MockK
     private lateinit var deleteMemberUseCase: DeleteMemberUseCase
@@ -55,14 +55,14 @@ class SettingViewModelTest {
     @BeforeEach
     fun setUp() {
         coEvery { getChatAlarmUseCase() } returns Result.success(true)
-        coEvery { getWoofAlarmUseCase() } returns Result.success(true)
+        coEvery { getPlaygroundAlarmUseCase() } returns Result.success(true)
         viewModel =
             SettingViewModel(
                 deleteTokenUseCase,
                 getChatAlarmUseCase,
-                getWoofAlarmUseCase,
+                getPlaygroundAlarmUseCase,
                 saveChatAlarmUseCase,
-                saveWoofAlarmUseCase,
+                savePlaygroundAlarmUseCase,
                 deleteMemberUseCase,
                 postLogoutUseCase,
             )
@@ -74,7 +74,7 @@ class SettingViewModelTest {
             // then
             val actual = viewModel.uiState.value ?: return@runTest
             Assertions.assertThat(actual.chattingAlarmPushPermitted).isEqualTo(true)
-            Assertions.assertThat(actual.woofAlarmPushPermitted).isEqualTo(true)
+            Assertions.assertThat(actual.playgroundAlarmPushPermitted).isEqualTo(true)
         }
 
     @Test
@@ -82,15 +82,15 @@ class SettingViewModelTest {
         runTest {
             // given
             coEvery { saveChatAlarmUseCase(true) } returns Result.success(Unit)
-            coEvery { saveWoofAlarmUseCase(true) } returns Result.success(Unit)
+            coEvery { savePlaygroundAlarmUseCase(true) } returns Result.success(Unit)
 
             // when
             viewModel.saveChattingAlarmSetting(true)
-            viewModel.saveWoofAlarmSetting(true)
+            viewModel.savePlaygroundAlarmSetting(true)
 
             // then
             coVerify { saveChatAlarmUseCase(true) }
-            coVerify { saveWoofAlarmUseCase(true) }
+            coVerify { savePlaygroundAlarmUseCase(true) }
         }
 
     @Test

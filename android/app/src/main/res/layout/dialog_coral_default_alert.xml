@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/tv_alert_title"
-            style="@style/Theme.AppCompat.TextView.Regular.Black.Size18"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

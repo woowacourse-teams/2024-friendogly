@@ -9,7 +9,9 @@ interface PlaygroundActionHandler {
 
     fun clickMyPlaygroundBtn()
 
-    fun clickRefreshBtn()
+    fun clickPlaygroundRefreshBtn()
+
+    fun clickPlaygroundInfoRefreshBtn(playgroundId: Long)
 
     fun clickBackBtn()
 
@@ -21,9 +23,9 @@ interface PlaygroundActionHandler {
 
     fun clickPetImage(petImageUrl: String)
 
-    fun clickPlaygroundMessage(message: String)
+    fun clickStateMessage(stateMessage: String)
 
-    fun clickJoinPlaygroundBtn(playgroundId: Long)
+    fun clickJoinPlaygroundBtn()
 
     fun clickLeavePlaygroundBtn()
 }

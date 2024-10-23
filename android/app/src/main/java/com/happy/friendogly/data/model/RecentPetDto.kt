@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 data class RecentPetDto(
     val id: Long = 0,
     val memberId: Long,
+    val petId: Long,
     val name: String,
     val birthday: LocalDate,
     val imgUrl: String,

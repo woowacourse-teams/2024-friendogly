@@ -4,5 +4,5 @@ data class SettingUiState(
     val totalAlarmPushPermitted: Boolean = true,
     val chattingAlarmPushPermitted: Boolean = true,
     val clubAlarmPushPermitted: Boolean = true,
-    val woofAlarmPushPermitted: Boolean = true,
+    val playgroundAlarmPushPermitted: Boolean = true,
 )

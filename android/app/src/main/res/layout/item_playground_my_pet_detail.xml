@@ -108,7 +108,7 @@
             android:gravity="center_vertical"
             android:hint="@string/playground_please_input_message"
             android:maxLines="1"
-            android:onClick="@{() -> actionHandler.clickPlaygroundMessage(petDetail.message)}"
+            android:onClick="@{() -> actionHandler.clickStateMessage(petDetail.message)}"
             android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
             android:text="@{petDetail.message}"

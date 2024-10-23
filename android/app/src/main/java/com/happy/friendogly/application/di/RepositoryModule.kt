@@ -105,7 +105,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsWoofRepository(repositoryImpl: PlaygroundRepositoryImpl): PlaygroundRepository
+    abstract fun bindsPlaygroundRepository(repositoryImpl: PlaygroundRepositoryImpl): PlaygroundRepository
 
     @Binds
     @Singleton

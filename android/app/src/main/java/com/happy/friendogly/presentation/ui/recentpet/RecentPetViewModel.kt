@@ -42,7 +42,11 @@ class RecentPetViewModel
             _navigateAction.emit(RecentPetNavigationAction.NavigateToBack)
         }
 
-        override fun navigateToProfile(id: Long) {
-            _navigateAction.emit(RecentPetNavigationAction.NavigateToOtherProfile(memberId = id))
+        override fun navigateToProfile(memberId: Long) {
+            _navigateAction.emit(RecentPetNavigationAction.NavigateToOtherProfile(memberId = memberId))
+        }
+
+        override fun navigateToPetImage(petImageUrl: String) {
+            _navigateAction.emit(RecentPetNavigationAction.NavigateToPetImage(petImageUrl = petImageUrl))
         }
     }

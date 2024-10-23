@@ -17,9 +17,9 @@ interface PlaygroundDataSource {
 
     suspend fun patchPlaygroundArrival(request: PatchPlaygroundArrivalRequest): Result<PlaygroundArrivalDto>
 
-    suspend fun getFootprintMarkBtnInfo(): Result<PetExistenceDto>
+    suspend fun getPetExistence(): Result<PetExistenceDto>
 
-    suspend fun getNearFootprints(): Result<List<PlaygroundDto>>
+    suspend fun getNearPlaygrounds(): Result<List<PlaygroundDto>>
 
     suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfoDto>
 

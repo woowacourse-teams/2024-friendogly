@@ -8,6 +8,7 @@ import com.happy.friendogly.databinding.ActivityRecentPetBinding
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.ui.otherprofile.OtherProfileActivity
+import com.happy.friendogly.presentation.ui.petimage.PetImageActivity
 import com.happy.friendogly.presentation.ui.recentpet.adapter.RecentPetAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,11 +36,19 @@ class RecentPetActivity : BaseActivity<ActivityRecentPetBinding>(R.layout.activi
         viewModel.navigateAction.observeEvent(this@RecentPetActivity) { navigateAction ->
             when (navigateAction) {
                 is RecentPetNavigationAction.NavigateToBack -> finish()
-                is RecentPetNavigationAction.NavigateToOtherProfile ->
-                    OtherProfileActivity.getIntent(
-                        this,
-                        id = navigateAction.memberId,
-                    )
+                is RecentPetNavigationAction.NavigateToOtherProfile -> {
+                    val intent =
+                        OtherProfileActivity.getIntent(
+                            this,
+                            id = navigateAction.memberId,
+                        )
+                    startActivity(intent)
+                }
+
+                is RecentPetNavigationAction.NavigateToPetImage -> {
+                    val intent = PetImageActivity.getIntent(this, navigateAction.petImageUrl)
+                    startActivity(intent)
+                }
             }
         }
     }
