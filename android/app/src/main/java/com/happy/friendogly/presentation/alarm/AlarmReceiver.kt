@@ -169,7 +169,7 @@ class AlarmReceiver : FirebaseMessagingService() {
                 IconCompat.createWithResource(this, R.drawable.ic_normal_profile)
             } else {
                 IconCompat.createWithBitmap(createRoundedBitmap(senderProfile))
-            }
+            },
         )
         .build()
 
@@ -240,8 +240,7 @@ class AlarmReceiver : FirebaseMessagingService() {
                                 chatRoomImage,
                             ),
                         )
-                    }
-
+                    },
                 )
                 .setLongLabel(chatRoomName)
                 .setAlwaysBadged()
