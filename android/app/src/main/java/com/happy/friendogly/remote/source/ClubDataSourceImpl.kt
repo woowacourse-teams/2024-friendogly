@@ -62,23 +62,6 @@ constructor(private val service: ClubService) : ClubDataSource {
         }
     }
 
-    override suspend fun getSearchingClubs(
-        filterCondition: ClubFilterConditionDto,
-        address: ClubAddressDto,
-        genderParams: List<GenderDto>,
-        sizeParams: List<SizeTypeDto>,
-    ): Result<List<ClubDto>> =
-        runCatching {
-            service.getSearchingClubs(
-                filterCondition = filterCondition.toRemote(),
-                province = address.province,
-                city = address.city,
-                village = address.village,
-                genderParams = genderParams.map { it.toRemote().name },
-                sizeParams = sizeParams.map { it.toRemote().name },
-            ).data.toData()
-        }
-
     override suspend fun getClub(clubId: Long): Result<ClubDetailDto> =
         runCatching {
             service.getClub(clubId).data.toData()
