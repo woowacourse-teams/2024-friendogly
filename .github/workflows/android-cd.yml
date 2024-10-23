@@ -94,4 +94,4 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.happy.friendogly
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-          track: "Beta-version"
+          track: "production"
