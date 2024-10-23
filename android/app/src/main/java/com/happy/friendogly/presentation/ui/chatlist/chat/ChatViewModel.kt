@@ -1,6 +1,5 @@
 package com.happy.friendogly.presentation.ui.chatlist.chat
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -62,19 +61,13 @@ class ChatViewModel
                 myMemberId = getChatRoomClubUseCase(chatRoomId).getOrThrow().myMemberId
                 getChatMessage(chatRoomId, INITIAL_POSITION)
 
-                runCatching {
-                    subScribeMessageUseCase(chatRoomId, myMemberId).collect { newMessage ->
-                        Log.d("테스트", "$newMessage")
-
-                        _chats.value = listOf(newMessage.toUiModel()) + _chats.value
-                        _newChatEvent.emit()
-                        launch {
-                            newChatMessageCount += 1
-                            saveChatMessageUseCase(chatRoomId, newMessage)
-                        }
+                subScribeMessageUseCase(chatRoomId, myMemberId).collect { newMessage ->
+                    _chats.value = listOf(newMessage.toUiModel()) + _chats.value
+                    _newChatEvent.emit()
+                    launch {
+                        newChatMessageCount += 1
+                        saveChatMessageUseCase(chatRoomId, newMessage)
                     }
-                }.onFailure {
-                    Log.d("테스트", "$it")
                 }
             }
         }
