@@ -1,5 +1,6 @@
 package com.happy.friendogly.remote.source
 
+import com.happy.friendogly.data.error.ApiExceptionDto.Companion.ClubParticipationExceptionDto
 import com.happy.friendogly.data.error.ApiExceptionDto.Companion.ClubSizeExceptionDto
 import com.happy.friendogly.data.error.ApiExceptionDto.Companion.FileSizeExceedExceptionDto
 import com.happy.friendogly.data.model.ClubAddressDto
@@ -98,7 +99,7 @@ constructor(private val service: ClubService) : ClubDataSource {
             null -> result
             is ApiExceptionResponse -> {
                 if (exception.httpCode == 400) {
-                    Result.failure(ClubSizeExceptionDto)
+                    Result.failure(ClubParticipationExceptionDto)
                 } else {
                     Result.failure(exception.toData())
                 }

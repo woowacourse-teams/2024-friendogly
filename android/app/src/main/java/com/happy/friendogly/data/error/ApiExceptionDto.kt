@@ -1,5 +1,6 @@
 package com.happy.friendogly.data.error
 
+import com.happy.friendogly.domain.model.ClubParticipation
 import java.io.IOException
 
 data class ApiExceptionDto(
@@ -37,6 +38,20 @@ data class ApiExceptionDto(
                                 detail = emptyList(),
                             )
                     )
+            )
+        val ClubParticipationExceptionDto =
+            ApiExceptionDto(
+                httpCode = 400,
+                error =
+                ErrorDto(
+                    isSuccess = false,
+                    data =
+                    ErrorDataDto(
+                        errorCode = ErrorCodeDto.CLUB_PARTICIPATION_EXCEED,
+                        errorMessage = "",
+                        detail = emptyList(),
+                    )
+                )
             )
     }
 }
