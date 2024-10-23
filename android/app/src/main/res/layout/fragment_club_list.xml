@@ -137,6 +137,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:visibility="gone" />
+
+                <include
+                    android:id="@+id/include_club_loading"
+                    layout="@layout/include_skeleton_club_list"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

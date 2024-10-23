@@ -36,7 +36,7 @@
 
         <include
             android:id="@+id/include_club_loading"
-            layout="@layout/include_skeleton_my_club"
+            layout="@layout/include_skeleton_club_list"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
