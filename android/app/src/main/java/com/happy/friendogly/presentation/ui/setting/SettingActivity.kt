@@ -107,7 +107,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(APP_INFO_URL)))
 
                 is SettingNavigationAction.NavigateToPrivacyPolicy -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(APP_INFO_URL)))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PRIVATE_INFO_URL)))
                 }
 
                 is SettingNavigationAction.NavigateToLogout -> logOutDialog()

@@ -14,10 +14,12 @@ import com.happy.friendogly.databinding.BottomSheetClubMenuBinding
 import com.happy.friendogly.presentation.base.observeEvent
 import com.happy.friendogly.presentation.dialog.AlertDialogModel
 import com.happy.friendogly.presentation.dialog.DefaultCoralAlertDialog
+import com.happy.friendogly.presentation.dialog.DefaultRedAlertDialog
 import com.happy.friendogly.presentation.ui.club.common.MessageHandler
 import com.happy.friendogly.presentation.ui.club.common.handleError
 import com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
+import com.happy.friendogly.presentation.ui.otherprofile.bottom.BottomUserReport
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,8 +67,8 @@ class ClubMenuBottomSheet(
     private fun initObserver() {
         viewModel.clubMenuEvent.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
-                ClubMenuEvent.Block -> {}
-                ClubMenuEvent.Report -> {}
+                ClubMenuEvent.Block -> usersBlockDialog(0L)
+                ClubMenuEvent.Report -> reportDialog(0L)
 
                 ClubMenuEvent.CancelSelection -> dismissNow()
 
@@ -133,4 +135,28 @@ class ClubMenuBottomSheet(
             )
         dialog.show(parentFragmentManager, tag)
     }
+
+    private fun usersBlockDialog(id: Long) {
+        val alertDialogModel =
+            AlertDialogModel(
+                title = getString(R.string.user_block_title),
+                description = getString(R.string.user_block_description),
+                positiveContents = getString(R.string.user_block_yes),
+                negativeContents = getString(R.string.user_block_no),
+            )
+        val dialog =
+            DefaultRedAlertDialog(
+                alertDialogModel = alertDialogModel,
+                clickToPositive = { makeToast(getString(R.string.user_block_message)) },
+                clickToNegative = {},
+            )
+        dialog.show(parentFragmentManager, "TAG")
+    }
+
+    private fun reportDialog(id: Long) {
+        val bottomSheet =
+            BottomUserReport(onSaved = { reportType -> makeToast(getString(R.string.club_report_message)) })
+        bottomSheet.show(parentFragmentManager, "TAG")
+    }
+
 }

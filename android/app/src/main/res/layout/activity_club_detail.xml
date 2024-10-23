@@ -302,7 +302,7 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <TextView
-            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size16"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             android:ellipsize="end"
