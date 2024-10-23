@@ -46,6 +46,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
+                    onSingleClick="@{() -> vm.openUserDetail()}"
                     android:id="@+id/view_club_detail_user_top_bar"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
