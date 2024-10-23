@@ -17,9 +17,13 @@ import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -137,6 +141,49 @@ class ClubQueryServiceTest extends ClubServiceTest {
         FindClubPageByFilterResponse responses = clubQueryService.findByFilter(savedMember.getId(), request);
 
         assertThat(responses.content().isEmpty()).isTrue();
+    }
+
+    @DisplayName("첫 페이지에 필터링 조건에 맞는 모임이 존재하지 않는 경우에도 다음 페이지를 읽어온다.")
+    @Test
+    void findSearching_NoResultOnFirstPage_MoveToNextPage() {
+        List<Club> clubs = new ArrayList<>();
+        clubs.add(createSavedClub(    // member가 참여 불가능한 모임
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE),
+                Set.of(SizeType.SMALL)
+        ));
+        clubs.add(createSavedClub(    // member가 참여 불가능한 모임
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE),
+                Set.of(SizeType.SMALL)
+        ));
+        clubs.add(createSavedClub(    // member가 참여 가능한 모임
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.values()),
+                Set.of(SizeType.values())
+        ));
+
+        Member member = memberRepository.save(new Member("member", "sdfdfef3", "imageUrl"));
+        Pet pet = petRepository.save(
+                new Pet(member, "뚱땡이", "수컷 대형견", LocalDate.now().minusDays(1L), SizeType.LARGE, Gender.MALE, "imageUrl"));
+
+        FindClubByFilterRequest request = new FindClubByFilterRequest(
+                FilterCondition.ABLE_TO_JOIN.name(),
+                province,
+                city,
+                village,
+                Arrays.stream(Gender.values()).map(gender -> gender.name()).collect(Collectors.toSet()),
+                Arrays.stream(SizeType.values()).map(sizeType -> sizeType.name()).collect(Collectors.toSet()),
+                20,
+                LocalDateTime.of(9999, 12, 31, 23, 59, 59),
+                999999999L
+        );
+
+        FindClubPageByFilterResponse responses = clubQueryService.findByFilter(member.getId(), request);
+        assertThat(responses.content()).hasSize(1);
     }
 
     @DisplayName("페이지 사이즈보다 더 많은 모임이 존재하는 경우, 한번에 페이지 사이즈 만큼의 모임이 조회된다.")

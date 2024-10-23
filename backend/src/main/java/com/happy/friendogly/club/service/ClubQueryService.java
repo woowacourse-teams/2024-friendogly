@@ -60,8 +60,8 @@ public class ClubQueryService {
         addFilteredResults(request, filteredClubs, result);
 
         while (result.size() < request.pageSize() && clubSlice.hasNext()) {
-            lastFoundCreatedAt = updateLastFoundCreatedAt(lastFoundCreatedAt, result);
-            lastFoundId = updateLastFoundId(lastFoundId, result);
+            lastFoundCreatedAt = updateLastFoundCreatedAt(clubSlice, result);
+            lastFoundId = updateLastFoundId(clubSlice, result);
 
             clubSlice = fetchClubSlice(request, lastFoundCreatedAt, lastFoundId);
             filteredClubs = filterClubs(clubSlice, filterCondition, member, pets);
@@ -118,16 +118,16 @@ public class ClubQueryService {
         }
     }
 
-    private LocalDateTime updateLastFoundCreatedAt(LocalDateTime lastFoundCreatedAt, List<Club> result) {
+    private LocalDateTime updateLastFoundCreatedAt(Slice<Club> clubSlice, List<Club> result) {
         if (result.isEmpty()) {
-            return lastFoundCreatedAt;
+            return clubSlice.getContent().get(clubSlice.getSize() - 1).getCreatedAt();
         }
         return result.get(result.size() - 1).getCreatedAt();
     }
 
-    private Long updateLastFoundId(Long lastFoundId, List<Club> result) {
+    private Long updateLastFoundId(Slice<Club> clubSlice, List<Club> result) {
         if (result.isEmpty()) {
-            return lastFoundId;
+            return clubSlice.getContent().get(clubSlice.getSize() - 1).getId();
         }
         return result.get(result.size() - 1).getId();
     }
