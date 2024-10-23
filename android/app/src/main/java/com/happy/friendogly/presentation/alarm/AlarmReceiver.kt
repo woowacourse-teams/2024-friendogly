@@ -21,7 +21,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.happy.friendogly.R
 import com.happy.friendogly.domain.usecase.GetChatAlarmUseCase
-import com.happy.friendogly.domain.usecase.GetWoofAlarmUseCase
+import com.happy.friendogly.domain.usecase.GetPlaygroundAlarmUseCase
 import com.happy.friendogly.presentation.ui.MainActivity
 import com.happy.friendogly.presentation.ui.MainActivity.Companion.EXTRA_FRAGMENT
 import com.happy.friendogly.presentation.ui.chatlist.chat.ChatActivity
@@ -39,12 +39,12 @@ class AlarmReceiver : FirebaseMessagingService() {
     private lateinit var notificationManager: NotificationManager
 
     @Inject
-    lateinit var getWoofAlarmUseCase: GetWoofAlarmUseCase
+    lateinit var getPlaygroundAlarmUseCase: GetPlaygroundAlarmUseCase
 
     @Inject
     lateinit var getChatAlarmUseCase: GetChatAlarmUseCase
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if (message.data[ALARM_TYPE] == "CHAT") {
@@ -52,11 +52,11 @@ class AlarmReceiver : FirebaseMessagingService() {
                 message,
             )
         } else if (message.data[ALARM_TYPE] == "FOOTPRINT") {
-            showWoofAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
+            showPlaygroundAlarm(message.data[ALARM_TITLE], message.data[ALARM_BODY])
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun showChatAlarm(message: RemoteMessage) =
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager =
@@ -80,15 +80,15 @@ class AlarmReceiver : FirebaseMessagingService() {
     private fun Map<String, String>.getValue(key: String): String =
         this[key] ?: throw IllegalArgumentException("채팅 알림 데이터에 $key 에 관한 값이 없습니다.")
 
-    private fun showWoofAlarm(
+    private fun showPlaygroundAlarm(
         title: String?,
         body: String?,
     ) = CoroutineScope(Dispatchers.IO).launch {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (getWoofAlarmUseCase.invoke().getOrDefault(true)) {
-            createNotificationChannel(AlarmType.WOOF)
-            deliverWoofNotification(title, body)
+        if (getPlaygroundAlarmUseCase.invoke().getOrDefault(true)) {
+            createNotificationChannel(AlarmType.PLAYGROUND)
+            deliverPlaygroundNotification(title, body)
         }
     }
 
@@ -273,7 +273,7 @@ class AlarmReceiver : FirebaseMessagingService() {
         return round.toBitmap()
     }
 
-    private fun deliverWoofNotification(
+    private fun deliverPlaygroundNotification(
         title: String?,
         body: String?,
     ) {
@@ -291,7 +291,7 @@ class AlarmReceiver : FirebaseMessagingService() {
             )
 
         val builder =
-            NotificationCompat.Builder(this, WOOF_CHANNEL_ID)
+            NotificationCompat.Builder(this, PLAYGROUND_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -305,27 +305,27 @@ class AlarmReceiver : FirebaseMessagingService() {
 
     enum class AlarmType {
         CHAT,
-        WOOF,
+        PLAYGROUND,
         ;
 
         fun channelId(): String =
             when (this) {
                 CHAT -> CHAT_CHANNEL_ID
-                WOOF -> WOOF_CHANNEL_ID
+                PLAYGROUND -> PLAYGROUND_CHANNEL_ID
             }
 
         fun channelName(): String =
             when (this) {
                 CHAT -> CHAT_CHANNEL_NAME
-                WOOF -> WOOF_CHANNEL_NAME
+                PLAYGROUND -> PLAYGROUND_CHANNEL_NAME
             }
     }
 
     companion object {
         private const val CHAT_CHANNEL_ID = "chat_channel"
         private const val CHAT_CHANNEL_NAME = "채팅"
-        private const val WOOF_CHANNEL_ID = "woof_channel"
-        private const val WOOF_CHANNEL_NAME = "친구 찾기"
+        private const val PLAYGROUND_CHANNEL_ID = "playground_channel"
+        private const val PLAYGROUND_CHANNEL_NAME = "친구 찾기"
         private const val ALARM_TITLE = "title"
         private const val ALARM_BODY = "body"
         private const val ALARM_TYPE = "type"
