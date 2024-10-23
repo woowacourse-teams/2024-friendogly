@@ -1,6 +1,7 @@
 package com.happy.friendogly.config.datasource;
 
 import com.zaxxer.hikari.HikariDataSource;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -24,8 +25,13 @@ public class DataSourceConfig {
     private static final String ROUTING_DATA_SOURCE = "routingDataSource";
 
     @Primary
+    @Bean(name = "dataSource")
+    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSourceType) throws SQLException {
+        return new LazyConnectionDataSourceProxy(routingDataSourceType);
+    }
+
     @Bean(name = WRITER_DATA_SOURCE_BEAN_NAME)
-    @ConfigurationProperties(prefix= WRITER_DATA_SOURCE_PREFIX)
+    @ConfigurationProperties(prefix = WRITER_DATA_SOURCE_PREFIX)
     public DataSource writerDataSource() {
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
@@ -33,7 +39,7 @@ public class DataSourceConfig {
     }
 
     @Bean(name = READER_DATA_SOURCE_BEAN_NAME)
-    @ConfigurationProperties(prefix= READER_DATA_SOURCE_PREFIX)
+    @ConfigurationProperties(prefix = READER_DATA_SOURCE_PREFIX)
     public DataSource readerDataSource() {
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
@@ -57,10 +63,5 @@ public class DataSourceConfig {
         routingDataSource.setDefaultTargetDataSource(writerDataSourceType);
 
         return routingDataSource;
-    }
-
-    @Bean(name = "dataSource")
-    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSourceType) {
-        return new LazyConnectionDataSourceProxy(routingDataSourceType);
     }
 }
