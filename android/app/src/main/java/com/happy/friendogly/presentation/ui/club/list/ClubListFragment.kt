@@ -93,7 +93,6 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
         }
     }
 
-
     private fun handleLoadStateErrors(vararg states: LoadState) {
         states.forEach { state ->
             if (state is LoadState.Error) {
@@ -103,7 +102,6 @@ class ClubListFragment : BaseFragment<FragmentClubListBinding>(R.layout.fragment
     }
 
     private fun setClubAdapter() {
-        applyViewVisibility(binding.includeClubLoading.nestedViewLayoutClubLoading)
         clubAdapter = ClubListAdapter(viewModel as ClubItemActionHandler)
         binding.includeClubList.rcvClubListClub.adapter = clubAdapter
         clubAdapter.addLoadStateListener { loadState ->
