@@ -65,7 +65,7 @@ public class PlaygroundCommandService {
 
     private void validateExistParticipatingPlayground(Member member) {
         if (playgroundMemberRepository.existsByMemberId(member.getId())) {
-            throw new FriendoglyException("이미 참여한 놀이터가 존재합니다.", ErrorCode.ALREADY_PARTICIPATE_PLAYGROUND, BAD_REQUEST);
+//            throw new FriendoglyException("이미 참여한 놀이터가 존재합니다.", ErrorCode.ALREADY_PARTICIPATE_PLAYGROUND, BAD_REQUEST);
         }
     }
 
