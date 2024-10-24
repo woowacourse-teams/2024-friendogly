@@ -1,7 +1,5 @@
 package com.happy.friendogly.presentation.ui.playground.util
 
-import android.content.res.Resources
-import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -21,9 +19,6 @@ import com.happy.friendogly.presentation.ui.playground.uimodel.MyPlaygroundUiMod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.Period
-
-private const val MARGIN_BOTTOM_DEFAULT = 26
-private const val MARGIN_BOTTOM_PLAYING = 106
 
 @BindingAdapter("petAge")
 fun TextView.bindPetAge(petBirthDate: LocalDate?) {
@@ -147,22 +142,16 @@ fun TextView.bindRegisterPlaygroundBtnClickable(uiState: PlaygroundUiState?) {
 
 @BindingAdapter("btnMargin")
 fun View.bindBtnMargin(playStatus: PlayStatus?) {
-    fun Int.dp(): Int {
-        val metrics = Resources.getSystem().displayMetrics
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
-            .toInt()
-    }
-
     val marginBottom =
         if (playStatus != PlayStatus.NO_PLAYGROUND) {
-            MARGIN_BOTTOM_PLAYING
+            resources.getDimension(R.dimen.location_btn_margin_bottom_playing)
         } else {
-            MARGIN_BOTTOM_DEFAULT
+            resources.getDimension(R.dimen.location_btn_margin_bottom_default)
         }
 
     val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
     layoutParams.apply {
-        bottomMargin = marginBottom.dp()
+        bottomMargin = marginBottom.toInt()
     }
 
     this.layoutParams = layoutParams
