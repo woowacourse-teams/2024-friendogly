@@ -86,13 +86,15 @@ public class PlaygroundQueryService {
 
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
         List<Playground> playgrounds = playgroundRepository.findAll();
-        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
+        boolean isParticipating = playgroundMemberRepository.existsByMemberId(memberId);
 
-        if (playgroundMember.isPresent()) {
+//        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
+
+        if (isParticipating) {
             return playgrounds.stream()
                     .map(playground -> new FindPlaygroundLocationResponse(
                             playground,
-                            playgroundMember.get().isSamePlayground(playground)
+                            true
                     )).toList();
         }
 
