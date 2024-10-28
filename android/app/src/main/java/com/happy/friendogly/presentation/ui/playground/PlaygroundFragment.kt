@@ -68,6 +68,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.UpdateLocationService
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPetImage
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToStateMessage
@@ -77,6 +78,7 @@ import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService.Companion.ACTION_START
+import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService.Companion.ACTION_UPDATE
 import com.happy.friendogly.presentation.ui.playground.state.PlaygroundUiState
 import com.happy.friendogly.presentation.ui.playground.uimodel.PlaygroundUiModel
 import com.happy.friendogly.presentation.ui.playground.util.ANIMATE_DURATION_MILLIS
@@ -124,7 +126,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     private lateinit var latLng: LatLng
     private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private lateinit var playgroundReceiver: PlaygroundLocationReceiver
+    private lateinit var locationReceiver: PlaygroundLocationReceiver
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     private val mapView: MapView by lazy { binding.mapView }
@@ -233,9 +235,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.leavePlayground()
         stopLocationService()
-        requireContext().unregisterReceiver(playgroundReceiver)
+        requireContext().unregisterReceiver(locationReceiver)
     }
 
     override fun onDetach() {
@@ -344,7 +345,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         viewModel.playgroundInfo.observe(viewLifecycleOwner) { playgroundInfo ->
             if (playgroundInfo != null) {
                 petDetailAdapter.submitList(playgroundInfo.petDetails)
-//                changeBottomSheetBehavior()
             }
         }
 
@@ -355,9 +355,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.myPlayground.observe(viewLifecycleOwner) { myPlayground ->
-            stopLocationService()
             if (myPlayground != null) {
                 viewModel.updatePlaygroundArrival(latLng)
+            } else {
+                stopLocationService()
             }
         }
 
@@ -401,6 +402,8 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 is StartLocationService -> startLocationService()
+
+                is UpdateLocationService -> updateLocationService()
             }
         }
 
@@ -454,7 +457,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupBroadCastReceiver() {
-        playgroundReceiver = PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
+        locationReceiver = PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
         val intentFilter =
             IntentFilter().apply {
                 addAction(PlaygroundLocationReceiver.ACTION_UPDATE_LOCATION)
@@ -462,12 +465,12 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(
-                playgroundReceiver,
+                locationReceiver,
                 intentFilter,
                 RECEIVER_EXPORTED,
             )
         } else {
-            requireContext().registerReceiver(playgroundReceiver, intentFilter)
+            requireContext().registerReceiver(locationReceiver, intentFilter)
         }
     }
 
@@ -677,6 +680,15 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         val intent =
             PlaygroundLocationService.getIntent(requireContext(), myPlayStatus).apply {
                 action = ACTION_START
+            }
+        requireContext().startForegroundService(intent)
+    }
+
+    private fun updateLocationService() {
+        val myPlayStatus = viewModel.myPlayStatus.value ?: return
+        val intent =
+            PlaygroundLocationService.getIntent(requireContext(), myPlayStatus).apply {
+                action = ACTION_UPDATE
             }
         requireContext().startForegroundService(intent)
     }

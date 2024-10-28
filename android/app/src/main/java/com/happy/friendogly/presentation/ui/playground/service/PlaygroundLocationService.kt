@@ -35,11 +35,15 @@ class PlaygroundLocationService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
+        val playStatus = intent?.getSerializableExtra(EXTRA_PLAY_STATUS) as? PlayStatus
+        val playStatusTitle = convertPlayStatusToTitle(playStatus)
         when (intent?.action) {
             ACTION_START -> {
-                val playStatus = intent.getSerializableExtra(EXTRA_PLAY_STATUS) as? PlayStatus
-                val playStatusTitle = convertPlayStatusToTitle(playStatus)
                 startForegroundService(playStatusTitle)
+            }
+
+            ACTION_UPDATE -> {
+                updateNotification(playStatusTitle)
             }
 
             ACTION_STOP -> {
@@ -125,6 +129,13 @@ class PlaygroundLocationService : Service() {
             .build()
     }
 
+    private fun updateNotification(playStatusTitle: String) {
+        val notification = createNotification(playStatusTitle)
+        val notificationManager =
+            getSystemService(NotificationManager::class.java) as NotificationManager
+        notificationManager.notify(SERVICE_ID, notification)
+    }
+
     private fun sendLocationUpdateBroadcast() {
         val intent =
             Intent(ACTION_UPDATE_LOCATION).apply {
@@ -153,6 +164,7 @@ class PlaygroundLocationService : Service() {
         private const val SERVICE_ID = 1
 
         const val ACTION_START = "PLAY"
+        const val ACTION_UPDATE = "UPDATE"
         const val ACTION_STOP = "STOP"
 
         fun getIntent(

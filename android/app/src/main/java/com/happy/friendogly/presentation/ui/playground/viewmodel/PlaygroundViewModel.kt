@@ -53,6 +53,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ShowRegisteringPlaygroundScreen
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.StartLocationService
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.UpdateLocationService
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPetImage
@@ -539,6 +540,11 @@ class PlaygroundViewModel
         }
 
         fun handlePlaygroundInfo(id: Long) {
+            val currentState = uiState.value ?: return
+            if (currentState is PlaygroundUiState.RegisteringPlayground) {
+                currentState.circleOverlay.map = null
+            }
+
             if (id == myPlayground.value?.id) {
                 loadPlaygroundInfo(id = id)
             } else {
@@ -568,6 +574,7 @@ class PlaygroundViewModel
                         if (previousPlayStatus != currentPlayStatus) {
                             val myPlayground = myPlayground.value ?: return@launch
                             loadPlaygroundInfo(myPlayground.id)
+                            _mapAction.value = UpdateLocationService
                         }
 
                         if (previousPlayStatus == PlayStatus.NO_PLAYGROUND) {
