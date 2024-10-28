@@ -22,4 +22,6 @@ sealed interface PlaygroundMapAction {
     data object ChangeTrackingMode : PlaygroundMapAction
 
     data object StartLocationService : PlaygroundMapAction
+
+    data object UpdateLocationService : PlaygroundMapAction
 }
