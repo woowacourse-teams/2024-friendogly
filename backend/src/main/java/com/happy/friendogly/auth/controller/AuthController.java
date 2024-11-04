@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     // TODO: KakaoMemberService와 AuthService 통합
     private final KakaoMemberService kakaoMemberService;
     private final AuthService authService;

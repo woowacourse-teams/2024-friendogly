@@ -29,26 +29,26 @@ public class ChatCommandService {
     private static final String EMPTY_CONTENT = "";
 
     private final MemberRepository memberRepository;
+    private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final ClubRepository clubRepository;
     private final NotificationService notificationService;
-    private final ChatTemplate chatTemplate;
+    private final ChatTemplate template;
 
     public ChatCommandService(
             MemberRepository memberRepository,
+            ClubRepository clubRepository,
             ChatRoomRepository chatRoomRepository,
             ChatMessageRepository chatMessageRepository,
-            ClubRepository clubRepository,
             NotificationService notificationService,
-            ChatTemplate chatTemplate
+            ChatTemplate template
     ) {
         this.memberRepository = memberRepository;
+        this.clubRepository = clubRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
-        this.clubRepository = clubRepository;
         this.notificationService = notificationService;
-        this.chatTemplate = chatTemplate;
+        this.template = template;
     }
 
     public void sendEnter(Long senderMemberId, Long chatRoomId) {
@@ -78,8 +78,9 @@ public class ChatCommandService {
         ChatMessageSocketResponse chat = new ChatMessageSocketResponse(
                 messageType, content, senderMember, LocalDateTime.now());
         Club club = clubRepository.getByChatRoomId(chatRoom.getId());
+
         notificationService.sendChatNotification(chatRoom.getId(), chat, club);
-        chatTemplate.convertAndSend(chatRoom.getId(), chat);
+        template.convertAndSend(chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }
 }
