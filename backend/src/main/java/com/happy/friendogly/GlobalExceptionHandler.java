@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handle(NoResourceFoundException exception) {
-        log.warn(exception.getMessage(), exception);
+        log.warn(exception.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(
                 ErrorCode.DEFAULT_ERROR_CODE,
