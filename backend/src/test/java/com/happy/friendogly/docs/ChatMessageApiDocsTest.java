@@ -15,11 +15,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
-import com.happy.friendogly.chat.controller.ChatMessageController;
-import com.happy.friendogly.chat.domain.MessageType;
-import com.happy.friendogly.chat.dto.request.FindMessagesByTimeRangeRequest;
-import com.happy.friendogly.chat.dto.response.FindChatMessagesResponse;
-import com.happy.friendogly.chat.service.ChatQueryService;
+import com.happy.friendogly.chatmessage.controller.ChatMessageController;
+import com.happy.friendogly.chatsocket.domain.MessageType;
+import com.happy.friendogly.chatmessage.dto.request.FindMessagesByTimeRangeRequest;
+import com.happy.friendogly.chatmessage.dto.response.FindChatMessagesResponse;
+import com.happy.friendogly.chatmessage.service.ChatMessageQueryService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import org.springframework.http.HttpHeaders;
 public class ChatMessageApiDocsTest extends RestDocsTest {
 
     @Mock
-    private ChatQueryService chatQueryService;
+    private ChatMessageQueryService chatMessageQueryService;
 
     @DisplayName("채팅방의 모든 채팅 내역 조회")
     @Test
@@ -70,7 +70,7 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                 )
         );
 
-        given(chatQueryService.findAllByChatRoomId(anyLong(), anyLong()))
+        given(chatMessageQueryService.findAllByChatRoomId(anyLong(), anyLong()))
                 .willReturn(response);
 
         mockMvc
@@ -127,7 +127,7 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
                 )
         );
 
-        given(chatQueryService.findByTimeRange(anyLong(), anyLong(), any(FindMessagesByTimeRangeRequest.class)))
+        given(chatMessageQueryService.findByTimeRange(anyLong(), anyLong(), any(FindMessagesByTimeRangeRequest.class)))
                 .willReturn(response);
 
         mockMvc
@@ -167,6 +167,6 @@ public class ChatMessageApiDocsTest extends RestDocsTest {
 
     @Override
     protected Object controller() {
-        return new ChatMessageController(chatQueryService);
+        return new ChatMessageController(chatMessageQueryService);
     }
 }

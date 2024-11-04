@@ -9,7 +9,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
-import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
+import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.domain.NotificationType;
