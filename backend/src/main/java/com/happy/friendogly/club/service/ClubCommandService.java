@@ -1,7 +1,7 @@
 package com.happy.friendogly.club.service;
 
 
-import com.happy.friendogly.chat.service.ChatCommandService;
+import com.happy.friendogly.chatsocket.service.ChatSocketCommandService;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
 import com.happy.friendogly.club.dto.request.SaveClubMemberRequest;
@@ -33,20 +33,20 @@ public class ClubCommandService {
     private final MemberRepository memberRepository;
     private final PetRepository petRepository;
     private final FileStorageManager fileStorageManager;
-    private final ChatCommandService chatCommandService;
+    private final ChatSocketCommandService chatSocketCommandService;
 
     public ClubCommandService(
             ClubRepository clubRepository,
             MemberRepository memberRepository,
             PetRepository petRepository,
             FileStorageManager fileStorageManager,
-            ChatCommandService chatCommandService
+            ChatSocketCommandService chatSocketCommandService
     ) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.petRepository = petRepository;
         this.fileStorageManager = fileStorageManager;
-        this.chatCommandService = chatCommandService;
+        this.chatSocketCommandService = chatSocketCommandService;
     }
 
     public SaveClubResponse save(Long memberId, MultipartFile image, SaveClubRequest request) {
@@ -83,7 +83,7 @@ public class ClubCommandService {
         club.addClubPet(mapToPets(request.participatingPetsId(), member));
         club.addChatRoomMember(member);
 
-        chatCommandService.sendEnter(memberId, club.getChatRoom().getId());
+        chatSocketCommandService.sendEnter(memberId, club.getChatRoom().getId());
 
         return new SaveClubMemberResponse(memberId, club.getChatRoom().getId());
     }

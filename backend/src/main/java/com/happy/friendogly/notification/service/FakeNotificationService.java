@@ -1,6 +1,6 @@
 package com.happy.friendogly.notification.service;
 
-import com.happy.friendogly.chat.dto.response.ChatMessageSocketResponse;
+import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.club.domain.Club;
 import java.util.List;
 import org.springframework.context.annotation.Profile;

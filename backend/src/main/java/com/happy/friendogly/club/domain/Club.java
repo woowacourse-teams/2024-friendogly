@@ -1,6 +1,6 @@
 package com.happy.friendogly.club.domain;
 
-import com.happy.friendogly.chat.domain.ChatRoom;
+import com.happy.friendogly.chatroom.domain.ChatRoom;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.domain.Name;

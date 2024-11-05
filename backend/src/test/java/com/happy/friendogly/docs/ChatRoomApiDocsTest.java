@@ -21,15 +21,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
-import com.happy.friendogly.chat.controller.ChatRoomController;
-import com.happy.friendogly.chat.dto.request.SaveChatRoomRequest;
-import com.happy.friendogly.chat.dto.response.ChatRoomDetail;
-import com.happy.friendogly.chat.dto.response.FindChatRoomMembersInfoResponse;
-import com.happy.friendogly.chat.dto.response.FindClubDetailsResponse;
-import com.happy.friendogly.chat.dto.response.FindMyChatRoomResponse;
-import com.happy.friendogly.chat.dto.response.SaveChatRoomResponse;
-import com.happy.friendogly.chat.service.ChatRoomCommandService;
-import com.happy.friendogly.chat.service.ChatRoomQueryService;
+import com.happy.friendogly.chatroom.controller.ChatRoomController;
+import com.happy.friendogly.chatroom.dto.request.SaveChatRoomRequest;
+import com.happy.friendogly.chatroom.dto.response.ChatRoomDetail;
+import com.happy.friendogly.chatroom.dto.response.FindChatRoomMembersInfoResponse;
+import com.happy.friendogly.chatroom.dto.response.FindClubDetailsResponse;
+import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponse;
+import com.happy.friendogly.chatroom.dto.response.SaveChatRoomResponse;
+import com.happy.friendogly.chatroom.service.ChatRoomCommandService;
+import com.happy.friendogly.chatroom.service.ChatRoomQueryService;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;

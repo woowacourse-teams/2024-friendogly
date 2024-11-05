@@ -1,7 +1,7 @@
 package com.happy.friendogly.support;
 
-import com.happy.friendogly.chat.repository.ChatMessageRepository;
-import com.happy.friendogly.chat.repository.ChatRoomRepository;
+import com.happy.friendogly.chatmessage.repository.ChatMessageRepository;
+import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.repository.MemberRepository;
