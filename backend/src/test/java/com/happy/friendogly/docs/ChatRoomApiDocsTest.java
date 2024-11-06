@@ -162,11 +162,11 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.myMemberId").description("나의 Member ID"),
                                         fieldWithPath("data.chatRooms.[].chatRoomId").description("채팅방 ID"),
                                         fieldWithPath("data.chatRooms.[].memberCount").description("채팅방 현재 인원"),
-                                        fieldWithPath("data.chatRooms.[].clubName").description("모임 이름"),
-                                        fieldWithPath("data.chatRooms.[].clubImageUrl").description("모임 이미지 URL"),
-                                        fieldWithPath("data.chatRooms.[].recentMessage").description("가장 최근에 전송된 메시지"),
+                                        fieldWithPath("data.chatRooms.[].clubName").description("모임 이름 (모임 채팅방 아닌 경우 빈 문자열)"),
+                                        fieldWithPath("data.chatRooms.[].clubImageUrl").description("모임 이미지 URL (모임 채팅방 아닌 경우 빈 문자열)"),
+                                        fieldWithPath("data.chatRooms.[].recentMessage").description("가장 최근에 전송된 메시지 (채팅 하나도 없으면 null)"),
                                         fieldWithPath("data.chatRooms.[].recentMessageCreatedAt").description(
-                                                "가장 최근에 메시지가 전송된 시간")
+                                                "가장 최근에 메시지가 전송된 시간 (채팅 하나도 없으면 null)")
                                 )
                                 .responseSchema(Schema.schema("FindMyChatRoomResponseV2"))
                                 .build()
