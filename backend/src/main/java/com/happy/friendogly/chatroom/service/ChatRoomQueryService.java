@@ -1,18 +1,24 @@
 package com.happy.friendogly.chatroom.service;
 
+import com.happy.friendogly.chatmessage.domain.ChatMessage;
+import com.happy.friendogly.chatmessage.repository.ChatMessageRepository;
 import com.happy.friendogly.chatroom.domain.ChatRoom;
 import com.happy.friendogly.chatroom.dto.request.InviteToChatRoomRequest;
 import com.happy.friendogly.chatroom.dto.response.ChatRoomDetail;
+import com.happy.friendogly.chatroom.dto.response.ChatRoomDetailV2;
 import com.happy.friendogly.chatroom.dto.response.FindChatRoomMembersInfoResponse;
 import com.happy.friendogly.chatroom.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponse;
+import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponseV2;
 import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +29,18 @@ public class ChatRoomQueryService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     public ChatRoomQueryService(
             ChatRoomRepository chatRoomRepository,
             MemberRepository memberRepository,
-            ClubRepository clubRepository
+            ClubRepository clubRepository,
+            ChatMessageRepository chatMessageRepository
     ) {
         this.chatRoomRepository = chatRoomRepository;
         this.memberRepository = memberRepository;
         this.clubRepository = clubRepository;
+        this.chatMessageRepository = chatMessageRepository;
     }
 
     public FindMyChatRoomResponse findMine(Long memberId) {
@@ -43,6 +52,27 @@ public class ChatRoomQueryService {
                 )
                 .toList();
         return new FindMyChatRoomResponse(member.getId(), chatRoomDetails);
+    }
+
+    public FindMyChatRoomResponseV2 findMineV2(Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        List<ChatRoom> chatRooms = chatRoomRepository.findMine(memberId);
+        List<ChatRoomDetailV2> chatRoomDetails = chatRooms.stream()
+                .map(this::toChatRoomDetail)
+                .toList();
+        return new FindMyChatRoomResponseV2(member.getId(), chatRoomDetails);
+    }
+
+    private ChatRoomDetailV2 toChatRoomDetail(ChatRoom chatRoom) {
+        Optional<Club> club = clubRepository.findByChatRoomId(chatRoom.getId());
+        String clubName = club.map(c -> c.getTitle().getValue()).orElse("");
+        String clubImageUrl = club.map(Club::getImageUrl).orElse("");
+
+        Optional<ChatMessage> recentMessage = chatMessageRepository.findRecentByChatRoomId(chatRoom.getId());
+        String content = recentMessage.map(ChatMessage::getContent).orElse(null);
+        LocalDateTime createdAt = recentMessage.map(ChatMessage::getCreatedAt).orElse(null);
+
+        return new ChatRoomDetailV2(chatRoom, clubName, clubImageUrl, content, createdAt);
     }
 
     public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long memberId, Long chatRoomId) {
