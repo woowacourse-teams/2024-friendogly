@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ClubFilterSelectorTest {
-
     private lateinit var clubFilterSelector: ClubFilterSelector
 
     @BeforeEach
@@ -28,7 +27,7 @@ class ClubFilterSelectorTest {
         clubFilterSelector.addClubFilter(filter)
         val actualFilter = clubFilterSelector.currentSelectedFilters.getOrAwaitValue()
 
-        //then
+        // then
         assertThat(actualFilter.firstOrNull()).isEqualTo(filter)
     }
 
@@ -43,9 +42,9 @@ class ClubFilterSelectorTest {
         clubFilterSelector.addClubFilter(filter)
         val actualFilter = clubFilterSelector.currentSelectedFilters.getOrAwaitValue()
 
-        //then
+        // then
         assertThat(
-            actualFilter.count { it.filterName == filter.filterName }
+            actualFilter.count { it.filterName == filter.filterName },
         ).isEqualTo(1)
     }
 
@@ -172,6 +171,4 @@ class ClubFilterSelectorTest {
         // then
         assertThat(containsSizeFilter).isFalse()
     }
-
-
 }
