@@ -76,7 +76,7 @@ public class ChatRoomQueryService {
 
         if (chatRoom.isPrivateChat()) {
             Optional<Member> otherMember = chatRoom.findMembers().stream()
-                    .filter(member -> myMemberId.equals(member.getId()))
+                    .filter(member -> !myMemberId.equals(member.getId()))
                     .findAny();
             String title = otherMember.map(member -> member.getName().getValue())
                     .orElse(null);
