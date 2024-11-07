@@ -87,7 +87,7 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("내가 참여한 채팅방 목록 조회 - v1")
+    @DisplayName("내가 참여한 채팅방 목록 조회 (v1)")
     @Test
     void findMine() throws Exception {
         ChatRoomDetail detail1 = new ChatRoomDetail(3L, 5, "신천동 소형견 모임", "https://image1.com/image.jpg");
@@ -162,9 +162,12 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.myMemberId").description("나의 Member ID"),
                                         fieldWithPath("data.chatRooms.[].chatRoomId").description("채팅방 ID"),
                                         fieldWithPath("data.chatRooms.[].memberCount").description("채팅방 현재 인원"),
-                                        fieldWithPath("data.chatRooms.[].clubName").description("모임 이름 (모임 채팅방 아닌 경우 빈 문자열)"),
-                                        fieldWithPath("data.chatRooms.[].clubImageUrl").description("모임 이미지 URL (모임 채팅방 아닌 경우 빈 문자열)"),
-                                        fieldWithPath("data.chatRooms.[].recentMessage").description("가장 최근에 전송된 메시지 (채팅 하나도 없으면 null)"),
+                                        fieldWithPath("data.chatRooms.[].title").description(
+                                                "모임 이름 혹은 상대방 이름 (1대1 채팅방에서 상대방이 없으면 null)"),
+                                        fieldWithPath("data.chatRooms.[].imageUrl").description(
+                                                "모임 이미지 URL 혹은 상대방 프로필 사진 URL (nullable)"),
+                                        fieldWithPath("data.chatRooms.[].recentMessage").description(
+                                                "가장 최근에 전송된 메시지 (채팅 하나도 없으면 null)"),
                                         fieldWithPath("data.chatRooms.[].recentMessageCreatedAt").description(
                                                 "가장 최근에 메시지가 전송된 시간 (채팅 하나도 없으면 null)")
                                 )

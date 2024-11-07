@@ -54,25 +54,38 @@ public class ChatRoomQueryService {
         return new FindMyChatRoomResponse(member.getId(), chatRoomDetails);
     }
 
-    public FindMyChatRoomResponseV2 findMineV2(Long memberId) {
-        Member member = memberRepository.getById(memberId);
-        List<ChatRoom> chatRooms = chatRoomRepository.findMine(memberId);
+    public FindMyChatRoomResponseV2 findMineV2(Long myMemberId) {
+        Member member = memberRepository.getById(myMemberId);
+        List<ChatRoom> chatRooms = chatRoomRepository.findMine(myMemberId);
         List<ChatRoomDetailV2> chatRoomDetails = chatRooms.stream()
-                .map(this::toChatRoomDetail)
+                .map(chatRoom -> toChatRoomDetail(chatRoom, myMemberId))
                 .toList();
         return new FindMyChatRoomResponseV2(member.getId(), chatRoomDetails);
     }
 
-    private ChatRoomDetailV2 toChatRoomDetail(ChatRoom chatRoom) {
-        Optional<Club> club = clubRepository.findByChatRoomId(chatRoom.getId());
-        String clubName = club.map(c -> c.getTitle().getValue()).orElse("");
-        String clubImageUrl = club.map(Club::getImageUrl).orElse("");
-
+    private ChatRoomDetailV2 toChatRoomDetail(ChatRoom chatRoom, Long myMemberId) {
         Optional<ChatMessage> recentMessage = chatMessageRepository.findRecentByChatRoomId(chatRoom.getId());
         String content = recentMessage.map(ChatMessage::getContent).orElse(null);
         LocalDateTime createdAt = recentMessage.map(ChatMessage::getCreatedAt).orElse(null);
 
-        return new ChatRoomDetailV2(chatRoom, clubName, clubImageUrl, content, createdAt);
+        if (chatRoom.isGroupChat()) {
+            Club club = clubRepository.findByChatRoomId(chatRoom.getId())
+                    .orElseThrow(() -> new FriendoglyException("채팅방에 해당하는 모임이 존재하지 않습니다."));
+            return new ChatRoomDetailV2(chatRoom, club.getTitle().getValue(), club.getImageUrl(), content, createdAt);
+        }
+
+        if (chatRoom.isPrivateChat()) {
+            Optional<Member> otherMember = chatRoom.findMembers().stream()
+                    .filter(member -> myMemberId.equals(member.getId()))
+                    .findAny();
+            String title = otherMember.map(member -> member.getName().getValue())
+                    .orElse(null);
+            String imageUrl = otherMember.map(Member::getImageUrl)
+                    .orElse(null);
+            return new ChatRoomDetailV2(chatRoom, title, imageUrl, content, createdAt);
+        }
+
+        throw new FriendoglyException("올바르지 않은 유형의 채팅방입니다.");
     }
 
     public List<FindChatRoomMembersInfoResponse> findMemberInfo(Long memberId, Long chatRoomId) {

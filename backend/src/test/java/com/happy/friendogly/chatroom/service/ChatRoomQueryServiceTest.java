@@ -168,13 +168,13 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                         .extracting(ChatRoomDetailV2::chatRoomId)
                         .containsExactly(chatRoom1.getId(), chatRoom2.getId()),
                 () -> assertThat(response.chatRooms())
-                        .extracting(ChatRoomDetailV2::clubName)
+                        .extracting(ChatRoomDetailV2::title)
                         .containsExactly("모임 제목1", "모임 제목2"),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetailV2::memberCount)
                         .containsExactly(2, 2),
                 () -> assertThat(response.chatRooms())
-                        .extracting(ChatRoomDetailV2::clubImageUrl)
+                        .extracting(ChatRoomDetailV2::imageUrl)
                         .containsExactly("https://image.com", "https://image.com"),
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetailV2::recentMessage)
