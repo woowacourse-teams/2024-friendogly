@@ -24,12 +24,15 @@ import com.epages.restdocs.apispec.Schema;
 import com.happy.friendogly.chatroom.controller.ChatRoomController;
 import com.happy.friendogly.chatroom.dto.request.SaveChatRoomRequest;
 import com.happy.friendogly.chatroom.dto.response.ChatRoomDetail;
+import com.happy.friendogly.chatroom.dto.response.ChatRoomDetailV2;
 import com.happy.friendogly.chatroom.dto.response.FindChatRoomMembersInfoResponse;
 import com.happy.friendogly.chatroom.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponse;
+import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponseV2;
 import com.happy.friendogly.chatroom.dto.response.SaveChatRoomResponse;
 import com.happy.friendogly.chatroom.service.ChatRoomCommandService;
 import com.happy.friendogly.chatroom.service.ChatRoomQueryService;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -84,7 +87,7 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("내가 참여한 채팅방 목록 조회")
+    @DisplayName("내가 참여한 채팅방 목록 조회 (v1)")
     @Test
     void findMine() throws Exception {
         ChatRoomDetail detail1 = new ChatRoomDetail(3L, 5, "신천동 소형견 모임", "https://image1.com/image.jpg");
@@ -117,6 +120,58 @@ public class ChatRoomApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.chatRooms.[].clubImageUrl").description("모임 이미지 URL")
                                 )
                                 .responseSchema(Schema.schema("FindMyChatRoomResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("내가 참여한 채팅방 목록 조회 (v2)")
+    @Test
+    void findMineV2() throws Exception {
+        ChatRoomDetailV2 detail1 = new ChatRoomDetailV2(
+                3L, 5, "신천동 소형견 모임", "https://image1.com/image.jpg",
+                "최근 메시지입니다 1", LocalDateTime.parse("2024-01-01T00:00:00"));
+        ChatRoomDetailV2 detail2 = new ChatRoomDetailV2(
+                7L, 5, "귀여운 강아지들 모임", "https://image2.com/image.jpg",
+                "recent message 2", LocalDateTime.parse("2024-01-01T01:00:00"));
+        ChatRoomDetailV2 detail3 = new ChatRoomDetailV2(
+                11L, 5, "서울 인싸견 모임", "https://image3.com/image.jpg",
+                "최근 메시지 3", LocalDateTime.parse("2024-01-01T02:00:00"));
+
+        FindMyChatRoomResponseV2 response = new FindMyChatRoomResponseV2(1L, List.of(detail1, detail2, detail3));
+
+        given(chatRoomQueryService.findMineV2(any()))
+                .willReturn(response);
+
+        mockMvc
+                .perform(get("/chat-rooms/mine/v2")
+                        .header(AUTHORIZATION, getMemberToken()))
+                .andDo(print())
+                .andDo(document("chat-rooms/findMineV2",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("ChatRoom API (v2)")
+                                .summary("내가 참여한 채팅방 목록 조회 API (v2)")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.myMemberId").description("나의 Member ID"),
+                                        fieldWithPath("data.chatRooms.[].chatRoomId").description("채팅방 ID"),
+                                        fieldWithPath("data.chatRooms.[].memberCount").description("채팅방 현재 인원"),
+                                        fieldWithPath("data.chatRooms.[].title").description(
+                                                "모임 이름 혹은 상대방 이름 (1대1 채팅방에서 상대방이 없으면 null)"),
+                                        fieldWithPath("data.chatRooms.[].imageUrl").description(
+                                                "모임 이미지 URL 혹은 상대방 프로필 사진 URL (nullable)"),
+                                        fieldWithPath("data.chatRooms.[].recentMessage").description(
+                                                "가장 최근에 전송된 메시지 (채팅 하나도 없으면 null)"),
+                                        fieldWithPath("data.chatRooms.[].recentMessageCreatedAt").description(
+                                                "가장 최근에 메시지가 전송된 시간 (채팅 하나도 없으면 null)")
+                                )
+                                .responseSchema(Schema.schema("FindMyChatRoomResponseV2"))
                                 .build()
                         )
                 ))

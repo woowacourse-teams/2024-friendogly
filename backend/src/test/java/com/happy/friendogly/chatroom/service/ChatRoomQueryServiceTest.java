@@ -13,16 +13,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.happy.friendogly.chatroom.domain.ChatRoom;
 import com.happy.friendogly.chatroom.dto.response.ChatRoomDetail;
+import com.happy.friendogly.chatroom.dto.response.ChatRoomDetailV2;
 import com.happy.friendogly.chatroom.dto.response.FindChatRoomMembersInfoResponse;
 import com.happy.friendogly.chatroom.dto.response.FindClubDetailsResponse;
 import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponse;
-import com.happy.friendogly.chatroom.service.ChatRoomQueryService;
+import com.happy.friendogly.chatroom.dto.response.FindMyChatRoomResponseV2;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.support.ServiceTest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -117,6 +119,123 @@ class ChatRoomQueryServiceTest extends ServiceTest {
                 () -> assertThat(response.chatRooms())
                         .extracting(ChatRoomDetail::clubImageUrl)
                         .containsExactly("https://image.com", "https://image.com")
+        );
+    }
+
+    @DisplayName("참여중인 1대1 채팅방과 최근 메시지를 조회한다.")
+    @Transactional
+    @Test
+    void findMineV2_PrivateChat() {
+        // given
+        ChatRoom chatRoom1 = chatRoomRepository.save(ChatRoom.createPrivate(member1, member2));
+        ChatRoom chatRoom2 = chatRoomRepository.save(ChatRoom.createPrivate(member2, member3));
+        chatRoom2.removeMember(member3);
+
+        jdbcTemplate.update("""
+                        INSERT INTO chat_message (chat_room_id, message_type, member_id, content, created_at)
+                        VALUES
+                        (?, 'CHAT', ?, '1번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '1번방 최근 메시지', '2024-01-01T01:00:00'),
+
+                        (?, 'CHAT', ?, '2번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '2번방 최근 메시지', '2024-01-01T02:00:00')
+                        """,
+                chatRoom1.getId(), member1.getId(),
+                chatRoom1.getId(), member1.getId(),
+                chatRoom2.getId(), member2.getId(),
+                chatRoom2.getId(), member2.getId()
+        );
+
+        // when
+        FindMyChatRoomResponseV2 response = chatRoomQueryService.findMineV2(member2.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::chatRoomId)
+                        .containsExactly(chatRoom1.getId(), chatRoom2.getId()),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::title)
+                        .containsExactly("트레", null),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::memberCount)
+                        .containsExactly(2, 1),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::imageUrl)
+                        .containsExactly("https://img1.com/image.jpg", null),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::recentMessage)
+                        .containsExactly("1번방 최근 메시지", "2번방 최근 메시지"),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::recentMessageCreatedAt)
+                        .containsExactly(
+                                LocalDateTime.parse("2024-01-01T01:00:00"),
+                                LocalDateTime.parse("2024-01-01T02:00:00"))
+        );
+    }
+
+    @DisplayName("참여중인 모임 채팅방과, 각각의 최근 메시지를 조회한다.")
+    @Transactional
+    @Test
+    void findMineV2() {
+        // given (1): member3이 chatRoom1, chatRoom2에 참여
+        club1.addClubMember(member3);
+        club1.addClubPet(List.of(pet3));
+        club1.addChatRoomMember(member3);
+
+        club2.addClubMember(member3);
+        club2.addClubPet(List.of(pet3));
+        club2.addChatRoomMember(member3);
+
+        // given (2): chatRoom1, chatRoom2에서 채팅 발생
+        jdbcTemplate.update("""
+                        INSERT INTO chat_message (chat_room_id, message_type, member_id, content, created_at)
+                        VALUES
+                        (?, 'CHAT', ?, '1번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '1번방 최근 메시지', '2024-01-01T01:00:00'),
+                        (?, 'CHAT', ?, '1번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '1번방 예전 메시지', '2024-01-01T00:00:00'),
+
+                        (?, 'CHAT', ?, '2번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '2번방 예전 메시지', '2024-01-01T00:00:00'),
+                        (?, 'CHAT', ?, '2번방 최근 메시지', '2024-01-01T02:00:00'),
+                        (?, 'CHAT', ?, '2번방 예전 메시지', '2024-01-01T00:00:00');
+                        """,
+                chatRoom1.getId(), member1.getId(),
+                chatRoom1.getId(), member1.getId(),
+                chatRoom1.getId(), member1.getId(),
+                chatRoom1.getId(), member1.getId(),
+                chatRoom2.getId(), member1.getId(),
+                chatRoom2.getId(), member1.getId(),
+                chatRoom2.getId(), member1.getId(),
+                chatRoom2.getId(), member1.getId()
+        );
+
+        // when
+        FindMyChatRoomResponseV2 response = chatRoomQueryService.findMineV2(member3.getId());
+
+        // then
+        assertAll(
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::chatRoomId)
+                        .containsExactly(chatRoom1.getId(), chatRoom2.getId()),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::title)
+                        .containsExactly("모임 제목1", "모임 제목2"),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::memberCount)
+                        .containsExactly(2, 2),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::imageUrl)
+                        .containsExactly("https://image.com", "https://image.com"),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::recentMessage)
+                        .containsExactly("1번방 최근 메시지", "2번방 최근 메시지"),
+                () -> assertThat(response.chatRooms())
+                        .extracting(ChatRoomDetailV2::recentMessageCreatedAt)
+                        .containsExactly(
+                                LocalDateTime.parse("2024-01-01T01:00:00"),
+                                LocalDateTime.parse("2024-01-01T02:00:00"))
         );
     }
 
