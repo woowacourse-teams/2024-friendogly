@@ -5,7 +5,6 @@ import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.model.Club
 import com.happy.friendogly.domain.usecase.GetMyHeadClubUseCase
 import com.happy.friendogly.presentation.ui.club.common.mapper.toPresentation
-import com.happy.friendogly.presentation.ui.club.list.ClubListUiState
 import com.happy.friendogly.presentation.ui.club.my.MyClubUiState
 import com.happy.friendogly.utils.CoroutinesTestExtension
 import com.happy.friendogly.utils.InstantTaskExecutorExtension
@@ -17,7 +16,6 @@ import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -46,15 +44,16 @@ class MyHeadClubViewModelTest {
                 getMyHeadClubUseCase()
             } returns DomainResult.Success(clubs)
 
-            viewModel = MyHeadClubViewModel(
-                getMyHeadClubUseCase = getMyHeadClubUseCase
-            )
+            viewModel =
+                MyHeadClubViewModel(
+                    getMyHeadClubUseCase = getMyHeadClubUseCase,
+                )
 
             // when
             val actualClubs = viewModel.myHeadClubs.getOrAwaitValue()
 
             // then
-            Assertions.assertEquals(clubs.toPresentation(),actualClubs)
+            Assertions.assertEquals(clubs.toPresentation(), actualClubs)
         }
 
     @Test
@@ -68,16 +67,17 @@ class MyHeadClubViewModelTest {
                 getMyHeadClubUseCase()
             } returns DomainResult.Success(clubs)
 
-            viewModel = MyHeadClubViewModel(
-                getMyHeadClubUseCase = getMyHeadClubUseCase
-            )
+            viewModel =
+                MyHeadClubViewModel(
+                    getMyHeadClubUseCase = getMyHeadClubUseCase,
+                )
             val expectUiState = MyClubUiState.NotData
 
             // when
             val actualUiState = viewModel.myHeadClubUiState.getOrAwaitValue()
 
             // then
-            Assertions.assertEquals(expectUiState,actualUiState)
+            Assertions.assertEquals(expectUiState, actualUiState)
         }
 
     @Test
@@ -88,15 +88,16 @@ class MyHeadClubViewModelTest {
                 getMyHeadClubUseCase()
             } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
 
-            viewModel = MyHeadClubViewModel(
-                getMyHeadClubUseCase = getMyHeadClubUseCase
-            )
+            viewModel =
+                MyHeadClubViewModel(
+                    getMyHeadClubUseCase = getMyHeadClubUseCase,
+                )
             val expectUiState = MyClubUiState.Error
 
             // when
             val actualUiState = viewModel.myHeadClubUiState.getOrAwaitValue()
 
             // then
-            Assertions.assertEquals(expectUiState,actualUiState)
+            Assertions.assertEquals(expectUiState, actualUiState)
         }
 }

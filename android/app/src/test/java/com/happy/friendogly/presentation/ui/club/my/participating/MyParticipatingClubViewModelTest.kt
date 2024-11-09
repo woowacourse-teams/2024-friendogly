@@ -44,9 +44,10 @@ class MyParticipatingClubViewModelTest {
                 getMyClubUseCase()
             } returns DomainResult.Success(clubs)
 
-            viewModel = MyParticipatingClubViewModel(
-                getMyClubUseCase = getMyClubUseCase
-            )
+            viewModel =
+                MyParticipatingClubViewModel(
+                    getMyClubUseCase = getMyClubUseCase,
+                )
 
             // when
             val actualClubs = viewModel.myClubs.getOrAwaitValue()
@@ -66,9 +67,10 @@ class MyParticipatingClubViewModelTest {
                 getMyClubUseCase()
             } returns DomainResult.Success(clubs)
 
-            viewModel = MyParticipatingClubViewModel(
-                getMyClubUseCase = getMyClubUseCase
-            )
+            viewModel =
+                MyParticipatingClubViewModel(
+                    getMyClubUseCase = getMyClubUseCase,
+                )
             val expectUiState = MyClubUiState.NotData
 
             // when
@@ -86,9 +88,10 @@ class MyParticipatingClubViewModelTest {
                 getMyClubUseCase()
             } returns DomainResult.Error(DataError.Network.SERVER_ERROR)
 
-            viewModel = MyParticipatingClubViewModel(
-                getMyClubUseCase = getMyClubUseCase
-            )
+            viewModel =
+                MyParticipatingClubViewModel(
+                    getMyClubUseCase = getMyClubUseCase,
+                )
             val expectUiState = MyClubUiState.Error
 
             // when
@@ -98,4 +101,3 @@ class MyParticipatingClubViewModelTest {
             Assertions.assertEquals(expectUiState, actualUiState)
         }
 }
-
