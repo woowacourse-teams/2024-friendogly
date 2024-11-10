@@ -19,7 +19,6 @@ class ClubFilterSelectorTest {
 
     @Test
     fun `필터를 추가하면 ClubFilterSelector에 해당 필터가 추가되어야 한다`() {
-        clubFilterSelector = ClubFilterSelector()
         // given
         val filter = ClubFilter.GenderFilter.Male
 
@@ -33,7 +32,6 @@ class ClubFilterSelectorTest {
 
     @Test
     fun `이미 추가 된 필터가 있다면 해당 필터는 추가되지 않아야 한다`() {
-        clubFilterSelector = ClubFilterSelector()
         // given
         val filter = ClubFilter.GenderFilter.Male
         clubFilterSelector.addClubFilter(filter)
