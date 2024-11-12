@@ -6,7 +6,7 @@ import com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFil
 
 class ClubFilterSelector {
     private val _currentSelectedFilters: MutableLiveData<List<ClubFilter>> =
-        MutableLiveData()
+        MutableLiveData(emptyList())
     val currentSelectedFilters: LiveData<List<ClubFilter>> get() = _currentSelectedFilters
 
     fun addClubFilter(filter: ClubFilter) {
