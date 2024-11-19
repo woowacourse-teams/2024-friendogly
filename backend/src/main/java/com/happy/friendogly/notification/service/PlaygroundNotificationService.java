@@ -1,5 +1,7 @@
 package com.happy.friendogly.notification.service;
 
+import static com.happy.friendogly.notification.domain.NotificationType.PLAYGROUND;
+
 import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
@@ -15,19 +17,25 @@ public class PlaygroundNotificationService {
     private final DeviceTokenRepository deviceTokenRepository;
     private final NotificationService notificationService;
 
-    public PlaygroundNotificationService(DeviceTokenRepository deviceTokenRepository,
-                                         NotificationService notificationService) {
+    public PlaygroundNotificationService(
+            DeviceTokenRepository deviceTokenRepository,
+            NotificationService notificationService
+    ) {
         this.deviceTokenRepository = deviceTokenRepository;
         this.notificationService = notificationService;
     }
 
-    public void sendJoinNotification(String newParticipatingMember,
-                                     List<PlaygroundMember> existingParticipatingMembers) {
+    public void sendJoinNotification(
+            String newParticipatingMember,
+            List<PlaygroundMember> existingParticipatingMembers
+    ) {
         List<String> deviceTokens = toDeviceToken(existingParticipatingMembers);
         String content = newParticipatingMember + "님이 놀이터에 참여했습니다";
 
-        notificationService.sendPlaygroundJoinNotification(DEFAULT_TITLE,
+        notificationService.sendNotification(
+                DEFAULT_TITLE,
                 content,
+                PLAYGROUND,
                 deviceTokens
         );
     }

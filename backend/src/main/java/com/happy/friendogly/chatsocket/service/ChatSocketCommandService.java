@@ -4,20 +4,20 @@ import static com.happy.friendogly.chatsocket.domain.MessageType.CHAT;
 import static com.happy.friendogly.chatsocket.domain.MessageType.ENTER;
 import static com.happy.friendogly.chatsocket.domain.MessageType.LEAVE;
 
-import com.happy.friendogly.chatsocket.template.ChatTemplate;
 import com.happy.friendogly.chatmessage.domain.ChatMessage;
+import com.happy.friendogly.chatmessage.repository.ChatMessageRepository;
 import com.happy.friendogly.chatroom.domain.ChatRoom;
+import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
 import com.happy.friendogly.chatsocket.domain.MessageType;
 import com.happy.friendogly.chatsocket.dto.request.ChatMessageSocketRequest;
 import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
-import com.happy.friendogly.chatmessage.repository.ChatMessageRepository;
-import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
+import com.happy.friendogly.chatsocket.template.ChatTemplate;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.service.NotificationService;
+import com.happy.friendogly.notification.service.ChatNotificationService;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class ChatSocketCommandService {
     private final ClubRepository clubRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final NotificationService notificationService;
+    private final ChatNotificationService chatNotificationService;
     private final ChatTemplate template;
 
     public ChatSocketCommandService(
@@ -40,14 +40,14 @@ public class ChatSocketCommandService {
             ClubRepository clubRepository,
             ChatRoomRepository chatRoomRepository,
             ChatMessageRepository chatMessageRepository,
-            NotificationService notificationService,
+            ChatNotificationService chatNotificationService,
             ChatTemplate template
     ) {
         this.memberRepository = memberRepository;
         this.clubRepository = clubRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
-        this.notificationService = notificationService;
+        this.chatNotificationService = chatNotificationService;
         this.template = template;
     }
 
@@ -79,7 +79,7 @@ public class ChatSocketCommandService {
                 messageType, content, senderMember, LocalDateTime.now());
         Club club = clubRepository.getByChatRoomId(chatRoom.getId());
 
-        notificationService.sendChatNotification(chatRoom.getId(), chat, club);
+        chatNotificationService.sendChatNotification(chatRoom.getId(), chat, club);
         template.convertAndSend(chatRoom.getId(), chat);
         chatMessageRepository.save(new ChatMessage(chatRoom, messageType, senderMember, content));
     }

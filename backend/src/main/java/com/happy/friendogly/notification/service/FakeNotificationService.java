@@ -1,8 +1,8 @@
 package com.happy.friendogly.notification.service;
 
-import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
-import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
+import java.util.Map;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 public class FakeNotificationService implements NotificationService {
 
     @Override
-    public void sendFootprintNotification(String title, String content, String receiverToken) {
+    public void sendNotification(
+            String title,
+            String content,
+            NotificationType notificationType,
+            List<String> receiverTokens
+    ) {
 
     }
 
     @Override
-    public void sendFootprintNotification(String title, String content, List<String> receiverTokens) {
-
-    }
-
-    @Override
-    public void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club) {
-
-    }
-
-    @Override
-    public void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens) {
+    public void sendNotification(
+            String title,
+            Map<String, String> contents,
+            NotificationType notificationType,
+            List<String> receiverTokens
+    ) {
 
     }
 }
