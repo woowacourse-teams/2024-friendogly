@@ -8,7 +8,6 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.domain.NotificationType;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final DeviceTokenRepository deviceTokenRepository;
 
-    public FcmNotificationService(
-            @Autowired FirebaseApp firebaseApp,
-            DeviceTokenRepository deviceTokenRepository
-    ) {
+    public FcmNotificationService(@Autowired FirebaseApp firebaseApp) {
         this.firebaseMessaging = FirebaseMessaging.getInstance(firebaseApp);
-        this.deviceTokenRepository = deviceTokenRepository;
     }
 
     @Override

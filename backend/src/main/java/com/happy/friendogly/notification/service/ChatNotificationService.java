@@ -34,8 +34,8 @@ public class ChatNotificationService {
                 "senderName", response.senderName(),
                 "content", response.content(),
                 "createdAt", response.createdAt().toString(),
-                "profilePictureUrl", response.profilePictureUrl(),
-                "clubPictureUrl", club.getImageUrl(),
+                "profilePictureUrl", response.profilePictureUrl() == null ? "" : response.profilePictureUrl(),
+                "clubPictureUrl", club.getImageUrl() == null ? "" : club.getImageUrl(),
                 "clubTitle", club.getTitle().getValue()
         );
 
