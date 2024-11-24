@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlaygroundNotificationService {
 
-    private final String DEFAULT_TITLE = "반갑개";
+    private static final String DEFAULT_TITLE = "반갑개";
 
     private final DeviceTokenRepository deviceTokenRepository;
     private final NotificationService notificationService;

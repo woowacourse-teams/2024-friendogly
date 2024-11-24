@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FootprintNotificationService {
 
-    private final String DEFAULT_TITLE = "반갑개";
+    private static final String DEFAULT_TITLE = "반갑개";
+    
     private final NotificationService notificationService;
     private final DeviceTokenRepository deviceTokenRepository;
 
