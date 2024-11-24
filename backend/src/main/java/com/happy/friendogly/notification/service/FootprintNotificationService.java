@@ -1,10 +1,9 @@
 package com.happy.friendogly.notification.service;
 
-import static com.happy.friendogly.notification.domain.NotificationType.FOOTPRINT;
-
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.WalkStatus;
 import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class FootprintNotificationService {
         notificationService.sendNotification(
                 DEFAULT_TITLE,
                 content,
-                FOOTPRINT,
+                NotificationType.FOOTPRINT,
                 List.of(deviceTokenRepository.getByMemberId(memberId).getDeviceToken())
         );
     }
@@ -52,7 +51,7 @@ public class FootprintNotificationService {
         notificationService.sendNotification(
                 DEFAULT_TITLE,
                 "내 산책 장소에 " + comingMemberName + "님도 산책온대요!",
-                FOOTPRINT,
+                NotificationType.FOOTPRINT,
                 nearDeviceTokens
         );
     }
@@ -62,7 +61,7 @@ public class FootprintNotificationService {
 
         notificationService.sendNotification(DEFAULT_TITLE,
                 "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
-                FOOTPRINT,
+                NotificationType.FOOTPRINT,
                 nearDeviceTokens
         );
     }

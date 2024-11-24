@@ -1,8 +1,7 @@
 package com.happy.friendogly.notification.service;
 
-import static com.happy.friendogly.notification.domain.NotificationType.PLAYGROUND;
-
 import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import java.util.List;
@@ -35,7 +34,7 @@ public class PlaygroundNotificationService {
         notificationService.sendNotification(
                 DEFAULT_TITLE,
                 content,
-                PLAYGROUND,
+                NotificationType.PLAYGROUND,
                 deviceTokens
         );
     }
