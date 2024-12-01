@@ -2,9 +2,9 @@ name: backend-ci
 
 on:
   pull_request:
-    branches: [ "develop" ]
-    paths:
-      - 'backend/**'
+    # branches: [ "develop" ]
+    # paths:
+    #   - 'backend/**'
 
 defaults:
   run:
@@ -13,7 +13,7 @@ defaults:
 jobs:
   build:
 
-    runs-on: self-hosted-dev
+    runs-on: prod-dodo
     permissions:
       checks: write
 
