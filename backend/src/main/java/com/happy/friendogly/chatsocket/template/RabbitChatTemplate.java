@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!local")
+@Profile("rabbit")
 public class RabbitChatTemplate implements ChatTemplate {
 
     private final RabbitTemplate rabbitTemplate;

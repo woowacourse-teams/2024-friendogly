@@ -12,16 +12,16 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-@Profile("local")
+@Profile("local | dev | prod")
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketLocalConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketInMemoryConfig implements WebSocketMessageBrokerConfigurer {
 
     private final WebSocketInterceptor webSocketInterceptor;
     private final WebSocketErrorHandler webSocketErrorHandler;
     private final JwtProvider jwtProvider;
 
-    public WebSocketLocalConfig(
+    public WebSocketInMemoryConfig(
             WebSocketInterceptor webSocketInterceptor,
             WebSocketErrorHandler webSocketErrorHandler,
             JwtProvider jwtProvider

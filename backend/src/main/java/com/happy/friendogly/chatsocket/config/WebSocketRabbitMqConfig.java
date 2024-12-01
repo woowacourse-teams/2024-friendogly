@@ -14,7 +14,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-@Profile("!local")
+@Profile("rabbit")
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketRabbitMqConfig implements WebSocketMessageBrokerConfigurer {

@@ -5,7 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("local")
+@Profile("local | dev | prod")
 public class InMemoryChatTemplate implements ChatTemplate {
 
     private static final String TOPIC_CHAT_PREFIX = "/exchange/chat.exchange/room.";
