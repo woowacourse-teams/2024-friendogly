@@ -1,14 +1,16 @@
 name: deploy
 
 on:
-  push:
-    branches: [ "release/backend" ]
-    paths:
-      - "backend/**"
+  pull_request:
+  # push:
+  #   branches: [ "develop" ]
+  #   paths:
+  #     - "backend/**"
+      
 
 jobs:
-  build-a:
-    runs-on: self-hosted-prod-a
+  build:
+    runs-on: prod-dodo
 
     steps:
       - name: Checkout Repository
@@ -35,56 +37,33 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build
 
-  deploy-a:
-    needs: build-a
-    runs-on: self-hosted-prod-a
+  deploy:
+    needs: build
+    runs-on: prod-dodo
     steps:
       - name: Change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
-      - name: Deploy prod-a
+      - name: Find Java Application PID And Kill PID
+        id: find_pid
         run: |
-          sudo chmod +x /home/ubuntu/deploy/deploy.sh
-          sudo /home/ubuntu/deploy/deploy.sh
+          sudo pgrep -f friendogly-0.0.1-SNAPSHOT.jar | xargs sudo kill -9 | true
 
-  build-b:
-    runs-on: self-hosted-prod-b
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "corretto"
-
-      - name: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "firebase-friendogly-private-key.json"
-          json: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
-          dir: './backend/src/main/resources/'
-
-      - name: Grant execute permission for gradlew
-        working-directory: ./backend
-        run: chmod +x gradlew
-
-      - name: Build project using Gradle
-        working-directory: ./backend
-        run: ./gradlew build
-
-  deploy-b:
-    needs: build-b
-    runs-on: self-hosted-prod-b
-    steps:
-      - name: Change permission
+      - name: Check if WAS is running on port 8080 after stop
         run: |
-          sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
+          PID=$(lsof -t -i:8080 || true)
+          if [ -n "$PID" ]; then
+            echo "Server is still running with PID: $PID"
+            exit 1
+          else
+            echo "Server successfully stopped."
+          fi
 
-      - name: Deploy prod-b
+      - name: Start server
         run: |
-          sudo chmod +x /home/ubuntu/deploy/deploy.sh
-          sudo /home/ubuntu/deploy/deploy.sh
+          cd backend/build/libs
+          echo "File creation time(KR-09:00):"
+          ls -l --time=ctime friendogly-0.0.1-SNAPSHOT.jar
+          sudo nohup java -jar friendogly-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --jwt.secret-key=${{ secrets.JWT_SECRET_KEY }} --jwt.access-expiration-time=${{ secrets.JWT_ACCESS_EXPIRATION_TIME }} --jwt.refresh-expiration-time=${{ secrets.JWT_REFRESH_EXPIRATION_TIME }} --kakao.admin-key=${{ secrets.KAKAO_ADMIN_KEY }} --spring.datasource.writer.hikari.jdbc-url=${{ secrets.MYSQL_RDS_WRITER_URL }} --spring.datasource.writer.hikari.username=${{ secrets.MYSQL_RDS_USERNAME }} --spring.datasource.writer.hikari.password=${{ secrets.MYSQL_RDS_PASSWORD }} --spring.datasource.reader.hikari.jdbc-url=${{ secrets.MYSQL_RDS_READER_URL }} --spring.datasource.reader.hikari.username=${{ secrets.MYSQL_RDS_USERNAME }} --spring.datasource.reader.hikari.password=${{ secrets.MYSQL_PASSWORD }} &
+          echo "start backend server" 
