@@ -38,9 +38,6 @@ public class S3StorageManager implements FileStorageManager {
     @Value("${aws.s3.server.endpoint}")
     private String S3_ENDPOINT;
 
-    @Value("${aws.s3.server.key-prefix}")
-    private String KEY_PREFIX;
-
     private final S3Client s3Client;
 
     public S3StorageManager() {
@@ -64,7 +61,7 @@ public class S3StorageManager implements FileStorageManager {
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME)
-                .key(KEY_PREFIX + newFilename)
+                .key(newFilename)
                 .contentType(contentType)
                 .build();
 
