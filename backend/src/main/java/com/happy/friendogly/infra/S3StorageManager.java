@@ -133,7 +133,7 @@ public class S3StorageManager implements FileStorageManager {
         try {
             s3Client.deleteObject(DeleteObjectRequest.builder()
                     .bucket(BUCKET_NAME)
-                    .key(KEY_PREFIX + fileName)
+                    .key( fileName)
                     .build());
         } catch (SdkException exception) {
             log.error(exception.getMessage(), exception);
