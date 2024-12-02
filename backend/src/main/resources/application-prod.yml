@@ -1,8 +1,8 @@
 aws:
   s3:
-    bucket-name: techcourse-project-2024
+    bucket-name: ${BUCKET_NAME}
     server:
-      endpoint: https://d3obq7hxojfffa.cloudfront.net/
+      endpoint: https://d1m6m0er0dq0qo.cloudfront.net/
       key-prefix: friendogly/
 jwt:
   secret-key: ${JWT_SECRET_KEY}
@@ -42,10 +42,10 @@ spring:
     init:
       data-locations:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${MYSQL_PROD_RDS_URL}
-    username: ${MYSQL_PROD_RDS_USERNAME}
-    password: ${MYSQL_PROD_RDS_PASSWORD}
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:mem:test'
+    username: username
+    password: password
   jpa:
     hibernate:
       ddl-auto: validate
