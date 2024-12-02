@@ -70,7 +70,7 @@ public class S3StorageManager implements FileStorageManager {
         try {
             s3Client.putObject(putObjectRequest, requestBody);
         } catch (SdkException e) {
-            throw new FriendoglyException(e.getMessage(), INTERNAL_SERVER_ERROR);
+            throw new FriendoglyException("s3전송 과정중에 에러 발생", INTERNAL_SERVER_ERROR);
         }
 
         return S3_ENDPOINT + newFilename;
