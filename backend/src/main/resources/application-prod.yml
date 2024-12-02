@@ -1,8 +1,8 @@
 aws:
   s3:
-    bucket-name: techcourse-project-2024
+    bucket-name: ${BUCKET_NAME}
     server:
-      endpoint: https://d3obq7hxojfffa.cloudfront.net/
+      endpoint: https://d1m6m0er0dq0qo.cloudfront.net/
       key-prefix: friendogly/
 jwt:
   secret-key: ${JWT_SECRET_KEY}
