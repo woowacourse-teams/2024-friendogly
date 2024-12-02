@@ -2,9 +2,9 @@ name: backend-ci
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: ["develop"]
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 defaults:
   run:
@@ -12,30 +12,29 @@ defaults:
 
 jobs:
   build:
-
-    runs-on: self-hosted-dev
-    permissions:
-      checks: write
-
-      # needed unless run with comment_mode: off
-      pull-requests: write
-
-      # only needed for private repository
-      contents: read
-
-      # only needed for private repository
-      issues: read
-
-      # required by download step to access artifacts API
-      actions: read
+    runs-on: friendogly-dev-new
+#    permissions:
+#      checks: write
+#
+#      # needed unless run with comment_mode: off
+#      pull-requests: write
+#
+#      # only needed for private repository
+#      contents: read
+#
+#      # only needed for private repository
+#      issues: read
+#
+#      # required by download step to access artifacts API
+#      actions: read
 
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'corretto'
+          java-version: "17"
+          distribution: "corretto"
 
       # - name: Setup Gradle
       #   uses: gradle/actions/setup-gradle@v3
@@ -50,23 +49,23 @@ jobs:
         with:
           name: "firebase-friendogly-private-key.json"
           json: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
-          dir: './backend/src/main/resources/'
+          dir: "./backend/src/main/resources/"
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-      - name: 테스트 결과를 PR에 코멘트로 등록합니다
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: |
-            ./backend/build/test-results/**/*.xml
-            ./backend/build/test-results/**/*.trx
-            ./backend/build/test-results/**/*.json
+      # - name: 테스트 결과를 PR에 코멘트로 등록합니다
+      #   uses: EnricoMi/publish-unit-test-result-action@v2
+      #   if: always()
+      #   with:
+      #     files: |
+      #       ./backend/build/test-results/**/*.xml
+      #       ./backend/build/test-results/**/*.trx
+      #       ./backend/build/test-results/**/*.json
 
-      - name: 실패 테스트결과의 원인을 Report 합니다
-        uses: mikepenz/action-junit-report@v3
-        if: always()
-        with:
-          report_paths: './backend/build/test-results/test/TEST-*.xml'
-          token: ${{ github.token }}
+      # - name: 실패 테스트결과의 원인을 Report 합니다
+      #   uses: mikepenz/action-junit-report@v3
+      #   if: always()
+      #   with:
+      #     report_paths: './backend/build/test-results/test/TEST-*.xml'
+      #     token: ${{ github.token }}
