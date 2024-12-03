@@ -37,3 +37,8 @@ spring:
   sql:
     init:
       data-locations:
+
+management:
+  health:
+    rabbit:
+      enabled: false

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!local")
+@Profile("rabbit") // RabbitMQ가 필요한 상황에서는 해당 프로파일명을 변경해주세요.
 public class RabbitChatTemplate implements ChatTemplate {
 
     private final RabbitTemplate rabbitTemplate;

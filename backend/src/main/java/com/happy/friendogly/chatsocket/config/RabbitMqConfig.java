@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableRabbit
-@Profile("!local")
+@Profile("rabbit")
 public class RabbitMqConfig {
 
     private static final String CHAT_QUEUE_NAME = "chat.queue";

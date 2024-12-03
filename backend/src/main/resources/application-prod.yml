@@ -27,35 +27,25 @@ management:
   server:
     port: 8081
 
+  health:
+    rabbit:
+      enabled: false
+
 file:
   firebase:
     path: firebase-friendogly-private-key.json
 
 spring:
-  rabbitmq:
-    host: ${RABBITMQ_PROD_HOST}
-    username: ${RABBITMQ_PROD_USERNAME}
-    password: ${RABBITMQ_PROD_PASSWORD}
-    port: 3100 # initial connection port: use 3100 instead of 5672
-    stomp-port: 9100 # STOMP port: use 9100 instead of 61613
   sql:
     init:
       data-locations:
+
   datasource:
-    writer:
-      hikari:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: ${WRITER_MYSQL_URL}
-        read-only: false
-        username: ${MYSQL_USERNAME}
-        password: ${MYSQL_PASSWORD}
-    reader:
-      hikari:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: ${READER_MYSQL_URL}
-        read-only: true
-        username: ${MYSQL_USERNAME}
-        password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_PROD_RDS_URL}
+    username: ${MYSQL_PROD_RDS_USERNAME}
+    password: ${MYSQL_PROD_RDS_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: validate
