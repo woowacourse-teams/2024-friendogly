@@ -1,11 +1,10 @@
 name: deploy
 
 on:
-  pull_request:
-  # push:
-  #   branches: [ "develop" ]
-  #   paths:
-  #     - "backend/**"
+  push:
+    branches: [ "release/backend" ]
+    paths:
+      - "backend/**"
       
 
 jobs:
@@ -45,7 +44,7 @@ jobs:
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
-      - name: Deploy prod-a
+      - name: Deploy
         run: |
           sudo chmod +x /home/ubuntu/deploy/deploy.sh
           sudo /home/ubuntu/deploy/deploy.sh
