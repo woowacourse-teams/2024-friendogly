@@ -39,7 +39,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted-prod-a
+    runs-on: prod-dodo
     steps:
       - name: Change permission
         run: |
