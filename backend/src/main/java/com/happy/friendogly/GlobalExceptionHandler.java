@@ -75,6 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handle(HttpRequestMethodNotSupportedException exception) {
+        // 안녕하세요?
         log.warn(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
