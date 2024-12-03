@@ -15,7 +15,7 @@ kakao:
 file:
   firebase:
     path: firebase-friendogly-private-key.json
-
+ 
 spring:
   rabbitmq:
     host: ${RABBITMQ_HOST}
