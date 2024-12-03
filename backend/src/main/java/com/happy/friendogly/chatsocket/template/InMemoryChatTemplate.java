@@ -1,11 +1,9 @@
 package com.happy.friendogly.chatsocket.template;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("local | dev | prod")
 public class InMemoryChatTemplate implements ChatTemplate {
 
     private static final String TOPIC_CHAT_PREFIX = "/exchange/chat.exchange/room.";
