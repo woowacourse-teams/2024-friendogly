@@ -3,6 +3,7 @@ package com.happy.friendogly.notification.service;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.WalkStatus;
 import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.notification.domain.NotificationType;
 import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FootprintNotificationService {
 
-    private final String DEFAULT_TITLE = "반갑개";
+    private static final String DEFAULT_TITLE = "반갑개";
+    
     private final NotificationService notificationService;
     private final DeviceTokenRepository deviceTokenRepository;
 
@@ -35,19 +37,21 @@ public class FootprintNotificationService {
             return;
         }
 
-        notificationService.sendFootprintNotification(
+        notificationService.sendNotification(
                 DEFAULT_TITLE,
                 content,
-                deviceTokenRepository.getByMemberId(memberId).getDeviceToken()
+                NotificationType.FOOTPRINT,
+                List.of(deviceTokenRepository.getByMemberId(memberId).getDeviceToken())
         );
     }
 
     public void sendWalkComingNotification(String comingMemberName, List<Footprint> nearFootprints) {
         List<String> nearDeviceTokens = toDeviceToken(nearFootprints);
 
-        notificationService.sendFootprintNotification(
+        notificationService.sendNotification(
                 DEFAULT_TITLE,
                 "내 산책 장소에 " + comingMemberName + "님도 산책온대요!",
+                NotificationType.FOOTPRINT,
                 nearDeviceTokens
         );
     }
@@ -55,8 +59,9 @@ public class FootprintNotificationService {
     public void sendWalkStartNotificationToNear(String startMemberName, List<Footprint> nearFootprints) {
         List<String> nearDeviceTokens = toDeviceToken(nearFootprints);
 
-        notificationService.sendFootprintNotification(DEFAULT_TITLE,
+        notificationService.sendNotification(DEFAULT_TITLE,
                 "내 산책장소에 " + startMemberName + "님이 산책을 시작했어요!",
+                NotificationType.FOOTPRINT,
                 nearDeviceTokens
         );
     }

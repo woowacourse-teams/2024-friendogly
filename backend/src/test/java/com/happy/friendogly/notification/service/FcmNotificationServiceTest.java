@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class FcmNotificationServiceTest {
     @Test
     void sendFootprintNotification() throws FirebaseMessagingException {
         // when
-        fcmNotificationService.sendFootprintNotification("title", "content", List.of());
+        fcmNotificationService.sendNotification("title", "content", NotificationType.FOOTPRINT, List.of());
 
         // then
         verify(firebaseMessaging, never()).sendEachForMulticast(any());

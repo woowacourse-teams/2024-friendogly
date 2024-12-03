@@ -1,16 +1,22 @@
 package com.happy.friendogly.notification.service;
 
-import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
-import com.happy.friendogly.club.domain.Club;
+import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
+import java.util.Map;
 
 public interface NotificationService {
 
-    void sendFootprintNotification(String title, String content, String receiverToken);
+    void sendNotification(
+            String title,
+            String content,
+            NotificationType notificationType,
+            List<String> receiverTokens
+    );
 
-    void sendFootprintNotification(String title, String content, List<String> receiverTokens);
-
-    void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club);
-
-    void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens);
+    void sendNotification(
+            String title,
+            Map<String, String> contents,
+            NotificationType notificationType,
+            List<String> receiverTokens
+    );
 }
