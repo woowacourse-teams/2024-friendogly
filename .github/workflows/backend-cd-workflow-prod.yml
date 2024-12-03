@@ -5,10 +5,11 @@ on:
     branches: [ "release/backend" ]
     paths:
       - "backend/**"
+      
 
 jobs:
-  build-a:
-    runs-on: self-hosted-prod-a
+  build:
+    runs-on: prod-dodo
 
     steps:
       - name: Checkout Repository
@@ -35,56 +36,15 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build
 
-  deploy-a:
-    needs: build-a
-    runs-on: self-hosted-prod-a
+  deploy:
+    needs: build
+    runs-on: prod-dodo
     steps:
       - name: Change permission
         run: |
           sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
 
-      - name: Deploy prod-a
-        run: |
-          sudo chmod +x /home/ubuntu/deploy/deploy.sh
-          sudo /home/ubuntu/deploy/deploy.sh
-
-  build-b:
-    runs-on: self-hosted-prod-b
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "corretto"
-
-      - name: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "firebase-friendogly-private-key.json"
-          json: ${{ secrets.FIREBASE_FRIENDOGLY_PRIVATE_KEY }}
-          dir: './backend/src/main/resources/'
-
-      - name: Grant execute permission for gradlew
-        working-directory: ./backend
-        run: chmod +x gradlew
-
-      - name: Build project using Gradle
-        working-directory: ./backend
-        run: ./gradlew build
-
-  deploy-b:
-    needs: build-b
-    runs-on: self-hosted-prod-b
-    steps:
-      - name: Change permission
-        run: |
-          sudo chown -R ubuntu:ubuntu /home/ubuntu/actions-runner/_work/2024-friendogly
-
-      - name: Deploy prod-b
+      - name: Deploy
         run: |
           sudo chmod +x /home/ubuntu/deploy/deploy.sh
           sudo /home/ubuntu/deploy/deploy.sh

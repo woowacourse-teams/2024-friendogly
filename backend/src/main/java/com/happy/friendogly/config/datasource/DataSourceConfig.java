@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
-@Profile("prod-replication")
+@Profile("prod-replication") // DB 이중화하는 경우 프로파일명을 변경해주세요.
 @Configuration
 public class DataSourceConfig {
 

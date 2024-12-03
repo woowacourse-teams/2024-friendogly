@@ -14,7 +14,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-@Profile("rabbit")
+@Profile("rabbit") // RabbitMQ가 필요한 상황에서는 해당 프로파일명을 변경해주세요.
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketRabbitMqConfig implements WebSocketMessageBrokerConfigurer {
