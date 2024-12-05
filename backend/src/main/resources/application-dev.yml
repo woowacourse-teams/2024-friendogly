@@ -2,7 +2,7 @@ aws:
   s3:
     bucket-name: ${BUCKET_NAME}
     server:
-      endpoint: https://d1m6m0er0dq0qo.cloudfront.net/
+      endpoint: https://d2bomkpybmqevt.cloudfront.net/
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
