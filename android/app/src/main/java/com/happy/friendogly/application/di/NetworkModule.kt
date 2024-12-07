@@ -67,14 +67,20 @@ object NetworkModule {
     @Singleton
     fun provideAuthService(
         @Base baseUrl: BaseUrl,
+        authenticatorInterceptor: AuthorizationInterceptor,
         converterFactory: Factory,
     ): AuthService =
-        Retrofit.Builder().baseUrl(baseUrl.url).client(
-            createOkHttpClient {
-                addInterceptor(ErrorResponseInterceptor())
-                addInterceptor(logging)
-            },
-        ).addConverterFactory(converterFactory).build()
+        Retrofit
+            .Builder()
+            .baseUrl(baseUrl.url)
+            .client(
+                createOkHttpClient {
+                    addInterceptor(authenticatorInterceptor)
+                    addInterceptor(ErrorResponseInterceptor())
+                    addInterceptor(logging)
+                },
+            ).addConverterFactory(converterFactory)
+            .build()
             .create(AuthService::class.java)
 
     @Singleton
@@ -84,24 +90,27 @@ object NetworkModule {
         authenticator: Authenticator,
         authenticatorInterceptor: AuthorizationInterceptor,
         converterFactory: Factory,
-    ): Retrofit {
-        return Retrofit.Builder().baseUrl(baseUrl.url).client(
-            createOkHttpClient {
-                addInterceptor(authenticatorInterceptor)
-                authenticator(authenticator)
-                addInterceptor(ErrorResponseInterceptor())
-                addInterceptor(logging)
-            },
-        ).addConverterFactory(converterFactory).build()
-    }
+    ): Retrofit =
+        Retrofit
+            .Builder()
+            .baseUrl(baseUrl.url)
+            .client(
+                createOkHttpClient {
+                    addInterceptor(authenticatorInterceptor)
+                    authenticator(authenticator)
+                    addInterceptor(ErrorResponseInterceptor())
+                    addInterceptor(logging)
+                },
+            ).addConverterFactory(converterFactory)
+            .build()
 
     @Singleton
     @Provides
     fun provideStumpClient(
         authenticator: Authenticator,
         authenticatorInterceptor: AuthorizationInterceptor,
-    ): StompClient {
-        return createOkHttpClient {
+    ): StompClient =
+        createOkHttpClient {
             addInterceptor(authenticatorInterceptor)
             authenticator(authenticator)
             addInterceptor(ErrorResponseInterceptor())
@@ -109,9 +118,12 @@ object NetworkModule {
         }.let(::OkHttpWebSocketClient).let(
             ::StompClient,
         )
-    }
 
     private fun createOkHttpClient(interceptors: OkHttpClient.Builder.() -> Unit = { }): OkHttpClient =
-        OkHttpClient.Builder().callTimeout(Duration.ofMinutes(TIME_OUT_MINUTE))
-            .pingInterval(Duration.ofSeconds(PING_OUT_SECOND)).apply(interceptors).build()
+        OkHttpClient
+            .Builder()
+            .callTimeout(Duration.ofMinutes(TIME_OUT_MINUTE))
+            .pingInterval(Duration.ofSeconds(PING_OUT_SECOND))
+            .apply(interceptors)
+            .build()
 }
