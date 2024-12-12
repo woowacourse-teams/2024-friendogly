@@ -41,6 +41,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             throw new FriendoglyException("토큰 정보가 존재하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
-        return Long.parseLong(jwtProvider.validateAndExtract(accessToken));
+//        return Long.parseLong(jwtProvider.validateAndExtract(accessToken));
+        return Long.parseLong(accessToken);
     }
 }

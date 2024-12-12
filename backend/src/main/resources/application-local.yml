@@ -14,18 +14,18 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
-  sql.init.mode: always
+  sql.init.mode: never
 
-logging.level.org:
-  hibernate:
-    SQL: debug
-    orm.jdbc.bind: trace
+#logging.level.org:
+#  hibernate:
+#    SQL: debug
+#    orm.jdbc.bind: trace
 
 file:
   firebase:
