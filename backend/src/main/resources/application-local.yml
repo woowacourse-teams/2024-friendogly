@@ -10,7 +10,7 @@ spring:
     password: ${MYSQL_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     defer-datasource-initialization: true
     properties:
       hibernate:
