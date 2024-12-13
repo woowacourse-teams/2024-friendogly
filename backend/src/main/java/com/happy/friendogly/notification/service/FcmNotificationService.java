@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,6 +76,7 @@ public class FcmNotificationService implements NotificationService {
         sendNotificationWithType(CHAT, "채팅", data, receiverTokens);
     }
 
+    @Async
     @Override
     public void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens) {
         Map<String, String> data = Map.of(
