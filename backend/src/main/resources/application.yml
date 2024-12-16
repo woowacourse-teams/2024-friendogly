@@ -10,3 +10,11 @@ spring:
   sql:
     init:
       encoding: utf-8
+
+
+server:
+  tomcat:
+    accept-count: 30
+    max-connections: 120
+    threads:
+      max: 60
