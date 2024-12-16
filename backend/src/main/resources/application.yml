@@ -15,6 +15,6 @@ spring:
 server:
   tomcat:
     accept-count: 10
-    max-connections: 50
+    max-connections: 70
     threads:
       max: 45
