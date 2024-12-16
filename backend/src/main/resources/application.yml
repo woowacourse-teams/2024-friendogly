@@ -17,4 +17,4 @@ server:
     accept-count: 30
     max-connections: 60
     threads:
-      max: 40
+      max: 45
