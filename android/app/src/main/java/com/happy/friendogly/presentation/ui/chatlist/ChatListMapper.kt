@@ -9,10 +9,10 @@ import java.time.LocalDateTime
 fun ChatRoom.toUiModel(): ChatListUiModel =
     ChatListUiModel(
         clubName,
-        "",
+        recentMessage,
         memberCount,
         0,
-        LocalDateTime.of(2024, 6, 7, 13, 6).classifyChatDateTime(),
+        recentMessageCreatedAt?.classifyChatDateTime(),
         clubImageUrl,
         chatRoomId = chatRoomId,
     )

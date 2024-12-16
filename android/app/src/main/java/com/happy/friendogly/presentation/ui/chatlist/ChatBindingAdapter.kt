@@ -1,5 +1,6 @@
 package com.happy.friendogly.presentation.ui.chatlist
 
+import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -10,7 +11,11 @@ import java.time.format.DateTimeFormatter
 private const val MAX_MESSAGE_COUNT = 999
 
 @BindingAdapter("chatDateTime")
-fun TextView.dateTimeString(dateTime: ChatDateTime) {
+fun TextView.dateTimeString(dateTime: ChatDateTime?) {
+    if (dateTime == null) {
+        this.visibility = View.GONE
+        return
+    }
     val timeFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.chat_time))
     val dateFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.chat_date))
 

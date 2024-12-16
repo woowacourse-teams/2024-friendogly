@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:layout_marginBottom="7dp"
             app:layout_constraintStart_toEndOf="@id/iv_chat_group"
             app:layout_constraintBottom_toBottomOf="@id/iv_chat_group"
             app:layout_constraintTop_toTopOf="@id/iv_chat_group"
@@ -59,7 +60,6 @@
 
         <TextView
             android:id="@+id/tv_chat_body"
-            android:visibility="gone"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,7 +72,6 @@
             tools:text="다들 언제 모이시는게 편하세요?" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/tv_chat_date_time"
             style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size10"
             chatDateTime="@{dateTime}"
