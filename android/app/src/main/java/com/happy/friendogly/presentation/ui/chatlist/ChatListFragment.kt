@@ -26,15 +26,19 @@ class ChatListFragment :
         binding.vm = viewModel
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.getChats()
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            viewModel.cancelPolling()
+        } else {
+            viewModel.getPollingChats()
+        }
     }
 
     private fun initAdapter() {
         adapter = ChatListAdapter(this)
         binding.rcvChatList.adapter = adapter
-        viewModel.getChats()
+        viewModel.getPollingChats()
         viewModel.chats.observe(viewLifecycleOwner) { chats ->
             adapter.submitList(chats)
         }
@@ -43,7 +47,7 @@ class ChatListFragment :
 
     private fun swipeEvent() {
         binding.swipelayoutChatListRefresh.setOnRefreshListener {
-            viewModel.getChats()
+            viewModel.getPollingChats()
             binding.swipelayoutChatListRefresh.isRefreshing = false
         }
     }
@@ -59,7 +63,7 @@ class ChatListFragment :
             ) { result ->
 
                 if (result.resultCode == LEAVE_CHAT_CODE) {
-                    viewModel.getChats()
+                    viewModel.getPollingChats()
                 }
             }
     }
