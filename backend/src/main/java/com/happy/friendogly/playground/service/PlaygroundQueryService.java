@@ -13,9 +13,12 @@ import com.happy.friendogly.playground.dto.response.detail.PlaygroundPetDetail;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,19 +43,24 @@ public class PlaygroundQueryService {
     }
 
     public FindPlaygroundDetailResponse findDetail(Long callMemberId, Long playgroundId) {
-        Playground playground = playgroundRepository.getById(playgroundId);
         List<PlaygroundMember> playgroundMembers = playgroundMemberRepository.findAllByPlaygroundId(playgroundId);
 
         int totalPetCount = 0;
         int arrivedPetCount = 0;
 
-        List<PlaygroundPetDetail> playgroundPetDetails = new ArrayList<>();
+        List<Long> memberIds = playgroundMembers.stream()
+                .map(playgroundMember -> playgroundMember.getMember().getId())
+                .toList();
 
+        Map<Long, List<Pet>> memberPets = petRepository.findAllByMemberIds(memberIds).stream()
+                .collect(Collectors.groupingBy(pet -> pet.getMember().getId()));
+
+        List<PlaygroundPetDetail> playgroundPetDetails = new ArrayList<>();
         for (PlaygroundMember playgroundMember : playgroundMembers) {
             Member member = playgroundMember.getMember();
             boolean isMyPet = member.getId().equals(callMemberId);
 
-            List<Pet> pets = petRepository.findByMemberId(member.getId());
+            List<Pet> pets = memberPets.getOrDefault(member.getId(), Collections.emptyList());
             totalPetCount += pets.size();
             arrivedPetCount += getArrivedPetCount(playgroundMember, pets);
 
@@ -70,7 +78,7 @@ public class PlaygroundQueryService {
                 .anyMatch(playgroundMember -> playgroundMember.equalsMemberId(callMemberId));
 
         return new FindPlaygroundDetailResponse(
-                playground.getId(),
+                playgroundId,
                 totalPetCount,
                 arrivedPetCount,
                 isParticipating,
