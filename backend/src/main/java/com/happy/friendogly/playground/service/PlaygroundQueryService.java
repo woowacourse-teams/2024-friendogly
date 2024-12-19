@@ -93,7 +93,7 @@ public class PlaygroundQueryService {
     }
 
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
-        List<Playground> playgrounds = playgroundRepository.findAll();
+        List<Playground> playgrounds = playgroundRepository.findAllWithCache();
         Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
 
         if (playgroundMember.isPresent()) {
