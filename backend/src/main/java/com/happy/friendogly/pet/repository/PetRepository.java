@@ -35,4 +35,12 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     boolean existsByMemberId(Long memberId);
 
     void deleteAllByMemberId(Long memberId);
+
+    @Query("""
+            SELECT p
+            FROM Pet p
+            WHERE p.member.id
+            IN :memberIds
+            """)
+    List<Pet> findAllByMemberIds(List<Long> memberIds);
 }
