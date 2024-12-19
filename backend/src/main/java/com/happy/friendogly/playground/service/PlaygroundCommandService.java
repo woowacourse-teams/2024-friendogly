@@ -22,6 +22,7 @@ import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,7 @@ public class PlaygroundCommandService {
         this.playgroundNotificationService = playgroundNotificationService;
     }
 
+    @CacheEvict(value = "playground_locations",key = "'all'")
     public SavePlaygroundResponse save(SavePlaygroundRequest request, Long memberId) {
         Member member = memberRepository.getById(memberId);
 
