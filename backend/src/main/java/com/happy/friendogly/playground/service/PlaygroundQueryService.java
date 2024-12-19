@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,19 +84,17 @@ public class PlaygroundQueryService {
         return 0;
     }
 
-    @Cacheable(value = "playground_locations", key = "'all'")
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
-        List<Playground> playgrounds = playgroundRepository.findAll();
-        System.out.println("안녕");
-//        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
-//
-//        if (playgroundMember.isPresent()) {
-//            return playgrounds.stream()
-//                    .map(playground -> new FindPlaygroundLocationResponse(
-//                            playground,
-//                            playgroundMember.get().isSamePlayground(playground)
-//                    )).toList();
-//        }
+        List<Playground> playgrounds = playgroundRepository.findAllWithCache();
+        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
+
+        if (playgroundMember.isPresent()) {
+            return playgrounds.stream()
+                    .map(playground -> new FindPlaygroundLocationResponse(
+                            playground,
+                            playgroundMember.get().isSamePlayground(playground)
+                    )).toList();
+        }
 
         return playgrounds.stream()
                 .map(playground -> new FindPlaygroundLocationResponse(playground, false))

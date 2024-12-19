@@ -10,9 +10,3 @@ spring:
   sql:
     init:
       encoding: utf-8
-
-logging:
-  level:
-    org:
-      springframework:
-        cache: DEBUG
