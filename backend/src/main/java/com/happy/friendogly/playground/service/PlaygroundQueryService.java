@@ -85,18 +85,18 @@ public class PlaygroundQueryService {
         return 0;
     }
 
-    @Cacheable(value = "playground_locations", key = "'all'")
+//    @Cacheable(value = "playground_locations", key = "'all'")
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
         List<Playground> playgrounds = playgroundRepository.findAll();
-        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
-
-        if (playgroundMember.isPresent()) {
-            return playgrounds.stream()
-                    .map(playground -> new FindPlaygroundLocationResponse(
-                            playground,
-                            playgroundMember.get().isSamePlayground(playground)
-                    )).toList();
-        }
+//        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
+//
+//        if (playgroundMember.isPresent()) {
+//            return playgrounds.stream()
+//                    .map(playground -> new FindPlaygroundLocationResponse(
+//                            playground,
+//                            playgroundMember.get().isSamePlayground(playground)
+//                    )).toList();
+//        }
 
         return playgrounds.stream()
                 .map(playground -> new FindPlaygroundLocationResponse(playground, false))
