@@ -88,6 +88,7 @@ public class PlaygroundQueryService {
     @Cacheable(value = "playground_locations", key = "'all'")
     public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
         List<Playground> playgrounds = playgroundRepository.findAll();
+        System.out.println("안녕");
 //        Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
 //
 //        if (playgroundMember.isPresent()) {
