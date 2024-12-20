@@ -10,3 +10,11 @@ spring:
   sql:
     init:
       encoding: utf-8
+
+server:
+  tomcat:
+    accept-count: 5
+    max-connections: 50
+    threads:
+      max: 50
+    connection-timeout: 5000
