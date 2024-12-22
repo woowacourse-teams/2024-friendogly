@@ -34,6 +34,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotGPSPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotLocationPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHelpBalloon
@@ -250,10 +251,18 @@ class PlaygroundViewModel
         }
 
         private fun runIfLocationPermissionGranted(action: () -> Unit) {
-            if (uiState.value !is PlaygroundUiState.LocationPermissionsNotGranted) {
-                action()
-            } else {
-                _alertAction.emit(AlertHasNotLocationPermissionDialog)
+            when (uiState.value) {
+                is PlaygroundUiState.GPSPermissionNotGranted -> {
+                    _alertAction.emit(AlertHasNotGPSPermissionDialog)
+                }
+
+                is PlaygroundUiState.LocationPermissionsNotGranted -> {
+                    _alertAction.emit(AlertHasNotLocationPermissionDialog)
+                }
+
+                else -> {
+                    action()
+                }
             }
         }
 

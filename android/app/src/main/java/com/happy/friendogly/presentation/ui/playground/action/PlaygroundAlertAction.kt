@@ -1,6 +1,8 @@
 package com.happy.friendogly.presentation.ui.playground.action
 
 sealed interface PlaygroundAlertAction {
+    data object AlertHasNotGPSPermissionDialog : PlaygroundAlertAction
+
     data object AlertHasNotLocationPermissionDialog : PlaygroundAlertAction
 
     data object AlertHasNotPetDialog : PlaygroundAlertAction

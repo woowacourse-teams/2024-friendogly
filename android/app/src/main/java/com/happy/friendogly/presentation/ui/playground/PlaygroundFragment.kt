@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.playground
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.RECEIVER_EXPORTED
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -50,6 +52,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToRegisterPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToUpdatePlaygroundArrival
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotGPSPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotLocationPermissionDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHasNotPetDialog
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertHelpBalloon
@@ -126,6 +129,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     private lateinit var latLng: LatLng
     private lateinit var locationPermission: LocationPermission
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private lateinit var gpsPermissionReceiver: BroadcastReceiver
     private lateinit var locationReceiver: PlaygroundLocationReceiver
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -202,13 +206,23 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-        if (locationPermission.hasPermissions() && viewModel.uiState.value is PlaygroundUiState.LocationPermissionsNotGranted) {
-            viewModel.updateUiState(PlaygroundUiState.Loading)
-            activateMap()
-        }
 
-        if (!locationPermission.hasPermissions() && viewModel.uiState.value !is PlaygroundUiState.LocationPermissionsNotGranted) {
-            viewModel.updateUiState(PlaygroundUiState.LocationPermissionsNotGranted)
+        if (isGPSEnabled()) {
+            if (locationPermission.hasPermissions() &&
+                (
+                    viewModel.uiState.value is PlaygroundUiState.LocationPermissionsNotGranted ||
+                        viewModel.uiState.value is PlaygroundUiState.GPSPermissionNotGranted
+                )
+            ) {
+                viewModel.updateUiState(PlaygroundUiState.Loading)
+                activateMap()
+            }
+
+            if (!locationPermission.hasPermissions() && viewModel.uiState.value !is PlaygroundUiState.LocationPermissionsNotGranted) {
+                viewModel.updateUiState(PlaygroundUiState.LocationPermissionsNotGranted)
+            }
+        } else {
+            viewModel.updateUiState(PlaygroundUiState.GPSPermissionNotGranted)
         }
     }
 
@@ -236,6 +250,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     override fun onDestroy() {
         super.onDestroy()
         stopLocationService()
+        requireContext().unregisterReceiver(gpsPermissionReceiver)
         requireContext().unregisterReceiver(locationReceiver)
     }
 
@@ -329,6 +344,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     locationPermission.createAlarmDialog()
                         .show(parentFragmentManager, tag)
 
+                is PlaygroundUiState.GPSPermissionNotGranted ->
+                    locationPermission.createGPSDialog()
+                        .show(parentFragmentManager, tag)
+
                 is PlaygroundUiState.FindingPlayground -> {
                     viewModel.showMyPlayground(map)
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -409,6 +428,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.alertAction.observeEvent(viewLifecycleOwner) { event ->
             when (event) {
+                is AlertHasNotGPSPermissionDialog -> {
+                    locationPermission.createGPSDialog().show(parentFragmentManager, tag)
+                }
+
                 is AlertHasNotLocationPermissionDialog -> {
                     locationPermission.createAlarmDialog().show(parentFragmentManager, tag)
                 }
@@ -456,7 +479,56 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             }
     }
 
+    private fun isGPSEnabled(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
     private fun setupBroadCastReceiver() {
+        setupGPSPermissionReceiver()
+        setupLocationReceiver()
+    }
+
+    private fun setupGPSPermissionReceiver() {
+        gpsPermissionReceiver =
+            object : BroadcastReceiver() {
+                override fun onReceive(
+                    context: Context,
+                    intent: Intent,
+                ) {
+                    if (intent.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+                        if (!isGPSEnabled() && viewModel.uiState.value !is PlaygroundUiState.GPSPermissionNotGranted) {
+                            viewModel.updateUiState(PlaygroundUiState.GPSPermissionNotGranted)
+                        }
+
+                        if (isGPSEnabled() && viewModel.uiState.value is PlaygroundUiState.GPSPermissionNotGranted) {
+                            viewModel.updateUiState(PlaygroundUiState.Loading)
+                            activateMap()
+                        }
+                    }
+                }
+            }
+
+        val intentFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        requireContext().registerReceiver(gpsPermissionReceiver, intentFilter)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(
+                gpsPermissionReceiver,
+                intentFilter,
+                RECEIVER_EXPORTED,
+            )
+        } else {
+            requireContext().registerReceiver(
+                gpsPermissionReceiver,
+                intentFilter,
+                Context.RECEIVER_NOT_EXPORTED,
+            )
+        }
+    }
+
+    private fun setupLocationReceiver() {
         locationReceiver = PlaygroundLocationReceiver(::updateLocation, ::leavePlayground)
         val intentFilter =
             IntentFilter().apply {
@@ -470,7 +542,11 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 RECEIVER_EXPORTED,
             )
         } else {
-            requireContext().registerReceiver(locationReceiver, intentFilter)
+            requireContext().registerReceiver(
+                locationReceiver,
+                intentFilter,
+                Context.RECEIVER_NOT_EXPORTED,
+            )
         }
     }
 

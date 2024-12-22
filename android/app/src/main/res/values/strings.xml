@@ -309,7 +309,9 @@
     <string name="alarm_dialog_body">알람을 설정하지 않으면, 채팅과 모임 알람을 받을 수 없어요!</string>
     <string name="alarm_dialog_body_playground">알림을 거부하여 모임 알림을 받을 수 없습니다.</string>
     <string name="location_dialog_title">위치 허용 사용 설정</string>
+    <string name="location_gps_dialog_title">GPS 허용 사용 설정</string>
     <string name="location_dialog_body">위치 설정하지 않으면, 친구를 찾을 수 없어요!</string>
+    <string name="location_gps_dialog_body">GPS 설정하지 않으면, 친구를 찾을 수 없어요!</string>
     <string name="permission_cancel">취소</string>
     <string name="permission_go_setting">설정</string>
     <string name="permission_denied_message">권한을 거부하여 기능을 사용할 수 없습니다.</string>
