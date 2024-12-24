@@ -103,7 +103,7 @@ public class FcmNotificationService implements NotificationService {
             try {
                 firebaseMessaging.send(message1);
             } catch (FirebaseMessagingException e) {
-                throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.",
+                throw new FriendoglyException(e.getMessage()+": "+e.getMessagingErrorCode().toString(),
                         INTERNAL_SERVER_ERROR);
             }
         }
