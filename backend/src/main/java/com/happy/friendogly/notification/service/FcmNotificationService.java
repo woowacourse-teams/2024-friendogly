@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.club.domain.Club;
@@ -91,14 +92,20 @@ public class FcmNotificationService implements NotificationService {
             List<String> receiverTokens
     ) {
         if (!receiverTokens.isEmpty()) {
+            Message message1 = Message.builder()
+                    .setTopic("aa").build();
             MulticastMessage message = MulticastMessage.builder()
                     .putAllData(data)
                     .putData("type", notificationType.toString())
                     .putData("title", title)
                     .addAllTokens(receiverTokens)
                     .build();
-
-            firebaseMessaging.sendEachForMulticastAsync(message);
+            try {
+                firebaseMessaging.send(message1);
+            } catch (FirebaseMessagingException e) {
+                throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.",
+                        INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
