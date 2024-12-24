@@ -3,10 +3,13 @@ package com.happy.friendogly.playground.service;
 import static com.happy.friendogly.common.ErrorCode.OVERLAP_PLAYGROUND_CREATION;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
+import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import com.happy.friendogly.notification.service.PlaygroundNotificationService;
 import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
@@ -22,6 +25,7 @@ import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,16 +41,21 @@ public class PlaygroundCommandService {
     private final PlaygroundMemberRepository playgroundMemberRepository;
     private final MemberRepository memberRepository;
     private final PlaygroundNotificationService playgroundNotificationService;
+    private final FirebaseMessaging firebaseMessaging;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     public PlaygroundCommandService(
             PlaygroundRepository playgroundRepository,
             PlaygroundMemberRepository playgroundMemberRepository,
             MemberRepository memberRepository,
-            PlaygroundNotificationService playgroundNotificationService) {
+            PlaygroundNotificationService playgroundNotificationService, @Autowired FirebaseApp firebaseApp,
+            DeviceTokenRepository deviceTokenRepository) {
         this.playgroundRepository = playgroundRepository;
         this.playgroundMemberRepository = playgroundMemberRepository;
         this.memberRepository = memberRepository;
         this.playgroundNotificationService = playgroundNotificationService;
+        this.deviceTokenRepository = deviceTokenRepository;
+        this.firebaseMessaging = FirebaseMessaging.getInstance();
     }
 
     public SavePlaygroundResponse save(SavePlaygroundRequest request, Long memberId) {
@@ -107,7 +116,8 @@ public class PlaygroundCommandService {
                 new PlaygroundMember(playground, member)
         );
 
-        playgroundNotificationService.sendJoinNotification(member.getName().getValue(), existingPlaygroundMembers);
+//        playgroundNotificationService.sendJoinNotification(member.getName().getValue(), existingPlaygroundMembers);
+        playgroundNotificationService.sendJoinNotificationWithTopic(member.getName().getValue(), "playround-" + playgroundId);
 
         return new SaveJoinPlaygroundMemberResponse(playgroundMember);
     }

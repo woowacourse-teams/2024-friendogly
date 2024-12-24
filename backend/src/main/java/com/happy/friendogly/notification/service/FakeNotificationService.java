@@ -29,4 +29,9 @@ public class FakeNotificationService implements NotificationService {
     public void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens) {
 
     }
+
+    @Override
+    public void sendPlaygroundJoinNotification(String defaultTitle, String content, String topic) {
+
+    }
 }

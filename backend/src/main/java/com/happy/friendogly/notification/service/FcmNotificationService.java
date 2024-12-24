@@ -85,6 +85,15 @@ public class FcmNotificationService implements NotificationService {
         sendNotificationWithType(PLAYGROUND, title, data, receiverTokens);
     }
 
+    @Override
+    public void sendPlaygroundJoinNotification(String defaultTitle, String content, String topic) {
+        Map<String, String> data = Map.of(
+                "body", content
+        );
+
+        sendNotificationWithTopic(PLAYGROUND, defaultTitle, data, topic);
+    }
+
     private void sendNotificationWithType(
             NotificationType notificationType,
             String title,
@@ -106,6 +115,22 @@ public class FcmNotificationService implements NotificationService {
                 throw new FriendoglyException(e.getMessage()+": "+e.getMessagingErrorCode().toString(),
                         INTERNAL_SERVER_ERROR);
             }
+        }
+    }
+
+    private void sendNotificationWithTopic(
+            NotificationType notificationType,
+            String title,
+            Map<String, String> data,
+            String topic
+    ) {
+        Message message = Message.builder()
+                .setTopic(topic).build();
+        try {
+            firebaseMessaging.send(message);
+        } catch (FirebaseMessagingException e) {
+            throw new FriendoglyException(e.getMessage()+": "+e.getMessagingErrorCode().toString(),
+                    INTERNAL_SERVER_ERROR);
         }
     }
 }

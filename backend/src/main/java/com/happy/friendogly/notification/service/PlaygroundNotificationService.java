@@ -32,6 +32,15 @@ public class PlaygroundNotificationService {
         );
     }
 
+    public void sendJoinNotificationWithTopic(String newParticipatingMember, String topic) {
+        String content = newParticipatingMember + "님이 놀이터에 참여했습니다";
+
+        notificationService.sendPlaygroundJoinNotification(DEFAULT_TITLE,
+                content,
+                topic
+        );
+    }
+
     private List<String> toDeviceToken(List<PlaygroundMember> playgroundMembers) {
         return playgroundMembers.stream()
                 .map(playgroundMember -> deviceTokenRepository.findByMemberId(playgroundMember.getMember().getId()))

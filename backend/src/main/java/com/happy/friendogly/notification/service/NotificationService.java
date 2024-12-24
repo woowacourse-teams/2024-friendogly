@@ -13,4 +13,6 @@ public interface NotificationService {
     void sendChatNotification(Long chatRoomId, ChatMessageSocketResponse response, Club club);
 
     void sendPlaygroundJoinNotification(String title, String content, List<String> receiverTokens);
+
+    void sendPlaygroundJoinNotification(String defaultTitle, String content, String topic);
 }
