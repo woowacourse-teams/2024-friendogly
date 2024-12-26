@@ -4,10 +4,10 @@ import java.time.LocalDateTime
 
 data class ChatListUiModel(
     val title: String,
-    val body: String,
+    val body: String?,
     val numberOfPeople: Int,
     val unreadMessageCount: Int,
-    val dateTime: ChatDateTime,
+    val dateTime: ChatDateTime?,
     val imageUrl: String? = null,
     val chatRoomId: Long = 0,
 ) {

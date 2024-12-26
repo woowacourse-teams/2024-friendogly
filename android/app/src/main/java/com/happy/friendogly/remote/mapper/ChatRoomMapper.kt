@@ -11,9 +11,11 @@ fun ChatRoomListResponse.toData(): ChatRoomListDto =
             chatRooms.map {
                 ChatRoomDto(
                     chatRoomId = it.chatRoomId,
-                    clubName = it.clubName,
+                    clubName = it.title,
                     memberCount = it.memberCount,
-                    clubImageUrl = it.clubImageUrl,
+                    clubImageUrl = it.imageUrl,
+                    recentMessage = it.recentMessage,
+                    recentMessageCreatedAt = it.recentMessageCreatedAt,
                 )
             },
     )

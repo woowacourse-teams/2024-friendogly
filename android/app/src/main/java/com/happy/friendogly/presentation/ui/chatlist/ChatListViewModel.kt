@@ -8,6 +8,9 @@ import com.happy.friendogly.domain.usecase.GetChatListUseCase
 import com.happy.friendogly.presentation.base.BaseViewModel
 import com.happy.friendogly.presentation.ui.chatlist.uimodel.ChatListUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +26,8 @@ class ChatListViewModel
         var memberId: Long = 0L
             private set
 
+        private var pollJob: Job? = null
+
         val isChatEmpty =
             MediatorLiveData<Boolean>().apply {
                 addSource(_chats) {
@@ -30,12 +35,21 @@ class ChatListViewModel
                 }
             }
 
-        fun getChats() {
-            viewModelScope.launch {
-                getChatListUseCase.invoke().onSuccess { room ->
-                    _chats.value = room.chatRooms.map { it.toUiModel() }
-                    memberId = room.myMemberId
+        fun getPollingChats() {
+            pollJob?.cancel()
+            pollJob =
+                viewModelScope.launch {
+                    while (this.isActive) {
+                        getChatListUseCase.invoke().onSuccess { room ->
+                            _chats.value = room.chatRooms.map { it.toUiModel() }
+                            memberId = room.myMemberId
+                        }
+                        delay(1000)
+                    }
                 }
-            }
+        }
+
+        fun cancelPolling() {
+            pollJob?.cancel()
         }
     }

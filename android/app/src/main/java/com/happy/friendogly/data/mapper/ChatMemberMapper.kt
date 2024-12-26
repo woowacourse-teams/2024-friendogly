@@ -24,6 +24,8 @@ fun ChatRoomListDto.toDomain(): ChatRooms =
                     clubName = it.clubName,
                     memberCount = it.memberCount,
                     clubImageUrl = it.clubImageUrl,
+                    recentMessage = it.recentMessage,
+                    recentMessageCreatedAt = it.recentMessageCreatedAt,
                 )
             },
     )
