@@ -22,8 +22,8 @@ public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
 
-    public FcmNotificationService(@Autowired FirebaseApp firebaseApp) {
-        this.firebaseMessaging = FirebaseMessaging.getInstance(firebaseApp);
+    public FcmNotificationService(FirebaseMessaging firebaseMessaging) {
+        this.firebaseMessaging = firebaseMessaging;
     }
 
     @Override
