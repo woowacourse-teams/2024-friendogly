@@ -57,7 +57,8 @@ public class PlaygroundCommandService {
         Playground savedPlayground = playgroundRepository.save(
                 new Playground(new Location(request.latitude(), request.longitude()))
         );
-        playgroundMemberRepository.save(new PlaygroundMember(savedPlayground, member));
+        PlaygroundMember playgroundMember = playgroundMemberRepository.save(new PlaygroundMember(savedPlayground, member));
+        playgroundNotificationService.subscribePlaygroundTopic(playgroundMember);
 
         return new SavePlaygroundResponse(savedPlayground);
     }
@@ -97,8 +98,6 @@ public class PlaygroundCommandService {
     public SaveJoinPlaygroundMemberResponse joinPlayground(Long memberId, Long playgroundId) {
         Playground playground = playgroundRepository.getById(playgroundId);
         Member member = memberRepository.getById(memberId);
-        List<PlaygroundMember> existingPlaygroundMembers = playgroundMemberRepository
-                .findAllByPlaygroundId(playgroundId);
 
         validateExistParticipatingPlayground(member);
 
@@ -106,7 +105,8 @@ public class PlaygroundCommandService {
                 new PlaygroundMember(playground, member)
         );
 
-        playgroundNotificationService.sendJoinNotification(member.getName().getValue(), existingPlaygroundMembers);
+        playgroundNotificationService.sendJoinNotification(member.getName().getValue(), playground);
+        playgroundNotificationService.subscribePlaygroundTopic(playgroundMember);
 
         return new SaveJoinPlaygroundMemberResponse(playgroundMember);
     }
@@ -116,6 +116,7 @@ public class PlaygroundCommandService {
                 .ifPresent(playgroundMember -> {
                     playgroundMemberRepository.delete(playgroundMember);
                     deletePlaygroundConditional(playgroundMember.getPlayground());
+                    playgroundNotificationService.unsubscribePlaygroundTopic(playgroundMember);
                 });
     }
 
@@ -163,6 +164,7 @@ public class PlaygroundCommandService {
                 ).toList();
 
         playgroundMemberRepository.deleteAll(deletePlaygroundMembers);
+        playgroundNotificationService.unsubscribeAllMemberForPlayground(deletePlaygroundMembers);
 
         List<Long> deletePlaygroundCandidate = deletePlaygroundMembers.stream()
                 .map(playgroundMember -> playgroundMember.getPlayground().getId())

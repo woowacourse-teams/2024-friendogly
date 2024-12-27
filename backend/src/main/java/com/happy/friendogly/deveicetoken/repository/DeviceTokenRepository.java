@@ -26,4 +26,6 @@ public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> 
             @Param("chatRoomId") Long chatRoomId, @Param("myMemberId") Long myMemberId);
 
     void deleteByMemberId(Long memberId);
+
+    List<DeviceToken> findByMemberIdIn(List<Long> memberIds);
 }
