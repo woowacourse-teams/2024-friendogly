@@ -1,8 +1,9 @@
-package com.happy.friendogly.notification.service;
+package com.happy.friendogly.playground.service;
 
-import com.happy.friendogly.notification.domain.DeviceToken;
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.notification.domain.NotificationType;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.notification.service.NotificationService;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
 import java.util.List;
 import java.util.Optional;

@@ -7,7 +7,6 @@ import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.service.PlaygroundNotificationService;
 import com.happy.friendogly.playground.domain.Location;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;

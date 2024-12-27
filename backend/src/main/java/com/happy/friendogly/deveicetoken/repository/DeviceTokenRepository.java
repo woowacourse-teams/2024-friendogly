@@ -1,7 +1,7 @@
-package com.happy.friendogly.notification.repository;
+package com.happy.friendogly.deveicetoken.repository;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
 import com.happy.friendogly.exception.FriendoglyException;
-import com.happy.friendogly.notification.domain.DeviceToken;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

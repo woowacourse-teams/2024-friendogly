@@ -1,10 +1,11 @@
-package com.happy.friendogly.notification.service;
+package com.happy.friendogly.footprint.service;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.WalkStatus;
-import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.notification.domain.NotificationType;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
+import com.happy.friendogly.notification.service.NotificationService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class FootprintNotificationService {
 
     private static final String DEFAULT_TITLE = "반갑개";
-    
+
     private final NotificationService notificationService;
     private final DeviceTokenRepository deviceTokenRepository;
 

@@ -1,4 +1,4 @@
-package com.happy.friendogly.notification.domain;
+package com.happy.friendogly.deveicetoken.domain;
 
 import com.happy.friendogly.member.domain.Member;
 import jakarta.persistence.Column;

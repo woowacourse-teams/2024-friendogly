@@ -3,6 +3,7 @@ package com.happy.friendogly.footprint.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.dto.request.FindNearFootprintRequest;
 import com.happy.friendogly.footprint.dto.request.SaveFootprintRequest;
@@ -10,7 +11,6 @@ import com.happy.friendogly.footprint.dto.response.FindMyLatestFootprintTimeAndP
 import com.happy.friendogly.footprint.dto.response.FindNearFootprintResponse;
 import com.happy.friendogly.footprint.dto.response.FindOneFootprintResponse;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.notification.domain.DeviceToken;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;

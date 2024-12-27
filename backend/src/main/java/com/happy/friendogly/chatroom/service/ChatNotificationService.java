@@ -1,10 +1,11 @@
-package com.happy.friendogly.notification.service;
+package com.happy.friendogly.chatroom.service;
 
 import static com.happy.friendogly.notification.domain.NotificationType.CHAT;
 
 import com.happy.friendogly.chatsocket.dto.response.ChatMessageSocketResponse;
 import com.happy.friendogly.club.domain.Club;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
+import com.happy.friendogly.notification.service.NotificationService;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
