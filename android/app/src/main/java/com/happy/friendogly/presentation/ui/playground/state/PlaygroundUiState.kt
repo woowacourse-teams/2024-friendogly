@@ -8,6 +8,8 @@ sealed interface PlaygroundUiState {
 
     data object LocationPermissionsNotGranted : PlaygroundUiState
 
+    data object GPSPermissionNotGranted : PlaygroundUiState
+
     data class FindingPlayground(val refreshBtnVisible: Boolean = false) : PlaygroundUiState
 
     data class RegisteringPlayground(

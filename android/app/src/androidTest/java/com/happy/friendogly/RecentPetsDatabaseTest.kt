@@ -72,6 +72,7 @@ class RecentPetsDatabaseTest {
         private val DUMMY_RECENT_PET =
             RecentPetEntity(
                 memberId = 0L,
+                petId = 0L,
                 imgUrl = "imageUrl",
                 name = "땡이",
                 birthday = LocalDate(2024, 10, 2),
