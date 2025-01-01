@@ -44,8 +44,26 @@ class PlaygroundDataSourceImpl
             return runCatching { service.getPetExistence().data.toData() }
         }
 
-        override suspend fun getNearPlaygrounds(): Result<List<PlaygroundDto>> {
-            return runCatching { service.getPlaygrounds().data.toData() }
+        override suspend fun getPlaygrounds(
+            startLatitude: Double,
+            endLatitude: Double,
+            startLongitude: Double,
+            endLongitude: Double,
+        ): Result<List<PlaygroundDto>> {
+            return runCatching {
+                service.getPlaygrounds(
+                    startLatitude,
+                    endLatitude,
+                    startLongitude,
+                    endLongitude,
+                ).data.toData()
+            }
+        }
+
+        override suspend fun getMyPlayground(): Result<MyPlaygroundDto> {
+            return runCatching {
+                service.getMyPlayground().data.toData()
+            }
         }
 
         override suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfoDto> {

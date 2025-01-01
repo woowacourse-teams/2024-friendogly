@@ -79,12 +79,32 @@ class PlaygroundRepositoryImpl
                 dto.toDomain()
             }
 
-        override suspend fun getPlaygrounds(): Result<List<Playground>> =
+        override suspend fun getPlaygrounds(
+            startLatitude: Double,
+            endLatitude: Double,
+            startLongitude: Double,
+            endLongitude: Double,
+        ): Result<List<Playground>> =
             source
-                .getNearPlaygrounds()
+                .getPlaygrounds(startLatitude, endLatitude, startLongitude, endLongitude)
                 .mapCatching { dto ->
                     dto.toDomain()
                 }
+
+        override suspend fun getMyPlayground(): DomainResult<MyPlayground, DataError.Network> =
+            source.getMyPlayground().fold(
+                onSuccess = { dto ->
+                    DomainResult.Success(dto.toDomain())
+                },
+                onFailure = { throwable ->
+                    when (throwable) {
+                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
+                        else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
+                    }
+                },
+            )
 
         override suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo> =
             source

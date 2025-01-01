@@ -1,12 +1,17 @@
 package com.happy.friendogly.presentation.ui.playground.action
 
+import com.happy.friendogly.presentation.ui.playground.model.MyPlayground
 import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.naver.maps.geometry.LatLng
 
 sealed interface PlaygroundMapAction {
     data class MakePlaygrounds(
-        val myPlayground: Playground?,
+        val myPlayground: MyPlayground?,
         val nearPlaygrounds: List<Playground>,
+    ) : PlaygroundMapAction
+
+    data class MakeMyPlayground(
+        val myPlayground: MyPlayground,
     ) : PlaygroundMapAction
 
     data object RegisterMyPlayground : PlaygroundMapAction

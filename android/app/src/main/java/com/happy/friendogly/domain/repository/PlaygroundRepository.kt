@@ -24,7 +24,14 @@ interface PlaygroundRepository {
 
     suspend fun getPetExistence(): Result<PetExistence>
 
-    suspend fun getPlaygrounds(): Result<List<Playground>>
+    suspend fun getPlaygrounds(
+        startLatitude: Double,
+        endLatitude: Double,
+        startLongitude: Double,
+        endLongitude: Double,
+    ): Result<List<Playground>>
+
+    suspend fun getMyPlayground(): DomainResult<MyPlayground, DataError.Network>
 
     suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo>
 

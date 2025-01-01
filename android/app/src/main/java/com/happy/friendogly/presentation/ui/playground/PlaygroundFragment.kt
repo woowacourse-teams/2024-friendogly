@@ -47,6 +47,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToCheckPetExistence
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLeavePlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundSummarySnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar
@@ -66,6 +67,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeBottomSheetBehavior
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakePlaygrounds
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
@@ -77,6 +79,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigate
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToStateMessage
 import com.happy.friendogly.presentation.ui.playground.adapter.PetDetailAdapter
 import com.happy.friendogly.presentation.ui.playground.adapter.PetSummaryAdapter
+import com.happy.friendogly.presentation.ui.playground.model.MyPlayground
 import com.happy.friendogly.presentation.ui.playground.model.Playground
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationReceiver
 import com.happy.friendogly.presentation.ui.playground.service.PlaygroundLocationService
@@ -321,12 +324,15 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             if (currentState is PlaygroundUiState.RegisteringPlayground) {
                 currentState.circleOverlay.center = map.cameraPosition.target
             }
+
+            viewModel.updateContentBounds(contentBounds = map.contentBounds)
         }
 
         map.addOnCameraIdleListener {
             val currentState = viewModel.uiState.value
             if (currentState is PlaygroundUiState.RegisteringPlayground) {
                 viewModel.updateCameraIdle(cameraIdle = true)
+//                viewModel.updateContentBounds(contentBounds = map.contentBounds)
                 getAddress(map.cameraPosition.target)
             }
         }
@@ -386,6 +392,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is MakePlaygrounds -> {
                     makeMyPlayground(event.myPlayground)
                     makeNearPlaygrounds(event.nearPlaygrounds)
+                }
+
+                is MakeMyPlayground -> {
+                    makeMyPlayground(event.myPlayground)
                 }
 
                 is RegisterMyPlayground -> viewModel.registerMyPlayground(map.cameraPosition.target)
@@ -601,9 +611,9 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
         map.moveCamera(cameraUpdate)
     }
 
-    private fun makeMyPlayground(myPlayground: Playground?) {
+    private fun makeMyPlayground(myPlayground: MyPlayground?) {
         if (myPlayground != null) {
-            val marker = createMarker(playground = myPlayground)
+            val marker = createMyPlaygroundMarker(myPlayground = myPlayground)
             val circleOverlay = createCircleOverlay(position = marker.position)
             val pathOverlay = createPathOverlay(marker.position)
             viewModel.loadMyPlayground(
@@ -620,7 +630,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             nearPlaygrounds.map { playground ->
                 PlaygroundUiModel(
                     id = playground.id,
-                    marker = createMarker(playground = playground),
+                    marker = createPlaygroundMarker(playground = playground),
                     circleOverlay =
                         createCircleOverlay(
                             position =
@@ -631,17 +641,31 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                         ),
                 )
             }
-        viewModel.loadNearPlaygrounds(playgrounds)
+        viewModel.refreshNearPlaygrounds(playgrounds)
     }
 
-    private fun createMarker(playground: Playground): Marker {
+    private fun createPlaygroundMarker(playground: Playground): Marker {
         val marker = Marker()
         marker.apply {
             position = LatLng(playground.latitude, playground.longitude)
-            icon = OverlayImage.fromResource(markerIcon(playground))
+            icon = OverlayImage.fromResource(R.drawable.ic_near_playground)
             width = MARKER_DEFAULT_WIDTH
             height = MARKER_DEFAULT_HEIGHT
             clickPlaygroundMarker(id = playground.id, marker = this)
+        }
+        marker.map = map
+
+        return marker
+    }
+
+    private fun createMyPlaygroundMarker(myPlayground: MyPlayground): Marker {
+        val marker = Marker()
+        marker.apply {
+            position = LatLng(myPlayground.latitude, myPlayground.longitude)
+            icon = OverlayImage.fromResource(R.drawable.ic_my_playground)
+            width = MARKER_DEFAULT_WIDTH
+            height = MARKER_DEFAULT_HEIGHT
+            clickPlaygroundMarker(id = myPlayground.id, marker = this)
         }
         marker.map = map
 
@@ -689,9 +713,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
-
-    private fun markerIcon(playground: Playground): Int =
-        if (playground.isParticipating) R.drawable.ic_my_playground else R.drawable.ic_near_playground
 
     private fun reduceMarkerSize() {
         val recentlyClickedMarker = viewModel.recentlyClickedPlayground.value ?: return
@@ -884,6 +905,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                 is AlertFailToRegisterPlaygroundSnackbar -> R.string.playground_fail_to_register_playground
                 is AlertFailToUpdatePlaygroundArrival -> R.string.playground_fail_to_update_playground_arrival
                 is AlertFailToLeavePlaygroundSnackbar -> R.string.playground_fail_to_leave
+                is AlertFailToLoadMyPlaygroundSnackbar -> R.string.playground_fail_to_load_my_playground
                 is AlertFailToLoadPlaygroundInfoSnackbar -> R.string.playground_fail_to_load_playground_info
                 is AlertFailToLoadPlaygroundSummarySnackbar -> R.string.playground_fail_to_load_playground_summary
                 is AlertFailToJoinPlaygroundSnackbar -> R.string.playground_fail_to_join_playground

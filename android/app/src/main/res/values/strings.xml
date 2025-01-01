@@ -285,6 +285,7 @@
     <string name="playground_fail_to_register_playground">놀이터 등록에 실패했습니다!</string>
     <string name="playground_fail_to_update_playground_arrival">놀이터 도착 여부를 업데이트하지 못했습니다!</string>
     <string name="playground_fail_to_leave">놀이터 나가기에 실패했습니다!</string>
+    <string name="playground_fail_to_load_my_playground">내가 참여한 놀이터를 불러오지 못했습니다!</string>
     <string name="playground_fail_to_load_playground_info">놀이터 정보를 불러오지 못했습니다!</string>
     <string name="playground_fail_to_load_playground_summary">놀이터 요약 정보를 불러오지 못했습니다!</string>
     <string name="playground_fail_to_join_playground">놀이터 참여하기에 실패했습니다!</string>
