@@ -11,6 +11,7 @@ import com.happy.friendogly.data.source.KakaoLoginDataSource
 import com.happy.friendogly.data.source.MemberDataSource
 import com.happy.friendogly.data.source.MessagingDataSource
 import com.happy.friendogly.data.source.MyClubDataSource
+import com.happy.friendogly.data.source.OnboardingDataSource
 import com.happy.friendogly.data.source.PetDataSource
 import com.happy.friendogly.data.source.PlaygroundDataSource
 import com.happy.friendogly.data.source.RecentPetsDataSource
@@ -20,6 +21,7 @@ import com.happy.friendogly.firebase.source.MessagingDataSourceImpl
 import com.happy.friendogly.kakao.source.KakaoLoginDataSourceImpl
 import com.happy.friendogly.local.source.AddressDataSourceImpl
 import com.happy.friendogly.local.source.AlarmSettingDataSourceImpl
+import com.happy.friendogly.local.source.OnboardingDataSourceImpl
 import com.happy.friendogly.local.source.RecentPetsDataSourceImpl
 import com.happy.friendogly.local.source.TokenDataSourceImpl
 import com.happy.friendogly.remote.source.AlamTokenDataSourceImpl
@@ -104,4 +106,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsRecentPetsDataSource(dataSourceImpl: RecentPetsDataSourceImpl): RecentPetsDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindOnboardingDataSource(dataSourceImpl: OnboardingDataSourceImpl): OnboardingDataSource
 }

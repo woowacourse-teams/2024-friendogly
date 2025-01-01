@@ -11,6 +11,7 @@ import com.happy.friendogly.data.repository.KakaoLoginRepositoryImpl
 import com.happy.friendogly.data.repository.MemberRepositoryImpl
 import com.happy.friendogly.data.repository.MessagingRepositoryImpl
 import com.happy.friendogly.data.repository.MyClubRepositoryImpl
+import com.happy.friendogly.data.repository.OnboardingRepositoryImpl
 import com.happy.friendogly.data.repository.PetRepositoryImpl
 import com.happy.friendogly.data.repository.PlaygroundRepositoryImpl
 import com.happy.friendogly.data.repository.RecentPetsRepositoryImpl
@@ -28,6 +29,7 @@ import com.happy.friendogly.domain.repository.KakaoLoginRepository
 import com.happy.friendogly.domain.repository.MemberRepository
 import com.happy.friendogly.domain.repository.MessagingRepository
 import com.happy.friendogly.domain.repository.MyClubRepository
+import com.happy.friendogly.domain.repository.OnboardingRepository
 import com.happy.friendogly.domain.repository.PetRepository
 import com.happy.friendogly.domain.repository.PlaygroundRepository
 import com.happy.friendogly.domain.repository.RecentPetsRepository
@@ -110,4 +112,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsRecentPetsRepository(repositoryImpl: RecentPetsRepositoryImpl): RecentPetsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOnboardingRepository(repositoryImpl: OnboardingRepositoryImpl): OnboardingRepository
 }
