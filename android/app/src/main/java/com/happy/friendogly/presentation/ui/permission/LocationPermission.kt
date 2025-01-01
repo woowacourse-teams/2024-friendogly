@@ -105,6 +105,26 @@ class LocationPermission private constructor(
             },
         )
 
+    private fun AppCompatActivity.createGPSDialog(): DialogFragment =
+        DefaultCoralAlertDialog(
+            alertDialogModel =
+                AlertDialogModel(
+                    getString(R.string.location_gps_dialog_title),
+                    getString(R.string.location_gps_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
+            clickToNegative = {
+                isPermitted(false)
+                analyticsHelper.logPermissionLocationDenied()
+            },
+            clickToPositive = {
+                val intent =
+                    Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                settingStartActivity.launch(intent)
+            },
+        )
+
     private fun Fragment.createDialog(): DialogFragment =
         DefaultCoralAlertDialog(
             alertDialogModel =
@@ -125,6 +145,26 @@ class LocationPermission private constructor(
             },
         )
 
+    private fun Fragment.createGPSDialog(): DialogFragment =
+        DefaultCoralAlertDialog(
+            alertDialogModel =
+                AlertDialogModel(
+                    getString(R.string.location_gps_dialog_title),
+                    getString(R.string.location_gps_dialog_body),
+                    getString(R.string.permission_cancel),
+                    getString(R.string.permission_go_setting),
+                ),
+            clickToNegative = {
+                isPermitted(false)
+                analyticsHelper.logPermissionLocationDenied()
+            },
+            clickToPositive = {
+                val intent =
+                    Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                settingStartActivity.launch(intent)
+            },
+        )
+
     override fun createAlarmDialog(): DialogFragment {
         val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
         return if (lifecycleOwner is AppCompatActivity) {
@@ -132,6 +172,17 @@ class LocationPermission private constructor(
         } else {
             (lifecycleOwner as Fragment).createDialog()
         }
+    }
+
+    override fun createGPSDialog(): DialogFragment {
+        val lifecycleOwner = lifecycleOwnerRef.get() ?: error("$lifecycleOwnerRef is null")
+        return if (lifecycleOwner is AppCompatActivity) {
+            lifecycleOwner.createGPSDialog()
+        } else {
+            (lifecycleOwner as Fragment).createGPSDialog()
+        }
+
+        println("createGPSDialog")
     }
 
     override fun shouldShowRequestPermissionRationale(): Boolean {
