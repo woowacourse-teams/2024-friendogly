@@ -2,9 +2,12 @@ package com.happy.friendogly.playground.controller;
 
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
+import com.happy.friendogly.playground.domain.Location;
+import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -25,11 +28,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/playgrounds")
 public class PlaygroundController {
+
+    private static final String MIN_KOREA_LATITUDE = "33.0637";
+    private static final String MAX_KOREA_LATITUDE = "43.0042";
+    private static final String MIN_KOREA_LONGITUDE = "124.1104";
+    private static final String MAX_KOREA_LONGITUDE = "131.4220";
 
     private final PlaygroundCommandService playgroundCommandService;
     private final PlaygroundQueryService playgroundQueryService;
@@ -64,8 +73,24 @@ public class PlaygroundController {
     }
 
     @GetMapping("/locations")
-    public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocation(@Auth Long memberId) {
-        return ApiResponse.ofSuccess(playgroundQueryService.findLocations(memberId));
+    public ApiResponse<List<FindPlaygroundLocationResponse>> findAllLocations(
+            @Auth Long memberId,
+            @RequestParam(defaultValue = MIN_KOREA_LATITUDE) double startLatitude,
+            @RequestParam(defaultValue = MAX_KOREA_LATITUDE) double endLatitude,
+            @RequestParam(defaultValue = MIN_KOREA_LONGITUDE) double startLongitude,
+            @RequestParam(defaultValue = MAX_KOREA_LONGITUDE) double endLongitude
+    ) {
+        List<FindPlaygroundLocationResponse> dummy = List.of(
+                new FindPlaygroundLocationResponse(new Playground(new Location(37.5173316, 127.101161)), false),
+                new FindPlaygroundLocationResponse(new Playground(new Location(37.5143316, 127.131161)), true)
+        );
+        return ApiResponse.ofSuccess(dummy);
+    }
+
+    @GetMapping("/locations/mine")
+    public ApiResponse<FindMyPlaygroundLocation> findMyLocation(@Auth Long memberId) {
+        FindMyPlaygroundLocation dummy = new FindMyPlaygroundLocation(1L, 37.5173316, 127.101161);
+        return ApiResponse.ofSuccess(dummy);
     }
 
     @PatchMapping("/arrival")
