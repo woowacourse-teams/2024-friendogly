@@ -5,7 +5,7 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
-import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -85,8 +85,19 @@ public class PlaygroundQueryService {
         return 0;
     }
 
-    public List<FindPlaygroundLocationResponse> findLocations(Long memberId) {
-        List<Playground> playgrounds = playgroundRepository.findAll();
+    public List<FindPlaygroundLocationResponse> findLocations(
+            Long memberId,
+            double startLatitude,
+            double endLatitude,
+            double startLongitude,
+            double endLongitude
+    ) {
+        List<Playground> playgrounds = playgroundRepository.findAllByLatitudeBetweenAndLongitudeBetween(
+                startLatitude,
+                endLatitude,
+                startLongitude,
+                endLongitude
+        );
         Optional<PlaygroundMember> playgroundMember = playgroundMemberRepository.findByMemberId(memberId);
 
         if (playgroundMember.isPresent()) {
@@ -139,10 +150,10 @@ public class PlaygroundQueryService {
         return petImageUrls;
     }
 
-    public FindMyPlaygroundLocation findMyPlaygroundLocation(Long memberId) {
+    public FindMyPlaygroundLocationResponse findMyPlaygroundLocation(Long memberId) {
         PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
         Playground playground = playgroundMember.getPlayground();
-        return new FindMyPlaygroundLocation(
+        return new FindMyPlaygroundLocationResponse(
                 playground.getId(),
                 playground.getLocation().getLatitude(),
                 playground.getLocation().getLongitude()

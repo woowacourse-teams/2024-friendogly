@@ -5,6 +5,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -30,7 +31,7 @@ import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
-import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -223,8 +224,8 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
         );
 
-//        when(playgroundQueryService.findLocations(anyLong()))
-//                .thenReturn(response);
+        when(playgroundQueryService.findLocations(anyLong(),anyDouble(),anyDouble(),anyDouble(),anyDouble()))
+                .thenReturn(response);
 
         mockMvc
                 .perform(get("/playgrounds/locations")
@@ -279,7 +280,10 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
     @Test
     void findMyPlaygroundLocation() throws Exception {
 
-        FindMyPlaygroundLocation findMyPlaygroundLocation = new FindMyPlaygroundLocation(1L, 37.5173316, 127.1011661);
+        FindMyPlaygroundLocationResponse response = new FindMyPlaygroundLocationResponse(1L, 37.5173316, 127.1011661);
+
+        when(playgroundQueryService.findMyPlaygroundLocation(anyLong()))
+                .thenReturn(response);
 
         mockMvc
                 .perform(get("/playgrounds/locations/mine")
