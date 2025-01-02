@@ -9,6 +9,7 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -161,6 +162,21 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
 
         // then
         assertThat(response.get(0).isParticipating()).isEqualTo(false);
+    }
+
+    @DisplayName("내가 참여한 놀이터의 위치를 조회할 수 있다.")
+    @Test
+    void findMyPlaygroundLocations() {
+        // given
+        Member member = saveMember("member1");
+        Playground playground = savePlayground();
+        savePlaygroundMember(playground, member);
+
+        // when
+        FindMyPlaygroundLocation myPlaygroundLocation = playgroundQueryService.findMyPlaygroundLocation(member.getId());
+
+        // then
+        assertThat(myPlaygroundLocation.id()).isEqualTo(playground.getId());
     }
 
     @DisplayName("놀이터의 요약정보를 조회한다.")
