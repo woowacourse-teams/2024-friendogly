@@ -1,8 +1,6 @@
 package com.happy.friendogly.presentation.ui.playground.viewmodel
 
 import android.location.Location
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -96,6 +94,7 @@ import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -385,13 +384,11 @@ class PlaygroundViewModel
                         updateUiState(PlaygroundUiState.Loading)
                         _playgroundInfo.value = playgroundInfo.toPresentation()
                         insertRecentPet(playgroundInfo.playgroundPetDetails)
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            {
-                                _mapAction.value = ChangeBottomSheetBehavior
-                                updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
-                            },
-                            ANIMATE_DURATION_MILLIS,
-                        )
+                        viewModelScope.launch {
+                            delay(ANIMATE_DURATION_MILLIS)
+                            _mapAction.value = ChangeBottomSheetBehavior
+                            updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
+                        }
                     }.onFailure {
                         _alertAction.emit(AlertFailToLoadPlaygroundInfoSnackbar)
                     }
@@ -564,12 +561,10 @@ class PlaygroundViewModel
 
         fun refreshNearPlaygrounds(markers: List<PlaygroundUiModel>) {
             nearPlaygrounds.value = markers
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    updateUiState(PlaygroundUiState.FindingPlayground())
-                },
-                ANIMATE_DURATION_MILLIS,
-            )
+            viewModelScope.launch {
+                delay(ANIMATE_DURATION_MILLIS)
+                updateUiState(PlaygroundUiState.FindingPlayground())
+            }
         }
 
         fun showMyPlayground(map: NaverMap) {

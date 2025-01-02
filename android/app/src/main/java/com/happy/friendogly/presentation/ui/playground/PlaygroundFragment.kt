@@ -13,8 +13,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +23,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -112,6 +111,8 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.cos
@@ -332,7 +333,6 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             val currentState = viewModel.uiState.value
             if (currentState is PlaygroundUiState.RegisteringPlayground) {
                 viewModel.updateCameraIdle(cameraIdle = true)
-//                viewModel.updateContentBounds(contentBounds = map.contentBounds)
                 getAddress(map.cameraPosition.target)
             }
         }
@@ -404,12 +404,10 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
                     getAddress(map.cameraPosition.target)
 
                     binding.layoutPlaygroundRegister.showViewAnimation()
-                    Handler(Looper.getMainLooper()).postDelayed(
-                        {
-                            showHelpBalloon(textRestId = R.string.playground_register_help)
-                        },
-                        ANIMATE_DURATION_MILLIS,
-                    )
+                    lifecycleScope.launch {
+                        delay(ANIMATE_DURATION_MILLIS)
+                        showHelpBalloon(textRestId = R.string.playground_register_help)
+                    }
                 }
 
                 is HideRegisteringPlaygroundScreen -> {
@@ -565,13 +563,12 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
             val lastLocation = location ?: return@activate
             latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
             moveCameraCenterPosition(latLng)
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    map.locationTrackingMode = LocationTrackingMode.Follow
-                },
-                ANIMATE_DURATION_MILLIS,
-            )
-            viewModel.loadPlaygrounds()
+
+            lifecycleScope.launch {
+                delay(ANIMATE_DURATION_MILLIS)
+                map.locationTrackingMode = LocationTrackingMode.Follow
+                viewModel.loadPlaygrounds()
+            }
         }
     }
 
@@ -979,7 +976,7 @@ class PlaygroundFragment : Fragment(), OnMapReadyCallback {
     companion object {
         private const val PLAYGROUND_RADIUS = 150.0
         private const val MIN_ZOOM = 7.0
-        private const val DEFAULT_ZOOM = 15.0
+        private const val DEFAULT_ZOOM = 14.0
         private const val MARKER_DEFAULT_WIDTH = 96
         private const val MARKER_DEFAULT_HEIGHT = 128
         private const val MARKER_CLICKED_WIDTH = 144

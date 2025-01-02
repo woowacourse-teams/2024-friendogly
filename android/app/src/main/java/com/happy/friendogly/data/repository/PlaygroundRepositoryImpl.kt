@@ -1,6 +1,5 @@
 package com.happy.friendogly.data.repository
 
-import com.happy.friendogly.data.error.ApiExceptionDto
 import com.happy.friendogly.data.mapper.toDomain
 import com.happy.friendogly.data.source.PlaygroundDataSource
 import com.happy.friendogly.domain.DomainResult
@@ -14,6 +13,8 @@ import com.happy.friendogly.presentation.ui.playground.model.PlaygroundInfo
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundJoin
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundMessage
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundSummary
+import com.happy.friendogly.remote.error.ApiExceptionResponse
+import com.happy.friendogly.remote.mapper.toData
 import com.happy.friendogly.remote.model.request.PatchPlaygroundArrivalRequest
 import com.happy.friendogly.remote.model.request.PatchPlaygroundMessageRequest
 import com.happy.friendogly.remote.model.request.PostPlaygroundRequest
@@ -41,7 +42,11 @@ class PlaygroundRepositoryImpl
                 },
                 onFailure = { throwable ->
                     when (throwable) {
-                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ApiExceptionResponse ->
+                            DomainResult.Error(
+                                throwable.error.data.errorCode.toData().toDomain(),
+                            )
+
                         is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
@@ -65,7 +70,11 @@ class PlaygroundRepositoryImpl
                 },
                 onFailure = { throwable ->
                     when (throwable) {
-                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ApiExceptionResponse ->
+                            DomainResult.Error(
+                                throwable.error.data.errorCode.toData().toDomain(),
+                            )
+
                         is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
@@ -98,7 +107,11 @@ class PlaygroundRepositoryImpl
                 },
                 onFailure = { throwable ->
                     when (throwable) {
-                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ApiExceptionResponse ->
+                            DomainResult.Error(
+                                throwable.error.data.errorCode.toData().toDomain(),
+                            )
+
                         is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         else -> DomainResult.Error(DataError.Network.SERVER_ERROR)
@@ -123,7 +136,11 @@ class PlaygroundRepositoryImpl
                 },
                 onFailure = { throwable ->
                     when (throwable) {
-                        is ApiExceptionDto -> DomainResult.Error(throwable.error.data.errorCode.toDomain())
+                        is ApiExceptionResponse ->
+                            DomainResult.Error(
+                                throwable.error.data.errorCode.toData().toDomain(),
+                            )
+
                         is ConnectException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         is UnknownHostException -> DomainResult.Error(DataError.Network.NO_INTERNET)
                         else -> DomainResult.Error(DataError.Network.SERVER_ERROR)

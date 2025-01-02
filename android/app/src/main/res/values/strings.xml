@@ -262,7 +262,7 @@
     <string name="playground_location_tracking">실시간으로 위치를 추적 중입니다.</string>
     <string name="playground_information">정보</string>
     <string name="playground_description">소개</string>
-    <string name="playground_refresh">새로고침</string>
+    <string name="playground_refresh">현 지도에서 조회</string>
     <string name="playground_join_complete">놀이터에 참여했어요!</string>
     <string name="playground_leave_my_playground">놀이터에서 나갔습니다!</string>
     <string name="playground_auto_leave_my_playground">오랜 시간 자리를 비워 자동으로 놀이터에서 나갔습니다!</string>
