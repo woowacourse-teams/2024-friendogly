@@ -9,7 +9,7 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
-import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -113,12 +113,41 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         Playground playground = savePlayground(expectedLatitude, expectedLongitude);
 
         // when
-        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(1L);
+        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(
+                1L,
+                37.0,
+                38.0,
+                127.0,
+                128.0
+        );
 
         // then
         assertAll(
                 () -> assertThat(response.get(0).latitude()).isEqualTo(expectedLatitude),
                 () -> assertThat(response.get(0).longitude()).isEqualTo(expectedLongitude)
+        );
+    }
+
+    @DisplayName("특정 범위내의 놀이터들의 위치를 조회할 수 있다.")
+    @Test
+    void findLocationsWithRange() {
+        // given
+        Playground insidePlayground = savePlayground(37.5173316, 127.1011661);
+        Playground outsidePlayground = savePlayground(38.5173316, 128.1011661);
+
+        // when
+        List<FindPlaygroundLocationResponse> playgroundsLocation = playgroundQueryService.findLocations(
+                1L,
+                37.0,
+                38.0,
+                127.0,
+                128.0
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(playgroundsLocation).hasSize(1),
+                () -> assertThat(playgroundsLocation.get(0).id()).isEqualTo(insidePlayground.getId())
         );
     }
 
@@ -142,7 +171,13 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         );
 
         // when
-        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(member1.getId());
+        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(
+                member1.getId(),
+                37.0,
+                38.0,
+                127.0,
+                128.0
+        );
 
         // then
         assertThat(response.get(0).isParticipating()).isEqualTo(true);
@@ -158,7 +193,13 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         savePlayground();
 
         // when
-        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(member1.getId());
+        List<FindPlaygroundLocationResponse> response = playgroundQueryService.findLocations(
+                member1.getId(),
+                37.0,
+                38.0,
+                127.0,
+                128.0
+        );
 
         // then
         assertThat(response.get(0).isParticipating()).isEqualTo(false);
@@ -173,7 +214,7 @@ class PlaygroundQueryServiceTest extends PlaygroundServiceTest {
         savePlaygroundMember(playground, member);
 
         // when
-        FindMyPlaygroundLocation myPlaygroundLocation = playgroundQueryService.findMyPlaygroundLocation(member.getId());
+        FindMyPlaygroundLocationResponse myPlaygroundLocation = playgroundQueryService.findMyPlaygroundLocation(member.getId());
 
         // then
         assertThat(myPlaygroundLocation.id()).isEqualTo(playground.getId());

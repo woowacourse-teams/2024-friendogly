@@ -1,6 +1,6 @@
 package com.happy.friendogly.playground.dto.response;
 
-public record FindMyPlaygroundLocation(
+public record FindMyPlaygroundLocationResponse(
         Long id,
         double latitude,
         double longitude

@@ -2,12 +2,10 @@ package com.happy.friendogly.playground.controller;
 
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
-import com.happy.friendogly.playground.domain.Location;
-import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
-import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -80,15 +78,18 @@ public class PlaygroundController {
             @RequestParam(defaultValue = MIN_KOREA_LONGITUDE) double startLongitude,
             @RequestParam(defaultValue = MAX_KOREA_LONGITUDE) double endLongitude
     ) {
-        List<FindPlaygroundLocationResponse> dummy = List.of(
-                new FindPlaygroundLocationResponse(new Playground(new Location(37.5173316, 127.101161)), false),
-                new FindPlaygroundLocationResponse(new Playground(new Location(37.5143316, 127.131161)), true)
+        List<FindPlaygroundLocationResponse> findPlaygroundLocationResponses = playgroundQueryService.findLocations(
+                memberId,
+                startLatitude,
+                endLatitude,
+                startLongitude,
+                endLongitude
         );
-        return ApiResponse.ofSuccess(dummy);
+        return ApiResponse.ofSuccess(findPlaygroundLocationResponses);
     }
 
     @GetMapping("/locations/mine")
-    public ApiResponse<FindMyPlaygroundLocation> findMyLocation(@Auth Long memberId) {
+    public ApiResponse<FindMyPlaygroundLocationResponse> findMyLocation(@Auth Long memberId) {
         return ApiResponse.ofSuccess(playgroundQueryService.findMyPlaygroundLocation(memberId));
     }
 
