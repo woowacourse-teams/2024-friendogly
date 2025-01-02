@@ -4,6 +4,7 @@ import android.content.Context
 import com.happy.friendogly.local.di.AddressModule
 import com.happy.friendogly.local.di.AlarmTokenModule
 import com.happy.friendogly.local.di.ChatAlarmModule
+import com.happy.friendogly.local.di.OnboardingModule
 import com.happy.friendogly.local.di.PlaygroundAlarmModule
 import com.happy.friendogly.local.di.TokenManager
 import dagger.Module
@@ -45,4 +46,10 @@ object DataStoreModule {
     fun providesPlaygroundAlarmModule(
         @ApplicationContext appContext: Context,
     ): PlaygroundAlarmModule = PlaygroundAlarmModule(appContext)
+
+    @Provides
+    @Singleton
+    fun providesOnboardingModule(
+        @ApplicationContext appContext: Context,
+    ): OnboardingModule = OnboardingModule(appContext)
 }

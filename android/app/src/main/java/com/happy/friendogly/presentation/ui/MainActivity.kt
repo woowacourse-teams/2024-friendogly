@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.happy.friendogly.R
 import com.happy.friendogly.databinding.ActivityMainBinding
+import com.happy.friendogly.domain.usecase.GetOnboardingShownUseCase
+import com.happy.friendogly.domain.usecase.SetOnboardingShownUseCase
 import com.happy.friendogly.firebase.analytics.AnalyticsHelper
 import com.happy.friendogly.presentation.base.BaseActivity
 import com.happy.friendogly.presentation.ui.chatlist.ChatListFragment
@@ -19,6 +22,7 @@ import com.happy.friendogly.presentation.ui.permission.MultiPermission
 import com.happy.friendogly.presentation.ui.petdetail.PetDetailActivity
 import com.happy.friendogly.presentation.ui.petdetail.PetsDetail
 import com.happy.friendogly.presentation.ui.playground.PlaygroundFragment
+import com.happy.friendogly.presentation.ui.playground.onboarding.OnboardingActivity
 import com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingActivity
 import com.happy.friendogly.presentation.ui.profilesetting.model.Profile
 import com.happy.friendogly.presentation.ui.recentpet.RecentPetActivity
@@ -31,6 +35,7 @@ import com.happy.friendogly.presentation.utils.logMyClubClick
 import com.happy.friendogly.presentation.utils.logMyPageFragmentSwitched
 import com.happy.friendogly.presentation.utils.logPlaygroundFragmentSwitched
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +44,12 @@ class MainActivity :
     MainActivityActionHandler {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
+    lateinit var setOnboardingShownUseCase: SetOnboardingShownUseCase
+
+    @Inject
+    lateinit var getOnboardingShownUseCase: GetOnboardingShownUseCase
 
     private lateinit var permission: MultiPermission
 
@@ -83,17 +94,20 @@ class MainActivity :
                         ClubListFragment.TAG,
                     )
 
-                R.id.playgroundFragment ->
+                R.id.playgroundFragment -> {
+                    showOnboarding()
                     switchFragment(
                         PlaygroundFragment::class.java,
                         PlaygroundFragment.TAG,
                     )
+                }
 
-                R.id.chatListFragment ->
+                R.id.chatListFragment -> {
                     switchFragment(
                         ChatListFragment::class.java,
                         ChatListFragment.TAG,
                     )
+                }
 
                 R.id.myPageFragment ->
                     switchFragment(
@@ -102,6 +116,15 @@ class MainActivity :
                     )
 
                 else -> false
+            }
+        }
+    }
+
+    private fun showOnboarding() {
+        lifecycleScope.launch {
+            if (!getOnboardingShownUseCase().getOrDefault(false)) {
+                startActivity(Intent(this@MainActivity, OnboardingActivity::class.java))
+                setOnboardingShownUseCase(true)
             }
         }
     }
