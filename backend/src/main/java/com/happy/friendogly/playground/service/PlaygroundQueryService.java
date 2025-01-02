@@ -5,6 +5,7 @@ import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.playground.domain.Playground;
 import com.happy.friendogly.playground.domain.PlaygroundMember;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocation;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -136,5 +137,15 @@ public class PlaygroundQueryService {
             return petImageUrls.subList(0, MAX_PET_PREVIEW_IMAGE_COUNT);
         }
         return petImageUrls;
+    }
+
+    public FindMyPlaygroundLocation findMyPlaygroundLocation(Long memberId) {
+        PlaygroundMember playgroundMember = playgroundMemberRepository.getByMemberId(memberId);
+        Playground playground = playgroundMember.getPlayground();
+        return new FindMyPlaygroundLocation(
+                playground.getId(),
+                playground.getLocation().getLatitude(),
+                playground.getLocation().getLongitude()
+        );
     }
 }

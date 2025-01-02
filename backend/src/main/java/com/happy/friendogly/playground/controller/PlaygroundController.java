@@ -89,8 +89,7 @@ public class PlaygroundController {
 
     @GetMapping("/locations/mine")
     public ApiResponse<FindMyPlaygroundLocation> findMyLocation(@Auth Long memberId) {
-        FindMyPlaygroundLocation dummy = new FindMyPlaygroundLocation(1L, 37.5173316, 127.101161);
-        return ApiResponse.ofSuccess(dummy);
+        return ApiResponse.ofSuccess(playgroundQueryService.findMyPlaygroundLocation(memberId));
     }
 
     @PatchMapping("/arrival")
