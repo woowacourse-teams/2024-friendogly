@@ -17,7 +17,7 @@ import com.happy.friendogly.member.dto.request.UpdateMemberRequest;
 import com.happy.friendogly.member.dto.response.SaveMemberResponse;
 import com.happy.friendogly.member.dto.response.UpdateMemberResponse;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.utils.UuidGenerator;
 import org.springframework.stereotype.Service;

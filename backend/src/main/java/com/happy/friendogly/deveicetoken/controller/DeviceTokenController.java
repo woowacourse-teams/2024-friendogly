@@ -1,11 +1,11 @@
-package com.happy.friendogly.notification.controller;
+package com.happy.friendogly.deveicetoken.controller;
 
 
 import com.happy.friendogly.auth.Auth;
 import com.happy.friendogly.common.ApiResponse;
-import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
-import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
-import com.happy.friendogly.notification.service.DeviceTokenCommandService;
+import com.happy.friendogly.deveicetoken.dto.request.UpdateDeviceTokenRequest;
+import com.happy.friendogly.deveicetoken.dto.response.UpdateDeviceTokenResponse;
+import com.happy.friendogly.deveicetoken.service.DeviceTokenCommandService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

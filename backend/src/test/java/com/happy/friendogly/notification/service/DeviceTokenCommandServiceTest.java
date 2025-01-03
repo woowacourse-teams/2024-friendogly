@@ -2,9 +2,10 @@ package com.happy.friendogly.notification.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
+import com.happy.friendogly.deveicetoken.service.DeviceTokenCommandService;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.notification.domain.DeviceToken;
-import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
+import com.happy.friendogly.deveicetoken.dto.request.UpdateDeviceTokenRequest;
 import com.happy.friendogly.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

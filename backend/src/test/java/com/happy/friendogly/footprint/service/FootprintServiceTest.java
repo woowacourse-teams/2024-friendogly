@@ -4,11 +4,11 @@ import static com.happy.friendogly.footprint.domain.WalkStatus.AFTER;
 import static com.happy.friendogly.footprint.domain.WalkStatus.BEFORE;
 import static com.happy.friendogly.footprint.domain.WalkStatus.ONGOING;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
 import com.happy.friendogly.footprint.domain.Footprint;
 import com.happy.friendogly.footprint.domain.Location;
 import com.happy.friendogly.member.domain.Member;
-import com.happy.friendogly.notification.domain.DeviceToken;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
 import com.happy.friendogly.pet.domain.SizeType;

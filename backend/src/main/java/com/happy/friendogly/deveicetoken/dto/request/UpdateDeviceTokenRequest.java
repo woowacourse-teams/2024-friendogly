@@ -1,4 +1,4 @@
-package com.happy.friendogly.notification.dto.request;
+package com.happy.friendogly.deveicetoken.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

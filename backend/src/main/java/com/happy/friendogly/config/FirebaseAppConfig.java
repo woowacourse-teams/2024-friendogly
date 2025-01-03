@@ -6,6 +6,7 @@ import static com.happy.friendogly.common.ErrorCode.INVALID_FIREBASE_CREDENTIALS
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.happy.friendogly.exception.FriendoglyException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,4 +61,8 @@ public class FirebaseAppConfig {
         }
     }
 
+    @Bean
+    public FirebaseMessaging firebaseMessaging(){
+        return FirebaseMessaging.getInstance(firebaseApp());
+    }
 }

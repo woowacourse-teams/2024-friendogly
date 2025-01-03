@@ -1,10 +1,10 @@
-package com.happy.friendogly.notification.service;
+package com.happy.friendogly.deveicetoken.service;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
+import com.happy.friendogly.deveicetoken.dto.request.UpdateDeviceTokenRequest;
+import com.happy.friendogly.deveicetoken.dto.response.UpdateDeviceTokenResponse;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.domain.DeviceToken;
-import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
-import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

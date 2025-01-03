@@ -19,4 +19,15 @@ public interface NotificationService {
             NotificationType notificationType,
             List<String> receiverTokens
     );
+
+    void sendNotificationToTopic(
+            String title,
+            String content,
+            NotificationType notificationType,
+            String topic
+    );
+
+    void subscribeTopic(List<String> deviceToken, String topic);
+
+    void unsubscribeTopic(List<String> deviceToken, String topic);
 }

@@ -5,7 +5,7 @@ import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
 import com.happy.friendogly.club.repository.ClubRepository;
 import com.happy.friendogly.footprint.repository.FootprintRepository;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.repository.DeviceTokenRepository;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.pet.repository.PetRepository;
 import com.happy.friendogly.playground.repository.PlaygroundMemberRepository;
 import com.happy.friendogly.playground.repository.PlaygroundRepository;
