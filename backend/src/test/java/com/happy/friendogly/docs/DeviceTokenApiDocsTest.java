@@ -14,10 +14,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
-import com.happy.friendogly.notification.controller.DeviceTokenController;
-import com.happy.friendogly.notification.dto.request.UpdateDeviceTokenRequest;
-import com.happy.friendogly.notification.dto.response.UpdateDeviceTokenResponse;
-import com.happy.friendogly.notification.service.DeviceTokenCommandService;
+import com.happy.friendogly.deveicetoken.controller.DeviceTokenController;
+import com.happy.friendogly.deveicetoken.dto.request.UpdateDeviceTokenRequest;
+import com.happy.friendogly.deveicetoken.dto.response.UpdateDeviceTokenResponse;
+import com.happy.friendogly.deveicetoken.service.DeviceTokenCommandService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

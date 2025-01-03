@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.playground.domain.Location;
@@ -31,6 +32,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
     void save() {
         // given
         Member member = saveMember("김도선");
+        deviceTokenRepository.save(new DeviceToken(member, "deviceToken1"));
         SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
 
         // when
@@ -48,6 +50,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
     void autoParticipatePlaygroundWhenCreate() {
         // given
         Member member = saveMember("김도선");
+        deviceTokenRepository.save(new DeviceToken(member, "deviceToken1"));
         SavePlaygroundRequest request = new SavePlaygroundRequest(37.5173316, 127.1011661);
 
         // when
@@ -137,6 +140,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
     void leavePlayground() {
         // given
         Member member = saveMember("김도선");
+        deviceTokenRepository.save(new DeviceToken(member, "deviceToken1"));
         Playground playground = savePlayground();
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
                 new PlaygroundMember(
@@ -158,6 +162,7 @@ class PlaygroundCommandServiceTest extends PlaygroundServiceTest {
     void deletePlaygroundWhenLeavePlaygroundAndNoMemberInPlayground() {
         // given
         Member member = saveMember("김도선");
+        deviceTokenRepository.save(new DeviceToken(member, "deviceToken1"));
         Playground playground = savePlayground();
         PlaygroundMember playgroundMember = playgroundMemberRepository.save(
                 new PlaygroundMember(

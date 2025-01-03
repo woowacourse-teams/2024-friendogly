@@ -4,9 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.happy.friendogly.chatroom.domain.ChatRoom;
 import com.happy.friendogly.chatroom.repository.ChatRoomRepository;
+import com.happy.friendogly.deveicetoken.domain.DeviceToken;
+import com.happy.friendogly.deveicetoken.repository.DeviceTokenRepository;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.member.repository.MemberRepository;
-import com.happy.friendogly.notification.domain.DeviceToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

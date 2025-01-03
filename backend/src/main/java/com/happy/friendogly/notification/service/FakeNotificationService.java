@@ -29,4 +29,19 @@ public class FakeNotificationService implements NotificationService {
     ) {
 
     }
+
+    @Override
+    public void sendNotificationToTopic(String title, String content, NotificationType notificationType, String topic) {
+
+    }
+
+    @Override
+    public void subscribeTopic(List<String> deviceToken, String topic) {
+
+    }
+
+    @Override
+    public void unsubscribeTopic(List<String> deviceToken, String topic) {
+
+    }
 }
