@@ -240,8 +240,8 @@ class PlaygroundViewModel
         private fun checkPetExistence() {
             analyticsHelper.logCheckPetExistenceClicked()
             viewModelScope.launch {
-                getPetExistenceUseCase()
-                    .onSuccess { petExistence ->
+                getPetExistenceUseCase().fold(
+                    onSuccess = { petExistence ->
                         analyticsHelper.logPetExistence(petExistence.isExistPet)
                         if (!petExistence.isExistPet) {
                             _alertAction.emit(AlertHasNotPetDialog)
@@ -250,9 +250,11 @@ class PlaygroundViewModel
                             updateUiState(PlaygroundUiState.RegisteringPlayground())
                             _mapAction.value = ShowRegisteringPlaygroundScreen
                         }
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToCheckPetExistence)
-                    }
+                    },
+                )
             }
         }
 
@@ -296,12 +298,12 @@ class PlaygroundViewModel
         private fun loadPlaygroundSummary(id: Long) {
             viewModelScope.launch {
                 getPlaygroundSummaryUseCase(id)
-                    .onSuccess { playgroundSummary ->
+                    .fold(onSuccess = { playgroundSummary ->
                         _playgroundSummary.value = playgroundSummary
                         updateUiState(PlaygroundUiState.ViewingPlaygroundSummary)
-                    }.onFailure {
+                    }, onError = {
                         _alertAction.emit(AlertFailToLoadPlaygroundSummarySnackbar)
-                    }
+                    })
             }
         }
 
@@ -379,19 +381,16 @@ class PlaygroundViewModel
 
         private fun loadPlaygroundInfo(id: Long) {
             viewModelScope.launch {
-                getPlaygroundInfoUseCase(id)
-                    .onSuccess { playgroundInfo ->
-                        updateUiState(PlaygroundUiState.Loading)
-                        _playgroundInfo.value = playgroundInfo.toPresentation()
-                        insertRecentPet(playgroundInfo.playgroundPetDetails)
-                        viewModelScope.launch {
-                            delay(ANIMATE_DURATION_MILLIS)
-                            _mapAction.value = ChangeBottomSheetBehavior
-                            updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
-                        }
-                    }.onFailure {
-                        _alertAction.emit(AlertFailToLoadPlaygroundInfoSnackbar)
+                getPlaygroundInfoUseCase(id).fold(onSuccess = { playgroundInfo ->
+                    updateUiState(PlaygroundUiState.Loading)
+                    _playgroundInfo.value = playgroundInfo.toPresentation()
+                    insertRecentPet(playgroundInfo.playgroundPetDetails)
+                    viewModelScope.launch {
+                        delay(ANIMATE_DURATION_MILLIS)
+                        _mapAction.value = ChangeBottomSheetBehavior
+                        updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
+                }, onError = { _alertAction.emit(AlertFailToLoadPlaygroundInfoSnackbar) })
             }
         }
 
@@ -422,8 +421,8 @@ class PlaygroundViewModel
                     contentsBounds.northLatitude,
                     contentsBounds.westLongitude,
                     contentsBounds.eastLongitude,
-                )
-                    .onSuccess { playgrounds ->
+                ).fold(
+                    onSuccess = { playgrounds ->
                         updateUiState(PlaygroundUiState.Loading)
                         analyticsHelper.logPlaygroundSize(playgrounds.size)
                         clearNearPlaygrounds()
@@ -431,10 +430,12 @@ class PlaygroundViewModel
                             playgrounds.filter { playground -> !playground.isParticipating }
 
                         _mapAction.value = MakePlaygrounds(null, nearPlaygrounds)
-                    }.onFailure {
+                    },
+                    onError = {
                         updateUiState(PlaygroundUiState.FindingPlayground())
                         _alertAction.emit(AlertFailToLoadPlaygroundsSnackbar)
-                    }
+                    },
+                )
             }
         }
 
@@ -518,8 +519,8 @@ class PlaygroundViewModel
                     contentsBounds.northLatitude,
                     contentsBounds.westLongitude,
                     contentsBounds.eastLongitude,
-                )
-                    .onSuccess { playgrounds ->
+                ).fold(
+                    onSuccess = { playgrounds ->
                         analyticsHelper.logPlaygroundSize(playgrounds.size)
                         updateUiState(PlaygroundUiState.Loading)
                         clearPlaygrounds()
@@ -535,10 +536,12 @@ class PlaygroundViewModel
                             playgrounds.filter { playground -> !playground.isParticipating }
 
                         _mapAction.value = MakePlaygrounds(myPlayground, nearPlaygrounds)
-                    }.onFailure {
+                    },
+                    onError = {
                         updateUiState(PlaygroundUiState.FindingPlayground())
                         _alertAction.emit(AlertFailToLoadPlaygroundsSnackbar)
-                    }
+                    },
+                )
             }
         }
 
@@ -646,36 +649,40 @@ class PlaygroundViewModel
 
         fun leavePlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         loadPlaygrounds()
                         _alertAction.emit(AlertLeaveMyPlaygroundSnackbar)
-                    }.onFailure {
-                        _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                    onError = { _alertAction.emit(AlertFailToLeavePlaygroundSnackbar) },
+                )
             }
         }
 
         fun leaveAndRegisterPlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         _mapAction.value = RegisterMyPlayground
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                )
             }
         }
 
         fun leaveAndJoinPlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         updateUiState(PlaygroundUiState.Loading)
                         joinPlayground()
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                )
             }
         }
 

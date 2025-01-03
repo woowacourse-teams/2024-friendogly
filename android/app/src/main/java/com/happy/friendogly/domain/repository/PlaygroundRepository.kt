@@ -22,24 +22,24 @@ interface PlaygroundRepository {
         longitude: Double,
     ): DomainResult<PlaygroundArrival, DataError.Network>
 
-    suspend fun getPetExistence(): Result<PetExistence>
+    suspend fun getPetExistence(): DomainResult<PetExistence, DataError.Network>
 
     suspend fun getPlaygrounds(
         startLatitude: Double,
         endLatitude: Double,
         startLongitude: Double,
         endLongitude: Double,
-    ): Result<List<Playground>>
+    ): DomainResult<List<Playground>, DataError.Network>
 
     suspend fun getMyPlayground(): DomainResult<MyPlayground, DataError.Network>
 
-    suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfo>
+    suspend fun getPlaygroundInfo(id: Long): DomainResult<PlaygroundInfo, DataError.Network>
 
-    suspend fun getPlaygroundSummary(playgroundId: Long): Result<PlaygroundSummary>
+    suspend fun getPlaygroundSummary(playgroundId: Long): DomainResult<PlaygroundSummary, DataError.Network>
 
     suspend fun postPlaygroundJoin(playgroundId: Long): DomainResult<PlaygroundJoin, DataError.Network>
 
-    suspend fun deletePlaygroundLeave(): Result<Unit>
+    suspend fun deletePlaygroundLeave(): DomainResult<Unit, DataError.Network>
 
-    suspend fun patchPlaygroundMessage(message: String): Result<PlaygroundMessage>
+    suspend fun patchPlaygroundMessage(message: String): DomainResult<PlaygroundMessage, DataError.Network>
 }
