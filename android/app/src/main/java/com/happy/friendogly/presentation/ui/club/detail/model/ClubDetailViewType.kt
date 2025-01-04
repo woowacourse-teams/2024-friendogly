@@ -5,11 +5,13 @@ enum class ClubDetailViewType {
     END_RECRUITMENT,
     PARTICIPATED,
     MINE,
+    NO_AVAILABLE_PET,
     ;
 
     companion object {
         fun from(
             isMine: Boolean,
+            isOpenState:  Boolean,
             isMyParticipated: Boolean,
             canParticipation: Boolean,
             isUserPetEmpty: Boolean,
@@ -20,6 +22,8 @@ enum class ClubDetailViewType {
                 PARTICIPATED
             } else if (canParticipation or isUserPetEmpty) {
                 RECRUITMENT
+            } else if (!canParticipation && isOpenState) {
+                NO_AVAILABLE_PET
             } else {
                 END_RECRUITMENT
             }

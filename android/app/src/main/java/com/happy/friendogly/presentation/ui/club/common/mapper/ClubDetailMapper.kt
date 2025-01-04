@@ -1,6 +1,7 @@
 package com.happy.friendogly.presentation.ui.club.common.mapper
 
 import com.happy.friendogly.domain.model.ClubDetail
+import com.happy.friendogly.domain.model.ClubState
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailUiModel
 import com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailViewType
 
@@ -10,7 +11,9 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         filters = allowedGender.toGenderGroupFilters() + allowedSize.toSizeGroupFilters(),
         content = content,
         title = title,
-        petProfiles = petDetails.map { it.toPresentation() },
+        petProfiles = petDetails
+            .map { it.toPresentation() }
+            .sortedByDescending { it.isMyPet },
         userProfiles = memberDetails.map { it.toPresentation() },
         clubDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
@@ -24,6 +27,7 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         clubDetailViewType =
             ClubDetailViewType.from(
                 isMine = isMine,
+                isOpenState = status == ClubState.OPEN,
                 isMyParticipated = alreadyParticipate,
                 canParticipation = canParticipate,
                 isUserPetEmpty = isMyPetsEmpty,

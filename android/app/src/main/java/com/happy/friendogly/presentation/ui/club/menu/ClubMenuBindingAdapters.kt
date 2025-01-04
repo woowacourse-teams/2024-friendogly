@@ -11,7 +11,9 @@ fun FrameLayout.bindMyParticipation(clubDetailViewType: ClubDetailViewType) {
         when (clubDetailViewType) {
             ClubDetailViewType.RECRUITMENT,
             ClubDetailViewType.END_RECRUITMENT,
+            ClubDetailViewType.NO_AVAILABLE_PET,
             -> false
+
             ClubDetailViewType.PARTICIPATED,
             ClubDetailViewType.MINE,
             -> true
