@@ -5,6 +5,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
+import com.epages.restdocs.apispec.SimpleType;
 import com.happy.friendogly.member.domain.Member;
 import com.happy.friendogly.pet.domain.Gender;
 import com.happy.friendogly.pet.domain.Pet;
@@ -29,6 +31,7 @@ import com.happy.friendogly.playground.domain.PlaygroundMember;
 import com.happy.friendogly.playground.dto.request.SavePlaygroundRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundArrivalRequest;
 import com.happy.friendogly.playground.dto.request.UpdatePlaygroundMemberMessageRequest;
+import com.happy.friendogly.playground.dto.response.FindMyPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundDetailResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundLocationResponse;
 import com.happy.friendogly.playground.dto.response.FindPlaygroundSummaryResponse;
@@ -221,12 +224,16 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                 new FindPlaygroundLocationResponse(4L, 37.5131474, 127.1042528, false)
         );
 
-        when(playgroundQueryService.findLocations(anyLong()))
+        when(playgroundQueryService.findLocations(anyLong(),anyDouble(),anyDouble(),anyDouble(),anyDouble()))
                 .thenReturn(response);
 
         mockMvc
                 .perform(get("/playgrounds/locations")
                         .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                        .queryParam("startLatitude", "37.5131474")
+                        .queryParam("endLatitude", "37.5183316")
+                        .queryParam("startLongitude", "127.0983182")
+                        .queryParam("endLongitude", "127.1042528")
                 )
                 .andDo(document("playgrounds/findLocations",
                         getDocumentRequest(),
@@ -234,6 +241,27 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                         resource(ResourceSnippetParameters.builder()
                                 .tag("Playground API")
                                 .summary("전체 놀이터 위치 조회 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .queryParameters(
+                                        parameterWithName("startLatitude")
+                                                .type(SimpleType.NUMBER)
+                                                .description("시작위도(default - 한국극단위도)")
+                                                .optional(),
+                                        parameterWithName("endLatitude")
+                                                .type(SimpleType.NUMBER)
+                                                .description("끝위도(default - 한국극단위도)")
+                                                .optional(),
+                                        parameterWithName("startLongitude")
+                                                .type(SimpleType.NUMBER)
+                                                .description("시작경도(default - 한국극단경도)")
+                                                .optional(),
+                                        parameterWithName("endLongitude")
+                                                .type(SimpleType.NUMBER)
+                                                .description("끝경도(default - 한국극단경도)")
+                                                .optional()
+                                )
                                 .responseFields(
                                         fieldWithPath("isSuccess").description("응답 성공 여부"),
                                         fieldWithPath("data.[].id").description("놀이터의 ID"),
@@ -242,6 +270,41 @@ public class PlaygroundApiDocsTest extends RestDocsTest {
                                         fieldWithPath("data.[].isParticipating").description("놀이터 참여 유무")
                                 )
                                 .responseSchema(Schema.schema("PlaygroundLocationResponse"))
+                                .build()
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("참여한 놀이터의 위치를 조회")
+    @Test
+    void findMyPlaygroundLocation() throws Exception {
+
+        FindMyPlaygroundLocationResponse response = new FindMyPlaygroundLocationResponse(1L, 37.5173316, 127.1011661);
+
+        when(playgroundQueryService.findMyPlaygroundLocation(anyLong()))
+                .thenReturn(response);
+
+        mockMvc
+                .perform(get("/playgrounds/locations/mine")
+                        .header(HttpHeaders.AUTHORIZATION, getMemberToken())
+                )
+                .andDo(document("playgrounds/findMyPlaygroundLocations",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        resource(ResourceSnippetParameters.builder()
+                                .tag("Playground API")
+                                .summary("참여한 놀이터 위치 조회 API")
+                                .requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("로그인한 회원의 access token")
+                                )
+                                .responseFields(
+                                        fieldWithPath("isSuccess").description("응답 성공 여부"),
+                                        fieldWithPath("data.id").description("놀이터의 ID"),
+                                        fieldWithPath("data.latitude").description("놀이터의 위도"),
+                                        fieldWithPath("data.longitude").description("놀이터의 경도")
+                                )
+                                .responseSchema(Schema.schema("MyPlaygroundLocationResponse"))
                                 .build()
                         )
                 ))
