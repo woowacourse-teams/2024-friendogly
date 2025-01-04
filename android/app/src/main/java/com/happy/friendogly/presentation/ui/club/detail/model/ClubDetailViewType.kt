@@ -11,7 +11,7 @@ enum class ClubDetailViewType {
     companion object {
         fun from(
             isMine: Boolean,
-            isOpenState:  Boolean,
+            isOpenState: Boolean,
             isMyParticipated: Boolean,
             canParticipation: Boolean,
             isUserPetEmpty: Boolean,

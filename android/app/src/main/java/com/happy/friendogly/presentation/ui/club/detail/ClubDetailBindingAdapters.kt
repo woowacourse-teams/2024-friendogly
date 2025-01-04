@@ -51,7 +51,8 @@ fun TextView.bindDetailViewTypeStyle(clubDetailViewType: ClubDetailViewType?) {
             -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
 
             ClubDetailViewType.END_RECRUITMENT,
-            ClubDetailViewType.NO_AVAILABLE_PET -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
+            ClubDetailViewType.NO_AVAILABLE_PET,
+            -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
 }

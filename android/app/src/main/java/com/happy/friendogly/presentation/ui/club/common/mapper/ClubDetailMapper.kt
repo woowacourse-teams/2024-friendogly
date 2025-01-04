@@ -11,9 +11,10 @@ fun ClubDetail.toPresentation(): ClubDetailUiModel {
         filters = allowedGender.toGenderGroupFilters() + allowedSize.toSizeGroupFilters(),
         content = content,
         title = title,
-        petProfiles = petDetails
-            .map { it.toPresentation() }
-            .sortedByDescending { it.isMyPet },
+        petProfiles =
+            petDetails
+                .map { it.toPresentation() }
+                .sortedByDescending { it.isMyPet },
         userProfiles = memberDetails.map { it.toPresentation() },
         clubDate = createdAt,
         currentNumberOfPeople = currentMemberCount,
