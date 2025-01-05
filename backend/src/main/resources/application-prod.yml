@@ -23,9 +23,6 @@ management:
       exposure:
         include: "*"
 
-  server:
-    port: 8081
-
   health:
     rabbit:
       enabled: false
