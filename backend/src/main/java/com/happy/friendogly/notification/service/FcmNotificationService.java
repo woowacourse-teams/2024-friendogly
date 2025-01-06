@@ -99,7 +99,7 @@ public class FcmNotificationService implements NotificationService {
                     .build();
 
             try {
-                firebaseMessaging.sendEachForMulticast(message);
+                firebaseMessaging.sendEachForMulticast(message,true);
             } catch (FirebaseMessagingException e) {
                 throw new FriendoglyException("FCM을 통해 사용자에게 알림을 보내는 과정에서 에러가 발생했습니다.",
                         INTERNAL_SERVER_ERROR);
