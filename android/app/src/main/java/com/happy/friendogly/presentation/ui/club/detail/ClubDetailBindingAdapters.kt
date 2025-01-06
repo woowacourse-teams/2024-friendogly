@@ -18,7 +18,7 @@ fun TextView.bindDetailViewTypeBackground(clubDetailViewType: ClubDetailViewType
                     R.color.coral400,
                 )
 
-            ClubDetailViewType.END_RECRUITMENT ->
+            ClubDetailViewType.END_RECRUITMENT, ClubDetailViewType.NO_AVAILABLE_PET ->
                 ContextCompat.getColorStateList(
                     context,
                     R.color.gray300,
@@ -35,6 +35,7 @@ fun TextView.bindDetailViewTypeText(clubDetailViewType: ClubDetailViewType?) {
             ClubDetailViewType.RECRUITMENT -> context.getString(R.string.club_detail_participate_text)
             ClubDetailViewType.END_RECRUITMENT -> context.getString(R.string.club_detail_un_participate_text)
             ClubDetailViewType.MINE, ClubDetailViewType.PARTICIPATED -> context.getString(R.string.club_detail_mine_text)
+            ClubDetailViewType.NO_AVAILABLE_PET -> context.getString(R.string.club_detail_no_available_pet)
         }
     this.text = text
 }
@@ -49,7 +50,9 @@ fun TextView.bindDetailViewTypeStyle(clubDetailViewType: ClubDetailViewType?) {
             ClubDetailViewType.MINE,
             -> R.style.Theme_AppCompat_TextView_SemiBold_White_Size14
 
-            ClubDetailViewType.END_RECRUITMENT -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
+            ClubDetailViewType.END_RECRUITMENT,
+            ClubDetailViewType.NO_AVAILABLE_PET,
+            -> R.style.Theme_AppCompat_TextView_SemiBold_Gray07_Size14
         }
     this.setTextAppearance(textStyle)
 }

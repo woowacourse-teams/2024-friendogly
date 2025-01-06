@@ -200,6 +200,7 @@
     <string name="club_detail_participate_text">참여하기</string>
     <string name="club_detail_un_participate_text">모집종료</string>
     <string name="club_detail_mine_text">모임보기</string>
+    <string name="club_detail_no_available_pet">참여 불가</string>
     <string name="club_detail_update">수정하기</string>
     <string name="club_detail_delete">방나가기</string>
     <string name="club_detail_report">신고하기</string>
