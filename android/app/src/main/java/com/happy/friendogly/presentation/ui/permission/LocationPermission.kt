@@ -181,8 +181,6 @@ class LocationPermission private constructor(
         } else {
             (lifecycleOwner as Fragment).createGPSDialog()
         }
-
-        println("createGPSDialog")
     }
 
     override fun shouldShowRequestPermissionRationale(): Boolean {

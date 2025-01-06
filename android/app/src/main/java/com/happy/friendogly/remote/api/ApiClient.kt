@@ -13,6 +13,7 @@ class ApiClient {
         const val POST_PLAYGROUND = BASE_URL
         const val PATCH_PLAYGROUND_ARRIVAL = "$BASE_URL/arrival"
         const val GET_PLAYGROUNDS = "$BASE_URL/locations"
+        const val GET_MY_PLAYGROUND = "$BASE_URL/locations/mine"
         const val GET_PLAYGROUND_INFO = "$BASE_URL/{id}"
         const val GET_PLAYGROUND_SUMMARY = "$BASE_URL/{playgroundId}/summary"
         const val POST_PLAYGROUND_JOIN = "$BASE_URL/{playgroundId}/join"

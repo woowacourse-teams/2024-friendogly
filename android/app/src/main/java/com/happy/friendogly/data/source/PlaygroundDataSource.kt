@@ -19,7 +19,14 @@ interface PlaygroundDataSource {
 
     suspend fun getPetExistence(): Result<PetExistenceDto>
 
-    suspend fun getNearPlaygrounds(): Result<List<PlaygroundDto>>
+    suspend fun getPlaygrounds(
+        startLatitude: Double,
+        endLatitude: Double,
+        startLongitude: Double,
+        endLongitude: Double,
+    ): Result<List<PlaygroundDto>>
+
+    suspend fun getMyPlayground(): Result<MyPlaygroundDto>
 
     suspend fun getPlaygroundInfo(id: Long): Result<PlaygroundInfoDto>
 

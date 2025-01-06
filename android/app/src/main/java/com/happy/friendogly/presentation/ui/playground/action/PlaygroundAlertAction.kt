@@ -35,7 +35,7 @@ sealed interface PlaygroundAlertAction {
 
     data object AlertFailToLeavePlaygroundSnackbar : PlaygroundAlertAction
 
-    data object AlertFailToSwitchPlaygroundSnackbar : PlaygroundAlertAction
+    data object AlertFailToLoadMyPlaygroundSnackbar : PlaygroundAlertAction
 
     data object AlertFailToLoadPlaygroundInfoSnackbar : PlaygroundAlertAction
 

@@ -19,6 +19,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface PlaygroundService {
     @POST(ApiClient.PlayGround.POST_PLAYGROUND)
@@ -32,7 +33,15 @@ interface PlaygroundService {
     ): BaseResponse<PlaygroundArrivalResponse>
 
     @GET(ApiClient.PlayGround.GET_PLAYGROUNDS)
-    suspend fun getPlaygrounds(): BaseResponse<List<PlaygroundResponse>>
+    suspend fun getPlaygrounds(
+        @Query("startLatitude") startLatitude: Double,
+        @Query("endLatitude") endLatitude: Double,
+        @Query("startLongitude") startLongitude: Double,
+        @Query("endLongitude") endLongitude: Double,
+    ): BaseResponse<List<PlaygroundResponse>>
+
+    @GET(ApiClient.PlayGround.GET_MY_PLAYGROUND)
+    suspend fun getMyPlayground(): BaseResponse<MyPlaygroundResponse>
 
     @GET(ApiClient.Pet.GET_PET_EXISTENCE)
     suspend fun getPetExistence(): BaseResponse<PetExistenceResponse>

@@ -1,8 +1,6 @@
 package com.happy.friendogly.presentation.ui.playground.viewmodel
 
 import android.location.Location
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,6 +8,7 @@ import com.happy.friendogly.R
 import com.happy.friendogly.domain.error.DataError
 import com.happy.friendogly.domain.fold
 import com.happy.friendogly.domain.usecase.DeletePlaygroundLeaveUseCase
+import com.happy.friendogly.domain.usecase.GetMyPlaygroundUseCase
 import com.happy.friendogly.domain.usecase.GetPetExistenceUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundInfoUseCase
 import com.happy.friendogly.domain.usecase.GetPlaygroundSummaryUseCase
@@ -29,6 +28,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAct
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToCheckPetExistence
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToJoinPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLeavePlaygroundSnackbar
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadMyPlaygroundSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundInfoSnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundSummarySnackbar
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundAlertAction.AlertFailToLoadPlaygroundsSnackbar
@@ -49,6 +49,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapActio
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeBottomSheetBehavior
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.ChangeTrackingMode
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.HideRegisteringPlaygroundScreen
+import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakeMyPlayground
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MakePlaygrounds
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.MoveCameraCenterPosition
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundMapAction.RegisterMyPlayground
@@ -59,6 +60,7 @@ import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigate
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToOtherProfile
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToPetImage
 import com.happy.friendogly.presentation.ui.playground.action.PlaygroundNavigateAction.NavigateToStateMessage
+import com.happy.friendogly.presentation.ui.playground.mapper.toMyPlayground
 import com.happy.friendogly.presentation.ui.playground.mapper.toPresentation
 import com.happy.friendogly.presentation.ui.playground.model.PlayStatus
 import com.happy.friendogly.presentation.ui.playground.model.PlaygroundPetDetail
@@ -86,11 +88,13 @@ import com.happy.friendogly.presentation.utils.logPlaygroundSize
 import com.happy.friendogly.presentation.utils.logRegisterMarkerBtnClicked
 import com.happy.friendogly.presentation.utils.logStateMessageClicked
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -102,6 +106,7 @@ class PlaygroundViewModel
         private val postPlaygroundUseCase: PostPlaygroundUseCase,
         private val patchPlaygroundArrivalUseCase: PatchPlaygroundArrivalUseCase,
         private val getPlaygroundsUseCase: GetPlaygroundsUseCase,
+        private val getMyPlaygroundUseCase: GetMyPlaygroundUseCase,
         private val getPetExistenceUseCase: GetPetExistenceUseCase,
         private val getPlaygroundInfoUseCase: GetPlaygroundInfoUseCase,
         private val getPlaygroundSummaryUseCase: GetPlaygroundSummaryUseCase,
@@ -118,11 +123,12 @@ class PlaygroundViewModel
             MutableLiveData(PlayStatus.NO_PLAYGROUND)
         val myPlayStatus: LiveData<PlayStatus> get() = _myPlayStatus
 
+        private val contentsBounds: MutableLiveData<LatLngBounds> = MutableLiveData()
+
         private val _myPlayground: MutableLiveData<MyPlaygroundUiModel?> = MutableLiveData()
         val myPlayground: LiveData<MyPlaygroundUiModel?> get() = _myPlayground
 
-        private val _nearPlaygrounds: MutableLiveData<List<PlaygroundUiModel>> = MutableLiveData()
-        val nearPlaygrounds: LiveData<List<PlaygroundUiModel>> get() = _nearPlaygrounds
+        private val nearPlaygrounds: MutableLiveData<List<PlaygroundUiModel>> = MutableLiveData()
 
         private val _recentlyClickedPlayground: MutableLiveData<Marker> = MutableLiveData()
         val recentlyClickedPlayground: LiveData<Marker> get() = _recentlyClickedPlayground
@@ -179,7 +185,7 @@ class PlaygroundViewModel
         override fun clickPlaygroundRefreshBtn() {
             analyticsHelper.logPlaygroundRefreshBtnClicked()
             runIfLocationPermissionGranted {
-                loadNearPlaygrounds()
+                refreshNearPlaygrounds()
             }
         }
 
@@ -234,8 +240,8 @@ class PlaygroundViewModel
         private fun checkPetExistence() {
             analyticsHelper.logCheckPetExistenceClicked()
             viewModelScope.launch {
-                getPetExistenceUseCase()
-                    .onSuccess { petExistence ->
+                getPetExistenceUseCase().fold(
+                    onSuccess = { petExistence ->
                         analyticsHelper.logPetExistence(petExistence.isExistPet)
                         if (!petExistence.isExistPet) {
                             _alertAction.emit(AlertHasNotPetDialog)
@@ -244,9 +250,11 @@ class PlaygroundViewModel
                             updateUiState(PlaygroundUiState.RegisteringPlayground())
                             _mapAction.value = ShowRegisteringPlaygroundScreen
                         }
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToCheckPetExistence)
-                    }
+                    },
+                )
             }
         }
 
@@ -266,15 +274,36 @@ class PlaygroundViewModel
             }
         }
 
+        private fun loadMyPlayground() {
+            viewModelScope.launch {
+                getMyPlaygroundUseCase().fold(
+                    onSuccess = { myPlayground ->
+                        _mapAction.value = MakeMyPlayground(myPlayground)
+                    },
+                    onError = { error ->
+                        when (error) {
+                            DataError.Network.NO_PARTICIPATING_PLAYGROUND -> {
+                                return@launch
+                            }
+
+                            else -> {
+                                _alertAction.emit(AlertFailToLoadMyPlaygroundSnackbar)
+                            }
+                        }
+                    },
+                )
+            }
+        }
+
         private fun loadPlaygroundSummary(id: Long) {
             viewModelScope.launch {
                 getPlaygroundSummaryUseCase(id)
-                    .onSuccess { playgroundSummary ->
+                    .fold(onSuccess = { playgroundSummary ->
                         _playgroundSummary.value = playgroundSummary
                         updateUiState(PlaygroundUiState.ViewingPlaygroundSummary)
-                    }.onFailure {
+                    }, onError = {
                         _alertAction.emit(AlertFailToLoadPlaygroundSummarySnackbar)
-                    }
+                    })
             }
         }
 
@@ -352,21 +381,16 @@ class PlaygroundViewModel
 
         private fun loadPlaygroundInfo(id: Long) {
             viewModelScope.launch {
-                getPlaygroundInfoUseCase(id)
-                    .onSuccess { playgroundInfo ->
-                        updateUiState(PlaygroundUiState.Loading)
-                        _playgroundInfo.value = playgroundInfo.toPresentation()
-                        insertRecentPet(playgroundInfo.playgroundPetDetails)
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            {
-                                _mapAction.value = ChangeBottomSheetBehavior
-                                updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
-                            },
-                            ANIMATE_DURATION_MILLIS,
-                        )
-                    }.onFailure {
-                        _alertAction.emit(AlertFailToLoadPlaygroundInfoSnackbar)
+                getPlaygroundInfoUseCase(id).fold(onSuccess = { playgroundInfo ->
+                    updateUiState(PlaygroundUiState.Loading)
+                    _playgroundInfo.value = playgroundInfo.toPresentation()
+                    insertRecentPet(playgroundInfo.playgroundPetDetails)
+                    viewModelScope.launch {
+                        delay(ANIMATE_DURATION_MILLIS)
+                        _mapAction.value = ChangeBottomSheetBehavior
+                        updateUiState(PlaygroundUiState.ViewingPlaygroundInfo)
                     }
+                }, onError = { _alertAction.emit(AlertFailToLoadPlaygroundInfoSnackbar) })
             }
         }
 
@@ -389,21 +413,29 @@ class PlaygroundViewModel
             return myPlayStatus == PlayStatus.PLAYING && distance > myPlayground.circleOverlay.radius
         }
 
-        private fun loadNearPlaygrounds() {
+        private fun refreshNearPlaygrounds() {
+            val contentsBounds = contentsBounds.value ?: return
             viewModelScope.launch {
-                getPlaygroundsUseCase()
-                    .onSuccess { playgrounds ->
-                        analyticsHelper.logPlaygroundSize(playgrounds.size)
+                getPlaygroundsUseCase(
+                    contentsBounds.southLatitude,
+                    contentsBounds.northLatitude,
+                    contentsBounds.westLongitude,
+                    contentsBounds.eastLongitude,
+                ).fold(
+                    onSuccess = { playgrounds ->
                         updateUiState(PlaygroundUiState.Loading)
+                        analyticsHelper.logPlaygroundSize(playgrounds.size)
                         clearNearPlaygrounds()
                         val nearPlaygrounds =
                             playgrounds.filter { playground -> !playground.isParticipating }
 
                         _mapAction.value = MakePlaygrounds(null, nearPlaygrounds)
-                    }.onFailure {
+                    },
+                    onError = {
                         updateUiState(PlaygroundUiState.FindingPlayground())
                         _alertAction.emit(AlertFailToLoadPlaygroundsSnackbar)
-                    }
+                    },
+                )
             }
         }
 
@@ -480,23 +512,36 @@ class PlaygroundViewModel
         }
 
         fun loadPlaygrounds() {
+            val contentsBounds = contentsBounds.value ?: return
             viewModelScope.launch {
-                getPlaygroundsUseCase()
-                    .onSuccess { playgrounds ->
+                getPlaygroundsUseCase(
+                    contentsBounds.southLatitude,
+                    contentsBounds.northLatitude,
+                    contentsBounds.westLongitude,
+                    contentsBounds.eastLongitude,
+                ).fold(
+                    onSuccess = { playgrounds ->
                         analyticsHelper.logPlaygroundSize(playgrounds.size)
                         updateUiState(PlaygroundUiState.Loading)
                         clearPlaygrounds()
                         val myPlayground =
                             playgrounds.firstOrNull { playground -> playground.isParticipating }
+                                ?.toMyPlayground()
+
+                        if (myPlayground == null) {
+                            loadMyPlayground()
+                        }
 
                         val nearPlaygrounds =
                             playgrounds.filter { playground -> !playground.isParticipating }
 
                         _mapAction.value = MakePlaygrounds(myPlayground, nearPlaygrounds)
-                    }.onFailure {
+                    },
+                    onError = {
                         updateUiState(PlaygroundUiState.FindingPlayground())
                         _alertAction.emit(AlertFailToLoadPlaygroundsSnackbar)
-                    }
+                    },
+                )
             }
         }
 
@@ -517,14 +562,12 @@ class PlaygroundViewModel
             _recentlyClickedPlayground.value = myPlayground.marker
         }
 
-        fun loadNearPlaygrounds(markers: List<PlaygroundUiModel>) {
-            _nearPlaygrounds.value = markers
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    updateUiState(PlaygroundUiState.FindingPlayground())
-                },
-                ANIMATE_DURATION_MILLIS,
-            )
+        fun refreshNearPlaygrounds(markers: List<PlaygroundUiModel>) {
+            nearPlaygrounds.value = markers
+            viewModelScope.launch {
+                delay(ANIMATE_DURATION_MILLIS)
+                updateUiState(PlaygroundUiState.FindingPlayground())
+            }
         }
 
         fun showMyPlayground(map: NaverMap) {
@@ -606,36 +649,40 @@ class PlaygroundViewModel
 
         fun leavePlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         loadPlaygrounds()
                         _alertAction.emit(AlertLeaveMyPlaygroundSnackbar)
-                    }.onFailure {
-                        _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                    onError = { _alertAction.emit(AlertFailToLeavePlaygroundSnackbar) },
+                )
             }
         }
 
         fun leaveAndRegisterPlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         _mapAction.value = RegisterMyPlayground
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                )
             }
         }
 
         fun leaveAndJoinPlayground() {
             viewModelScope.launch {
-                deletePlaygroundLeaveUseCase()
-                    .onSuccess {
+                deletePlaygroundLeaveUseCase().fold(
+                    onSuccess = {
                         updateUiState(PlaygroundUiState.Loading)
                         joinPlayground()
-                    }.onFailure {
+                    },
+                    onError = {
                         _alertAction.emit(AlertFailToLeavePlaygroundSnackbar)
-                    }
+                    },
+                )
             }
         }
 
@@ -646,6 +693,10 @@ class PlaygroundViewModel
                     currentUiState.playgroundRegisterBtnClickable.copy(cameraIdle = cameraIdle)
                 updateUiState(currentUiState.copy(playgroundRegisterBtnClickable = updatedBtnClickable))
             }
+        }
+
+        fun updateContentBounds(contentBounds: LatLngBounds) {
+            contentsBounds.value = contentBounds
         }
 
         fun updateAddressAndInKorea(
