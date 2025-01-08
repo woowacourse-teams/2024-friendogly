@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:gravity="end">
+
+    <TextView
+        android:id="@+id/tv_chat_mine_time"
+        style="@style/Theme.AppCompat.TextView.Regular.Gray07.Size10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="0"
+        android:gravity="end"
+        android:minWidth="120dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_chat_mine_message"
+        app:layout_constraintEnd_toStartOf="@id/tv_chat_mine_message"
+        tools:text="오후 2:23" />
+
+    <TextView
+        android:id="@+id/tv_chat_mine_message"
+        style="@style/Theme.AppCompat.TextView.Regular.Size16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="21dp"
+        android:layout_weight="0"
+        android:background="@drawable/rect_orange700_fill_16"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="11dp"
+        android:textColor="@color/white"
+        tools:text="이거 맞음?" />
+
+
+</LinearLayout>

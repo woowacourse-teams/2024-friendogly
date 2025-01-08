@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_club_error"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_error_load" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Medium.Gray08.Size18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_list_error_title" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="10dp" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Medium.Gray05.Size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/club_list_error_content" />
+    </LinearLayout>
+</layout>

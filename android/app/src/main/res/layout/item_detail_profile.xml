@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="profile"
+            type="com.happy.friendogly.presentation.ui.club.detail.model.ClubDetailProfileUiModel" />
+        <variable
+            name="navigation"
+            type="com.happy.friendogly.presentation.ui.club.detail.ClubDetailNavigation" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->navigation.navigateToProfile(profile)}"
+        android:layout_marginEnd="10dp"
+        android:layout_width="80dp"
+        android:background="@drawable/ripple_rect_fill8_white"
+        android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/img_profile_normal"
+            glide="@{profile.imageUrl}"
+            android:backgroundTint="@color/coral50"
+            app:shapeAppearanceOverlay="@style/Circle"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_detail_profile_text"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"/>
+        <TextView
+            android:text="@{profile.name}"
+            android:layout_marginTop="5dp"
+            android:id="@+id/tv_detail_profile_text"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+            tools:text = "멍멍이"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

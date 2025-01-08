@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.profilesetting.ProfileSettingViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.profilesetting.ProfileSettingActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_profile_set_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_make_profile_title"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size24"
+                profileSettingTitle="@{vm.uiState.isFirstTimeSetup}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="프로필 만들기" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_user_profile_edit"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="40dp"
+                android:onClick="@{() -> vm.selectProfileImage()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_make_profile_title">
+
+                <ImageView
+                    android:id="@+id/iv_user_profile_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:imageBitmap="@{vm.uiState.profileImage}"
+                    app:imageUrl="@{vm.uiState.profileImageUrl}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/img_profile_normal" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="39dp"
+                    android:src="@drawable/ic_user_profile_set_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_user_name_title"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Gray09.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/profile_setting_nickname"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout_user_profile_edit" />
+
+
+            <EditText
+                android:id="@+id/et_user_name"
+                style="@style/Theme.AppCompat.TextView.Profile.EditText.Contents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:hint="@string/profile_setting_nickname_hint"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="8"
+                android:maxLines="1"
+                android:text="@={vm.nickname}"
+                app:layout_constraintStart_toStartOf="@+id/tv_user_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_user_name_title" />
+
+
+            <TextView
+                android:id="@+id/tv_edit_text_count"
+                style="Theme.AppCompat.TextView.Regular.Gray05.Size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                app:editTextLength="@{vm.nickname}"
+                app:layout_constraintBottom_toBottomOf="@+id/et_user_name"
+                app:layout_constraintEnd_toEndOf="@+id/et_user_name"
+                app:layout_constraintTop_toTopOf="@+id/et_user_name"
+                tools:text="0/8" />
+
+
+            <TextView
+                android:id="@+id/tv_edit_btn"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> vm.submitProfileSelection()}"
+                android:padding="18dp"
+                android:text="@string/make_profile_edit_btn_title"
+                app:editBtnBackgroundTextColor="@{vm.isButtonActive}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:background="@color/coral400" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

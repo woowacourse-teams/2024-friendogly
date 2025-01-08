@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.happy.friendogly.presentation.dialog.AlertDialogModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_dialog_white_fill_20"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tv_alert_title"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textVisibleCheck="@{model.title}" />
+
+        <TextView
+            android:id="@+id/tv_alert_description"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alert_title"
+            app:textVisibleCheck="@{model.description}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alert_description"
+            tools:layout_editor_absoluteX="24dp">
+
+            <TextView
+                android:id="@+id/tv_negative"
+                style="@style/Theme.AppCompat.Red.Alert.TextView.Button.Negative"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@{model.negativeContents}"
+                app:layout_constraintTop_toBottomOf="@+id/tv_alert_description"
+                tools:layout_editor_absoluteX="24dp" />
+
+            <TextView
+                android:id="@+id/tv_positive"
+                style="@style/Theme.AppCompat.Red.Alert.TextView.Button.Positive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:text="@{model.positiveContents}"
+                app:layout_constraintTop_toBottomOf="@+id/tv_alert_description"
+                tools:layout_editor_absoluteX="24dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

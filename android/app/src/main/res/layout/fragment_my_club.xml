@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="actionHandler"
+            type="com.happy.friendogly.presentation.ui.club.common.ClubItemActionHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.ui.club.my.participating.MyParticipatingFragment">
+        <include
+            android:id="@+id/include_club_list"
+            layout="@layout/include_club_list_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            android:id="@+id/include_club_data"
+            layout="@layout/include_club_not_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone"
+            app:actionHandler="@{actionHandler}" />
+
+        <include
+            android:id="@+id/include_club_error"
+            layout="@layout/include_club_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/include_club_loading"
+            layout="@layout/include_skeleton_club_list"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

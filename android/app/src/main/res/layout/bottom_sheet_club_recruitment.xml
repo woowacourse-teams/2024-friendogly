@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_white_fill_10"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/btn_club_open"
+            style="@style/Theme.AppCompat.TextView.Medium.Gray10.Size18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/club_state_open"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="모집중" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray300"
+            app:layout_constraintTop_toBottomOf="@id/btn_club_open" />
+
+        <TextView
+            android:id="@+id/btn_club_close"
+            style="@style/Theme.AppCompat.TextView.Medium.Gray10.Size18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/club_state_closed"
+            app:layout_constraintTop_toBottomOf="@id/line"
+            tools:layout_editor_absoluteX="0dp"
+            tools:text="모집 종료" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

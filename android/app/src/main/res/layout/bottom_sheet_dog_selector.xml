@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.select.PetSelectViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/RoundTopCornerBottomSheetDialogTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".presentation.ui.club.select.PetSelectBottomSheet">
+
+        <View
+            android:id="@+id/view_club_select_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_club_select_back_button"
+            onSingleClick="@{()->vm.cancelSelection()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="@id/view_club_select_top_bar"
+            app:layout_constraintEnd_toEndOf="@id/view_club_select_top_bar"
+            app:layout_constraintTop_toTopOf="@id/view_club_select_top_bar" />
+
+        <TextView
+            android:id="@+id/tv_select_dog_title"
+            style="@style/Theme.AppCompat.TextView.Medium.Black.Size18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/dog_selector_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_club_select_top_bar" />
+
+        <TextView
+            android:id="@+id/tv_select_dog_content"
+            style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/dog_select_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_select_dog_title" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_club_select_dog_list"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginVertical="15dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingHorizontal="30dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_club_select_commit"
+            app:layout_constraintTop_toBottomOf="@id/tv_select_dog_content" />
+
+        <TextView
+            android:id="@+id/tv_club_select_commit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="24dp"
+            app:validButtonBackground="@{vm.validCommit}"
+            android:text="@string/club_select_commit"
+            onSingleClick="@{()->vm.submitDogs()}"
+            android:background="@drawable/rect_coral04_fill_8"
+            app:validButtonStyle="@{vm.validCommit}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_club_select_dog_list" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.add.ClubAddViewModel" />
+    </data>
+
+    <ScrollView
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_club_add_information"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".presentation.ui.club.add.information.ClubAddInformationFragment">
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:text="@string/club_add_information_main_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:text="@{vm.myAddress.adminArea}"
+                    style="@style/Theme.AppCompat.TextView.Medium.Orange.Size14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="잠실 6동" />
+
+                <TextView
+                    android:layout_marginStart="3dp"
+                    style="@style/Theme.AppCompat.TextView.SemiBold.Gray07.Size14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/club_add_information_main_content" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/club_add_club_title" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
+            <EditText
+                android:id="@+id/et_club_subject"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:hint="@string/club_add_club_subject_hint"
+                android:maxLength="100"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:text="@={vm.clubTitle}" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                app:titleCount="@{vm.clubTitle}"
+                tools:text="0/100" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/club_add_club_content" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp" />
+
+            <EditText
+                android:id="@+id/et_club_content"
+                style="@style/Theme.AppCompat.TextView.Medium.Black.Size16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:scrollbars="vertical"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:gravity="top"
+                android:hint="@string/club_add_content_hint"
+                android:lines="5"
+                android:maxLength="1000"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:text="@={vm.clubContent}" />
+
+            <TextView
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                app:contentCount="@{vm.clubContent}"
+                tools:text="0/1000" />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"/>
+        </LinearLayout>
+    </ScrollView>
+</layout>

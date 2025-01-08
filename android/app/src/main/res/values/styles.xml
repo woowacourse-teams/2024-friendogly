@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ImageView Style-->
+    <style name="Circle">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="RoundXSmall">
+        <item name="cornerSize">5dp</item>
+    </style>
+
+    <style name="RoundSmall">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="RoundBig">
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <!-- Bottom sheet -->
+    <style name="TransparentBottomSheetDialogTheme" parent="Widget.Material3.BottomSheet">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rect_white_fill_30</item>
+    </style>
+
+    <style name="RoundTopCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundTopCornerModalStyle</item>
+    </style>
+
+    <style name="RoundTopCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_white_fill_bottom_radius_24</item>
+    </style>
+
+    <!-- Bold -->
+    <style name="Theme.AppCompat.TextView.Bold.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Bold.Black.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+    </style>
+
+
+    <!-- Semi Bold -->
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray08.Size26" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">26dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray09.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray800</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray09.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray800</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray05.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray500</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray06.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray500</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray07.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/gray600</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.White.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <!-- Medium -->
+    <style name="Theme.AppCompat.TextView.Medium.Black.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Gray08.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.White.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Black.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.White.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.White.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Black.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Gray10.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray400</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Black.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Medium.Orange.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <!-- Regular -->
+    <style name="Theme.AppCompat.TextView.Regular.Black.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Red.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray07.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray05.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray400</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">14dp</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray05.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray400</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray07.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray08.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textColor">@color/gray700</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Black.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray07.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.White.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.White.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.White.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray07.Size10" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray600</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.White.Size10" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Black.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Gray09.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Black.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Regular.Black.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Orange.Size26" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Black.Size25" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral300.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral300</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral500.Size18" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral500</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral300.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral300</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral500.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size22" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral400.Size30" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral400</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray500.Size28" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray500</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Gray500.Size24" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray500</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.SemiBold.Coral300.Size20" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/coral300</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <!--Profile Edit Text-->
+    <style name="Theme.AppCompat.TextView.Profile.EditText.Contents" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textSize">16dp</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <!--ADD club Menu Text-->
+    <style name="club_add_custom_checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:button">@null</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableEnd">@drawable/sel_club_add_check_filter_menu</item>
+        <item name="android:background">@drawable/sel_club_background_filter_menu</item>
+        <item name="android:textColor">@drawable/sel_club_text_filter_menu</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:paddingHorizontal">15dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+    </style>
+
+    <style name="club_add_custom_progressbar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progressbar_linear_progress</item>
+    </style>
+
+    <style name="club_detail_custom_bottom_sheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="behavior_peekHeight">0dp</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="club_detail_side_sheet_dialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="marker_information_bottom_sheet_dialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+    <!-- Alert 관련 -->
+    <style name="Theme.AppCompat.Alert.Padding.Radius16" parent="Theme.AppCompat">
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+
+    <style name="Theme.AppCompat.blue.Alert.TextView.Button.Negative" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_gray02_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.coral.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_coral300_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.Red.Alert.TextView.Button.Negative" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_gray02_fill_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.AppCompat.Red.Alert.TextView.Button.Positive" parent="Theme.AppCompat.Alert.Padding.Radius16">
+        <item name="android:background">@drawable/sel_dialog_line_red_16</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TransparentActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/black50</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- bottom sheet 키보드 설정 -->
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+
+</resources>

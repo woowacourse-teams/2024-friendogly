@@ -1,0 +1,50 @@
+aws:
+  s3:
+    bucket-name: ${BUCKET_NAME}
+    server:
+      endpoint: https://d1m6m0er0dq0qo.cloudfront.net/
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
+  refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
+
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  health:
+    rabbit:
+      enabled: false
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json
+
+spring:
+  sql:
+    init:
+      data-locations:
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_PROD_RDS_URL}
+    username: ${MYSQL_PROD_RDS_USERNAME}
+    password: ${MYSQL_PROD_RDS_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100

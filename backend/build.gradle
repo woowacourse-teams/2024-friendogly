@@ -1,0 +1,136 @@
+buildscript {
+    ext {
+        restdocsApiSpecVersion = '0.17.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+    id 'org.hidetake.swagger.generator' version '2.18.2'
+}
+
+group = 'com.woowacourse'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+swaggerSources {
+    sample {
+        setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
+    }
+}
+
+openapi3 {
+    servers = [
+            { url = "http://3.35.5.179/" },
+            { url = "http://localhost:8080" }
+    ]
+    title = "반갑개 API 명세서"
+    description = "반갑개 명세서"
+    version = "0.0.1"
+    format = "yaml"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp' // rabbitmq
+    implementation 'org.springframework.boot:spring-boot-starter-reactor-netty' // rabbitmq
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    swaggerUI 'org.webjars:swagger-ui:4.11.1'
+
+    implementation "software.amazon.awssdk:s3:2.26.21"
+
+    // fcm
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    systemProperty 'file.encoding', 'UTF-8'
+}
+
+//tasks.withType(GenerateSwaggerUI) {
+//    dependsOn 'openapi3'
+//}
+
+tasks.withType(GenerateSwaggerUI) {
+    dependsOn 'openapi3'
+    doFirst {
+        def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+
+        def securitySchemesContent = "  securitySchemes:\n" +      \
+                                          "    APIKey:\n" +      \
+                                          "      type: apiKey\n" +      \
+                                          "      name: Authorization\n" +      \
+                                          "      in: header\n" +     \
+                                          "security:\n" +
+                "  - APIKey: []  # Apply the security scheme here"
+
+        swaggerUIFile.append securitySchemesContent
+    }
+}
+
+// 생성된 SwaggerUI 를 jar 에 포함시키기 위해 build/resources 경로로 로 복사
+tasks.register('copySwaggerUI', Copy) {
+    dependsOn 'generateSwaggerUISample'
+
+    def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
+
+    from("${generateSwaggerUISampleTask.outputDir}")
+    into("${project.buildDir}/resources/main/static/docs")
+}
+
+// 3.4.3
+// bootJar 실행 전, copySwaggerUI 를 실행하도록 설정
+bootJar {
+    dependsOn 'copySwaggerUI'
+}
+
+
+jar {
+    from tasks.copySwaggerUI
+}
+
+resolveMainClassName {
+    dependsOn 'copySwaggerUI'
+}
+
+test {
+    systemProperty 'user.timezone', 'Asia/Seoul'
+
+}

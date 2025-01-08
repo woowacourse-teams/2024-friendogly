@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.menu.ClubMenuViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        onSingleClick="@{()->vm.close()}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:background="@color/white"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    app:myParticipation = "@{vm.clubDetailViewType}"
+                    onSingleClick="@{()->vm.selectDelete()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.Red.Size14"
+                        android:text="@string/club_detail_delete"
+                        android:paddingHorizontal="30dp"
+                        android:paddingVertical="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+                <FrameLayout
+                    app:myVisibleMenu = "@{vm.clubDetailViewType}"
+                    onSingleClick="@{()->vm.selectModify()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                        android:text="@string/club_detail_update"
+                        android:paddingHorizontal="30dp"
+                        android:paddingVertical="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+                <FrameLayout
+                    app:userVisibleMenu = "@{vm.clubDetailViewType}"
+                    onSingleClick="@{()->vm.selectBlock()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.Black.Size14"
+                        android:text="@string/club_detail_block"
+                        android:paddingHorizontal="30dp"
+                        android:paddingVertical="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+                <FrameLayout
+                    app:userVisibleMenu = "@{vm.clubDetailViewType}"
+                    onSingleClick="@{()->vm.selectReport()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Theme.AppCompat.TextView.Regular.Red.Size14"
+                        android:text="@string/club_detail_report"
+                        android:paddingHorizontal="30dp"
+                        android:paddingVertical="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

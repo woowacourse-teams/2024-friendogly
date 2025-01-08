@@ -1,0 +1,43 @@
+aws:
+  s3:
+    bucket-name: ${BUCKET_NAME}
+    server:
+      endpoint: https://d2bomkpybmqevt.cloudfront.net/
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
+  refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
+
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
+
+file:
+  firebase:
+    path: firebase-friendogly-private-key.json
+ 
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    port: 5672
+    stomp-port: 61613
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/friendogly?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_USER_NAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  sql:
+    init:
+      data-locations:
+
+management:
+  health:
+    rabbit:
+      enabled: false

@@ -1,0 +1,97 @@
+name: Android CD
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+defaults:
+  run:
+    working-directory: ./android
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Create local.properties
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+        run: |
+          echo "$LOCAL_PROPERTIES" > local.properties
+
+      - name: Create keystore.properties
+        env:
+          KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_PROPERTIES" > keystore.properties
+
+      - name: Create keystore directory
+        run: mkdir -p /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore
+
+      - name: Putting data
+        env:
+          DATA: ${{ secrets.RELEASE_KEYSTORE }}
+        run: echo $DATA > base64 -d > /home/runner/work/2024-friendogly/2024-friendogly/android/app/keystore/friendogly.jks
+
+      - name: Create release-keystore
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        run: |
+          touch ../android/app/keystore/friendogly.jks
+          echo "$RELEASE_KEYSTORE" | base64 -d > ../android/app/keystore/friendogly.jks
+          cat ../android/app/keystore/friendogly.jks
+
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          touch ../android/app/google-services.json
+          echo GOOGLE_SERVICES_JSON >> ../android/app/google-services.json
+          cat ../android/app/google-services.json
+
+      - name: Create file
+        run: cat /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json | base64
+
+      - name: Putting data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/2024-friendogly/2024-friendogly/android/app/google-services.json
+
+      - name: Build Release APK
+        run: |
+          ./gradlew :app:assembleRelease
+
+      - name: Upload Release Build to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-artifacts
+          path: android/app/build/outputs/apk/release/
+          if-no-files-found: error
+
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Build release Bundle
+        run: ./gradlew bundleRelease
+
+      - name: Upload artifact to Google Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.happy.friendogly
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: "production"

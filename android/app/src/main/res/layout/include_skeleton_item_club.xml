@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:background="@drawable/rect_gray_fill_radius8"
+        android:padding="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_club_main"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:id="@+id/iv_club"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_gary03_fill_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout_club_main"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout_club_main"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout_club_main" >
+            <View
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rect_gray03_fill_8"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+            <View
+                android:layout_marginEnd="60dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rect_gray03_fill_8"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"/>
+            <View
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rect_gray03_fill_8"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

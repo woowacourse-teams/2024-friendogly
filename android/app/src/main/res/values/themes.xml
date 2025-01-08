@@ -1,0 +1,30 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Friendogly" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Friendogly.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.Friendogly</item>
+    </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/coral400</item>
+    </style>
+
+    <style name="Theme.Friendogly" parent="Base.Theme.Friendogly" />
+
+    <style name="Theme.ImageCropper" parent="Theme.AppCompat">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/black</item>
+    </style>
+
+</resources>

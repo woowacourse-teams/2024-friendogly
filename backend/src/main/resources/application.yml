@@ -1,0 +1,12 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jpa:
+    defer-datasource-initialization: true
+  application:
+    name: friendogly
+  sql:
+    init:
+      encoding: utf-8

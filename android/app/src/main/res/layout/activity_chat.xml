@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.chatlist.chat.ChatViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_chat_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_arrow_left"
+                app:navigationIconTint="@color/black"
+                app:title="@string/chat_list_title"
+                app:titleTextAppearance="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18">
+
+                <ImageButton
+                    android:id="@+id/ib_chat_side_menu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_side_menu" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_chat_detail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:reverseLayout="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:layout_constraintBottom_toTopOf="@id/cl_chat_send_message"
+            app:layout_constraintTop_toBottomOf="@id/appbar_chat_main"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="-105dp"
+            tools:listitem="@layout/item_chat_other" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_chat_send_message"
+            android:layout_width="match_parent"
+            android:paddingTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_chat_send_message"
+                style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+                android:layout_width="0dp"
+                android:text="@={vm.sendMessage}"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_gray03_fill_16"
+                android:backgroundTint="@color/gray100"
+                android:hint="@string/chat_send_hint_message"
+                android:maxLines="4"
+                android:paddingHorizontal="22dp"
+                android:paddingVertical="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ib_chat_send_message"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="ㅎㅇㅎㅇ" />
+
+        <Button
+            android:id="@+id/ib_chat_send_message"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center|end"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="0"
+            android:background="@drawable/ic_send_message"
+            android:enabled="@{vm.isCanSend()}"
+            android:scaleType="fitCenter"
+            app:backgroundTint="@color/sel_chat_send_btn"
+            app:layout_constraintBottom_toBottomOf="@id/edt_chat_send_message"
+            app:layout_constraintTop_toTopOf="@id/edt_chat_send_message"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

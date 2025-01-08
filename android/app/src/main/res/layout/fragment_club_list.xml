@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.happy.friendogly.presentation.ui.club.common.model.clubfilter.ClubFilter" />
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.club.list.ClubListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_club_list_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                onSingleClick="@{()->vm.addMyLocation()}"
+                android:id="@+id/linear_layout_club_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/ripple_rect_white">
+
+                <TextView
+                    app:address="@{vm.myAddress}"
+                    style="@style/Theme.AppCompat.TextView.Bold.Black.Size18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="내 동네 설정" />
+
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_bottom" />
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <include
+            android:id="@+id/include_club_list_participation_filter"
+            layout="@layout/include_club_filter"
+            onSingleClick="@{()->vm.selectParticipationFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:filterName="@{vm.participationFilter.filterName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_club_list_top_bar" />
+
+        <include
+            android:id="@+id/include_club_list_size_filter"
+            layout="@layout/include_club_filter"
+            onSingleClick="@{()->vm.selectSizeFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:filterName="@{ClubFilter.SIZE_FILTER_SUBJECT}"
+            app:layout_constraintStart_toEndOf="@id/include_club_list_participation_filter"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_club_list_top_bar" />
+
+        <include
+            android:id="@+id/include_club_list_gender_filter"
+            layout="@layout/include_club_filter"
+            onSingleClick="@{()->vm.selectGenderFilter()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            app:filterName="@{ClubFilter.GENDER_FILTER_SUBJECT}"
+            app:layout_constraintStart_toEndOf="@id/include_club_list_size_filter"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_club_list_top_bar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_club_list_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="12dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/swipe_refresh_layout_club_list"
+            app:layout_constraintTop_toBottomOf="@id/include_club_list_participation_filter"
+            tools:listitem="@layout/item_selected_filter_menu" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout_club_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rcv_club_list_filter">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/include_club_list"
+                    layout="@layout/include_club_list_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/include_club_address"
+                    layout="@layout/include_club_not_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="gone"
+                    app:vm="@{vm}" />
+
+                <include
+                    android:id="@+id/include_club_data"
+                    layout="@layout/include_club_not_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="gone"
+                    app:actionHandler="@{vm}" />
+
+                <include
+                    android:id="@+id/include_club_error"
+                    layout="@layout/include_club_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="gone" />
+
+                <include
+                    android:id="@+id/include_club_loading"
+                    layout="@layout/include_skeleton_club_list"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ImageButton
+            onSingleClick="@{()->vm.addClub()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_circle_white"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="10dp"
+            android:src="@drawable/ic_club_add_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="44f5dc51-5bf3-4a6e-88b2-3c9c6411bd7d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/model/PlayStatus.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/mapper/FootprintRecentWalkStatusMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/mapper/PlaygroundArrivalMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/model/FootprintRecentWalkStatusDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/model/PlaygroundArrivalDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/repository/WoofRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/repository/WoofRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/source/WoofDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/data/source/WoofDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/repository/WoofRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/repository/WoofRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/usecase/PatchFootprintRecentWalkStatusAutoUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/usecase/PatchPlaygroundArrivalUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/usecase/PatchFootprintRecentWalkStatusManualUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/domain/usecase/PatchFootprintRecentWalkStatusManualUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/WoofFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/WoofFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/action/WoofActionHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/action/WoofActionHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/model/FootprintRecentWalkStatus.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/model/PlaygroundArrival.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/util/WoofBindingAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/util/WoofBindingAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/viewmodel/WoofViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/presentation/ui/woof/viewmodel/WoofViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/api/ApiClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/api/ApiClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/api/WoofService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/api/WoofService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/mapper/FootprintWalkStatusMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/mapper/PlaygroundArrivalDtoMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/model/request/FootprintRecentWalkStatusAutoRequest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/model/request/PlaygroundArrivalRequest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/model/response/FootprintWalkStatusResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/model/response/PlaygroundArrivalResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/source/WoofDataSourceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/happy/friendogly/remote/source/WoofDataSourceImpl.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2jKtGmRx5nf6gdVzWCDvuzPh6ZJ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/map-playground",
+    "last_opened_file_path": "/Users/park_yaechan/Android/2024-friendogly",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="44f5dc51-5bf3-4a6e-88b2-3c9c6411bd7d" name="Changes" comment="" />
+      <created>1721147505148</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721147505148</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

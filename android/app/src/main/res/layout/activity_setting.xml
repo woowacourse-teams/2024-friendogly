@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.happy.friendogly.presentation.ui.setting.SettingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/container_header"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/transparent"
+            app:contentInsetStart="0dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_habit_create_header"
+                style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/setting" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                onSingleClick="@{() -> vm.navigateToBack()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+
+        <TextView
+            android:id="@+id/tv_my_activities_title"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="알림 설정"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_header" />
+
+
+        <include
+            android:id="@+id/alarm_settings_total_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:description="@{String.format(@string/alarm_settings_total_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_total_push_switch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_activities_title"
+            app:title="@{String.format(@string/alarm_settings_total_push)}" />
+
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarm_settings_total_push_switch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_total_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_total_push"
+            app:thumbTint="@color/sel_switch_thumb"
+            app:trackDecoration="@null"
+            app:trackTint="@color/sel_switch_track"
+            tools:checked="true" />
+
+        <include
+            android:id="@+id/alarm_settings_chatting_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_chatting_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_chatting_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_total_push"
+            app:title="@{String.format(@string/alarm_settings_chatting_push)}" />
+
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarm_settings_chatting_push_switch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_chatting_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_chatting_push"
+            app:thumbTint="@color/sel_switch_thumb"
+            app:trackDecoration="@null"
+            app:trackTint="@color/sel_switch_track"
+            tools:checked="true" />
+
+
+        <include
+            android:id="@+id/alarm_settings_club_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+
+            android:visibility="gone"
+            app:description="@{String.format(@string/alarm_settings_club_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_club_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_chatting_push"
+            app:title="@{String.format(@string/alarm_settings_club_push)}" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarm_settings_club_push_switch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_club_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_club_push"
+            app:thumbTint="@color/sel_switch_thumb"
+            app:trackDecoration="@null"
+            app:trackTint="@color/sel_switch_track"
+            tools:checked="true" />
+
+        <include
+            android:id="@+id/alarm_settings_playground_push"
+            layout="@layout/include_alarm_settings_contents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:description="@{String.format(@string/alarm_settings_playground_push_description)}"
+            app:layout_constraintEnd_toStartOf="@id/alarm_settings_playground_push_switch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alarm_settings_club_push"
+            app:title="@{String.format(@string/alarm_settings_playground_push)}" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/alarm_settings_playground_push_switch"
+            style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/alarm_settings_playground_push"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/alarm_settings_playground_push"
+            app:thumbTint="@color/sel_switch_thumb"
+            app:trackDecoration="@null"
+            app:trackTint="@color/sel_switch_track"
+            tools:checked="true" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/gray300"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_settings_playground_push"
+            tools:layout_editor_absoluteX="-16dp" />
+
+        <TextView
+            android:id="@+id/tv_etc_title"
+            style="@style/Theme.AppCompat.TextView.SemiBold.Black.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/etc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider" />
+
+
+        <TextView
+            android:id="@+id/tv_app_info"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToAppInfo()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:text="@string/app_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_etc_title" />
+
+
+        <TextView
+            android:id="@+id/tv_privacy_policy"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToPrivacyPolicy()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/privacy_policy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_app_info" />
+
+
+        <TextView
+            android:id="@+id/tv_logout"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToLogoutDialog()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_privacy_policy" />
+
+
+        <TextView
+            android:id="@+id/tv_unsubscribe"
+            style="@style/Theme.AppCompat.TextView.Regular.Black.Size16"
+            onSingleClick="@{() -> vm.navigateToUnsubscribeDialog()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/unsubscribe"
+            android:textColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_logout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

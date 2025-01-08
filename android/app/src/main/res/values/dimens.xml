@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="location_btn_margin_bottom_default">26dp</dimen>
+    <dimen name="location_btn_margin_bottom_playing">106dp</dimen>
+</resources>
