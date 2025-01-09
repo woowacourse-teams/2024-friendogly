@@ -27,9 +27,8 @@ public class ChatMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id", nullable = false)
-    private ChatRoom chatRoom;
+    @Column(name = "chat_room_id", nullable = false)
+    private Long chatRoomId;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "message_type", nullable = false)
@@ -51,7 +50,7 @@ public class ChatMessage {
             Member senderMember,
             String content
     ) {
-        this.chatRoom = chatRoom;
+        this.chatRoomId = chatRoom.getId();
         this.messageType = messageType;
         this.senderMember = senderMember;
         this.content = content;
