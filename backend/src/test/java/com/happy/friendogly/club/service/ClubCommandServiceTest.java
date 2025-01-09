@@ -3,7 +3,11 @@ package com.happy.friendogly.club.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.happy.friendogly.chatmessage.domain.ChatMessage;
+import com.happy.friendogly.chatroom.domain.ChatRoom;
+import com.happy.friendogly.chatsocket.domain.MessageType;
 import com.happy.friendogly.club.domain.Club;
 import com.happy.friendogly.club.domain.Status;
 import com.happy.friendogly.club.dto.request.DeleteKickedMemberRequest;
@@ -278,6 +282,25 @@ class ClubCommandServiceTest extends ClubServiceTest {
         clubCommandService.deleteClubMember(savedClub.getId(), savedMember.getId());
 
         assertThat(clubRepository.findById(savedClub.getId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("채팅 메시지가 존재해도 모임을 삭제할 수 있다.")
+    @Test
+    void deleteClubWhenChatMessageExist() {
+        // given
+        Club club = createSavedClub(
+                savedMember,
+                List.of(savedPet),
+                Set.of(Gender.FEMALE, Gender.FEMALE_NEUTERED, Gender.MALE, Gender.MALE_NEUTERED),
+                Set.of(SizeType.SMALL)
+        );
+
+        ChatRoom chatRoom = club.getChatRoom();
+        ChatMessage chatMessage = new ChatMessage(chatRoom, MessageType.CHAT, savedMember, "메세지내용");
+        chatMessageRepository.save(chatMessage);
+
+        // when - then
+        assertDoesNotThrow(() -> clubCommandService.deleteClubMember(club.getId(), savedMember.getId()));
     }
 
     @DisplayName("Full 상태에서 회원이 모임에서 탈퇴하면 Open으로 바꾼다.")
