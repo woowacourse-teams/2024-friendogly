@@ -121,14 +121,10 @@
 <br>
 
 ## 핵심기능
-### 강아지 놀이터
-미리 주변 강아지 산책정보를 확인하고 산책을 나가보세요!  
-![반갑개 놀이터영상](https://github.com/user-attachments/assets/dc9ffe57-726c-4c0a-8ebf-8da1fd2b2e8d)
-
-### 동네 강아지 모임
-우리 동네의 여러 강아지 모임을 찾아보고 이야기를 나눠요!  
-![반갑개 모임영상](https://github.com/user-attachments/assets/6577798a-efd1-4c99-b620-da678fa02f62)
-
+|강아지 놀이터 기능|동네 강아지 모임 기능|
+|:---:|:---:|
+|![반갑개 놀이터영상](https://github.com/user-attachments/assets/dc9ffe57-726c-4c0a-8ebf-8da1fd2b2e8d)|![반갑개 모임영상](https://github.com/user-attachments/assets/6577798a-efd1-4c99-b620-da678fa02f62)|
+|미리 주변 강아지 산책정보를 확인하고 산책을 나가보세요!|우리 동네의 여러 강아지 모임을 찾아보고 이야기를 나눠요!|
 
 ## 백엔드
 ### 기술스택
