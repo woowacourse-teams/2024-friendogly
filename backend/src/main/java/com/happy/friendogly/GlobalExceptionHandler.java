@@ -4,6 +4,7 @@ import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +22,12 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendoglyException.class)
-    public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception) {
-        //TODO: 커스텀 예외 내부에 우리 잘못인지 구분하는 로직 만들기 (일단은 외부api가 안되면 5xx, 사용자잘못이면 4xx)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception, HttpServletRequest request) {
         if (exception.getHttpStatus().is5xxServerError()) {
-            log.error(exception.getMessage(), exception);
+            log.error("API: {}, Message: {}", request.getRequestURI(), exception.getMessage(), exception);
         }
         if (exception.getHttpStatus().is4xxClientError()) {
-            log.warn(exception.getMessage(), exception);
+            log.warn("API: {}, Message: {}", request.getRequestURI(), exception.getMessage(), exception);
         }
 
         ErrorResponse errorResponse = new ErrorResponse(
