@@ -4,7 +4,6 @@ import com.happy.friendogly.common.ApiResponse;
 import com.happy.friendogly.common.ErrorCode;
 import com.happy.friendogly.common.ErrorResponse;
 import com.happy.friendogly.exception.FriendoglyException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +21,12 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendoglyException.class)
-    public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception) {
         if (exception.getHttpStatus().is5xxServerError()) {
-            log.error("API: {}, Message: {}", request.getRequestURI(), exception.getMessage(), exception);
+            log.error(exception.getMessage(), exception);
         }
         if (exception.getHttpStatus().is4xxClientError()) {
-            log.warn("API: {}, Message: {}", request.getRequestURI(), exception.getMessage(), exception);
+            log.warn(exception.getMessage(), exception);
         }
 
         ErrorResponse errorResponse = new ErrorResponse(
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(fieldError -> fieldError.getField() + ": "
                         + fieldError.getDefaultMessage()
-                        + " [요청 값: " + fieldError.getRejectedValue() + "]")
+                        + " 요청 값: " + fieldError.getRejectedValue())
                 .toList();
 
         log.warn(detail.toString(), exception);

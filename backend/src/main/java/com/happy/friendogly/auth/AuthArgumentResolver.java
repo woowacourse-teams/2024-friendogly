@@ -4,6 +4,7 @@ import com.happy.friendogly.auth.service.jwt.JwtProvider;
 import com.happy.friendogly.exception.FriendoglyException;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,10 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             throw new FriendoglyException("토큰 정보가 존재하지 않습니다.", HttpStatus.UNAUTHORIZED);
         }
 
-        return Long.parseLong(jwtProvider.validateAndExtract(accessToken));
+        String memberId = jwtProvider.validateAndExtract(accessToken);
+        MDC.put("memberId", memberId);
+        MDC.put("uri", request.getRequestURI());    // 필터로 밀어넣기
+
+        return Long.parseLong(memberId);
     }
 }
