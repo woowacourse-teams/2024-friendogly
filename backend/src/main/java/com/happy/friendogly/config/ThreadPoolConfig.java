@@ -22,7 +22,7 @@ public class ThreadPoolConfig {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setThreadNamePrefix("Async-Thread-");
         threadPoolTaskExecutor.setCorePoolSize(2);
-        threadPoolTaskExecutor.setMaxPoolSize(4);
+        threadPoolTaskExecutor.setMaxPoolSize(2);
         threadPoolTaskExecutor.setQueueCapacity(10);
         threadPoolTaskExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             @Override
