@@ -11,12 +11,13 @@ import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
 import java.util.Map;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@Profile("!local")
+@Profile("local")
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -59,6 +60,7 @@ public class FcmNotificationService implements NotificationService {
     }
 
     @Override
+    @Async("asyncThreadPoolExecutor")
     public void sendNotificationToTopic(
             String title,
             String content,
