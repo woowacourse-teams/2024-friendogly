@@ -2,6 +2,7 @@ package com.happy.friendogly.config;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class ThreadPoolConfig {
                         executor.getActiveCount(),
                         executor.getPoolSize(),
                         executor.getQueue().size());
+                throw new RejectedExecutionException("Async task rejected.");
             }
         });
         threadPoolTaskExecutor.initialize();
