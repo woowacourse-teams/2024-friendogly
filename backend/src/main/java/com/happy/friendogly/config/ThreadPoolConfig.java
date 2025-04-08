@@ -22,15 +22,16 @@ public class ThreadPoolConfig {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setThreadNamePrefix("Async-Thread-");
         threadPoolTaskExecutor.setCorePoolSize(2);
-        threadPoolTaskExecutor.setMaxPoolSize(3);
-        threadPoolTaskExecutor.setQueueCapacity(10);
+        threadPoolTaskExecutor.setMaxPoolSize(10);
+        threadPoolTaskExecutor.setQueueCapacity(20);
         threadPoolTaskExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                log.warn("❌ Async task rejected. ActiveCount: {}, PoolSize: {}, QueueSize: {}",
+                log.warn("Async task rejected. ActiveCount: {}, PoolSize: {}, QueueSize: {}",
                         executor.getActiveCount(),
                         executor.getPoolSize(),
-                        executor.getQueue().size());
+                        executor.getQueue().size()
+                );
                 throw new RejectedExecutionException("Async task rejected.");
             }
         });
