@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +32,7 @@ public class PlaygroundNotificationService {
         this.notificationService = notificationService;
     }
 
+    @Async("asyncThreadPoolExecutor")
     public void sendJoinNotification(
             String newParticipatingMember,
             Playground playground
