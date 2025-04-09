@@ -44,7 +44,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
         String memberId = jwtProvider.validateAndExtract(accessToken);
         MDC.put("memberId", memberId);
-        MDC.put("uri", request.getRequestURI());    // 필터로 밀어넣기
 
         return Long.parseLong(memberId);
     }
