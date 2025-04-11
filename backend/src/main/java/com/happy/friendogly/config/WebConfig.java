@@ -1,20 +1,23 @@
 package com.happy.friendogly.config;
 
 import com.happy.friendogly.auth.AuthArgumentResolver;
-import com.happy.friendogly.auth.service.jwt.JwtProvider;
+import com.happy.friendogly.utils.logging.MdcLoggingInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final JwtProvider jwtProvider;
+    private final AuthArgumentResolver authArgumentResolver;
+    private final MdcLoggingInterceptor mdcLoggingInterceptor;
 
-    public WebConfig(JwtProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
+    public WebConfig(AuthArgumentResolver authArgumentResolver, MdcLoggingInterceptor mdcLoggingInterceptor) {
+        this.authArgumentResolver = authArgumentResolver;
+        this.mdcLoggingInterceptor = mdcLoggingInterceptor;
     }
 
     @Override
@@ -28,6 +31,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthArgumentResolver(jwtProvider));
+        resolvers.add(authArgumentResolver);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(mdcLoggingInterceptor);
     }
 }
