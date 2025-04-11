@@ -54,7 +54,7 @@ public class MdcLoggingTest {
             mdcMock.when(() -> MDC.put("memberId", "1"))
                     .then(invocation -> actualOrder.add(PUT_MEMBER_ID));
 
-            mdcMock.when(() -> MDC.clear())
+            mdcMock.when(MDC::clear)
                     .then(invocation -> actualOrder.add(CLEAR));
 
             willAnswer(invocation -> {
@@ -74,17 +74,11 @@ public class MdcLoggingTest {
     @Test
     void mdcClear() throws Exception {
         try (MockedStatic<MDC> mdcMock = mockStatic(MDC.class)) {
-            List<String> actualOrder = new ArrayList<>();
-
-            // given
-            mdcMock.when(() -> MDC.clear())
-                    .then(invocation -> actualOrder.add(CLEAR));
-
             // when: Authorization 헤더가 없어 처리 도중 예외 발생
             mockMvc.perform(get("/playgrounds/locations"));
 
             // then
-            assertThat(actualOrder).contains(CLEAR);
+            mdcMock.verify(MDC::clear);
         }
     }
 }
