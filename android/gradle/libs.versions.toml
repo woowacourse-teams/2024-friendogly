@@ -1,10 +1,10 @@
 [versions]
 applicationId = "com.happy.friendogly"
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "26"
-targetSdk = "34"
-versionCode = "15"
-versionName = "1.1.0"
+targetSdk = "35"
+versionCode = "16"
+versionName = "1.1.2"
 
 agp = "8.3.0"
 kotlin = "1.9.21"
