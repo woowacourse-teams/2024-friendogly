@@ -5,18 +5,24 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.MessagingErrorCode;
 import com.google.firebase.messaging.MulticastMessage;
 import com.happy.friendogly.exception.FriendoglyException;
 import com.happy.friendogly.notification.domain.NotificationType;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @Profile("!local")
+@Slf4j
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
@@ -59,6 +65,15 @@ public class FcmNotificationService implements NotificationService {
     }
 
     @Override
+    @Retryable(
+            retryFor = {RetryableFcmException.class},
+            maxAttempts = 3,
+            backoff = @Backoff(
+                    delay = 1_000,
+                    multiplier = 2,
+                    random = true
+            )
+    )
     public void sendNotificationToTopic(
             String title,
             String content,
@@ -74,8 +89,23 @@ public class FcmNotificationService implements NotificationService {
         try {
             firebaseMessaging.send(message);
         } catch (FirebaseMessagingException e) {
+            MessagingErrorCode errorCode = e.getMessagingErrorCode();
+            if (errorCode == MessagingErrorCode.INTERNAL || errorCode == MessagingErrorCode.UNAVAILABLE) {
+                throw new RetryableFcmException("일시적인 FCM 서버 에러 발생", e);
+            }
             throw new FriendoglyException("FCM을 통해 Topic으로 알림을 보내는 과정에서 에러가 발생했습니다.", INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Recover
+    public void recoverSendNotificationToTopic(
+            RetryableFcmException e,
+            String title,
+            String content,
+            NotificationType notificationType,
+            String topic
+    ) {
+        log.error(e.getMessage(),e);
     }
 
     @Override

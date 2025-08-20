@@ -7,7 +7,6 @@ import com.happy.friendogly.exception.FriendoglyException;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,14 +16,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-// TODO: 적절한 로그 레벨 설정
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendoglyException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handle(FriendoglyException exception) {
-        //TODO: 커스텀 예외 내부에 우리 잘못인지 구분하는 로직 만들기 (일단은 외부api가 안되면 5xx, 사용자잘못이면 4xx)
         if (exception.getHttpStatus().is5xxServerError()) {
             log.error(exception.getMessage(), exception);
         }
@@ -43,13 +40,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<ErrorResponse>> handle(MethodArgumentNotValidException exception) {
-        log.warn(exception.getMessage(), exception);
-
-        List<String> detail = exception.getBindingResult()
-                .getFieldErrors()
+        List<String> detail = exception.getFieldErrors()
                 .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .map(fieldError -> fieldError.getField() + ": "
+                        + fieldError.getDefaultMessage()
+                        + " 요청 값: " + fieldError.getRejectedValue())
                 .toList();
+
+        log.warn(detail.toString(), exception);
 
         ErrorResponse errorResponse = new ErrorResponse(
                 ErrorCode.DEFAULT_ERROR_CODE,
